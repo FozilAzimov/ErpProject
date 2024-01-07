@@ -13,5 +13,8 @@ export default {
     dashboard: {
       headerName: 'Masaüstü',
     },
+    purchaseinvoice: {
+      headerName: 'satınalma faturalarının listesi',
+    },
   },
 }

@@ -11,7 +11,10 @@ export default {
       branchLookUpName: 'Select a branch',
     },
     dashboard: {
-      headerName: 'Dashboard',
+      headerName: 'dashboard',
+    },
+    purchaseinvoice: {
+      headerName: 'purchase invoice list',
     },
   },
 }

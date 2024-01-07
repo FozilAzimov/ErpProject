@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full m-1">
+  <div class="w-full m-1 pr-2">
     <div class="w-full">
       <LoadingPage
         v-if="isLoading"
@@ -13,7 +13,9 @@
           alt="user"
           class="w-[14px]"
         />
-        <h1 class="font-bold text-[#3b89e9]">Session List</h1>
+        <h1 class="font-bold text-[#3b89e9] text-[14px] uppercase">
+          Session List
+        </h1>
       </div>
     </div>
     <div>

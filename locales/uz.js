@@ -13,5 +13,8 @@ export default {
     dashboard: {
       headerName: 'Ish stoli',
     },
+    purchaseinvoice: {
+      headerName: "Hisob-faktura ro'yxati",
+    },
   },
 }

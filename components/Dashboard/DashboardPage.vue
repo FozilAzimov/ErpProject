@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full m-1">
+  <div class="w-full m-1 pr-2">
     <LoadingPage
       v-if="isLoading"
       class="absolute left-[50%] top-[8px] translate-x-[-50%]"
@@ -7,7 +7,7 @@
     <div
       class="dashboardBox border-[1px] border-solid border-[rgba(0,0,0,0.05)] p-[12px] bg-gradient-to-b from-transparent via-transparent to-gray-200 shadow-md"
     >
-      <h1 class="font-bold text-[#3b89e9]">
+      <h1 class="font-bold text-[#3b89e9] text-[14px] uppercase">
         {{ $t('pages.dashboard.headerName') }}
       </h1>
     </div>

@@ -30,7 +30,9 @@ export default {
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
     '@/plugins/vee-validate.js',
+    // Custom plugin for getting information about the user's device
     '@/plugins/element-ui.js',
+    '@/plugins/drugguble.js',
     '@/plugins/axios.js',
   ],
 

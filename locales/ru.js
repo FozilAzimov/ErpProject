@@ -13,5 +13,8 @@ export default {
     dashboard: {
       headerName: 'Рабочий Стол',
     },
+    purchaseinvoice: {
+      headerName: 'Список счете-фактуре',
+    },
   },
 }
