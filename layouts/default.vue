@@ -112,7 +112,7 @@
             />
           </button>
           <ul
-            class="w-[130px] bg-[#fff] absolute top-[44px] text-[13px] overflow-hidden duration-[0.4s]"
+            class="w-[130px] bg-[#fff] absolute top-[44px] text-[13px] overflow-hidden duration-[0.4s] z-[100]"
             :style="{
               height: langToggle ? '135px' : '0px',
               border: langToggle ? '1px solid #ddd' : '1px solid #206fa2b3',

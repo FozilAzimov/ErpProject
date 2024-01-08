@@ -1,7 +1,30 @@
 <template>
   <button
-    class="py-[4px] px-[10px] rounded-[5px] bg-[rgba(54,155,215,0.8)] text-white text-[15px] m-2 border-[1px] border-[solid] border-[rgba(54,155,215,0.1)] hover:bg-gradient-to-b hover:from-transparent hover:via-transparent hover:to-[#369bd7cc] hover:border-[1px] hover:border-[solid] hover:border-[rgb(54,155,215)]"
+    class="flex items-center gap-1 rounded-[5px] text-white active:scale-110 duration-[0.3s] hover:bg-gradient-to-b hover:from-transparent hover:via-transparent hover:to-[rgba(0,0,0,0.1)]"
+    :style="{
+      padding: `${pt}px ${pr}px ${pb}px ${pl}px`,
+      backgroundColor: bg,
+      fontSize: `${text_size}px`,
+      margin: `${margin}px`,
+    }"
   >
-    Add New
+    <img v-if="is_there_picture" class="w-[15px]" :src="url" alt="icons" />
+    {{ name }}
   </button>
 </template>
+<script>
+export default {
+  props: {
+    name: String,
+    pl: String,
+    pt: String,
+    pr: String,
+    pb: String,
+    text_size: String,
+    bg: String,
+    margin: String,
+    url: String,
+    is_there_picture: Boolean,
+  },
+}
+</script>

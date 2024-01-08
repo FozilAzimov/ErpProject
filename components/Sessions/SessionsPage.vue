@@ -13,7 +13,7 @@
           alt="user"
           class="w-[14px]"
         />
-        <h1 class="font-bold text-[#3b89e9] text-[14px] uppercase">
+        <h1 class="font-bold text-[rgb(49,126,172)] text-[14px] uppercase">
           Session List
         </h1>
       </div>
