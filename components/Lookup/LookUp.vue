@@ -285,9 +285,8 @@ export default {
       }
 
       axios
-        .post(`https://192.168.1.55:8443/api/${this.durl}`, data, {
+        .post(`https://192.168.1.55:8443/api/security/${this.durl}`, data, {
           headers: {
-            'Content-type': 'application/json',
             Authorization: `Bearer ${localStorage.getItem('token')}`,
           },
         })

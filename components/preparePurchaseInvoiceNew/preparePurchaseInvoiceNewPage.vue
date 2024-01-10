@@ -4,108 +4,6 @@
       v-if="isLoading"
       class="absolute left-[50%] top-[8px] translate-x-[-50%]"
     />
-    <form class="flex items-center gap-3 py-4">
-      <div>
-        <label
-          for="from"
-          class="text-[13px] text-[] cursor-pointer tracking-[1.1]"
-          >Date from</label
-        >
-        <GenericInputDatePage
-          id="from"
-          v-model="formData.from"
-          :width="'165'"
-          :height="'30'"
-          :pl="'10'"
-          :pr="'10'"
-          :pt="'1'"
-          :pb="'1'"
-          :text_size="'13'"
-          :type="'datetime-local'"
-          :value_color="'rgba(0,0,0,0.7)'"
-          @change="getSelectValue"
-        />
-      </div>
-      <div>
-        <label for="to" class="text-[13px] text-[] cursor-pointer"
-          >Date to</label
-        >
-        <GenericInputDatePage
-          id="to"
-          v-model="formData.to"
-          :width="'165'"
-          :height="'30'"
-          :pl="'10'"
-          :pr="'10'"
-          :pt="'2'"
-          :pb="'2'"
-          :text_size="'13'"
-          :type="'datetime-local'"
-          :value_color="'rgba(0,0,0,0.7)'"
-          @change="getSelectValue"
-        />
-      </div>
-      <div class="flex items-center gap-1">
-        <label for="bill" class="text-[13px] text-[] cursor-pointer"
-          >Status (Bill)</label
-        >
-        <GenericSelect
-          id="bill"
-          v-model="formData.from"
-          :data="selectData.billStatusList"
-          text_size="13"
-          @change="getSelectValue"
-        />
-      </div>
-      <div class="flex items-center gap-1">
-        <label for="pay" class="text-[13px] text-[] cursor-pointer"
-          >Status (Pay)</label
-        >
-        <GenericSelect
-          id="pay"
-          v-model="formData.pay"
-          :data="selectData.payStatusList"
-          text_size="13"
-          @change="getSelectValue"
-        />
-      </div>
-      <div class="flex items-center gap-1">
-        <label for="invoice" class="text-[13px] text-[] cursor-pointer"
-          >Invoice (Status)</label
-        >
-        <GenericSelect
-          id="invoice"
-          v-model="formData.invoice"
-          :data="selectData.invoiceOnWayStatusList"
-          text_size="13"
-          @change="getSelectValue"
-        />
-      </div>
-      <div class="flex items-center gap-1">
-        <label for="departments" class="text-[13px] text-[] cursor-pointer"
-          >Departments</label
-        >
-        <GenericSelect
-          id="departments"
-          v-model="formData.departments"
-          :data="selectData.departmentDTOList"
-          text_size="13"
-          @change="getSelectValue"
-        />
-      </div>
-      <div class="flex items-center gap-1">
-        <label for="warehouse" class="text-[13px] text-[] cursor-pointer"
-          >Warehouse</label
-        >
-        <GenericSelect
-          id="warehouse"
-          v-model="formData.warehouse"
-          :data="selectData.warehouseList"
-          text_size="13"
-          @change="getSelectValue"
-        />
-      </div>
-    </form>
     <div
       class="dashboardBox border-[1px] border-solid border-[rgba(0,0,0,0.05)] p-[12px] bg-gradient-to-b from-transparent via-transparent to-gray-200 shadow-md flex items-center justify-between"
     >
@@ -261,8 +159,6 @@
                           })
                         : key.code === 'invoiceConfirmedStatus'
                         ? 'Un Confirmed'
-                        : key.code === 'images'
-                        ? 'Bu rasm chiqmaydi'
                         : value[key.code]
                     }}
                   </td>
@@ -326,22 +222,18 @@
 
 <script>
 import axios from 'axios'
-// Icons url
-import search from '../../assets/icons/search.png'
-import printer from '../../assets/icons/printer.png'
 // Components
 import LoadingPage from '../Loading/LoadingPage.vue'
 import GenericButton from '../Button/GenericButton.vue'
 import GenericInput from '../Input/GenericInput.vue'
-import GenericSelect from '../Select/GenericSelect.vue'
-import GenericInputDatePage from '../InputDate/GenericInputDatePage.vue'
+// Icons url
+import search from '../../assets/icons/search.png'
+import printer from '../../assets/icons/printer.png'
 export default {
   components: {
     LoadingPage,
     GenericButton,
     GenericInput,
-    GenericSelect,
-    GenericInputDatePage,
   },
   data() {
     return {
@@ -359,8 +251,6 @@ export default {
         printer,
       },
       tableId: [],
-      selectData: {},
-      formData: new Map(),
     }
   },
   mounted() {
@@ -379,16 +269,7 @@ export default {
           {
             current_page: 1,
             page_size: this.pageSize_value,
-            searchForm: {
-              keyword: this.keywordValue || '',
-              from_date: Object.fromEntries(this.formData).from,
-              to_date: Object.fromEntries(this.formData).to,
-            },
-            billStatus: Object.fromEntries(this.formData).bill,
-            payStatus: Object.fromEntries(this.formData).pay,
-            invoiceOnWayStatus: Object.fromEntries(this.formData).invoice,
-            departmentId: Object.fromEntries(this.formData).departments,
-            warehouseId: Object.fromEntries(this.formData).warehouse,
+            searchForm: { keyword: this.keywordValue || '' },
           },
           {
             headers: {
@@ -401,7 +282,6 @@ export default {
           this.isLoading = !this.isLoading
           this.tableHead = res.data.rightMap
           this.tableData = res.data.invoiceList
-          this.selectData = res.data.purchaseInvoiceSearchDTO
           this.getTableBody()
         })
         .catch((error) => {
@@ -456,17 +336,13 @@ export default {
         .then((res) => {
           this.isLoading = !this.isLoading
           this.$router.push('/preparePurchaseInvoiceNew.htm')
+          console.log(res)
         })
         .catch((error) => {
           this.isLoading = !this.isLoading
           // eslint-disable-next-line no-console
           console.log(error)
         })
-    },
-
-    // Select value
-    getSelectValue(value, id) {
-      this.formData.set(id, value)
     },
   },
 }

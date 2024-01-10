@@ -65,7 +65,7 @@ export default {
     // Branches request
     this.isLoading = !this.isLoading
     axios
-      .get('https://192.168.1.55:8443/api/branches', {
+      .get(`https://192.168.1.55:8443/api/branches`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
@@ -101,7 +101,7 @@ export default {
     getData(id) {
       this.isLoading = !this.isLoading
       axios
-        .post('https://192.168.1.55:8443/api/postBranch', {
+        .post(`https://192.168.1.55:8443/api/postBranch`, {
           id,
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,

@@ -7,6 +7,7 @@
       fontSize: `${text_size}px`,
       margin: `${margin}px`,
     }"
+    @click="getTableRowOpen"
   >
     <img v-if="is_there_picture" class="w-[15px]" :src="url" alt="icons" />
     {{ name }}
@@ -25,6 +26,11 @@ export default {
     margin: String,
     url: String,
     is_there_picture: Boolean,
+  },
+  methods: {
+    getTableRowOpen() {
+      this.$emit('click')
+    },
   },
 }
 </script>

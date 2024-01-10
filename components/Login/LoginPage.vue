@@ -91,7 +91,6 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
 import axios from 'axios'
 import LoadingPage from '../Loading/LoadingPage.vue'
 import LanguageSelector from '@/components/main/LanguageSelector'
@@ -112,10 +111,6 @@ export default {
     }
   },
 
-  computed: {
-    ...mapGetters('device', ['xl']),
-  },
-
   methods: {
     getTypePassword() {
       this.typeIcon ? (this.typeIcon = false) : (this.typeIcon = true)
@@ -126,7 +121,7 @@ export default {
         if (success) {
           this.isLoading = !this.isLoading
           axios
-            .post('https://192.168.1.55:8443/api/security/logIn', {
+            .post(`https://192.168.1.55:8443/api/security/logIn`, {
               username: this.form.username,
               password: this.form.password,
             })

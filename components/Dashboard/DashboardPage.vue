@@ -56,7 +56,7 @@ export default {
     // Menu request
     this.isLoading = !this.isLoading
     axios
-      .get('https://192.168.1.55:8443/api/menu', {
+      .get(`https://192.168.1.55:8443/api/menu`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
