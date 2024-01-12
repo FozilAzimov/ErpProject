@@ -14,7 +14,7 @@ export default {
       headerName: 'dashboard',
     },
     purchaseinvoice: {
-      headerName: 'purchase invoice list',
+      headerName: 'purchase invoice',
     },
   },
 }

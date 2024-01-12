@@ -16,5 +16,8 @@ export default {
     purchaseinvoice: {
       headerName: "Hisob-faktura ro'yxati",
     },
+    preparepurchaseinvoice: {
+      headerName: 'Hisob-faktura',
+    },
   },
 }

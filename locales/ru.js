@@ -16,5 +16,8 @@ export default {
     purchaseinvoice: {
       headerName: 'Список счете-фактуре',
     },
+    preparepurchaseinvoice: {
+      headerName: 'Счет-Фактура Покупки',
+    },
   },
 }

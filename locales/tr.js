@@ -16,5 +16,8 @@ export default {
     purchaseinvoice: {
       headerName: 'satınalma faturalarının listesi',
     },
+    preparepurchaseinvoice: {
+      headerName: 'satınalma faturalarının',
+    },
   },
 }

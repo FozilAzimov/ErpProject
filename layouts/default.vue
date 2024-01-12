@@ -37,7 +37,7 @@
             />
           </button>
           <ul
-            class="w-[203px] bg-[#fff] absolute top-[44px] text-[13px] overflow-hidden duration-[0.5s]"
+            class="w-[203px] bg-[#fff] absolute top-[44px] z-100 text-[13px] overflow-hidden duration-[0.5s]"
             :style="{
               height: dropToggle ? '229px' : '0px',
               border: dropToggle ? '1px solid #ddd' : '1px solid #206fa2b3',
@@ -330,7 +330,7 @@ export default {
     // Log Out
     getLogout() {
       axios
-        .post('https://192.168.1.55:8443/api/security/logout', {
+        .delete('https://192.168.1.55:8443/api/security/logout', {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
           },

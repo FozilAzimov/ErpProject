@@ -1,118 +1,9 @@
-<template>
+<!-- <template>
   <div class="w-full m-1 pr-2">
     <LoadingPage
       v-if="isLoading"
       class="absolute left-[50%] top-[8px] translate-x-[-50%]"
     />
-    <ColumnConfig
-      :style="'top:' + (checkModal ? '15%' : '-70%')"
-      :right="tableHead"
-      :left="leftMap"
-      :url="actionUrl"
-      @checkModal="handleValue"
-    />
-    <form class="flex items-center gap-3 py-4">
-      <div>
-        <label
-          for="from"
-          class="text-[13px] text-[] cursor-pointer tracking-[1.1]"
-          >Date from</label
-        >
-        <GenericInputDatePage
-          id="from"
-          v-model="formData.from"
-          width="165"
-          height="30"
-          pl="10"
-          pr="10"
-          pt="1"
-          pb="1"
-          textsize="13"
-          type="datetime-local"
-          valuecolor="rgba(0,0,0,0.7)"
-          @change="getSelectValue"
-        />
-      </div>
-      <div>
-        <label for="to" class="text-[13px] text-[] cursor-pointer"
-          >Date to</label
-        >
-        <GenericInputDatePage
-          id="to"
-          v-model="formData.to"
-          width="165"
-          height="30"
-          pl="10"
-          pr="10"
-          pt="2"
-          pb="2"
-          textsize="13"
-          type="datetime-local"
-          valuecolor="rgba(0,0,0,0.7)"
-          @change="getSelectValue"
-        />
-      </div>
-      <div class="flex items-center gap-1">
-        <label for="bill" class="text-[13px] text-[] cursor-pointer"
-          >Status (Bill)</label
-        >
-        <GenericSelect
-          id="bill"
-          v-model="formData.from"
-          :data="selectData.billStatusList"
-          textsize="13"
-          @change="getSelectValue"
-        />
-      </div>
-      <div class="flex items-center gap-1">
-        <label for="pay" class="text-[13px] text-[] cursor-pointer"
-          >Status (Pay)</label
-        >
-        <GenericSelect
-          id="pay"
-          v-model="formData.pay"
-          :data="selectData.payStatusList"
-          textsize="13"
-          @change="getSelectValue"
-        />
-      </div>
-      <div class="flex items-center gap-1">
-        <label for="invoice" class="text-[13px] text-[] cursor-pointer"
-          >Invoice (Status)</label
-        >
-        <GenericSelect
-          id="invoice"
-          v-model="formData.invoice"
-          :data="selectData.invoiceOnWayStatusList"
-          textsize="13"
-          @change="getSelectValue"
-        />
-      </div>
-      <div class="flex items-center gap-1">
-        <label for="departments" class="text-[13px] text-[] cursor-pointer"
-          >Departments</label
-        >
-        <GenericSelect
-          id="departments"
-          v-model="formData.departments"
-          :data="selectData.departmentDTOList"
-          textsize="13"
-          @change="getSelectValue"
-        />
-      </div>
-      <div class="flex items-center gap-1">
-        <label for="warehouse" class="text-[13px] text-[] cursor-pointer"
-          >Warehouse</label
-        >
-        <GenericSelect
-          id="warehouse"
-          v-model="formData.warehouse"
-          :data="selectData.warehouseList"
-          textsize="13"
-          @change="getSelectValue"
-        />
-      </div>
-    </form>
     <div
       class="dashboardBox border-[1px] border-solid border-[rgba(0,0,0,0.05)] p-[12px] bg-gradient-to-b from-transparent via-transparent to-gray-200 shadow-md flex items-center justify-between"
     >
@@ -130,7 +21,6 @@
         <ul class="flex items-center gap-4">
           <li
             class="bg-[rgba(32,111,162,0.05)] p-[7px] rounded-[50%] cursor-pointer border-[1px] border-[solid] border-[rgba(0,0,0,0.1] hover:border-[#3b89e9] duration-[0.4s]"
-            @click="openColumnConfig"
           >
             <img
               class="w-[11px]"
@@ -159,17 +49,16 @@
         </ul>
       </div>
     </div>
-    <div class="border-[1px] border-solid border-[rgba(0,0,0,0.1)] h-[700px]">
+    <div class="border-[1px] border-solid border-[rgba(0,0,0,0.1)] h-[600px]">
       <GenericButton
-        name="Add New"
-        pl="10"
-        pt="3"
-        pr="10"
-        pb="3"
-        bg="rgba(54, 155, 215, 0.8)"
-        textsize="15"
-        margin="8"
-        @click="$router.push('/preparePurchaseInvoiceNew.htm')"
+        :name="'Add New'"
+        :pl="'10'"
+        :pt="'3'"
+        :pr="'10'"
+        :pb="'3'"
+        :bg="'rgba(54, 155, 215, 0.8)'"
+        :text_size="'15'"
+        :margin="'8'"
       />
       <div class="mt-3 p-2">
         <div class="flex items-center justify-between mb-1">
@@ -191,46 +80,45 @@
           <div class="flex items-center gap-2">
             <GenericInput
               v-model="keywordValue"
-              width="200"
-              height="30"
-              pl="10"
-              pr="10"
-              pt="2"
-              pb="2"
-              text_size="13"
-              type="text"
-              placeholder="Search..."
+              :width="'200'"
+              :height="'30'"
+              :pl="'10'"
+              :pr="'10'"
+              :pt="'2'"
+              :pb="'2'"
+              :text_size="'13'"
+              :type="'text'"
+              :placeholder="'Search...'"
               @change="getTableRequest"
-              @input="getInputValue"
             />
             <GenericButton
-              name="Search"
-              pl="10"
-              pt="4"
-              pr="10"
-              pb="4"
-              bg="rgba(54, 155, 215, 0.8)"
-              textsize="14"
+              :name="'Search'"
+              :pl="'10'"
+              :pt="'4'"
+              :pr="'10'"
+              :pb="'4'"
+              :bg="'rgba(54, 155, 215, 0.8)'"
+              :text_size="'14'"
               :url="imgUrl.search"
-              :istherepicture="true"
+              :is_there_picture="true"
               @click="getTableRequest"
             />
             <GenericButton
-              name="Print Preview"
-              pl="10"
-              pt="4"
-              pr="10"
-              pb="4"
-              bg="rgb(126,183,62)"
-              textsize="14"
+              :name="'Print Preview'"
+              :pl="'10'"
+              :pt="'4'"
+              :pr="'10'"
+              :pb="'4'"
+              :bg="'rgb(126,183,62)'"
+              :text_size="'14'"
               :url="imgUrl.printer"
-              :istherepicture="true"
+              :is_there_picture="true"
             />
           </div>
         </div>
-        <div class="h-[600px] flex items-start overflow-scroll">
+        <div class="h-[500px] flex items-start overflow-scroll">
           <table class="w-full border-[1px] border-[solid] border-[#F0F0F0]">
-            <thead class="bg-[rgb(229,235,245)]">
+            <thead class="bg-[rgb(229,235,245)] sticky">
               <tr>
                 <th
                   v-for="(headName, key) in tableHead"
@@ -271,39 +159,37 @@
                           })
                         : key.code === 'invoiceConfirmedStatus'
                         ? 'Un Confirmed'
-                        : key.code === 'images'
-                        ? 'Bu rasm chiqmaydi'
                         : value[key.code]
                     }}
                   </td>
                   <td class="flex items-center justify-center gap-2 p-2">
                     <GenericButton
-                      name="Open"
-                      pl="10"
-                      pt="4"
-                      pr="10"
-                      pb="4"
-                      bg="rgb(126,183,62)"
-                      textsize="14"
+                      :name="'Open'"
+                      :pl="'10'"
+                      :pt="'4'"
+                      :pr="'10'"
+                      :pb="'4'"
+                      :bg="'rgb(126,183,62)'"
+                      :text_size="'14'"
                       @click="getTableRowOpen(tableId[index])"
                     />
                     <GenericButton
-                      name="qrCode"
-                      pl="10"
-                      pt="4"
-                      pr="10"
-                      pb="4"
-                      bg="rgb(126,183,62)"
-                      textsize="14"
+                      :name="'qrCode'"
+                      :pl="'10'"
+                      :pt="'4'"
+                      :pr="'10'"
+                      :pb="'4'"
+                      :bg="'rgb(126,183,62)'"
+                      :text_size="'14'"
                     />
                     <GenericButton
-                      name="forDevice"
-                      pl="10"
-                      pt="4"
-                      pr="10"
-                      pb="4"
-                      bg="rgb(126,183,62)"
-                      textsize="14"
+                      :name="'forDevice'"
+                      :pl="'10'"
+                      :pt="'4'"
+                      :pr="'10'"
+                      :pb="'4'"
+                      :bg="'rgb(126,183,62)'"
+                      :text_size="'14'"
                     />
                   </td>
                 </tr>
@@ -315,15 +201,13 @@
                     class="text-center border-[1px] border-[solid] border-[#F0F0F0] text-[12px] p-3"
                   >
                     <div
-                      class="flex flex-col justify-center items-start text-[rgba(0,0,0,0.5)]"
+                      class="flex flex-col items-center justify-center text-[rgba(0,0,0,0.5)]"
                     >
-                      <span class="flex flex-col items-center">
-                        <img
-                          src="../../assets/icons/no-data.png"
-                          alt="no-data-icons"
-                        />
-                        No data
-                      </span>
+                      <img
+                        src="../../assets/icons/no-data.png"
+                        alt="no-data-icons"
+                      />
+                      No data
                     </div>
                   </td>
                 </tr>
@@ -338,24 +222,18 @@
 
 <script>
 import axios from 'axios'
-// Icons url
-import search from '../../assets/icons/search.png'
-import printer from '../../assets/icons/printer.png'
 // Components
 import LoadingPage from '../Loading/LoadingPage.vue'
 import GenericButton from '../Button/GenericButton.vue'
 import GenericInput from '../Input/GenericInput.vue'
-import GenericSelect from '../Select/GenericSelect.vue'
-import GenericInputDatePage from '../InputDate/GenericInputDatePage.vue'
-import ColumnConfig from '../ColumnConfig/ColumnConfig.vue'
+// Icons url
+import search from '../../assets/icons/search.png'
+import printer from '../../assets/icons/printer.png'
 export default {
   components: {
     LoadingPage,
     GenericButton,
     GenericInput,
-    GenericSelect,
-    GenericInputDatePage,
-    ColumnConfig,
   },
   data() {
     return {
@@ -373,11 +251,6 @@ export default {
         printer,
       },
       tableId: [],
-      selectData: {},
-      formData: new Map(),
-      checkModal: false,
-      actionUrl: '',
-      leftMap: {},
     }
   },
   mounted() {
@@ -387,30 +260,16 @@ export default {
 
   // Methods
   methods: {
-    handleValue(checkModal) {
-      this.checkModal = checkModal
-    },
-    openColumnConfig() {
-      this.checkModal = true
-    },
-    getTableRequest() {
+    getTableRequest(value) {
       this.isLoading = !this.isLoading
+      this.keywordValue = value
       axios
         .post(
           `https://192.168.1.55:8443/api/invoice/purchaseInvoiceList`,
           {
             current_page: 1,
             page_size: this.pageSize_value,
-            searchForm: {
-              keyword: this.keywordValue,
-              from_date: Object.fromEntries(this.formData).from,
-              to_date: Object.fromEntries(this.formData).to,
-            },
-            billStatus: Object.fromEntries(this.formData).bill,
-            payStatus: Object.fromEntries(this.formData).pay,
-            invoiceOnWayStatus: Object.fromEntries(this.formData).invoice,
-            departmentId: Object.fromEntries(this.formData).departments,
-            warehouseId: Object.fromEntries(this.formData).warehouse,
+            searchForm: { keyword: this.keywordValue || '' },
           },
           {
             headers: {
@@ -422,10 +281,7 @@ export default {
           this.tableBody = []
           this.isLoading = !this.isLoading
           this.tableHead = res.data.rightMap
-          this.leftMap = res.data.leftMap
-          this.actionUrl = res.data.actionUrl
           this.tableData = res.data.invoiceList
-          this.selectData = res.data.purchaseInvoiceSearchDTO
           this.getTableBody()
         })
         .catch((error) => {
@@ -480,6 +336,7 @@ export default {
         .then((res) => {
           this.isLoading = !this.isLoading
           this.$router.push('/preparePurchaseInvoiceNew.htm')
+          console.log(res)
         })
         .catch((error) => {
           this.isLoading = !this.isLoading
@@ -487,16 +344,6 @@ export default {
           console.log(error)
         })
     },
-
-    // Generic_Select value
-    getSelectValue(value, id) {
-      this.formData.set(id, value)
-    },
-
-    // Generic_Input value
-    getInputValue(inputVal) {
-      this.keywordValue = inputVal
-    },
   },
 }
-</script>
+</script> -->

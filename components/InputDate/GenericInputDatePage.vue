@@ -7,8 +7,8 @@
       width: `${width}px`,
       height: `${height}px`,
       padding: `${pt}px ${pr}px ${pb}px ${pl}px`,
-      fontSize: `${text_size}px`,
-      color: value_color,
+      fontSize: `${textsize}px`,
+      color: valuecolor,
     }"
     :placeholder="placeholder"
     @change="getSelectValue"
@@ -17,17 +17,50 @@
 <script>
 export default {
   props: {
-    id: String,
-    width: String,
-    height: String,
-    placeholder: String,
-    pl: String,
-    pt: String,
-    pr: String,
-    pb: String,
-    text_size: String,
-    type: String,
-    value_color: String,
+    id: {
+      type: String,
+      default: '',
+    },
+    width: {
+      type: String,
+      default: '',
+    },
+    height: {
+      type: String,
+      default: '',
+    },
+    placeholder: {
+      type: String,
+      default: '',
+    },
+    pl: {
+      type: String,
+      default: '',
+    },
+    pt: {
+      type: String,
+      default: '',
+    },
+    pr: {
+      type: String,
+      default: '',
+    },
+    pb: {
+      type: String,
+      default: '',
+    },
+    textsize: {
+      type: String,
+      default: '',
+    },
+    type: {
+      type: String,
+      default: '',
+    },
+    valuecolor: {
+      type: String,
+      default: '',
+    },
   },
   data() {
     return {
