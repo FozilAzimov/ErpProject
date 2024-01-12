@@ -197,7 +197,7 @@
               pr="10"
               pt="2"
               pb="2"
-              text_size="13"
+              textsize="13"
               type="text"
               placeholder="Search..."
               @change="getTableRequest"
