@@ -2,8 +2,8 @@
   <div
     id="lookUpComponent"
     ref="parentDiv"
-    class="custom-lookup-widget"
-    :style="lookUpStyles"
+    class="custom-lookup-widget relative"
+    :style="{ width: widthtype === '%' ? `${dwidth}%` : `${dwidth}px` }"
     @mouseover="handleMouseOverList"
     @mouseout="handleMouseOutList"
   >
@@ -13,16 +13,15 @@
       </option>
     </select>
     <input
-      :value="selectedText"
+      :value="selectedText || defvalue"
       type="text"
-      class="custom-widget-list"
-      :style="inputStyles"
+      class="custom-widget-list w-full"
       @input="handleInput"
       @keydown="onKeydown"
     />
     <i
       v-if="!disabled"
-      class="el-icon-arrow-down icon-arrow"
+      class="el-icon-arrow-down icon-arrow text-[17px] absolute right-[10px] top-[50%] translate-y-[-50%]"
       @click="toggleList"
     ></i>
     <ul
@@ -54,10 +53,27 @@
 import axios from 'axios'
 export default {
   props: {
-    durl: String,
-    dparam: String,
-    dwidth: String,
-    dlist: String,
+    durl: { type: String, default: '' },
+    dwidth: {
+      type: String,
+      default: '',
+    },
+    widthtype: {
+      type: String,
+      default: '',
+    },
+    dlist: {
+      type: String,
+      default: '',
+    },
+    defvalue: {
+      type: String,
+      default: '',
+    },
+    dparam: {
+      type: Object,
+      default: () => ({}),
+    },
   },
   data() {
     return {
@@ -72,25 +88,14 @@ export default {
       showList: false,
       options: [],
       selected: [],
+      inputSearchValue: '',
     }
   },
   computed: {
-    // div width
-    lookUpStyles() {
-      return { width: this.dwidth ? `${parseInt(this.dwidth)}px` : '200px' }
-    },
-
-    // input width
-    inputStyles() {
-      return {
-        width: this.dwidth ? `${parseInt(this.dwidth) - 30}px` : '170px',
-      }
-    },
-
     // list style
     listStyles() {
       return {
-        width: this.dlist ? `${parseInt(this.dlist) + 20}px` : '220px',
+        width: this.widthtype === '%' ? `${this.dwidth}%` : `${this.dwidth}px`,
         display: this.showList ? 'block' : 'none',
       }
     },
@@ -105,7 +110,6 @@ export default {
       }
     },
   },
-
   methods: {
     // event click on icon
     toggleList() {
@@ -136,6 +140,7 @@ export default {
     handleInput(event) {
       const keyCode = event.which // key-code
       const searchKey = event.target.value // search-key
+      this.inputSearchValue = searchKey
       this.selectedText = event.target.value
       const thisInput = event.target
       const parentEl = thisInput.parentElement
@@ -231,6 +236,9 @@ export default {
 
     // click event on li
     selectOption(option) {
+      if (this.dparam.param) {
+        this.getSelectedList(option)
+      }
       const el = this.$refs.selected
       const ul = el[0].parentElement
       const parentEl = ul.parentElement
@@ -259,6 +267,33 @@ export default {
       this.showList = false
     },
 
+    // li selected function
+    getSelectedList(prop) {
+      axios
+        .post(
+          `https://192.168.1.55:8443/api/invoiceBase/getCurrentCurrencyRate`,
+          {
+            branchCompanyId: this.dparam.branchId ? Number(prop.value) : null,
+            currencyId: this.dparam.currencyId ? Number(prop.value) : null,
+            dateFrom: this.dparam.dateFrom,
+            employeeId: null,
+            settingsRateType: 'PURCHASE',
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('token')}`,
+            },
+          }
+        )
+        .then((res) => {
+          this.$emit('customEvent', [res.data, this.dparam.companyType])
+        })
+        .catch((error) => {
+          // eslint-disable-next-line no-console
+          console.log(error)
+        })
+    },
+
     // add class slectedLi to li
     handleMouseEnter(event) {
       const ul = document.querySelector('ul.search-results')
@@ -274,25 +309,22 @@ export default {
     // post search key
     getDataList() {
       if (!this.durl) return
-      const searchKey = this.searchText.trim()
       const data = {
-        search_Key: searchKey,
-        typeStr: null,
-        clusterSeasonId: null,
+        search_key: this.inputSearchValue,
       }
       if (this.dparam) {
-        Object.assign(data, JSON.parse(this.dparam))
+        Object.assign(data, this.dparam)
       }
 
       axios
-        .post(`https://192.168.1.55:8443/api/security/${this.durl}`, data, {
+        .post(`https://192.168.1.55:8443/api/${this.durl}`, data, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
           },
         })
         .then((response) => {
           if (response) {
-            this.old_search_key = searchKey
+            this.old_search_key = this.inputSearchValue
             this.options = response.data.map((obj) => {
               const value = obj.id
               const text = obj.name
@@ -323,17 +355,23 @@ export default {
 
 <style scoped>
 .custom-lookup-widget {
-  border: 1px solid #000;
-  width: 200px;
+  border-radius: 5px;
 }
 .custom-widget-list {
-  width: 170px;
   border: none;
   outline: none;
-  height: 25px;
-  padding: 2px;
+  height: 23px;
+  padding: 2px 10px;
   overflow: hidden;
   text-overflow: ellipsis;
+  border-radius: 5px;
+  border: 1px solid rgba(228, 228, 228, 1);
+  transition: 0.4s;
+}
+.custom-widget-list:focus {
+  border: 1px solid #52a8eccc;
+  box-shadow: 0 0 5px #52a8ec99;
+  transition: 0.4s;
 }
 .icon-arrow:hover {
   cursor: pointer;
@@ -342,16 +380,16 @@ export default {
   position: absolute;
   z-index: 999;
   background-color: #fff;
-  border: 1px solid #ccc;
   max-height: 200px;
   overflow-y: auto;
   list-style: none;
   padding: 0;
   margin: 0;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
 }
 .search-results li {
-  font-size: 14px;
-  padding: 5px;
+  font-size: 13px;
+  padding: 3px;
   cursor: pointer;
 }
 .search-results li:hover,

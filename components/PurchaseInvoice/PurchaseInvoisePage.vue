@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full m-1 pr-2">
+  <div class="w-full p-[0px_12px_0px_10px]">
     <LoadingPage
       v-if="isLoading"
       class="absolute left-[50%] top-[8px] translate-x-[-50%]"
@@ -11,7 +11,7 @@
       :url="actionUrl"
       @checkModal="handleValue"
     />
-    <form class="flex items-center gap-3 py-4">
+    <form class="flex flex-wrap items-center gap-3 py-4">
       <div>
         <label
           for="from"
@@ -261,14 +261,7 @@
                   >
                     {{
                       key.code === 'date'
-                        ? new Date(value[key.code]).toLocaleString('en-GB', {
-                            day: '2-digit',
-                            month: '2-digit',
-                            year: 'numeric',
-                            hour: '2-digit',
-                            minute: '2-digit',
-                            second: '2-digit',
-                          })
+                        ? new Date(value[key.code]).toLocaleString('en-GB')
                         : key.code === 'invoiceConfirmedStatus'
                         ? 'Un Confirmed'
                         : key.code === 'images'

@@ -25,6 +25,10 @@ export default {
     ],
   },
 
+  server: {
+    host: '0.0.0.0',
+  },
+
   ssr: false,
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
