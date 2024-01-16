@@ -41,12 +41,12 @@
           :istherepicture="true"
         />
         <h1 class="font-bold text-[rgb(49,126,172)] text-[14px] uppercase">
-          {{ $t('pages.preparepurchaseinvoice.headerName') }}
+          {{ tableNameTranslateObj.purchaseInvoice }}
         </h1>
       </div>
     </div>
     <div>
-      <table class="w-full text-[13px]">
+      <table class="w-full text-[13px] mt-2">
         <tbody>
           <tr
             class="bg-[rgba(239,243,249,0.7)] hover:bg-gradient-to-b hover:from-transparent hover:via-transparent hover:to-[rgba(220,229,243,0.7)]"
@@ -54,7 +54,7 @@
             <td
               class="w-[15%] border-[1px] border-[solid] border-[#778899] p-[2px]"
             >
-              Date
+              {{ tableNameTranslateObj.date }}
             </td>
             <td
               class="w-[16%] border-[1px] border-[solid] border-[#778899] p-[2px]"
@@ -80,7 +80,7 @@
             <td
               class="w-[16%] border-[1px] border-[solid] border-[#778899] p-[2px]"
             >
-              Payment Type
+              {{ tableNameTranslateObj.paymentType }}
             </td>
             <td
               class="w-[17%] border-[1px] border-[solid] border-[#778899] p-[2px]"
@@ -90,12 +90,15 @@
                 dwidth="100"
                 widthtype="%"
                 dlist="100"
+                name="paymentType"
+                :required="required.lookUp2"
+                @customFunction="getLookUpValue"
               />
             </td>
             <td
               class="w-[15%] border-[1px] border-[solid] border-[#778899] p-[2px]"
             >
-              System Number
+              {{ tableNameTranslateObj.systemNumber }}
             </td>
             <td
               class="w-[17%] border-[1px] border-[solid] border-[#778899] p-[2px]"
@@ -117,7 +120,7 @@
             class="bg-[rgba(239,243,249,0.7)] hover:bg-gradient-to-b hover:from-transparent hover:via-transparent hover:to-[rgba(220,229,243,0.7)]"
           >
             <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
-              Supplier
+              {{ tableNameTranslateObj.supplier }}
             </td>
             <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
               <LookUp
@@ -135,7 +138,10 @@
                     .split(',')
                     .join(''),
                 }"
+                name="supplier"
+                :required="required.lookUp1"
                 @customEvent="getSelectedList"
+                @customFunction="getLookUpValue"
               />
             </td>
             <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
@@ -169,7 +175,7 @@
             class="bg-[rgba(239,243,249,0.7)] hover:bg-gradient-to-b hover:from-transparent hover:via-transparent hover:to-[rgba(220,229,243,0.7)]"
           >
             <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
-              Value Date
+              {{ tableNameTranslateObj.valueDate }}
             </td>
             <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
               <GenericInput
@@ -197,7 +203,7 @@
               class="border-[1px] border-[solid] border-[#778899] p-[2px]"
             ></td>
             <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
-              Invoice Bill Status
+              {{ tableNameTranslateObj.invoiceBillStatus }}
             </td>
             <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
               <GenericInput
@@ -217,7 +223,7 @@
             class="bg-[rgba(239,243,249,0.7)] hover:bg-gradient-to-b hover:from-transparent hover:via-transparent hover:to-[rgba(220,229,243,0.7)]"
           >
             <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
-              Company Groups
+              {{ tableNameTranslateObj['menu.companies.group'] }}
             </td>
             <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
               <LookUp
@@ -235,7 +241,7 @@
               class="border-[1px] border-[solid] border-[#778899] p-[2px]"
             ></td>
             <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
-              OnWay
+              {{ tableNameTranslateObj.onWay }}
             </td>
             <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
               <GenericInput
@@ -255,7 +261,7 @@
             class="bg-[rgba(239,243,249,0.7)] hover:bg-gradient-to-b hover:from-transparent hover:via-transparent hover:to-[rgba(220,229,243,0.7)]"
           >
             <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
-              Branch
+              {{ tableNameTranslateObj.branch }}
             </td>
             <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
               <LookUp
@@ -292,7 +298,7 @@
               />
             </td>
             <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
-              Invoice Status
+              {{ tableNameTranslateObj.invoiceStatus }}
             </td>
             <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
               <GenericInput
@@ -312,7 +318,7 @@
             class="bg-[rgba(239,243,249,0.7)] hover:bg-gradient-to-b hover:from-transparent hover:via-transparent hover:to-[rgba(220,229,243,0.7)]"
           >
             <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
-              Department
+              {{ tableNameTranslateObj.department }}
             </td>
             <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
               <LookUp
@@ -330,7 +336,7 @@
               class="border-[1px] border-[solid] border-[#778899] p-[2px]"
             ></td>
             <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
-              Invoice №
+              {{ tableNameTranslateObj.invoiceNo }}
             </td>
             <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
               <GenericInput
@@ -350,7 +356,7 @@
             class="bg-[rgba(239,243,249,0.7)] hover:bg-gradient-to-b hover:from-transparent hover:via-transparent hover:to-[rgba(220,229,243,0.7)]"
           >
             <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
-              Warehouse
+              {{ tableNameTranslateObj.warehouse }}
             </td>
             <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
               <LookUp
@@ -368,7 +374,7 @@
               class="border-[1px] border-[solid] border-[#778899] p-[2px]"
             ></td>
             <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
-              Note
+              {{ tableNameTranslateObj['personSalary.note'] }}
             </td>
             <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
               <GenericInput
@@ -388,7 +394,7 @@
             class="bg-[rgba(239,243,249,0.7)] hover:bg-gradient-to-b hover:from-transparent hover:via-transparent hover:to-[rgba(220,229,243,0.7)]"
           >
             <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
-              Currency
+              {{ tableNameTranslateObj.currency }}
             </td>
             <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
               <LookUp
@@ -429,7 +435,7 @@
               />
             </td>
             <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
-              Nominal
+              {{ tableNameTranslateObj.postNominal }}
             </td>
             <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
               <GenericInput
@@ -449,7 +455,7 @@
             class="bg-[rgba(239,243,249,0.7)] hover:bg-gradient-to-b hover:from-transparent hover:via-transparent hover:to-[rgba(220,229,243,0.7)]"
           >
             <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
-              Order Production Type
+              {{ tableNameTranslateObj.orderProductionType }}
             </td>
             <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
               <LookUp
@@ -467,7 +473,7 @@
               class="border-[1px] border-[solid] border-[#778899] p-[2px]"
             ></td>
             <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
-              Sequence Number
+              {{ tableNameTranslateObj.order_sequence_number }}
             </td>
             <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
               <GenericInput
@@ -487,7 +493,7 @@
             class="bg-[rgba(239,243,249,0.7)] hover:bg-gradient-to-b hover:from-transparent hover:via-transparent hover:to-[rgba(220,229,243,0.7)]"
           >
             <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
-              Calculation Type
+              {{ tableNameTranslateObj.calculationType }}
             </td>
             <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
               <LookUp
@@ -499,7 +505,7 @@
               />
             </td>
             <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
-              Contract
+              {{ tableNameTranslateObj.contract }}
             </td>
             <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
               <LookUp
@@ -510,7 +516,7 @@
               />
             </td>
             <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
-              Invoice Number
+              {{ tableNameTranslateObj['invoice.invoiceNumber'] }}
             </td>
             <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
               <GenericInput
@@ -531,7 +537,7 @@
             class="bg-[rgba(239,243,249,0.7)] hover:bg-gradient-to-b hover:from-transparent hover:via-transparent hover:to-[rgba(220,229,243,0.7)]"
           >
             <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
-              Driver Name
+              {{ tableNameTranslateObj.driverName }}
             </td>
             <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
               <GenericInput
@@ -563,7 +569,7 @@
             class="bg-[rgba(239,243,249,0.7)] hover:bg-gradient-to-b hover:from-transparent hover:via-transparent hover:to-[rgba(220,229,243,0.7)]"
           >
             <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
-              PlateNumber
+              {{ tableNameTranslateObj.plateNumber }}
             </td>
             <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
               <LookUp
@@ -590,7 +596,7 @@
             class="bg-[rgba(239,243,249,0.7)] hover:bg-gradient-to-b hover:from-transparent hover:via-transparent hover:to-[rgba(220,229,243,0.7)]"
           >
             <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
-              Car
+              {{ tableNameTranslateObj.car }}
             </td>
             <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
               <LookUp
@@ -615,6 +621,112 @@
           </tr>
         </tbody>
       </table>
+      <GenericButton
+        name="Accept"
+        pl="10"
+        pt="3"
+        pr="10"
+        pb="3"
+        bg="rgba(54, 155, 215, 0.8)"
+        textsize="14"
+        class="mt-1 mb-2"
+        @click="additionInvoiceItem"
+      />
+      <div
+        class="w-full bg-[rgba(0,0,0,0.05)] overflow-hidden"
+        :class="
+          isInvoiceItam ? 'duration-[0.7s] h-[300px]' : 'duration-[1s] h-[0px]'
+        "
+      >
+        <h1 class="text-[13px]">Invoice Item</h1>
+        <div class="flex gap-1">
+          <GenericButton
+            name="Column Setting"
+            pl="10"
+            pt="3"
+            pr="10"
+            pb="3"
+            bggradient="linear-gradient(to top, rgb(25,52,79),rgba(25,52,79, 0.58))"
+            textsize="14"
+            :url="img.setting"
+            :istherepicture="true"
+          />
+          <GenericButton
+            name="Save"
+            pl="10"
+            pt="3"
+            pr="10"
+            pb="3"
+            bg="rgb(119,191,66)"
+            textsize="14"
+          />
+          <GenericButton
+            name="Make Bill"
+            pl="10"
+            pt="3"
+            pr="10"
+            pb="3"
+            bg="rgba(54, 155, 215, 0.8)"
+            textsize="14"
+          />
+          <GenericButton
+            name="Print Preview"
+            pl="10"
+            pt="3"
+            pr="10"
+            pb="3"
+            bg="rgba(126,183,62, 0.8)"
+            textsize="14"
+            :url="img.printer"
+            :istherepicture="true"
+          />
+          <GenericButton
+            name="Delete"
+            pl="10"
+            pt="3"
+            pr="10"
+            pb="3"
+            bggradient="linear-gradient(to top, rgb(108,33,38),rgba(108,33,38,0.65))"
+            textsize="14"
+            :url="img.del"
+            :istherepicture="true"
+          />
+          <GenericInput
+            width="120"
+            height="30"
+            pl="10"
+            pr="10"
+            pt="2"
+            pb="2"
+            textsize="13"
+            type="number"
+            placeholder="Change price"
+          />
+          <GenericInput
+            width="120"
+            height="30"
+            pl="10"
+            pr="10"
+            pt="2"
+            pb="2"
+            textsize="13"
+            type="number"
+            placeholder="Change vat"
+          />
+        </div>
+        <div class="mt-1">
+          <LookUp
+            durl="invoiceBase/findAllCompanyForInvoice"
+            dwidth="200"
+            dlist="200"
+          />
+          <LookUp
+            durl="invoiceBase/findAllPaymentType"
+            dwidth="200"
+            dlist="200"
+          />
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -624,16 +736,23 @@ import axios from 'axios'
 // Icons url
 import goBack from '../../assets/icons/go-back.png'
 import copy from '../../assets/icons/copy.png'
+import setting from '../../assets/icons/settings.png'
+import printer from '../../assets/icons/printer.png'
+import del from '../../assets/icons/delete.png'
 // Components
 import GenericButton from '../Button/GenericButton.vue'
 import LoadingPage from '../Loading/LoadingPage.vue'
 import LookUp from '../Lookup/LookUp.vue'
+import GenericInput from '../Input/GenericInput.vue'
 export default {
+  // COMPONENTS
   components: {
     LoadingPage,
     GenericButton,
     LookUp,
+    GenericInput,
   },
+
   // DATA
   data() {
     return {
@@ -660,11 +779,18 @@ export default {
         'postNominal',
         'order_sequence_number',
         'invoice.invoiceNumber',
+        'driverName',
+        'plateNumber',
+        'car',
       ],
+      tableNameTranslateObj: {},
       isLoading: false,
       img: {
         goBack,
         copy,
+        setting,
+        printer,
+        del,
       },
       objData: {},
       selectedRow: null,
@@ -673,16 +799,24 @@ export default {
         branch: {},
         currency: {},
       },
+      inputValuesObj: new Map(),
+      required: {
+        lookUp1: true,
+        lookUp2: true,
+      },
+      isInvoiceItam: false,
     }
   },
 
   // MOUNTED
   mounted() {
     this.getPageRequest()
+    this.getStaticTableNameValues()
   },
 
   // METHOD
   methods: {
+    // preparePurchaseInvoiceNewAjaxLoad api
     getPageRequest() {
       this.isLoading = !this.isLoading
       axios
@@ -707,6 +841,28 @@ export default {
         })
     },
 
+    // translate api
+    getStaticTableNameValues() {
+      axios
+        .post(
+          `https://192.168.1.55:8443/api/translate`,
+          { messages: this.tableNameTranslate },
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('token')}`,
+            },
+          }
+        )
+        .then((res) => {
+          this.tableNameTranslateObj = res.data
+        })
+        .catch((error) => {
+          // eslint-disable-next-line no-console
+          console.log(error)
+        })
+    },
+
+    // 3 ta lookup ni boshqarish
     getSelectedList(data) {
       if (data[1] === 'Supplier') {
         this.propsValue.supplare = data[0]
@@ -715,18 +871,31 @@ export default {
       } else this.propsValue.currency = data[0]
     },
 
-    getStaticTableNameValues() {
-      axios
-        .post(`https://192.168.1.55:8443/api/translate`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-        })
-        .then((res) => {})
-        .catch((error) => {
-          // eslint-disable-next-line no-console
-          console.log(error)
-        })
+    // Lookup's Valuesini olish
+    getLookUpValue(key, value) {
+      this.inputValuesObj.set(key, value)
+      this.inputValuesObj.get('supplier')
+        ? (this.required.lookUp1 = true)
+        : (this.required.lookUp1 = false)
+      this.inputValuesObj.get('paymentType')
+        ? (this.required.lookUp2 = true)
+        : (this.required.lookUp2 = false)
+    },
+
+    // button action addition rows
+    additionInvoiceItem() {
+      this.inputValuesObj.get('supplier')
+        ? (this.required.lookUp1 = true)
+        : (this.required.lookUp1 = false)
+      this.inputValuesObj.get('paymentType')
+        ? (this.required.lookUp2 = true)
+        : (this.required.lookUp2 = false)
+
+      if (this.required.lookUp1 && this.required.lookUp2) {
+        this.isInvoiceItam = true
+      } else {
+        this.isInvoiceItam = false
+      }
     },
   },
 }

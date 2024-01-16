@@ -15,6 +15,9 @@
     <input
       :value="selectedText || defvalue"
       type="text"
+      :style="{
+        border: required ? '1px solid rgb(228, 228, 228)' : '1px solid red',
+      }"
       class="custom-widget-list w-full"
       @input="handleInput"
       @keydown="onKeydown"
@@ -53,6 +56,10 @@
 import axios from 'axios'
 export default {
   props: {
+    name: {
+      type: String,
+      default: '',
+    },
     durl: { type: String, default: '' },
     dwidth: {
       type: String,
@@ -73,6 +80,10 @@ export default {
     dparam: {
       type: Object,
       default: () => ({}),
+    },
+    required: {
+      type: Boolean,
+      default: true,
     },
   },
   data() {
@@ -159,6 +170,7 @@ export default {
           showLi[0].classList.add('selectedLi')
         }
       }
+      this.$emit('customFunction', this.name, this.selectedText)
     },
 
     // =>=>=>=> key down event =>=>=>
@@ -232,6 +244,7 @@ export default {
           this.showList = false
         }
       }
+      this.$emit('customFunction', this.name, this.selectedText)
     },
 
     // click event on li
@@ -245,7 +258,6 @@ export default {
       const fullCustomData = JSON.stringify(option)
       const select = parentEl.querySelector('select')
       const thisInput = parentEl.querySelector('input')
-
       if (fullCustomData) {
         parentEl.setAttribute('full_custom_data', fullCustomData)
         const optionValue = JSON.parse(fullCustomData)
@@ -265,6 +277,7 @@ export default {
       }
       ul.scrollTop = 0
       this.showList = false
+      this.$emit('customFunction', this.name, this.selectedText)
     },
 
     // li selected function
@@ -365,7 +378,7 @@ export default {
   overflow: hidden;
   text-overflow: ellipsis;
   border-radius: 5px;
-  border: 1px solid rgba(228, 228, 228, 1);
+  border: 1px solid rgb(228, 228, 228);
   transition: 0.4s;
 }
 .custom-widget-list:focus {
