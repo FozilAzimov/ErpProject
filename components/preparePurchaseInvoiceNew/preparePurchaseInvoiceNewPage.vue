@@ -284,7 +284,8 @@
             <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
               <GenericInput
                 :value="
-                  propsValue.branch.value || objData?.companyCurrencyRate?.text
+                  propsValue.branch.value ||
+                  objData?.companyRefCurrencyRate?.text
                 "
                 width="50"
                 widthtype="%"

@@ -113,219 +113,244 @@
         />
       </div>
     </form>
-    <div
-      class="dashboardBox border-[1px] border-solid border-[rgba(0,0,0,0.05)] p-[12px] bg-gradient-to-b from-transparent via-transparent to-gray-200 shadow-md flex items-center justify-between"
-    >
-      <div class="flex items-center gap-[10px]">
-        <img
-          src="../../assets/icons/user-black.png"
-          alt="user"
-          class="w-[14px]"
-        />
-        <h1 class="font-bold text-[rgb(49,126,172)] text-[14px] uppercase">
-          {{ $t('pages.purchaseinvoice.headerName') }}
-        </h1>
-      </div>
-      <div>
-        <ul class="flex items-center gap-4">
-          <li
-            class="bg-[rgba(32,111,162,0.05)] p-[7px] rounded-[50%] cursor-pointer border-[1px] border-[solid] border-[rgba(0,0,0,0.1] hover:border-[#3b89e9] duration-[0.4s]"
-            @click="openColumnConfig"
-          >
-            <img
-              class="w-[11px]"
-              src="../../assets/icons/gear.png"
-              alt="gear"
-            />
-          </li>
-          <li
-            class="bg-[rgba(32,111,162,0.05)] p-[7px] rounded-[50%] cursor-pointer border-[1px] border-[solid] border-[rgba(0,0,0,0.1] hover:border-[#3b89e9] focus:border-[#3b89e9] duration-[0.4s]"
-          >
-            <img
-              class="w-[11px] rotate-180"
-              src="../../assets/icons/arrow.png"
-              alt="arrow"
-            />
-          </li>
-          <li
-            class="bg-[rgba(32,111,162,0.05)] p-[7px] rounded-[50%] cursor-pointer border-[1px] border-[solid] border-[rgba(0,0,0,0.1] hover:border-[#3b89e9] focus:border-[#3b89e9] duration-[0.4s]"
-          >
-            <img
-              class="w-[11px]"
-              src="../../assets/icons/remove.png"
-              alt="remove"
-            />
-          </li>
-        </ul>
-      </div>
-    </div>
-    <div class="border-[1px] border-solid border-[rgba(0,0,0,0.1)] h-[700px]">
-      <GenericButton
-        name="Add New"
-        pl="10"
-        pt="3"
-        pr="10"
-        pb="3"
-        bg="rgba(54, 155, 215, 0.8)"
-        textsize="15"
-        margin="8"
-        @click="$router.push('/preparePurchaseInvoiceNew.htm')"
-      />
-      <div class="mt-3 p-2">
-        <div class="flex items-center justify-between mb-1">
-          <div class="text-[14px]">
-            <select
-              v-model="pageSize_value"
-              class="border-[1px] border-[solid] border-[rgba(171,177,187,0.7)] w-[60px] px-[5px] py-[3px] cursor-pointer rounded-[2px] text-[14px] outline-none"
-              @change="getTableRequest()"
+    <template v-if="isCloseTable">
+      <div
+        class="border-[1px] border-solid border-[rgba(0,0,0,0.05)] p-[12px] bg-gradient-to-b from-transparent via-transparent to-gray-200 shadow-md flex items-center justify-between"
+      >
+        <div class="flex items-center gap-[10px]">
+          <img
+            src="../../assets/icons/user-black.png"
+            alt="user"
+            class="w-[14px]"
+          />
+          <h1 class="font-bold text-[rgb(49,126,172)] text-[14px] uppercase">
+            {{ $t('pages.purchaseinvoice.headerName') }}
+          </h1>
+        </div>
+        <div>
+          <ul class="flex items-center gap-4">
+            <li
+              class="p-[7px] rounded-[50%] cursor-pointer border-[1px] border-[solid] border-[rgba(0,0,0,0.1] hover:border-[#3b89e9] duration-[0.4s]"
+              :style="{
+                background: 'radial-gradient(#fff, rgba(32,111,162,0.2))',
+              }"
+              @click="openColumnConfig"
             >
-              <option value="1">1</option>
-              <option value="10">10</option>
-              <option value="25">25</option>
-              <option value="50">50</option>
-              <option value="100">100</option>
-              <option value="500">500</option>
-            </select>
-            Records
-          </div>
-          <div class="flex items-center gap-2">
-            <GenericInput
-              v-model="keywordValue"
-              width="200"
-              height="30"
-              pl="10"
-              pr="10"
-              pt="2"
-              pb="2"
-              textsize="13"
-              type="text"
-              placeholder="Search..."
-              @change="getTableRequest"
-              @input="getInputValue"
-            />
-            <GenericButton
-              name="Search"
-              pl="10"
-              pt="4"
-              pr="10"
-              pb="4"
-              bg="rgba(54, 155, 215, 0.8)"
-              textsize="14"
-              :url="imgUrl.search"
-              :istherepicture="true"
-              @click="getTableRequest"
-            />
-            <GenericButton
-              name="Print Preview"
-              pl="10"
-              pt="4"
-              pr="10"
-              pb="4"
-              bg="rgb(126,183,62)"
-              textsize="14"
-              :url="imgUrl.printer"
-              :istherepicture="true"
-            />
-          </div>
-        </div>
-        <div class="h-[600px] flex items-start overflow-scroll">
-          <table class="w-full border-[1px] border-[solid] border-[#F0F0F0]">
-            <thead class="bg-[rgb(229,235,245)]">
-              <tr>
-                <th
-                  v-for="(headName, key) in tableHead"
-                  :key="key"
-                  :style="{ width: `${headName.width}px` }"
-                  class="text-[13px] font-semibold border-[1px] border-[solid] border-[rgba(119,136,153,0.2)] p-2 cursor-pointer"
-                >
-                  {{ headName.name }}
-                </th>
-                <th
-                  class="text-[13px] font-semibold border-[1px] border-[solid] border-[rgba(119,136,153,0.2)] p-2 cursor-pointer"
-                >
-                  Action
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <template v-if="isThereBody">
-                <tr
-                  v-for="(value, index) in tableBody"
-                  :key="index"
-                  class="bg-gradient-to-b from-transparent via-transparent to-[#F4F4F4]"
-                >
-                  <td
-                    v-for="(key, inx) in tableHead"
-                    :key="inx"
-                    class="border-[1px] text-[12px] p-2"
-                  >
-                    {{
-                      key.code === 'date'
-                        ? new Date(value[key.code]).toLocaleString('en-GB')
-                        : key.code === 'invoiceConfirmedStatus'
-                        ? 'Un Confirmed'
-                        : key.code === 'images'
-                        ? 'Bu rasm chiqmaydi'
-                        : value[key.code]
-                    }}
-                  </td>
-                  <td class="flex items-center justify-center gap-2 p-2">
-                    <GenericButton
-                      name="Open"
-                      pl="10"
-                      pt="4"
-                      pr="10"
-                      pb="4"
-                      bg="rgb(126,183,62)"
-                      textsize="14"
-                      @click="getTableRowOpen(tableId[index])"
-                    />
-                    <GenericButton
-                      name="qrCode"
-                      pl="10"
-                      pt="4"
-                      pr="10"
-                      pb="4"
-                      bg="rgb(126,183,62)"
-                      textsize="14"
-                    />
-                    <GenericButton
-                      name="forDevice"
-                      pl="10"
-                      pt="4"
-                      pr="10"
-                      pb="4"
-                      bg="rgb(126,183,62)"
-                      textsize="14"
-                    />
-                  </td>
-                </tr>
-              </template>
-              <template v-else>
-                <tr>
-                  <td
-                    :colspan="tableHeadLength"
-                    class="text-center border-[1px] border-[solid] border-[#F0F0F0] text-[12px] p-3"
-                  >
-                    <div
-                      class="flex flex-col justify-center items-start text-[rgba(0,0,0,0.5)]"
-                    >
-                      <span class="flex flex-col items-center">
-                        <img
-                          src="../../assets/icons/no-data.png"
-                          alt="no-data-icons"
-                        />
-                        No data
-                      </span>
-                    </div>
-                  </td>
-                </tr>
-              </template>
-            </tbody>
-          </table>
+              <img
+                class="w-[11px]"
+                src="../../assets/icons/gear.png"
+                alt="gear"
+              />
+            </li>
+            <li
+              class="p-[7px] rounded-[50%] cursor-pointer border-[1px] border-[solid] border-[rgba(0,0,0,0.1] hover:border-[#3b89e9] focus:border-[#3b89e9] duration-[0.4s]"
+              :style="{
+                background: 'radial-gradient(#fff, rgba(32,111,162,0.2))',
+              }"
+              @click="isOpen"
+            >
+              <img
+                class="w-[11px]"
+                :class="
+                  isOpenTable
+                    ? 'rotate-[-180deg] duration-[1s]'
+                    : 'rotate-[0deg] duration-[1s]'
+                "
+                src="../../assets/icons/arrow.png"
+                alt="arrow"
+              />
+            </li>
+            <li
+              class="p-[7px] rounded-[50%] cursor-pointer border-[1px] border-[solid] border-[rgba(0,0,0,0.1] hover:border-[#3b89e9] focus:border-[#3b89e9] duration-[0.4s]"
+              :style="{
+                background: 'radial-gradient(#fff, rgba(32,111,162,0.2))',
+              }"
+              @click="isClose"
+            >
+              <img
+                class="w-[11px]"
+                src="../../assets/icons/remove.png"
+                alt="remove"
+              />
+            </li>
+          </ul>
         </div>
       </div>
-    </div>
+      <div
+        class="border-[1px] border-solid border-[rgba(0,0,0,0.1)]"
+        :class="
+          isOpenTable
+            ? 'duration-[1s] h-[700px] overflow-hidden'
+            : 'duration-[1s] h-0 overflow-hidden'
+        "
+      >
+        <GenericButton
+          name="Add New"
+          pl="10"
+          pt="3"
+          pr="10"
+          pb="3"
+          bg="rgba(54, 155, 215, 0.8)"
+          textsize="15"
+          margin="8"
+          @click="$router.push('/preparePurchaseInvoiceNew.htm')"
+        />
+        <div class="mt-3 p-2">
+          <div class="flex items-center justify-between mb-1">
+            <div class="text-[14px]">
+              <select
+                v-model="pageSize_value"
+                class="border-[1px] border-[solid] border-[rgba(171,177,187,0.7)] w-[60px] px-[5px] py-[3px] cursor-pointer rounded-[2px] text-[14px] outline-none"
+                @change="getTableRequest()"
+              >
+                <option value="1">1</option>
+                <option value="10">10</option>
+                <option value="25">25</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+                <option value="500">500</option>
+              </select>
+              Records
+            </div>
+            <div class="flex items-center gap-2">
+              <GenericInput
+                v-model="keywordValue"
+                width="200"
+                height="30"
+                pl="10"
+                pr="10"
+                pt="2"
+                pb="2"
+                textsize="13"
+                type="text"
+                placeholder="Search..."
+                @change="getTableRequest"
+                @input="getInputValue"
+              />
+              <GenericButton
+                name="Search"
+                pl="10"
+                pt="4"
+                pr="10"
+                pb="4"
+                bg="rgba(54, 155, 215, 0.8)"
+                textsize="14"
+                :url="imgUrl.search"
+                :istherepicture="true"
+                @click="getTableRequest"
+              />
+              <GenericButton
+                name="Print Preview"
+                pl="10"
+                pt="4"
+                pr="10"
+                pb="4"
+                bg="rgb(126,183,62)"
+                textsize="14"
+                :url="imgUrl.printer"
+                :istherepicture="true"
+              />
+            </div>
+          </div>
+          <div class="h-[600px] flex items-start overflow-scroll">
+            <table class="w-full border-[1px] border-[solid] border-[#F0F0F0]">
+              <thead class="bg-[rgb(229,235,245)]">
+                <tr>
+                  <th
+                    v-for="(headName, key) in tableHead"
+                    :key="key"
+                    :style="{ width: `${headName.width}px` }"
+                    class="text-[13px] font-semibold border-[1px] border-[solid] border-[rgba(119,136,153,0.2)] p-2 cursor-pointer"
+                  >
+                    {{ headName.name }}
+                  </th>
+                  <th
+                    class="text-[13px] font-semibold border-[1px] border-[solid] border-[rgba(119,136,153,0.2)] p-2 cursor-pointer"
+                  >
+                    Action
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <template v-if="isThereBody">
+                  <tr
+                    v-for="(value, index) in tableBody"
+                    :key="index"
+                    class="bg-gradient-to-b from-transparent via-transparent to-[#F4F4F4]"
+                  >
+                    <td
+                      v-for="(key, inx) in tableHead"
+                      :key="inx"
+                      class="border-[1px] text-[12px] p-2"
+                    >
+                      {{
+                        key.code === 'date'
+                          ? new Date(value[key.code]).toLocaleString('en-GB')
+                          : key.code === 'invoiceConfirmedStatus'
+                          ? 'Un Confirmed'
+                          : key.code === 'images'
+                          ? 'Bu rasm chiqmaydi'
+                          : value[key.code]
+                      }}
+                    </td>
+                    <td class="flex items-center justify-center gap-2 p-2">
+                      <GenericButton
+                        name="Open"
+                        pl="10"
+                        pt="4"
+                        pr="10"
+                        pb="4"
+                        bg="rgb(126,183,62)"
+                        textsize="14"
+                        @click="getTableRowOpen(tableId[index])"
+                      />
+                      <GenericButton
+                        name="qrCode"
+                        pl="10"
+                        pt="4"
+                        pr="10"
+                        pb="4"
+                        bg="rgb(126,183,62)"
+                        textsize="14"
+                      />
+                      <GenericButton
+                        name="forDevice"
+                        pl="10"
+                        pt="4"
+                        pr="10"
+                        pb="4"
+                        bg="rgb(126,183,62)"
+                        textsize="14"
+                      />
+                    </td>
+                  </tr>
+                </template>
+                <template v-else>
+                  <tr>
+                    <td
+                      :colspan="tableHeadLength"
+                      class="text-center border-[1px] border-[solid] border-[#F0F0F0] text-[12px] p-3"
+                    >
+                      <div
+                        class="flex flex-col justify-center items-start text-[rgba(0,0,0,0.5)]"
+                      >
+                        <span class="flex flex-col items-center">
+                          <img
+                            src="../../assets/icons/no-data.png"
+                            alt="no-data-icons"
+                          />
+                          No data
+                        </span>
+                      </div>
+                    </td>
+                  </tr>
+                </template>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </template>
   </div>
 </template>
 
@@ -371,6 +396,8 @@ export default {
       checkModal: false,
       actionUrl: '',
       leftMap: {},
+      isOpenTable: true,
+      isCloseTable: true,
     }
   },
   mounted() {
@@ -489,6 +516,14 @@ export default {
     // Generic_Input value
     getInputValue(inputVal) {
       this.keywordValue = inputVal
+    },
+
+    // Table page ni ochish va yopish uchun
+    isOpen() {
+      this.isOpenTable = !this.isOpenTable
+    },
+    isClose() {
+      this.isCloseTable = !this.isCloseTable
     },
   },
 }

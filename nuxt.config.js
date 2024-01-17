@@ -25,9 +25,8 @@ export default {
     ],
   },
 
-  server: {
-    host: '0.0.0.0',
-  },
+  // server: {
+  // },
 
   ssr: false,
 
@@ -70,10 +69,38 @@ export default {
 
   i18n: {
     locales: [
-      { code: 'en', iso: 'en_cy-US_CY', file: 'en.js', title: 'English' },
-      { code: 'ru', iso: 'ru-RU', file: 'ru.js', title: 'Русский' },
-      { code: 'tr', iso: 'tr-TR', file: 'tr.js', title: 'Türkçe' },
-      { code: 'uz', iso: 'uz-UZ', file: 'uz.js', title: 'O’zbekcha' },
+      {
+        code: 'en',
+        iso: 'en_cy-US_CY',
+        file: 'en.js',
+        title: 'English',
+        url: 'usa.png',
+        alt: 'usa.png',
+      },
+      {
+        code: 'ru',
+        iso: 'ru-RU',
+        file: 'ru.js',
+        title: 'Русский',
+        url: 'russia.png',
+        alt: 'rus.png',
+      },
+      {
+        code: 'tr',
+        iso: 'tr-TR',
+        file: 'tr.js',
+        title: 'Türkçe',
+        url: 'turkey.png',
+        alt: 'turkey.png',
+      },
+      {
+        code: 'uz',
+        iso: 'uz-UZ',
+        file: 'uz.js',
+        title: 'O’zbekcha',
+        url: 'uzbekistan.png',
+        alt: 'uzb.png',
+      },
     ],
     defaultLocale: 'en',
     sortRoutes: true, // set false if adding custom routes https://i18n.nuxtjs.org/options-reference#sortroutes
@@ -81,9 +108,9 @@ export default {
     detectBrowserLanguage: {
       alwaysRedirect: false,
       useCookie: true,
-      cookieKey: 'i18n_redirected',
+      cookieKey: 'lang',
+      useLocalStorage: true,
     },
-    strategy: 'no_prefix',
   },
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
