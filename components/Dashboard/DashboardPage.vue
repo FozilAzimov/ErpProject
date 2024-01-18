@@ -71,11 +71,6 @@ export default {
         // eslint-disable-next-line no-console
         console.log(error)
       })
-    axios.get(`https://192.168.1.55:8443/api/systemMenu`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
-    })
   },
 }
 </script>

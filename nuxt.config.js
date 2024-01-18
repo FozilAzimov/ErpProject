@@ -1,3 +1,5 @@
+import path from 'path'
+import fs from 'fs'
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
@@ -61,7 +63,12 @@ export default {
     '@nuxtjs/pwa',
     '@nuxtjs/eslint-module',
     '@nuxtjs/i18n',
+    // '@nuxt/image',
   ],
+
+  // image: {
+  //   dir: 'static/images',
+  // },
 
   generate: {
     fallback: true,
@@ -70,20 +77,20 @@ export default {
   i18n: {
     locales: [
       {
-        code: 'en',
-        iso: 'en_cy-US_CY',
-        file: 'en.js',
-        title: 'English',
-        url: 'usa.png',
-        alt: 'usa.png',
-      },
-      {
         code: 'ru',
         iso: 'ru-RU',
         file: 'ru.js',
         title: 'Русский',
         url: 'russia.png',
         alt: 'rus.png',
+      },
+      {
+        code: 'en',
+        iso: 'en_cy-US_CY',
+        file: 'en.js',
+        title: 'English',
+        url: 'usa.png',
+        alt: 'usa.png',
       },
       {
         code: 'tr',
@@ -102,7 +109,7 @@ export default {
         alt: 'uzb.png',
       },
     ],
-    defaultLocale: 'en',
+    defaultLocale: 'ru',
     sortRoutes: true, // set false if adding custom routes https://i18n.nuxtjs.org/options-reference#sortroutes
     langDir: '~/locales/',
     detectBrowserLanguage: {
@@ -110,6 +117,14 @@ export default {
       useCookie: true,
       cookieKey: 'lang',
       useLocalStorage: true,
+    },
+    strategy: 'no_prefix',
+  },
+
+  server: {
+    https: {
+      key: fs.readFileSync(path.resolve(__dirname, './keys/private.key')),
+      cert: fs.readFileSync(path.resolve(__dirname, './keys/certificate.crt')),
     },
   },
 

@@ -23,21 +23,20 @@
       }"
     >
       <li
-        v-for="(item, index) in languageData"
-        :key="index"
-        :to="switchLocalePath(item.lang)"
-        @click="getLanguage(item.lang, item.value)"
+        v-for="locale in availableLocales"
+        :key="locale.code"
+        @click="getLanguage(locale.code, locale.title)"
       >
         <nuxt-link
-          to=""
+          :to="switchLocalePath(locale.code)"
           class="block p-[7px_15px] hover:bg-[rgba(54,155,215,0.3)] duration-[0.2s] flex items-center gap-2 cursor-pointer"
         >
           <img
             class="w-[11px]"
-            :src="require(`../../assets/icons/${item.url}`)"
-            :alt="item.alt"
+            :src="require(`../../assets/icons/${locale.url}`)"
+            :alt="locale.alt"
           />
-          {{ item.value }}
+          {{ locale.title }}
         </nuxt-link>
       </li>
     </ul>
@@ -52,26 +51,10 @@ export default {
       langToggle: false,
       dropToggle: false,
       language: localStorage.getItem('langValue'),
-      languageData: [
-        { value: 'English', url: 'usa.png', alt: 'usa.png', lang: 'en' },
-        { value: 'Russian', url: 'russia.png', alt: 'rus.png', lang: 'ru' },
-        {
-          value: 'Turkish',
-          url: 'turkey.png',
-          alt: 'turkey.png',
-          lang: 'tr',
-        },
-        {
-          value: 'Uzbek',
-          url: 'uzbekistan.png',
-          alt: 'uzb.png',
-          lang: 'uz',
-        },
-      ],
     }
   },
 
-  // Computed
+  // COMPUTED
   computed: {
     availableLocales() {
       return this.$i18n.locales

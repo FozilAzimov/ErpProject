@@ -193,12 +193,17 @@
                   </p>
                 </div>
               </template>
-              <el-menu-item
-                v-for="(childItem, indexChild) in item.child"
-                :key="indexChild"
-                :index="String(childItem.id - indexChild)"
-                >{{ childItem.name }}</el-menu-item
-              >
+              <div @click="isCollapse">
+                <nuxt-link
+                  v-for="(childItem, indexChild) in item.child"
+                  :key="indexChild"
+                  :to="`${childItem.url}.htm`"
+                >
+                  <el-menu-item :index="String(childItem.id - indexChild)">
+                    {{ childItem.name }}
+                  </el-menu-item>
+                </nuxt-link>
+              </div>
             </el-submenu>
           </el-menu>
         </el-aside>
@@ -316,6 +321,7 @@ export default {
   methods: {
     isCollapse() {
       this.collapseMune = !this.collapseMune
+      console.log(this.collapseMune)
     },
 
     // Log Out

@@ -76,42 +76,6 @@
           @change="getSelectValue"
         />
       </div>
-      <div class="flex items-center gap-1">
-        <label for="invoice" class="text-[13px] text-[] cursor-pointer"
-          >Invoice (Status)</label
-        >
-        <GenericSelect
-          id="invoice"
-          v-model="formData.invoice"
-          :data="selectData.invoiceOnWayStatusList"
-          textsize="13"
-          @change="getSelectValue"
-        />
-      </div>
-      <div class="flex items-center gap-1">
-        <label for="departments" class="text-[13px] text-[] cursor-pointer"
-          >Departments</label
-        >
-        <GenericSelect
-          id="departments"
-          v-model="formData.departments"
-          :data="selectData.departmentDTOList"
-          textsize="13"
-          @change="getSelectValue"
-        />
-      </div>
-      <div class="flex items-center gap-1">
-        <label for="warehouse" class="text-[13px] text-[] cursor-pointer"
-          >Warehouse</label
-        >
-        <GenericSelect
-          id="warehouse"
-          v-model="formData.warehouse"
-          :data="selectData.warehouseList"
-          textsize="13"
-          @change="getSelectValue"
-        />
-      </div>
     </form>
     <template v-if="isCloseTable">
       <div
@@ -184,17 +148,28 @@
             : 'duration-[1s] h-0 overflow-hidden'
         "
       >
-        <GenericButton
-          name="Add New"
-          pl="10"
-          pt="3"
-          pr="10"
-          pb="3"
-          bg="rgba(54, 155, 215, 0.8)"
-          textsize="15"
-          margin="8"
-          @click="$router.push('/preparePurchaseInvoiceNew.htm')"
-        />
+        <div class="flex items-center gap-2 m-[8px]">
+          <GenericButton
+            name="Add New"
+            pl="10"
+            pt="3"
+            pr="10"
+            pb="3"
+            bg="rgba(54, 155, 215, 0.8)"
+            textsize="15"
+            @click="$router.push('/prepareSalesReturnNew.htm')"
+          />
+          <GenericButton
+            name="Add New For Person"
+            pl="10"
+            pt="3"
+            pr="10"
+            pb="3"
+            bg="rgba(54, 155, 215, 0.8)"
+            textsize="15"
+            @click="$router.push('/prepareSalesReturnNew.htm')"
+          />
+        </div>
         <div class="mt-3 p-2">
           <div class="flex items-center justify-between mb-1">
             <div class="text-[14px]">
@@ -329,7 +304,7 @@ export default {
       this.isLoading = !this.isLoading
       axios
         .post(
-          `https://192.168.1.55:8443/api/invoice/purchaseInvoiceList`,
+          `https://192.168.1.55:8443/api/invoice/salesReturnList`,
           {
             current_page: 1,
             page_size: this.pageSize_value,
