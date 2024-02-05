@@ -1,0 +1,134 @@
+{
+  "ActualitySystem": {
+    "description": "Auto imported from components/ActualitySystemPage/ActualitySystem.vue"
+  },
+  "BranchesPage": {
+    "description": "Auto imported from components/Branches/BranchesPage.vue"
+  },
+  "ColumnConfigPage": {
+    "description": "Auto imported from components/ColumnConfig/ColumnConfigPage.vue"
+  },
+  "ColorsPage": {
+    "description": "Auto imported from components/ColorsPage/ColorsPage.vue"
+  },
+  "DashboardPage": {
+    "description": "Auto imported from components/Dashboard/DashboardPage.vue"
+  },
+  "GenericButton": {
+    "description": "Auto imported from components/Button/GenericButton.vue"
+  },
+  "DyeingsPage": {
+    "description": "Auto imported from components/Dyeings/DyeingsPage.vue"
+  },
+  "ExpenseInvoice": {
+    "description": "Auto imported from components/ExpenseInvoice/ExpenseInvoice.vue"
+  },
+  "GenericPrepareTablePage": {
+    "description": "Auto imported from components/GenericPrepareTable/GenericPrepareTablePage.vue"
+  },
+  "GenericInvoiceItemModalPage": {
+    "description": "Auto imported from components/GenericInvoiceItemModal/GenericInvoiceItemModalPage.vue"
+  },
+  "GenericTablePage": {
+    "description": "Auto imported from components/GenericTable/GenericTablePage.vue"
+  },
+  "GenericTranslatePage": {
+    "description": "Auto imported from components/GenericTranslate/GenericTranslatePage.vue"
+  },
+  "GenericInput": {
+    "description": "Auto imported from components/Input/GenericInput.vue"
+  },
+  "GenericInputDatePage": {
+    "description": "Auto imported from components/InputDate/GenericInputDatePage.vue"
+  },
+  "InternanlListPage": {
+    "description": "Auto imported from components/InternalListPage/InternanlListPage.vue"
+  },
+  "LoadingPage": {
+    "description": "Auto imported from components/Loading/LoadingPage.vue"
+  },
+  "LoginPage": {
+    "description": "Auto imported from components/Login/LoginPage.vue"
+  },
+  "LookUp": {
+    "description": "Auto imported from components/Lookup/LookUp.vue"
+  },
+  "LanguageSelector": {
+    "description": "Auto imported from components/main/LanguageSelector.vue"
+  },
+  "MenuSettings": {
+    "description": "Auto imported from components/MenuSettings/MenuSettings.vue"
+  },
+  "OutputProductionInvoice": {
+    "description": "Auto imported from components/OutputProductionInvoice/OutputProductionInvoice.vue"
+  },
+  "PreparePurchaseInvoiceNewPage": {
+    "description": "Auto imported from components/PreparePurchaseInvoiceNew/PreparePurchaseInvoiceNewPage.vue"
+  },
+  "PrepareSalesReturnNewPage": {
+    "description": "Auto imported from components/PrepareSalesReturnNew/PrepareSalesReturnNewPage.vue"
+  },
+  "ProductionInvoice": {
+    "description": "Auto imported from components/ProductionInvoice/ProductionInvoice.vue"
+  },
+  "ProductionOrderPage": {
+    "description": "Auto imported from components/ProductionOrderPage/ProductionOrderPage.vue"
+  },
+  "ProductionOrderplannigs": {
+    "description": "Auto imported from components/ProductionOrderPlannigs/ProductionOrderplannigs.vue"
+  },
+  "PurchaseInvoisePage": {
+    "description": "Auto imported from components/PurchaseInvoice/PurchaseInvoisePage.vue"
+  },
+  "PurchaseOrderPage": {
+    "description": "Auto imported from components/PurchaseOrderpage/PurchaseOrderPage.vue"
+  },
+  "PurchaseReturnPage": {
+    "description": "Auto imported from components/PurchaseReturnPage/PurchaseReturnPage.vue"
+  },
+  "SaleInvoicePage": {
+    "description": "Auto imported from components/SaleInvoice/SaleInvoicePage.vue"
+  },
+  "SalesOrderpage": {
+    "description": "Auto imported from components/SalesOrderpage/SalesOrderpage.vue"
+  },
+  "SalesReturnPage": {
+    "description": "Auto imported from components/SalesReturn/SalesReturnPage.vue"
+  },
+  "GenericSelect": {
+    "description": "Auto imported from components/Select/GenericSelect.vue"
+  },
+  "SessionsPage": {
+    "description": "Auto imported from components/Sessions/SessionsPage.vue"
+  },
+  "GenericActiveLookUpPage": {
+    "description": "Auto imported from components/Generics/GenericActiveLookUp/GenericActiveLookUpPage.vue"
+  },
+  "PageTable": {
+    "description": "Auto imported from components/Reports/TransactionReports/PageTable.vue"
+  },
+  "SummaryReportPage1": {
+    "description": "Auto imported from components/Reports/TransactionReports/SummaryReportPage1.vue"
+  },
+  "SummaryReportPage2": {
+    "description": "Auto imported from components/Reports/TransactionReports/SummaryReportPage2.vue"
+  },
+  "SummaryReportPage3": {
+    "description": "Auto imported from components/Reports/TransactionReports/SummaryReportPage3.vue"
+  },
+  "SummaryReportPage4": {
+    "description": "Auto imported from components/Reports/TransactionReports/SummaryReportPage4.vue"
+  },
+  "SummaryReportPage5": {
+    "description": "Auto imported from components/Reports/TransactionReports/SummaryReportPage5.vue"
+  },
+  "SummaryReportPage6": {
+    "description": "Auto imported from components/Reports/TransactionReports/SummaryReportPage6.vue"
+  },
+  "SummaryReportPage7": {
+    "description": "Auto imported from components/Reports/TransactionReports/SummaryReportPage7.vue"
+  },
+  "TransactionReportsPage": {
+    "description": "Auto imported from components/Reports/TransactionReports/TransactionReportsPage.vue"
+  }
+}

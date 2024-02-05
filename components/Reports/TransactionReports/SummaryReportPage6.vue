@@ -124,59 +124,67 @@
             <span class="text-[rgb(49,126,172)] text-[18px] font-semibold">
               totalProduction
             </span>
-            <PageTable />
+            <PageTable
+              :tablebody="tableBody?.resultSummaryQtyByFinishedBatchForMonth"
+            />
           </div>
           <div class="flex flex-col my-4">
             <span class="text-[rgb(49,126,172)] text-[18px] font-semibold">
               Sale
             </span>
-            <PageTable />
+            <PageTable
+              :tablebody="tableBody?.resultSummaryQtyAndAmountBySaleInvoice"
+            />
           </div>
           <div class="flex flex-col my-4">
             <span class="text-[rgb(49,126,172)] text-[18px] font-semibold">
               Knitting
             </span>
-            <PageTable />
+            <PageTable
+              :tablebody="tableBody?.resultSummaryKnittingServicePrice"
+            />
           </div>
           <div class="flex flex-col my-4">
             <span class="text-[rgb(49,126,172)] text-[18px] font-semibold">
               Expenses
             </span>
-            <PageTable :header="header1" :tablebody="tableBody2" />
+            <PageTable
+              :tablebody="tableBody?.resultSummaryExpenseProductsByCategory"
+            />
           </div>
           <div class="flex flex-col my-4">
             <span class="text-[rgb(49,126,172)] text-[18px] font-semibold">
               Finance
             </span>
-            <PageTable />
+            <PageTable :tablebody="tableBody?.resultSummaryFinanceExpense" />
           </div>
           <div class="flex flex-col my-4">
             <span class="text-[rgb(49,126,172)] text-[18px] font-semibold">
               Cost
             </span>
-            <PageTable />
+            <PageTable :tablebody="tableBody?.resultCostPriceForProduction" />
           </div>
           <div class="flex flex-col my-4">
             <span class="text-[rgb(49,126,172)] text-[18px] font-semibold">
               Saldo
             </span>
             <PageTable
+              :topheader="topHeader"
               :header="header2"
-              :tablebody="tableBody3"
-              :topheader="tableBody3[0]"
+              :tablebody="tableBody?.resultSummaryQtyByProductionInput"
             />
           </div>
           <div class="flex flex-col my-4">
             <span class="text-[rgb(49,126,172)] text-[18px] font-semibold">
               Entry
             </span>
-            <PageTable />
+            <PageTable :tablebody="tableBody?.entryResultDataCreditDebitList" />
           </div>
           <div class="flex flex-col my-4">
             <span class="text-[rgb(49,126,172)] text-[18px] font-semibold">
               SaleCost
             </span>
-            <PageTable />
+            <PageTable :tablebody="tableBody?.resultCostPriceForSale" />
           </div>
         </div>
       </div>
@@ -237,11 +245,10 @@ export default {
       rateTypeId: null,
       currencyRate: null,
       currencySymbol: null,
+      tableBody: {},
+      topHeader: {},
       dateF: null,
       dateT: null,
-      tableBody: [],
-      tableBody2: [],
-      tableBody3: [],
       header1: ['Id', 'Name', 'Round'],
       header2: ['Id', 'Saldo', 'Debit', 'Credit'],
     }
@@ -293,11 +300,10 @@ export default {
             this.isCloseTableUI = true
             this.currencyRate = data?.fp?.currencyRate
             this.currencySymbol = data?.currencySymbol
+            this.tableBody = data
+            this.topHeader = data?.resultSummaryQtyByProductionInput[0]
             this.dateF = data?.dateF
             this.dateT = data?.dateT
-            this.tableBody = data?.resultDataCreditDebit
-            this.tableBody2 = data?.resultSummaryExpenseProductsByCategory
-            this.tableBody3 = data?.resultSummaryQtyByProductionInput
           })
           .catch((error) => {
             this.isLoading = !this.isLoading

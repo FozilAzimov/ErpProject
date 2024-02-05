@@ -93,38 +93,50 @@
           <div class="flex flex-col my-4">
             <PageTable
               :header="header"
-              :tablebody="body?.purchaseAndSaleHasUnitPriceList"
+              :tablebody="tableBody?.purchaseAndSaleHasUnitPriceList"
             />
           </div>
           <div class="flex flex-col my-4">
             <PageTable
               :header="header"
-              :tablebody="body?.purchaseAndSaleNotUnitPriceList"
+              :tablebody="tableBody?.purchaseAndSaleNotUnitPriceList"
             />
           </div>
           <div class="flex flex-col my-4">
             <span class="text-[rgb(49,126,172)] text-[18px] font-semibold">
               Cashbox Production expense
             </span>
-            <PageTable :header="genericHead2" :tablebody="tableBody" />
+            <PageTable
+              :header="genericHead2"
+              :tablebody="tableBody?.resultDataCashForMonth"
+            />
           </div>
           <div class="flex flex-col my-4">
             <span class="text-[rgb(49,126,172)] text-[18px] font-semibold">
               Bank TransactionsExit
             </span>
-            <PageTable :header="genericHead1" :tablebody="tableBody" />
+            <PageTable
+              :header="genericHead1"
+              :tablebody="tableBody?.resultDataBankForMonth"
+            />
           </div>
           <div class="flex flex-col my-4">
             <span class="text-[rgb(49,126,172)] text-[18px] font-semibold">
               Bank TransactionsExit
             </span>
-            <PageTable :header="genericHead1" :tablebody="tableBody" />
+            <PageTable
+              :header="genericHead1"
+              :tablebody="tableBody?.resultDataBankForMonth2"
+            />
           </div>
           <div class="flex flex-col my-4">
             <span class="text-[rgb(49,126,172)] text-[18px] font-semibold">
               Bank TransactionsExit
             </span>
-            <PageTable :header="genericHead1" :tablebody="tableBody" />
+            <PageTable
+              :header="genericHead1"
+              :tablebody="tableBody?.resultDataBankForMonth3"
+            />
           </div>
         </div>
       </div>
@@ -174,11 +186,7 @@ export default {
       currencySymbol: null,
       dateF: null,
       dateT: null,
-      body: {},
-      tableBody: [],
-      tableBody2: [],
-      tableBody3: [],
-      tableBody4: [],
+      tableBody: {},
       tableBody6: [],
       genericHead1: [],
       genericHead2: [],
@@ -226,10 +234,6 @@ export default {
           this.dateT = data?.dateT
           this.bankList = data?.bankList
           this.cashboxList = data?.cashboxList
-          this.tableBody = data?.resultDataCreditDebit
-          this.tableBody2 = data?.resultDataCreditDebitStock
-          this.tableBody3 = data?.resultSummaryQtyByExpenseForMonth
-          this.tableBody4 = data?.resultSummaryQtyByExpense
           this.tableBody6.push(data?.resultLastEntryPersons)
           this.genericHeadAction()
         })
@@ -241,6 +245,8 @@ export default {
     },
 
     genericHeadAction() {
+      this.genericHead1 = []
+      this.genericHead2 = []
       this.bankList.forEach((obj) => this.genericHead1.push(obj.account_name))
       this.cashboxList.forEach((obj) => this.genericHead2.push(obj.name))
       this.genericHead1.unshift('Id', 'Company Name', 'Payment Type')

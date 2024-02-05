@@ -339,7 +339,7 @@ export default {
     // Log Out
     getLogout() {
       axios
-        .delete('https://192.168.1.55:8443/api/security/logout', {
+        .delete(`${this.baseURL}/security/logout`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
             'x-auth-token': localStorage.getItem('authToken'),

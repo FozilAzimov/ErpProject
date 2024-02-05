@@ -236,6 +236,7 @@
                     :src="img.del"
                     alt="delete"
                     class="w-[18px] cursor-pointer"
+                    @click="rowDelAction(indexOne)"
                   />
                 </span>
               </td>
@@ -351,6 +352,11 @@ export default {
     },
     noOpenModal() {
       this.tableBody.push(this.filteredTablehead)
+    },
+
+    // row delete action
+    rowDelAction(index) {
+      this.tableBody = this.tableBody.filter((row, inx) => inx !== index)
     },
 
     // Modal Close

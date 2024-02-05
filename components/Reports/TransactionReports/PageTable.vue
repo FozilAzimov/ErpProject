@@ -194,17 +194,17 @@
 <script>
 export default {
   props: {
-    tablebody: {
-      type: Array,
-      default: () => [],
+    topheader: {
+      type: Object,
+      default: () => ({}),
     },
     header: {
       type: Array,
       default: () => [],
     },
-    topheader: {
-      type: Object,
-      default: () => ({}),
+    tablebody: {
+      type: Array,
+      default: () => [],
     },
   },
 }
