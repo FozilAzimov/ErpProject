@@ -61,6 +61,10 @@ export default {
       type: String,
       default: '',
     },
+    name: {
+      type: String,
+      default: '',
+    },
   },
   data() {
     return {
@@ -70,6 +74,7 @@ export default {
   methods: {
     getSelectValue() {
       this.$emit('change', this.inputValue, this.id)
+      this.$emit('customFunction', this.name, this.inputValue)
     },
   },
 }

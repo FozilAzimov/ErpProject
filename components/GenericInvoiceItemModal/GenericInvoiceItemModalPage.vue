@@ -1,0 +1,249 @@
+<template>
+  <div
+    class="max-w-[80%] max-h-[65vh] p-3 rounded-md overflow-auto fixed bg-[rgb(208,225,243)] z-[1000] left-[50%] top-[50%] translate-x-[-50%] translate-y-[-60%] shadow-[0px_0px_50px_rgba(0,0,0,0.2)] flex justify-between"
+  >
+    <div>
+      <div
+        class="flex items-center justify-between gap-5 border-b-[1px] border-b-[solid] border-b-[#000] pb-3 mb-2"
+      >
+        <h2 class="font-bold text-[rgb(49,126,172)]">Invoice Item</h2>
+        <div class="flex items-center justify-between gap-2">
+          <GenericButton
+            name="Accept"
+            pl="10"
+            pt="3"
+            pr="10"
+            pb="3"
+            bg="rgb(119,191,120)"
+            textsize="14"
+            @click="acceptAction"
+          />
+          <GenericButton
+            name="Close"
+            pl="10"
+            pt="3"
+            pr="10"
+            pb="3"
+            bg="rgb(245,108,108)"
+            textsize="14"
+            @click="closeAction"
+          />
+        </div>
+      </div>
+      <div class="flex justify-between items-start gap-52 pb-3">
+        <div>
+          <div
+            v-for="(itemRight, indexRight) in rightData"
+            :key="itemRight.name + indexRight"
+            class="flex justify-between gap-5"
+          >
+            <div>
+              <label class="font-medium whitespace-nowrap text-[14px]">
+                {{ itemRight.headerText }}
+              </label>
+            </div>
+            <div class="mt-[2px]">
+              <LookUp
+                v-if="itemRight.type === 'list'"
+                :durl="`invoiceBase/${itemRight.durl}`"
+                dwidth="250"
+                :name="itemRight.name"
+                @customFunction="getInputValue"
+              />
+              <GenericInput
+                v-else-if="
+                  itemRight.type === 'float' || itemRight.type === 'integer'
+                "
+                width="250"
+                height="23"
+                pl="10"
+                pr="10"
+                pt="2"
+                pb="2"
+                textsize="13"
+                type="number"
+                :name="itemRight.name"
+                @customFunction="getInputValue"
+              />
+              <GenericInput
+                v-else-if="itemRight.type === 'string'"
+                width="250"
+                height="23"
+                pl="10"
+                pr="10"
+                pt="2"
+                pb="2"
+                textsize="13"
+                type="text"
+                :name="itemRight.name"
+                @customFunction="getInputValue"
+              />
+              <GenericInputDatePage
+                v-else-if="itemRight.type === 'date'"
+                width="250"
+                height="23"
+                pl="10"
+                pr="10"
+                pt="1"
+                pb="1"
+                textsize="13"
+                type="datetime-local"
+                valuecolor="rgba(0,0,0,0.7)"
+                :name="itemRight.name"
+                @customFunction="getInputValue"
+              />
+              <GenericInput
+                v-else-if="itemRight.type === 'checkbox'"
+                type="checkbox"
+                :name="itemRight.name"
+                @customFunction="getInputValue"
+              />
+              <span v-else>Type {{ itemRight.type }}</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div
+            v-for="(itemLeft, indexLeft) in leftData"
+            :key="itemLeft.name + indexLeft"
+            class="flex justify-between gap-5"
+          >
+            <div>
+              <label class="font-medium whitespace-nowrap text-[14px]">
+                {{ itemLeft.headerText }}
+              </label>
+            </div>
+            <div class="mt-[2px]">
+              <LookUp
+                v-if="itemLeft.type === 'list'"
+                :durl="`invoiceBase/${itemLeft.durl}`"
+                dwidth="250"
+                :name="itemLeft.name"
+                @customFunction="getInputValue"
+              />
+              <GenericInput
+                v-else-if="
+                  itemLeft.type === 'float' || itemLeft.type === 'integer'
+                "
+                width="250"
+                height="23"
+                pl="10"
+                pr="10"
+                pt="2"
+                pb="2"
+                textsize="13"
+                type="number"
+                :name="itemLeft.name"
+                @customFunction="getInputValue"
+              />
+              <GenericInput
+                v-else-if="itemLeft.type === 'string'"
+                width="250"
+                height="23"
+                pl="10"
+                pr="10"
+                pt="2"
+                pb="2"
+                textsize="13"
+                type="text"
+                :name="itemLeft.name"
+                @customFunction="getInputValue"
+              />
+              <GenericInputDatePage
+                v-else-if="itemLeft.type === 'date'"
+                width="250"
+                height="23"
+                pl="10"
+                pr="10"
+                pt="1"
+                pb="1"
+                textsize="13"
+                type="datetime-local"
+                valuecolor="rgba(0,0,0,0.7)"
+                :name="itemLeft.name"
+                @customFunction="getInputValue"
+              />
+              <GenericInput
+                v-else-if="itemLeft.type === 'checkbox'"
+                type="checkbox"
+                :name="itemLeft.name"
+                @customFunction="getInputValue"
+              />
+              <span v-else>Type {{ itemLeft.type }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import GenericButton from '../Button/GenericButton.vue'
+import GenericInput from '../Input/GenericInput.vue'
+import GenericInputDatePage from '../InputDate/GenericInputDatePage.vue'
+import LookUp from '../Lookup/LookUp.vue'
+
+export default {
+  components: { GenericInput, GenericButton, LookUp, GenericInputDatePage },
+  props: {
+    tabledata: {
+      type: Array,
+      default: () => [],
+    },
+  },
+  data() {
+    return {
+      modalData: [],
+      rightData: [],
+      leftData: [],
+      required: {
+        lookUp: true,
+      },
+      inputValuesObj: new Map(),
+    }
+  },
+  mounted() {
+    this.filterData()
+  },
+  methods: {
+    // Data filter
+    filterData() {
+      // eslint-disable-next-line array-callback-return
+      this.modalData = this.tabledata.filter((value) => {
+        if (
+          value.type !== 'label' &&
+          value.type !== 'hidden' &&
+          value.type !== 'file_image' &&
+          value.type !== 'button'
+        )
+          return value
+      })
+      this.rightData = this.modalData.slice(
+        0,
+        Number.parseInt(this.modalData.length / 2) + 1
+      )
+      this.leftData = this.modalData.slice(
+        Number.parseInt(this.modalData.length / 2) + 1,
+        this.modalData.length
+      )
+    },
+
+    // Modal close
+    closeAction() {
+      this.$emit('customCloseAction', false)
+    },
+
+    // Accept button action addition rows
+    acceptAction() {
+      this.$emit('customInputValueObj', this.inputValuesObj)
+      this.closeAction()
+    },
+
+    // Lookup's Valuesini olish
+    getInputValue(key, value) {
+      this.inputValuesObj.set(key, value)
+    },
+  },
+}
+</script>

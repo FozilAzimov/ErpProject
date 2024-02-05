@@ -18,6 +18,18 @@
       <div class="flex items-center gap-[5px]">
         <div>
           <button
+            class="toggle-button p-[5px_10px] text-[13px] uppercase flex items-center justify-center gap-4 bg-[#fff] rounded-[3px] relative z-[1] hover:bg-gradient-to-b hover:from-transparent hover:via-transparent hover:to-gray-200"
+            @click="goToMenuSetting"
+          >
+            <img
+              src="../assets/icons/menuSetting.png"
+              alt="menu-setting"
+              class="w-[18px]"
+            />
+          </button>
+        </div>
+        <div>
+          <button
             class="toggle-button p-[4px_10px] text-[13px] uppercase flex items-center justify-center gap-4 bg-[#fff] rounded-[3px] relative z-[1] hover:bg-gradient-to-b hover:from-transparent hover:via-transparent hover:to-gray-200"
             @click="dropdownToggle"
           >
@@ -37,7 +49,7 @@
             />
           </button>
           <ul
-            class="w-[203px] bg-[#fff] absolute top-[44px] z-100 text-[13px] overflow-hidden duration-[0.5s]"
+            class="w-[203px] bg-[#fff] absolute top-[44px] z-[1000] text-[13px] overflow-hidden duration-[0.5s]"
             :style="{
               height: dropToggle ? '229px' : '0px',
               border: dropToggle ? '1px solid #ddd' : '1px solid #206fa2b3',
@@ -286,9 +298,10 @@ export default {
     // System Menu
     this.isLoading = !this.isLoading
     axios
-      .get('https://192.168.1.55:8443/api/systemMenu', {
+      .get(`${this.baseURL}/systemMenu`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
+          'x-auth-token': localStorage.getItem('authToken'),
         },
       })
       .then((res) => {
@@ -321,7 +334,6 @@ export default {
   methods: {
     isCollapse() {
       this.collapseMune = !this.collapseMune
-      console.log(this.collapseMune)
     },
 
     // Log Out
@@ -330,6 +342,7 @@ export default {
         .delete('https://192.168.1.55:8443/api/security/logout', {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
+            'x-auth-token': localStorage.getItem('authToken'),
           },
         })
         .then((res) => {
@@ -385,9 +398,10 @@ export default {
     // Language Request
     getLanguage(lang, value) {
       axios
-        .get(`https://192.168.1.55:8443/api/lang?lang=${lang}`, {
+        .get(`${this.baseURL}/lang?lang=${lang}`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
+            'x-auth-token': localStorage.getItem('authToken'),
           },
         })
         .then((res) => {
@@ -409,6 +423,11 @@ export default {
             `Proyekt tili ${value}ga o'zgartirilishida xatolik bo'ldi!`
           )
         })
+    },
+
+    // go to Menu Setting
+    goToMenuSetting() {
+      this.isLoading = !this.isLoading
     },
   },
 }

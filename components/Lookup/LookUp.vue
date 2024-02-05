@@ -13,10 +13,11 @@
       </option>
     </select>
     <input
-      :value="selectedText || defvalue"
+      v-model="selectedText"
       type="text"
       :style="{
-        border: required ? '1px solid rgb(228, 228, 228)' : '1px solid red',
+        border: required ? '1px solid rgb(228,228,228)' : '1px solid red',
+        height: `${height}px`,
       }"
       class="custom-widget-list w-full"
       @input="handleInput"
@@ -53,8 +54,8 @@
 </template>
 
 <script>
-import axios from 'axios'
 export default {
+  // PROPS
   props: {
     name: {
       type: String,
@@ -85,7 +86,13 @@ export default {
       type: Boolean,
       default: true,
     },
+    height: {
+      type: String,
+      default: '',
+    },
   },
+
+  // DATA
   data() {
     return {
       token: null,
@@ -99,9 +106,10 @@ export default {
       showList: false,
       options: [],
       selected: [],
-      inputSearchValue: '',
     }
   },
+
+  // COMPUTED
   computed: {
     // list style
     listStyles() {
@@ -121,6 +129,13 @@ export default {
       }
     },
   },
+
+  // MOUNTED
+  mounted() {
+    this.selectedText = this.defvalue
+  },
+
+  // METHODS
   methods: {
     // event click on icon
     toggleList() {
@@ -150,21 +165,20 @@ export default {
     // input event
     handleInput(event) {
       const keyCode = event.which // key-code
-      const searchKey = event.target.value // search-key
-      this.inputSearchValue = searchKey
       this.selectedText = event.target.value
       const thisInput = event.target
       const parentEl = thisInput.parentElement
       const ul = parentEl.querySelector('ul.search-results')
       const showLi = Array.from(ul.querySelectorAll('li.show-li'))
 
-      // if searchKey post to backend
+      // if this.selectedText post to backend
       if (
-        searchKey !== '' &&
-        (this.old_search_key !== searchKey || keyCode === 8 || keyCode === 46)
+        this.selectedText !== '' &&
+        (this.old_search_key !== this.selectedText ||
+          keyCode === 8 ||
+          keyCode === 46)
       ) {
         this.searchText = event.target.value
-        document.addEventListener('click', this.handleClick)
         this.getDataList()
         if (showLi.length > 0) {
           showLi[0].classList.add('selectedLi')
@@ -277,14 +291,14 @@ export default {
       }
       ul.scrollTop = 0
       this.showList = false
-      this.$emit('customFunction', this.name, this.selectedText)
+      this.$emit('customFunction', this.name, this.selectedText, option.value)
     },
 
     // li selected function
     getSelectedList(prop) {
-      axios
+      this.$axios
         .post(
-          `https://192.168.1.55:8443/api/invoiceBase/getCurrentCurrencyRate`,
+          `${this.baseURL}/invoiceBase/getCurrentCurrencyRate`,
           {
             branchCompanyId: this.dparam.branchId ? Number(prop.value) : null,
             currencyId: this.dparam.currencyId ? Number(prop.value) : null,
@@ -295,6 +309,7 @@ export default {
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem('token')}`,
+              'x-auth-token': localStorage.getItem('authToken'),
             },
           }
         )
@@ -323,21 +338,22 @@ export default {
     getDataList() {
       if (!this.durl) return
       const data = {
-        search_key: this.inputSearchValue,
+        search_key: this.selectedText,
       }
       if (this.dparam) {
         Object.assign(data, this.dparam)
       }
 
-      axios
-        .post(`https://192.168.1.55:8443/api/${this.durl}`, data, {
+      this.$axios
+        .post(`${this.baseURL}/${this.durl}`, data, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
+            'x-auth-token': localStorage.getItem('authToken'),
           },
         })
         .then((response) => {
           if (response) {
-            this.old_search_key = this.inputSearchValue
+            this.old_search_key = this.selectedText
             this.options = response.data.map((obj) => {
               const value = obj.id
               const text = obj.name
@@ -357,9 +373,8 @@ export default {
           }
           this.showList = true
         })
-        .catch((error) => {
+        .catch(() => {
           this.showList = false
-          alert(error)
         })
     },
   },
@@ -371,9 +386,8 @@ export default {
   border-radius: 5px;
 }
 .custom-widget-list {
-  border: none;
+  font-size: 13px;
   outline: none;
-  height: 23px;
   padding: 2px 10px;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -382,8 +396,8 @@ export default {
   transition: 0.4s;
 }
 .custom-widget-list:focus {
-  border: 1px solid #52a8eccc;
   box-shadow: 0 0 5px #52a8ec99;
+  border: 1px solid #52a8eccc !important;
   transition: 0.4s;
 }
 .icon-arrow:hover {

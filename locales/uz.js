@@ -19,5 +19,10 @@ export default {
     preparepurchaseinvoice: {
       headerName: 'Hisob-faktura',
     },
+    reports: {
+      transactionReports: {
+        headerName: 'Transaction Report',
+      },
+    },
   },
 }

@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full m-1 pr-2">
+  <div class="w-full p-[4px_10px_4px_4px]">
     <LoadingPage
       v-if="isLoading"
       class="absolute left-[50%] top-[8px] translate-x-[-50%]"
@@ -41,7 +41,7 @@
           :istherepicture="true"
         />
         <h1 class="font-bold text-[rgb(49,126,172)] text-[14px] uppercase">
-          {{ tableNameTranslateObj.purchaseInvoice }}
+          {{ tableNameTranslateObj.salesinvoice }}
         </h1>
       </div>
     </div>
@@ -90,8 +90,6 @@
                 dwidth="100"
                 widthtype="%"
                 dlist="100"
-                name="paymentType"
-                :required="required.lookUp2"
                 @customFunction="getLookUpValue"
               />
             </td>
@@ -227,6 +225,7 @@
             </td>
             <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
               <LookUp
+                v-if="objData?.branch?.text"
                 :defvalue="objData?.branch?.text"
                 durl="invoiceBase/findAllCompanyLogic"
                 dwidth="100"
@@ -241,7 +240,7 @@
               />
             </td>
             <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
-              {{ propsValue.branch.name }}
+              {{ propsValue.branch.name || objData?.supplierRefCurSymbol }}
             </td>
             <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
               <GenericInput
@@ -285,6 +284,7 @@
             </td>
             <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
               <LookUp
+                v-if="objData?.department?.text"
                 :defvalue="objData?.department?.text"
                 durl="invoiceBase/findAllDepartmentLogic"
                 dwidth="100"
@@ -323,6 +323,7 @@
             </td>
             <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
               <LookUp
+                v-if="objData?.warehouse?.text"
                 :defvalue="objData?.warehouse?.text"
                 durl="invoiceBase/findAllWarehouseLogic"
                 dwidth="100"
@@ -361,6 +362,7 @@
             </td>
             <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
               <LookUp
+                v-if="objData?.currency?.text"
                 :defvalue="objData?.currency?.text"
                 durl="invoiceBase/findAllCurrency"
                 dwidth="100"
@@ -379,7 +381,7 @@
               />
             </td>
             <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
-              {{ propsValue.currency.name }}
+              {{ propsValue.currency.name || objData?.currencySymbol }}
             </td>
             <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
               <GenericInput
@@ -422,6 +424,7 @@
             </td>
             <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
               <LookUp
+                v-if="objData?.orderProductionType?.text"
                 :defvalue="objData?.orderProductionType?.text"
                 durl="invoiceBase/findAllOrderProductionType"
                 dwidth="100"
@@ -460,6 +463,7 @@
             </td>
             <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
               <LookUp
+                v-if="objData?.calc_type?.text"
                 :defvalue="objData?.calc_type?.text"
                 durl="invoiceBase/findAllInvoiceCalc_type"
                 dwidth="100"
@@ -609,7 +613,6 @@
 </template>
 
 <script>
-import axios from 'axios'
 // Icons url
 import goBack from '../../assets/icons/go-back.png'
 import copy from '../../assets/icons/copy.png'
@@ -634,7 +637,7 @@ export default {
   data() {
     return {
       tableNameTranslate: [
-        'salesinvoice.',
+        'salesinvoice',
         'date',
         'customer',
         'valueDate',
@@ -670,7 +673,6 @@ export default {
       inputValuesObj: new Map(),
       required: {
         lookUp1: true,
-        lookUp2: true,
       },
       isInvoiceItam: false,
     }
@@ -687,15 +689,16 @@ export default {
     // prepareSalesReturn api
     getPageRequest() {
       this.isLoading = !this.isLoading
-      axios
+      this.$axios
         .post(
-          `https://192.168.1.55:8443/api/invoice/prepareSalesReturn`,
+          `${this.baseURL}/invoice/prepareSalesReturn`,
           {
             saleToPerson: false,
           },
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem('token')}`,
+              'x-auth-token': localStorage.getItem('authToken'),
             },
           }
         )
@@ -713,13 +716,14 @@ export default {
 
     // translate api
     getStaticTableNameValues() {
-      axios
+      this.$axios
         .post(
-          `https://192.168.1.55:8443/api/translate`,
+          `${this.baseURL}/translate`,
           { messages: this.tableNameTranslate },
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem('token')}`,
+              'x-auth-token': localStorage.getItem('authToken'),
             },
           }
         )
@@ -747,9 +751,6 @@ export default {
       this.inputValuesObj.get('supplier')
         ? (this.required.lookUp1 = true)
         : (this.required.lookUp1 = false)
-      this.inputValuesObj.get('paymentType')
-        ? (this.required.lookUp2 = true)
-        : (this.required.lookUp2 = false)
     },
 
     // button action addition rows
@@ -757,11 +758,8 @@ export default {
       this.inputValuesObj.get('supplier')
         ? (this.required.lookUp1 = true)
         : (this.required.lookUp1 = false)
-      this.inputValuesObj.get('paymentType')
-        ? (this.required.lookUp2 = true)
-        : (this.required.lookUp2 = false)
 
-      if (this.required.lookUp1 && this.required.lookUp2) {
+      if (this.required.lookUp1) {
         this.isInvoiceItam = true
       } else {
         this.isInvoiceItam = false

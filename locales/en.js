@@ -16,5 +16,10 @@ export default {
     purchaseinvoice: {
       headerName: 'purchase invoice',
     },
+    reports: {
+      transactionReports: {
+        headerName: 'Transaction Report',
+      },
+    },
   },
 }

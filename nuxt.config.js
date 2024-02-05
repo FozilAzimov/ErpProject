@@ -17,7 +17,7 @@ export default {
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
-  css: ['assets/scss/main.scss'],
+  css: ['@assets/scss/main.scss', '@assets/css/main.css'],
 
   styleResources: {
     scss: [
@@ -39,6 +39,7 @@ export default {
     '@/plugins/element-ui.js',
     '@/plugins/drugguble.js',
     '@/plugins/axios.js',
+    '@/plugins/globalMixins.js',
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -50,8 +51,6 @@ export default {
   buildModules: [
     // https://go.nuxtjs.dev/eslint
     '@nuxtjs/eslint-module',
-    // https://go.nuxtjs.dev/tailwindcss
-    '@nuxtjs/tailwindcss',
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
@@ -128,6 +127,10 @@ export default {
     },
   },
 
+  env: {
+    baseURL: 'https://localhost:8443/api',
+  },
+
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
     baseURL: '',
@@ -141,7 +144,14 @@ export default {
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
-  build: {},
+  build: {
+    postcss: {
+      plugins: {
+        tailwindcss: {},
+        autoprefixer: {},
+      },
+    },
+  },
   proxy: {
     '/api/': { target: 'http://example.com', pathRewrite: { '^/api/': '' } },
   },

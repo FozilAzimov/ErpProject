@@ -66,7 +66,11 @@
               <input
                 :class="'input right-item__' + index"
                 type="text"
-                :value="item.width !== null ? item.width : 120"
+                :value="
+                  (item.width || item.dwidth) !== null
+                    ? item.width || item.dwidth
+                    : 120
+                "
               />
               <span
                 style="display: none"
@@ -89,7 +93,6 @@
 <script>
 import Draggable from 'vuedraggable'
 import { ref } from 'vue'
-import axios from 'axios'
 
 export default {
   components: {
@@ -107,7 +110,11 @@ export default {
     },
     url: {
       type: String,
-      default: 'actionUrl',
+      default: '',
+    },
+    api: {
+      type: String,
+      default: '',
     },
   },
   data() {
@@ -139,7 +146,6 @@ export default {
       },
     },
   },
-  mounted() {},
   methods: {
     onLeftChange(event) {
       // for event on swap
@@ -199,9 +205,9 @@ export default {
         }
       })
 
-      axios
+      this.$axios
         .post(
-          'https://192.168.1.55:8443/api/base/saveColumnConfig',
+          `${this.baseURL}/base/${this.api}`,
           {
             actionUrl: this.url,
             userColumns: rightItemsName,
@@ -209,6 +215,7 @@ export default {
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem('token')}`,
+              'x-auth-token': localStorage.getItem('authToken'),
             },
           }
         )
@@ -224,6 +231,8 @@ export default {
     closePopup() {
       this.checkModal = false
       this.$emit('checkModal', this.checkModal)
+      console.log(this.right)
+      console.log(this.left)
     },
   },
 }
@@ -232,7 +241,7 @@ export default {
 <style scoped>
 .settings-container {
   position: absolute;
-  top: -70%;
+  top: 150px;
   left: 25%;
   transform: translate(25%);
   padding: 15px 5px;

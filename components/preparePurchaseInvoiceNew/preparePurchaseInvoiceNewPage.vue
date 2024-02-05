@@ -1,9 +1,20 @@
 <template>
-  <div class="w-full m-1 pr-2">
+  <div class="w-full p-[4px_10px_4px_4px]">
     <LoadingPage
       v-if="isLoading"
       class="absolute left-[50%] top-[8px] translate-x-[-50%]"
     />
+    <transition name="fade">
+      <ColumnConfigPage
+        v-show="checkModal"
+        :right="rightData"
+        :left="leftData"
+        :url="actionUrl"
+        api="saveColumnConfigU"
+        class="z-[10000]"
+        @checkModal="handleValue"
+      />
+    </transition>
     <div
       class="border-[1px] border-solid border-[rgba(0,0,0,0.05)] p-[12px] bg-gradient-to-b from-transparent via-transparent to-gray-200 shadow-md"
     >
@@ -227,6 +238,7 @@
             </td>
             <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
               <LookUp
+                v-if="objData?.companyGroup?.text"
                 :defvalue="objData?.companyGroup?.text"
                 durl="invoiceBase/findAllCompanyGroups"
                 dwidth="100"
@@ -265,6 +277,7 @@
             </td>
             <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
               <LookUp
+                v-if="objData?.branch?.text"
                 :defvalue="objData?.branch?.text"
                 durl="invoiceBase/findAllCompanyLogic"
                 dwidth="100"
@@ -323,6 +336,7 @@
             </td>
             <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
               <LookUp
+                v-if="objData?.department?.text"
                 :defvalue="objData?.department?.text"
                 durl="invoiceBase/findAllDepartmentLogic"
                 dwidth="100"
@@ -361,6 +375,7 @@
             </td>
             <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
               <LookUp
+                v-if="objData?.warehouse?.text"
                 :defvalue="objData?.warehouse?.text"
                 durl="invoiceBase/findAllWarehouseLogic"
                 dwidth="100"
@@ -399,6 +414,7 @@
             </td>
             <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
               <LookUp
+                v-if="objData?.currency?.text"
                 :defvalue="objData?.currency?.text"
                 durl="invoiceBase/findAllCurrency"
                 dwidth="100"
@@ -460,6 +476,7 @@
             </td>
             <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
               <LookUp
+                v-if="objData?.orderProductionType?.text"
                 :defvalue="objData?.orderProductionType?.text"
                 durl="invoiceBase/findAllOrderProductionType"
                 dwidth="100"
@@ -498,6 +515,7 @@
             </td>
             <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
               <LookUp
+                v-if="objData?.calc_type?.text"
                 :defvalue="objData?.calc_type?.text"
                 durl="invoiceBase/findAllInvoiceCalc_type"
                 dwidth="100"
@@ -636,7 +654,7 @@
       <div
         class="w-full bg-[rgba(0,0,0,0.05)] overflow-hidden"
         :class="
-          isInvoiceItam ? 'duration-[0.7s] h-[300px]' : 'duration-[1s] h-[0px]'
+          isInvoiceItam ? 'duration-[1s] h-[700px]' : 'duration-[1s] h-[0px]'
         "
       >
         <h1 class="text-[13px]">Invoice Item</h1>
@@ -651,6 +669,7 @@
             textsize="14"
             :url="img.setting"
             :istherepicture="true"
+            @click="openColumnConfig"
           />
           <GenericButton
             name="Save"
@@ -660,6 +679,18 @@
             pb="3"
             bg="rgb(119,191,66)"
             textsize="14"
+            @click="saveInvoice"
+            @customInputValueObj="getFilterData"
+          />
+          <GenericButton
+            name="Edit"
+            pl="10"
+            pt="3"
+            pr="10"
+            pb="3"
+            bg="rgb(119,191,66)"
+            textsize="14"
+            @click="editInvoice"
           />
           <GenericButton
             name="Make Bill"
@@ -727,13 +758,32 @@
             dlist="200"
           />
         </div>
+        <GenericPrepareTablePage
+          :tablehead="tableData"
+          :tableheadlength="tableData.length"
+          :addmodalorrow="openPopup"
+          :isedit="isEdit"
+          height="300"
+          class="bg-[rgba(255,255,255,0.5)] mt-2"
+          @input-values-updated="handleInputValuesUpdated"
+        />
       </div>
     </div>
+    <template v-if="invoiceRightColumns !== null">
+      <GenericPrepareTablePage
+        :tablehead="invoiceRightColumns"
+        :tableheadlength="tableData.length"
+        :addmodalorrow="openPopup"
+        :isedit="isEdit"
+        height="300"
+        class="bg-[rgba(255,255,255,0.5)] mt-2"
+        @input-values-updated="handleInputValuesUpdated"
+      />
+    </template>
   </div>
 </template>
 
 <script>
-import axios from 'axios'
 // Icons url
 import goBack from '../../assets/icons/go-back.png'
 import copy from '../../assets/icons/copy.png'
@@ -745,6 +795,8 @@ import GenericButton from '../Button/GenericButton.vue'
 import LoadingPage from '../Loading/LoadingPage.vue'
 import LookUp from '../Lookup/LookUp.vue'
 import GenericInput from '../Input/GenericInput.vue'
+import GenericPrepareTablePage from '../GenericPrepareTable/GenericPrepareTablePage.vue'
+import ColumnConfigPage from '../ColumnConfig/ColumnConfigPage.vue'
 export default {
   // COMPONENTS
   components: {
@@ -752,6 +804,8 @@ export default {
     GenericButton,
     LookUp,
     GenericInput,
+    GenericPrepareTablePage,
+    ColumnConfigPage,
   },
 
   // DATA
@@ -784,6 +838,7 @@ export default {
         'plateNumber',
         'car',
       ],
+      rightColumns: [],
       tableNameTranslateObj: {},
       isLoading: false,
       img: {
@@ -800,12 +855,24 @@ export default {
         branch: {},
         currency: {},
       },
+      tableData: [],
+      tableData2: [],
       inputValuesObj: new Map(),
       required: {
         lookUp1: true,
         lookUp2: true,
       },
       isInvoiceItam: false,
+      rightMap: new Map(),
+      leftMap: new Map(),
+      rightData: [],
+      leftData: [],
+      actionUrl: '',
+      checkModal: false,
+      openPopup: true,
+      invoiceRightColumns: null,
+      invoiceList: [],
+      isEdit: false,
     }
   },
 
@@ -820,20 +887,25 @@ export default {
     // preparePurchaseInvoiceNewAjaxLoad api
     getPageRequest() {
       this.isLoading = !this.isLoading
-      axios
+      this.$axios
         .post(
-          `https://192.168.1.55:8443/api/invoice/preparePurchaseInvoiceNewAjaxLoad`,
+          `${this.baseURL}/invoice/preparePurchaseInvoiceNewAjaxLoad`,
           {},
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem('token')}`,
+              'x-auth-token': localStorage.getItem('authToken'),
             },
           }
         )
         .then((res) => {
           this.isLoading = !this.isLoading
-          this.objData = res.data
-          this.$router.push('/preparePurchaseInvoiceNew.htm')
+          this.objData = res?.data?.invoiceJson
+          this.actionUrl = res?.data?.actionUrl
+          this.rightColumns = res?.data?.rightColumns
+          this.openPopup = res?.data?.openPopup
+          this.leftRightDataFilter()
+          this.getFilterData()
         })
         .catch((error) => {
           this.isLoading = !this.isLoading
@@ -842,15 +914,43 @@ export default {
         })
     },
 
+    // Filter Action
+    leftRightDataFilter() {
+      if (this.rightColumns) {
+        // eslint-disable-next-line array-callback-return
+        this.tableData = this.rightColumns.filter((value) => {
+          if (value.showUI) return value
+        })
+        // eslint-disable-next-line array-callback-return
+        this.tableData2 = this.rightColumns.filter((value) => {
+          if (!value.showUI) return value
+        })
+      }
+    },
+
+    // Filter Action
+    getFilterData() {
+      this.tableData.forEach((obj) => {
+        this.rightMap.set(obj.name, obj)
+      })
+      this.tableData2.forEach((obj) => {
+        this.leftMap.set(obj.name, obj)
+      })
+
+      this.rightData = Object.fromEntries(this.rightMap)
+      this.leftData = Object.fromEntries(this.leftMap)
+    },
+
     // translate api
     getStaticTableNameValues() {
-      axios
+      this.$axios
         .post(
-          `https://192.168.1.55:8443/api/translate`,
+          `${this.baseURL}/translate`,
           { messages: this.tableNameTranslate },
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem('token')}`,
+              'x-auth-token': localStorage.getItem('authToken'),
             },
           }
         )
@@ -875,6 +975,8 @@ export default {
     // Lookup's Valuesini olish
     getLookUpValue(key, value) {
       this.inputValuesObj.set(key, value)
+
+      // LookUp required action
       this.inputValuesObj.get('supplier')
         ? (this.required.lookUp1 = true)
         : (this.required.lookUp1 = false)
@@ -885,6 +987,7 @@ export default {
 
     // button action addition rows
     additionInvoiceItem() {
+      // LookUp required action
       this.inputValuesObj.get('supplier')
         ? (this.required.lookUp1 = true)
         : (this.required.lookUp1 = false)
@@ -898,6 +1001,86 @@ export default {
         this.isInvoiceItam = false
       }
     },
+
+    // Column Config function
+    handleValue(checkModal) {
+      this.checkModal = checkModal
+    },
+    openColumnConfig() {
+      this.checkModal = true
+    },
+
+    // get invoice list
+    handleInputValuesUpdated(updatedArr) {
+      this.invoiceList = updatedArr
+    },
+
+    // edit invoice
+    editInvoice() {
+      this.isEdit = !this.isEdit
+    },
+
+    saveInvoice() {
+      const data = {
+        branch: { id: 2 },
+        calc_type: 1,
+        company: { id: 21 },
+        companyCurrencyRate: '12390',
+        companyGroup: { id: 1 },
+        companyRefCurrencyRate: '12390',
+        currency: { id: 1 },
+        currencyRate: '12390',
+        date: '2024-01-26T16:57:24',
+        department: { id: 1 },
+        driverName: '',
+        id: null,
+        invoiceBillStatus: '',
+        invoiceItems: this.invoiceList,
+        invoiceNo: '',
+        invoiceNominal: '1',
+        invoiceNumber: '',
+        invoiceStatus: '',
+        notes: '',
+        order: { id: 1 },
+        paymentType: { id: 45 },
+        sellDate: '2024-01-26T16:57:24',
+        sequenceNumber: '',
+        systemNumber: '',
+        warehouse: { id: 7 },
+      }
+
+      this.$axios
+        .post(
+          `${this.baseURL}/invoice/prepareCreateEditPurchaseInvoice`,
+          data,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('token')}`,
+              'x-auth-token': localStorage.getItem('authToken'),
+            },
+          }
+        )
+        .then((res) => {
+          this.tableNameTranslateObj = res.data
+        })
+        .catch((error) => {
+          // eslint-disable-next-line no-console
+          console.log(error)
+        })
+    },
   },
 }
 </script>
+
+<style>
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
+}
+
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
+  transform: translateY(-20px);
+}
+</style>

@@ -4,13 +4,17 @@
       v-if="isLoading"
       class="absolute left-[50%] top-[8px] translate-x-[-50%]"
     />
-    <ColumnConfig
-      :style="'top:' + (checkModal ? '15%' : '-70%')"
-      :right="tableHead"
-      :left="leftMap"
-      :url="actionUrl"
-      @checkModal="handleValue"
-    />
+    <transition name="fade">
+      <ColumnConfigPage
+        v-show="checkModal"
+        :right="tableHead"
+        :left="leftMap"
+        :url="actionUrl"
+        api="saveColumnConfig"
+        class="z-[10000]"
+        @checkModal="handleValue"
+      />
+    </transition>
     <form class="flex flex-wrap items-center gap-3 py-4">
       <div>
         <label
@@ -257,6 +261,7 @@
             :tablebody="tableBody"
             :tableheadlength="tableHeadLength"
             :istherebody="isThereBody"
+            height="600"
           />
         </div>
       </div>
@@ -265,7 +270,6 @@
 </template>
 
 <script>
-import axios from 'axios'
 // Icons url
 import search from '../../assets/icons/search.png'
 import printer from '../../assets/icons/printer.png'
@@ -275,7 +279,7 @@ import GenericButton from '../Button/GenericButton.vue'
 import GenericInput from '../Input/GenericInput.vue'
 import GenericSelect from '../Select/GenericSelect.vue'
 import GenericInputDatePage from '../InputDate/GenericInputDatePage.vue'
-import ColumnConfig from '../ColumnConfig/ColumnConfig.vue'
+import ColumnConfigPage from '../ColumnConfig/ColumnConfigPage.vue'
 import GenericTablePage from '../GenericTable/GenericTablePage.vue'
 export default {
   components: {
@@ -284,7 +288,7 @@ export default {
     GenericInput,
     GenericSelect,
     GenericInputDatePage,
-    ColumnConfig,
+    ColumnConfigPage,
     GenericTablePage,
   },
   data() {
@@ -327,9 +331,9 @@ export default {
     },
     getTableRequest() {
       this.isLoading = !this.isLoading
-      axios
+      this.$axios
         .post(
-          `https://192.168.1.55:8443/api/invoice/purchaseInvoiceList`,
+          `${this.baseURL}/invoice/purchaseInvoiceList`,
           {
             current_page: 1,
             page_size: this.pageSize_value,
@@ -353,6 +357,7 @@ export default {
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem('token')}`,
+              'x-auth-token': localStorage.getItem('authToken'),
             },
           }
         )
@@ -363,7 +368,7 @@ export default {
           this.leftMap = res.data.leftMap
           this.actionUrl = res.data.actionUrl
           this.tableData = res.data.invoiceList
-          this.selectData = res.data.purchaseInvoiceSearchDTO
+          this.selectData = res.data.invoiceSearchDTO
           this.getTableBody()
         })
         .catch((error) => {
@@ -384,9 +389,9 @@ export default {
           if (this.tableHead[key].code in obj) {
             if (obj[value]) {
               if (typeof obj[value] === 'object')
-                data.set(value, obj[value].name)
+                data.set(value, obj[value].value)
               else data.set(value, obj[value])
-            } else data.set(value, '-')
+            } else data.set(value, obj[value])
           } else data.set(value, false)
         }
         this.tableBody.push(Object.fromEntries(data))
@@ -402,9 +407,9 @@ export default {
     // Table Action Open button
     getTableRowOpen(thisId) {
       this.isLoading = !this.isLoading
-      axios
+      this.$axios
         .post(
-          `https://192.168.1.55:8443/api/invoice/preparePurchaseInvoice`,
+          `${this.baseURL}/invoice/preparePurchaseInvoice`,
           {
             current_page: 1,
             page_size: this.pageSize_value,
@@ -413,6 +418,7 @@ export default {
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem('token')}`,
+              'x-auth-token': localStorage.getItem('authToken'),
             },
           }
         )
@@ -447,3 +453,16 @@ export default {
   },
 }
 </script>
+
+<style>
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
+}
+
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
+  transform: translateY(-20px);
+}
+</style>

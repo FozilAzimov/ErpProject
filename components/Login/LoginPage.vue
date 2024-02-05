@@ -27,6 +27,7 @@
               </label>
               <input
                 id="username"
+                ref="usernameInput"
                 v-model="form.username"
                 :class="{
                   'border-red-200 shadow-[0_0_4px_#ef4444]': errors[0],
@@ -91,7 +92,6 @@
 </template>
 
 <script>
-import axios from 'axios'
 import LoadingPage from '../Loading/LoadingPage.vue'
 import LanguageSelector from '@/components/main/LanguageSelector'
 
@@ -111,6 +111,10 @@ export default {
     }
   },
 
+  mounted() {
+    this.$refs.usernameInput.focus()
+  },
+
   methods: {
     getTypePassword() {
       this.typeIcon ? (this.typeIcon = false) : (this.typeIcon = true)
@@ -120,12 +124,13 @@ export default {
       this.$refs.formValidation.validate().then((success) => {
         if (success) {
           this.isLoading = !this.isLoading
-          axios
-            .post(`https://192.168.1.55:8443/api/security/logIn`, {
+          this.$axios
+            .post(`${this.baseURL}/security/logIn`, {
               username: this.form.username,
               password: this.form.password,
             })
             .then((res) => {
+              localStorage.setItem('authToken', res.headers['x-auth-token'])
               localStorage.setItem('token', res.data.token)
               this.$router.push('/branches.htm')
               this.isLoading = !this.isLoading
@@ -147,13 +152,12 @@ export default {
 
     // Language Request
     getLanguage() {
-      axios.get(
-        `https://192.168.1.55:8443/api/lang?lang=${localStorage.getItem(
-          'lang'
-        )}`,
+      this.$axios.get(
+        `${this.baseURL}/lang?lang=${localStorage.getItem('lang')}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
+            'x-auth-token': localStorage.getItem('authToken'),
           },
         }
       )

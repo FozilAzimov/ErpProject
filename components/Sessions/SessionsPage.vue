@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full m-1 pr-2">
+  <div class="w-full p-[4px_10px_4px_4px]">
     <div class="w-full">
       <LoadingPage
         v-if="isLoading"
@@ -96,7 +96,6 @@
 </template>
 
 <script>
-import axios from 'axios'
 import LoadingPage from '../Loading/LoadingPage.vue'
 export default {
   components: { LoadingPage },
@@ -123,10 +122,11 @@ export default {
   mounted() {
     // Sessions request
     this.isLoading = !this.isLoading
-    axios
-      .get('https://192.168.1.55:8443/api/sessions', {
+    this.$axios
+      .get(`${this.baseURL}/session/sessions`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
+          'x-auth-token': localStorage.getItem('authToken'),
         },
       })
       .then((res) => {
