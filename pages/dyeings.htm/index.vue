@@ -1,10 +1,10 @@
 <template>
-  <ExpenseInvoice />
+  <Dyeings />
 </template>
 
 <script>
-import ExpenseInvoice from '../../components/ExpenseInvoice/ExpenseInvoice.vue'
+import Dyeings from '../../components/Orders/Dyeings/DyeingsPage'
 export default {
-  components: { ExpenseInvoice }
+  components: { Dyeings }
 }
 </script>

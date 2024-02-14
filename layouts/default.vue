@@ -209,7 +209,7 @@
                 <nuxt-link
                   v-for="(childItem, indexChild) in item.child"
                   :key="indexChild"
-                  :to="`${childItem.url}.htm`"
+                  :to="`/${childItem.url}.htm`"
                 >
                   <el-menu-item :index="String(childItem.id - indexChild)">
                     {{ childItem.name }}

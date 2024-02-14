@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import ExpenseInvoice from '../../components/ExpenseInvoice/ExpenseInvoice.vue'
+import ExpenseInvoice from '../../components/Invoices/ExpenseInvoice/ExpenseInvoice.vue'
 export default {
   components: { ExpenseInvoice }
 }

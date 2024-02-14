@@ -12,7 +12,7 @@
     }"
     :placeholder="placeholder"
     @input="getInputValue"
-    @change="getTableRequest"
+    @keyup.enter="getTableRequest"
   />
 </template>
 <script>
@@ -66,6 +66,14 @@ export default {
       type: String,
       default: '',
     },
+    order: {
+      type: Number,
+      default: 0,
+    },
+    required: {
+      type: Boolean,
+      default: true,
+    },
   },
   data() {
     return {
@@ -74,12 +82,12 @@ export default {
   },
   methods: {
     getTableRequest(event) {
-      this.$emit('change', event.target.value)
-      this.$emit('customFunction', this.name, this.keywordValue)
+      this.$emit('enter', event.target.value)
+      this.$emit('customFunction', this.name, this.keywordValue, this.order)
     },
     getInputValue() {
       this.$emit('input', this.keywordValue)
-      this.$emit('customFunction', this.name, this.keywordValue)
+      this.$emit('customFunction', this.name, this.keywordValue, this.order)
     },
   },
 }

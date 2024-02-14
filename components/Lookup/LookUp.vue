@@ -20,6 +20,7 @@
         height: `${height}px`,
       }"
       class="custom-widget-list w-full"
+      :disabled="disabled ? true : false"
       @input="handleInput"
       @keydown="onKeydown"
     />
@@ -48,7 +49,9 @@
       >
         {{ option.text }}
       </li>
-      <li :style="noData"><i class="el-icon-files"></i> 'No data'</li>
+      <li v-if="!disabled" :style="noData">
+        <i class="el-icon-files"></i> 'No data'
+      </li>
     </ul>
   </div>
 </template>
@@ -90,6 +93,14 @@ export default {
       type: String,
       default: '',
     },
+    order: {
+      type: Number,
+      default: 0,
+    },
+    disabled: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   // DATA
@@ -97,7 +108,7 @@ export default {
     return {
       token: null,
       noDataCheck: false,
-      disabled: false,
+      localDisabled: false,
       mouseOver: true,
       searchText: '',
       selectedValue: '',
@@ -127,6 +138,13 @@ export default {
         justifyContent: 'center',
         textAlign: 'center',
       }
+    },
+  },
+
+  // WATCH
+  watch: {
+    defvalue(newVal) {
+      this.selectedText = newVal
     },
   },
 
@@ -184,7 +202,13 @@ export default {
           showLi[0].classList.add('selectedLi')
         }
       }
-      this.$emit('customFunction', this.name, this.selectedText)
+      this.$emit(
+        'customFunction',
+        this.name,
+        this.selectedText,
+        this.selectedValue,
+        this.order
+      )
     },
 
     // =>=>=>=> key down event =>=>=>
@@ -258,7 +282,13 @@ export default {
           this.showList = false
         }
       }
-      this.$emit('customFunction', this.name, this.selectedText)
+      this.$emit(
+        'customFunction',
+        this.name,
+        this.selectedText,
+        this.selectedValue,
+        this.order
+      )
     },
 
     // click event on li
@@ -291,7 +321,13 @@ export default {
       }
       ul.scrollTop = 0
       this.showList = false
-      this.$emit('customFunction', this.name, this.selectedText, option.value)
+      this.$emit(
+        'customFunction',
+        this.name,
+        this.selectedText,
+        option.value,
+        this.order
+      )
     },
 
     // li selected function
@@ -388,7 +424,7 @@ export default {
 .custom-widget-list {
   font-size: 13px;
   outline: none;
-  padding: 2px 10px;
+  padding: 2px 20px 2px 10px;
   overflow: hidden;
   text-overflow: ellipsis;
   border-radius: 5px;

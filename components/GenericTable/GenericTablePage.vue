@@ -1,5 +1,5 @@
 <template>
-  <div class="flex items-start overflow-scroll" :class="`h-[${height}px]`">
+  <div class="flex items-start overflow-scroll" :style="`height:${height}px`">
     <table class="w-full border-[1px] border-[solid] border-[#F0F0F0]">
       <thead class="bg-[rgb(229,235,245)]">
         <tr>
@@ -58,7 +58,7 @@
               </span>
             </td>
             <td class="flex items-center justify-center gap-2 p-2">
-              <GenericButton
+              <!-- <GenericButton
                 name="Open"
                 pl="10"
                 pt="4"
@@ -67,7 +67,10 @@
                 bg="rgb(126,183,62)"
                 textsize="14"
                 @click="getTableRowOpen(tableId[index])"
-              />
+              /> -->
+              <router-link :to="`${openUrl}.htm/${value.id}`"
+                >open item {{ value.id }}</router-link
+              >
               <GenericButton
                 name="qrCode"
                 pl="10"
@@ -136,6 +139,10 @@ export default {
     height: {
       type: String,
       default: '0',
+    },
+    openUrl: {
+      type: String,
+      default: '',
     },
   },
 }

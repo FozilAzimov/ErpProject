@@ -1,0 +1,499 @@
+<template>
+  <div class="w-full p-[0px_12px_0px_10px]">
+    <LoadingPage
+      v-if="isLoading"
+      class="absolute left-[50%] top-[8px] translate-x-[-50%]"
+    />
+    <template v-if="isCloseTable">
+      <div
+        class="border-[1px] border-solid border-[rgba(0,0,0,0.05)] p-[12px] bg-gradient-to-b from-transparent via-transparent to-gray-200 shadow-md flex items-center justify-between mt-2"
+      >
+        <div class="flex items-center gap-[10px]">
+          <h1 class="font-bold text-[rgb(49,126,172)] text-[14px] uppercase">
+            Reports of the dyeing
+          </h1>
+        </div>
+        <div>
+          <ul class="flex items-center gap-4">
+            <li
+              class="p-[7px] rounded-[50%] cursor-pointer border-[1px] border-[solid] border-[rgba(0,0,0,0.1] hover:border-[#3b89e9] focus:border-[#3b89e9] duration-[0.4s]"
+              :style="{
+                background: 'radial-gradient(#fff, rgba(32,111,162,0.2))'
+              }"
+              @click="isOpen"
+            >
+              <img
+                class="w-[11px]"
+                :class="
+                  isOpenTable
+                    ? 'rotate-[-180deg] duration-[1s]'
+                    : 'rotate-[0deg] duration-[1s]'
+                "
+                src="../../../assets/icons/arrow.png"
+                alt="arrow"
+              />
+            </li>
+            <li
+              class="p-[7px] rounded-[50%] cursor-pointer border-[1px] border-[solid] border-[rgba(0,0,0,0.1] hover:border-[#3b89e9] focus:border-[#3b89e9] duration-[0.4s]"
+              :style="{
+                background: 'radial-gradient(#fff, rgba(32,111,162,0.2))'
+              }"
+              @click="isClose"
+            >
+              <img
+                class="w-[11px]"
+                src="../../../assets/icons/remove.png"
+                alt="remove"
+              />
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div
+        class="border-[1px] border-solid border-[rgba(0,0,0,0.1)] flex flex-col gap-8 p-4 flex-wrap"
+        :class="
+          isOpenTable
+            ? 'duration-[1s] overflow-hidden'
+            : 'duration-[1s]  overflow-hidden'
+        "
+      >
+        <!-- =============================================== -->
+        <div class="flex gap-8">
+          <ul class="flex flex-col gap-4 justify-start w-[400px]">
+            <li class="flex justify-between">
+              <label>Start Date</label>
+              <GenericInput
+                :value="new Date().toLocaleString('en-GB').split(',').join('')"
+                width="150"
+                widthtype="px"
+                height="23"
+                pl="10"
+                pr="10"
+                pt="2"
+                pb="2"
+                textsize="13"
+                type="text"
+              />
+            </li>
+            <li class="flex justify-between">
+              <label>Batch From </label>
+              <div class="flex gap-2 items-start">
+                <GenericInput
+                  width="100"
+                  widthtype="px"
+                  height="23"
+                  pl="10"
+                  pr="10"
+                  pt="2"
+                  pb="2"
+                  textsize="13"
+                  type="text"
+                />
+                <GenericInput
+                  width="100"
+                  widthtype="px"
+                  height="23"
+                  pl="10"
+                  pr="10"
+                  pt="2"
+                  pb="2"
+                  textsize="13"
+                  type="text"
+                />
+              </div>
+            </li>
+            <li class="flex justify-between">
+              <label>production Order From </label>
+              <div class="flex gap-2 items-start">
+                <GenericInput
+                  width="100"
+                  widthtype="px"
+                  height="23"
+                  pl="10"
+                  pr="10"
+                  pt="2"
+                  pb="2"
+                  textsize="13"
+                  type="text"
+                />
+                <GenericInput
+                  width="100"
+                  widthtype="px"
+                  height="23"
+                  pl="10"
+                  pr="10"
+                  pt="2"
+                  pb="2"
+                  textsize="13"
+                  type="text"
+                />
+              </div>
+            </li>
+
+            <li class="flex justify-between">
+              <label>Company (order) </label>
+              <LookUp
+                durl="invoiceBase/findAllPaymentType"
+                dwidth="150"
+                widthtype="px"
+                dlist="100"
+                name="paymentType"
+              />
+            </li>
+            <li class="flex justify-between">
+              <label>Company Branch </label>
+              <LookUp
+                durl="invoiceBase/findAllPaymentType"
+                dwidth="150"
+                widthtype="px"
+                dlist="100"
+                name="paymentType"
+              />
+            </li>
+            <li class="flex justify-between">
+              <label>batch Process Stage </label>
+              <LookUp
+                durl="invoiceBase/findAllPaymentType"
+                dwidth="150"
+                widthtype="px"
+                dlist="100"
+                name="paymentType"
+              />
+            </li>
+            <li class="flex justify-between">
+              <label>Type </label>
+              <LookUp
+                durl="invoiceBase/findAllPaymentType"
+                dwidth="150"
+                widthtype="px"
+                dlist="100"
+                name="paymentType"
+              />
+            </li>
+            <li class="flex justify-between">
+              <label>Equipment </label>
+              <LookUp
+                durl="invoiceBase/findAllPaymentType"
+                dwidth="150"
+                widthtype="px"
+                dlist="100"
+                name="paymentType"
+              />
+            </li>
+            <li class="flex justify-between">
+              <label>Employee </label>
+              <LookUp
+                durl="invoiceBase/findAllPaymentType"
+                dwidth="150"
+                widthtype="px"
+                dlist="100"
+                name="paymentType"
+              />
+            </li>
+            <li class="flex justify-between">
+              <label>Order production type </label>
+              <LookUp
+                durl="invoiceBase/findAllPaymentType"
+                dwidth="150"
+                widthtype="px"
+                dlist="100"
+                name="paymentType"
+              />
+            </li>
+          </ul>
+
+          <ul class="flex flex-col gap-4 justify-start w-[400px]">
+            <li class="flex justify-between">
+              <label>End Date</label>
+              <GenericInput
+                :value="new Date().toLocaleString('en-GB').split(',').join('')"
+                width="150"
+                widthtype="px"
+                height="23"
+                pl="10"
+                pr="10"
+                pt="2"
+                pb="2"
+                textsize="13"
+                type="text"
+              />
+            </li>
+            <li class="flex justify-between">
+              <label>Batch to </label>
+              <div class="flex items-start gap-2">
+                <GenericInput
+                  width="100"
+                  widthtype="px"
+                  height="23"
+                  pl="10"
+                  pr="10"
+                  pt="2"
+                  pb="2"
+                  textsize="13"
+                  type="text"
+                />
+                <GenericInput
+                  width="100"
+                  widthtype="px"
+                  height="23"
+                  pl="10"
+                  pr="10"
+                  pt="2"
+                  pb="2"
+                  textsize="13"
+                  type="text"
+                />
+              </div>
+            </li>
+            <li class="flex justify-between">
+              <label>production Order to </label>
+              <div class="flex items-start gap-2">
+                <GenericInput
+                  width="100"
+                  widthtype="px"
+                  height="23"
+                  pl="10"
+                  pr="10"
+                  pt="2"
+                  pb="2"
+                  textsize="13"
+                  type="text"
+                />
+                <GenericInput
+                  width="100"
+                  widthtype="px"
+                  height="23"
+                  pl="10"
+                  pr="10"
+                  pt="2"
+                  pb="2"
+                  textsize="13"
+                  type="text"
+                />
+              </div>
+            </li>
+          </ul>
+        </div>
+        <!-- =============================================== -->
+        <div class="flex gap-2">
+          <GenericButton
+            name="Accept"
+            pl="15"
+            pt="3"
+            pr="15"
+            pb="3"
+            bggradient="linear-gradient(90deg, rgba(75,157,162,1) 0%, rgba(0,155,255,1) 0%, rgba(0,155,255,1) 99%)"
+            textsize="15"
+          />
+          <GenericButton
+            name="Print Preview"
+            pl="15"
+            pt="3"
+            pr="15"
+            pb="3"
+            bggradient="linear-gradient(90deg, rgba(75,157,162,1) 0%, rgba(22,198,5,1) 0%, rgba(69,161,2,1) 99%)"
+            textsize="15"
+          />
+        </div>
+        <div class="w-full overflow-scroll">
+          <GenericTablePage
+            :tablehead="tableHead"
+            :tablebody="tableBody"
+            :tableheadlength="tableHeadLength"
+            :istherebody="isThereBody"
+            height="600"
+          />
+        </div>
+      </div>
+    </template>
+  </div>
+</template>
+
+<script>
+import axios from 'axios'
+// Icons url
+import search from '../../../assets/icons/search.png'
+import printer from '../../../assets/icons/printer.png'
+import LookUp from '../../Lookup/LookUp.vue'
+
+// Components
+import LoadingPage from '../../Loading/LoadingPage.vue'
+import GenericButton from '../../Button/GenericButton.vue'
+// import GenericTablePage from '../GenericTable/GenericTablePage.vue'
+
+export default {
+  components: {
+    LoadingPage,
+    GenericButton,
+    LookUp
+    //  GenericTablePage
+  },
+  data() {
+    return {
+      isLoading: false,
+      pageSize_value: 10,
+      keywordValue: '',
+      users: [],
+      tableData: [],
+      tableHead: {},
+      tableBody: [],
+      tableHeadLength: null,
+      isThereBody: false,
+      imgUrl: {
+        search,
+        printer
+      },
+      tableId: [],
+      selectData: {},
+      formData: new Map(),
+      checkModal: false,
+      actionUrl: '',
+      leftMap: {},
+      isOpenTable: true,
+      isCloseTable: true,
+      radio1: '1',
+      radio: '1',
+      radioSaldo: '1',
+      select: '',
+      showHidePerson: false
+    }
+  },
+  mounted() {
+    // Table function
+    this.getTableRequest()
+  },
+
+  // Methods
+  methods: {
+    handleValue(checkModal) {
+      this.checkModal = checkModal
+    },
+    getTableRequest() {
+      this.isLoading = !this.isLoading
+      axios
+        .post(
+          `https://192.168.1.55:8443/api/invoice/purchaseInvoiceList`,
+          {
+            current_page: 1,
+            page_size: this.pageSize_value,
+            searchForm: {
+              keyword: this.keywordValue,
+              from_date: new Date(Object.fromEntries(this.formData).from)
+                .toLocaleString('en-GB')
+                .split(',')
+                .join(''),
+              to_date: new Date(Object.fromEntries(this.formData).to)
+                .toLocaleString('en-GB')
+                .split(',')
+                .join('')
+            },
+            billStatus: Object.fromEntries(this.formData).bill,
+            payStatus: Object.fromEntries(this.formData).pay,
+            invoiceOnWayStatus: Object.fromEntries(this.formData).invoice,
+            departmentId: Object.fromEntries(this.formData).departments,
+            warehouseId: Object.fromEntries(this.formData).warehouse
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('token')}`
+            }
+          }
+        )
+        .then((res) => {
+          this.tableBody = []
+          this.isLoading = !this.isLoading
+          this.tableHead = res.data.rightMap
+          this.leftMap = res.data.leftMap
+          this.actionUrl = res.data.actionUrl
+          this.tableData = res.data.invoiceList
+          this.selectData = res.data.invoiceSearchDTO
+          this.getTableBody()
+        })
+        .catch((error) => {
+          this.isLoading = !this.isLoading
+          // eslint-disable-next-line no-console
+          console.log(error)
+        })
+    },
+
+    // Generic Table function Start
+    getTableBody() {
+      const arr = new Set()
+      for (const obj of this.tableData) {
+        arr.add(obj.id)
+        const data = new Map()
+        for (const key in this.tableHead) {
+          const value = this.tableHead[key].code
+          if (this.tableHead[key].code in obj) {
+            if (obj[value]) {
+              if (typeof obj[value] === 'object')
+                data.set(value, obj[value].value)
+              else data.set(value, obj[value])
+            } else data.set(value, obj[value])
+          } else data.set(value, false)
+        }
+        this.tableBody.push(Object.fromEntries(data))
+      }
+      this.tableHeadLength = Object.entries(this.tableHead).length
+      this.tableBody.length > 0
+        ? (this.isThereBody = true)
+        : (this.isThereBody = false)
+      this.tableId = Array.from(arr)
+    },
+    // Generic Table function End
+
+    // Table Action Open button
+    getTableRowOpen(thisId) {
+      this.isLoading = !this.isLoading
+      axios
+        .post(
+          `https://192.168.1.55:8443/api/invoice/preparePurchaseInvoice`,
+          {
+            current_page: 1,
+            page_size: this.pageSize_value,
+            searchForm: { keyword: this.keywordValue || '', id: thisId }
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('token')}`
+            }
+          }
+        )
+        .then((res) => {
+          this.isLoading = !this.isLoading
+          this.$router.push('/preparePurchaseInvoiceNew.htm')
+        })
+        .catch((error) => {
+          this.isLoading = !this.isLoading
+          // eslint-disable-next-line no-console
+          console.log(error)
+        })
+    },
+
+    // Generic_Select value
+    getSelectValue(value, id) {
+      this.formData.set(id, value)
+    },
+
+    // Generic_Input value
+    getInputValue(inputVal) {
+      this.keywordValue = inputVal
+    },
+
+    // Table page ni ochish va yopish uchun
+    isOpen() {
+      this.isOpenTable = !this.isOpenTable
+    },
+    isClose() {
+      this.isCloseTable = !this.isCloseTable
+    }
+  }
+}
+</script>
+
+<style>
+.el-radio {
+  margin-right: 20px !important;
+  padding: 5px !important;
+}
+</style>

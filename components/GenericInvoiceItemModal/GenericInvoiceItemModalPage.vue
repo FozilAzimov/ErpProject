@@ -119,7 +119,7 @@
                 :durl="`invoiceBase/${itemLeft.durl}`"
                 dwidth="250"
                 :name="itemLeft.name"
-                @customFunction="getInputValue"
+                @customFunction="getLookUpValue"
               />
               <GenericInput
                 v-else-if="
@@ -201,6 +201,9 @@ export default {
         lookUp: true,
       },
       inputValuesObj: new Map(),
+      inputValuesMap: new Map(),
+      arrRow: [],
+      rowSetArray: [],
     }
   },
   mounted() {
@@ -236,13 +239,28 @@ export default {
 
     // Accept button action addition rows
     acceptAction() {
-      this.$emit('customInputValueObj', this.inputValuesObj)
+      const objBack = Object.fromEntries(this.inputValuesObj)
+      const obj = Object.fromEntries(this.inputValuesMap)
+      this.$emit('customInputValueObj', objBack, obj)
       this.closeAction()
     },
 
     // Lookup's Valuesini olish
     getInputValue(key, value) {
+      this.inputValuesObj.set('erepairStatus', 'false')
+      this.inputValuesObj.set('marriage', 'false')
+      this.inputValuesObj.set('mark', 'false')
+      this.inputValuesObj.set('waste', 'false')
+      this.inputValuesObj.set('qtyOfOne', '0')
+      this.inputValuesObj.set('price4', '0')
+      this.inputValuesObj.set('packNumber', `${1}`)
       this.inputValuesObj.set(key, value)
+      this.inputValuesMap.set(key, value)
+    },
+
+    getLookUpValue(key, name, value) {
+      this.inputValuesObj.set(key, { id: Number(value) })
+      this.inputValuesMap.set(key, name)
     },
   },
 }

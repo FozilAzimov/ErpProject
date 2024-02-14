@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import PurchaseReturnPage from '../../components/PurchaseReturnPage/PurchaseReturnPage'
+import PurchaseReturnPage from '../../components/Invoices/PurchaseReturnPage/PurchaseReturnPage'
 export default {
   components: { PurchaseReturnPage }
 }

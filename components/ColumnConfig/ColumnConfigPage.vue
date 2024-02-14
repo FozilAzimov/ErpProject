@@ -1,11 +1,28 @@
 <!-- eslint-disable vue/require-default-prop -->
 <template>
-  <div
-    class="settings-container"
-    @mouseleave="checkClick1"
-    @mouseover="checkClick2"
-  >
+  <div class="settings-container">
     <h2>Column config</h2>
+    <ul
+      v-if="createedit"
+      class="w-[97%] flex items-center justify-between p-2 border border-[#ccc]"
+    >
+      <li>
+        <!-- <label for="">Auto Edit Open Item</label>
+        <input type="checkbox" /> -->
+        <el-button type="primary" @click="toggle1"
+          >Auto Edit Open Item</el-button
+        >
+        <el-checkbox id="check" v-model="editOpen1" size="large" border />
+      </li>
+      <li>
+        <el-button type="primary" @click="toggle2">Open popup</el-button>
+        <el-checkbox id="check" v-model="openPopup1" size="large" border />
+      </li>
+      <li>
+        <el-button type="primary" @click="toggle3">Auto Height Item</el-button>
+        <el-checkbox id="check" v-model="autoHeight1" size="large" border />
+      </li>
+    </ul>
     <div class="column-container">
       <div style="width: 325px" class="left-box">
         <h3>Все колонки</h3>
@@ -17,12 +34,7 @@
           @click="swapToRight"
           >Swap to right</el-button
         >
-        <draggable
-          v-model="leftItems"
-          class="columns-box"
-          group="items"
-          @change="onLeftChange"
-        >
+        <draggable v-model="leftItems" class="columns-box" group="items">
           <div
             v-for="(item, index) in leftItems"
             :key="index"
@@ -48,12 +60,7 @@
           @click="swapToLeft"
           >Swap to left</el-button
         >
-        <draggable
-          v-model="rightItems"
-          class="columns-box"
-          group="items"
-          @change="onRightChange"
-        >
+        <draggable v-model="rightItems" class="columns-box" group="items">
           <div
             v-for="(item, index) in rightItems"
             :key="index"
@@ -100,6 +107,10 @@ export default {
   },
   props: {
     checkColumnConfig: Boolean,
+    createedit: {
+      type: Boolean,
+      default: false,
+    },
     right: {
       type: Object,
       default: () => ({}),
@@ -116,6 +127,18 @@ export default {
       type: String,
       default: '',
     },
+    autoheight: {
+      type: Boolean,
+      default: false,
+    },
+    openpopup: {
+      type: Boolean,
+      default: false,
+    },
+    editopen: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -124,12 +147,18 @@ export default {
       checkModal: this.checkColumnConfig,
       checked1: ref(false),
       checked2: ref(false),
+      editOpen1: ref(this.editopen),
+      openPopup1: ref(this.openpopup),
+      autoHeight1: ref(this.autoheight),
     }
   },
   watch: {
     right: {
       immediate: true,
       handler(newRight) {
+        this.editOpen1 = this.editopen
+        this.openPopup1 = this.openpopup
+        this.autoHeight1 = this.autoheight
         for (const item in newRight) {
           newRight[item].postKey = item
           this.rightItems.push(newRight[item])
@@ -147,20 +176,20 @@ export default {
     },
   },
   methods: {
-    onLeftChange(event) {
-      // for event on swap
+    toggle1() {
+      this.editOpen1 = !this.editOpen1
     },
-    onRightChange(event) {
-      // for event on swap
+    toggle2() {
+      this.openPopup1 = !this.openPopup1
+    },
+    toggle3() {
+      this.autoHeight1 = !this.autoHeight1
     },
 
     mouseOver(index) {
       const icon = document.querySelector('.icon-' + index)
       icon.style.display = 'flex'
     },
-
-    checkClick1() {},
-    checkClick2() {},
 
     mouseLeave(index) {
       const icon = document.querySelector('.icon-' + index)
@@ -193,7 +222,7 @@ export default {
       })
       this.rightItems = []
     },
-    postColumns(event) {
+    postColumns() {
       let rightItemsName = ''
       // eslint-disable-next-line array-callback-return
       this.rightItems.map((item, index) => {
@@ -205,21 +234,29 @@ export default {
         }
       })
 
+      let data = {}
+      if (this.createedit) {
+        data = {
+          actionUrl: this.url,
+          userColumns: rightItemsName,
+          autoEditOpenItem: this.editOpen1,
+          autoHeightItem: this.autoHeight1,
+          openPopupItem: this.openPopup1,
+        }
+      } else {
+        data = {
+          actionUrl: this.url,
+          userColumns: rightItemsName,
+        }
+      }
       this.$axios
-        .post(
-          `${this.baseURL}/base/${this.api}`,
-          {
-            actionUrl: this.url,
-            userColumns: rightItemsName,
+        .post(`${this.baseURL}/base/${this.api}`, data, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+            'x-auth-token': localStorage.getItem('authToken'),
           },
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem('token')}`,
-              'x-auth-token': localStorage.getItem('authToken'),
-            },
-          }
-        )
-        .then((res) => {
+        })
+        .then(() => {
           this.checkModal = false
           this.$emit('checkModal', this.checkModal)
           location.reload()
@@ -231,8 +268,6 @@ export default {
     closePopup() {
       this.checkModal = false
       this.$emit('checkModal', this.checkModal)
-      console.log(this.right)
-      console.log(this.left)
     },
   },
 }
@@ -300,6 +335,7 @@ export default {
 .el-checkbox.is-bordered {
   padding: 10px 12px !important;
 }
+
 .input {
   text-align: center;
   width: 85%;

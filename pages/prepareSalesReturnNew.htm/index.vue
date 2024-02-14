@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import PrepareSalesReturnNewPage from '../../components/PrepareSalesReturnNew/PrepareSalesReturnNewPage.vue'
+import PrepareSalesReturnNewPage from '../../components/Invoices/PrepareSalesReturnNew/PrepareSalesReturnNewPage.vue'
 
 export default {
   components: { PrepareSalesReturnNewPage },
