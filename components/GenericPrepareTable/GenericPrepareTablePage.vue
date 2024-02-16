@@ -563,6 +563,7 @@ export default {
       arrRow: [],
       isCanAdd: this.isedit,
       newEditObjData: [],
+      addToAllInputValue: false,
     }
   },
 
@@ -588,6 +589,15 @@ export default {
 
   // METHODS
   methods: {
+    // Arrayni bo'sh object dan tozalash
+    arrayFiltered() {
+      // eslint-disable-next-line array-callback-return
+      this.rowSetArray = this.rowSetArray.filter((obj) => {
+        if (Object.keys(obj).length > 1) return obj
+      })
+    },
+    // Arrayni bo'sh object dan tozalash
+
     // Save action dan keyin filter qiluvchi input funksiyasi
     filterAction(name, value) {
       // eslint-disable-next-line array-callback-return
@@ -608,13 +618,6 @@ export default {
           return obj
         }
       })
-      // Arrayni bo'sh object dan tozalash
-      // eslint-disable-next-line array-callback-return
-      this.tooLastRowSetArray = this.tooLastRowSetArray.filter((obj, index) => {
-        if (Object.keys(obj).length) return obj
-      })
-      // Arrayni bosh object dan tozalash
-
       this.tooLastRowSetArray.length
         ? (this.noDataRow = false)
         : (this.noDataRow = true)
@@ -629,13 +632,17 @@ export default {
       } else {
         this.noOpenModal()
         this.allInputValues = Object.fromEntries(this.inputValuesMap)
-        this.rowSetArray.push(this.allInputValues)
-        const obj1 = Object.fromEntries(this.inputValuesObj)
-        this.arrRow.push(obj1)
+        // ----------
+        if (this.addToAllInputValue) this.rowSetArray.push(this.allInputValues)
+        this.addToAllInputValue = true
+        // ----------
+        this.rowSetArray.forEach((obj, i) => (obj.index = i + 1))
+        const requestObj = Object.fromEntries(this.inputValuesObj)
+        this.arrRow.push(requestObj)
       }
       this.showHideRow = false
-      this.inputValuesObj.clear()
       this.inputValuesMap.clear()
+      this.addmodalorrow && this.inputValuesObj.clear()
     },
     // Add an Item
 
@@ -648,8 +655,15 @@ export default {
     // row delete action
     rowDelAction(index) {
       this.tableBody = this.tableBody.filter((row, inx) => inx !== index)
-      this.rowSetArray = this.rowSetArray.filter((row, inx) => inx !== index)
+      this.rowSetArray = this.rowSetArray.filter(
+        (row) => row.index !== index + 1
+      )
+      this.arrRow = this.arrRow.filter((row, inx) => inx !== index)
+      this.newEditObjData = this.rowSetArray
+      this.tooLastRowSetArray = this.rowSetArray
+      this.rowSetArray.forEach((obj, i) => (obj.index = i + 1))
       this.inputValuesMap.clear()
+      this.addmodalorrow && this.inputValuesObj.clear()
     },
 
     // Modal Closeobject
@@ -716,6 +730,7 @@ export default {
       this.noOpenModal()
       this.arrRow.push(objBack)
       this.rowSetArray.push(obj)
+      this.rowSetArray.forEach((obj, i) => (obj.index = i + 1))
 
       this.inputValuesObj.clear()
       this.inputValuesMap.clear()
@@ -726,56 +741,28 @@ export default {
     getSaveRowAction() {
       if (this.addmodalorrow) {
         this.showHideRow = true
-
-        // ---------------------------------------------
-        // Dublicate object ni filter qilish
-        const uniqueArray = Array.from(
-          new Set(this.rowSetArray.map(JSON.stringify))
-        ).map(JSON.parse)
-        this.rowSetArray = uniqueArray
-        // Dublicate object ni filter qilish
-
-        // Arrayni bo'sh object dan tozalash
-        // eslint-disable-next-line array-callback-return
-        this.rowSetArray = this.rowSetArray.filter((obj, index) => {
-          if (Object.keys(obj).length) return obj
-        })
+        this.arrayFiltered()
         this.tooLastRowSetArray = this.rowSetArray
-        // Arrayni bo'sh object dan tozalash
-        // ----------------------------------------------
         this.$emit('rowValues', this.arrRow, this.showHideRow)
-
         // Total row ko'rinishini xal qiladi
         this.rowSetArray.length
           ? (this.noDataRow = false)
           : (this.noDataRow = true)
-
+        // Total row ko'rinishini xal qiladi
         this.totalAction()
       } else {
         this.showHideRow = true
         this.allInputValues = Object.fromEntries(this.inputValuesMap)
         this.rowSetArray.push(this.allInputValues)
+        this.rowSetArray.forEach((obj, i) => (obj.index = i + 1))
         this.inputValuesMap.clear()
-
-        // ---------------------------------------------
-        // Dublicate object ni filter qilish
-        const uniqueArray = Array.from(
-          new Set(this.rowSetArray.map(JSON.stringify))
-        ).map(JSON.parse)
-        this.rowSetArray = uniqueArray
-        // Dublicate object ni filter qilish
-
-        // Arrayni bo'sh object dan tozalash
-        // eslint-disable-next-line array-callback-return
-        this.rowSetArray = this.rowSetArray.filter((obj, index) => {
-          if (Object.keys(obj).length) return obj
-        })
+        this.arrayFiltered()
         this.tooLastRowSetArray = this.rowSetArray
-        // Arrayni bo'sh object dan tozalash
-        // ----------------------------------------------
-        const obj1 = Object.fromEntries(this.inputValuesObj)
-        this.arrRow.push(obj1)
-        this.arrRow.shift()
+        const requestObj = Object.fromEntries(this.inputValuesObj)
+        this.arrRow.push(requestObj)
+        this.arrRow = this.arrRow.filter(
+          (obj) => Object.keys(obj).length > 1 && obj
+        )
         this.$emit('rowValues', this.arrRow, this.showHideRow)
 
         // Total row ko'rinishini xal qiladi
@@ -790,7 +777,6 @@ export default {
     //  Edit button click qilganda ishlaydi
     getEditRowAction() {
       this.showHideRow = false
-      // ----------------------------------------------
       // Edit ning row data`sini shakillantirish
       this.newEditObjData = []
       this.rowSetArray.forEach((obj) => {
@@ -805,23 +791,15 @@ export default {
           Object.fromEntries(editObjData),
         ]
       })
-      // -------------------------------------
-      // Dublicate object ni filter qilish
-      const uniqueArray = Array.from(
-        new Set(this.rowSetArray.map(JSON.stringify))
-      ).map(JSON.parse)
-      this.rowSetArray = uniqueArray
-      // Dublicate object ni filter qilish
 
       // Arrayni bo'sh object dan tozalash
       // eslint-disable-next-line array-callback-return
-      this.rowSetArray = this.rowSetArray.filter((obj, index) => {
-        if (Object.keys(obj).length) return obj
+      this.rowSetArray = this.rowSetArray.filter((obj) => {
+        if (Object.keys(obj).length > 1) return obj
       })
       this.newEditObjData = this.rowSetArray
       this.tooLastRowSetArray = this.rowSetArray
       // Arrayni bo'sh object dan tozalash
-      // ----------------------------------------------
 
       this.totalAction()
     },
@@ -841,26 +819,6 @@ export default {
       })
     },
     // Total hisoblavchi function end
-
-    // intNumber
-    intNumber(evt) {
-      const theEvent = evt || window.event
-      let key = theEvent.keyCode || theEvent.which
-      const x = key
-      key = String.fromCharCode(key)
-      const textVal = this.$refs.input.value
-      if (x === 46 && textVal.includes('.')) {
-        theEvent.preventDefault()
-      }
-      const regex = /[0-9]|\./
-      if (
-        ((!regex.test(key) && x !== 8 && x !== 37 && x !== 39) || x === 46) &&
-        x !== 9
-      ) {
-        theEvent.returnValue = false
-        if (theEvent.preventDefault) theEvent.preventDefault()
-      }
-    },
   },
 }
 </script>

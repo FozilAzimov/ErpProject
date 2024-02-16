@@ -223,6 +223,7 @@ export default {
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
+            'x-auth-token': localStorage.getItem('authToken'),
           },
         }
       )

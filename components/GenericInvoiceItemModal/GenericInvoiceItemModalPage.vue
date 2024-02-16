@@ -48,7 +48,7 @@
                 :durl="`invoiceBase/${itemRight.durl}`"
                 dwidth="250"
                 :name="itemRight.name"
-                @customFunction="getInputValue"
+                @customFunction="getLookUpValue"
               />
               <GenericInput
                 v-else-if="

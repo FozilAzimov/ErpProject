@@ -58,7 +58,8 @@
               </span>
             </td>
             <td class="flex items-center justify-center gap-2 p-2">
-              <!-- <GenericButton
+              <GenericRouterLinkButton
+                :to="`${openUrl}.htm/${value.id}`"
                 name="Open"
                 pl="10"
                 pt="4"
@@ -66,11 +67,7 @@
                 pb="4"
                 bg="rgb(126,183,62)"
                 textsize="14"
-                @click="getTableRowOpen(tableId[index])"
-              /> -->
-              <router-link :to="`${openUrl}.htm/${value.id}`"
-                >open item {{ value.id }}</router-link
-              >
+              />
               <GenericButton
                 name="qrCode"
                 pl="10"
@@ -118,7 +115,10 @@
 </template>
 
 <script>
+import GenericButton from '../Button/GenericButton.vue'
+import GenericRouterLinkButton from '../Generics/GenericRouterLink/GenericRouterLinkButton.vue'
 export default {
+  components: { GenericRouterLinkButton, GenericButton },
   props: {
     tablehead: {
       type: Object,
