@@ -6,7 +6,7 @@
           <th
             v-for="(headName, key) in tablehead"
             :key="key"
-            class="text-[13px] font-semibold border-[1px] border-[solid] border-[rgba(119,136,153,0.2)] p-2 cursor-pointer"
+            class="text-[13px] font-semibold border-[1px] border-[solid] border-[rgba(119,136,153,0.2)] p-2 cursor-pointer whitespace-nowrap"
             :class="`w-[${headName.width}px]`"
           >
             {{ headName.name }}

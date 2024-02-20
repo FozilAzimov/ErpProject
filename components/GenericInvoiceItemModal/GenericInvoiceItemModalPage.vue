@@ -48,6 +48,7 @@
                 :durl="`invoiceBase/${itemRight.durl}`"
                 dwidth="250"
                 :name="itemRight.name"
+                :result-type="itemRight.resultType"
                 @customFunction="getLookUpValue"
               />
               <GenericInput
@@ -119,6 +120,7 @@
                 :durl="`invoiceBase/${itemLeft.durl}`"
                 dwidth="250"
                 :name="itemLeft.name"
+                :result-type="itemLeft.resultType"
                 @customFunction="getLookUpValue"
               />
               <GenericInput
@@ -191,6 +193,10 @@ export default {
       type: Array,
       default: () => [],
     },
+    whichTableName: {
+      type: String,
+      default: '',
+    },
   },
   data() {
     return {
@@ -247,19 +253,27 @@ export default {
 
     // Lookup's Valuesini olish
     getInputValue(key, value) {
-      this.inputValuesObj.set('erepairStatus', 'false')
-      this.inputValuesObj.set('marriage', 'false')
-      this.inputValuesObj.set('mark', 'false')
-      this.inputValuesObj.set('waste', 'false')
-      this.inputValuesObj.set('qtyOfOne', '0')
-      this.inputValuesObj.set('price4', '0')
-      this.inputValuesObj.set('packNumber', `${1}`)
-      this.inputValuesObj.set(key, value)
-      this.inputValuesMap.set(key, value)
+      if (this.whichTableName) {
+        this.inputValuesObj.set('erepairStatus', 'false')
+        this.inputValuesObj.set('marriage', 'false')
+        this.inputValuesObj.set('mark', 'false')
+        this.inputValuesObj.set('waste', 'false')
+        this.inputValuesObj.set('qtyOfOne', '0')
+        this.inputValuesObj.set('price4', '0')
+        this.inputValuesObj.set('packNumber', `${1}`)
+        this.inputValuesObj.set(key, value)
+        this.inputValuesMap.set(key, value)
+      } else {
+        this.inputValuesObj.set(key, value)
+        this.inputValuesMap.set(key, value)
+      }
     },
 
-    getLookUpValue(key, name, value) {
-      this.inputValuesObj.set(key, { id: Number(value) })
+    getLookUpValue(key, name, value, order, resultType) {
+      this.inputValuesObj.set(
+        key,
+        resultType === 'object' ? { id: Number(value) } : value
+      )
       this.inputValuesMap.set(key, name)
     },
   },

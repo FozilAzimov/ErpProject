@@ -17,9 +17,7 @@
     </transition>
     <form class="flex flex-wrap items-center gap-3 py-4">
       <div>
-        <label
-          for="from"
-          class="text-[13px] text-[] cursor-pointer tracking-[1.1]"
+        <label for="from" class="text-[13px] cursor-pointer tracking-[1.1]"
           >Date from</label
         >
         <GenericInputDatePage
@@ -38,9 +36,7 @@
         />
       </div>
       <div>
-        <label for="to" class="text-[13px] text-[] cursor-pointer"
-          >Date to</label
-        >
+        <label for="to" class="text-[13px] cursor-pointer">Date to</label>
         <GenericInputDatePage
           id="to"
           v-model="formData.to"
@@ -57,7 +53,7 @@
         />
       </div>
       <div class="flex items-center gap-1">
-        <label for="bill" class="text-[13px] text-[] cursor-pointer"
+        <label for="bill" class="text-[13px] cursor-pointer"
           >Status (Bill)</label
         >
         <GenericSelect
@@ -69,9 +65,7 @@
         />
       </div>
       <div class="flex items-center gap-1">
-        <label for="pay" class="text-[13px] text-[] cursor-pointer"
-          >Status (Pay)</label
-        >
+        <label for="pay" class="text-[13px] cursor-pointer">Status (Pay)</label>
         <GenericSelect
           id="pay"
           v-model="formData.pay"
@@ -81,7 +75,7 @@
         />
       </div>
       <div class="flex items-center gap-1">
-        <label for="invoice" class="text-[13px] text-[] cursor-pointer"
+        <label for="invoice" class="text-[13px] cursor-pointer"
           >Invoice (Status)</label
         >
         <GenericSelect
@@ -93,7 +87,7 @@
         />
       </div>
       <div class="flex items-center gap-1">
-        <label for="departments" class="text-[13px] text-[] cursor-pointer"
+        <label for="departments" class="text-[13px] cursor-pointer"
           >Departments</label
         >
         <GenericSelect
@@ -105,7 +99,7 @@
         />
       </div>
       <div class="flex items-center gap-1">
-        <label for="warehouse" class="text-[13px] text-[] cursor-pointer"
+        <label for="warehouse" class="text-[13px] cursor-pointer"
           >Warehouse</label
         >
         <GenericSelect

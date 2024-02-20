@@ -101,6 +101,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    resultType: {
+      type: String,
+      default: '',
+    },
   },
 
   // DATA
@@ -207,7 +211,8 @@ export default {
         this.name,
         this.selectedText,
         this.selectedValue,
-        this.order
+        this.order,
+        this.resultType
       )
     },
 
@@ -287,7 +292,8 @@ export default {
         this.name,
         this.selectedText,
         this.selectedValue,
-        this.order
+        this.order,
+        this.resultType
       )
     },
 
@@ -326,7 +332,8 @@ export default {
         this.name,
         this.selectedText,
         option.value,
-        this.order
+        this.order,
+        this.resultType
       )
     },
 

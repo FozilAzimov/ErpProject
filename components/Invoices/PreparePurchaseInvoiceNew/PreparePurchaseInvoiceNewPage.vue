@@ -757,131 +757,292 @@
         @click="additionInvoiceItem"
       />
       <div
-        class="w-full bg-[rgba(0,0,0,0.05)] overflow-hidden"
+        class="w-full bg-[rgba(224,230,238,0.6)] overflow-hidden"
         :class="
           isInvoiceItam || userId
-            ? 'duration-[1s] h-[700px]'
+            ? 'duration-[1s] h-fit'
             : 'duration-[1s] h-[0px]'
         "
       >
-        <h1 class="text-[13px]">Invoice Item</h1>
-        <div class="flex gap-1">
-          <GenericButton
-            name="Column Setting"
-            pl="10"
-            pt="3"
-            pr="10"
-            pb="3"
-            bggradient="linear-gradient(to top, rgb(25,52,79),rgba(25,52,79, 0.58))"
-            textsize="14"
-            :url="img.setting"
-            :istherepicture="true"
-            @click="openColumnConfig"
-          />
-          <template v-if="hideButton">
+        <div
+          class="border-[1px] border-[solid] border-[rgba(119,136,153,0.5)] p-[8px_0_8px_8px]"
+        >
+          <h1 class="text-[13px]">Invoice Item</h1>
+          <div class="flex gap-1">
             <GenericButton
-              name="Save"
+              name="Column Setting"
               pl="10"
               pt="3"
               pr="10"
               pb="3"
-              bg="rgb(119,191,66)"
+              bggradient="linear-gradient(to top, rgb(25,52,79),rgba(25,52,79, 0.58))"
               textsize="14"
-              @click="saveInvoice"
-              @customInputValueObj="getFilterData"
+              :url="img.setting"
+              :istherepicture="true"
+              @click="openColumnConfig"
             />
-          </template>
-          <template v-else>
+            <template v-if="hideButton">
+              <GenericButton
+                name="Save"
+                pl="10"
+                pt="3"
+                pr="10"
+                pb="3"
+                bg="rgb(119,191,66)"
+                textsize="14"
+                @click="saveInvoice"
+                @customInputValueObj="getFilterData"
+              />
+            </template>
+            <template v-else>
+              <GenericButton
+                name="Edit"
+                pl="10"
+                pt="3"
+                pr="10"
+                pb="3"
+                bg="rgb(119,191,66)"
+                textsize="14"
+                :url="img.edit"
+                :istherepicture="true"
+                @click="editInvoice"
+              />
+            </template>
             <GenericButton
-              name="Edit"
+              name="Make Bill"
               pl="10"
               pt="3"
               pr="10"
               pb="3"
-              bg="rgb(119,191,66)"
+              bg="rgba(54, 155, 215, 0.8)"
               textsize="14"
-              @click="editInvoice"
+            />
+            <GenericButton
+              name="Print Preview"
+              pl="10"
+              pt="3"
+              pr="10"
+              pb="3"
+              bg="rgba(126,183,62, 0.8)"
+              textsize="14"
+              :url="img.printer"
+              :istherepicture="true"
+            />
+            <GenericButton
+              name="Delete"
+              pl="10"
+              pt="3"
+              pr="10"
+              pb="3"
+              bggradient="linear-gradient(to top, rgb(108,33,38),rgba(108,33,38,0.65))"
+              textsize="14"
+              :url="img.del"
+              :istherepicture="true"
+            />
+            <GenericInput
+              width="120"
+              height="30"
+              pl="10"
+              pr="10"
+              pt="2"
+              pb="2"
+              textsize="13"
+              type="number"
+              placeholder="Change price"
+            />
+            <GenericInput
+              width="120"
+              height="30"
+              pl="10"
+              pr="10"
+              pt="2"
+              pb="2"
+              textsize="13"
+              type="number"
+              placeholder="Change vat"
+            />
+          </div>
+          <div class="my-1">
+            <LookUp
+              durl="invoiceBase/findAllCompanyForInvoice"
+              dwidth="200"
+              dlist="200"
+              name="companyForInvoice"
+              @customFunction="getLookUpValue"
+            />
+            <LookUp
+              durl="invoiceBase/findAllPaymentType"
+              dwidth="200"
+              dlist="200"
+            />
+          </div>
+          <template>
+            <GenericButton
+              name="Change Invoice Company"
+              pl="10"
+              pt="3"
+              pr="10"
+              pb="3"
+              bggradient="linear-gradient(to top, rgb(108,33,38),rgba(108,33,38,0.65))"
+              textsize="14"
+            />
+            <GenericPrepareTablePage
+              ref="saveEditRef"
+              :tablehead="tableData"
+              :tableheadlength="tableData.length"
+              :addmodalorrow="openPopup"
+              :isedit="isEdit"
+              :height="290"
+              :default-values="productValues"
+              class="bg-[rgba(255,255,255,0.5)] mt-1"
+              @rowValues="getRowElements"
             />
           </template>
-          <GenericButton
-            name="Make Bill"
-            pl="10"
-            pt="3"
-            pr="10"
-            pb="3"
-            bg="rgba(54, 155, 215, 0.8)"
-            textsize="14"
-          />
-          <GenericButton
-            name="Print Preview"
-            pl="10"
-            pt="3"
-            pr="10"
-            pb="3"
-            bg="rgba(126,183,62, 0.8)"
-            textsize="14"
-            :url="img.printer"
-            :istherepicture="true"
-          />
-          <GenericButton
-            name="Delete"
-            pl="10"
-            pt="3"
-            pr="10"
-            pb="3"
-            bggradient="linear-gradient(to top, rgb(108,33,38),rgba(108,33,38,0.65))"
-            textsize="14"
-            :url="img.del"
-            :istherepicture="true"
-          />
-          <GenericInput
-            width="120"
-            height="30"
-            pl="10"
-            pr="10"
-            pt="2"
-            pb="2"
-            textsize="13"
-            type="number"
-            placeholder="Change price"
-          />
-          <GenericInput
-            width="120"
-            height="30"
-            pl="10"
-            pr="10"
-            pt="2"
-            pb="2"
-            textsize="13"
-            type="number"
-            placeholder="Change vat"
-          />
+          <!-- ============ -->
+          <template v-if="subTable">
+            <strong class="text-[15px]"
+              >Payment Details.
+              <span class="text-[14px] text-[rgb(156,0,78)]"
+                >Parent ID = {{ parentID }}</span
+              ></strong
+            >
+            <div class="flex items-center gap-1">
+              <GenericButton
+                v-if="undoPayment.topUndoPayment"
+                name="Undo Payment"
+                pl="10"
+                pt="3"
+                pr="10"
+                pb="3"
+                bggradient="linear-gradient(to top, rgb(25,52,79),rgba(25,52,79,0.5))"
+                textsize="14"
+                color="rgb(255,229,142)"
+                @click="undoPaymentTransactionColumns('topUP')"
+              />
+              <template v-else>
+                <GenericButton
+                  v-if="editPayDiscard.editPayShowHide1"
+                  name="Edit"
+                  pl="10"
+                  pt="3"
+                  pr="10"
+                  pb="3"
+                  bggradient="linear-gradient(to top, rgb(25,52,79),rgba(25,52,79,0.5))"
+                  textsize="14"
+                  :url="editPayDiscard.editPayShowHide1 ? img.edit : ''"
+                  :istherepicture="editPayDiscard.editPayShowHide1 && true"
+                  @click="editTransactionColumns('topE')"
+                />
+                <GenericButton
+                  v-else
+                  name="Pay"
+                  pl="10"
+                  pt="3"
+                  pr="10"
+                  pb="3"
+                  bggradient="linear-gradient(to top, rgb(25,52,79),rgba(25,52,79,0.5))"
+                  textsize="14"
+                  @click="payTransactionColumns('topP')"
+                />
+                <GenericButton
+                  v-if="editPayDiscard.discardShowHide1"
+                  name="Discard"
+                  pl="10"
+                  pt="3"
+                  pr="10"
+                  pb="3"
+                  bggradient="linear-gradient(to top, rgb(205,210,212),rgba(205,210,212,0.65))"
+                  textsize="14"
+                  color="rgb(190,72,77)"
+                  @click="discardTransactionColumns('topD')"
+                />
+              </template>
+            </div>
+            <GenericSubPrepareTablePage
+              ref="transactionColumnsRef"
+              :tablehead="transactionColumnsData"
+              :tableheadlength="transactionColumnsData.length"
+              :addmodalorrow="openPopup"
+              :isedit="isEdit"
+              :height="290"
+              :default-values="productValues"
+              class="bg-[rgba(255,255,255,0.5)] mt-2"
+              @rowValues="getSubRowElements"
+            />
+          </template>
+          <template v-if="subTable">
+            <strong class="text-[15px]"
+              >Extra Payment Details.
+              <span class="text-[14px] text-[rgb(156,0,78)]"
+                >Parent ID = {{ parentID }}</span
+              ></strong
+            >
+            <div class="flex items-center gap-1">
+              <GenericButton
+                v-if="undoPayment.subUndoPayment"
+                name="Undo Payment"
+                pl="10"
+                pt="3"
+                pr="10"
+                pb="3"
+                bggradient="linear-gradient(to top, rgb(25,52,79),rgba(25,52,79,0.5))"
+                textsize="14"
+                color="rgb(255,229,142)"
+                @click="undoPaymentTransactionColumns('subUP')"
+              />
+              <template v-else>
+                <GenericButton
+                  v-if="editPayDiscard.editPayShowHide2"
+                  name="Edit"
+                  pl="10"
+                  pt="3"
+                  pr="10"
+                  pb="3"
+                  bggradient="linear-gradient(to top, rgb(25,52,79),rgba(25,52,79,0.5))"
+                  textsize="14"
+                  :url="editPayDiscard.editPayShowHide2 ? img.edit : ''"
+                  :istherepicture="editPayDiscard.editPayShowHide2 && true"
+                  @click="editTransactionColumns('subE')"
+                />
+                <GenericButton
+                  v-else
+                  name="Pay"
+                  pl="10"
+                  pt="3"
+                  pr="10"
+                  pb="3"
+                  bggradient="linear-gradient(to top, rgb(25,52,79),rgba(25,52,79,0.5))"
+                  textsize="14"
+                  @click="payTransactionColumns('subP')"
+                />
+                <GenericButton
+                  v-if="editPayDiscard.discardShowHide2"
+                  name="Discard"
+                  pl="10"
+                  pt="3"
+                  pr="10"
+                  pb="3"
+                  bggradient="linear-gradient(to top, rgb(205,210,212),rgba(205,210,212,0.65))"
+                  textsize="14"
+                  color="rgb(190,72,77)"
+                  @click="discardTransactionColumns('subD')"
+                />
+              </template>
+            </div>
+            <GenericSubPrepareTableTooPage
+              ref="transactionColumnsTooRef"
+              :tablehead="transactionColumnsData"
+              :tableheadlength="transactionColumnsData.length"
+              :addmodalorrow="openPopup"
+              :isedit="isEdit"
+              :height="290"
+              :default-values="productValues"
+              class="bg-[rgba(255,255,255,0.5)] mt-2"
+              @rowValues="getSubRowElements"
+            />
+          </template>
+          <!-- ============ -->
         </div>
-        <div class="mt-1">
-          <LookUp
-            durl="invoiceBase/findAllCompanyForInvoice"
-            dwidth="200"
-            dlist="200"
-            name="companyForInvoice"
-            @customFunction="getLookUpValue"
-          />
-          <LookUp
-            durl="invoiceBase/findAllPaymentType"
-            dwidth="200"
-            dlist="200"
-          />
-        </div>
-        <GenericPrepareTablePage
-          ref="saveEditRef"
-          :tablehead="tableData"
-          :tableheadlength="tableData.length"
-          :addmodalorrow="productValues ? true : openPopup"
-          :isedit="isEdit"
-          :height="290"
-          :default-values="productValues"
-          class="bg-[rgba(255,255,255,0.5)] mt-2"
-          @rowValues="getRowElements"
-        />
       </div>
     </div>
     <template v-if="invoiceRightColumns !== null">
@@ -906,6 +1067,7 @@ import copy from '../../../assets/icons/copy.png'
 import setting from '../../../assets/icons/settings.png'
 import printer from '../../../assets/icons/printer.png'
 import del from '../../../assets/icons/delete.png'
+import edit from '../../../assets/icons/editIcon.svg'
 // Components
 import GenericButton from '../../Button/GenericButton.vue'
 import LoadingPage from '../../Loading/LoadingPage.vue'
@@ -913,6 +1075,8 @@ import LookUp from '../../Lookup/LookUp.vue'
 import GenericInput from '../../Input/GenericInput.vue'
 import GenericPrepareTablePage from '../../GenericPrepareTable/GenericPrepareTablePage.vue'
 import ColumnConfigPage from '../../ColumnConfig/ColumnConfigPage.vue'
+import GenericSubPrepareTablePage from '../../Generics/GenericSubPrepareTable/GenericSubPrepareTablePage.vue'
+import GenericSubPrepareTableTooPage from '../../Generics/GenericSubPrepareTableToo/GenericSubPrepareTableTooPage.vue'
 export default {
   // COMPONENTS
   components: {
@@ -922,6 +1086,8 @@ export default {
     GenericInput,
     GenericPrepareTablePage,
     ColumnConfigPage,
+    GenericSubPrepareTablePage,
+    GenericSubPrepareTableTooPage,
   },
 
   // DATA
@@ -963,6 +1129,7 @@ export default {
         setting,
         printer,
         del,
+        edit,
       },
       objData: {},
       selectedRow: null,
@@ -997,6 +1164,20 @@ export default {
       productValues: null,
       editOpen: false,
       autoHeight: false,
+      transactionColumns: [],
+      transactionColumnsData: [],
+      editPayDiscard: {
+        editPayShowHide1: true,
+        editPayShowHide2: true,
+        discardShowHide1: false,
+        discardShowHide2: false,
+      },
+      undoPayment: {
+        topUndoPayment: false,
+        subUndoPayment: false,
+      },
+      subTable: false,
+      parentID: 0,
     }
   },
 
@@ -1033,17 +1214,19 @@ export default {
             },
           }
         )
-        .then((res) => {
-          this.productValues = res?.data?.invoiceJson?.invoiceItems
+        .then(({ data }) => {
+          this.productValues = data?.invoiceJson?.invoiceItems
           this.isLoading = !this.isLoading
-          this.objData = res?.data?.invoiceJson
-          this.actionUrl = res?.data?.actionUrl
-          this.rightColumns = res?.data?.rightColumns
-          this.openPopup = res?.data?.openPopup
-          this.editOpen = res?.data?.autoEditOpen
-          this.autoHeight = res?.data?.autoHeight
+          this.objData = data?.invoiceJson
+          this.actionUrl = data?.actionUrl
+          this.rightColumns = data?.rightColumns
+          this.openPopup = data?.openPopup
+          this.editOpen = data?.autoEditOpen
+          this.autoHeight = data?.autoHeight
+          this.transactionColumns = data?.transactionColumns
           this.leftRightDataFilter()
           this.getFilterData()
+          this.transactionColumnsFiltered()
         })
         .catch((error) => {
           this.isLoading = !this.isLoading
@@ -1055,14 +1238,23 @@ export default {
     // Filter Action
     leftRightDataFilter() {
       if (this.rightColumns) {
-        // eslint-disable-next-line array-callback-return
         this.tableData = this.rightColumns.filter((value) => {
-          if (value.showUI) return value
+          return value.showUI && value
         })
-        // eslint-disable-next-line array-callback-return
         this.tableData2 = this.rightColumns.filter((value) => {
-          if (!value.showUI) return value
+          return !value.showUI && value
         })
+      }
+    },
+
+    // Filter Action
+    transactionColumnsFiltered() {
+      if (this.transactionColumns) {
+        this.transactionColumnsData = this.transactionColumns.filter(
+          (value) => {
+            return value.showUI && value
+          }
+        )
       }
     },
 
@@ -1158,7 +1350,6 @@ export default {
     // edit invoice
     editInvoice() {
       this.hideButton = !this.hideButton
-
       // GenericTablePage da ishlab beruvchi function
       this.$refs.saveEditRef.getEditRowAction()
     },
@@ -1168,9 +1359,134 @@ export default {
       this.invoiceList = arr
     },
 
+    editTransactionColumns(prop) {
+      if (prop === 'topE') {
+        this.editPayDiscard.editPayShowHide1 = false
+        this.editPayDiscard.discardShowHide1 = true
+      } else if (prop === 'subE') {
+        this.editPayDiscard.editPayShowHide2 = false
+        this.editPayDiscard.discardShowHide2 = true
+      }
+      if (prop === 'topE') {
+        // GenericSubTablePage da ishlab beruvchi function
+        this.$refs.transactionColumnsRef.editAction()
+      } else if (prop === 'subE') {
+        // GenericSubTablePageToo da ishlab beruvchi function
+        this.$refs.transactionColumnsTooRef.editAction()
+      }
+    },
+
+    payTransactionColumns(prop) {
+      if (prop === 'topP') {
+        // GenericSubTablePage da ishlab beruvchi function
+        this.$refs.transactionColumnsRef.payAction(prop)
+      } else if (prop === 'subP') {
+        // GenericSubTablePageToo da ishlab beruvchi function
+        this.$refs.transactionColumnsTooRef.payAction(prop)
+      }
+    },
+
+    discardTransactionColumns(prop) {
+      if (prop === 'topD') {
+        this.editPayDiscard.discardShowHide1 = false
+        this.editPayDiscard.editPayShowHide1 = true
+      } else if (prop === 'subD') {
+        this.editPayDiscard.discardShowHide2 = false
+        this.editPayDiscard.editPayShowHide2 = true
+      }
+      if (prop === 'topD') {
+        // GenericSubTablePage da ishlab beruvchi function
+        this.$refs.transactionColumnsRef.discardAndUndoPaymentAction()
+      } else if (prop === 'subD') {
+        // GenericSubTablePageToo da ishlab beruvchi function
+        this.$refs.transactionColumnsTooRef.discardAndUndoPaymentAction()
+      }
+    },
+
+    undoPaymentTransactionColumns(prop) {
+      if (prop === 'topUP') {
+        // GenericSubTablePage da ishlab beruvchi function
+        this.$refs.transactionColumnsRef.discardAndUndoPaymentAction()
+      } else if (prop === 'subUP') {
+        // GenericSubTablePageToo da ishlab beruvchi function
+        this.$refs.transactionColumnsTooRef.discardAndUndoPaymentAction()
+      }
+      this.isLoading = !this.isLoading
+      this.$axios
+        .post(
+          `${this.baseURL}/invoice/${
+            prop === 'topUP' ? 'payUnPayUrl' : 'extraPayUnPay'
+          }`,
+          {
+            id: this.parentID,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('token')}`,
+              'x-auth-token': localStorage.getItem('authToken'),
+            },
+          }
+        )
+        .then(({ status }) => {
+          if (status === 200 && prop === 'topUP') {
+            this.isLoading = !this.isLoading
+            this.undoPayment.topUndoPayment = false
+            this.editPayDiscard.discardShowHide1 = false
+            this.editPayDiscard.editPayShowHide1 = true
+          } else if (status === 200 && prop === 'subUP') {
+            this.isLoading = !this.isLoading
+            this.undoPayment.subUndoPayment = false
+            this.editPayDiscard.discardShowHide2 = false
+            this.editPayDiscard.editPayShowHide2 = true
+          }
+        })
+        .catch((error) => {
+          this.isLoading = !this.isLoading
+          // eslint-disable-next-line no-console
+          console.log(error)
+        })
+    },
+
+    getSubRowElements(arr, prop) {
+      this.isLoading = !this.isLoading
+      this.$axios
+        .post(
+          `${this.baseURL}/invoice/${
+            prop === 'topP' ? 'payUnPayUrl' : 'extraPayUnPay'
+          }`,
+          {
+            id: this.parentID,
+            transactionsList: arr,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('token')}`,
+              'x-auth-token': localStorage.getItem('authToken'),
+            },
+          }
+        )
+        .then(({ status }) => {
+          if (status === 200 && prop === 'topP') {
+            this.isLoading = !this.isLoading
+            this.undoPayment.topUndoPayment = true
+          } else if (status === 200 && prop === 'subP') {
+            this.isLoading = !this.isLoading
+            this.undoPayment.subUndoPayment = true
+          }
+        })
+        .catch((error) => {
+          this.isLoading = !this.isLoading
+          // eslint-disable-next-line no-console
+          console.log(error)
+        })
+    },
+
     saveInvoice() {
       // GenericTablePage da ishlab beruvchi function
       this.$refs.saveEditRef.getSaveRowAction()
+
+      // GenericTablePage da subTable uchun
+      this.subTable = true
 
       const inputValues = this.inputValues
       const lookupValues = this.lookUpValues
@@ -1281,7 +1597,7 @@ export default {
           date,
           department: { id: Number(department) },
           driverName,
-          id: null,
+          id: this.parentID ? this.parentID : null,
           invoiceBillStatus,
           invoiceItems: this.invoiceList,
           invoiceNo: '',
@@ -1309,8 +1625,8 @@ export default {
             },
           }
         )
-        .then((res) => {
-          // this.tableNameTranslateObj = res.data
+        .then(({ data }) => {
+          this.parentID = data?.id
         })
         .catch((error) => {
           // eslint-disable-next-line no-console

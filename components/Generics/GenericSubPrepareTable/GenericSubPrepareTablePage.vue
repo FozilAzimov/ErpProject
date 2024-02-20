@@ -3,14 +3,13 @@
     <GenericInvoiceItemModalPage
       v-if="isOpenModal"
       :tabledata="tablehead"
-      :which-table-name="whichTableName"
       @customCloseAction="closeAction"
       @customInputValueObj="modalAcceptAction"
     />
     <div
       class="flex items-start overflow-scroll relative z-0 mb-5 bg-white border-[1px] border-[solid] border-[rgba(119,136,153,0.3)]"
       :style="`max-height:${height}px`"
-      style="min-height: 165px"
+      style="min-height: 132px"
     >
       <table class="w-full border-[1px] border-[solid] border-[#F0F0F0]">
         <thead class="bg-[rgb(229,235,245)]">
@@ -104,7 +103,7 @@
                   >
                     <span class="flex flex-col items-center">
                       <img
-                        src="../../assets/icons/no-data.png"
+                        src="../../../assets/icons/no-data.png"
                         alt="no-data-icons"
                       />
                       No data
@@ -320,7 +319,7 @@
                   >
                     <span class="flex flex-col items-center">
                       <img
-                        src="../../assets/icons/no-data.png"
+                        src="../../../assets/icons/no-data.png"
                         alt="no-data-icons"
                       />
                       No data
@@ -496,14 +495,14 @@
 
 <script>
 // import icons
-import plus from '../../assets/icons/plus.png'
-import del from '../../assets/icons/delete-button.png'
+import plus from '../../../assets/icons/plus.png'
+import del from '../../../assets/icons/delete-button.png'
 
 // import components
-import GenericButton from '../Button/GenericButton.vue'
-import GenericInvoiceItemModalPage from '../GenericInvoiceItemModal/GenericInvoiceItemModalPage.vue'
-import GenericInput from '../Input/GenericInput.vue'
-import LookUp from '../Lookup/LookUp.vue'
+import GenericButton from '../../Button/GenericButton.vue'
+import GenericInvoiceItemModalPage from '../../GenericInvoiceItemModal/GenericInvoiceItemModalPage.vue'
+import GenericInput from '../../Input/GenericInput.vue'
+import LookUp from '../../Lookup/LookUp.vue'
 
 export default {
   // COMPONENTS
@@ -560,14 +559,13 @@ export default {
       totalObjMap: new Map(),
       sumColumnArr: [],
       total: 0,
-      showHideRow: false,
+      showHideRow: true,
       rowDataShowHide: true,
       noDataRow: false,
       arrRow: [],
       isCanAdd: this.isedit,
       newEditObjData: [],
       addToAllInputValue: false,
-      whichTableName: '',
     }
   },
 
@@ -652,7 +650,6 @@ export default {
 
     yesOpenModal() {
       this.isOpenModal = true
-      this.whichTableName = 'topTable'
     },
     noOpenModal() {
       this.tableBody.push(this.filteredTablehead)
@@ -693,13 +690,6 @@ export default {
         this.arrRow[order][key] = value
         this.rowSetArray[order][key] = value
       } else {
-        this.inputValuesObj.set('erepairStatus', 'false')
-        this.inputValuesObj.set('marriage', 'false')
-        this.inputValuesObj.set('mark', 'false')
-        this.inputValuesObj.set('waste', 'false')
-        this.inputValuesObj.set('qtyOfOne', '0')
-        this.inputValuesObj.set('price4', '0')
-        this.inputValuesObj.set('packNumber', `${order + 1}`)
         this.inputValuesObj.set(key, value)
         this.inputValuesMap.set(key, value)
       }
@@ -707,7 +697,7 @@ export default {
     // input's Valuesini olish
 
     // Lookup's Valuesini olish
-    getLookUpValue(key, name, value, order) {
+    getLookUpValue(key, name, value, order, resultType) {
       if (
         this.arrRow[order + 1] &&
         this.rowSetArray[order + 1] &&
@@ -723,7 +713,10 @@ export default {
         this.arrRow[order][key] = { id: Number(value) }
         this.rowSetArray[order][key] = name
       } else {
-        this.inputValuesObj.set(key, { id: Number(value) })
+        this.inputValuesObj.set(
+          key,
+          resultType === 'object' ? { id: Number(value) } : value
+        )
         this.inputValuesMap.set(key, name)
       }
     },
@@ -742,19 +735,18 @@ export default {
     },
     // Modal uchun ishlaydi
 
-    // Save button click qilganda ishlaydi
-    getSaveRowAction() {
+    // Pay button click qilganda ishlaydi
+    payAction(prop) {
       if (this.addmodalorrow) {
         this.showHideRow = true
         this.arrayFiltered()
         this.tooLastRowSetArray = this.rowSetArray
-        this.$emit('rowValues', this.arrRow, this.showHideRow)
+        this.$emit('rowValues', this.arrRow, prop)
         // Total row ko'rinishini xal qiladi
         this.rowSetArray.length
           ? (this.noDataRow = false)
           : (this.noDataRow = true)
         // Total row ko'rinishini xal qiladi
-        this.totalAction()
       } else {
         this.showHideRow = true
         this.allInputValues = Object.fromEntries(this.inputValuesMap)
@@ -768,20 +760,29 @@ export default {
         this.arrRow = this.arrRow.filter(
           (obj) => Object.keys(obj).length > 1 && obj
         )
-        this.$emit('rowValues', this.arrRow, this.showHideRow)
+        this.$emit('rowValues', this.arrRow, prop)
 
         // Total row ko'rinishini xal qiladi
         this.rowSetArray.length
           ? (this.noDataRow = false)
           : (this.noDataRow = true)
-
-        this.totalAction()
       }
+      this.totalAction()
     },
 
-    //  Edit button click qilganda ishlaydi
-    getEditRowAction() {
+    // Discard va Undo Payment button click qilganda ishlaydi
+    discardAndUndoPaymentAction() {
+      this.showHideRow = true
+      this.arrRow = []
+      this.tableBody = []
+      this.rowSetArray = []
+      this.tooLastRowSetArray = []
+    },
+
+    // Edit button click qilganda ishlaydi
+    editAction() {
       this.showHideRow = false
+
       // Edit ning row data`sini shakillantirish
       this.newEditObjData = []
       this.rowSetArray.forEach((obj) => {
