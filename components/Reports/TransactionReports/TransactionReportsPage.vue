@@ -4,17 +4,6 @@
       v-if="isLoading"
       class="absolute left-[50%] top-[8px] translate-x-[-50%]"
     />
-    <!-- <transition name="fade">
-      <ColumnConfigPage
-        v-show="checkModalValue"
-        :right="tableHead"
-        :left="leftMap"
-        :url="actionUrl"
-        api="saveColumnConfig"
-        class="z-[10000]"
-        @checkModal="handleValue"
-      />
-    </transition> -->
     <template v-if="isCloseTable">
       <div
         class="border-[1px] mt-1 border-solid border-[rgba(0,0,0,0.05)] p-[12px] bg-gradient-to-b from-transparent via-transparent to-gray-200 shadow-md flex items-center justify-between"
@@ -184,7 +173,6 @@ import SummaryReportPage4 from './SummaryReportPage4.vue'
 import SummaryReportPage5 from './SummaryReportPage5.vue'
 import SummaryReportPage6 from './SummaryReportPage6.vue'
 import SummaryReportPage7 from './SummaryReportPage7.vue'
-// import ColumnConfigPage from '../../ColumnConfig/ColumnConfigPage.vue'
 export default {
   components: {
     LoadingPage,
@@ -218,7 +206,7 @@ export default {
     this.isLoading = !this.isLoading
     this.$axios
       .post(
-        `${this.baseURL}/transactionsReport/transactionReports`,
+        `/transactionsReport/transactionReports`,
         {},
         {
           headers: {
@@ -264,7 +252,7 @@ export default {
       this.isLoading = !this.isLoading
       this.$axios
         .post(
-          `${this.baseURL}/transactionsReport/transactionReportsType`,
+          `/transactionsReport/transactionReportsType`,
           {
             reportType: this.lookUpValue,
           },

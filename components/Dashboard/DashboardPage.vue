@@ -55,7 +55,7 @@ export default {
     // Menu request
     this.isLoading = !this.isLoading
     this.$axios
-      .get(`${this.baseURL}/menu`, {
+      .get(`/menu`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
           'x-auth-token': localStorage.getItem('authToken'),

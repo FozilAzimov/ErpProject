@@ -243,15 +243,12 @@
 </template>
 
 <script>
-import axios from 'axios'
+import { mapState } from 'vuex'
 export default {
   // DATA
   data() {
     return {
-      isLoginPage: false,
       isPage: false,
-      systemMenuList: null,
-      firstSystemMenuList: [],
       collapseMune: true,
       isLoading: false,
       logoutMessage: false,
@@ -266,6 +263,7 @@ export default {
     availableLocales() {
       return this.$i18n.locales
     },
+    ...mapState(['isLoading', 'systemMenuList', 'firstSystemMenuList']),
   },
 
   // WATCH
@@ -296,29 +294,7 @@ export default {
   // MOUNTED
   mounted() {
     // System Menu
-    this.isLoading = !this.isLoading
-    axios
-      .get(`${this.baseURL}/systemMenu`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-          'x-auth-token': localStorage.getItem('authToken'),
-        },
-      })
-      .then((res) => {
-        this.isLoading = !this.isLoading
-        this.systemMenuList = res.data
-        // eslint-disable-next-line array-callback-return
-        this.firstSystemMenuList = res.data.filter((value) => {
-          if (value.active) return value
-        })
-      })
-      .catch((error) => {
-        this.isLoading = !this.isLoading
-        this.$router.push('/login.htm')
-        localStorage.removeItem('token')
-        // eslint-disable-next-line no-console
-        console.log(error)
-      })
+    this.$store.dispatch('fetchSystemMenu')
     // Drop Toggle
     window.addEventListener('click', this.handleWindowClick)
     window.addEventListener('click', this.handleWindowClickTranslate)
@@ -338,8 +314,8 @@ export default {
 
     // Log Out
     getLogout() {
-      axios
-        .delete(`${this.baseURL}/security/logout`, {
+      this.$axios
+        .delete(`/security/logout`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
             'x-auth-token': localStorage.getItem('authToken'),
@@ -397,8 +373,8 @@ export default {
 
     // Language Request
     getLanguage(lang, value) {
-      axios
-        .get(`${this.baseURL}/lang?lang=${lang}`, {
+      this.$axios
+        .get(`/lang?lang=${lang}`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
             'x-auth-token': localStorage.getItem('authToken'),

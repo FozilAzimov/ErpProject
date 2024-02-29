@@ -10,6 +10,8 @@
         :right="tableHead"
         :left="leftMap"
         :url="actionUrl"
+        api="saveColumnConfig"
+        class="z-[10000]"
         @checkModal="handleValue"
       />
     </transition>
@@ -54,18 +56,110 @@
           @change="getSelectValue"
         />
       </div>
-      <div class="flex items-center gap-1">
-        <label for="departments" class="text-[13px] text-[] cursor-pointer"
-          >Departments</label
-        >
-        <GenericSelect
-          id="departments"
-          v-model="formData.departments"
-          :data="selectData.departmentDTOList"
-          textsize="13"
-          @change="getSelectValue"
+      <template
+        v-if="mainActionUrl === 'productionOrder/productionorderAjaxLoad'"
+      >
+        <SearchBar
+          v-if="selectData.length !== 0"
+          :vithout-title="true"
+          :title-list="[
+            {
+              id: 'confirm',
+              name: 'orderStatusConfirmed',
+              title: 'order status confirmed',
+            },
+            {
+              id: 'clientCompanyId',
+              name: 'companies',
+              title: 'select an option',
+            },
+            {
+              id: 'colorVariantId',
+              name: 'title.colorVariant.sub',
+              title: 'color variant',
+            },
+            {
+              id: 'sysUserId',
+              name: 'p_o_creator',
+              title: 'order creator',
+            },
+            {
+              id: 'productionOrderLookupStatus',
+              name: 'all',
+              title: 'all',
+            },
+            {
+              id: 'planningTypeId',
+              name: 'type',
+              title: 'type',
+            },
+          ]"
+          :search-list="selectData"
+          @form-data-values="getFormValues"
         />
-      </div>
+      </template>
+      <template v-else>
+        <div class="flex items-center gap-1">
+          <label for="bill" class="text-[13px] text-[] cursor-pointer"
+            >Status (Bill)</label
+          >
+          <GenericSelect
+            id="bill"
+            v-model="formData.from"
+            :data="selectData.billStatusList"
+            textsize="13"
+            @change="getSelectValue"
+          />
+        </div>
+        <div class="flex items-center gap-1">
+          <label for="pay" class="text-[13px] text-[] cursor-pointer"
+            >Status (Pay)</label
+          >
+          <GenericSelect
+            id="pay"
+            v-model="formData.pay"
+            :data="selectData.payStatusList"
+            textsize="13"
+            @change="getSelectValue"
+          />
+        </div>
+        <div class="flex items-center gap-1">
+          <label for="invoice" class="text-[13px] text-[] cursor-pointer"
+            >Invoice (Status)</label
+          >
+          <GenericSelect
+            id="invoice"
+            v-model="formData.invoice"
+            :data="selectData.invoiceOnWayStatusList"
+            textsize="13"
+            @change="getSelectValue"
+          />
+        </div>
+        <div class="flex items-center gap-1">
+          <label for="departments" class="text-[13px] text-[] cursor-pointer"
+            >Departments</label
+          >
+          <GenericSelect
+            id="departments"
+            v-model="formData.departments"
+            :data="selectData.departmentDTOList"
+            textsize="13"
+            @change="getSelectValue"
+          />
+        </div>
+        <div class="flex items-center gap-1">
+          <label for="warehouse" class="text-[13px] text-[] cursor-pointer"
+            >Warehouse</label
+          >
+          <GenericSelect
+            id="warehouse"
+            v-model="formData.warehouse"
+            :data="selectData.warehouseList"
+            textsize="13"
+            @change="getSelectValue"
+          />
+        </div>
+      </template>
     </form>
     <template v-if="isCloseTable">
       <div
@@ -78,7 +172,7 @@
             class="w-[14px]"
           />
           <h1 class="font-bold text-[rgb(49,126,172)] text-[14px] uppercase">
-            Colors
+            {{ $t('pages.purchaseinvoice.headerName') }}
           </h1>
         </div>
         <div>
@@ -147,7 +241,7 @@
           bg="rgba(54, 155, 215, 0.8)"
           textsize="15"
           margin="8"
-          @click="$router.push('/preparePurchaseInvoiceNew.htm')"
+          @click="$router.push(`/${createEditUrl}.htm`)"
         />
         <div class="mt-3 p-2">
           <div class="flex items-center justify-between mb-1">
@@ -211,7 +305,7 @@
             :tablebody="tableBody"
             :tableheadlength="tableHeadLength"
             :istherebody="isThereBody"
-            actionstype="production"
+            open-url="prepareProductionOrderItem"
             height="600"
           />
         </div>
@@ -227,11 +321,13 @@ import printer from '../../assets/icons/printer.png'
 // Components
 import LoadingPage from '../Loading/LoadingPage.vue'
 import GenericButton from '../Button/GenericButton.vue'
-import GenericInput from '../Input/GenericInput.vue'
 import GenericSelect from '../Select/GenericSelect.vue'
 import GenericInputDatePage from '../InputDate/GenericInputDatePage.vue'
-import GenericTablePage from '../GenericTable/GenericTablePage.vue'
 import ColumnConfigPage from '../ColumnConfig/ColumnConfigPage.vue'
+import GenericTablePage from '../GenericTable/GenericTablePage.vue'
+import GenericInput from '../Input/GenericInput.vue'
+import SearchBar from '@/components/main/SearchBar.vue'
+
 export default {
   components: {
     LoadingPage,
@@ -241,6 +337,17 @@ export default {
     GenericInputDatePage,
     ColumnConfigPage,
     GenericTablePage,
+    SearchBar,
+  },
+  props: {
+    mainActionUrl: {
+      type: String,
+      default: '',
+    },
+    mainCreateUrl: {
+      type: String,
+      default: '',
+    },
   },
   data() {
     return {
@@ -258,22 +365,67 @@ export default {
         printer,
       },
       tableId: [],
-      selectData: {},
+      selectData: [],
       formData: new Map(),
       checkModal: false,
       actionUrl: '',
       leftMap: {},
       isOpenTable: true,
       isCloseTable: true,
+      formDataObject: null,
+      createEditUrl: null,
     }
   },
   mounted() {
     // Table function
     this.getTableRequest()
+    this.createEditUrl = this.mainCreateUrl
   },
 
   // Methods
   methods: {
+    getFormValues(formObject) {
+      this.formDataObject = formObject
+      this.isLoading = !this.isLoading
+      this.$axios
+        .post(
+          `/${this.mainActionUrl}`,
+          {
+            page_current: 1,
+            page_size: Number(this.pageSize_value),
+            searchForm: {
+              keyword: this.keywordValue,
+              from_date: new Date(Object.fromEntries(this.formData).from)
+                .toLocaleString('en-GB')
+                .split(',')
+                .join(''),
+              to_date: new Date(Object.fromEntries(this.formData).to)
+                .toLocaleString('en-GB')
+                .split(',')
+                .join(''),
+            },
+            ...this.formDataObject,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('token')}`,
+              'x-auth-token': localStorage.getItem('authToken'),
+            },
+          }
+        )
+        .then((res) => {
+          this.tableBody = []
+          this.isLoading = !this.isLoading
+          if (
+            this.mainActionUrl === 'productionOrder/productionorderAjaxLoad'
+          ) {
+            this.tableData = res.data.productionListMap
+          } else {
+            this.tableData = res.data.invoiceList
+          }
+          this.getTableBody()
+        })
+    },
     handleValue(checkModal) {
       this.checkModal = checkModal
     },
@@ -284,10 +436,10 @@ export default {
       this.isLoading = !this.isLoading
       this.$axios
         .post(
-          `/invoice/purchaseInvoiceList`,
+          `/${this.mainActionUrl}`,
           {
-            current_page: 1,
-            page_size: this.pageSize_value,
+            page_current: 1,
+            page_size: Number(this.pageSize_value),
             searchForm: {
               keyword: this.keywordValue,
               from_date: new Date(Object.fromEntries(this.formData).from)
@@ -318,14 +470,15 @@ export default {
           this.tableHead = res.data.rightMap
           this.leftMap = res.data.leftMap
           this.actionUrl = res.data.actionUrl
-          this.tableData = res.data.invoiceList
-          this.selectData = res.data.invoiceSearchDTO
+          if (
+            this.mainActionUrl === 'productionOrder/productionorderAjaxLoad'
+          ) {
+            this.tableData = res.data.productionListMap
+          } else {
+            this.tableData = res.data.invoiceList
+          }
+          this.selectData.push(res.data.searchDTO)
           this.getTableBody()
-        })
-        .catch((error) => {
-          this.isLoading = !this.isLoading
-          // eslint-disable-next-line no-console
-          console.log(error)
         })
     },
 

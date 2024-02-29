@@ -250,7 +250,7 @@ export default {
         }
       }
       this.$axios
-        .post(`${this.baseURL}/base/${this.api}`, data, {
+        .post(`/base/${this.api}`, data, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
             'x-auth-token': localStorage.getItem('authToken'),

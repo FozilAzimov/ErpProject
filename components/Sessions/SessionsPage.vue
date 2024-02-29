@@ -123,7 +123,7 @@ export default {
     // Sessions request
     this.isLoading = !this.isLoading
     this.$axios
-      .get(`${this.baseURL}/session/sessions`, {
+      .get(`/session/sessions`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
           'x-auth-token': localStorage.getItem('authToken'),

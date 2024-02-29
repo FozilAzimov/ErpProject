@@ -65,10 +65,14 @@ export default {
       type: String,
       default: '',
     },
+    value: {
+      type: String,
+      default: '',
+    },
   },
   data() {
     return {
-      inputValue: '',
+      inputValue: this.value || '',
     }
   },
   methods: {

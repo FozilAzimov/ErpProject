@@ -308,16 +308,12 @@ export default {
           rateTypeId: this.rateTypeId,
         }
         this.$axios
-          .post(
-            `${this.baseURL}/transactionsReport/reportContent`,
-            requestBody,
-            {
-              headers: {
-                Authorization: `Bearer ${localStorage.getItem('token')}`,
-                'x-auth-token': localStorage.getItem('authToken'),
-              },
-            }
-          )
+          .post(`/transactionsReport/reportContent`, requestBody, {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('token')}`,
+              'x-auth-token': localStorage.getItem('authToken'),
+            },
+          })
           .then(({ data }) => {
             this.isLoading = !this.isLoading
             this.isCloseTableUI = true

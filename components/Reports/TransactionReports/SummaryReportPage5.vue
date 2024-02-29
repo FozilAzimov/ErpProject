@@ -218,7 +218,7 @@ export default {
         dateTo: this.dateTo,
       }
       this.$axios
-        .post(`${this.baseURL}/transactionsReport/reportContent`, requestBody, {
+        .post(`/transactionsReport/reportContent`, requestBody, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
             'x-auth-token': localStorage.getItem('authToken'),

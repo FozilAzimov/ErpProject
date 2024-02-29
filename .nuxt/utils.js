@@ -195,11 +195,11 @@ export async function setContext (app, context) {
       isDev: true,
       isHMR: false,
       app,
-
+      store: app.store,
       payload: context.payload,
       error: context.error,
       base: app.router.options.base,
-      env: {"baseURL":"https://localhost:8443/api"}
+      env: {}
     }
     // Only set once
 

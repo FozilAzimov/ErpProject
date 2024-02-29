@@ -64,7 +64,7 @@ export default {
     // Branches request
     this.isLoading = !this.isLoading
     this.$axios
-      .get(`${this.baseURL}/companies/branches`, {
+      .get(`/companies/branches`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
           'x-auth-token': localStorage.getItem('authToken'),
@@ -101,7 +101,7 @@ export default {
     getData(id) {
       this.isLoading = !this.isLoading
       this.$axios
-        .post(`${this.baseURL}/companies/postBranch`, {
+        .post(`/companies/postBranch`, {
           id,
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,

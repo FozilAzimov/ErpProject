@@ -332,7 +332,7 @@ export default {
       this.isLoading = !this.isLoading
       this.$axios
         .post(
-          `${this.baseURL}/invoice/purchaseInvoiceList`,
+          `/invoice/purchaseInvoiceList`,
           {
             current_page: 1,
             page_size: this.pageSize_value,
@@ -408,7 +408,7 @@ export default {
       this.isLoading = !this.isLoading
       this.$axios
         .post(
-          `${this.baseURL}/invoice/preparePurchaseInvoice`,
+          `/invoice/preparePurchaseInvoice`,
           {
             current_page: 1,
             page_size: this.pageSize_value,

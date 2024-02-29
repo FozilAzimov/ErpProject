@@ -341,7 +341,7 @@ export default {
     getSelectedList(prop) {
       this.$axios
         .post(
-          `${this.baseURL}/invoiceBase/getCurrentCurrencyRate`,
+          `/invoiceBase/getCurrentCurrencyRate`,
           {
             branchCompanyId: this.dparam.branchId ? Number(prop.value) : null,
             currencyId: this.dparam.currencyId ? Number(prop.value) : null,
@@ -388,7 +388,7 @@ export default {
       }
 
       this.$axios
-        .post(`${this.baseURL}/${this.durl}`, data, {
+        .post(`/${this.durl}`, data, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
             'x-auth-token': localStorage.getItem('authToken'),

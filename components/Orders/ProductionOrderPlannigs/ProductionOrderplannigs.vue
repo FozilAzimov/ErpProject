@@ -206,7 +206,7 @@
                 @change="getTableRequest()"
               >
                 <option value="1">1</option>
-                <option value="10">10</option>    
+                <option value="10">10</option>
                 <option value="25">25</option>
                 <option value="50">50</option>
                 <option value="100">100</option>
@@ -331,7 +331,7 @@ export default {
       this.isLoading = !this.isLoading
       this.$axios
         .post(
-          `${this.baseURL}/invoice/purchaseInvoiceList`,
+          `/invoice/purchaseInvoiceList`,
           {
             current_page: 1,
             page_size: this.pageSize_value,
@@ -407,7 +407,7 @@ export default {
       this.isLoading = !this.isLoading
       this.$axios
         .post(
-          `${this.baseURL}/invoice/preparePurchaseInvoice`,
+          `/invoice/preparePurchaseInvoice`,
           {
             current_page: 1,
             page_size: this.pageSize_value,

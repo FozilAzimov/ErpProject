@@ -210,13 +210,6 @@
     "_name": "_59afd0f1"
   },
   {
-    "name": "preparePurchaseInvoiceNew.htm",
-    "path": "/preparePurchaseInvoiceNew.htm",
-    "component": "C:\\\\ErpProject\\\\pages\\\\preparePurchaseInvoiceNew.htm\\\\index.vue",
-    "chunkName": "pages/preparePurchaseInvoiceNew.htm/index",
-    "_name": "_2516533d"
-  },
-  {
     "name": "prepareSalesReturnNew.htm",
     "path": "/prepareSalesReturnNew.htm",
     "component": "C:\\\\ErpProject\\\\pages\\\\prepareSalesReturnNew.htm\\\\index.vue",
@@ -336,8 +329,15 @@
     "_name": "_7607bc89"
   },
   {
+    "name": "prepareProductionOrderItem.htm-id",
+    "path": "/prepareProductionOrderItem.htm/:id?",
+    "component": "C:\\\\ErpProject\\\\pages\\\\prepareProductionOrderItem.htm\\\\_id.vue",
+    "chunkName": "pages/prepareProductionOrderItem.htm/_id",
+    "_name": "_1679047d"
+  },
+  {
     "name": "preparePurchaseInvoiceNew.htm-id",
-    "path": "/preparePurchaseInvoiceNew.htm/:id",
+    "path": "/preparePurchaseInvoiceNew.htm/:id?",
     "component": "C:\\\\ErpProject\\\\pages\\\\preparePurchaseInvoiceNew.htm\\\\_id.vue",
     "chunkName": "pages/preparePurchaseInvoiceNew.htm/_id",
     "_name": "_37aa00e5"

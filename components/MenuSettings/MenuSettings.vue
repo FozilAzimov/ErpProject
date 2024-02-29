@@ -219,7 +219,7 @@ export default {
       }
 
       this.$axios
-        .post(`${this.baseURL}/user/editUserPerm`, data, {
+        .post(`/user/editUserPerm`, data, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
             'x-auth-token': localStorage.getItem('authToken'),

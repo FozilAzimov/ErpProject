@@ -125,13 +125,16 @@ export default {
         if (success) {
           this.isLoading = !this.isLoading
           this.$axios
-            .post(`${this.baseURL}/security/logIn`, {
+            .post(`/security/logIn`, {
               username: this.form.username,
               password: this.form.password,
             })
             .then((res) => {
               localStorage.setItem('authToken', res.headers['x-auth-token'])
               localStorage.setItem('token', res.data.token)
+
+              document.cookie = `x-auth-token=${res.headers['x-auth-token']}; domain=localhost; secure; SameSite=None;`
+
               this.$router.push('/branches.htm')
               this.isLoading = !this.isLoading
               this.$message({
@@ -152,15 +155,12 @@ export default {
 
     // Language Request
     getLanguage() {
-      this.$axios.get(
-        `${this.baseURL}/lang?lang=${localStorage.getItem('lang')}`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-            'x-auth-token': localStorage.getItem('authToken'),
-          },
-        }
-      )
+      this.$axios.get(`/lang?lang=${localStorage.getItem('lang')}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+          'x-auth-token': localStorage.getItem('authToken'),
+        },
+      })
     },
   },
 }

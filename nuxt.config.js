@@ -12,6 +12,11 @@ export default {
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       { hid: 'description', name: 'description', content: '' },
       { name: 'format-detection', content: 'telephone=no' },
+      { httpEquiv: 'Set-Cookie', content: 'SameSite=None; Secure' },
+      {
+        httpEquiv: 'Content-Security-Policy',
+        content: 'upgrade-insecure-requests',
+      },
     ],
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
   },
@@ -39,7 +44,6 @@ export default {
     '@/plugins/element-ui.js',
     '@/plugins/drugguble.js',
     '@/plugins/axios.js',
-    '@/plugins/globalMixins.js',
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -125,17 +129,18 @@ export default {
       key: fs.readFileSync(path.resolve(__dirname, './keys/private.key')),
       cert: fs.readFileSync(path.resolve(__dirname, './keys/certificate.crt')),
     },
+    // port: 8443,
+    // host: '192.168.1.64',
   },
 
-  env: {
-    baseURL: 'https://localhost:8443/api',
-    // baseURL: 'https://192.168.1.64:8443/api',
-    // baseURL: 'https://192.168.1.55:8443/api',
-  },
+  env: {},
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
-    baseURL: '',
+    baseURL: 'https://localhost:8443/api',
+    // baseURL: 'https://192.168.1.159:8443/api',
+    // baseURL: 'https://192.168.1.64:8443/api',
+    // baseURL: 'https://192.168.1.55:8443/api',
   },
 
   // PWA module configuration: https://go.nuxtjs.dev/pwa
@@ -153,8 +158,5 @@ export default {
         autoprefixer: {},
       },
     },
-  },
-  proxy: {
-    '/api/': { target: 'http://example.com', pathRewrite: { '^/api/': '' } },
   },
 }

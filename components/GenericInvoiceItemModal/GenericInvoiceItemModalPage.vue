@@ -272,7 +272,7 @@ export default {
     getLookUpValue(key, name, value, order, resultType) {
       this.inputValuesObj.set(
         key,
-        resultType === 'object' ? { id: Number(value) } : value
+        resultType === 'object' ? { id: Number(value), text: name } : value
       )
       this.inputValuesMap.set(key, name)
     },

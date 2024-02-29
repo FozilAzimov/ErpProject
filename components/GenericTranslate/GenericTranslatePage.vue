@@ -12,7 +12,7 @@ export default {
     getStaticTableNameValues() {
       this.$axios
         .post(
-          `${this.baseURL}/translate`,
+          `/translate`,
           { messages: this.tableNameTranslate },
           {
             headers: {

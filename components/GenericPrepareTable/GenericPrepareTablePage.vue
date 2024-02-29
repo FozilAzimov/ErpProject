@@ -1,5 +1,9 @@
 <template>
   <div>
+    <LoadingPage
+      v-if="isLoading"
+      class="absolute left-[50%] top-[8px] translate-x-[-50%]"
+    />
     <GenericInvoiceItemModalPage
       v-if="isOpenModal"
       :tabledata="tablehead"
@@ -20,6 +24,7 @@
             >
               №
             </th>
+
             <th
               v-for="(headName, key) in filteredTablehead"
               :key="key"
@@ -39,429 +44,275 @@
           </tr>
         </thead>
         <tbody>
-          <!-- Start Open PopUp 'true' Table body -->
-          <template v-if="addmodalorrow">
-            <template v-if="showHideRow">
-              <tr>
-                <td class="border-[1px] text-[12px] p-2 text-center">
-                  <GenericInput
-                    width="50"
-                    height="20"
-                    pl="8"
-                    pr="8"
-                    pt="1"
-                    pb="1"
-                    textsize="11"
-                    type="text"
-                    name="index"
-                    @customFunction="filterAction"
-                  />
-                </td>
-                <td
-                  v-for="(item, inx) in filteredTablehead"
-                  :key="inx"
-                  class="border-[1px] text-[12px] p-2 text-center"
-                >
-                  <GenericInput
-                    width="150"
-                    height="20"
-                    pl="8"
-                    pr="8"
-                    pt="1"
-                    pb="1"
-                    textsize="11"
-                    type="text"
-                    :name="item.name"
-                    @customFunction="filterAction"
-                  />
-                </td>
-              </tr>
-              <template v-if="rowDataShowHide">
-                <tr
-                  v-for="(row, indexOne) in tooLastRowSetArray"
-                  :key="indexOne"
-                  class="bg-gradient-to-b from-transparent via-transparent to-[#F4F4F4]"
-                >
-                  <td class="border-[1px] text-[12px] p-2 text-center">
-                    {{ indexOne + 1 }}
-                  </td>
-                  <td
-                    v-for="(item, indexToo) in filteredTablehead"
-                    :key="indexToo"
-                    class="border-[1px] text-[12px] p-2"
-                  >
-                    <label>{{ row && row[item.name] }}</label>
-                  </td>
-                </tr>
-              </template>
-              <tr v-if="noDataRow">
-                <td
-                  :colspan="tableheadlength"
-                  class="text-center border-[1px] border-[solid] border-[#F0F0F0] text-[12px] p-2"
-                >
-                  <div
-                    class="flex flex-col justify-center items-start text-[rgba(0,0,0,0.5)]"
-                  >
-                    <span class="flex flex-col items-center">
-                      <img
-                        src="../../assets/icons/no-data.png"
-                        alt="no-data-icons"
-                      />
-                      No data
-                    </span>
-                  </div>
-                </td>
-              </tr>
-              <template v-else>
-                <tr class="bg-[rgb(229,235,245)]">
-                  <td
-                    class="border-[1px] text-[13px] p-3 text-[rgba(0,0,0,0.7)] border-[1px] border-[solid] border-[rgba(119,136,153,0.2)]"
-                  >
-                    Total
-                  </td>
-                  <td
-                    v-for="(item, indexToo) in filteredTablehead"
-                    :key="indexToo"
-                    class="border-[1px] text-[12px] p-2 text-[rgb(29,119,255)] border-[1px] border-[solid] border-[rgba(119,136,153,0.2)]"
-                  >
-                    {{ item.sumColumn && totalObjMap.get(item.name) }}
-                  </td>
-                </tr>
-              </template>
-            </template>
-            <template v-else>
+          <!-- Start Open PopUp 'false' Table body -->
+          <template v-if="showHideRow">
+            <tr>
+              <td class="border-[1px] text-[12px] p-2 text-center">
+                <GenericInput
+                  width="50"
+                  height="20"
+                  pl="8"
+                  pr="8"
+                  pt="1"
+                  pb="1"
+                  textsize="11"
+                  type="text"
+                  name="index"
+                  @customFunction="filterAction"
+                />
+              </td>
+              <td
+                v-for="(item, inx) in filteredTablehead"
+                :key="inx"
+                class="border-[1px] text-[12px] p-2 text-center"
+              >
+                <GenericInput
+                  width="150"
+                  height="20"
+                  pl="8"
+                  pr="8"
+                  pt="1"
+                  pb="1"
+                  textsize="11"
+                  type="text"
+                  :name="item.name"
+                  @customFunction="filterAction"
+                />
+              </td>
+            </tr>
+            <template v-if="rowDataShowHide">
               <tr
-                v-for="(item, indexOne) in tableBody"
+                v-for="(row, indexOne) in twoResData"
                 :key="indexOne"
-                class="bg-gradient-to-b from-transparent via-transparent to-[#F3F3F3]"
+                class="bg-gradient-to-b from-transparent via-transparent to-[#F4F4F4]"
               >
                 <td class="border-[1px] text-[12px] p-2 text-center">
                   {{ indexOne + 1 }}
                 </td>
                 <td
-                  v-for="(value, indexToo) in item"
+                  v-for="(item, indexToo) in filteredTablehead"
                   :key="indexToo"
                   class="border-[1px] text-[12px] p-2"
-                  :class="`w-[${value.dwidth}px]`"
                 >
-                  <LookUp
-                    v-if="value.type === 'list'"
-                    :defvalue="
-                      newEditObjData.length
-                        ? newEditObjData[indexOne][value.name]
-                        : rowSetArray.length
-                        ? rowSetArray[indexOne][value.name]
-                        : ''
-                    "
-                    :durl="`invoiceBase/${value.durl}`"
-                    dwidth="250"
-                    :order="indexOne"
-                    :name="value.name"
-                    :result-type="value.resultType"
-                    @customFunction="getLookUpValue"
-                  />
-                  <GenericInput
-                    v-else-if="
-                      value.type === 'float' || value.type === 'integer'
-                    "
-                    :value="
-                      newEditObjData.length
-                        ? newEditObjData[indexOne][value.name]
-                        : rowSetArray.length
-                        ? rowSetArray[indexOne][value.name]
-                        : ''
-                    "
-                    width="150"
-                    height="23"
-                    pl="10"
-                    pr="10"
-                    pt="2"
-                    pb="2"
-                    :order="indexOne"
-                    textsize="13"
-                    type="number"
-                    :name="value.name"
-                    @customFunction="getInputValue"
-                  />
-                  <GenericInput
-                    v-else-if="value.type === 'string'"
-                    :value="
-                      newEditObjData.length
-                        ? newEditObjData[indexOne][value.name]
-                        : rowSetArray.length
-                        ? rowSetArray[indexOne][value.name]
-                        : ''
-                    "
-                    width="150"
-                    height="23"
-                    pl="10"
-                    pr="10"
-                    pt="2"
-                    pb="2"
-                    :order="indexOne"
-                    textsize="13"
-                    type="text"
-                    :name="value.name"
-                    @customFunction="getInputValue"
-                  />
-                  <GenericInputDatePage
-                    v-else-if="value.type === 'date'"
-                    width="170"
-                    height="23"
-                    pl="10"
-                    pr="10"
-                    pt="1"
-                    pb="1"
-                    :order="indexOne"
-                    textsize="13"
-                    type="datetime-local"
-                    valuecolor="rgba(0,0,0,0.7)"
-                    :name="value.name"
-                    @customFunction="getInputValue"
-                  />
-                  <GenericInput
-                    v-else-if="value.type === 'checkbox'"
-                    type="checkbox"
-                    :order="indexOne"
-                    :name="value.name"
-                    @customFunction="getInputValue"
-                  />
-                  <GenericButton
-                    v-else-if="value.type === 'button'"
-                    :name="value.headerText"
-                    pl="10"
-                    pt="3"
-                    pr="10"
-                    pb="3"
-                    :order="indexOne"
-                    bg="rgb(156,104,183)"
-                    textsize="12"
-                  />
-                </td>
-                <td class="border-[1px] text-[12px] p-2 text-center">
-                  <span
-                    class="flex justify-center active:scale-[1.2] duration-[0.2s]"
+                  <label
+                    v-if="row[item.name] && typeof row[item.name] === 'object'"
+                    >{{ row[item.name]['text'] }}</label
                   >
+                  <label v-else-if="row[item.name] && item.type === 'date'">{{
+                    new Date(row[item.name]).toISOString().split('.')[0]
+                  }}</label>
+                  <label v-else>{{ row[item.name] }}</label>
+                </td>
+              </tr>
+            </template>
+            <tr v-if="noDataRow">
+              <td
+                :colspan="tableheadlength"
+                class="text-center border-[1px] border-[solid] border-[#F0F0F0] text-[12px] p-2"
+              >
+                <div
+                  class="flex flex-col justify-center items-start text-[rgba(0,0,0,0.5)]"
+                >
+                  <span class="flex flex-col items-center">
                     <img
-                      :src="img.del"
-                      alt="delete"
-                      class="w-[18px] cursor-pointer"
-                      @click="rowDelAction(indexOne)"
+                      src="../../assets/icons/no-data.png"
+                      alt="no-data-icons"
                     />
+                    No data
                   </span>
+                </div>
+              </td>
+            </tr>
+            <template v-else>
+              <tr class="bg-[rgb(229,235,245)]">
+                <td
+                  class="border-[1px] text-[13px] p-3 text-[rgba(0,0,0,0.7)] border-[1px] border-[solid] border-[rgba(119,136,153,0.2)]"
+                >
+                  Total
+                </td>
+                <td
+                  v-for="(item, indexToo) in filteredTablehead"
+                  :key="indexToo"
+                  class="border-[1px] text-[12px] p-2 text-[rgb(29,119,255)] border-[1px] border-[solid] border-[rgba(119,136,153,0.2)]"
+                >
+                  {{ item.sumColumn && totalObjMap.get(item.name) }}
                 </td>
               </tr>
             </template>
           </template>
-          <!-- End Open PopUp 'true' Table body -->
 
-          <!-- Start Open PopUp 'false' Table body -->
           <template v-else>
-            <template v-if="showHideRow">
-              <tr>
-                <td class="border-[1px] text-[12px] p-2 text-center">
-                  <GenericInput
-                    width="50"
-                    height="20"
-                    pl="8"
-                    pr="8"
-                    pt="1"
-                    pb="1"
-                    textsize="11"
-                    type="text"
-                    name="index"
-                    @customFunction="filterAction"
-                  />
-                </td>
-                <td
-                  v-for="(item, inx) in filteredTablehead"
-                  :key="inx"
-                  class="border-[1px] text-[12px] p-2 text-center"
-                >
-                  <GenericInput
-                    width="150"
-                    height="20"
-                    pl="8"
-                    pr="8"
-                    pt="1"
-                    pb="1"
-                    textsize="11"
-                    type="text"
-                    :name="item.name"
-                    @customFunction="filterAction"
-                  />
-                </td>
-              </tr>
-              <template v-if="rowDataShowHide">
-                <tr
-                  v-for="(row, indexOne) in tooLastRowSetArray"
-                  :key="indexOne"
-                  class="bg-gradient-to-b from-transparent via-transparent to-[#F4F4F4]"
-                >
-                  <td class="border-[1px] text-[12px] p-2 text-center">
-                    {{ indexOne + 1 }}
-                  </td>
-                  <td
-                    v-for="(item, indexToo) in filteredTablehead"
-                    :key="indexToo"
-                    class="border-[1px] text-[12px] p-2"
-                  >
-                    <label>{{ row && row[item.name] }}</label>
-                  </td>
-                </tr>
-              </template>
-              <tr v-if="noDataRow">
-                <td
-                  :colspan="tableheadlength"
-                  class="text-center border-[1px] border-[solid] border-[#F0F0F0] text-[12px] p-2"
-                >
-                  <div
-                    class="flex flex-col justify-center items-start text-[rgba(0,0,0,0.5)]"
-                  >
-                    <span class="flex flex-col items-center">
-                      <img
-                        src="../../assets/icons/no-data.png"
-                        alt="no-data-icons"
-                      />
-                      No data
-                    </span>
-                  </div>
-                </td>
-              </tr>
-              <template v-else>
-                <tr class="bg-[rgb(229,235,245)]">
-                  <td
-                    class="border-[1px] text-[13px] p-3 text-[rgba(0,0,0,0.7)] border-[1px] border-[solid] border-[rgba(119,136,153,0.2)]"
-                  >
-                    Total
-                  </td>
-                  <td
-                    v-for="(item, indexToo) in filteredTablehead"
-                    :key="indexToo"
-                    class="border-[1px] text-[12px] p-2 text-[rgb(29,119,255)] border-[1px] border-[solid] border-[rgba(119,136,153,0.2)]"
-                  >
-                    {{ item.sumColumn && totalObjMap.get(item.name) }}
-                  </td>
-                </tr>
-              </template>
-            </template>
-            <template v-else>
-              <tr
-                v-for="(item, indexOne) in tableBody"
-                :key="indexOne"
-                class="bg-gradient-to-b from-transparent via-transparent to-[#F3F3F3]"
+            <tr
+              v-for="(item, indexOne) in tableBody"
+              :key="indexOne"
+              class="bg-gradient-to-b from-transparent via-transparent to-[#F3F3F3]"
+            >
+              <td class="border-[1px] text-[12px] p-2 text-center">
+                {{ indexOne + 1 }}
+              </td>
+              <td
+                v-for="(value, indexToo) in item"
+                :key="indexToo"
+                class="border-[1px] text-[12px] p-2"
+                :class="`w-[${value.dwidth}px]`"
               >
-                <td class="border-[1px] text-[12px] p-2 text-center">
-                  {{ indexOne + 1 }}
-                </td>
-                <td
-                  v-for="(value, indexToo) in item"
-                  :key="indexToo"
-                  class="border-[1px] text-[12px] p-2"
-                  :class="`w-[${value.dwidth}px]`"
+                <LookUp
+                  v-if="value.type === 'list' && value.required"
+                  :defvalue="
+                    newEditObjData?.length &&
+                    newEditObjData[indexOne][value.name] &&
+                    typeof newEditObjData[indexOne][value.name] === 'object'
+                      ? newEditObjData[indexOne][value.name].text
+                      : newEditObjData.length &&
+                        newEditObjData[indexOne][value.name] &&
+                        typeof newEditObjData[indexOne][value.name] !== 'object'
+                      ? newEditObjData[indexOne][value.name]
+                      : ''
+                  "
+                  :durl="`invoiceBase/${value.durl}`"
+                  dwidth="250"
+                  :order="indexOne"
+                  :name="value.name"
+                  :result-type="value.resultType"
+                  @customFunction="getLookUpValue"
+                />
+                <LookUp
+                  v-else-if="value.type === 'list' && !value.required"
+                  :defvalue="
+                    newEditObjData.length &&
+                    newEditObjData[indexOne][value.name] &&
+                    typeof newEditObjData[indexOne][value.name] === 'object'
+                      ? newEditObjData[indexOne][value.name].text
+                      : newEditObjData.length &&
+                        newEditObjData[indexOne][value.name] &&
+                        typeof newEditObjData[indexOne][value.name] !== 'object'
+                      ? newEditObjData[indexOne][value.name]
+                      : ''
+                  "
+                  :durl="`invoiceBase/${value.durl}`"
+                  dwidth="250"
+                  :order="indexOne"
+                  :name="value.name"
+                  :result-type="value.resultType"
+                  @customFunction="getLookUpValue"
+                />
+                <GenericInput
+                  v-else-if="value.type === 'float' || value.type === 'integer'"
+                  :value="
+                    newEditObjData.length &&
+                    newEditObjData[indexOne][value.name] &&
+                    typeof newEditObjData[indexOne][value.name] === 'object'
+                      ? newEditObjData[indexOne][value.name].text
+                      : newEditObjData.length &&
+                        newEditObjData[indexOne][value.name] &&
+                        typeof newEditObjData[indexOne][value.name] !== 'object'
+                      ? newEditObjData[indexOne][value.name]
+                      : ''
+                  "
+                  width="150"
+                  height="23"
+                  pl="10"
+                  pr="10"
+                  pt="2"
+                  pb="2"
+                  :order="indexOne"
+                  textsize="13"
+                  type="number"
+                  :name="value.name"
+                  @customFunction="getInputValue"
+                />
+                <GenericInput
+                  v-else-if="value.type === 'string'"
+                  :value="
+                    newEditObjData.length &&
+                    newEditObjData[indexOne][value.name] &&
+                    typeof newEditObjData[indexOne][value.name] === 'object'
+                      ? newEditObjData[indexOne][value.name].text
+                      : newEditObjData.length &&
+                        newEditObjData[indexOne][value.name] &&
+                        typeof newEditObjData[indexOne][value.name] !== 'object'
+                      ? newEditObjData[indexOne][value.name]
+                      : ''
+                  "
+                  width="150"
+                  height="23"
+                  pl="10"
+                  pr="10"
+                  pt="2"
+                  pb="2"
+                  :order="indexOne"
+                  textsize="13"
+                  type="text"
+                  :name="value.name"
+                  @customFunction="getInputValue"
+                />
+                <GenericInputDatePage
+                  v-else-if="value.type === 'date'"
+                  width="170"
+                  height="23"
+                  pl="10"
+                  pr="10"
+                  pt="1"
+                  pb="1"
+                  :order="indexOne"
+                  textsize="13"
+                  type="datetime-local"
+                  valuecolor="rgba(0,0,0,0.7)"
+                  :name="value.name"
+                  @customFunction="getInputValue"
+                />
+                <GenericInput
+                  v-else-if="value.type === 'checkbox'"
+                  type="checkbox"
+                  :order="indexOne"
+                  :name="value.name"
+                  @customFunction="getInputValue"
+                />
+                <GenericButton
+                  v-else-if="value.type === 'button'"
+                  :name="value.headerText"
+                  pl="10"
+                  pt="3"
+                  pr="10"
+                  pb="3"
+                  :order="indexOne"
+                  bg="rgb(156,104,183)"
+                  textsize="12"
+                />
+                <span
+                  v-else-if="
+                    value.type === 'label' &&
+                    newEditObjData.length &&
+                    newEditObjData[indexOne][value.name] &&
+                    typeof newEditObjData[indexOne][value.name] === 'object'
+                  "
+                  >{{ newEditObjData[indexOne][value.name].text }}</span
                 >
-                  <LookUp
-                    v-if="value.type === 'list'"
-                    :defvalue="
-                      newEditObjData.length
-                        ? newEditObjData[indexOne][value.name]
-                        : ''
+                <span
+                  v-else-if="
+                    value.type === 'label' &&
+                    newEditObjData.length &&
+                    newEditObjData[indexOne][value.name] &&
+                    typeof newEditObjData[indexOne][value.name] !== 'object'
+                  "
+                  >{{ newEditObjData[indexOne][value.name] }}</span
+                >
+              </td>
+              <td class="border-[1px] text-[12px] p-2 text-center">
+                <span
+                  class="flex justify-center active:scale-[1.2] duration-[0.2s]"
+                >
+                  <img
+                    :src="img.del"
+                    alt="delete"
+                    class="w-[18px] cursor-pointer"
+                    @click="
+                      rowDelAction(indexOne, newEditObjData[indexOne]?.id)
                     "
-                    :durl="`invoiceBase/${value.durl}`"
-                    dwidth="250"
-                    :order="indexOne"
-                    :name="value.name"
-                    :result-type="value.resultType"
-                    @customFunction="getLookUpValue"
                   />
-                  <GenericInput
-                    v-else-if="
-                      value.type === 'float' || value.type === 'integer'
-                    "
-                    :value="
-                      newEditObjData.length
-                        ? newEditObjData[indexOne][value.name]
-                        : ''
-                    "
-                    width="150"
-                    height="23"
-                    pl="10"
-                    pr="10"
-                    pt="2"
-                    pb="2"
-                    :order="indexOne"
-                    textsize="13"
-                    type="number"
-                    :name="value.name"
-                    @customFunction="getInputValue"
-                  />
-                  <GenericInput
-                    v-else-if="value.type === 'string'"
-                    :value="
-                      newEditObjData.length
-                        ? newEditObjData[indexOne][value.name]
-                        : ''
-                    "
-                    width="150"
-                    height="23"
-                    pl="10"
-                    pr="10"
-                    pt="2"
-                    pb="2"
-                    :order="indexOne"
-                    textsize="13"
-                    type="text"
-                    :name="value.name"
-                    @customFunction="getInputValue"
-                  />
-                  <GenericInputDatePage
-                    v-else-if="value.type === 'date'"
-                    width="170"
-                    height="23"
-                    pl="10"
-                    pr="10"
-                    pt="1"
-                    pb="1"
-                    :order="indexOne"
-                    textsize="13"
-                    type="datetime-local"
-                    valuecolor="rgba(0,0,0,0.7)"
-                    :name="value.name"
-                    @customFunction="getInputValue"
-                  />
-                  <GenericInput
-                    v-else-if="value.type === 'checkbox'"
-                    type="checkbox"
-                    :order="indexOne"
-                    :name="value.name"
-                    @customFunction="getInputValue"
-                  />
-                  <GenericButton
-                    v-else-if="value.type === 'button'"
-                    :name="value.headerText"
-                    pl="10"
-                    pt="3"
-                    pr="10"
-                    pb="3"
-                    :order="indexOne"
-                    bg="rgb(156,104,183)"
-                    textsize="12"
-                  />
-                </td>
-                <td class="border-[1px] text-[12px] p-2 text-center">
-                  <span
-                    class="flex justify-center active:scale-[1.2] duration-[0.2s]"
-                  >
-                    <img
-                      :src="img.del"
-                      alt="delete"
-                      class="w-[18px] cursor-pointer"
-                      @click="rowDelAction(indexOne)"
-                    />
-                  </span>
-                </td>
-              </tr>
-            </template>
+                </span>
+              </td>
+            </tr>
           </template>
           <!-- End Open PopUp 'false' Table body -->
 
@@ -504,6 +355,8 @@ import GenericButton from '../Button/GenericButton.vue'
 import GenericInvoiceItemModalPage from '../GenericInvoiceItemModal/GenericInvoiceItemModalPage.vue'
 import GenericInput from '../Input/GenericInput.vue'
 import LookUp from '../Lookup/LookUp.vue'
+import GenericInputDatePage from '../InputDate/GenericInputDatePage.vue'
+import LoadingPage from '../Loading/LoadingPage.vue'
 
 export default {
   // COMPONENTS
@@ -512,6 +365,8 @@ export default {
     GenericInvoiceItemModalPage,
     LookUp,
     GenericInput,
+    GenericInputDatePage,
+    LoadingPage,
   },
 
   // PROPS
@@ -519,6 +374,14 @@ export default {
     tablehead: {
       type: Array,
       default: () => [],
+    },
+    responseData: {
+      type: Array,
+      default: () => [],
+    },
+    uiShowHide: {
+      type: Boolean,
+      default: false,
     },
     tableheadlength: {
       type: Number,
@@ -531,10 +394,6 @@ export default {
     addmodalorrow: {
       type: Boolean,
       default: true,
-    },
-    isedit: {
-      type: Boolean,
-      default: false,
     },
     defaultValues: {
       type: Array,
@@ -549,13 +408,10 @@ export default {
         plus,
         del,
       },
+      isLoading: false,
       isOpenModal: false,
       tableBody: [],
-      rowSetArray: [],
-      tooLastRowSetArray: [],
-      allInputValues: {},
       inputValuesObj: new Map(),
-      inputValuesMap: new Map(),
       totalArray: [],
       totalObjMap: new Map(),
       sumColumnArr: [],
@@ -563,11 +419,10 @@ export default {
       showHideRow: false,
       rowDataShowHide: true,
       noDataRow: false,
-      arrRow: [],
-      isCanAdd: this.isedit,
       newEditObjData: [],
-      addToAllInputValue: false,
       whichTableName: '',
+      ResData: [],
+      twoResData: [],
     }
   },
 
@@ -581,10 +436,14 @@ export default {
   // WATCH
   watch: {
     defaultValues(newVal) {
-      this.rowSetArray = newVal
+      this.ResData = newVal
     },
-    isedit(newVal) {
-      this.isCanAdd = newVal
+    responseData(newResData) {
+      this.ResData = newResData
+      this.twoResData = this.ResData
+      this.totalAction()
+      // ID orqali filterlash uchun
+      this.ResData.forEach((obj, i) => (obj.index = i + 1))
     },
   },
 
@@ -596,16 +455,55 @@ export default {
     // Arrayni bo'sh object dan tozalash
     arrayFiltered() {
       // eslint-disable-next-line array-callback-return
-      this.rowSetArray = this.rowSetArray.filter((obj) => {
-        if (Object.keys(obj).length > 1) return obj
+      this.ResData = this.ResData.filter((obj) => {
+        if (Object.keys(obj).length > 8) return obj
       })
     },
     // Arrayni bo'sh object dan tozalash
 
+    // static filter
+    ResDataFiltered() {
+      if (this.ResData.length) {
+        this.ResData = this.ResData.filter((obj) => {
+          if (
+            'createdDate' in obj ||
+            'invoiceDate' in obj ||
+            'updatedDate' in obj
+          ) {
+            obj.createdDate = new Date(obj.createdDate)
+              .toISOString()
+              .split('.')[0]
+            obj.invoiceDate = new Date(obj.invoiceDate)
+              .toISOString()
+              .split('.')[0]
+            obj.updatedDate = new Date(obj.updatedDate)
+              .toISOString()
+              .split('.')[0]
+          }
+          return obj
+        })
+        this.ResData.forEach((obj) => {
+          for (const key in obj) {
+            if (obj[key] === '' || obj[key] === ' ') {
+              delete obj[key]
+            }
+          }
+        })
+        this.ResData.forEach((obj) => {
+          for (const key in obj) {
+            if (key === 'warehouse' || key === 'invoice') {
+              obj[key] = { id: obj[key] }
+            }
+          }
+        })
+      }
+    },
+    // static filter
+
     // Save action dan keyin filter qiluvchi input funksiyasi
     filterAction(name, value) {
       // eslint-disable-next-line array-callback-return
-      this.tooLastRowSetArray = this.rowSetArray.filter((obj) => {
+      this.twoResData = this.ResData.filter((obj) => {
         if (obj[name]) {
           this.rowDataShowHide = true
           this.noDataRow = false
@@ -622,53 +520,106 @@ export default {
           return obj
         }
       })
-      this.tooLastRowSetArray.length
+      this.twoResData.length
         ? (this.noDataRow = false)
         : (this.noDataRow = true)
       this.total = 0
       this.totalAction()
     },
 
+    // input's Valuesini olish
+    getInputValue(key, value, order) {
+      this.setDefaultValues(order)
+      if (this.ResData[order] && !this.newEditObjData.length) {
+        this.ResData[order][key] = value
+      } else if (this.ResData[order] && this.newEditObjData.length) {
+        this.ResData[order][key] = value
+      } else {
+        this.inputValuesObj.set(key, value)
+        this.ResData.push(Object.fromEntries(this.inputValuesObj))
+      }
+    },
+    // input's Valuesini olish
+
+    // Lookup's Valuesini olish
+    lookUpVal(resultType, value, name) {
+      return resultType === 'object' ? { id: Number(value), text: name } : value
+    },
+    getLookUpValue(key, name, value, order, resultType) {
+      this.setDefaultValues(order)
+      if (this.ResData[order] && !this.newEditObjData.length) {
+        this.ResData[order][key] = this.lookUpVal(resultType, value, name)
+      } else if (this.ResData[order] && this.newEditObjData.length) {
+        this.ResData[order][key] = this.lookUpVal(resultType, value, name)
+      } else {
+        this.inputValuesObj.set(key, this.lookUpVal(resultType, value, name))
+        this.ResData.push(Object.fromEntries(this.inputValuesObj))
+      }
+    },
+    // Lookup's Valuesini olish
+
+    // default set values
+    setDefaultValues(order) {
+      this.inputValuesObj.set('erepairStatus', 'false')
+      this.inputValuesObj.set('marriage', 'false')
+      this.inputValuesObj.set('mark', 'false')
+      this.inputValuesObj.set('waste', 'false')
+      this.inputValuesObj.set('qtyOfOne', '0')
+      this.inputValuesObj.set('price4', '0')
+      // this.inputValuesObj.set('packNumber', order + 1)
+      return this.inputValuesObj
+    },
+    // default set values
+
     // Add an Item
     addAnItemAction() {
       if (this.addmodalorrow) {
-        this.yesOpenModal()
+        this.isOpenModal = true
+        this.whichTableName = 'topTable'
       } else {
-        this.noOpenModal()
-        this.allInputValues = Object.fromEntries(this.inputValuesMap)
-        // ----------
-        if (this.addToAllInputValue) this.rowSetArray.push(this.allInputValues)
-        this.addToAllInputValue = true
-        // ----------
-        this.rowSetArray.forEach((obj, i) => (obj.index = i + 1))
+        this.tableBody.push(this.filteredTablehead)
+        this.setDefaultValues()
         const requestObj = Object.fromEntries(this.inputValuesObj)
-        this.arrRow.push(requestObj)
+        this.ResData.push(requestObj)
+        this.inputValuesObj.clear()
       }
       this.showHideRow = false
-      this.inputValuesMap.clear()
-      this.addmodalorrow && this.inputValuesObj.clear()
+      // ID orqali filterlash uchun
+      this.ResData.forEach((obj, i) => (obj.index = i + 1))
     },
     // Add an Item
 
-    yesOpenModal() {
-      this.isOpenModal = true
-      this.whichTableName = 'topTable'
+    // Row delete Request
+    requestAction(id) {
+      this.$axios
+        .post(
+          `/invoice/prepareCreateEditPurchaseInvoiceEx`,
+          { deleteItemId: id },
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('token')}`,
+              'x-auth-token': localStorage.getItem('authToken'),
+            },
+          }
+        )
+        .then()
+        .catch((error) => {
+          // eslint-disable-next-line no-console
+          console.log(error)
+        })
     },
-    noOpenModal() {
-      this.tableBody.push(this.filteredTablehead)
-    },
+
     // row delete action
-    rowDelAction(index) {
+    rowDelAction(index, id) {
       this.tableBody = this.tableBody.filter((row, inx) => inx !== index)
-      this.rowSetArray = this.rowSetArray.filter(
-        (row) => row.index !== index + 1
-      )
-      this.arrRow = this.arrRow.filter((row, inx) => inx !== index)
-      this.newEditObjData = this.rowSetArray
-      this.tooLastRowSetArray = this.rowSetArray
-      this.rowSetArray.forEach((obj, i) => (obj.index = i + 1))
-      this.inputValuesMap.clear()
-      this.addmodalorrow && this.inputValuesObj.clear()
+      id
+        ? (this.ResData = this.ResData.filter((row) => row.id !== id))
+        : (this.ResData = this.ResData.filter((row) => row.index !== index))
+
+      this.newEditObjData = this.ResData
+      this.twoResData = this.ResData
+      this.inputValuesObj.clear()
+      id && this.requestAction(id)
     },
 
     // Modal Closeobject
@@ -676,69 +627,12 @@ export default {
       this.isOpenModal = isClose
     },
 
-    // input's Valuesini olish
-    getInputValue(key, value, order) {
-      if (
-        this.arrRow[order + 1] &&
-        this.rowSetArray[order + 1] &&
-        !this.newEditObjData.length
-      ) {
-        this.arrRow[order + 1][key] = value
-        this.rowSetArray[order + 1][key] = value
-      } else if (
-        this.arrRow[order] &&
-        this.rowSetArray[order] &&
-        this.newEditObjData.length
-      ) {
-        this.arrRow[order][key] = value
-        this.rowSetArray[order][key] = value
-      } else {
-        this.inputValuesObj.set('erepairStatus', 'false')
-        this.inputValuesObj.set('marriage', 'false')
-        this.inputValuesObj.set('mark', 'false')
-        this.inputValuesObj.set('waste', 'false')
-        this.inputValuesObj.set('qtyOfOne', '0')
-        this.inputValuesObj.set('price4', '0')
-        this.inputValuesObj.set('packNumber', `${order + 1}`)
-        this.inputValuesObj.set(key, value)
-        this.inputValuesMap.set(key, value)
-      }
-    },
-    // input's Valuesini olish
-
-    // Lookup's Valuesini olish
-    getLookUpValue(key, name, value, order) {
-      if (
-        this.arrRow[order + 1] &&
-        this.rowSetArray[order + 1] &&
-        !this.newEditObjData.length
-      ) {
-        this.arrRow[order + 1][key] = { id: Number(value) }
-        this.rowSetArray[order + 1][key] = name
-      } else if (
-        this.arrRow[order] &&
-        this.rowSetArray[order] &&
-        this.newEditObjData.length
-      ) {
-        this.arrRow[order][key] = { id: Number(value) }
-        this.rowSetArray[order][key] = name
-      } else {
-        this.inputValuesObj.set(key, { id: Number(value) })
-        this.inputValuesMap.set(key, name)
-      }
-    },
-    // Lookup's Valuesini olish
-
     // Modal uchun ishlaydi
-    modalAcceptAction(objBack, obj) {
+    modalAcceptAction(objBack) {
       this.showHideRow = false
-      this.noOpenModal()
-      this.arrRow.push(objBack)
-      this.rowSetArray.push(obj)
-      this.rowSetArray.forEach((obj, i) => (obj.index = i + 1))
-
-      this.inputValuesObj.clear()
-      this.inputValuesMap.clear()
+      this.tableBody.push(this.filteredTablehead)
+      this.ResData.push(objBack)
+      this.newEditObjData = this.ResData
     },
     // Modal uchun ishlaydi
 
@@ -746,75 +640,38 @@ export default {
     getSaveRowAction() {
       if (this.addmodalorrow) {
         this.showHideRow = true
-        this.arrayFiltered()
-        this.tooLastRowSetArray = this.rowSetArray
-        this.$emit('rowValues', this.arrRow, this.showHideRow)
-        // Total row ko'rinishini xal qiladi
-        this.rowSetArray.length
-          ? (this.noDataRow = false)
-          : (this.noDataRow = true)
-        // Total row ko'rinishini xal qiladi
-        this.totalAction()
       } else {
         this.showHideRow = true
-        this.allInputValues = Object.fromEntries(this.inputValuesMap)
-        this.rowSetArray.push(this.allInputValues)
-        this.rowSetArray.forEach((obj, i) => (obj.index = i + 1))
-        this.inputValuesMap.clear()
-        this.arrayFiltered()
-        this.tooLastRowSetArray = this.rowSetArray
         const requestObj = Object.fromEntries(this.inputValuesObj)
-        this.arrRow.push(requestObj)
-        this.arrRow = this.arrRow.filter(
-          (obj) => Object.keys(obj).length > 1 && obj
-        )
-        this.$emit('rowValues', this.arrRow, this.showHideRow)
-
-        // Total row ko'rinishini xal qiladi
-        this.rowSetArray.length
-          ? (this.noDataRow = false)
-          : (this.noDataRow = true)
-
-        this.totalAction()
+        this.ResData.push(requestObj)
+        this.inputValuesObj.clear()
       }
+      // ==================================
+      this.arrayFiltered()
+      this.ResDataFiltered()
+      this.$emit('rowValues', this.ResData, this.showHideRow)
+      this.twoResData = this.ResData
+      // Total row ko'rinishini xal qiladi
+      this.totalAction()
+      this.twoResData.length
+        ? (this.noDataRow = false)
+        : (this.noDataRow = true)
+      // ==================================
     },
 
     //  Edit button click qilganda ishlaydi
     getEditRowAction() {
       this.showHideRow = false
-      // Edit ning row data`sini shakillantirish
-      this.newEditObjData = []
-      this.rowSetArray.forEach((obj) => {
-        const editObjData = new Map()
-        this.tableBody.forEach((arr) => {
-          arr.forEach((subObj) => {
-            subObj.name in obj && editObjData.set(subObj.name, obj[subObj.name])
-          })
-        })
-        this.newEditObjData = [
-          ...this.newEditObjData,
-          Object.fromEntries(editObjData),
-        ]
-      })
-
-      // Arrayni bo'sh object dan tozalash
-      // eslint-disable-next-line array-callback-return
-      this.rowSetArray = this.rowSetArray.filter((obj) => {
-        if (Object.keys(obj).length > 1) return obj
-      })
-      this.newEditObjData = this.rowSetArray
-      this.tooLastRowSetArray = this.rowSetArray
-      // Arrayni bo'sh object dan tozalash
-
-      this.totalAction()
+      this.newEditObjData = this.ResData
     },
+
     // Total hisoblavchi function start
     totalAction() {
       this.filteredTablehead.forEach((headName) => {
         headName.sumColumn && this.sumColumnArr.push(headName.name)
       })
       this.sumColumnArr.forEach((name) => {
-        this.tooLastRowSetArray.forEach((obj) => {
+        this.twoResData.forEach((obj) => {
           if (name in obj) {
             this.total += Number(obj[name])
             this.totalObjMap.set(name, this.total)

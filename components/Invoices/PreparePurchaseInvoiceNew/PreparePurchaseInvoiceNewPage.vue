@@ -20,6 +20,12 @@
       />
     </transition>
     <div
+      v-if="showHideLogistic"
+      class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-[10000]"
+    >
+      <GenericLogisticsCalculationPage :table-data="logisticsCalcData" />
+    </div>
+    <div
       class="border-[1px] border-solid border-[rgba(0,0,0,0.05)] p-[12px] bg-gradient-to-b from-transparent via-transparent to-gray-200 shadow-md"
     >
       <div class="flex items-center gap-[10px]">
@@ -744,22 +750,38 @@
           </tr>
         </tbody>
       </table>
-      <GenericButton
-        v-if="!userId"
-        name="Accept"
-        pl="10"
-        pt="3"
-        pr="10"
-        pb="3"
-        bg="rgba(54, 155, 215, 0.8)"
-        textsize="14"
-        class="mt-1 mb-2"
-        @click="additionInvoiceItem"
-      />
+      <template>
+        <GenericButton
+          v-if="subTable || userId"
+          name="Logistics Calculation"
+          pl="10"
+          pt="3"
+          pr="10"
+          pb="3"
+          bggradient="linear-gradient(to top, rgb(108,105,199),rgba(108,105,199, 0.58))"
+          textsize="14"
+          class="mt-1 mb-2"
+          :url="img.logistics"
+          :istherepicture="true"
+          @click="logisticsCalculationAction"
+        />
+        <GenericButton
+          v-else
+          name="Accept"
+          pl="10"
+          pt="3"
+          pr="10"
+          pb="3"
+          bg="rgba(54, 155, 215, 0.8)"
+          textsize="14"
+          class="mt-1 mb-2"
+          @click="additionInvoiceItem"
+        />
+      </template>
       <div
         class="w-full bg-[rgba(224,230,238,0.6)] overflow-hidden"
         :class="
-          isInvoiceItam || userId
+          isInvoiceItem || userId
             ? 'duration-[1s] h-fit'
             : 'duration-[1s] h-[0px]'
         "
@@ -891,6 +913,8 @@
               :tablehead="tableData"
               :tableheadlength="tableData.length"
               :addmodalorrow="openPopup"
+              :response-data="responseData"
+              :ui-show-hide="uiShowHide"
               :isedit="isEdit"
               :height="290"
               :default-values="productValues"
@@ -1068,6 +1092,7 @@ import setting from '../../../assets/icons/settings.png'
 import printer from '../../../assets/icons/printer.png'
 import del from '../../../assets/icons/delete.png'
 import edit from '../../../assets/icons/editIcon.svg'
+import logistics from '../../../assets/icons/logistics.png'
 // Components
 import GenericButton from '../../Button/GenericButton.vue'
 import LoadingPage from '../../Loading/LoadingPage.vue'
@@ -1077,6 +1102,7 @@ import GenericPrepareTablePage from '../../GenericPrepareTable/GenericPrepareTab
 import ColumnConfigPage from '../../ColumnConfig/ColumnConfigPage.vue'
 import GenericSubPrepareTablePage from '../../Generics/GenericSubPrepareTable/GenericSubPrepareTablePage.vue'
 import GenericSubPrepareTableTooPage from '../../Generics/GenericSubPrepareTableToo/GenericSubPrepareTableTooPage.vue'
+import GenericLogisticsCalculationPage from '../../Generics/GenericLogisticsCalculation/GenericLogisticsCalculationPage.vue'
 export default {
   // COMPONENTS
   components: {
@@ -1088,6 +1114,7 @@ export default {
     ColumnConfigPage,
     GenericSubPrepareTablePage,
     GenericSubPrepareTableTooPage,
+    GenericLogisticsCalculationPage,
   },
 
   // DATA
@@ -1130,6 +1157,7 @@ export default {
         printer,
         del,
         edit,
+        logistics,
       },
       objData: {},
       selectedRow: null,
@@ -1146,7 +1174,7 @@ export default {
         lookUp1: true,
         lookUp2: true,
       },
-      isInvoiceItam: false,
+      isInvoiceItem: false,
       rightMap: new Map(),
       leftMap: new Map(),
       rightData: [],
@@ -1178,6 +1206,10 @@ export default {
       },
       subTable: false,
       parentID: 0,
+      responseData: [],
+      logisticsCalcData: {},
+      showHideLogistic: false,
+      uiShowHide: false,
     }
   },
 
@@ -1185,6 +1217,12 @@ export default {
   mounted() {
     this.getPageRequest()
     this.getStaticTableNameValues()
+    // Close modal when clicking outside of it
+    window.addEventListener('click', this.closeModalOutside)
+  },
+
+  beforeDestroy() {
+    window.removeEventListener('click', this.closeModalOutside)
   },
 
   // CREATED
@@ -1199,13 +1237,21 @@ export default {
 
   // METHOD
   methods: {
+    // GenericLogisticsCalculation show hide action
+    closeModalOutside(event) {
+      if (event.target.classList.contains('bg-gray-900')) {
+        this.showHideLogistic = false
+      }
+    },
+    // GenericLogisticsCalculation show hide action
+
     // preparePurchaseInvoiceNewAjaxLoad api
     getPageRequest() {
       const id = this.userId ? this.userId : null
       this.isLoading = !this.isLoading
       this.$axios
         .post(
-          `${this.baseURL}/invoice/preparePurchaseInvoiceNewAjaxLoad`,
+          `/invoice/preparePurchaseInvoiceNewAjaxLoad`,
           { id },
           {
             headers: {
@@ -1275,7 +1321,7 @@ export default {
     getStaticTableNameValues() {
       this.$axios
         .post(
-          `${this.baseURL}/translate`,
+          `/translate`,
           { messages: this.tableNameTranslate },
           {
             headers: {
@@ -1322,7 +1368,7 @@ export default {
         : (this.required.lookUp2 = false)
     },
 
-    // button action addition rows
+    // Accept button action function
     additionInvoiceItem() {
       // LookUp required action
       this.lookupValuesObj.get('supplier')
@@ -1333,10 +1379,46 @@ export default {
         : (this.required.lookUp2 = false)
 
       if (this.required.lookUp1 && this.required.lookUp2) {
-        this.isInvoiceItam = true
+        this.isInvoiceItem = true
       } else {
-        this.isInvoiceItam = false
+        this.isInvoiceItem = false
       }
+    },
+
+    // Logistics Calculation api request action function
+    async apiRequestActionLC(propBody) {
+      this.isLoading = !this.isLoading
+      try {
+        const res = await this.$axios.post(
+          `/invoice/preparePurchaseInvoiceNewJson?id=${this.parentID}`,
+          propBody,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('token')}`,
+              'x-auth-token': localStorage.getItem('authToken'),
+            },
+          }
+        )
+        const data = await res.data
+        this.isLoading = !this.isLoading
+        if (!('statusType' in propBody)) {
+          return data
+        }
+      } catch (error) {
+        this.isLoading = !this.isLoading
+        // eslint-disable-next-line no-console
+        console.error('Xatolik yuz berdi:', error)
+        throw error
+      }
+    },
+
+    // Logistics Calculation action function
+    async logisticsCalculationAction() {
+      this.logisticsCalcData = await this.apiRequestActionLC({
+        id: this.parentID,
+      })
+      this.apiRequestActionLC({ id: this.parentID, statusType: true })
+      this.showHideLogistic = true
     },
 
     // Column Config function
@@ -1355,8 +1437,8 @@ export default {
     },
 
     getRowElements(arr, hideBtn) {
-      this.hideButton = !hideBtn
       this.invoiceList = arr
+      this.hideButton = !hideBtn
     },
 
     editTransactionColumns(prop) {
@@ -1414,9 +1496,7 @@ export default {
       this.isLoading = !this.isLoading
       this.$axios
         .post(
-          `${this.baseURL}/invoice/${
-            prop === 'topUP' ? 'payUnPayUrl' : 'extraPayUnPay'
-          }`,
+          `/invoice/${prop === 'topUP' ? 'payUnPayUrl' : 'extraPayUnPay'}`,
           {
             id: this.parentID,
           },
@@ -1451,9 +1531,7 @@ export default {
       this.isLoading = !this.isLoading
       this.$axios
         .post(
-          `${this.baseURL}/invoice/${
-            prop === 'topP' ? 'payUnPayUrl' : 'extraPayUnPay'
-          }`,
+          `/invoice/${prop === 'topP' ? 'payUnPayUrl' : 'extraPayUnPay'}`,
           {
             id: this.parentID,
             transactionsList: arr,
@@ -1584,7 +1662,8 @@ export default {
       const warehouse = lookupValues.warehouse
         ? lookupValues.warehouse
         : objData.warehouse.id
-      const data = {
+
+      const requestBody = {
         invoice: {
           branch: { id: Number(branch) },
           calc_type: calcType,
@@ -1614,19 +1693,18 @@ export default {
           warehouse: { id: Number(warehouse) },
         },
       }
+
       this.$axios
-        .post(
-          `${this.baseURL}/invoice/prepareCreateEditPurchaseInvoiceEx`,
-          data,
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem('token')}`,
-              'x-auth-token': localStorage.getItem('authToken'),
-            },
-          }
-        )
-        .then(({ data }) => {
+        .post(`/invoice/prepareCreateEditPurchaseInvoiceEx`, requestBody, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+            'x-auth-token': localStorage.getItem('authToken'),
+          },
+        })
+        .then(({ data, status }) => {
           this.parentID = data?.id
+          this.responseData = data?.invoiceItems
+          status === 200 && (this.uiShowHide = true)
         })
         .catch((error) => {
           // eslint-disable-next-line no-console
@@ -1642,7 +1720,6 @@ export default {
 .fade-leave-active {
   transition: opacity 0.5s;
 }
-
 .fade-enter,
 .fade-leave-to {
   opacity: 0;
