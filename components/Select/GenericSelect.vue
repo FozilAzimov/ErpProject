@@ -94,6 +94,10 @@ export default {
       type: Number,
       default: 150,
     },
+    index: {
+      type: Number,
+      default: 0,
+    },
   },
   data() {
     return {
@@ -106,7 +110,8 @@ export default {
         'change',
         this.selectValue,
         this.formDataId,
-        this.isDefOptionTitle
+        this.isDefOptionTitle,
+        this.index
       )
     },
   },

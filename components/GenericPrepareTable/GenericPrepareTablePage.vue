@@ -2,7 +2,11 @@
   <div>
     <LoadingPage
       v-if="isLoading"
-      class="absolute left-[50%] top-[8px] translate-x-[-50%]"
+      class="fixed left-[50%] top-[8px] translate-x-[-50%]"
+    />
+    <LoadingPage
+      v-if="!tableShowHide && helperShowHideRow"
+      class="fixed left-[50%] top-[8px] translate-x-[-50%]"
     />
     <GenericInvoiceItemModalPage
       v-if="isOpenModal"
@@ -36,16 +40,17 @@
               </template>
             </th>
             <th
-              v-if="!showHideRow"
+              v-if="!showHideRow && !isCanAdd"
               class="text-[13px] font-semibold border-[1px] border-[solid] border-[rgba(119,136,153,0.2)] p-2"
             >
               Delete
             </th>
           </tr>
         </thead>
+
         <tbody>
-          <!-- Start Open PopUp 'false' Table body -->
-          <template v-if="showHideRow">
+          <!-- Save button click qilingandan keyin ko'rinadi -->
+          <template v-if="showHideRow || isCanAdd">
             <tr>
               <td class="border-[1px] text-[12px] p-2 text-center">
                 <GenericInput
@@ -99,8 +104,110 @@
                     >{{ row[item.name]['text'] }}</label
                   >
                   <label v-else-if="row[item.name] && item.type === 'date'">{{
-                    new Date(row[item.name]).toISOString().split('.')[0]
+                    new Date(row[item.name])
+                      .toLocaleString('en-GB')
+                      .split(',')
+                      .join('')
                   }}</label>
+                  <img
+                    v-else-if="item.type === 'file_image'"
+                    src="../../assets/images/no-image.png"
+                    class="w-[60px]"
+                  />
+                  <GenericButton
+                    v-else-if="item.type === 'button'"
+                    :name="item.headerText"
+                    pl="10"
+                    pt="3"
+                    pr="10"
+                    pb="3"
+                    :order="indexOne"
+                    bg="rgb(156,104,183)"
+                    textsize="12"
+                  />
+                  <GenericInput
+                    v-else-if="item.type === 'checkbox'"
+                    type="checkbox"
+                    :order="indexOne"
+                    :name="item.name"
+                    @customFunction="getInputValue"
+                  />
+                  <label v-else-if="row[item.name] && item.name === 'ammount'">
+                    {{
+                      combinationThreeInputValues.length &&
+                      Boolean(
+                        (combinationThreeInputValues[indexOne]?.qty ?? 0) *
+                          ((combinationThreeInputValues[indexOne]?.unitPrice ??
+                            0) +
+                            (combinationThreeInputValues[indexOne]?.cashPrice ??
+                              0))
+                      ) &&
+                      combinationThreeInputValues[indexOne]?.vat
+                        ? (combinationThreeInputValues[indexOne]?.qty ?? 0) *
+                            ((combinationThreeInputValues[indexOne]
+                              ?.unitPrice ?? 0) +
+                              (combinationThreeInputValues[indexOne]
+                                ?.cashPrice ?? 0)) +
+                          ((combinationThreeInputValues[indexOne]?.qty ?? 0) *
+                            (combinationThreeInputValues[indexOne]?.unitPrice ??
+                              0) *
+                            (combinationThreeInputValues[indexOne]?.vat ?? 0)) /
+                            100
+                        : combinationThreeInputValues.length &&
+                          Boolean(
+                            (combinationThreeInputValues[indexOne]?.qty ?? 0) *
+                              ((combinationThreeInputValues[indexOne]
+                                ?.unitPrice ?? 0) +
+                                (combinationThreeInputValues[indexOne]
+                                  ?.cashPrice ?? 0))
+                          )
+                        ? (combinationThreeInputValues[indexOne]?.qty ?? 0) *
+                          (combinationThreeInputValues[indexOne]?.unitPrice ??
+                            0)
+                        : isCanAdd
+                        ? row[item.name]
+                        : 0
+                    }}
+                  </label>
+                  <label
+                    v-else-if="row[item.name] && item.name === 'ammountwvat'"
+                  >
+                    {{
+                      combinationThreeInputValues.length &&
+                      Boolean(
+                        (combinationThreeInputValues[indexOne]?.qty ?? 0) *
+                          (combinationThreeInputValues[indexOne]?.unitPrice ??
+                            0)
+                      )
+                        ? (combinationThreeInputValues[indexOne]?.qty ?? 0) *
+                          (combinationThreeInputValues[indexOne]?.unitPrice ??
+                            0)
+                        : isCanAdd
+                        ? row[item.name]
+                        : 0
+                    }}
+                  </label>
+                  <label
+                    v-else-if="row[item.name] && item.name === 'vatAmount'"
+                  >
+                    {{
+                      combinationThreeInputValues.length &&
+                      Boolean(
+                        (combinationThreeInputValues[indexOne]?.qty ?? 0) *
+                          (combinationThreeInputValues[indexOne]?.unitPrice ??
+                            0) *
+                          (combinationThreeInputValues[indexOne]?.vat ?? 0)
+                      )
+                        ? ((combinationThreeInputValues[indexOne]?.qty ?? 0) *
+                            (combinationThreeInputValues[indexOne]?.unitPrice ??
+                              0) *
+                            (combinationThreeInputValues[indexOne]?.vat ?? 0)) /
+                          100
+                        : isCanAdd
+                        ? row[item.name]
+                        : 0
+                    }}
+                  </label>
                   <label v-else>{{ row[item.name] }}</label>
                 </td>
               </tr>
@@ -123,24 +230,23 @@
                 </div>
               </td>
             </tr>
-            <template v-else>
-              <tr class="bg-[rgb(229,235,245)]">
-                <td
-                  class="border-[1px] text-[13px] p-3 text-[rgba(0,0,0,0.7)] border-[1px] border-[solid] border-[rgba(119,136,153,0.2)]"
-                >
-                  Total
-                </td>
-                <td
-                  v-for="(item, indexToo) in filteredTablehead"
-                  :key="indexToo"
-                  class="border-[1px] text-[12px] p-2 text-[rgb(29,119,255)] border-[1px] border-[solid] border-[rgba(119,136,153,0.2)]"
-                >
-                  {{ item.sumColumn && totalObjMap.get(item.name) }}
-                </td>
-              </tr>
-            </template>
+            <tr v-else class="bg-[rgb(229,235,245)]">
+              <td
+                class="border-[1px] text-[13px] p-3 text-[rgba(0,0,0,0.7)] border-[1px] border-[solid] border-[rgba(119,136,153,0.2)]"
+              >
+                Total
+              </td>
+              <td
+                v-for="(item, indexToo) in filteredTablehead"
+                :key="indexToo"
+                class="border-[1px] text-[12px] p-2 text-[rgb(29,119,255)] border-[1px] border-[solid] border-[rgba(119,136,153,0.2)]"
+              >
+                {{ item.sumColumn && totalObjMap.get(item.name)?.toFixed(4) }}
+              </td>
+            </tr>
           </template>
 
+          <!-- Save button click qilinishidan oldin ko'rinadi -->
           <template v-else>
             <tr
               v-for="(item, indexOne) in tableBody"
@@ -157,32 +263,12 @@
                 :class="`w-[${value.dwidth}px]`"
               >
                 <LookUp
-                  v-if="value.type === 'list' && value.required"
-                  :defvalue="
-                    newEditObjData?.length &&
-                    newEditObjData[indexOne][value.name] &&
-                    typeof newEditObjData[indexOne][value.name] === 'object'
-                      ? newEditObjData[indexOne][value.name].text
-                      : newEditObjData.length &&
-                        newEditObjData[indexOne][value.name] &&
-                        typeof newEditObjData[indexOne][value.name] !== 'object'
-                      ? newEditObjData[indexOne][value.name]
-                      : ''
-                  "
-                  :durl="`invoiceBase/${value.durl}`"
-                  dwidth="250"
-                  :order="indexOne"
-                  :name="value.name"
-                  :result-type="value.resultType"
-                  @customFunction="getLookUpValue"
-                />
-                <LookUp
-                  v-else-if="value.type === 'list' && !value.required"
+                  v-if="value.type === 'list'"
                   :defvalue="
                     newEditObjData.length &&
                     newEditObjData[indexOne][value.name] &&
                     typeof newEditObjData[indexOne][value.name] === 'object'
-                      ? newEditObjData[indexOne][value.name].text
+                      ? newEditObjData[indexOne][value.name]?.text
                       : newEditObjData.length &&
                         newEditObjData[indexOne][value.name] &&
                         typeof newEditObjData[indexOne][value.name] !== 'object'
@@ -248,7 +334,7 @@
                 />
                 <GenericInputDatePage
                   v-else-if="value.type === 'date'"
-                  width="170"
+                  width="200"
                   height="23"
                   pl="10"
                   pr="10"
@@ -257,6 +343,12 @@
                   :order="indexOne"
                   textsize="13"
                   type="datetime-local"
+                  :value="
+                    newEditObjData[indexOne]?.updatedDate &&
+                    new Date(newEditObjData[indexOne]?.updatedDate)
+                      .toISOString()
+                      .split('.')[0]
+                  "
                   valuecolor="rgba(0,0,0,0.7)"
                   :name="value.name"
                   @customFunction="getInputValue"
@@ -279,6 +371,79 @@
                   bg="rgb(156,104,183)"
                   textsize="12"
                 />
+                <span
+                  v-else-if="value.type === 'label' && value.name === 'ammount'"
+                >
+                  {{
+                    combinationThreeInputValues.length &&
+                    Boolean(
+                      (combinationThreeInputValues[indexOne]?.qty ?? 0) *
+                        ((combinationThreeInputValues[indexOne]?.unitPrice ??
+                          0) +
+                          (combinationThreeInputValues[indexOne]?.cashPrice ??
+                            0))
+                    ) &&
+                    combinationThreeInputValues[indexOne]?.vat
+                      ? (combinationThreeInputValues[indexOne]?.qty ?? 0) *
+                          ((combinationThreeInputValues[indexOne]?.unitPrice ??
+                            0) +
+                            (combinationThreeInputValues[indexOne]?.cashPrice ??
+                              0)) +
+                        ((combinationThreeInputValues[indexOne]?.qty ?? 0) *
+                          (combinationThreeInputValues[indexOne]?.unitPrice ??
+                            0) *
+                          (combinationThreeInputValues[indexOne]?.vat ?? 0)) /
+                          100
+                      : combinationThreeInputValues.length &&
+                        Boolean(
+                          (combinationThreeInputValues[indexOne]?.qty ?? 0) *
+                            ((combinationThreeInputValues[indexOne]
+                              ?.unitPrice ?? 0) +
+                              (combinationThreeInputValues[indexOne]
+                                ?.cashPrice ?? 0))
+                        )
+                      ? (combinationThreeInputValues[indexOne]?.qty ?? 0) *
+                        (combinationThreeInputValues[indexOne]?.unitPrice ?? 0)
+                      : 0
+                  }}
+                </span>
+                <span
+                  v-else-if="
+                    value.type === 'label' && value.name === 'ammountwvat'
+                  "
+                >
+                  {{
+                    combinationThreeInputValues.length &&
+                    Boolean(
+                      (combinationThreeInputValues[indexOne]?.qty ?? 0) *
+                        (combinationThreeInputValues[indexOne]?.unitPrice ?? 0)
+                    )
+                      ? (combinationThreeInputValues[indexOne]?.qty ?? 0) *
+                        (combinationThreeInputValues[indexOne]?.unitPrice ?? 0)
+                      : 0
+                  }}
+                </span>
+                <span
+                  v-else-if="
+                    value.type === 'label' && value.name === 'vatAmount'
+                  "
+                >
+                  {{
+                    combinationThreeInputValues.length &&
+                    Boolean(
+                      (combinationThreeInputValues[indexOne]?.qty ?? 0) *
+                        (combinationThreeInputValues[indexOne]?.unitPrice ??
+                          0) *
+                        (combinationThreeInputValues[indexOne]?.vat ?? 0)
+                    )
+                      ? ((combinationThreeInputValues[indexOne]?.qty ?? 0) *
+                          (combinationThreeInputValues[indexOne]?.unitPrice ??
+                            0) *
+                          (combinationThreeInputValues[indexOne]?.vat ?? 0)) /
+                        100
+                      : 0
+                  }}
+                </span>
                 <span
                   v-else-if="
                     value.type === 'label' &&
@@ -314,9 +479,9 @@
               </td>
             </tr>
           </template>
-          <!-- End Open PopUp 'false' Table body -->
 
-          <tr v-if="!showHideRow">
+          <!-- AddAnItem button -->
+          <tr v-if="!showHideRow && !isCanAdd">
             <td
               :colspan="tableheadlength"
               class="text-center border-[1px] border-[solid] border-[#F0F0F0] text-[12px] py-3"
@@ -395,6 +560,10 @@ export default {
       type: Boolean,
       default: true,
     },
+    isedit: {
+      type: Boolean,
+      default: false,
+    },
     defaultValues: {
       type: Array,
       default: () => [],
@@ -417,12 +586,17 @@ export default {
       sumColumnArr: [],
       total: 0,
       showHideRow: false,
+      helperShowHideRow: false,
       rowDataShowHide: true,
       noDataRow: false,
       newEditObjData: [],
       whichTableName: '',
       ResData: [],
       twoResData: [],
+      isCanAdd: this.isedit,
+      combinationThreeInputValues: [],
+      parentID: null,
+      tableShowHide: false,
     }
   },
 
@@ -435,15 +609,27 @@ export default {
 
   // WATCH
   watch: {
+    isedit(newVal) {
+      this.isCanAdd = newVal
+    },
+    uiShowHide(value) {
+      this.tableShowHide = value
+      this.showHideRow = this.tableShowHide
+    },
     defaultValues(newVal) {
       this.ResData = newVal
+      this.isCanAdd && (this.twoResData = this.ResData)
+      this.totalAction()
+      this.setIndex()
     },
     responseData(newResData) {
       this.ResData = newResData
       this.twoResData = this.ResData
       this.totalAction()
-      // ID orqali filterlash uchun
-      this.ResData.forEach((obj, i) => (obj.index = i + 1))
+      this.setIndex()
+      this.twoResData.length
+        ? (this.noDataRow = false)
+        : (this.noDataRow = true)
     },
   },
 
@@ -452,6 +638,12 @@ export default {
 
   // METHODS
   methods: {
+    // ID orqali filterlash uchun
+    setIndex() {
+      this.ResData.forEach((obj, i) => (obj.index = i + 1))
+    },
+    // ID orqali filterlash uchun
+
     // Arrayni bo'sh object dan tozalash
     arrayFiltered() {
       // eslint-disable-next-line array-callback-return
@@ -507,9 +699,9 @@ export default {
         if (obj[name]) {
           this.rowDataShowHide = true
           this.noDataRow = false
-          if (String(obj[name]).includes(String(value))) {
-            return obj
-          }
+          if (typeof obj[name] === 'number') {
+            if (String(obj[name]).includes(String(value))) return obj
+          } else if (String(obj[name].text).includes(String(value))) return obj
         } else if (obj[name] && value.length) {
           this.rowDataShowHide = false
           this.noDataRow = true
@@ -537,6 +729,20 @@ export default {
       } else {
         this.inputValuesObj.set(key, value)
         this.ResData.push(Object.fromEntries(this.inputValuesObj))
+      }
+
+      if (
+        key === 'qty' ||
+        key === 'unitPrice' ||
+        key === 'cashPrice' ||
+        key === 'vat'
+      ) {
+        if (this.combinationThreeInputValues[order])
+          this.$set(this.combinationThreeInputValues[order], key, Number(value))
+        else
+          this.$set(this.combinationThreeInputValues, order, {
+            [key]: Number(value),
+          })
       }
     },
     // input's Valuesini olish
@@ -584,8 +790,7 @@ export default {
         this.inputValuesObj.clear()
       }
       this.showHideRow = false
-      // ID orqali filterlash uchun
-      this.ResData.forEach((obj, i) => (obj.index = i + 1))
+      this.setIndex()
     },
     // Add an Item
 
@@ -612,14 +817,15 @@ export default {
     // row delete action
     rowDelAction(index, id) {
       this.tableBody = this.tableBody.filter((row, inx) => inx !== index)
+      this.combinationThreeInputValues =
+        this.combinationThreeInputValues.filter((obj, inx) => inx !== index)
       id
-        ? (this.ResData = this.ResData.filter((row) => row.id !== id))
-        : (this.ResData = this.ResData.filter((row) => row.index !== index))
-
+        ? (this.ResData = this.ResData.filter((row) => row?.id !== id))
+        : (this.ResData = this.ResData.filter((row) => row.index !== index + 1))
+      id && this.requestAction(id)
       this.newEditObjData = this.ResData
       this.twoResData = this.ResData
       this.inputValuesObj.clear()
-      id && this.requestAction(id)
     },
 
     // Modal Closeobject
@@ -638,19 +844,23 @@ export default {
 
     // Save button click qilganda ishlaydi
     getSaveRowAction() {
-      if (this.addmodalorrow) {
-        this.showHideRow = true
-      } else {
-        this.showHideRow = true
+      if (!this.addmodalorrow) {
         const requestObj = Object.fromEntries(this.inputValuesObj)
         this.ResData.push(requestObj)
         this.inputValuesObj.clear()
       }
+      this.showHideRow = this.tableShowHide
+      this.helperShowHideRow = true
+
       // ==================================
       this.arrayFiltered()
       this.ResDataFiltered()
-      this.$emit('rowValues', this.ResData, this.showHideRow)
-      this.twoResData = this.ResData
+      this.$emit(
+        'rowValues',
+        this.ResData,
+        this.helperShowHideRow,
+        this.parentID
+      )
       // Total row ko'rinishini xal qiladi
       this.totalAction()
       this.twoResData.length
@@ -659,10 +869,29 @@ export default {
       // ==================================
     },
 
-    //  Edit button click qilganda ishlaydi
-    getEditRowAction() {
+    // Edit button click qilganda ishlaydi
+    getEditRowAction(id) {
       this.showHideRow = false
+      this.helperShowHideRow = false
       this.newEditObjData = this.ResData
+      this.setIndex()
+
+      if (this.isCanAdd) {
+        this.parentID = id
+        if (this.addmodalorrow) {
+          for (let i = 0; i < this.newEditObjData.length; i++) {
+            this.tableBody.push(this.filteredTablehead)
+          }
+        } else {
+          for (let i = 0; i < this.newEditObjData.length - 1; i++) {
+            this.tableBody.push(this.filteredTablehead)
+          }
+        }
+        this.addAnItemAction()
+        this.isOpenModal = false
+        this.combinationThreeInputValues = this.newEditObjData
+        this.isCanAdd = false
+      }
     },
 
     // Total hisoblavchi function start

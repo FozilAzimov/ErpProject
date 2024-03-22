@@ -1,6 +1,6 @@
 <template>
   <div
-    class="w-[150px] p-1 bg-[rgba(0,0,0,0.2)] rounded-[5px] flex justify-center items-center gap-3 text-[rgba(255,255,255,0.6)]"
+    class="w-[150px] p-1 bg-[rgba(45,95,133,0.87)] rounded-[5px] flex justify-center items-center gap-3 text-[rgba(255,255,255,0.75)]"
   >
     <img
       class="w-[25px] animate-[spin_2.5s_linear_infinite]"

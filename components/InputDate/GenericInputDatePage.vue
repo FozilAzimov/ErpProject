@@ -69,16 +69,25 @@ export default {
       type: String,
       default: '',
     },
+    order: {
+      type: Number,
+      default: 0,
+    },
   },
   data() {
     return {
       inputValue: this.value || '',
     }
   },
+  watch: {
+    value(newVal) {
+      this.inputValue = newVal
+    },
+  },
   methods: {
     getSelectValue() {
       this.$emit('change', this.inputValue, this.id)
-      this.$emit('customFunction', this.name, this.inputValue)
+      this.$emit('customFunction', this.name, this.inputValue, this.order)
     },
   },
 }

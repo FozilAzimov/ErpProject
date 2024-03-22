@@ -2,7 +2,7 @@
   <div class="w-full p-[4px_10px_4px_4px]">
     <LoadingPage
       v-if="isLoading"
-      class="absolute left-[50%] top-[8px] translate-x-[-50%]"
+      class="fixed left-[50%] top-[8px] translate-x-[-50%]"
     />
     <transition name="fade">
       <ColumnConfigPage
@@ -646,6 +646,7 @@
                 textsize="13"
                 type="text"
                 name="invoiceNominal"
+                :disabled="userId ? true : false"
                 @customFunction="inputValue"
               />
             </td>
@@ -760,7 +761,7 @@
           pb="3"
           bggradient="linear-gradient(to top, rgb(108,105,199),rgba(108,105,199, 0.58))"
           textsize="14"
-          class="mt-1 mb-2"
+          class="my-1"
           :url="img.logistics"
           :istherepicture="true"
           @click="logisticsCalculationAction"
@@ -774,7 +775,7 @@
           pb="3"
           bg="rgba(54, 155, 215, 0.8)"
           textsize="14"
-          class="mt-1 mb-2"
+          class="my-1"
           @click="additionInvoiceItem"
         />
       </template>
@@ -860,6 +861,7 @@
               textsize="14"
               :url="img.del"
               :istherepicture="true"
+              @click="deleteInvoice"
             />
             <GenericInput
               width="120"
@@ -909,25 +911,48 @@
               textsize="14"
             />
             <GenericPrepareTablePage
-              ref="saveEditRef"
+              ref="invoiceRef"
               :tablehead="tableData"
               :tableheadlength="tableData.length"
               :addmodalorrow="openPopup"
               :response-data="responseData"
               :ui-show-hide="uiShowHide"
               :isedit="isEdit"
-              :height="290"
+              :height="450"
               :default-values="productValues"
               class="bg-[rgba(255,255,255,0.5)] mt-1"
               @rowValues="getRowElements"
             />
           </template>
+          <!-- sub list -->
+          <div
+            v-if="subListShowHide || isEdit"
+            class="flex items-center justify-end gap-1"
+          >
+            <div class="flex flex-col items-end">
+              <span
+                v-for="(name, index) in subListArrayLeft"
+                :key="index"
+                class="text-[13px]"
+                >{{ name }}{{ ' -' }}</span
+              >
+            </div>
+            <div class="flex flex-col items-start">
+              <span
+                v-for="(value, index) in subListArrayRight"
+                :key="index"
+                class="text-[13px]"
+                >{{ value }}</span
+              >
+            </div>
+          </div>
+          <!-- sub list -->
           <!-- ============ -->
-          <template v-if="subTable">
+          <template v-if="subTable || isEdit">
             <strong class="text-[15px]"
               >Payment Details.
               <span class="text-[14px] text-[rgb(156,0,78)]"
-                >Parent ID = {{ parentID }}</span
+                >Parent ID = {{ parentID ? parentID : userId }}</span
               ></strong
             >
             <div class="flex items-center gap-1">
@@ -987,18 +1012,19 @@
               :tablehead="transactionColumnsData"
               :tableheadlength="transactionColumnsData.length"
               :addmodalorrow="openPopup"
+              :sub-ui-show-hide="subUiShowHide"
               :isedit="isEdit"
-              :height="290"
-              :default-values="productValues"
+              :height="350"
+              :default-values="transactionsList"
               class="bg-[rgba(255,255,255,0.5)] mt-2"
               @rowValues="getSubRowElements"
             />
           </template>
-          <template v-if="subTable">
+          <template v-if="subTable || isEdit">
             <strong class="text-[15px]"
               >Extra Payment Details.
               <span class="text-[14px] text-[rgb(156,0,78)]"
-                >Parent ID = {{ parentID }}</span
+                >Parent ID = {{ parentID ? parentID : userId }}</span
               ></strong
             >
             <div class="flex items-center gap-1">
@@ -1058,9 +1084,10 @@
               :tablehead="transactionColumnsData"
               :tableheadlength="transactionColumnsData.length"
               :addmodalorrow="openPopup"
+              :sub-ui-show-hide-two="subUiShowHideTwo"
               :isedit="isEdit"
               :height="290"
-              :default-values="productValues"
+              :default-values="transactionsExtraList"
               class="bg-[rgba(255,255,255,0.5)] mt-2"
               @rowValues="getSubRowElements"
             />
@@ -1069,18 +1096,6 @@
         </div>
       </div>
     </div>
-    <template v-if="invoiceRightColumns !== null">
-      <GenericPrepareTablePage
-        ref="saveEditRef"
-        :tablehead="invoiceRightColumns"
-        :tableheadlength="tableData.length"
-        :addmodalorrow="openPopup"
-        :isedit="isEdit"
-        :height="290"
-        class="bg-[rgba(255,255,255,0.5)] mt-2"
-        @rowValues="getRowElements"
-      />
-    </template>
   </div>
 </template>
 
@@ -1147,6 +1162,15 @@ export default {
         'plateNumber',
         'car',
       ],
+      subListArrayLeft: [
+        'Net Amount: USD($)',
+        'Total Discount: USD($)',
+        'Discount Card: USD($)',
+        'Total: USD($)',
+        'Currency amount: UZS(сум)',
+        'Supplier Amount:UZS(сум)',
+      ],
+      subListArrayRight: [],
       rightColumns: [],
       tableNameTranslateObj: {},
       isLoading: false,
@@ -1182,7 +1206,6 @@ export default {
       actionUrl: '',
       checkModal: false,
       openPopup: true,
-      invoiceRightColumns: null,
       invoiceList: [],
       isEdit: false,
       showHideRow: false,
@@ -1190,6 +1213,8 @@ export default {
       inputValues: {},
       hideButton: true,
       productValues: null,
+      transactionsList: [],
+      transactionsExtraList: [],
       editOpen: false,
       autoHeight: false,
       transactionColumns: [],
@@ -1206,11 +1231,42 @@ export default {
       },
       subTable: false,
       parentID: 0,
+      id: null,
       responseData: [],
       logisticsCalcData: {},
       showHideLogistic: false,
       uiShowHide: false,
+      subUiShowHide: false,
+      subUiShowHideTwo: false,
+      subListData: {},
+      subListShowHide: false,
     }
+  },
+
+  // WATCH
+  watch: {
+    objData(val) {
+      const arr = [
+        val?.subtotal,
+        val?.totalDiscount,
+        val?.discountCardAmount,
+        val?.total,
+        val?.currencyTotal,
+        val?.currencyTotal,
+      ]
+      this.subListArrayRight = arr
+    },
+    subListData(val) {
+      const arr = [
+        val?.subtotal,
+        val?.totalDiscount,
+        val?.discountCardAmount,
+        val?.total,
+        val?.currencyTotal,
+        val?.currencyTotal,
+      ]
+      this.subListArrayRight = arr
+    },
   },
 
   // MOUNTED
@@ -1227,9 +1283,9 @@ export default {
 
   // CREATED
   created() {
-    this.userId = this.$route.params.id
+    this.userId = this.$route.params?.id
     if (this.userId) {
-      this.isEdit = false
+      this.isEdit = true
       this.checkIsEdit = true
       this.hideButton = false
     }
@@ -1262,7 +1318,8 @@ export default {
         )
         .then(({ data }) => {
           this.productValues = data?.invoiceJson?.invoiceItems
-          this.isLoading = !this.isLoading
+          this.transactionsList = data?.invoiceJson?.transactionsList
+          this.transactionsExtraList = data?.invoiceJson?.transactionsExtraList
           this.objData = data?.invoiceJson
           this.actionUrl = data?.actionUrl
           this.rightColumns = data?.rightColumns
@@ -1273,6 +1330,14 @@ export default {
           this.leftRightDataFilter()
           this.getFilterData()
           this.transactionColumnsFiltered()
+          data?.invoiceJson?.transactionsList.length &&
+            (this.undoPayment.topUndoPayment = true)
+          if (data?.invoiceJson?.transactionsExtraList.length) {
+            this.editPayDiscard.editPayShowHide2 = true
+            this.editPayDiscard.discardShowHide2 = false
+            // (this.undoPayment.subUndoPayment = true)
+          }
+          this.isLoading = !this.isLoading
         })
         .catch((error) => {
           this.isLoading = !this.isLoading
@@ -1368,7 +1433,7 @@ export default {
         : (this.required.lookUp2 = false)
     },
 
-    // Accept button action function
+    // Accept button action
     additionInvoiceItem() {
       // LookUp required action
       this.lookupValuesObj.get('supplier')
@@ -1385,7 +1450,7 @@ export default {
       }
     },
 
-    // Logistics Calculation api request action function
+    // Logistics Calculation api request action
     async apiRequestActionLC(propBody) {
       this.isLoading = !this.isLoading
       try {
@@ -1412,7 +1477,7 @@ export default {
       }
     },
 
-    // Logistics Calculation action function
+    // Logistics Calculation action
     async logisticsCalculationAction() {
       this.logisticsCalcData = await this.apiRequestActionLC({
         id: this.parentID,
@@ -1429,14 +1494,45 @@ export default {
       this.checkModal = true
     },
 
+    // delete Invoice
+    deleteInvoice() {
+      this.isLoading = !this.isLoading
+      this.$axios
+        .post(
+          `/invoices/prepareDeleteInvoiceUrl`,
+          {
+            id: this.parentID ? Number(this.parentID) : Number(this.userId),
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('token')}`,
+              'x-auth-token': localStorage.getItem('authToken'),
+            },
+          }
+        )
+        .then((res) => {
+          this.isLoading = !this.isLoading
+          if (res.status === 200) this.$router.push('/purchaseinvoice.htm')
+        })
+        .catch((error) => {
+          this.isLoading = !this.isLoading
+          // eslint-disable-next-line no-console
+          console.log(error)
+        })
+    },
+
     // edit invoice
     editInvoice() {
       this.hideButton = !this.hideButton
       // GenericTablePage da ishlab beruvchi function
-      this.$refs.saveEditRef.getEditRowAction()
+      this.$refs.invoiceRef.getEditRowAction(
+        this.parentID ? this.parentID : this.userId
+      )
+      this.uiShowHide = false
     },
 
-    getRowElements(arr, hideBtn) {
+    getRowElements(arr, hideBtn, id) {
+      this.id = +id
       this.invoiceList = arr
       this.hideButton = !hideBtn
     },
@@ -1478,27 +1574,61 @@ export default {
       }
       if (prop === 'topD') {
         // GenericSubTablePage da ishlab beruvchi function
-        this.$refs.transactionColumnsRef.discardAndUndoPaymentAction()
+        this.$refs.transactionColumnsRef.discardAndUndoPaymentAction(prop)
       } else if (prop === 'subD') {
         // GenericSubTablePageToo da ishlab beruvchi function
-        this.$refs.transactionColumnsTooRef.discardAndUndoPaymentAction()
+        this.$refs.transactionColumnsTooRef.discardAndUndoPaymentAction(prop)
       }
+    },
+
+    getResponseTransactionsAction(prop) {
+      this.$axios
+        .post(
+          `/invoice/preparePurchaseInvoiceNewAjaxLoad`,
+          { id: this.parentID ? this.parentID : this.userId },
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('token')}`,
+              'x-auth-token': localStorage.getItem('authToken'),
+            },
+          }
+        )
+        .then(({ data }) => {
+          this.transactionsList = data?.invoiceJson?.transactionsList
+          this.transactionsExtraList = data?.invoiceJson?.transactionsExtraList
+          if (prop === 'topP' && data.invoiceJson?.transactionsList.length) {
+            this.subUiShowHide = true
+            this.undoPayment.topUndoPayment = true
+          } else if (
+            prop === 'subP' &&
+            data.invoiceJson?.transactionsExtraList.length
+          ) {
+            this.subUiShowHideTwo = true
+            // this.undoPayment.subUndoPayment = true
+            this.editPayDiscard.editPayShowHide2 = true
+            this.editPayDiscard.discardShowHide2 = false
+          }
+        })
+        .catch((error) => {
+          // eslint-disable-next-line no-console
+          console.log(error)
+        })
     },
 
     undoPaymentTransactionColumns(prop) {
       if (prop === 'topUP') {
         // GenericSubTablePage da ishlab beruvchi function
-        this.$refs.transactionColumnsRef.discardAndUndoPaymentAction()
+        this.$refs.transactionColumnsRef.discardAndUndoPaymentAction(prop)
       } else if (prop === 'subUP') {
         // GenericSubTablePageToo da ishlab beruvchi function
-        this.$refs.transactionColumnsTooRef.discardAndUndoPaymentAction()
+        this.$refs.transactionColumnsTooRef.discardAndUndoPaymentAction(prop)
       }
       this.isLoading = !this.isLoading
       this.$axios
         .post(
           `/invoice/${prop === 'topUP' ? 'payUnPayUrl' : 'extraPayUnPay'}`,
           {
-            id: this.parentID,
+            id: this.parentID ? this.parentID : this.userId,
           },
           {
             headers: {
@@ -1511,14 +1641,15 @@ export default {
           if (status === 200 && prop === 'topUP') {
             this.isLoading = !this.isLoading
             this.undoPayment.topUndoPayment = false
-            this.editPayDiscard.discardShowHide1 = false
             this.editPayDiscard.editPayShowHide1 = true
+            this.editPayDiscard.discardShowHide1 = false
           } else if (status === 200 && prop === 'subUP') {
             this.isLoading = !this.isLoading
             this.undoPayment.subUndoPayment = false
             this.editPayDiscard.discardShowHide2 = false
             this.editPayDiscard.editPayShowHide2 = true
           }
+          this.getResponseTransactionsAction()
         })
         .catch((error) => {
           this.isLoading = !this.isLoading
@@ -1529,13 +1660,18 @@ export default {
 
     getSubRowElements(arr, prop) {
       this.isLoading = !this.isLoading
+      const topBodyP = {
+        id: this.parentID ? this.parentID : Number(this.userId),
+        transactionsList: arr,
+      }
+      const subBodyP = {
+        id: this.parentID ? this.parentID : Number(this.userId),
+        transactionsExtraList: arr,
+      }
       this.$axios
         .post(
           `/invoice/${prop === 'topP' ? 'payUnPayUrl' : 'extraPayUnPay'}`,
-          {
-            id: this.parentID,
-            transactionsList: arr,
-          },
+          prop === 'topP' ? topBodyP : subBodyP,
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -1543,17 +1679,11 @@ export default {
             },
           }
         )
-        .then(({ status }) => {
-          if (status === 200 && prop === 'topP') {
-            this.isLoading = !this.isLoading
-            this.undoPayment.topUndoPayment = true
-          } else if (status === 200 && prop === 'subP') {
-            this.isLoading = !this.isLoading
-            this.undoPayment.subUndoPayment = true
-          }
+        .then((res) => {
+          this.isLoading = !this.isLoading
+          this.getResponseTransactionsAction(prop)
         })
         .catch((error) => {
-          this.isLoading = !this.isLoading
           // eslint-disable-next-line no-console
           console.log(error)
         })
@@ -1561,11 +1691,11 @@ export default {
 
     saveInvoice() {
       // GenericTablePage da ishlab beruvchi function
-      this.$refs.saveEditRef.getSaveRowAction()
+      this.$refs.invoiceRef.getSaveRowAction()
 
       // GenericTablePage da subTable uchun
+      this.subListShowHide = true
       this.subTable = true
-
       const inputValues = this.inputValues
       const lookupValues = this.lookUpValues
       const objData = this.objData
@@ -1590,78 +1720,90 @@ export default {
       sellDate =
         splitSellDate[0].split('/').reverse().join('-') + 'T' + splitSellDate[1]
 
-      const currencyRate = this.propsValue.supplare.value
-        ? this.propsValue.supplare.value
-        : objData.currencyRate.text
+      const currencyRate = this.propsValue?.supplare?.value
+        ? this.propsValue?.supplare?.value
+        : objData?.currencyRate?.text
+        ? objData?.currencyRate?.text
+        : objData?.currencyRate
 
-      const driverName = inputValues.driverName
-        ? this.inputValues.driverName
+      const driverName = inputValues?.driverName
+        ? this.inputValues?.driverName
         : ''
 
-      const companyRefCurrencyRate = inputValues.companyRefCurrencyRate
-        ? this.inputValues.companyRefCurrencyRate
-        : this.propsValue.branch.value
-        ? this.propsValue.branch.value
-        : objData.companyRefCurrencyRate.text
+      const companyRefCurrencyRate = inputValues?.companyRefCurrencyRate
+        ? this.inputValues?.companyRefCurrencyRate
+        : this.propsValue?.branch?.value
+        ? this.propsValue?.branch?.value
+        : objData?.companyRefCurrencyRate?.text
+        ? objData?.companyRefCurrencyRate?.text
+        : objData?.companyRefCurrencyRate
 
-      const companyCurrencyRate = inputValues.companyRefCurrencyRate
-        ? this.inputValues.companyCurrencyRate
-        : this.propsValue.supplare.value
-        ? this.propsValue.supplare.value
-        : objData.companyCurrencyRate.text
+      const companyCurrencyRate = inputValues?.companyRefCurrencyRate
+        ? this.inputValues?.companyCurrencyRate
+        : this.propsValue?.supplare?.value
+        ? this.propsValue?.supplare?.value
+        : objData?.companyCurrencyRate?.text
+        ? objData?.companyCurrencyRate?.text
+        : objData?.companyCurrencyRate
 
-      const invoiceNominal = this.inputValues.invoiceNominal
-        ? this.inputValues.invoiceNominal
-        : objData.invoiceNominal.text
+      const invoiceNominal = this.inputValues?.invoiceNominal
+        ? this.inputValues?.invoiceNominal
+        : objData?.invoiceNominal?.text
+        ? objData?.invoiceNominal?.text
+        : objData?.invoiceNominal
 
-      const systemNumber = inputValues.systemNumber
-        ? this.inputValues.systemNumber
+      const systemNumber = inputValues?.systemNumber
+        ? this.inputValues?.systemNumber
         : ''
 
-      const invoiceStatus = inputValues.invoiceStatus
-        ? this.inputValues.invoiceStatus
+      const invoiceStatus = inputValues?.invoiceStatus
+        ? this.inputValues?.invoiceStatus
         : ''
 
-      const invoiceBillStatus = inputValues.invoiceBillStatus
-        ? this.inputValues.invoiceBillStatus
+      const invoiceBillStatus = inputValues?.invoiceBillStatus
+        ? this.inputValues?.invoiceBillStatus
         : ''
 
       // lookup values
-      const calcType = lookupValues.calc_type
-        ? lookupValues.calc_type
-        : objData.calc_type.id
+      const calcType = lookupValues?.calc_type
+        ? lookupValues?.calc_type
+        : objData?.calc_type?.id
 
-      const branch = lookupValues.branch
-        ? lookupValues.branch
-        : objData.branch.id
+      const order = lookupValues?.order
+        ? lookupValues?.order
+        : objData?.order?.id
 
-      const companyGroup = lookupValues.companyGroup
-        ? lookupValues.companyGroup
-        : objData.companyGroup.id
+      const branch = lookupValues?.branch
+        ? lookupValues?.branch
+        : objData.branch?.id
 
-      const supplier = lookupValues.supplier
-        ? lookupValues.supplier
-        : objData.supplier.id
+      const companyGroup = lookupValues?.companyGroup
+        ? lookupValues?.companyGroup
+        : objData?.companyGroup?.id
 
-      const currency = lookupValues.currency
-        ? lookupValues.currency
-        : objData.currency.id
+      const supplier = lookupValues?.supplier
+        ? lookupValues?.supplier
+        : objData?.supplier?.id
 
-      const department = lookupValues.department
-        ? lookupValues.department
-        : objData.department.id
+      const currency = lookupValues?.currency
+        ? lookupValues?.currency
+        : objData?.currency?.id
 
-      const paymentType = lookupValues.paymentType
-        ? lookupValues.paymentType
-        : objData.paymentType.id
+      const department = lookupValues?.department
+        ? lookupValues?.department
+        : objData?.department?.id
 
-      const orderProductionType = lookupValues.orderProductionType
-        ? lookupValues.orderProductionType
-        : objData.orderProductionType.id
+      const paymentType = lookupValues?.paymentType
+        ? lookupValues?.paymentType
+        : objData?.paymentType?.id
 
-      const warehouse = lookupValues.warehouse
-        ? lookupValues.warehouse
-        : objData.warehouse.id
+      const orderProductionType = lookupValues?.orderProductionType
+        ? lookupValues?.orderProductionType
+        : objData?.orderProductionType?.id
+
+      const warehouse = lookupValues?.warehouse
+        ? lookupValues?.warehouse
+        : objData?.warehouse?.id
 
       const requestBody = {
         invoice: {
@@ -1676,7 +1818,7 @@ export default {
           date,
           department: { id: Number(department) },
           driverName,
-          id: this.parentID ? this.parentID : null,
+          id: this.isEdit ? this.id : this.parentID ? this.parentID : null,
           invoiceBillStatus,
           invoiceItems: this.invoiceList,
           invoiceNo: '',
@@ -1684,7 +1826,7 @@ export default {
           invoiceNumber: '',
           invoiceStatus,
           notes: '',
-          order: { id: 1 },
+          order,
           orderProductionType: { id: Number(orderProductionType) },
           paymentType: { id: Number(paymentType) },
           sellDate,
@@ -1694,17 +1836,38 @@ export default {
         },
       }
 
+      // Open qilib kirilganda jo'natiladigan 'request body'
+      const editRequestBody = {
+        invoice: {
+          calc_type: calcType,
+          companyCurrencyRate,
+          companyRefCurrencyRate,
+          currency: { id: Number(currency) },
+          currencyRate,
+          id: this.isEdit ? this.id : this.parentID ? this.parentID : null,
+          invoiceItems: this.invoiceList,
+          invoiceNominal,
+          order,
+          paymentType: { id: Number(paymentType) },
+        },
+      }
+
       this.$axios
-        .post(`/invoice/prepareCreateEditPurchaseInvoiceEx`, requestBody, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-            'x-auth-token': localStorage.getItem('authToken'),
-          },
-        })
-        .then(({ data, status }) => {
+        .post(
+          `/invoice/prepareCreateEditPurchaseInvoiceEx`,
+          this.isEdit ? editRequestBody : requestBody,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('token')}`,
+              'x-auth-token': localStorage.getItem('authToken'),
+            },
+          }
+        )
+        .then(({ data }) => {
           this.parentID = data?.id
           this.responseData = data?.invoiceItems
-          status === 200 && (this.uiShowHide = true)
+          this.subListData = data
+          data?.invoiceItems.length && (this.uiShowHide = true)
         })
         .catch((error) => {
           // eslint-disable-next-line no-console

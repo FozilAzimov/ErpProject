@@ -137,7 +137,8 @@ export default {
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
-    baseURL: 'https://localhost:8443/api',
+    // baseURL: 'https://localhost:8443/api',
+    baseURL: 'https://localhost:443/api',
     // baseURL: 'https://192.168.1.159:8443/api',
     // baseURL: 'https://192.168.1.64:8443/api',
     // baseURL: 'https://192.168.1.55:8443/api',

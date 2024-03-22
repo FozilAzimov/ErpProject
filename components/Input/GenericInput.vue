@@ -81,7 +81,8 @@ export default {
       this.$emit('enter', event.target.value)
       this.$emit('customFunction', this.name, this.keywordValue, this.order)
     },
-    getInputValue() {
+    getInputValue({ target: { value } }) {
+      this.keywordValue = value
       this.$emit('input', this.keywordValue)
       this.$emit('customFunction', this.name, this.keywordValue, this.order)
     },
