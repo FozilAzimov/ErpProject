@@ -266,13 +266,8 @@
                   v-if="value.type === 'list'"
                   :defvalue="
                     newEditObjData.length &&
-                    newEditObjData[indexOne][value.name] &&
-                    typeof newEditObjData[indexOne][value.name] === 'object'
+                    newEditObjData?.[indexOne]?.[value.name]
                       ? newEditObjData[indexOne][value.name]?.text
-                      : newEditObjData.length &&
-                        newEditObjData[indexOne][value.name] &&
-                        typeof newEditObjData[indexOne][value.name] !== 'object'
-                      ? newEditObjData[indexOne][value.name]
                       : ''
                   "
                   :durl="`invoiceBase/${value.durl}`"
@@ -280,18 +275,14 @@
                   :order="indexOne"
                   :name="value.name"
                   :result-type="value.resultType"
+                  :required="requiredData?.[indexOne]?.[value.name]"
                   @customFunction="getLookUpValue"
                 />
                 <GenericInput
                   v-else-if="value.type === 'float' || value.type === 'integer'"
                   :value="
                     newEditObjData.length &&
-                    newEditObjData[indexOne][value.name] &&
-                    typeof newEditObjData[indexOne][value.name] === 'object'
-                      ? newEditObjData[indexOne][value.name].text
-                      : newEditObjData.length &&
-                        newEditObjData[indexOne][value.name] &&
-                        typeof newEditObjData[indexOne][value.name] !== 'object'
+                    newEditObjData?.[indexOne]?.[value.name]
                       ? newEditObjData[indexOne][value.name]
                       : ''
                   "
@@ -304,6 +295,7 @@
                   :order="indexOne"
                   textsize="13"
                   type="number"
+                  :required="requiredData?.[indexOne]?.[value.name]"
                   :name="value.name"
                   @customFunction="getInputValue"
                 />
@@ -311,12 +303,7 @@
                   v-else-if="value.type === 'string'"
                   :value="
                     newEditObjData.length &&
-                    newEditObjData[indexOne][value.name] &&
-                    typeof newEditObjData[indexOne][value.name] === 'object'
-                      ? newEditObjData[indexOne][value.name].text
-                      : newEditObjData.length &&
-                        newEditObjData[indexOne][value.name] &&
-                        typeof newEditObjData[indexOne][value.name] !== 'object'
+                    newEditObjData?.[indexOne]?.[value.name]
                       ? newEditObjData[indexOne][value.name]
                       : ''
                   "
@@ -330,6 +317,7 @@
                   textsize="13"
                   type="text"
                   :name="value.name"
+                  :required="requiredData?.[indexOne]?.[value.name]"
                   @customFunction="getInputValue"
                 />
                 <GenericInputDatePage
@@ -351,6 +339,7 @@
                   "
                   valuecolor="rgba(0,0,0,0.7)"
                   :name="value.name"
+                  :required="requiredData?.[indexOne]?.[value.name]"
                   @customFunction="getInputValue"
                 />
                 <GenericInput
@@ -491,10 +480,10 @@
               >
                 <GenericButton
                   name="Add an Item"
-                  pl="10"
-                  pt="3"
-                  pr="10"
-                  pb="3"
+                  pl="8"
+                  pt="2"
+                  pr="8"
+                  pb="2"
                   bg="rgb(119,191,120)"
                   textsize="14"
                   :url="img.plus"
@@ -597,6 +586,8 @@ export default {
       combinationThreeInputValues: [],
       parentID: null,
       tableShowHide: false,
+      requiredData: [],
+      disabledButtun: false,
     }
   },
 
@@ -631,6 +622,9 @@ export default {
         ? (this.noDataRow = false)
         : (this.noDataRow = true)
     },
+    ResData(val) {
+      this.requiredLookUpAndInputCheckerAction(val)
+    },
   },
 
   // MOUNTED
@@ -646,12 +640,38 @@ export default {
 
     // Arrayni bo'sh object dan tozalash
     arrayFiltered() {
-      // eslint-disable-next-line array-callback-return
-      this.ResData = this.ResData.filter((obj) => {
-        if (Object.keys(obj).length > 8) return obj
-      })
+      this.ResData = this.ResData.filter((obj) => Object.keys(obj).length > 8)
     },
     // Arrayni bo'sh object dan tozalash
+
+    // LookUp va Input'larning required'larini tekshiradi
+    requiredLookUpAndInputCheckerAction(data) {
+      const arr = this.filteredTablehead.filter(
+        (obj) =>
+          obj.required &&
+          (obj.type === 'list' || obj.type === 'float' || obj.type === 'date')
+      )
+
+      arr.forEach((obj) => {
+        data.forEach((subObj, index) => {
+          if (subObj?.[obj.name] && this.requiredData[index])
+            this.requiredData[index][obj.name] = true
+          else if (subObj?.[obj.name] && !this.requiredData[index])
+            this.requiredData.push({ [obj.name]: true })
+          else if (!subObj?.[obj.name] && this.requiredData[index])
+            this.requiredData[index][obj.name] = false
+          else this.requiredData.push({ [obj.name]: false })
+        })
+      })
+      this.requiredData = this.requiredData.splice(0, this.tableBody.length)
+      this.disabledButton = this.requiredData.find((obj) =>
+        Object.values(obj).includes(false)
+      )
+      if (this.disabledButton) this.disabledButton = true
+      else this.disabledButton = false
+      this.$emit('requiredAction', this.disabledButton, 'top')
+    },
+    // LookUp va Input'larning required'larini tekshiradi
 
     // static filter
     ResDataFiltered() {
@@ -730,7 +750,9 @@ export default {
         this.inputValuesObj.set(key, value)
         this.ResData.push(Object.fromEntries(this.inputValuesObj))
       }
-
+      // function
+      this.requiredLookUpAndInputCheckerAction(this.ResData, order)
+      // function
       if (
         key === 'qty' ||
         key === 'unitPrice' ||
@@ -761,6 +783,8 @@ export default {
         this.inputValuesObj.set(key, this.lookUpVal(resultType, value, name))
         this.ResData.push(Object.fromEntries(this.inputValuesObj))
       }
+      // function
+      this.requiredLookUpAndInputCheckerAction(this.ResData, order)
     },
     // Lookup's Valuesini olish
 
@@ -833,14 +857,25 @@ export default {
       this.isOpenModal = isClose
     },
 
-    // Modal uchun ishlaydi
+    // Modal uchun: Accept button bosilganda ishlaydi
     modalAcceptAction(objBack) {
       this.showHideRow = false
       this.tableBody.push(this.filteredTablehead)
       this.ResData.push(objBack)
       this.newEditObjData = this.ResData
+      // function
+      this.requiredLookUpAndInputCheckerAction(this.ResData)
+
+      this.ResData.forEach((obj, index) => {
+        this.combinationThreeInputValues[index] = {
+          qty: parseFloat(obj?.qty),
+          unitPrice: parseFloat(obj?.unitPrice),
+          cashPrice: parseFloat(obj?.cashPrice),
+          vat: parseFloat(obj?.vat),
+        }
+      })
     },
-    // Modal uchun ishlaydi
+    // Modal uchun: Accept button bosilganda ishlaydi
 
     // Save button click qilganda ishlaydi
     getSaveRowAction() {
@@ -893,6 +928,12 @@ export default {
         this.isCanAdd = false
       }
     },
+
+    // new list dispatch
+    getNewList() {
+      this.$emit('getNewList', this.twoResData)
+    },
+    // new list dispatch
 
     // Total hisoblavchi function start
     totalAction() {

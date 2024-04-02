@@ -112,7 +112,7 @@
               class="w-[17%] border-[1px] border-[solid] border-[#778899] p-[2px]"
             >
               <LookUp
-                :defvalue="userId ? objData?.paymentType?.text : ''"
+                :defvalue="userId || parentID ? objData?.paymentType?.text : ''"
                 durl="invoiceBase/findAllPaymentType"
                 dwidth="100"
                 widthtype="%"
@@ -157,7 +157,7 @@
             <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
               <LookUp
                 :defvalue="
-                  userId
+                  userId || parentID
                     ? objData?.company?.text
                     : objData?.supplierCurSymbol?.text
                 "
@@ -254,7 +254,7 @@
             </td>
             <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
               <GenericInput
-                :value="userId ? objData?.invoiceBillStatus : ''"
+                :value="userId || parentID ? objData?.invoiceBillStatus : ''"
                 width="50"
                 widthtype="%"
                 height="23"
@@ -755,12 +755,12 @@
         <GenericButton
           v-if="subTable || userId"
           name="Logistics Calculation"
-          pl="10"
-          pt="3"
-          pr="10"
-          pb="3"
-          bggradient="linear-gradient(to top, rgb(108,105,199),rgba(108,105,199, 0.58))"
+          pl="8"
+          pt="2"
+          pr="8"
+          pb="2"
           textsize="14"
+          bggradient="linear-gradient(to top, rgb(108,105,199),rgba(108,105,199, 0.58))"
           class="my-1"
           :url="img.logistics"
           :istherepicture="true"
@@ -769,12 +769,12 @@
         <GenericButton
           v-else
           name="Accept"
-          pl="10"
-          pt="3"
-          pr="10"
-          pb="3"
-          bg="rgba(54, 155, 215, 0.8)"
+          pl="8"
+          pt="2"
+          pr="8"
+          pb="2"
           textsize="14"
+          bg="rgba(54, 155, 215, 0.8)"
           class="my-1"
           @click="additionInvoiceItem"
         />
@@ -791,139 +791,258 @@
           class="border-[1px] border-[solid] border-[rgba(119,136,153,0.5)] p-[8px_0_8px_8px]"
         >
           <h1 class="text-[13px]">Invoice Item</h1>
-          <div class="flex gap-1">
+          <div class="flex gap-1 flex-wrap">
             <GenericButton
               name="Column Setting"
-              pl="10"
-              pt="3"
-              pr="10"
-              pb="3"
-              bggradient="linear-gradient(to top, rgb(25,52,79),rgba(25,52,79, 0.58))"
+              pl="8"
+              pt="2"
+              pr="8"
+              pb="2"
               textsize="14"
+              bggradient="linear-gradient(to top, rgb(25,52,79),rgba(25,52,79, 0.58))"
               :url="img.setting"
               :istherepicture="true"
               @click="openColumnConfig"
             />
-            <template v-if="hideButton">
-              <GenericButton
-                name="Save"
-                pl="10"
-                pt="3"
-                pr="10"
-                pb="3"
-                bg="rgb(119,191,66)"
-                textsize="14"
-                @click="saveInvoice"
-                @customInputValueObj="getFilterData"
-              />
-            </template>
-            <template v-else>
-              <GenericButton
-                name="Edit"
-                pl="10"
-                pt="3"
-                pr="10"
-                pb="3"
-                bg="rgb(119,191,66)"
-                textsize="14"
-                :url="img.edit"
-                :istherepicture="true"
-                @click="editInvoice"
-              />
-            </template>
             <GenericButton
-              name="Make Bill"
-              pl="10"
-              pt="3"
-              pr="10"
-              pb="3"
-              bg="rgba(54, 155, 215, 0.8)"
+              v-if="hideButton"
+              name="Save"
+              pl="8"
+              pt="2"
+              pr="8"
+              pb="2"
               textsize="14"
+              bg="rgb(119,191,66)"
+              :disabled="disabledButton"
+              disabled-bg="rgba(119,191,66,0.6)"
+              @click="saveInvoice"
+              @customInputValueObj="getFilterData"
+            />
+            <GenericButton
+              v-else
+              name="Edit"
+              pl="8"
+              pt="2"
+              pr="8"
+              pb="2"
+              textsize="14"
+              bg="rgb(119,191,66)"
+              :url="img.edit"
+              :istherepicture="true"
+              @click="editInvoice"
+            />
+            <GenericButton
+              v-if="isMakeAndUnBill"
+              name="Un Bill"
+              pl="8"
+              pt="2"
+              pr="8"
+              pb="2"
+              textsize="14"
+              bg="rgba(54, 155, 215, 0.8)"
+              @click="makeAndUnBillAction"
+            />
+            <GenericButton
+              v-else
+              name="Make Bill"
+              pl="8"
+              pt="2"
+              pr="8"
+              pb="2"
+              textsize="14"
+              bg="rgba(54, 155, 215, 0.8)"
+              @click="makeAndUnBillAction"
             />
             <GenericButton
               name="Print Preview"
-              pl="10"
-              pt="3"
-              pr="10"
-              pb="3"
-              bg="rgba(126,183,62, 0.8)"
+              pl="8"
+              pt="2"
+              pr="8"
+              pb="2"
               textsize="14"
+              bg="rgba(126,183,62, 0.8)"
               :url="img.printer"
               :istherepicture="true"
             />
             <GenericButton
+              v-if="!isMakeAndUnBill && !undoPayment.topUndoPayment"
               name="Delete"
-              pl="10"
-              pt="3"
-              pr="10"
-              pb="3"
-              bggradient="linear-gradient(to top, rgb(108,33,38),rgba(108,33,38,0.65))"
+              pl="8"
+              pt="2"
+              pr="8"
+              pb="2"
               textsize="14"
+              bggradient="linear-gradient(to top, rgb(108,33,38),rgba(108,33,38,0.65))"
               :url="img.del"
               :istherepicture="true"
               @click="deleteInvoice"
             />
-            <GenericInput
-              width="120"
-              height="30"
-              pl="10"
-              pr="10"
-              pt="2"
-              pb="2"
-              textsize="13"
-              type="number"
-              placeholder="Change price"
-            />
-            <GenericInput
-              width="120"
-              height="30"
-              pl="10"
-              pr="10"
-              pt="2"
-              pb="2"
-              textsize="13"
-              type="number"
-              placeholder="Change vat"
-            />
+            <template v-if="isEdit || staticBtns">
+              <GenericButton
+                name="copyToInternal"
+                pl="8"
+                pt="2"
+                pr="8"
+                pb="2"
+                textsize="14"
+                bg="rgba(54, 155, 215, 0.8)"
+              />
+              <GenericButton
+                name="copyToExternal"
+                pl="8"
+                pt="2"
+                pr="8"
+                pb="2"
+                textsize="14"
+                bg="rgba(54, 155, 215, 0.8)"
+              />
+              <GenericButton
+                name="Print Barcode"
+                pl="8"
+                pt="2"
+                pr="8"
+                pb="2"
+                textsize="14"
+                bg="rgba(54, 155, 215, 0.8)"
+              />
+              <GenericButton
+                name="Sms notify"
+                pl="8"
+                pt="2"
+                pr="8"
+                pb="2"
+                textsize="14"
+                bg="rgba(54, 155, 215, 0.8)"
+              />
+              <GenericButton
+                name="Calculate Gramm 1"
+                pl="8"
+                pt="2"
+                pr="8"
+                pb="2"
+                textsize="14"
+                bg="rgba(54, 155, 215, 0.8)"
+              />
+              <GenericButton
+                name="Calculate Gramm 2"
+                pl="8"
+                pt="2"
+                pr="8"
+                pb="2"
+                textsize="14"
+                bg="rgba(54, 155, 215, 0.8)"
+              />
+              <GenericButton
+                name="Print all Barcode"
+                pl="8"
+                pt="2"
+                pr="8"
+                pb="2"
+                textsize="14"
+                bg="rgba(54, 155, 215, 0.8)"
+              />
+              <GenericButton
+                name="changeUsedItemsPriceAccess"
+                pl="8"
+                pt="2"
+                pr="8"
+                pb="2"
+                textsize="14"
+                bggradient="linear-gradient(to top, rgb(108,33,38),rgba(108,33,38,0.65))"
+                @click="
+                  changePriceAccessAndCompanyAction('changeUsedInvoiceItems')
+                "
+              />
+              <GenericInput
+                width="100"
+                height="28"
+                pl="10"
+                pr="10"
+                pt="2"
+                pb="2"
+                textsize="13"
+                type="number"
+                placeholder="Barcode"
+              />
+              <GenericInput
+                width="100"
+                height="28"
+                pl="10"
+                pr="10"
+                pt="2"
+                pb="2"
+                textsize="13"
+                type="number"
+                placeholder="External barcode"
+              />
+            </template>
           </div>
-          <div class="my-1">
-            <LookUp
-              durl="invoiceBase/findAllCompanyForInvoice"
-              dwidth="200"
-              dlist="200"
-              name="companyForInvoice"
-              @customFunction="getLookUpValue"
-            />
-            <LookUp
-              durl="invoiceBase/findAllPaymentType"
-              dwidth="200"
-              dlist="200"
-            />
-          </div>
-          <template>
+          <div class="my-3 flex items-end gap-1">
+            <span v-if="false">
+              <label class="text-[15px]"
+                >{{ tableNameTranslateObj.allEdit }}
+                {{ tableNameTranslateObj.supplier }}</label
+              >
+              <LookUp
+                durl="invoiceBase/searchProductList"
+                dwidth="200"
+                dlist="200"
+              />
+            </span>
+            <span>
+              <label class="text-[13px]"
+                >{{ tableNameTranslateObj.allEdit }}
+                {{ tableNameTranslateObj.supplier }}</label
+              >
+              <LookUp
+                durl="invoiceBase/findAllCompanyForInvoice"
+                dwidth="200"
+                dlist="200"
+                name="supplier"
+                @customFunction="getLookUpValue"
+              />
+            </span>
+            <span>
+              <label class="text-[13px]"
+                >{{ tableNameTranslateObj.allEdit }}
+                {{ tableNameTranslateObj.paymentType }}</label
+              >
+              <LookUp
+                durl="invoiceBase/findAllPaymentType"
+                dwidth="200"
+                dlist="200"
+                name="paymentType"
+                @customFunction="getLookUpValue"
+              />
+            </span>
             <GenericButton
               name="Change Invoice Company"
-              pl="10"
+              pl="8"
               pt="3"
-              pr="10"
+              pr="8"
               pb="3"
+              textsize="13"
               bggradient="linear-gradient(to top, rgb(108,33,38),rgba(108,33,38,0.65))"
-              textsize="14"
+              @click="
+                changePriceAccessAndCompanyAction('changeUsedInvoiceCompany')
+              "
             />
-            <GenericPrepareTablePage
-              ref="invoiceRef"
-              :tablehead="tableData"
-              :tableheadlength="tableData.length"
-              :addmodalorrow="openPopup"
-              :response-data="responseData"
-              :ui-show-hide="uiShowHide"
-              :isedit="isEdit"
-              :height="450"
-              :default-values="productValues"
-              class="bg-[rgba(255,255,255,0.5)] mt-1"
-              @rowValues="getRowElements"
-            />
-          </template>
+          </div>
+          <GenericPrepareTablePage
+            ref="invoiceRef"
+            :tablehead="tableData"
+            :tableheadlength="tableData.length"
+            :addmodalorrow="openPopup"
+            :response-data="responseData"
+            :ui-show-hide="uiShowHide"
+            :isedit="isEdit"
+            :height="450"
+            :default-values="productValues"
+            class="bg-[rgba(255,255,255,0.5)] mt-1"
+            @rowValues="getRowElements"
+            @getNewList="getList"
+            @requiredAction="getDisabledValue"
+          />
           <!-- sub list -->
           <div
             v-if="subListShowHide || isEdit"
@@ -947,7 +1066,6 @@
             </div>
           </div>
           <!-- sub list -->
-          <!-- ============ -->
           <template v-if="subTable || isEdit">
             <strong class="text-[15px]"
               >Payment Details.
@@ -959,10 +1077,10 @@
               <GenericButton
                 v-if="undoPayment.topUndoPayment"
                 name="Undo Payment"
-                pl="10"
-                pt="3"
-                pr="10"
-                pb="3"
+                pl="8"
+                pt="2"
+                pr="8"
+                pb="2"
                 bggradient="linear-gradient(to top, rgb(25,52,79),rgba(25,52,79,0.5))"
                 textsize="14"
                 color="rgb(255,229,142)"
@@ -972,10 +1090,10 @@
                 <GenericButton
                   v-if="editPayDiscard.editPayShowHide1"
                   name="Edit"
-                  pl="10"
-                  pt="3"
-                  pr="10"
-                  pb="3"
+                  pl="8"
+                  pt="2"
+                  pr="8"
+                  pb="2"
                   bggradient="linear-gradient(to top, rgb(25,52,79),rgba(25,52,79,0.5))"
                   textsize="14"
                   :url="editPayDiscard.editPayShowHide1 ? img.edit : ''"
@@ -985,10 +1103,12 @@
                 <GenericButton
                   v-else
                   name="Pay"
-                  pl="10"
-                  pt="3"
-                  pr="10"
-                  pb="3"
+                  pl="8"
+                  pt="2"
+                  pr="8"
+                  pb="2"
+                  :disabled="subDisabledButton"
+                  disabled-bg="rgba(25,52,79,0.5)"
                   bggradient="linear-gradient(to top, rgb(25,52,79),rgba(25,52,79,0.5))"
                   textsize="14"
                   @click="payTransactionColumns('topP')"
@@ -996,10 +1116,10 @@
                 <GenericButton
                   v-if="editPayDiscard.discardShowHide1"
                   name="Discard"
-                  pl="10"
-                  pt="3"
-                  pr="10"
-                  pb="3"
+                  pl="8"
+                  pt="2"
+                  pr="8"
+                  pb="2"
                   bggradient="linear-gradient(to top, rgb(205,210,212),rgba(205,210,212,0.65))"
                   textsize="14"
                   color="rgb(190,72,77)"
@@ -1018,6 +1138,7 @@
               :default-values="transactionsList"
               class="bg-[rgba(255,255,255,0.5)] mt-2"
               @rowValues="getSubRowElements"
+              @requiredAction="getDisabledValue"
             />
           </template>
           <template v-if="subTable || isEdit">
@@ -1031,10 +1152,10 @@
               <GenericButton
                 v-if="undoPayment.subUndoPayment"
                 name="Undo Payment"
-                pl="10"
-                pt="3"
-                pr="10"
-                pb="3"
+                pl="8"
+                pt="2"
+                pr="8"
+                pb="2"
                 bggradient="linear-gradient(to top, rgb(25,52,79),rgba(25,52,79,0.5))"
                 textsize="14"
                 color="rgb(255,229,142)"
@@ -1044,10 +1165,10 @@
                 <GenericButton
                   v-if="editPayDiscard.editPayShowHide2"
                   name="Edit"
-                  pl="10"
-                  pt="3"
-                  pr="10"
-                  pb="3"
+                  pl="8"
+                  pt="2"
+                  pr="8"
+                  pb="2"
                   bggradient="linear-gradient(to top, rgb(25,52,79),rgba(25,52,79,0.5))"
                   textsize="14"
                   :url="editPayDiscard.editPayShowHide2 ? img.edit : ''"
@@ -1057,10 +1178,12 @@
                 <GenericButton
                   v-else
                   name="Pay"
-                  pl="10"
-                  pt="3"
-                  pr="10"
-                  pb="3"
+                  pl="8"
+                  pt="2"
+                  pr="8"
+                  pb="2"
+                  :disabled="subTwoDisabledButton"
+                  disabled-bg="rgba(25,52,79,0.5)"
                   bggradient="linear-gradient(to top, rgb(25,52,79),rgba(25,52,79,0.5))"
                   textsize="14"
                   @click="payTransactionColumns('subP')"
@@ -1068,10 +1191,10 @@
                 <GenericButton
                   v-if="editPayDiscard.discardShowHide2"
                   name="Discard"
-                  pl="10"
-                  pt="3"
-                  pr="10"
-                  pb="3"
+                  pl="8"
+                  pt="2"
+                  pr="8"
+                  pb="2"
                   bggradient="linear-gradient(to top, rgb(205,210,212),rgba(205,210,212,0.65))"
                   textsize="14"
                   color="rgb(190,72,77)"
@@ -1090,9 +1213,9 @@
               :default-values="transactionsExtraList"
               class="bg-[rgba(255,255,255,0.5)] mt-2"
               @rowValues="getSubRowElements"
+              @requiredAction="getDisabledValue"
             />
           </template>
-          <!-- ============ -->
         </div>
       </div>
     </div>
@@ -1161,6 +1284,7 @@ export default {
         'driverName',
         'plateNumber',
         'car',
+        'allEdit',
       ],
       subListArrayLeft: [
         'Net Amount: USD($)',
@@ -1240,6 +1364,13 @@ export default {
       subUiShowHideTwo: false,
       subListData: {},
       subListShowHide: false,
+      makeAndUnBill: false,
+      isMakeAndUnBill: false,
+      staticBtns: false,
+      newListData: [],
+      disabledButton: false,
+      subDisabledButton: false,
+      subTwoDisabledButton: false,
     }
   },
 
@@ -1303,7 +1434,11 @@ export default {
 
     // preparePurchaseInvoiceNewAjaxLoad api
     getPageRequest() {
-      const id = this.userId ? this.userId : null
+      const id = this.parentID
+        ? this.parentID
+        : this.userId
+        ? this.userId
+        : null
       this.isLoading = !this.isLoading
       this.$axios
         .post(
@@ -1327,15 +1462,26 @@ export default {
           this.editOpen = data?.autoEditOpen
           this.autoHeight = data?.autoHeight
           this.transactionColumns = data?.transactionColumns
+          if (this.isEdit) {
+            if (data?.invoiceJson?.paymentType?.text) this.makeAndUnBill = true
+            else this.makeAndUnBill = false
+          }
+          if (this.isEdit) {
+            if (data?.invoiceJson?.invoiceBillStatus === 'BILLED')
+              this.isMakeAndUnBill = true
+            else this.isMakeAndUnBill = false
+          }
+          // function
           this.leftRightDataFilter()
+          // function
           this.getFilterData()
+          // function
           this.transactionColumnsFiltered()
           data?.invoiceJson?.transactionsList.length &&
             (this.undoPayment.topUndoPayment = true)
-          if (data?.invoiceJson?.transactionsExtraList.length) {
+          if (data?.invoiceJson?.transactionsExtraList) {
             this.editPayDiscard.editPayShowHide2 = true
             this.editPayDiscard.discardShowHide2 = false
-            // (this.undoPayment.subUndoPayment = true)
           }
           this.isLoading = !this.isLoading
         })
@@ -1494,15 +1640,50 @@ export default {
       this.checkModal = true
     },
 
-    // delete Invoice
-    deleteInvoice() {
+    // Save || Pay button'larni disabled qilish
+    getDisabledValue(disabledVal, type) {
+      if (type === 'top') this.disabledButton = disabledVal
+      else if (type === 'bottom') this.subDisabledButton = disabledVal
+      else if (type === 'subBottom') this.subTwoDisabledButton = disabledVal
+    },
+
+    // Change Price Access and Change Company action
+    // new List olish
+    getList(arr) {
+      this.newListData = arr
+    },
+    changePriceAccessAndCompanyAction(prop) {
+      this.$refs.invoiceRef.getNewList()
+      if (prop === 'changeUsedInvoiceItems' && !this.hideButton) {
+        let requestBody = ''
+        this.newListData.forEach((obj, index) => {
+          requestBody += obj?.id
+          if (index !== this.responseData.length - 1) {
+            requestBody += ','
+          }
+        })
+        this.changePriceAccessAndCompanyRequest(prop, requestBody)
+      } else if (prop === 'changeUsedInvoiceCompany' && !this.hideButton) {
+        const requestBody = {
+          id: this.parentID ? this.parentID : this.userId,
+          company: { id: this.lookUpValues?.supplier },
+          paymentType: { id: this.lookUpValues?.paymentType },
+        }
+        if (requestBody.id && requestBody.company && requestBody.paymentType)
+          this.changePriceAccessAndCompanyRequest(prop, requestBody)
+      }
+    },
+
+    // Change Price Access and Change Company action request
+    changePriceAccessAndCompanyRequest(prop, requestBody) {
       this.isLoading = !this.isLoading
       this.$axios
         .post(
-          `/invoices/prepareDeleteInvoiceUrl`,
-          {
-            id: this.parentID ? Number(this.parentID) : Number(this.userId),
-          },
+          `/invoices/${prop}`,
+
+          prop === 'changeUsedInvoiceItems'
+            ? { idsItems: requestBody }
+            : { invoice: requestBody },
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -1512,13 +1693,76 @@ export default {
         )
         .then((res) => {
           this.isLoading = !this.isLoading
-          if (res.status === 200) this.$router.push('/purchaseinvoice.htm')
+          if (res.status === 200) {
+            this.getPageRequest()
+          }
         })
         .catch((error) => {
           this.isLoading = !this.isLoading
           // eslint-disable-next-line no-console
           console.log(error)
         })
+    },
+
+    // Make Bill and Un Bill action
+    makeAndUnBillAction() {
+      if (this.makeAndUnBill) {
+        this.isLoading = !this.isLoading
+        this.$axios
+          .post(
+            `/invoices/makeBillInvoiceUrl`,
+            {
+              id: this.parentID ? Number(this.parentID) : Number(this.userId),
+            },
+            {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
+                'x-auth-token': localStorage.getItem('authToken'),
+              },
+            }
+          )
+          .then((res) => {
+            this.isLoading = !this.isLoading
+            if (res.status === 200) {
+              this.getPageRequest()
+              this.isMakeAndUnBill = !this.isMakeAndUnBill
+            }
+          })
+          .catch((error) => {
+            this.isLoading = !this.isLoading
+            // eslint-disable-next-line no-console
+            console.log(error)
+          })
+      }
+    },
+
+    // delete Invoice
+    deleteInvoice() {
+      if (!this.hideButton) {
+        this.isLoading = !this.isLoading
+        this.$axios
+          .post(
+            `/invoices/prepareDeleteInvoiceUrl`,
+            {
+              id: this.parentID ? Number(this.parentID) : Number(this.userId),
+            },
+            {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
+                'x-auth-token': localStorage.getItem('authToken'),
+              },
+            }
+          )
+          .then((res) => {
+            this.isLoading = !this.isLoading
+            if (res.status === 200) this.$router.push('/purchaseinvoice.htm')
+          })
+          .catch((error) => {
+            this.isLoading = !this.isLoading
+            // eslint-disable-next-line no-console
+            console.log(error)
+          })
+      }
     },
 
     // edit invoice
@@ -1529,6 +1773,7 @@ export default {
         this.parentID ? this.parentID : this.userId
       )
       this.uiShowHide = false
+      this.makeAndUnBill = false
     },
 
     getRowElements(arr, hideBtn, id) {
@@ -1596,15 +1841,11 @@ export default {
         .then(({ data }) => {
           this.transactionsList = data?.invoiceJson?.transactionsList
           this.transactionsExtraList = data?.invoiceJson?.transactionsExtraList
-          if (prop === 'topP' && data.invoiceJson?.transactionsList.length) {
+          if (prop === 'topP' && this.transactionsList.length) {
             this.subUiShowHide = true
             this.undoPayment.topUndoPayment = true
-          } else if (
-            prop === 'subP' &&
-            data.invoiceJson?.transactionsExtraList.length
-          ) {
+          } else if (prop === 'subP' && this.transactionsExtraList) {
             this.subUiShowHideTwo = true
-            // this.undoPayment.subUndoPayment = true
             this.editPayDiscard.editPayShowHide2 = true
             this.editPayDiscard.discardShowHide2 = false
           }
@@ -1690,189 +1931,198 @@ export default {
     },
 
     saveInvoice() {
-      // GenericTablePage da ishlab beruvchi function
-      this.$refs.invoiceRef.getSaveRowAction()
+      if (!this.disabledButton) {
+        // GenericTablePage da ishlab beruvchi function
+        this.$refs.invoiceRef.getSaveRowAction()
 
-      // GenericTablePage da subTable uchun
-      this.subListShowHide = true
-      this.subTable = true
-      const inputValues = this.inputValues
-      const lookupValues = this.lookUpValues
-      const objData = this.objData
+        // GenericTablePage da subTable uchun
+        this.subListShowHide = true
+        this.subTable = true
+        const inputValues = this.inputValues
+        const lookupValues = this.lookUpValues
+        const objData = this.objData
 
-      // input values
-      const dateBack = new Date(objData.date)
-        .toLocaleString('en-GB')
-        .split(',')
-        .join('')
+        // input values
+        const dateBack = new Date(objData.date)
+          .toLocaleString('en-GB')
+          .split(',')
+          .join('')
 
-      let date = inputValues.date ? inputValues.date : dateBack
-      const splitDate = date.split(' ')
-      date = splitDate[0].split('/').reverse().join('-') + 'T' + splitDate[1]
+        let date = inputValues.date ? inputValues.date : dateBack
+        const splitDate = date.split(' ')
+        date = splitDate[0].split('/').reverse().join('-') + 'T' + splitDate[1]
 
-      const sellDateBack = new Date(objData.date)
-        .toLocaleString('en-GB')
-        .split(',')
-        .join('')
+        const sellDateBack = new Date(objData.date)
+          .toLocaleString('en-GB')
+          .split(',')
+          .join('')
 
-      let sellDate = inputValues.sellDate ? inputValues.sellDate : sellDateBack
-      const splitSellDate = sellDate.split(' ')
-      sellDate =
-        splitSellDate[0].split('/').reverse().join('-') + 'T' + splitSellDate[1]
+        let sellDate = inputValues.sellDate
+          ? inputValues.sellDate
+          : sellDateBack
+        const splitSellDate = sellDate.split(' ')
+        sellDate =
+          splitSellDate[0].split('/').reverse().join('-') +
+          'T' +
+          splitSellDate[1]
 
-      const currencyRate = this.propsValue?.supplare?.value
-        ? this.propsValue?.supplare?.value
-        : objData?.currencyRate?.text
-        ? objData?.currencyRate?.text
-        : objData?.currencyRate
+        const currencyRate = this.propsValue?.supplare?.value
+          ? this.propsValue?.supplare?.value
+          : objData?.currencyRate?.text
+          ? objData?.currencyRate?.text
+          : objData?.currencyRate
 
-      const driverName = inputValues?.driverName
-        ? this.inputValues?.driverName
-        : ''
+        const driverName = inputValues?.driverName
+          ? this.inputValues?.driverName
+          : ''
 
-      const companyRefCurrencyRate = inputValues?.companyRefCurrencyRate
-        ? this.inputValues?.companyRefCurrencyRate
-        : this.propsValue?.branch?.value
-        ? this.propsValue?.branch?.value
-        : objData?.companyRefCurrencyRate?.text
-        ? objData?.companyRefCurrencyRate?.text
-        : objData?.companyRefCurrencyRate
+        const companyRefCurrencyRate = inputValues?.companyRefCurrencyRate
+          ? this.inputValues?.companyRefCurrencyRate
+          : this.propsValue?.branch?.value
+          ? this.propsValue?.branch?.value
+          : objData?.companyRefCurrencyRate?.text
+          ? objData?.companyRefCurrencyRate?.text
+          : objData?.companyRefCurrencyRate
 
-      const companyCurrencyRate = inputValues?.companyRefCurrencyRate
-        ? this.inputValues?.companyCurrencyRate
-        : this.propsValue?.supplare?.value
-        ? this.propsValue?.supplare?.value
-        : objData?.companyCurrencyRate?.text
-        ? objData?.companyCurrencyRate?.text
-        : objData?.companyCurrencyRate
+        const companyCurrencyRate = inputValues?.companyRefCurrencyRate
+          ? this.inputValues?.companyCurrencyRate
+          : this.propsValue?.supplare?.value
+          ? this.propsValue?.supplare?.value
+          : objData?.companyCurrencyRate?.text
+          ? objData?.companyCurrencyRate?.text
+          : objData?.companyCurrencyRate
 
-      const invoiceNominal = this.inputValues?.invoiceNominal
-        ? this.inputValues?.invoiceNominal
-        : objData?.invoiceNominal?.text
-        ? objData?.invoiceNominal?.text
-        : objData?.invoiceNominal
+        const invoiceNominal = this.inputValues?.invoiceNominal
+          ? this.inputValues?.invoiceNominal
+          : objData?.invoiceNominal?.text
+          ? objData?.invoiceNominal?.text
+          : objData?.invoiceNominal
 
-      const systemNumber = inputValues?.systemNumber
-        ? this.inputValues?.systemNumber
-        : ''
+        const systemNumber = inputValues?.systemNumber
+          ? this.inputValues?.systemNumber
+          : ''
 
-      const invoiceStatus = inputValues?.invoiceStatus
-        ? this.inputValues?.invoiceStatus
-        : ''
+        const invoiceStatus = inputValues?.invoiceStatus
+          ? this.inputValues?.invoiceStatus
+          : ''
 
-      const invoiceBillStatus = inputValues?.invoiceBillStatus
-        ? this.inputValues?.invoiceBillStatus
-        : ''
+        const invoiceBillStatus = inputValues?.invoiceBillStatus
+          ? this.inputValues?.invoiceBillStatus
+          : ''
 
-      // lookup values
-      const calcType = lookupValues?.calc_type
-        ? lookupValues?.calc_type
-        : objData?.calc_type?.id
+        // lookup values
+        const calcType = lookupValues?.calc_type
+          ? lookupValues?.calc_type
+          : objData?.calc_type?.id
 
-      const order = lookupValues?.order
-        ? lookupValues?.order
-        : objData?.order?.id
+        const order = lookupValues?.order
+          ? lookupValues?.order
+          : objData?.order?.id
 
-      const branch = lookupValues?.branch
-        ? lookupValues?.branch
-        : objData.branch?.id
+        const branch = lookupValues?.branch
+          ? lookupValues?.branch
+          : objData.branch?.id
 
-      const companyGroup = lookupValues?.companyGroup
-        ? lookupValues?.companyGroup
-        : objData?.companyGroup?.id
+        const companyGroup = lookupValues?.companyGroup
+          ? lookupValues?.companyGroup
+          : objData?.companyGroup?.id
 
-      const supplier = lookupValues?.supplier
-        ? lookupValues?.supplier
-        : objData?.supplier?.id
+        const supplier = lookupValues?.supplier
+          ? lookupValues?.supplier
+          : objData?.supplier?.id
 
-      const currency = lookupValues?.currency
-        ? lookupValues?.currency
-        : objData?.currency?.id
+        const currency = lookupValues?.currency
+          ? lookupValues?.currency
+          : objData?.currency?.id
 
-      const department = lookupValues?.department
-        ? lookupValues?.department
-        : objData?.department?.id
+        const department = lookupValues?.department
+          ? lookupValues?.department
+          : objData?.department?.id
 
-      const paymentType = lookupValues?.paymentType
-        ? lookupValues?.paymentType
-        : objData?.paymentType?.id
+        const paymentType = lookupValues?.paymentType
+          ? lookupValues?.paymentType
+          : objData?.paymentType?.id
 
-      const orderProductionType = lookupValues?.orderProductionType
-        ? lookupValues?.orderProductionType
-        : objData?.orderProductionType?.id
+        const orderProductionType = lookupValues?.orderProductionType
+          ? lookupValues?.orderProductionType
+          : objData?.orderProductionType?.id
 
-      const warehouse = lookupValues?.warehouse
-        ? lookupValues?.warehouse
-        : objData?.warehouse?.id
+        const warehouse = lookupValues?.warehouse
+          ? lookupValues?.warehouse
+          : objData?.warehouse?.id
 
-      const requestBody = {
-        invoice: {
-          branch: { id: Number(branch) },
-          calc_type: calcType,
-          company: { id: Number(supplier) },
-          companyCurrencyRate,
-          companyGroup: { id: Number(companyGroup) },
-          companyRefCurrencyRate,
-          currency: { id: Number(currency) },
-          currencyRate,
-          date,
-          department: { id: Number(department) },
-          driverName,
-          id: this.isEdit ? this.id : this.parentID ? this.parentID : null,
-          invoiceBillStatus,
-          invoiceItems: this.invoiceList,
-          invoiceNo: '',
-          invoiceNominal,
-          invoiceNumber: '',
-          invoiceStatus,
-          notes: '',
-          order,
-          orderProductionType: { id: Number(orderProductionType) },
-          paymentType: { id: Number(paymentType) },
-          sellDate,
-          sequenceNumber: '',
-          systemNumber,
-          warehouse: { id: Number(warehouse) },
-        },
+        const requestBody = {
+          invoice: {
+            branch: { id: Number(branch) },
+            calc_type: calcType,
+            company: { id: Number(supplier) },
+            companyCurrencyRate,
+            companyGroup: { id: Number(companyGroup) },
+            companyRefCurrencyRate,
+            currency: { id: Number(currency) },
+            currencyRate,
+            date,
+            department: { id: Number(department) },
+            driverName,
+            id: this.isEdit ? this.id : this.parentID ? this.parentID : null,
+            invoiceBillStatus,
+            invoiceItems: this.invoiceList,
+            invoiceNo: '',
+            invoiceNominal,
+            invoiceNumber: '',
+            invoiceStatus,
+            notes: '',
+            order,
+            orderProductionType: { id: Number(orderProductionType) },
+            paymentType: { id: Number(paymentType) },
+            sellDate,
+            sequenceNumber: '',
+            systemNumber,
+            warehouse: { id: Number(warehouse) },
+          },
+        }
+
+        // Open qilib kirilganda jo'natiladigan 'request body'
+        const editRequestBody = {
+          invoice: {
+            calc_type: calcType,
+            companyCurrencyRate,
+            companyRefCurrencyRate,
+            currency: { id: Number(currency) },
+            currencyRate,
+            id: this.isEdit ? this.id : this.parentID ? this.parentID : null,
+            invoiceItems: this.invoiceList,
+            invoiceNominal,
+            order,
+            paymentType: { id: Number(paymentType) },
+          },
+        }
+
+        this.$axios
+          .post(
+            `/invoice/prepareCreateEditPurchaseInvoiceEx`,
+            this.isEdit ? editRequestBody : requestBody,
+            {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
+                'x-auth-token': localStorage.getItem('authToken'),
+              },
+            }
+          )
+          .then(({ data }) => {
+            this.parentID = data?.id
+            this.responseData = data?.invoiceItems
+            this.subListData = data
+            data?.invoiceItems.length && (this.uiShowHide = true)
+            if (!this.isEdit && data?.paymentType?.text)
+              this.makeAndUnBill = true
+            else this.makeAndUnBill = false
+          })
+          .catch((error) => {
+            // eslint-disable-next-line no-console
+            console.log(error)
+          })
       }
-
-      // Open qilib kirilganda jo'natiladigan 'request body'
-      const editRequestBody = {
-        invoice: {
-          calc_type: calcType,
-          companyCurrencyRate,
-          companyRefCurrencyRate,
-          currency: { id: Number(currency) },
-          currencyRate,
-          id: this.isEdit ? this.id : this.parentID ? this.parentID : null,
-          invoiceItems: this.invoiceList,
-          invoiceNominal,
-          order,
-          paymentType: { id: Number(paymentType) },
-        },
-      }
-
-      this.$axios
-        .post(
-          `/invoice/prepareCreateEditPurchaseInvoiceEx`,
-          this.isEdit ? editRequestBody : requestBody,
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem('token')}`,
-              'x-auth-token': localStorage.getItem('authToken'),
-            },
-          }
-        )
-        .then(({ data }) => {
-          this.parentID = data?.id
-          this.responseData = data?.invoiceItems
-          this.subListData = data
-          data?.invoiceItems.length && (this.uiShowHide = true)
-        })
-        .catch((error) => {
-          // eslint-disable-next-line no-console
-          console.log(error)
-        })
     },
   },
 }

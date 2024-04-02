@@ -175,6 +175,7 @@
                   :order="indexOne"
                   :name="value.name"
                   :result-type="value.resultType"
+                  :required="requiredData?.[indexOne]?.[value.name]"
                   @customFunction="getLookUpValue"
                 />
                 <GenericInput
@@ -195,6 +196,7 @@
                   textsize="13"
                   type="number"
                   :name="value.name"
+                  :required="requiredData?.[indexOne]?.[value.name]"
                   @customFunction="getInputValue"
                 />
                 <GenericInput
@@ -215,6 +217,7 @@
                   textsize="13"
                   type="text"
                   :name="value.name"
+                  :required="requiredData?.[indexOne]?.[value.name]"
                   @customFunction="getInputValue"
                 />
                 <GenericInputDatePage
@@ -237,6 +240,7 @@
                   type="datetime-local"
                   valuecolor="rgba(0,0,0,0.7)"
                   :name="value.name"
+                  :required="requiredData?.[indexOne]?.[value.name]"
                   @customFunction="getInputValue"
                 />
               </td>
@@ -370,6 +374,8 @@ export default {
       isCanAdd: this.isedit,
       parentID: null,
       tableShowHide: false,
+      requiredData: [],
+      disabledButtun: false,
     }
   },
 
@@ -398,6 +404,9 @@ export default {
         ? (this.noDataRow = false)
         : (this.noDataRow = true)
     },
+    ResData(val) {
+      this.requiredLookUpAndInputCheckerAction(val)
+    },
   },
 
   // MOUNTED
@@ -420,6 +429,34 @@ export default {
     },
     // Arrayni bo'sh object dan tozalash
 
+    // LookUp va Input'larning required'larini tekshiradi
+    requiredLookUpAndInputCheckerAction(data) {
+      const arr = this.filteredTablehead.filter(
+        (obj) =>
+          obj.required &&
+          (obj.type === 'list' || obj.type === 'float' || obj.type === 'date')
+      )
+      arr.forEach((obj) => {
+        data.forEach((subObj, index) => {
+          if (subObj?.[obj.name] && this.requiredData[index])
+            this.requiredData[index][obj.name] = true
+          else if (subObj?.[obj.name] && !this.requiredData[index])
+            this.requiredData.push({ [obj.name]: true })
+          else if (!subObj?.[obj.name] && this.requiredData[index])
+            this.requiredData[index][obj.name] = false
+          else this.requiredData.push({ [obj.name]: false })
+        })
+      })
+      this.requiredData = this.requiredData.splice(0, this.tableBody.length)
+      this.disabledButtun = this.requiredData.find((obj) =>
+        Object.values(obj).includes(false)
+      )
+      if (this.disabledButtun) this.disabledButtun = true
+      else this.disabledButtun = false
+      this.$emit('requiredAction', this.disabledButtun, 'bottom')
+    },
+    // LookUp va Input'larning required'larini tekshiradi
+
     // Save action dan keyin filter qiluvchi input funksiyasi
     filterAction(name, value) {
       // eslint-disable-next-line array-callback-return
@@ -427,9 +464,15 @@ export default {
         if (obj[name]) {
           this.rowDataShowHide = true
           this.noDataRow = false
+
           if (typeof obj[name] === 'number') {
             if (String(obj[name]).includes(String(value))) return obj
-          } else if (String(obj[name].text).includes(String(value))) return obj
+          } else if (
+            typeof obj[name] === 'object' &&
+            String(obj[name]?.text).includes(String(value))
+          )
+            return obj
+          else if (String(obj[name]).includes(String(value))) return obj
         } else if (obj[name] && value.length) {
           this.rowDataShowHide = false
           this.noDataRow = true
@@ -447,6 +490,17 @@ export default {
       this.totalAction()
     },
 
+    // Cashbox and Banks value'larini o'chirish
+    removeCashboxAndBanksValueAction(key, order) {
+      this.newEditResData.forEach((obj) => {
+        if (key === 'cashbox') {
+          delete this.newEditResData[order]?.bankBranchAccount
+        } else if (key === 'bankBranchAccount') {
+          delete this.newEditResData[order]?.cashbox
+        }
+      })
+    },
+
     // input's Valuesini olish
     getInputValue(key, value, order) {
       if (
@@ -461,8 +515,9 @@ export default {
         })
         this.$set(this.newEditResData, order, newObj)
       } else this.newEditResData.push({ [key]: value })
-
       this.ResData = this.newEditResData
+      // function
+      this.requiredLookUpAndInputCheckerAction(this.ResData)
     },
     // input's Valuesini olish
 
@@ -491,8 +546,11 @@ export default {
           [key]: this.lookUpVal(resultType, value, name),
         })
       }
-
+      // function
+      this.removeCashboxAndBanksValueAction(key, order)
       this.ResData = this.newEditResData
+      // function
+      this.requiredLookUpAndInputCheckerAction(this.ResData)
     },
     // Lookup's Valuesini olish
 
@@ -542,9 +600,12 @@ export default {
         : (this.ResData = this.ResData.filter((row) => row.index !== index + 1))
       id && this.requestAction(id)
       // ===============
+      this.requiredData = this.requiredData.filter((obj, inx) => inx !== index)
       this.twoResData = this.newEditResData
       this.ResData = this.newEditResData
       this.inputValuesObj.clear()
+      // function
+      this.requiredLookUpAndInputCheckerAction(this.ResData)
     },
 
     // Modal Closeobject
@@ -555,6 +616,8 @@ export default {
     modalAcceptAction(objBack) {
       this.tableBody.push(this.filteredTablehead)
       this.newEditResData.push(objBack)
+      // function
+      this.requiredLookUpAndInputCheckerAction(this.newEditResData)
     },
     // Modal uchun ishlaydi
 
@@ -562,6 +625,12 @@ export default {
     payAction(prop) {
       if (this.addmodalorrow) {
         this.ResData = this.newEditResData
+        const arr = this.ResData
+        arr.filter((obj) => {
+          const newObj = (obj.paymentTypesId = obj.paymentTypesId.id)
+          return newObj
+        })
+        this.ResData = arr
       } else {
         let requestObj = Object.fromEntries(this.inputValuesObj)
         this.ResData.push(requestObj)

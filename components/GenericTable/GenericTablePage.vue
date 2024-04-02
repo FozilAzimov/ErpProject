@@ -41,13 +41,30 @@
                 v-html="value[key.code]"
               ></span>
               <span
+                v-else-if="key.code === 'invoiceConfirmedStatus'"
+                class="p-[2px_5px] italic text-white font-bold rounded-[5px] bg-[rgb(221,86,0)]"
+                v-html="value[key.code]"
+              ></span>
+
+              <!-- Bill Status col -->
+              <span
                 v-else-if="
-                  key.code === 'invoiceBillStatus' ||
-                  key.code === 'invoiceConfirmedStatus'
+                  key.code === 'invoiceBillStatus' &&
+                  String(value[key.code]).includes('Not')
                 "
                 class="p-[2px_5px] italic text-white font-bold rounded-[5px] bg-[rgb(221,86,0)]"
                 v-html="value[key.code]"
               ></span>
+              <span
+                v-else-if="
+                  key.code === 'invoiceBillStatus' &&
+                  !String(value[key.code]).includes('Not')
+                "
+                class="p-[2px_5px] italic text-white font-bold rounded-[5px] bg-[rgb(102,149,51)]"
+                v-html="value[key.code]"
+              ></span>
+              <!-- Bill Status col -->
+
               <img
                 v-else-if="key.code === 'images'"
                 src="../../assets/images/no-image.png"

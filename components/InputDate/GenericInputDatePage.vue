@@ -1,7 +1,7 @@
 <template>
   <input
     v-model="inputValue"
-    class="rounded-[5px] border-[1px] border-[solid] border-[rgba(228,228,228,1)] outline-none focus:bg-gradient-to-b focus:from-transparent focus:via-transparent focus:to-[rgba(228,228,228,0.5)] focus:border-[1px] focus:border-solid focus:border-[#52a8eccc] duration-[0.4s] focus:shadow-[0_0_5px_#52a8ec99]"
+    class="input rounded-[5px] border-[1px] border-[solid] border-[rgba(228,228,228,1)] outline-none focus:bg-gradient-to-b focus:from-transparent focus:via-transparent focus:to-[rgba(228,228,228,0.5)] duration-[0.4s] focus:shadow-[0_0_5px_#52a8ec99]"
     :type="type"
     :style="{
       width: `${width}px`,
@@ -9,6 +9,9 @@
       padding: `${pt}px ${pr}px ${pb}px ${pl}px`,
       fontSize: `${textsize}px`,
       color: valuecolor,
+      border: required
+        ? '1px solid rgb(228,228,228)'
+        : '1px solid rgba(255,0,0,0.5)',
     }"
     :placeholder="placeholder"
     @change="getSelectValue"
@@ -73,6 +76,10 @@ export default {
       type: Number,
       default: 0,
     },
+    required: {
+      type: Boolean,
+      default: true,
+    },
   },
   data() {
     return {
@@ -92,3 +99,9 @@ export default {
   },
 }
 </script>
+
+<style scoped>
+.input:focus {
+  border: 1px solid #52a8eccc !important;
+}
+</style>

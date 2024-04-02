@@ -175,6 +175,7 @@
                   :order="indexOne"
                   :name="value.name"
                   :result-type="value.resultType"
+                  :required="requiredData?.[indexOne]?.[value.name]"
                   @customFunction="getLookUpValue"
                 />
                 <GenericInput
@@ -195,6 +196,7 @@
                   textsize="13"
                   type="number"
                   :name="value.name"
+                  :required="requiredData?.[indexOne]?.[value.name]"
                   @customFunction="getInputValue"
                 />
                 <GenericInput
@@ -215,6 +217,7 @@
                   textsize="13"
                   type="text"
                   :name="value.name"
+                  :required="requiredData?.[indexOne]?.[value.name]"
                   @customFunction="getInputValue"
                 />
                 <GenericInputDatePage
@@ -237,6 +240,7 @@
                   type="datetime-local"
                   valuecolor="rgba(0,0,0,0.7)"
                   :name="value.name"
+                  :required="requiredData?.[indexOne]?.[value.name]"
                   @customFunction="getInputValue"
                 />
               </td>
@@ -355,7 +359,6 @@ export default {
       isLoading: false,
       isOpenModal: false,
       tableBody: [],
-      inputValuesObj: new Map(),
       totalArray: [],
       totalObjMap: new Map(),
       sumColumnArr: [],
@@ -371,6 +374,8 @@ export default {
       isCanAdd: this.isedit,
       parentID: null,
       tableShowHide: false,
+      requiredData: [],
+      disabledButtun: false,
     }
   },
 
@@ -391,6 +396,10 @@ export default {
       this.showHideRow = value
     },
     defaultValues(newVal) {
+      if (newVal.length && Object.values(newVal?.at(-1)).length > 9) {
+        this.tableShowHide = true
+        this.showHideRow = true
+      }
       this.ResData = newVal
       this.newEditResData = this.ResData
       this.setIndex()
@@ -399,6 +408,9 @@ export default {
       this.twoResData.length
         ? (this.noDataRow = false)
         : (this.noDataRow = true)
+    },
+    ResData(val) {
+      this.requiredLookUpAndInputCheckerAction(val)
     },
   },
 
@@ -422,6 +434,34 @@ export default {
     },
     // Arrayni bo'sh object dan tozalash
 
+    // LookUp va Input'larning required'larini tekshiradi
+    requiredLookUpAndInputCheckerAction(data) {
+      const arr = this.filteredTablehead.filter(
+        (obj) =>
+          obj.required &&
+          (obj.type === 'list' || obj.type === 'float' || obj.type === 'date')
+      )
+      arr.forEach((obj) => {
+        data.forEach((subObj, index) => {
+          if (subObj?.[obj.name] && this.requiredData[index])
+            this.requiredData[index][obj.name] = true
+          else if (subObj?.[obj.name] && !this.requiredData[index])
+            this.requiredData.push({ [obj.name]: true })
+          else if (!subObj?.[obj.name] && this.requiredData[index])
+            this.requiredData[index][obj.name] = false
+          else this.requiredData.push({ [obj.name]: false })
+        })
+      })
+      this.requiredData = this.requiredData.splice(0, this.tableBody.length)
+      this.disabledButtun = this.requiredData.find((obj) =>
+        Object.values(obj).includes(false)
+      )
+      if (this.disabledButtun) this.disabledButtun = true
+      else this.disabledButtun = false
+      this.$emit('requiredAction', this.disabledButtun, 'subBottom')
+    },
+    // LookUp va Input'larning required'larini tekshiradi
+
     // Save action dan keyin filter qiluvchi input funksiyasi
     filterAction(name, value) {
       // eslint-disable-next-line array-callback-return
@@ -431,7 +471,12 @@ export default {
           this.noDataRow = false
           if (typeof obj[name] === 'number') {
             if (String(obj[name]).includes(String(value))) return obj
-          } else if (String(obj[name].text).includes(String(value))) return obj
+          } else if (
+            typeof obj[name] === 'object' &&
+            String(obj[name]?.text).includes(String(value))
+          )
+            return obj
+          else if (String(obj[name]).includes(String(value))) return obj
         } else if (obj[name] && value.length) {
           this.rowDataShowHide = false
           this.noDataRow = true
@@ -447,6 +492,17 @@ export default {
         : (this.noDataRow = true)
       this.total = 0
       this.totalAction()
+    },
+
+    // Cashbox and Banks value'larini o'chirish
+    removeCashboxAndBanksValueAction(key, order) {
+      this.newEditResData.forEach((obj) => {
+        if (key === 'cashbox') {
+          delete this.newEditResData[order]?.bankBranchAccount
+        } else if (key === 'bankBranchAccount') {
+          delete this.newEditResData[order]?.cashbox
+        }
+      })
     },
 
     // input's Valuesini olish
@@ -465,6 +521,8 @@ export default {
       } else this.newEditResData.push({ [key]: value })
 
       this.ResData = this.newEditResData
+      // function
+      this.requiredLookUpAndInputCheckerAction(this.ResData)
     },
     // input's Valuesini olish
 
@@ -493,8 +551,11 @@ export default {
           [key]: this.lookUpVal(resultType, value, name),
         })
       }
-
+      // function
+      this.removeCashboxAndBanksValueAction(key, order)
       this.ResData = this.newEditResData
+      // function
+      this.requiredLookUpAndInputCheckerAction(this.ResData)
     },
     // Lookup's Valuesini olish
 
@@ -504,10 +565,6 @@ export default {
         this.isOpenModal = true
       } else {
         this.tableBody.push(this.filteredTablehead)
-        let requestObj = Object.fromEntries(this.inputValuesObj)
-        this.ResData.push(requestObj)
-        this.inputValuesObj.clear()
-        requestObj = {}
       }
     },
     // Add an Item
@@ -544,9 +601,11 @@ export default {
         : (this.ResData = this.ResData.filter((row) => row.index !== index + 1))
       id && this.requestAction(id)
       // ===============
+      this.requiredData = this.requiredData.filter((obj, inx) => inx !== index)
       this.twoResData = this.newEditResData
       this.ResData = this.newEditResData
-      this.inputValuesObj.clear()
+      // function
+      this.requiredLookUpAndInputCheckerAction(this.newEditResData)
     },
 
     // Modal Closeobject
@@ -557,27 +616,30 @@ export default {
     modalAcceptAction(objBack) {
       this.tableBody.push(this.filteredTablehead)
       this.newEditResData.push(objBack)
+      // function
+      this.requiredLookUpAndInputCheckerAction(this.newEditResData)
     },
     // Modal uchun ishlaydi
 
     // edit qilganda transactionsExtraList data'sini filter qiladi
     payloadDataFilter() {
+      this.fakeResData = []
       this.ResData.forEach((obj) => {
         const temporarilyObj = {}
         if ('amount' in obj) temporarilyObj.amount = obj.amount
-        if ('cashbox' in obj) temporarilyObj.cashbox = obj.cashbox
-        if ('companyRefId' in obj)
-          temporarilyObj.companyRefId = obj.companyRefId
-        if ('company_amount' in obj)
+        if (obj?.cashbox) temporarilyObj.cashbox = obj.cashbox
+        if (obj?.bankBranchAccount)
+          temporarilyObj.bankBranchAccount = obj.bankBranchAccount
+        if (obj?.companyRefId) temporarilyObj.companyRefId = obj.companyRefId
+        if (obj?.company_amount)
           temporarilyObj.company_amount = obj.company_amount
-        if ('currency1' in obj) temporarilyObj.currency1 = obj.currency1
-        if ('currencyRate' in obj)
-          temporarilyObj.currencyRate = obj.currencyRate
-        if ('currency_amount' in obj)
+        if (obj?.currency1) temporarilyObj.currency1 = obj.currency1
+        if (obj?.currencyRate) temporarilyObj.currencyRate = obj.currencyRate
+        if (obj?.currency_amount)
           temporarilyObj.currency_amount = obj.currency_amount
         if ('date' in obj)
           temporarilyObj.date = new Date(obj.date).toISOString().split('.')[0]
-        if ('debitCredit' in obj) temporarilyObj.debitCredit = obj.debitCredit
+        if (obj?.debitCredit) temporarilyObj.debitCredit = obj.debitCredit
         if ('id' in obj) temporarilyObj.id = obj.id
         if ('invoice' in obj) temporarilyObj.invoice = { id: obj.invoice }
         if ('nominalConstant' in obj)
@@ -603,26 +665,19 @@ export default {
     payAction(prop) {
       if (this.addmodalorrow) {
         this.ResData = this.newEditResData
-      } else {
-        let requestObj = Object.fromEntries(this.inputValuesObj)
-        this.ResData.push(requestObj)
-        this.inputValuesObj.clear()
-        requestObj = {}
+        const arr = this.ResData
+        arr.filter((obj) => {
+          const newObj = (obj.paymentTypesId = obj.paymentTypesId.id)
+          return newObj
+        })
+        this.ResData = arr
       }
       // function
       this.arrayFiltered()
       // function
       this.payloadDataFilter()
 
-      // emit ishlatilgan
-      this.ResData.forEach((obj) => {
-        if (Object.keys(obj).length > 10) {
-          this.$emit('rowValues', this.fakeResData, prop)
-        } else {
-          this.$emit('rowValues', this.ResData, prop)
-        }
-      })
-      // emit ishlatilgan
+      this.$emit('rowValues', this.fakeResData, prop)
 
       // Total row ko'rinishini xal qiladi
       this.totalAction()
@@ -641,7 +696,6 @@ export default {
         this.twoResData = []
         this.ResData = []
         this.newEditResData = []
-        this.inputValuesObj.clear()
         this.noDataRow = true
       }
     },
@@ -652,14 +706,9 @@ export default {
       this.tableShowHide = false
       this.helperShowHideRow = false
 
-      if (this.addmodalorrow) {
-        for (let i = 0; i < this.newEditResData.length; i++) {
-          this.tableBody.push(this.filteredTablehead)
-        }
-      } else {
-        for (let i = 0; i < this.ResData.length; i++) {
-          this.tableBody.push(this.filteredTablehead)
-        }
+      this.tableBody = []
+      for (let i = 0; i < this.ResData.length; i++) {
+        this.tableBody.push(this.filteredTablehead)
       }
     },
     // Edit button click qilganda ishlaydi

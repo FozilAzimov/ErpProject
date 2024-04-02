@@ -16,7 +16,9 @@
       v-model="selectedText"
       type="text"
       :style="{
-        border: required ? '1px solid rgb(228,228,228)' : '1px solid red',
+        border: required
+          ? '1px solid rgb(228,228,228)'
+          : '1px solid rgba(255,0,0,0.5)',
         height: `${height}px`,
       }"
       class="custom-widget-list w-full"
@@ -104,6 +106,10 @@ export default {
     resultType: {
       type: String,
       default: '',
+    },
+    clearValue: {
+      type: Object,
+      default: () => ({}),
     },
   },
 

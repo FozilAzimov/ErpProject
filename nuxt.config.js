@@ -139,9 +139,11 @@ export default {
   axios: {
     // baseURL: 'https://localhost:8443/api',
     baseURL: 'https://localhost:443/api',
+    // baseURL: 'https://localhost:8008/api',
     // baseURL: 'https://192.168.1.159:8443/api',
     // baseURL: 'https://192.168.1.64:8443/api',
     // baseURL: 'https://192.168.1.55:8443/api',
+    // baseURL: 'https://192.168.1.105:443/api',
   },
 
   // PWA module configuration: https://go.nuxtjs.dev/pwa

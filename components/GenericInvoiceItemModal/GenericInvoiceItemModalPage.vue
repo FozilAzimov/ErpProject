@@ -49,6 +49,7 @@
                 dwidth="250"
                 :name="itemRight.name"
                 :result-type="itemRight.resultType"
+                :required="requiredData[0]?.[itemRight.name]"
                 @customFunction="getLookUpValue"
               />
               <GenericInput
@@ -64,6 +65,7 @@
                 textsize="13"
                 type="number"
                 :name="itemRight.name"
+                :required="requiredData[0]?.[itemRight.name]"
                 @customFunction="getInputValue"
               />
               <GenericInput
@@ -77,6 +79,7 @@
                 textsize="13"
                 type="text"
                 :name="itemRight.name"
+                :required="requiredData[0]?.[itemRight.name]"
                 @customFunction="getInputValue"
               />
               <GenericInputDatePage
@@ -91,6 +94,7 @@
                 type="datetime-local"
                 valuecolor="rgba(0,0,0,0.7)"
                 :name="itemRight.name"
+                :required="requiredData[0]?.[itemRight.name]"
                 @customFunction="getInputValue"
               />
               <GenericInput
@@ -121,6 +125,7 @@
                 dwidth="250"
                 :name="itemLeft.name"
                 :result-type="itemLeft.resultType"
+                :required="requiredData[0]?.[itemLeft.name]"
                 @customFunction="getLookUpValue"
               />
               <GenericInput
@@ -136,6 +141,7 @@
                 textsize="13"
                 type="number"
                 :name="itemLeft.name"
+                :required="requiredData[0]?.[itemLeft.name]"
                 @customFunction="getInputValue"
               />
               <GenericInput
@@ -149,6 +155,7 @@
                 textsize="13"
                 type="text"
                 :name="itemLeft.name"
+                :required="requiredData[0]?.[itemLeft.name]"
                 @customFunction="getInputValue"
               />
               <GenericInputDatePage
@@ -163,6 +170,7 @@
                 type="datetime-local"
                 valuecolor="rgba(0,0,0,0.7)"
                 :name="itemLeft.name"
+                :required="requiredData[0]?.[itemLeft.name]"
                 @customFunction="getInputValue"
               />
               <GenericInput
@@ -187,7 +195,14 @@ import GenericInputDatePage from '../InputDate/GenericInputDatePage.vue'
 import LookUp from '../Lookup/LookUp.vue'
 
 export default {
-  components: { GenericInput, GenericButton, LookUp, GenericInputDatePage },
+  components: {
+    GenericInput,
+    GenericButton,
+    LookUp,
+    GenericInputDatePage,
+  },
+
+  // Props
   props: {
     tabledata: {
       type: Array,
@@ -198,24 +213,59 @@ export default {
       default: '',
     },
   },
+
+  // Data
   data() {
     return {
       modalData: [],
       rightData: [],
       leftData: [],
-      required: {
-        lookUp: true,
-      },
       inputValuesObj: new Map(),
-      inputValuesMap: new Map(),
-      arrRow: [],
-      rowSetArray: [],
+      ResData: [],
+      requiredData: [],
+      disabledButtun: false,
     }
   },
+
+  // Watch
+  watch: {
+    ResData(val) {
+      this.requiredLookUpAndInputCheckerAction(val)
+    },
+  },
+
+  // Mounted
   mounted() {
     this.filterData()
   },
+
+  // Methods
   methods: {
+    // LookUp va Input'larning required'larini tekshiradi
+    requiredLookUpAndInputCheckerAction(data) {
+      const arr = this.modalData.filter(
+        (obj) =>
+          obj.required &&
+          (obj.type === 'list' || obj.type === 'float' || obj.type === 'date')
+      )
+      arr.forEach((obj) => {
+        data.forEach((subObj, index) => {
+          if (subObj?.[obj.name] && this.requiredData[index])
+            this.requiredData[index][obj.name] = true
+          else if (!subObj?.[obj.name] && this.requiredData[index])
+            this.requiredData[index][obj.name] = false
+          else if (subObj?.[obj.name] && !this.requiredData[index])
+            this.requiredData.push({ [obj.name]: true })
+          else this.requiredData.push({ [obj.name]: false })
+        })
+      })
+      this.requiredData = [this.requiredData?.at(-1)]
+      this.disabledButtun = this.requiredData
+        .map((obj) => Object.values(obj).includes(true))
+        .at(-1)
+    },
+    // LookUp va Input'larning required'larini tekshiradi
+
     // Data filter
     filterData() {
       // eslint-disable-next-line array-callback-return
@@ -238,6 +288,16 @@ export default {
       )
     },
 
+    // Cashbox and Banks value'larini o'chirish
+    removeCashboxAndBanksValueAction(key) {
+      if (key === 'cashbox') {
+        this.inputValuesObj.delete('bankBranchAccount')
+      } else if (key === 'bankBranchAccount') {
+        this.inputValuesObj.delete('cashbox')
+      }
+      console.log(this.inputValuesObj, 'this.inputValuesObj')
+    },
+
     // Modal close
     closeAction() {
       this.$emit('customCloseAction', false)
@@ -246,9 +306,14 @@ export default {
     // Accept button action addition rows
     acceptAction() {
       const objBack = Object.fromEntries(this.inputValuesObj)
-      const obj = Object.fromEntries(this.inputValuesMap)
-      this.$emit('customInputValueObj', objBack, obj)
-      this.closeAction()
+      this.ResData.push(objBack)
+      // function
+      this.requiredLookUpAndInputCheckerAction(this.ResData)
+      if (this.disabledButtun) {
+        this.$emit('customInputValueObj', objBack)
+        // function
+        this.closeAction()
+      }
     },
 
     // Lookup's Valuesini olish
@@ -262,19 +327,21 @@ export default {
         this.inputValuesObj.set('price4', '0')
         this.inputValuesObj.set('packNumber', `${1}`)
         this.inputValuesObj.set(key, value)
-        this.inputValuesMap.set(key, value)
       } else {
         this.inputValuesObj.set(key, value)
-        this.inputValuesMap.set(key, value)
       }
     },
 
     getLookUpValue(key, name, value, order, resultType) {
       this.inputValuesObj.set(
         key,
-        resultType === 'object' ? { id: Number(value), text: name } : value
+        resultType === 'object'
+          ? { id: Number(value), text: name }
+          : key === 'paymentTypesId'
+          ? { id: `${value}`, text: name }
+          : value
       )
-      this.inputValuesMap.set(key, name)
+      this.removeCashboxAndBanksValueAction(key)
     },
   },
 }
