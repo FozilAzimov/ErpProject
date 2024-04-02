@@ -99,21 +99,24 @@
                   :key="indexToo"
                   class="border-[1px] text-[12px] p-2"
                 >
-                  <label
+                  <span
                     v-if="row[item.name] && typeof row[item.name] === 'object'"
-                    >{{ row[item.name]['text'] }}</label
+                    >{{ row[item.name]['text'] }}</span
                   >
-                  <label v-else-if="row[item.name] && item.type === 'date'">{{
+                  <span v-else-if="row[item.name] && item.type === 'date'">{{
                     new Date(row[item.name])
                       .toLocaleString('en-GB')
                       .split(',')
                       .join('')
-                  }}</label>
+                  }}</span>
                   <img
                     v-else-if="item.type === 'file_image'"
                     src="../../assets/images/no-image.png"
                     class="w-[60px]"
                   />
+                  <span v-else-if="item.type === 'checkbox'">{{
+                    row?.[item.name]
+                  }}</span>
                   <GenericButton
                     v-else-if="item.type === 'button'"
                     :name="item.headerText"
@@ -125,14 +128,7 @@
                     bg="rgb(156,104,183)"
                     textsize="12"
                   />
-                  <GenericInput
-                    v-else-if="item.type === 'checkbox'"
-                    type="checkbox"
-                    :order="indexOne"
-                    :name="item.name"
-                    @customFunction="getInputValue"
-                  />
-                  <label v-else-if="row[item.name] && item.name === 'ammount'">
+                  <span v-else-if="row[item.name] && item.name === 'ammount'">
                     {{
                       combinationThreeInputValues.length &&
                       Boolean(
@@ -168,8 +164,8 @@
                         ? row[item.name]
                         : 0
                     }}
-                  </label>
-                  <label
+                  </span>
+                  <span
                     v-else-if="row[item.name] && item.name === 'ammountwvat'"
                   >
                     {{
@@ -186,10 +182,8 @@
                         ? row[item.name]
                         : 0
                     }}
-                  </label>
-                  <label
-                    v-else-if="row[item.name] && item.name === 'vatAmount'"
-                  >
+                  </span>
+                  <span v-else-if="row[item.name] && item.name === 'vatAmount'">
                     {{
                       combinationThreeInputValues.length &&
                       Boolean(
@@ -207,8 +201,8 @@
                         ? row[item.name]
                         : 0
                     }}
-                  </label>
-                  <label v-else>{{ row[item.name] }}</label>
+                  </span>
+                  <span v-else>{{ row[item.name] }}</span>
                 </td>
               </tr>
             </template>
@@ -262,6 +256,12 @@
                 class="border-[1px] text-[12px] p-2"
                 :class="`w-[${value.dwidth}px]`"
               >
+                {{
+                  newEditObjData.length &&
+                  newEditObjData?.[indexOne]?.[value.name]
+                    ? newEditObjData[indexOne][value.name]
+                    : ''
+                }}
                 <LookUp
                   v-if="value.type === 'list'"
                   :defvalue="
@@ -347,6 +347,12 @@
                   type="checkbox"
                   :order="indexOne"
                   :name="value.name"
+                  :value="
+                    newEditObjData.length &&
+                    newEditObjData?.[indexOne]?.[value.name]
+                      ? newEditObjData[indexOne][value.name]
+                      : ''
+                  "
                   @customFunction="getInputValue"
                 />
                 <GenericButton
@@ -890,6 +896,7 @@ export default {
       // ==================================
       this.arrayFiltered()
       this.ResDataFiltered()
+
       this.$emit(
         'rowValues',
         this.ResData,

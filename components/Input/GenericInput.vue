@@ -1,6 +1,6 @@
 <template>
   <input
-    v-model="keywordValue"
+    :v-model="keywordValue"
     class="input rounded-[5px] outline-none focus:bg-gradient-to-b focus:from-transparent focus:via-transparent focus:to-[rgba(228,228,228,0.5)] focus:border-[1px] focus:border-solid focus:border-[#52a8eccc] duration-[0.4s] focus:shadow-[0_0_5px_#52a8ec99]"
     :type="type"
     :style="{
@@ -88,8 +88,10 @@ export default {
       this.$emit('enter', event.target.value)
       this.$emit('customFunction', this.name, this.keywordValue, this.order)
     },
-    getInputValue({ target: { value } }) {
-      this.keywordValue = value
+    getInputValue({ target: { value, checked, type } }) {
+      type === 'checkbox'
+        ? (this.keywordValue = checked)
+        : (this.keywordValue = value)
       this.$emit('input', this.keywordValue)
       this.$emit('customFunction', this.name, this.keywordValue, this.order)
     },

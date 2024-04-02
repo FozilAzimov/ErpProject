@@ -111,7 +111,8 @@ export default {
         this.selectValue,
         this.formDataId,
         this.isDefOptionTitle,
-        this.index
+        this.index,
+        this.id
       )
     },
   },

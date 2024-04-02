@@ -32,7 +32,7 @@
           textsize="13"
           type="datetime-local"
           valuecolor="rgba(0,0,0,0.7)"
-          @change="getSelectValue"
+          @change="getInputDateValues"
         />
       </div>
       <div>
@@ -49,7 +49,7 @@
           textsize="13"
           type="datetime-local"
           valuecolor="rgba(0,0,0,0.7)"
-          @change="getSelectValue"
+          @change="getInputDateValues"
         />
       </div>
       <div class="flex items-center gap-1">
@@ -373,7 +373,7 @@ export default {
         })
     },
 
-    // Generic Table function Start
+    // Generic Table action Start
     getTableBody() {
       const arr = new Set()
       for (const obj of this.tableData) {
@@ -397,7 +397,7 @@ export default {
         : (this.isThereBody = false)
       this.tableId = Array.from(arr)
     },
-    // Generic Table function End
+    // Generic Table action End
 
     // Table Action Open button
     getTableRowOpen(thisId) {
@@ -428,8 +428,13 @@ export default {
         })
     },
 
+    // Generic_Date value
+    getInputDateValues(value, id) {
+      this.formData.set(id, value)
+    },
+
     // Generic_Select value
-    getSelectValue(value, id) {
+    getSelectValue(value, formDataId, isDefOptionTitle, index, id) {
       this.formData.set(id, value)
     },
 
