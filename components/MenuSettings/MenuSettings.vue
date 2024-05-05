@@ -136,8 +136,7 @@
             pt="5"
             pr="10"
             pb="5"
-            bggradient="linear-gradient(90deg, rgba(162,75,75,1) 0%, rgba(121,9,9,1) 53%,
-rgba(154,81,81,1) 100%)"
+            bggradient="linear-gradient(90deg, rgba(162,75,75,1) 0%, rgba(121,9,9,1) 53%, rgba(154,81,81,1) 100%)"
             textsize="14"
             @click="closeModal()"
           />

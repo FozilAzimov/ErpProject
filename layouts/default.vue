@@ -403,7 +403,7 @@ export default {
 
     // go to Menu Setting
     goToMenuSetting() {
-      this.isLoading = !this.isLoading
+      this.$router.push('menuSettings.htm')
     },
   },
 }

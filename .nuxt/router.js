@@ -34,7 +34,6 @@ const _3adf68e8 = () => interopDefault(import('..\\pages\\outputToPrOrder.htm\\i
 const _a1edd650 = () => interopDefault(import('..\\pages\\outputToPrOrderReturn.htm\\index.vue' /* webpackChunkName: "pages/outputToPrOrderReturn.htm/index" */))
 const _79cbe902 = () => interopDefault(import('..\\pages\\outputToServiceInvoice.htm\\index.vue' /* webpackChunkName: "pages/outputToServiceInvoice.htm/index" */))
 const _59afd0f1 = () => interopDefault(import('..\\pages\\personEquipmentSews.htm\\index.vue' /* webpackChunkName: "pages/personEquipmentSews.htm/index" */))
-const _48379aad = () => interopDefault(import('..\\pages\\prepareSalesReturnNew.htm\\index.vue' /* webpackChunkName: "pages/prepareSalesReturnNew.htm/index" */))
 const _12fc8f64 = () => interopDefault(import('..\\pages\\productionInvoice.htm\\index.vue' /* webpackChunkName: "pages/productionInvoice.htm/index" */))
 const _63962f83 = () => interopDefault(import('..\\pages\\productionorder.htm\\index.vue' /* webpackChunkName: "pages/productionorder.htm/index" */))
 const _82c6ee96 = () => interopDefault(import('..\\pages\\productionorderplannings.htm\\index.vue' /* webpackChunkName: "pages/productionorderplannings.htm/index" */))
@@ -53,6 +52,8 @@ const _581b1d17 = () => interopDefault(import('..\\pages\\transactionSaldoReport
 const _7607bc89 = () => interopDefault(import('..\\pages\\index.vue' /* webpackChunkName: "pages/index" */))
 const _1679047d = () => interopDefault(import('..\\pages\\prepareProductionOrderItem.htm\\_id.vue' /* webpackChunkName: "pages/prepareProductionOrderItem.htm/_id" */))
 const _37aa00e5 = () => interopDefault(import('..\\pages\\preparePurchaseInvoiceNew.htm\\_id.vue' /* webpackChunkName: "pages/preparePurchaseInvoiceNew.htm/_id" */))
+const _9f5db842 = () => interopDefault(import('..\\pages\\prepareSaleInvoiceNew.htm\\_id.vue' /* webpackChunkName: "pages/prepareSaleInvoiceNew.htm/_id" */))
+const _57533756 = () => interopDefault(import('..\\pages\\prepareSalesReturnNew.htm\\_id.vue' /* webpackChunkName: "pages/prepareSalesReturnNew.htm/_id" */))
 
 const emptyFn = () => {}
 
@@ -186,10 +187,6 @@ export const routerOptions = {
     component: _59afd0f1,
     name: "personEquipmentSews.htm"
   }, {
-    path: "/prepareSalesReturnNew.htm",
-    component: _48379aad,
-    name: "prepareSalesReturnNew.htm"
-  }, {
     path: "/productionInvoice.htm",
     component: _12fc8f64,
     name: "productionInvoice.htm"
@@ -261,6 +258,14 @@ export const routerOptions = {
     path: "/preparePurchaseInvoiceNew.htm/:id?",
     component: _37aa00e5,
     name: "preparePurchaseInvoiceNew.htm-id"
+  }, {
+    path: "/prepareSaleInvoiceNew.htm/:id?",
+    component: _9f5db842,
+    name: "prepareSaleInvoiceNew.htm-id"
+  }, {
+    path: "/prepareSalesReturnNew.htm/:id?",
+    component: _57533756,
+    name: "prepareSalesReturnNew.htm-id"
   }],
 
   fallback: false

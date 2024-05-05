@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full p-[0px_10px_4px_4px]">
+  <div class="w-full p-[0px_12px_0px_10px]">
     <LoadingPage
       v-if="isLoading"
       class="absolute left-[50%] top-[8px] translate-x-[-50%]"
@@ -10,14 +10,14 @@
         :right="tableHead"
         :left="leftMap"
         :url="actionUrl"
+        api="saveColumnConfig"
+        class="z-[10000]"
         @checkModal="handleValue"
       />
     </transition>
     <form class="flex flex-wrap items-center gap-3 py-4">
       <div>
-        <label
-          for="from"
-          class="text-[13px] text-[] cursor-pointer tracking-[1.1]"
+        <label for="from" class="text-[13px] cursor-pointer tracking-[1.1]"
           >Date from</label
         >
         <GenericInputDatePage
@@ -32,13 +32,11 @@
           textsize="13"
           type="datetime-local"
           valuecolor="rgba(0,0,0,0.7)"
-          @change="getSelectValue"
+          @change="getInputDateValues"
         />
       </div>
       <div>
-        <label for="to" class="text-[13px] text-[] cursor-pointer"
-          >Date to</label
-        >
+        <label for="to" class="text-[13px] cursor-pointer">Date to</label>
         <GenericInputDatePage
           id="to"
           v-model="formData.to"
@@ -51,29 +49,63 @@
           textsize="13"
           type="datetime-local"
           valuecolor="rgba(0,0,0,0.7)"
-          @change="getSelectValue"
+          @change="getInputDateValues"
         />
       </div>
       <div class="flex items-center gap-1">
-        <label for="bill" class="text-[13px] text-[] cursor-pointer"
+        <label for="bill" class="text-[13px] cursor-pointer"
           >Status (Bill)</label
         >
         <GenericSelect
           id="bill"
           v-model="formData.from"
-          :data="selectData.billStatusList"
+          :data="selectData?.billStatusList"
           textsize="13"
           @change="getSelectValue"
         />
       </div>
       <div class="flex items-center gap-1">
-        <label for="pay" class="text-[13px] text-[] cursor-pointer"
-          >Status (Pay)</label
-        >
+        <label for="pay" class="text-[13px] cursor-pointer">Status (Pay)</label>
         <GenericSelect
           id="pay"
           v-model="formData.pay"
-          :data="selectData.payStatusList"
+          :data="selectData?.payStatusList"
+          textsize="13"
+          @change="getSelectValue"
+        />
+      </div>
+      <div class="flex items-center gap-1">
+        <label for="invoice" class="text-[13px] cursor-pointer"
+          >Invoice (Status)</label
+        >
+        <GenericSelect
+          id="invoice"
+          v-model="formData.invoice"
+          :data="selectData?.invoiceOnWayStatusList"
+          textsize="13"
+          @change="getSelectValue"
+        />
+      </div>
+      <div class="flex items-center gap-1">
+        <label for="departments" class="text-[13px] cursor-pointer"
+          >Departments</label
+        >
+        <GenericSelect
+          id="departments"
+          v-model="formData.departments"
+          :data="selectData?.departmentDTOList"
+          textsize="13"
+          @change="getSelectValue"
+        />
+      </div>
+      <div class="flex items-center gap-1">
+        <label for="warehouse" class="text-[13px] cursor-pointer"
+          >Warehouse</label
+        >
+        <GenericSelect
+          id="warehouse"
+          v-model="formData.warehouse"
+          :data="selectData?.warehouseList"
           textsize="13"
           @change="getSelectValue"
         />
@@ -90,7 +122,7 @@
             class="w-[14px]"
           />
           <h1 class="font-bold text-[rgb(49,126,172)] text-[14px] uppercase">
-            {{ $t('pages.purchaseinvoice.headerName') }}
+            Sale Invoice
           </h1>
         </div>
         <div>
@@ -150,7 +182,7 @@
             : 'duration-[1s] h-0 overflow-hidden'
         "
       >
-        <div class="flex items-center gap-2 m-[8px]">
+        <div class="flex items-center">
           <GenericButton
             name="Add New"
             pl="10"
@@ -158,17 +190,19 @@
             pr="10"
             pb="3"
             bg="rgba(54, 155, 215, 0.8)"
-            textsize="15"
+            textsize="13"
+            margin="8"
             @click="$router.push('/prepareSalesReturnNew.htm')"
           />
           <GenericButton
-            name="Add New For Person"
+            name="Add New for Person"
             pl="10"
             pt="3"
             pr="10"
             pb="3"
             bg="rgba(54, 155, 215, 0.8)"
-            textsize="15"
+            textsize="13"
+            margin="8"
             @click="$router.push('/prepareSalesReturnNew.htm')"
           />
         </div>
@@ -201,7 +235,7 @@
                 textsize="13"
                 type="text"
                 placeholder="Search..."
-                @change="getTableRequest"
+                @enter="getTableRequest"
                 @input="getInputValue"
               />
               <GenericButton
@@ -234,6 +268,8 @@
             :tablebody="tableBody"
             :tableheadlength="tableHeadLength"
             :istherebody="isThereBody"
+            open-url="prepareSaleInvoiceNew"
+            height="600"
           />
         </div>
       </div>
@@ -305,7 +341,7 @@ export default {
       this.isLoading = !this.isLoading
       this.$axios
         .post(
-          `${this.baseURL}/invoice/salesReturnList`,
+          `/invoices/salesReturn`,
           {
             current_page: 1,
             page_size: this.pageSize_value,
@@ -333,14 +369,14 @@ export default {
             },
           }
         )
-        .then((res) => {
+        .then(({ data: { response } }) => {
           this.tableBody = []
           this.isLoading = !this.isLoading
-          this.tableHead = res.data.rightMap
-          this.leftMap = res.data.leftMap
-          this.actionUrl = res.data.actionUrl
-          this.tableData = res.data.invoiceList
-          this.selectData = res.data.invoiceSearchDTO
+          this.tableHead = response.rightMap
+          this.leftMap = response.leftMap
+          this.actionUrl = response.actionUrl
+          this.tableData = response.invoiceList
+          this.selectData = response.invoiceSearchDTO
           this.getTableBody()
         })
         .catch((error) => {
@@ -350,7 +386,7 @@ export default {
         })
     },
 
-    // Generic Table function Start
+    // Generic Table action Start
     getTableBody() {
       const arr = new Set()
       for (const obj of this.tableData) {
@@ -363,7 +399,7 @@ export default {
               if (typeof obj[value] === 'object')
                 data.set(value, obj[value].value)
               else data.set(value, obj[value])
-            } else data.set(value, '-')
+            } else data.set(value, obj[value])
           } else data.set(value, false)
         }
         this.tableBody.push(Object.fromEntries(data))
@@ -374,14 +410,14 @@ export default {
         : (this.isThereBody = false)
       this.tableId = Array.from(arr)
     },
-    // Generic Table function End
+    // Generic Table action End
 
     // Table Action Open button
     getTableRowOpen(thisId) {
       this.isLoading = !this.isLoading
       this.$axios
         .post(
-          `${this.baseURL}/invoice/preparePurchaseInvoice`,
+          `/invoices/salesReturnAjaxLoad`,
           {
             current_page: 1,
             page_size: this.pageSize_value,
@@ -396,7 +432,7 @@ export default {
         )
         .then((res) => {
           this.isLoading = !this.isLoading
-          this.$router.push('/preparePurchaseInvoiceNew.htm')
+          this.$router.push('/prepareSaleInvoiceNew.htm')
         })
         .catch((error) => {
           this.isLoading = !this.isLoading
@@ -405,8 +441,13 @@ export default {
         })
     },
 
+    // Generic_Date value
+    getInputDateValues(value, id) {
+      this.formData.set(id, value)
+    },
+
     // Generic_Select value
-    getSelectValue(value, id) {
+    getSelectValue(value, formDataId, isDefOptionTitle, index, id) {
       this.formData.set(id, value)
     },
 

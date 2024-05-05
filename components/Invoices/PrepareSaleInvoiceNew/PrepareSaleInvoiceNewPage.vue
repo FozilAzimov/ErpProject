@@ -62,7 +62,7 @@
           :istherepicture="true"
         />
         <h1 class="font-bold text-[rgb(49,126,172)] text-[14px] uppercase">
-          {{ tableNameTranslateObj.purchaseInvoice }}
+          Sale Invoice
         </h1>
       </div>
     </div>
@@ -73,12 +73,12 @@
             class="bg-[rgba(239,243,249,0.7)] hover:bg-gradient-to-b hover:from-transparent hover:via-transparent hover:to-[rgba(220,229,243,0.7)]"
           >
             <td
-              class="w-[15%] border-[1px] border-[solid] border-[#778899] p-[2px]"
+              class="w-[15%] border-[1px] border-solid border-[#778899] p-[2px]"
             >
               {{ tableNameTranslateObj.date }}
             </td>
             <td
-              class="w-[16%] border-[1px] border-[solid] border-[#778899] p-[2px]"
+              class="w-[16%] border-[1px] border-solid border-[#778899] p-[2px]"
             >
               <GenericInput
                 :value="
@@ -104,12 +104,12 @@
               />
             </td>
             <td
-              class="w-[16%] border-[1px] border-[solid] border-[#778899] p-[2px]"
+              class="w-[16%] border-[1px] border-solid border-[#778899] p-[2px]"
             >
               {{ tableNameTranslateObj.paymentType }}
             </td>
             <td
-              class="w-[17%] border-[1px] border-[solid] border-[#778899] p-[2px]"
+              class="w-[17%] border-[1px] border-solid border-[#778899] p-[2px]"
             >
               <LookUp
                 :defvalue="userId || parentID ? objData?.paymentType?.text : ''"
@@ -124,12 +124,12 @@
               />
             </td>
             <td
-              class="w-[15%] border-[1px] border-[solid] border-[#778899] p-[2px]"
+              class="w-[15%] border-[1px] border-solid border-[#778899] p-[2px]"
             >
               {{ tableNameTranslateObj.systemNumber }}
             </td>
             <td
-              class="w-[17%] border-[1px] border-[solid] border-[#778899] p-[2px]"
+              class="w-[17%] border-[1px] border-solid border-[#778899] p-[2px]"
             >
               <GenericInput
                 :value="userId ? objData?.systemNumber : ''"
@@ -151,10 +151,10 @@
           <tr
             class="bg-[rgba(239,243,249,0.7)] hover:bg-gradient-to-b hover:from-transparent hover:via-transparent hover:to-[rgba(220,229,243,0.7)]"
           >
-            <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
+            <td class="border-[1px] border-solid border-[#778899] p-[2px]">
               {{ tableNameTranslateObj.supplier }}
             </td>
-            <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
+            <td class="border-[1px] border-solid border-[#778899] p-[2px]">
               <LookUp
                 :defvalue="
                   userId || parentID
@@ -181,10 +181,10 @@
                 @customFunction="getLookUpValue"
               />
             </td>
-            <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
+            <td class="border-[1px] border-solid border-[#778899] p-[2px]">
               {{ propsValue.supplare.name }}
             </td>
-            <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
+            <td class="border-[1px] border-solid border-[#778899] p-[2px]">
               <GenericInput
                 :value="
                   userId
@@ -206,20 +206,16 @@
                 @customFunction="inputValue"
               />
             </td>
-            <td
-              class="border-[1px] border-[solid] border-[#778899] p-[2px]"
-            ></td>
-            <td
-              class="border-[1px] border-[solid] border-[#778899] p-[2px]"
-            ></td>
+            <td class="border-[1px] border-solid border-[#778899] p-[2px]"></td>
+            <td class="border-[1px] border-solid border-[#778899] p-[2px]"></td>
           </tr>
           <tr
             class="bg-[rgba(239,243,249,0.7)] hover:bg-gradient-to-b hover:from-transparent hover:via-transparent hover:to-[rgba(220,229,243,0.7)]"
           >
-            <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
+            <td class="border-[1px] border-solid border-[#778899] p-[2px]">
               {{ tableNameTranslateObj.valueDate }}
             </td>
-            <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
+            <td class="border-[1px] border-solid border-[#778899] p-[2px]">
               <GenericInput
                 :value="
                   userId
@@ -243,16 +239,12 @@
                 @customFunction="inputValue"
               />
             </td>
-            <td
-              class="border-[1px] border-[solid] border-[#778899] p-[2px]"
-            ></td>
-            <td
-              class="border-[1px] border-[solid] border-[#778899] p-[2px]"
-            ></td>
-            <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
+            <td class="border-[1px] border-solid border-[#778899] p-[2px]"></td>
+            <td class="border-[1px] border-solid border-[#778899] p-[2px]"></td>
+            <td class="border-[1px] border-solid border-[#778899] p-[2px]">
               {{ tableNameTranslateObj.invoiceBillStatus }}
             </td>
-            <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
+            <td class="border-[1px] border-solid border-[#778899] p-[2px]">
               <GenericInput
                 :value="userId || parentID ? objData?.invoiceBillStatus : ''"
                 width="50"
@@ -273,10 +265,10 @@
           <tr
             class="bg-[rgba(239,243,249,0.7)] hover:bg-gradient-to-b hover:from-transparent hover:via-transparent hover:to-[rgba(220,229,243,0.7)]"
           >
-            <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
+            <td class="border-[1px] border-solid border-[#778899] p-[2px]">
               {{ tableNameTranslateObj['menu.companies.group'] }}
             </td>
-            <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
+            <td class="border-[1px] border-solid border-[#778899] p-[2px]">
               <LookUp
                 v-if="objData?.companyGroup?.text"
                 :defvalue="objData?.companyGroup?.text"
@@ -289,16 +281,12 @@
                 @customFunction="getLookUpValue"
               />
             </td>
-            <td
-              class="border-[1px] border-[solid] border-[#778899] p-[2px]"
-            ></td>
-            <td
-              class="border-[1px] border-[solid] border-[#778899] p-[2px]"
-            ></td>
-            <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
+            <td class="border-[1px] border-solid border-[#778899] p-[2px]"></td>
+            <td class="border-[1px] border-solid border-[#778899] p-[2px]"></td>
+            <td class="border-[1px] border-solid border-[#778899] p-[2px]">
               {{ tableNameTranslateObj.onWay }}
             </td>
-            <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
+            <td class="border-[1px] border-solid border-[#778899] p-[2px]">
               <GenericInput
                 :value="userId ? objData?.invoiceOnWayStatus : ''"
                 width="50"
@@ -319,10 +307,10 @@
           <tr
             class="bg-[rgba(239,243,249,0.7)] hover:bg-gradient-to-b hover:from-transparent hover:via-transparent hover:to-[rgba(220,229,243,0.7)]"
           >
-            <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
+            <td class="border-[1px] border-solid border-[#778899] p-[2px]">
               {{ tableNameTranslateObj.branch }}
             </td>
-            <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
+            <td class="border-[1px] border-solid border-[#778899] p-[2px]">
               <LookUp
                 :defvalue="userId ? objData?.branch : objData?.branch?.text"
                 durl="invoiceBase/findAllCompanyLogic"
@@ -338,10 +326,10 @@
                 @customFunction="getLookUpValue"
               />
             </td>
-            <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
+            <td class="border-[1px] border-solid border-[#778899] p-[2px]">
               {{ propsValue.branch.name }}
             </td>
-            <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
+            <td class="border-[1px] border-solid border-[#778899] p-[2px]">
               <GenericInput
                 :value="
                   userId
@@ -363,10 +351,10 @@
                 @customFunction="inputValue"
               />
             </td>
-            <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
+            <td class="border-[1px] border-solid border-[#778899] p-[2px]">
               {{ tableNameTranslateObj.invoiceStatus }}
             </td>
-            <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
+            <td class="border-[1px] border-solid border-[#778899] p-[2px]">
               <GenericInput
                 :value="userId ? objData?.invoiceStatus : ''"
                 width="50"
@@ -387,10 +375,10 @@
           <tr
             class="bg-[rgba(239,243,249,0.7)] hover:bg-gradient-to-b hover:from-transparent hover:via-transparent hover:to-[rgba(220,229,243,0.7)]"
           >
-            <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
+            <td class="border-[1px] border-solid border-[#778899] p-[2px]">
               {{ tableNameTranslateObj.department }}
             </td>
-            <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
+            <td class="border-[1px] border-solid border-[#778899] p-[2px]">
               <LookUp
                 v-if="userId || objData?.department?.text"
                 :defvalue="
@@ -405,16 +393,12 @@
                 @customFunction="getLookUpValue"
               />
             </td>
-            <td
-              class="border-[1px] border-[solid] border-[#778899] p-[2px]"
-            ></td>
-            <td
-              class="border-[1px] border-[solid] border-[#778899] p-[2px]"
-            ></td>
-            <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
+            <td class="border-[1px] border-solid border-[#778899] p-[2px]"></td>
+            <td class="border-[1px] border-solid border-[#778899] p-[2px]"></td>
+            <td class="border-[1px] border-solid border-[#778899] p-[2px]">
               {{ tableNameTranslateObj.invoiceNo }}
             </td>
-            <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
+            <td class="border-[1px] border-solid border-[#778899] p-[2px]">
               <GenericInput
                 :value="userId ? objData?.invoiceNo : ''"
                 width="50"
@@ -435,10 +419,10 @@
           <tr
             class="bg-[rgba(239,243,249,0.7)] hover:bg-gradient-to-b hover:from-transparent hover:via-transparent hover:to-[rgba(220,229,243,0.7)]"
           >
-            <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
+            <td class="border-[1px] border-solid border-[#778899] p-[2px]">
               {{ tableNameTranslateObj.warehouse }}
             </td>
-            <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
+            <td class="border-[1px] border-solid border-[#778899] p-[2px]">
               <LookUp
                 v-if="objData?.warehouse?.text"
                 :defvalue="objData?.warehouse?.text"
@@ -451,16 +435,12 @@
                 @customFunction="getLookUpValue"
               />
             </td>
-            <td
-              class="border-[1px] border-[solid] border-[#778899] p-[2px]"
-            ></td>
-            <td
-              class="border-[1px] border-[solid] border-[#778899] p-[2px]"
-            ></td>
-            <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
+            <td class="border-[1px] border-solid border-[#778899] p-[2px]"></td>
+            <td class="border-[1px] border-solid border-[#778899] p-[2px]"></td>
+            <td class="border-[1px] border-solid border-[#778899] p-[2px]">
               {{ tableNameTranslateObj['personSalary.note'] }}
             </td>
-            <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
+            <td class="border-[1px] border-solid border-[#778899] p-[2px]">
               <GenericInput
                 :value="userId ? objData?.notes : ''"
                 width="50"
@@ -481,10 +461,10 @@
           <tr
             class="bg-[rgba(239,243,249,0.7)] hover:bg-gradient-to-b hover:from-transparent hover:via-transparent hover:to-[rgba(220,229,243,0.7)]"
           >
-            <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
+            <td class="border-[1px] border-solid border-[#778899] p-[2px]">
               {{ tableNameTranslateObj.currency }}
             </td>
-            <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
+            <td class="border-[1px] border-solid border-[#778899] p-[2px]">
               <LookUp
                 v-if="objData?.currency?.text"
                 :defvalue="objData?.currency?.text"
@@ -505,10 +485,10 @@
                 @customFunction="getLookUpValue"
               />
             </td>
-            <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
+            <td class="border-[1px] border-solid border-[#778899] p-[2px]">
               {{ propsValue.currency.name }}
             </td>
-            <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
+            <td class="border-[1px] border-solid border-[#778899] p-[2px]">
               <GenericInput
                 :value="
                   userId
@@ -529,10 +509,10 @@
                 @customFunction="inputValue"
               />
             </td>
-            <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
+            <td class="border-[1px] border-solid border-[#778899] p-[2px]">
               {{ tableNameTranslateObj.postNominal }}
             </td>
-            <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
+            <td class="border-[1px] border-solid border-[#778899] p-[2px]">
               <GenericInput
                 :value="userId ? objData?.invoiceNominal : ''"
                 width="50"
@@ -553,10 +533,10 @@
           <tr
             class="bg-[rgba(239,243,249,0.7)] hover:bg-gradient-to-b hover:from-transparent hover:via-transparent hover:to-[rgba(220,229,243,0.7)]"
           >
-            <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
+            <td class="border-[1px] border-solid border-[#778899] p-[2px]">
               {{ tableNameTranslateObj.orderProductionType }}
             </td>
-            <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
+            <td class="border-[1px] border-solid border-[#778899] p-[2px]">
               <LookUp
                 v-if="objData?.orderProductionType?.text"
                 :defvalue="objData?.orderProductionType?.text"
@@ -569,16 +549,12 @@
                 @customFunction="getLookUpValue"
               />
             </td>
-            <td
-              class="border-[1px] border-[solid] border-[#778899] p-[2px]"
-            ></td>
-            <td
-              class="border-[1px] border-[solid] border-[#778899] p-[2px]"
-            ></td>
-            <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
+            <td class="border-[1px] border-solid border-[#778899] p-[2px]"></td>
+            <td class="border-[1px] border-solid border-[#778899] p-[2px]"></td>
+            <td class="border-[1px] border-solid border-[#778899] p-[2px]">
               {{ tableNameTranslateObj.order_sequence_number }}
             </td>
-            <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
+            <td class="border-[1px] border-solid border-[#778899] p-[2px]">
               <GenericInput
                 :value="userId ? objData?.sequenceNumber : ''"
                 width="50"
@@ -599,10 +575,10 @@
           <tr
             class="bg-[rgba(239,243,249,0.7)] hover:bg-gradient-to-b hover:from-transparent hover:via-transparent hover:to-[rgba(220,229,243,0.7)]"
           >
-            <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
+            <td class="border-[1px] border-solid border-[#778899] p-[2px]">
               {{ tableNameTranslateObj.calculationType }}
             </td>
-            <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
+            <td class="border-[1px] border-solid border-[#778899] p-[2px]">
               <LookUp
                 v-if="objData?.calc_type?.text"
                 :defvalue="objData?.calc_type?.text"
@@ -615,10 +591,10 @@
                 @customFunction="getLookUpValue"
               />
             </td>
-            <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
+            <td class="border-[1px] border-solid border-[#778899] p-[2px]">
               {{ tableNameTranslateObj.contract }}
             </td>
-            <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
+            <td class="border-[1px] border-solid border-[#778899] p-[2px]">
               <LookUp
                 :value="userId ? objData?.order?.text : ''"
                 durl="invoiceBase/findAllContracts"
@@ -630,10 +606,10 @@
                 @customFunction="getLookUpValue"
               />
             </td>
-            <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
+            <td class="border-[1px] border-solid border-[#778899] p-[2px]">
               {{ tableNameTranslateObj['invoice.invoiceNumber'] }}
             </td>
-            <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
+            <td class="border-[1px] border-solid border-[#778899] p-[2px]">
               <GenericInput
                 :value="objData?.invoiceNominal?.text"
                 width="50"
@@ -654,10 +630,10 @@
           <tr
             class="bg-[rgba(239,243,249,0.7)] hover:bg-gradient-to-b hover:from-transparent hover:via-transparent hover:to-[rgba(220,229,243,0.7)]"
           >
-            <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
+            <td class="border-[1px] border-solid border-[#778899] p-[2px]">
               {{ tableNameTranslateObj.driverName }}
             </td>
-            <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
+            <td class="border-[1px] border-solid border-[#778899] p-[2px]">
               <GenericInput
                 :value="userId ? objData?.invoiceNumber : ''"
                 width="50"
@@ -674,26 +650,18 @@
                 @customFunction="inputValue"
               />
             </td>
-            <td
-              class="border-[1px] border-[solid] border-[#778899] p-[2px]"
-            ></td>
-            <td
-              class="border-[1px] border-[solid] border-[#778899] p-[2px]"
-            ></td>
-            <td
-              class="border-[1px] border-[solid] border-[#778899] p-[2px]"
-            ></td>
-            <td
-              class="border-[1px] border-[solid] border-[#778899] p-[2px]"
-            ></td>
+            <td class="border-[1px] border-solid border-[#778899] p-[2px]"></td>
+            <td class="border-[1px] border-solid border-[#778899] p-[2px]"></td>
+            <td class="border-[1px] border-solid border-[#778899] p-[2px]"></td>
+            <td class="border-[1px] border-solid border-[#778899] p-[2px]"></td>
           </tr>
           <tr
             class="bg-[rgba(239,243,249,0.7)] hover:bg-gradient-to-b hover:from-transparent hover:via-transparent hover:to-[rgba(220,229,243,0.7)]"
           >
-            <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
+            <td class="border-[1px] border-solid border-[#778899] p-[2px]">
               {{ tableNameTranslateObj.plateNumber }}
             </td>
-            <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
+            <td class="border-[1px] border-solid border-[#778899] p-[2px]">
               <LookUp
                 :value="userId ? objData?.plateNumber : ''"
                 durl="invoiceBase/findAllPlateNumber"
@@ -705,26 +673,18 @@
                 @customFunction="getLookUpValue"
               />
             </td>
-            <td
-              class="border-[1px] border-[solid] border-[#778899] p-[2px]"
-            ></td>
-            <td
-              class="border-[1px] border-[solid] border-[#778899] p-[2px]"
-            ></td>
-            <td
-              class="border-[1px] border-[solid] border-[#778899] p-[2px]"
-            ></td>
-            <td
-              class="border-[1px] border-[solid] border-[#778899] p-[2px]"
-            ></td>
+            <td class="border-[1px] border-solid border-[#778899] p-[2px]"></td>
+            <td class="border-[1px] border-solid border-[#778899] p-[2px]"></td>
+            <td class="border-[1px] border-solid border-[#778899] p-[2px]"></td>
+            <td class="border-[1px] border-solid border-[#778899] p-[2px]"></td>
           </tr>
           <tr
             class="bg-[rgba(239,243,249,0.7)] hover:bg-gradient-to-b hover:from-transparent hover:via-transparent hover:to-[rgba(220,229,243,0.7)]"
           >
-            <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
+            <td class="border-[1px] border-solid border-[#778899] p-[2px]">
               {{ tableNameTranslateObj.car }}
             </td>
-            <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
+            <td class="border-[1px] border-solid border-[#778899] p-[2px]">
               <LookUp
                 :defvalue="userId ? objData?.car : ''"
                 durl="invoiceBase/findAllCar"
@@ -736,18 +696,10 @@
                 @customFunction="getLookUpValue"
               />
             </td>
-            <td
-              class="border-[1px] border-[solid] border-[#778899] p-[2px]"
-            ></td>
-            <td
-              class="border-[1px] border-[solid] border-[#778899] p-[2px]"
-            ></td>
-            <td
-              class="border-[1px] border-[solid] border-[#778899] p-[2px]"
-            ></td>
-            <td
-              class="border-[1px] border-[solid] border-[#778899] p-[2px]"
-            ></td>
+            <td class="border-[1px] border-solid border-[#778899] p-[2px]"></td>
+            <td class="border-[1px] border-solid border-[#778899] p-[2px]"></td>
+            <td class="border-[1px] border-solid border-[#778899] p-[2px]"></td>
+            <td class="border-[1px] border-solid border-[#778899] p-[2px]"></td>
           </tr>
         </tbody>
       </table>
@@ -788,7 +740,7 @@
         "
       >
         <div
-          class="border-[1px] border-[solid] border-[rgba(119,136,153,0.5)] p-[8px_0_8px_8px]"
+          class="border-[1px] border-solid border-[rgba(119,136,153,0.5)] p-[8px_0_8px_8px]"
         >
           <h1 class="text-[13px]">Invoice Item</h1>
           <div class="flex gap-1 flex-wrap">
@@ -1143,6 +1095,7 @@
               @requiredAction="getDisabledValue"
             />
           </template>
+
           <template v-if="subTable || isEdit">
             <strong class="text-[15px]"
               >Extra Payment Details.
@@ -1410,6 +1363,7 @@ export default {
     window.addEventListener('click', this.closeModalOutside)
   },
 
+  // BEFORE_DESTROY
   beforeDestroy() {
     window.removeEventListener('click', this.closeModalOutside)
   },
@@ -1444,8 +1398,8 @@ export default {
       this.isLoading = !this.isLoading
       this.$axios
         .post(
-          `/invoice/preparePurchaseInvoiceNewAjaxLoad`,
-          { id },
+          `/invoices/prepareSaleInvoiceNewAjaxLoad`,
+          { id, saleToPerson: false },
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -1463,7 +1417,7 @@ export default {
           this.openPopup = data?.openPopup
           this.editOpen = data?.autoEditOpen
           this.autoHeight = data?.autoHeight
-          this.transactionColumns = data?.transactionColumns
+          this.transactionColumns = data?.transactionsColumns
           if (this.isEdit) {
             if (data?.invoiceJson?.paymentType?.text) this.makeAndUnBill = true
             else this.makeAndUnBill = false
@@ -1603,7 +1557,7 @@ export default {
       this.isLoading = !this.isLoading
       try {
         const res = await this.$axios.post(
-          `/invoice/preparePurchaseInvoiceNewJson?id=${this.parentID}`,
+          `/invoices/preparePurchaseInvoiceNewJson?id=${this.parentID}`,
           propBody,
           {
             headers: {
@@ -1831,7 +1785,7 @@ export default {
     getResponseTransactionsAction(prop) {
       this.$axios
         .post(
-          `/invoice/preparePurchaseInvoiceNewAjaxLoad`,
+          `/invoices/prepareSaleInvoiceNewAjaxLoad`,
           { id: this.parentID ? this.parentID : this.userId },
           {
             headers: {
@@ -1869,7 +1823,7 @@ export default {
       this.isLoading = !this.isLoading
       this.$axios
         .post(
-          `/invoice/${prop === 'topUP' ? 'payUnPayUrl' : 'extraPayUnPay'}`,
+          `/invoices/${prop === 'topUP' ? 'payUnPayUrl' : 'extraPayUnPay'}`,
           {
             id: this.parentID ? this.parentID : this.userId,
           },
@@ -1913,7 +1867,7 @@ export default {
       }
       this.$axios
         .post(
-          `/invoice/${prop === 'topP' ? 'payUnPayUrl' : 'extraPayUnPay'}`,
+          `/invoices/${prop === 'topP' ? 'payUnPayUrl' : 'extraPayUnPay'}`,
           prop === 'topP' ? topBodyP : subBodyP,
           {
             headers: {
@@ -2095,14 +2049,14 @@ export default {
             id: this.isEdit ? this.id : this.parentID ? this.parentID : null,
             invoiceItems: this.invoiceList,
             invoiceNominal,
-            order,
+            order: { id: order },
             paymentType: { id: Number(paymentType) },
           },
         }
 
         this.$axios
           .post(
-            `/invoice/prepareCreateEditPurchaseInvoiceEx`,
+            `/invoices/prepareCreateEditSaleInvoice`,
             this.isEdit ? editRequestBody : requestBody,
             {
               headers: {
@@ -2112,11 +2066,11 @@ export default {
             }
           )
           .then(({ data }) => {
-            this.parentID = data?.id
-            this.responseData = data?.invoiceItems
-            this.subListData = data
-            data?.invoiceItems.length && (this.uiShowHide = true)
-            if (!this.isEdit && data?.paymentType?.text)
+            this.parentID = data?.invoiceJson?.id
+            this.responseData = data?.invoiceJson?.invoiceItems
+            this.subListData = data?.invoiceJson
+            data?.invoiceJson?.invoiceItems.length && (this.uiShowHide = true)
+            if (!this.isEdit && data?.invoiceJson?.paymentType?.text)
               this.makeAndUnBill = true
             else this.makeAndUnBill = false
           })

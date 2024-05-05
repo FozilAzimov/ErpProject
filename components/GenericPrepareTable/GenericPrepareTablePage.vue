@@ -8,23 +8,34 @@
       v-if="!tableShowHide && helperShowHideRow"
       class="fixed left-[50%] top-[8px] translate-x-[-50%]"
     />
-    <GenericInvoiceItemModalPage
-      v-if="isOpenModal"
-      :tabledata="tablehead"
-      :which-table-name="whichTableName"
-      @customCloseAction="closeAction"
-      @customInputValueObj="modalAcceptAction"
-    />
     <div
-      class="flex items-start overflow-scroll relative z-0 mb-5 bg-white border-[1px] border-[solid] border-[rgba(119,136,153,0.3)]"
+      v-if="isOpenModal"
+      class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-[10000]"
+    >
+      <generic-invoice-filtering-modal-page
+        v-if="$route.path.includes('prepareSaleInvoiceNew.htm')"
+        :table-head="filteredTablehead"
+        @customCloseAction="closeAction"
+        @modalDataAction="tableBodyAllDataAction"
+      />
+      <GenericInvoiceItemModalPage
+        v-else
+        :tabledata="tablehead"
+        :which-table-name="whichTableName"
+        @customCloseAction="closeAction"
+        @customInputValueObj="modalAcceptAction"
+      />
+    </div>
+    <div
+      class="flex items-start overflow-scroll relative z-0 mb-5 bg-white border-[1px] border-solid border-[rgba(119,136,153,0.3)]"
       :style="`max-height:${height}px`"
       style="min-height: 165px"
     >
-      <table class="w-full border-[1px] border-[solid] border-[#F0F0F0]">
+      <table class="w-full border-[1px] border-solid border-[#F0F0F0]">
         <thead class="bg-[rgb(229,235,245)]">
           <tr>
             <th
-              class="text-[13px] font-semibold border-[1px] border-[solid] border-[rgba(119,136,153,0.2)] p-2"
+              class="text-[13px] font-semibold border-[1px] border-solid border-[rgba(119,136,153,0.2)] p-2"
             >
               №
             </th>
@@ -32,16 +43,14 @@
             <th
               v-for="(headName, key) in filteredTablehead"
               :key="key"
-              class="text-[13px] font-semibold border-[1px] border-[solid] border-[rgba(119,136,153,0.2)] p-2 whitespace-nowrap"
+              class="text-[13px] font-semibold border-[1px] border-solid border-[rgba(119,136,153,0.2)] p-2 whitespace-nowrap"
               :class="headName.width ? `w-[${headName.width}px]` : ''"
             >
-              <template v-if="headName.type !== 'hidden'">
-                {{ headName.headerText }}
-              </template>
+              {{ headName.headerText }}
             </th>
             <th
               v-if="!showHideRow && !isCanAdd"
-              class="text-[13px] font-semibold border-[1px] border-[solid] border-[rgba(119,136,153,0.2)] p-2"
+              class="text-[13px] font-semibold border-[1px] border-solid border-[rgba(119,136,153,0.2)] p-2"
             >
               Delete
             </th>
@@ -100,11 +109,13 @@
                   class="border-[1px] text-[12px] p-2"
                 >
                   <span
-                    v-if="row[item.name] && typeof row[item.name] === 'object'"
-                    >{{ row[item.name]['text'] }}</span
+                    v-if="
+                      row?.[item.name] && typeof row?.[item.name] === 'object'
+                    "
+                    >{{ row?.[item.name]?.['text'] }}</span
                   >
-                  <span v-else-if="row[item.name] && item.type === 'date'">{{
-                    new Date(row[item.name])
+                  <span v-else-if="row?.[item.name] && item.type === 'date'">{{
+                    new Date(row?.[item.name])
                       .toLocaleString('en-GB')
                       .split(',')
                       .join('')
@@ -128,7 +139,7 @@
                     bg="rgb(156,104,183)"
                     textsize="12"
                   />
-                  <span v-else-if="row[item.name] && item.name === 'ammount'">
+                  <span v-else-if="row?.[item.name] && item.name === 'ammount'">
                     {{
                       combinationThreeInputValues.length &&
                       Boolean(
@@ -209,7 +220,7 @@
             <tr v-if="noDataRow">
               <td
                 :colspan="tableheadlength"
-                class="text-center border-[1px] border-[solid] border-[#F0F0F0] text-[12px] p-2"
+                class="text-center border-[1px] border-solid border-[#F0F0F0] text-[12px] p-2"
               >
                 <div
                   class="flex flex-col justify-center items-start text-[rgba(0,0,0,0.5)]"
@@ -226,14 +237,14 @@
             </tr>
             <tr v-else class="bg-[rgb(229,235,245)]">
               <td
-                class="border-[1px] text-[13px] p-3 text-[rgba(0,0,0,0.7)] border-[1px] border-[solid] border-[rgba(119,136,153,0.2)]"
+                class="border-1px text-[13px] p-3 text-[rgba(0,0,0,0.7)] border-[1px] border-solid border-[rgba(119,136,153,0.2)]"
               >
                 Total
               </td>
               <td
                 v-for="(item, indexToo) in filteredTablehead"
                 :key="indexToo"
-                class="border-[1px] text-[12px] p-2 text-[rgb(29,119,255)] border-[1px] border-[solid] border-[rgba(119,136,153,0.2)]"
+                class="border-1px text-[12px] p-2 text-[rgb(29,119,255)] border-[1px] border-solid border-[rgba(119,136,153,0.2)]"
               >
                 {{ item.sumColumn && totalObjMap.get(item.name)?.toFixed(4) }}
               </td>
@@ -256,18 +267,12 @@
                 class="border-[1px] text-[12px] p-2"
                 :class="`w-[${value.dwidth}px]`"
               >
-                {{
-                  newEditObjData.length &&
-                  newEditObjData?.[indexOne]?.[value.name]
-                    ? newEditObjData[indexOne][value.name]
-                    : ''
-                }}
                 <LookUp
                   v-if="value.type === 'list'"
                   :defvalue="
                     newEditObjData.length &&
                     newEditObjData?.[indexOne]?.[value.name]
-                      ? newEditObjData[indexOne][value.name]?.text
+                      ? newEditObjData?.[indexOne]?.[value.name]?.text
                       : ''
                   "
                   :durl="`invoiceBase/${value.durl}`"
@@ -283,7 +288,7 @@
                   :value="
                     newEditObjData.length &&
                     newEditObjData?.[indexOne]?.[value.name]
-                      ? newEditObjData[indexOne][value.name]
+                      ? newEditObjData?.[indexOne]?.[value.name]
                       : ''
                   "
                   width="150"
@@ -304,7 +309,7 @@
                   :value="
                     newEditObjData.length &&
                     newEditObjData?.[indexOne]?.[value.name]
-                      ? newEditObjData[indexOne][value.name]
+                      ? newEditObjData?.[indexOne]?.[value.name]
                       : ''
                   "
                   width="150"
@@ -333,7 +338,7 @@
                   type="datetime-local"
                   :value="
                     newEditObjData[indexOne]?.updatedDate &&
-                    new Date(newEditObjData[indexOne]?.updatedDate)
+                    new Date(newEditObjData?.[indexOne]?.updatedDate)
                       .toISOString()
                       .split('.')[0]
                   "
@@ -350,7 +355,7 @@
                   :value="
                     newEditObjData.length &&
                     newEditObjData?.[indexOne]?.[value.name]
-                      ? newEditObjData[indexOne][value.name]
+                      ? newEditObjData?.[indexOne]?.[value.name]
                       : ''
                   "
                   @customFunction="getInputValue"
@@ -443,19 +448,19 @@
                   v-else-if="
                     value.type === 'label' &&
                     newEditObjData.length &&
-                    newEditObjData[indexOne][value.name] &&
-                    typeof newEditObjData[indexOne][value.name] === 'object'
+                    newEditObjData?.[indexOne]?.[value.name] &&
+                    typeof newEditObjData?.[indexOne]?.[value.name] === 'object'
                   "
-                  >{{ newEditObjData[indexOne][value.name].text }}</span
+                  >{{ newEditObjData?.[indexOne]?.[value.name]?.text }}</span
                 >
                 <span
                   v-else-if="
-                    value.type === 'label' &&
+                    value?.type === 'label' &&
                     newEditObjData.length &&
-                    newEditObjData[indexOne][value.name] &&
-                    typeof newEditObjData[indexOne][value.name] !== 'object'
+                    newEditObjData?.[indexOne]?.[value.name] &&
+                    typeof newEditObjData?.[indexOne]?.[value.name] !== 'object'
                   "
-                  >{{ newEditObjData[indexOne][value.name] }}</span
+                  >{{ newEditObjData?.[indexOne]?.[value.name] }}</span
                 >
               </td>
               <td class="border-[1px] text-[12px] p-2 text-center">
@@ -479,7 +484,7 @@
           <tr v-if="!showHideRow && !isCanAdd">
             <td
               :colspan="tableheadlength"
-              class="text-center border-[1px] border-[solid] border-[#F0F0F0] text-[12px] py-3"
+              class="text-center border-[1px] border-solid border-[#F0F0F0] text-[12px] py-3"
             >
               <div
                 class="flex flex-col justify-center items-start text-[rgba(0,0,0,0.5)]"
@@ -517,6 +522,7 @@ import GenericInput from '../Input/GenericInput.vue'
 import LookUp from '../Lookup/LookUp.vue'
 import GenericInputDatePage from '../InputDate/GenericInputDatePage.vue'
 import LoadingPage from '../Loading/LoadingPage.vue'
+import GenericInvoiceFilteringModalPage from '../GenericInvoiceFilteringModal/GenericInvoiceFilteringModalPage.vue'
 
 export default {
   // COMPONENTS
@@ -527,6 +533,7 @@ export default {
     GenericInput,
     GenericInputDatePage,
     LoadingPage,
+    GenericInvoiceFilteringModalPage,
   },
 
   // PROPS
@@ -600,7 +607,7 @@ export default {
   // COMPUTED
   computed: {
     filteredTablehead() {
-      return this.tablehead.filter((headName) => headName.type !== 'hidden')
+      return this.tablehead.filter((headName) => headName.showUI)
     },
   },
 
@@ -634,10 +641,26 @@ export default {
   },
 
   // MOUNTED
-  mounted() {},
+  mounted() {
+    // Close modal when clicking outside of it
+    window.addEventListener('click', this.closeModalOutside)
+  },
+
+  // BeforeDestroy
+  beforeDestroy() {
+    window.removeEventListener('click', this.closeModalOutside)
+  },
 
   // METHODS
   methods: {
+    // GenericInvoiceFilteringModal show hide action
+    closeModalOutside(event) {
+      if (event.target.classList.contains('bg-gray-900')) {
+        this.isOpenModal = false
+      }
+    },
+    // GenericInvoiceFilteringModal show hide action
+
     // ID orqali filterlash uchun
     setIndex() {
       this.ResData.forEach((obj, i) => (obj.index = i + 1))
@@ -669,6 +692,7 @@ export default {
           else this.requiredData.push({ [obj.name]: false })
         })
       })
+
       this.requiredData = this.requiredData.splice(0, this.tableBody.length)
       this.disabledButton = this.requiredData.find((obj) =>
         Object.values(obj).includes(false)
@@ -681,25 +705,25 @@ export default {
 
     // static filter
     ResDataFiltered() {
+      this.ResData = this.ResData.filter((obj) => {
+        if (
+          'createdDate' in obj ||
+          'invoiceDate' in obj ||
+          'updatedDate' in obj
+        ) {
+          obj.createdDate = new Date(obj.createdDate)
+            .toISOString()
+            .split('.')[0]
+          obj.invoiceDate = new Date(obj.invoiceDate)
+            .toISOString()
+            .split('.')[0]
+          obj.updatedDate = new Date(obj.updatedDate)
+            .toISOString()
+            .split('.')[0]
+        }
+        return obj
+      })
       if (this.ResData.length) {
-        this.ResData = this.ResData.filter((obj) => {
-          if (
-            'createdDate' in obj ||
-            'invoiceDate' in obj ||
-            'updatedDate' in obj
-          ) {
-            obj.createdDate = new Date(obj.createdDate)
-              .toISOString()
-              .split('.')[0]
-            obj.invoiceDate = new Date(obj.invoiceDate)
-              .toISOString()
-              .split('.')[0]
-            obj.updatedDate = new Date(obj.updatedDate)
-              .toISOString()
-              .split('.')[0]
-          }
-          return obj
-        })
         this.ResData.forEach((obj) => {
           for (const key in obj) {
             if (obj[key] === '' || obj[key] === ' ') {
@@ -709,7 +733,11 @@ export default {
         })
         this.ResData.forEach((obj) => {
           for (const key in obj) {
-            if (key === 'warehouse' || key === 'invoice') {
+            if (
+              key === 'warehouse' ||
+              key === 'invoice' ||
+              key === 'entryRef'
+            ) {
               obj[key] = { id: obj[key] }
             }
           }
@@ -869,6 +897,7 @@ export default {
       this.tableBody.push(this.filteredTablehead)
       this.ResData.push(objBack)
       this.newEditObjData = this.ResData
+
       // function
       this.requiredLookUpAndInputCheckerAction(this.ResData)
 
@@ -958,6 +987,30 @@ export default {
       })
     },
     // Total hisoblavchi function end
+
+    tableBodyAllDataAction(tableBodyAllData) {
+      this.showHideRow = false
+      tableBodyAllData.forEach((obj) => {
+        this.tableBody.push(this.filteredTablehead)
+      })
+
+      this.ResData = [...this.ResData, ...tableBodyAllData]
+      this.newEditObjData = this.ResData
+
+      console.log(this.newEditObjData)
+
+      // function
+      this.requiredLookUpAndInputCheckerAction(this.ResData)
+
+      this.ResData.forEach((obj, index) => {
+        this.combinationThreeInputValues[index] = {
+          qty: parseFloat(obj?.qty),
+          unitPrice: parseFloat(obj?.unitPrice),
+          cashPrice: parseFloat(obj?.cashPrice),
+          vat: parseFloat(obj?.vat),
+        }
+      })
+    },
   },
 }
 </script>

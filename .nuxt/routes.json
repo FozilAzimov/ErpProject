@@ -3,294 +3,350 @@
     "name": "bands.htm",
     "path": "/bands.htm",
     "component": "C:\\\\ErpProject\\\\pages\\\\bands.htm\\\\index.vue",
-    "chunkName": "pages/bands.htm/index"
+    "chunkName": "pages/bands.htm/index",
+    "_name": "_228336fa"
   },
   {
     "name": "batchReports.htm",
     "path": "/batchReports.htm",
     "component": "C:\\\\ErpProject\\\\pages\\\\batchReports.htm\\\\index.vue",
-    "chunkName": "pages/batchReports.htm/index"
+    "chunkName": "pages/batchReports.htm/index",
+    "_name": "_306c67b1"
   },
   {
     "name": "batchStagesReport.htm",
     "path": "/batchStagesReport.htm",
     "component": "C:\\\\ErpProject\\\\pages\\\\batchStagesReport.htm\\\\index.vue",
-    "chunkName": "pages/batchStagesReport.htm/index"
+    "chunkName": "pages/batchStagesReport.htm/index",
+    "_name": "_5403c495"
   },
   {
     "name": "branches.htm",
     "path": "/branches.htm",
     "component": "C:\\\\ErpProject\\\\pages\\\\branches.htm\\\\index.vue",
-    "chunkName": "pages/branches.htm/index"
+    "chunkName": "pages/branches.htm/index",
+    "_name": "_c443a1b4"
   },
   {
     "name": "branchProductsStockReportByLogic.htm",
     "path": "/branchProductsStockReportByLogic.htm",
     "component": "C:\\\\ErpProject\\\\pages\\\\branchProductsStockReportByLogic.htm\\\\index.vue",
-    "chunkName": "pages/branchProductsStockReportByLogic.htm/index"
+    "chunkName": "pages/branchProductsStockReportByLogic.htm/index",
+    "_name": "_86bb0c5a"
   },
   {
     "name": "calculationByColorVariantRecipe.htm",
     "path": "/calculationByColorVariantRecipe.htm",
     "component": "C:\\\\ErpProject\\\\pages\\\\calculationByColorVariantRecipe.htm\\\\index.vue",
-    "chunkName": "pages/calculationByColorVariantRecipe.htm/index"
+    "chunkName": "pages/calculationByColorVariantRecipe.htm/index",
+    "_name": "_dbac8d30"
   },
   {
     "name": "checkRealCountBarcode.htm",
     "path": "/checkRealCountBarcode.htm",
     "component": "C:\\\\ErpProject\\\\pages\\\\checkRealCountBarcode.htm\\\\index.vue",
-    "chunkName": "pages/checkRealCountBarcode.htm/index"
+    "chunkName": "pages/checkRealCountBarcode.htm/index",
+    "_name": "_302d9a61"
   },
   {
     "name": "colors.htm",
     "path": "/colors.htm",
     "component": "C:\\\\ErpProject\\\\pages\\\\colors.htm\\\\index.vue",
-    "chunkName": "pages/colors.htm/index"
+    "chunkName": "pages/colors.htm/index",
+    "_name": "_82e50974"
   },
   {
     "name": "dashboard.htm",
     "path": "/dashboard.htm",
     "component": "C:\\\\ErpProject\\\\pages\\\\dashboard.htm\\\\index.vue",
-    "chunkName": "pages/dashboard.htm/index"
+    "chunkName": "pages/dashboard.htm/index",
+    "_name": "_7a28fbf8"
   },
   {
     "name": "dyeings.htm",
     "path": "/dyeings.htm",
     "component": "C:\\\\ErpProject\\\\pages\\\\dyeings.htm\\\\index.vue",
-    "chunkName": "pages/dyeings.htm/index"
+    "chunkName": "pages/dyeings.htm/index",
+    "_name": "_68e935f7"
   },
   {
     "name": "expenseInvoice.htm",
     "path": "/expenseInvoice.htm",
     "component": "C:\\\\ErpProject\\\\pages\\\\expenseInvoice.htm\\\\index.vue",
-    "chunkName": "pages/expenseInvoice.htm/index"
+    "chunkName": "pages/expenseInvoice.htm/index",
+    "_name": "_0f03913e"
   },
   {
     "name": "grades.htm",
     "path": "/grades.htm",
     "component": "C:\\\\ErpProject\\\\pages\\\\grades.htm\\\\index.vue",
-    "chunkName": "pages/grades.htm/index"
+    "chunkName": "pages/grades.htm/index",
+    "_name": "_469fa3ba"
   },
   {
     "name": "inputFromProductionCompany.htm",
     "path": "/inputFromProductionCompany.htm",
     "component": "C:\\\\ErpProject\\\\pages\\\\inputFromProductionCompany.htm\\\\index.vue",
-    "chunkName": "pages/inputFromProductionCompany.htm/index"
+    "chunkName": "pages/inputFromProductionCompany.htm/index",
+    "_name": "_7e8a59e6"
   },
   {
     "name": "inputReturn.htm",
     "path": "/inputReturn.htm",
     "component": "C:\\\\ErpProject\\\\pages\\\\inputReturn.htm\\\\index.vue",
-    "chunkName": "pages/inputReturn.htm/index"
+    "chunkName": "pages/inputReturn.htm/index",
+    "_name": "_3b83c1fe"
   },
   {
     "name": "inputStockDetailReport.htm",
     "path": "/inputStockDetailReport.htm",
     "component": "C:\\\\ErpProject\\\\pages\\\\inputStockDetailReport.htm\\\\index.vue",
-    "chunkName": "pages/inputStockDetailReport.htm/index"
+    "chunkName": "pages/inputStockDetailReport.htm/index",
+    "_name": "_b2f21fb6"
   },
   {
     "name": "inputToServiceInvoice.htm",
     "path": "/inputToServiceInvoice.htm",
     "component": "C:\\\\ErpProject\\\\pages\\\\inputToServiceInvoice.htm\\\\index.vue",
-    "chunkName": "pages/inputToServiceInvoice.htm/index"
+    "chunkName": "pages/inputToServiceInvoice.htm/index",
+    "_name": "_6c36540a"
   },
   {
     "name": "internalInvoice.htm",
     "path": "/internalInvoice.htm",
     "component": "C:\\\\ErpProject\\\\pages\\\\internalInvoice.htm\\\\index.vue",
-    "chunkName": "pages/internalInvoice.htm/index"
+    "chunkName": "pages/internalInvoice.htm/index",
+    "_name": "_2fb416a8"
   },
   {
     "name": "invoiceReports.htm",
     "path": "/invoiceReports.htm",
     "component": "C:\\\\ErpProject\\\\pages\\\\invoiceReports.htm\\\\index.vue",
-    "chunkName": "pages/invoiceReports.htm/index"
+    "chunkName": "pages/invoiceReports.htm/index",
+    "_name": "_7e5120b8"
   },
   {
     "name": "login.htm",
     "path": "/login.htm",
     "component": "C:\\\\ErpProject\\\\pages\\\\login.htm\\\\index.vue",
-    "chunkName": "pages/login.htm/index"
+    "chunkName": "pages/login.htm/index",
+    "_name": "_39a1c10f"
   },
   {
     "name": "maintable",
     "path": "/maintable",
     "component": "C:\\\\ErpProject\\\\pages\\\\maintable\\\\index.vue",
-    "chunkName": "pages/maintable/index"
+    "chunkName": "pages/maintable/index",
+    "_name": "_31b09e96"
   },
   {
     "name": "marketSalesInvoice.htm",
     "path": "/marketSalesInvoice.htm",
     "component": "C:\\\\ErpProject\\\\pages\\\\marketSalesInvoice.htm\\\\index.vue",
-    "chunkName": "pages/marketSalesInvoice.htm/index"
+    "chunkName": "pages/marketSalesInvoice.htm/index",
+    "_name": "_0dd49fb9"
   },
   {
     "name": "menuSettings.htm",
     "path": "/menuSettings.htm",
     "component": "C:\\\\ErpProject\\\\pages\\\\menuSettings.htm\\\\index.vue",
-    "chunkName": "pages/menuSettings.htm/index"
+    "chunkName": "pages/menuSettings.htm/index",
+    "_name": "_dc8ad6d8"
   },
   {
     "name": "outputproductioninvoice.htm",
     "path": "/outputproductioninvoice.htm",
     "component": "C:\\\\ErpProject\\\\pages\\\\outputproductioninvoice.htm\\\\index.vue",
-    "chunkName": "pages/outputproductioninvoice.htm/index"
+    "chunkName": "pages/outputproductioninvoice.htm/index",
+    "_name": "_367cb385"
   },
   {
     "name": "outputProductionReturn.htm",
     "path": "/outputProductionReturn.htm",
     "component": "C:\\\\ErpProject\\\\pages\\\\outputProductionReturn.htm\\\\index.vue",
-    "chunkName": "pages/outputProductionReturn.htm/index"
+    "chunkName": "pages/outputProductionReturn.htm/index",
+    "_name": "_5312a10c"
   },
   {
     "name": "outputToProductionCompany.htm",
     "path": "/outputToProductionCompany.htm",
     "component": "C:\\\\ErpProject\\\\pages\\\\outputToProductionCompany.htm\\\\index.vue",
-    "chunkName": "pages/outputToProductionCompany.htm/index"
+    "chunkName": "pages/outputToProductionCompany.htm/index",
+    "_name": "_6803b690"
   },
   {
     "name": "outputToProductionCompanyReturn.htm",
     "path": "/outputToProductionCompanyReturn.htm",
     "component": "C:\\\\ErpProject\\\\pages\\\\outputToProductionCompanyReturn.htm\\\\index.vue",
-    "chunkName": "pages/outputToProductionCompanyReturn.htm/index"
+    "chunkName": "pages/outputToProductionCompanyReturn.htm/index",
+    "_name": "_68168480"
   },
   {
     "name": "outputToPrOrder.htm",
     "path": "/outputToPrOrder.htm",
     "component": "C:\\\\ErpProject\\\\pages\\\\outputToPrOrder.htm\\\\index.vue",
-    "chunkName": "pages/outputToPrOrder.htm/index"
+    "chunkName": "pages/outputToPrOrder.htm/index",
+    "_name": "_3adf68e8"
   },
   {
     "name": "outputToPrOrderReturn.htm",
     "path": "/outputToPrOrderReturn.htm",
     "component": "C:\\\\ErpProject\\\\pages\\\\outputToPrOrderReturn.htm\\\\index.vue",
-    "chunkName": "pages/outputToPrOrderReturn.htm/index"
+    "chunkName": "pages/outputToPrOrderReturn.htm/index",
+    "_name": "_a1edd650"
   },
   {
     "name": "outputToServiceInvoice.htm",
     "path": "/outputToServiceInvoice.htm",
     "component": "C:\\\\ErpProject\\\\pages\\\\outputToServiceInvoice.htm\\\\index.vue",
-    "chunkName": "pages/outputToServiceInvoice.htm/index"
+    "chunkName": "pages/outputToServiceInvoice.htm/index",
+    "_name": "_79cbe902"
   },
   {
     "name": "personEquipmentSews.htm",
     "path": "/personEquipmentSews.htm",
     "component": "C:\\\\ErpProject\\\\pages\\\\personEquipmentSews.htm\\\\index.vue",
-    "chunkName": "pages/personEquipmentSews.htm/index"
-  },
-  {
-    "name": "prepareSalesReturnNew.htm",
-    "path": "/prepareSalesReturnNew.htm",
-    "component": "C:\\\\ErpProject\\\\pages\\\\prepareSalesReturnNew.htm\\\\index.vue",
-    "chunkName": "pages/prepareSalesReturnNew.htm/index"
+    "chunkName": "pages/personEquipmentSews.htm/index",
+    "_name": "_59afd0f1"
   },
   {
     "name": "productionInvoice.htm",
     "path": "/productionInvoice.htm",
     "component": "C:\\\\ErpProject\\\\pages\\\\productionInvoice.htm\\\\index.vue",
-    "chunkName": "pages/productionInvoice.htm/index"
+    "chunkName": "pages/productionInvoice.htm/index",
+    "_name": "_12fc8f64"
   },
   {
     "name": "productionorder.htm",
     "path": "/productionorder.htm",
     "component": "C:\\\\ErpProject\\\\pages\\\\productionorder.htm\\\\index.vue",
-    "chunkName": "pages/productionorder.htm/index"
+    "chunkName": "pages/productionorder.htm/index",
+    "_name": "_63962f83"
   },
   {
     "name": "productionorderplannings.htm",
     "path": "/productionorderplannings.htm",
     "component": "C:\\\\ErpProject\\\\pages\\\\productionorderplannings.htm\\\\index.vue",
-    "chunkName": "pages/productionorderplannings.htm/index"
+    "chunkName": "pages/productionorderplannings.htm/index",
+    "_name": "_82c6ee96"
   },
   {
     "name": "purchaseinvoice.htm",
     "path": "/purchaseinvoice.htm",
     "component": "C:\\\\ErpProject\\\\pages\\\\purchaseinvoice.htm\\\\index.vue",
-    "chunkName": "pages/purchaseinvoice.htm/index"
+    "chunkName": "pages/purchaseinvoice.htm/index",
+    "_name": "_8c424468"
   },
   {
     "name": "purchaseorder.htm",
     "path": "/purchaseorder.htm",
     "component": "C:\\\\ErpProject\\\\pages\\\\purchaseorder.htm\\\\index.vue",
-    "chunkName": "pages/purchaseorder.htm/index"
+    "chunkName": "pages/purchaseorder.htm/index",
+    "_name": "_67ce2c0b"
   },
   {
     "name": "saleinvoice.htm",
     "path": "/saleinvoice.htm",
     "component": "C:\\\\ErpProject\\\\pages\\\\saleinvoice.htm\\\\index.vue",
-    "chunkName": "pages/saleinvoice.htm/index"
+    "chunkName": "pages/saleinvoice.htm/index",
+    "_name": "_1be90912"
   },
   {
     "name": "salesorder.htm",
     "path": "/salesorder.htm",
     "component": "C:\\\\ErpProject\\\\pages\\\\salesorder.htm\\\\index.vue",
-    "chunkName": "pages/salesorder.htm/index"
+    "chunkName": "pages/salesorder.htm/index",
+    "_name": "_3ef45d34"
   },
   {
     "name": "salesReturn.htm",
     "path": "/salesReturn.htm",
     "component": "C:\\\\ErpProject\\\\pages\\\\salesReturn.htm\\\\index.vue",
-    "chunkName": "pages/salesReturn.htm/index"
+    "chunkName": "pages/salesReturn.htm/index",
+    "_name": "_7de78dfc"
   },
   {
     "name": "sessions.htm",
     "path": "/sessions.htm",
     "component": "C:\\\\ErpProject\\\\pages\\\\sessions.htm\\\\index.vue",
-    "chunkName": "pages/sessions.htm/index"
+    "chunkName": "pages/sessions.htm/index",
+    "_name": "_273d9cb9"
   },
   {
     "name": "sewBandEquipments.htm",
     "path": "/sewBandEquipments.htm",
     "component": "C:\\\\ErpProject\\\\pages\\\\sewBandEquipments.htm\\\\index.vue",
-    "chunkName": "pages/sewBandEquipments.htm/index"
+    "chunkName": "pages/sewBandEquipments.htm/index",
+    "_name": "_5a55c3b9"
   },
   {
     "name": "sewModelReport.htm",
     "path": "/sewModelReport.htm",
     "component": "C:\\\\ErpProject\\\\pages\\\\sewModelReport.htm\\\\index.vue",
-    "chunkName": "pages/sewModelReport.htm/index"
+    "chunkName": "pages/sewModelReport.htm/index",
+    "_name": "_7cade09e"
   },
   {
     "name": "simpleProductionInvoice.htm",
     "path": "/simpleProductionInvoice.htm",
     "component": "C:\\\\ErpProject\\\\pages\\\\simpleProductionInvoice.htm\\\\index.vue",
-    "chunkName": "pages/simpleProductionInvoice.htm/index"
+    "chunkName": "pages/simpleProductionInvoice.htm/index",
+    "_name": "_45ad7876"
   },
   {
     "name": "transactionDetailReport.htm",
     "path": "/transactionDetailReport.htm",
     "component": "C:\\\\ErpProject\\\\pages\\\\transactionDetailReport.htm\\\\index.vue",
-    "chunkName": "pages/transactionDetailReport.htm/index"
+    "chunkName": "pages/transactionDetailReport.htm/index",
+    "_name": "_bea727d6"
   },
   {
     "name": "transactionReports.htm",
     "path": "/transactionReports.htm",
     "component": "C:\\\\ErpProject\\\\pages\\\\transactionReports.htm\\\\index.vue",
-    "chunkName": "pages/transactionReports.htm/index"
+    "chunkName": "pages/transactionReports.htm/index",
+    "_name": "_dc0365d6"
   },
   {
     "name": "transactionSaldoReport.htm",
     "path": "/transactionSaldoReport.htm",
     "component": "C:\\\\ErpProject\\\\pages\\\\transactionSaldoReport.htm\\\\index.vue",
-    "chunkName": "pages/transactionSaldoReport.htm/index"
+    "chunkName": "pages/transactionSaldoReport.htm/index",
+    "_name": "_581b1d17"
   },
   {
     "name": "index",
     "path": "/",
     "component": "C:\\\\ErpProject\\\\pages\\\\index.vue",
-    "chunkName": "pages/index"
+    "chunkName": "pages/index",
+    "_name": "_7607bc89"
   },
   {
     "name": "prepareProductionOrderItem.htm-id",
     "path": "/prepareProductionOrderItem.htm/:id?",
     "component": "C:\\\\ErpProject\\\\pages\\\\prepareProductionOrderItem.htm\\\\_id.vue",
-    "chunkName": "pages/prepareProductionOrderItem.htm/_id"
+    "chunkName": "pages/prepareProductionOrderItem.htm/_id",
+    "_name": "_1679047d"
   },
   {
     "name": "preparePurchaseInvoiceNew.htm-id",
     "path": "/preparePurchaseInvoiceNew.htm/:id?",
     "component": "C:\\\\ErpProject\\\\pages\\\\preparePurchaseInvoiceNew.htm\\\\_id.vue",
-    "chunkName": "pages/preparePurchaseInvoiceNew.htm/_id"
+    "chunkName": "pages/preparePurchaseInvoiceNew.htm/_id",
+    "_name": "_37aa00e5"
+  },
+  {
+    "name": "prepareSaleInvoiceNew.htm-id",
+    "path": "/prepareSaleInvoiceNew.htm/:id?",
+    "component": "C:\\\\ErpProject\\\\pages\\\\prepareSaleInvoiceNew.htm\\\\_id.vue",
+    "chunkName": "pages/prepareSaleInvoiceNew.htm/_id",
+    "_name": "_9f5db842"
+  },
+  {
+    "name": "prepareSalesReturnNew.htm-id",
+    "path": "/prepareSalesReturnNew.htm/:id?",
+    "component": "C:\\\\ErpProject\\\\pages\\\\prepareSalesReturnNew.htm\\\\_id.vue",
+    "chunkName": "pages/prepareSalesReturnNew.htm/_id",
+    "_name": "_57533756"
   }
 ]

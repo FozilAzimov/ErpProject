@@ -2,23 +2,26 @@
   "ActualitySystem": {
     "description": "Auto imported from components/ActualitySystemPage/ActualitySystem.vue"
   },
-  "BranchesPage": {
-    "description": "Auto imported from components/Branches/BranchesPage.vue"
-  },
-  "ColorsPage": {
-    "description": "Auto imported from components/ColorsPage/ColorsPage.vue"
+  "ColumnConfigPage": {
+    "description": "Auto imported from components/ColumnConfig/ColumnConfigPage.vue"
   },
   "GenericButton": {
     "description": "Auto imported from components/Button/GenericButton.vue"
   },
-  "GenericInvoiceItemModalPage": {
-    "description": "Auto imported from components/GenericInvoiceItemModal/GenericInvoiceItemModalPage.vue"
-  },
-  "ColumnConfigPage": {
-    "description": "Auto imported from components/ColumnConfig/ColumnConfigPage.vue"
+  "BranchesPage": {
+    "description": "Auto imported from components/Branches/BranchesPage.vue"
   },
   "DashboardPage": {
     "description": "Auto imported from components/Dashboard/DashboardPage.vue"
+  },
+  "ColorsPage": {
+    "description": "Auto imported from components/ColorsPage/ColorsPage.vue"
+  },
+  "GenericInvoiceFilteringModalPage": {
+    "description": "Auto imported from components/GenericInvoiceFilteringModal/GenericInvoiceFilteringModalPage.vue"
+  },
+  "GenericInvoiceItemModalPage": {
+    "description": "Auto imported from components/GenericInvoiceItemModal/GenericInvoiceItemModalPage.vue"
   },
   "GenericPrepareTablePage": {
     "description": "Auto imported from components/GenericPrepareTable/GenericPrepareTablePage.vue"
@@ -86,11 +89,11 @@
   "GenericRouterLinkButton": {
     "description": "Auto imported from components/Generics/GenericRouterLink/GenericRouterLinkButton.vue"
   },
-  "GenericSubPrepareTableTooPage": {
-    "description": "Auto imported from components/Generics/GenericSubPrepareTableToo/GenericSubPrepareTableTooPage.vue"
-  },
   "GenericSubPrepareTablePage": {
     "description": "Auto imported from components/Generics/GenericSubPrepareTable/GenericSubPrepareTablePage.vue"
+  },
+  "GenericSubPrepareTableTooPage": {
+    "description": "Auto imported from components/Generics/GenericSubPrepareTableToo/GenericSubPrepareTableTooPage.vue"
   },
   "ExpenseInvoice": {
     "description": "Auto imported from components/Invoices/ExpenseInvoice/ExpenseInvoice.vue"
@@ -122,6 +125,9 @@
   "PreparePurchaseInvoiceNewPage": {
     "description": "Auto imported from components/Invoices/PreparePurchaseInvoiceNew/PreparePurchaseInvoiceNewPage.vue"
   },
+  "PrepareSaleInvoiceNewPage": {
+    "description": "Auto imported from components/Invoices/PrepareSaleInvoiceNew/PrepareSaleInvoiceNewPage.vue"
+  },
   "PrepareSalesReturnNewPage": {
     "description": "Auto imported from components/Invoices/PrepareSalesReturnNew/PrepareSalesReturnNewPage.vue"
   },
@@ -149,11 +155,11 @@
   "DyeingsPage": {
     "description": "Auto imported from components/Orders/Dyeings/DyeingsPage.vue"
   },
-  "ProductionOrderplannigs": {
-    "description": "Auto imported from components/Orders/ProductionOrderPlannigs/ProductionOrderplannigs.vue"
-  },
   "ProductionOrderPage": {
     "description": "Auto imported from components/Orders/ProductionOrderPage/ProductionOrderPage.vue"
+  },
+  "ProductionOrderplannigs": {
+    "description": "Auto imported from components/Orders/ProductionOrderPlannigs/ProductionOrderplannigs.vue"
   },
   "PurchaseOrderPage": {
     "description": "Auto imported from components/Orders/PurchaseOrderpage/PurchaseOrderPage.vue"
@@ -164,20 +170,20 @@
   "BandsPage": {
     "description": "Auto imported from components/Reports/BandsPage/BandsPage.vue"
   },
-  "BatchStagesReport": {
-    "description": "Auto imported from components/Reports/BatchStagesReport/BatchStagesReport.vue"
-  },
   "BatchReportsPage": {
     "description": "Auto imported from components/Reports/BatchReportsPage/BatchReportsPage.vue"
+  },
+  "BatchStagesReport": {
+    "description": "Auto imported from components/Reports/BatchStagesReport/BatchStagesReport.vue"
   },
   "BranchProductsStockReportByLogic": {
     "description": "Auto imported from components/Reports/BranchProductsStockReportByLogic/BranchProductsStockReportByLogic.vue"
   },
-  "InputStockDetailReport": {
-    "description": "Auto imported from components/Reports/InputStockDetailReport/InputStockDetailReport.vue"
-  },
   "GradePage": {
     "description": "Auto imported from components/Reports/GradePage/GradePage.vue"
+  },
+  "InputStockDetailReport": {
+    "description": "Auto imported from components/Reports/InputStockDetailReport/InputStockDetailReport.vue"
   },
   "InvoiceReportsPage": {
     "description": "Auto imported from components/Reports/InvoiceReportsPage/InvoiceReportsPage.vue"

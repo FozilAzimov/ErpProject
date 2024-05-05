@@ -4,7 +4,7 @@
     <select
       v-model="selectValue"
       :disabled="disabled"
-      class="cursor-pointer py-[4px] rounded-[5px] border-[1px] border-[solid] border-[rgba(228,228,228,1)] outline-none focus:bg-gradient-to-b focus:from-transparent focus:via-transparent focus:to-[rgba(228,228,228,0.5)] focus:border-[1px] focus:border-solid focus:border-[rgba(131,137,150,0.5)] duration-[0.4s] focus:shadow-[0_0_5px_rgba(131,137,150,0.5)]"
+      class="cursor-pointer py-[4px] rounded-[5px] border-[1px] border-solid border-[rgba(119,136,153,0.3)] outline-none focus:bg-gradient-to-b focus:from-transparent focus:via-transparent focus:to-[rgba(228,228,228,0.5)] focus:border-[1px] focus:border-solid focus:border-[rgba(131,137,150,0.5)] duration-[0.4s] focus:shadow-[0_0_5px_rgba(131,137,150,0.5)]"
       :style="{
         fontSize: `${textsize}px`,
         maxWidth: `${maxWidth}px`,

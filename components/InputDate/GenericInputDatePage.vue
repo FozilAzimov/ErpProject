@@ -1,7 +1,7 @@
 <template>
   <input
     v-model="inputValue"
-    class="input rounded-[5px] border-[1px] border-[solid] border-[rgba(228,228,228,1)] outline-none focus:bg-gradient-to-b focus:from-transparent focus:via-transparent focus:to-[rgba(228,228,228,0.5)] duration-[0.4s] focus:shadow-[0_0_5px_#52a8ec99]"
+    class="input rounded-[5px] border-[1px] border-solid border-[rgba(119,136,153,0.3)] outline-none focus:bg-gradient-to-b focus:from-transparent focus:via-transparent focus:to-[rgba(228,228,228,0.5)] duration-[0.4s] focus:shadow-[0_0_5px_#52a8ec99]"
     :type="type"
     :style="{
       width: `${width}px`,

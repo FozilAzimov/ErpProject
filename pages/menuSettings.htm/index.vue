@@ -23,14 +23,12 @@ export default {
   },
   async fetch() {
     try {
-      const response = await this.$axios.$get(
-        'https://192.168.1.55:8443/api/user/quickMenuSettings',
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-        }
-      )
+      const response = await this.$axios.get('user/quickMenuSettings', {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+          'x-auth-token': localStorage.getItem('authToken'),
+        },
+      })
 
       if (response) {
         this.menuObject = response
@@ -40,6 +38,7 @@ export default {
         }))
       }
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error(error)
     }
   },

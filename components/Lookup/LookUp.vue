@@ -17,7 +17,7 @@
       type="text"
       :style="{
         border: required
-          ? '1px solid rgb(228,228,228)'
+          ? '1px solid rgba(119,136,153,0.3)'
           : '1px solid rgba(255,0,0,0.5)',
         height: `${height}px`,
       }"
@@ -40,7 +40,7 @@
       <li
         v-for="option in options"
         ref="selected"
-        :key="option.id"
+        :key="option?.value"
         :title="option.text"
         :full_custom_data="JSON.stringify(option)"
         :value="option.value"

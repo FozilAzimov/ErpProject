@@ -9,5 +9,3 @@ export default {
   components: { PreparePurchaseInvoiceNewPage },
 }
 </script>
-
-<style></style>
