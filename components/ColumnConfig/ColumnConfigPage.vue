@@ -105,6 +105,8 @@ export default {
   components: {
     Draggable,
   },
+
+  // PROPS
   props: {
     checkColumnConfig: Boolean,
     createedit: {
@@ -139,7 +141,13 @@ export default {
       type: Boolean,
       default: false,
     },
+    object: {
+      type: Object,
+      default: () => ({}),
+    },
   },
+
+  // DATA
   data() {
     return {
       leftItems: [],
@@ -152,9 +160,10 @@ export default {
       autoHeight1: ref(this.autoheight),
     }
   },
+
+  // WATCH
   watch: {
     right: {
-      immediate: true,
       handler(newRight) {
         this.editOpen1 = this.editopen
         this.openPopup1 = this.openpopup
@@ -164,17 +173,20 @@ export default {
           this.rightItems.push(newRight[item])
         }
       },
+      deep: true,
     },
     left: {
-      immediate: true,
       handler(newLeft) {
         for (const item in newLeft) {
           newLeft[item].postKey = item
           this.leftItems.push(newLeft[item])
         }
       },
+      deep: true,
     },
   },
+
+  // METHOD
   methods: {
     toggle1() {
       this.editOpen1 = !this.editOpen1

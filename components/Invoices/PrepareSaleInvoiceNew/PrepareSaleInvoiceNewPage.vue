@@ -4,6 +4,7 @@
       v-if="isLoading"
       class="fixed left-[50%] top-[8px] translate-x-[-50%]"
     />
+    <message-box ref="messageBoxRef" @emitProp="getEmitProp" />
     <transition name="fade">
       <ColumnConfigPage
         v-show="checkModal"
@@ -14,7 +15,7 @@
         :autoheight="autoHeight"
         :openpopup="openPopup"
         :editopen="editOpen"
-        api="saveColumnConfigU"
+        api="saveColumnConfig"
         class="z-[10000]"
         @checkModal="handleValue"
       />
@@ -29,7 +30,7 @@
       class="border-[1px] border-solid border-[rgba(0,0,0,0.05)] p-[12px] bg-gradient-to-b from-transparent via-transparent to-gray-200 shadow-md"
     >
       <div class="flex items-center gap-[10px]">
-        <GenericButton
+        <generic-nuxt-link-button
           name="Go Back"
           pl="10"
           pt="3"
@@ -39,27 +40,7 @@
           textsize="14"
           :url="img.goBack"
           :istherepicture="true"
-          @click="$router.go(-1)"
-        />
-        <GenericButton
-          name="onWay changeState"
-          pl="10"
-          pt="3"
-          pr="10"
-          pb="3"
-          bggradient="linear-gradient(to bottom, rgb(108,33,38),rgba(108,33,38,0.65))"
-          textsize="14"
-        />
-        <GenericButton
-          name="Copy Invoice"
-          pl="10"
-          pt="3"
-          pr="10"
-          pb="3"
-          bg="rgba(54, 155, 215, 0.8)"
-          textsize="14"
-          :url="img.copy"
-          :istherepicture="true"
+          to="/saleInvoice.htm"
         />
         <h1 class="font-bold text-[rgb(49,126,172)] text-[14px] uppercase">
           Sale Invoice
@@ -118,7 +99,6 @@
                 widthtype="%"
                 dlist="100"
                 name="paymentType"
-                :required="required.lookUp2"
                 :disabled="userId ? true : false"
                 @customFunction="getLookUpValue"
               />
@@ -166,13 +146,8 @@
                 widthtype="%"
                 dlist="100"
                 :dparam="{
-                  companyType: 'Supplier',
-                  dateFrom: userId
-                    ? objData?.date
-                    : new Date(objData?.date)
-                        .toLocaleString('en-GB')
-                        .split(',')
-                        .join(''),
+                  companyType: 'client',
+                  branchcompany: false,
                 }"
                 name="supplier"
                 :required="required.lookUp1"
@@ -424,13 +399,14 @@
             </td>
             <td class="border-[1px] border-solid border-[#778899] p-[2px]">
               <LookUp
-                v-if="objData?.warehouse?.text"
                 :defvalue="objData?.warehouse?.text"
                 durl="invoiceBase/findAllWarehouseLogic"
+                :dparam="{ departmentId }"
                 dwidth="100"
                 widthtype="%"
                 dlist="100"
-                name="wareHouseLogic"
+                name="warehouse"
+                :required="required.lookUp2"
                 :disabled="userId ? true : false"
                 @customFunction="getLookUpValue"
               />
@@ -703,7 +679,7 @@
           </tr>
         </tbody>
       </table>
-      <template>
+      <div>
         <GenericButton
           v-if="subTable || userId"
           name="Logistics Calculation"
@@ -730,7 +706,7 @@
           class="my-1"
           @click="additionInvoiceItem"
         />
-      </template>
+      </div>
       <div
         class="w-full bg-[rgba(224,230,238,0.6)] overflow-hidden"
         :class="
@@ -984,12 +960,13 @@
             ref="invoiceRef"
             :tablehead="tableData"
             :tableheadlength="tableData.length"
-            :addmodalorrow="openPopup"
+            :addmodalorrow="true"
             :response-data="responseData"
             :ui-show-hide="uiShowHide"
             :isedit="isEdit"
             :height="450"
             :default-values="productValues"
+            :filtering-modal-payload-data="filterModalProductPayloadData"
             class="bg-[rgba(255,255,255,0.5)] mt-1"
             @rowValues="getRowElements"
             @getNewList="getList"
@@ -1196,6 +1173,8 @@ import ColumnConfigPage from '../../ColumnConfig/ColumnConfigPage.vue'
 import GenericSubPrepareTablePage from '../../Generics/GenericSubPrepareTable/GenericSubPrepareTablePage.vue'
 import GenericSubPrepareTableTooPage from '../../Generics/GenericSubPrepareTableToo/GenericSubPrepareTableTooPage.vue'
 import GenericLogisticsCalculationPage from '../../Generics/GenericLogisticsCalculation/GenericLogisticsCalculationPage.vue'
+import GenericNuxtLinkButton from '../../Generics/GenericNuxtLink/GenericNuxtLinkButton.vue'
+import MessageBox from '../../MessageBox.vue'
 export default {
   // COMPONENTS
   components: {
@@ -1208,6 +1187,8 @@ export default {
     GenericSubPrepareTablePage,
     GenericSubPrepareTableTooPage,
     GenericLogisticsCalculationPage,
+    GenericNuxtLinkButton,
+    MessageBox,
   },
 
   // DATA
@@ -1277,11 +1258,12 @@ export default {
         lookUp1: true,
         lookUp2: true,
       },
+      departmentId: null,
       isInvoiceItem: false,
-      rightMap: new Map(),
-      leftMap: new Map(),
-      rightData: [],
-      leftData: [],
+      rightMap: {},
+      leftMap: {},
+      rightData: {},
+      leftData: {},
       actionUrl: '',
       checkModal: false,
       openPopup: true,
@@ -1326,6 +1308,7 @@ export default {
       disabledButton: false,
       subDisabledButton: false,
       subTwoDisabledButton: false,
+      filterModalProductPayloadData: {},
     }
   },
 
@@ -1395,11 +1378,15 @@ export default {
         : this.userId
         ? this.userId
         : null
+      const allTrueAndFalseData = JSON.parse(
+        localStorage.getItem('allTrueAndFalseData')
+      )
+
       this.isLoading = !this.isLoading
       this.$axios
         .post(
           `/invoices/prepareSaleInvoiceNewAjaxLoad`,
-          { id, saleToPerson: false },
+          { id, saleToPerson: allTrueAndFalseData.saleToPerson },
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -1418,6 +1405,7 @@ export default {
           this.editOpen = data?.autoEditOpen
           this.autoHeight = data?.autoHeight
           this.transactionColumns = data?.transactionsColumns
+          this.departmentId = data?.invoiceJson?.department?.id
           if (this.isEdit) {
             if (data?.invoiceJson?.paymentType?.text) this.makeAndUnBill = true
             else this.makeAndUnBill = false
@@ -1474,14 +1462,14 @@ export default {
     // Filter Action
     getFilterData() {
       this.tableData.forEach((obj) => {
-        this.rightMap.set(obj.name, obj)
+        this.rightMap[obj.name] = obj
       })
       this.tableData2.forEach((obj) => {
-        this.leftMap.set(obj.name, obj)
+        this.leftMap[obj.name] = obj
       })
 
-      this.rightData = Object.fromEntries(this.rightMap)
-      this.leftData = Object.fromEntries(this.leftMap)
+      this.rightData = this.rightMap
+      this.leftData = this.leftMap
     },
 
     // translate api
@@ -1530,7 +1518,7 @@ export default {
       this.lookupValuesObj.get('supplier')
         ? (this.required.lookUp1 = true)
         : (this.required.lookUp1 = false)
-      this.lookupValuesObj.get('paymentType')
+      this.lookupValuesObj.get('warehouse')
         ? (this.required.lookUp2 = true)
         : (this.required.lookUp2 = false)
     },
@@ -1541,7 +1529,7 @@ export default {
       this.lookupValuesObj.get('supplier')
         ? (this.required.lookUp1 = true)
         : (this.required.lookUp1 = false)
-      this.lookupValuesObj.get('paymentType')
+      this.lookupValuesObj.get('warehouse')
         ? (this.required.lookUp2 = true)
         : (this.required.lookUp2 = false)
 
@@ -1549,6 +1537,47 @@ export default {
         this.isInvoiceItem = true
       } else {
         this.isInvoiceItem = false
+      }
+
+      // function
+      this.setFilteringModalPayloadDataAction()
+    },
+
+    // Filter Modal uchun data jo'natish
+    setFilteringModalPayloadDataAction() {
+      const inputValues = this.inputValues
+      const lookupValues = this.lookUpValues
+      const objData = this.objData
+
+      const dateBack = new Date(objData.date)
+        .toLocaleString('en-GB')
+        .split(',')
+        .join('')
+      const date = inputValues.date ? inputValues.date : dateBack
+      const supplier = lookupValues?.supplier
+        ? lookupValues?.supplier
+        : objData?.supplier?.id
+      const orderProductionType = lookupValues?.orderProductionType
+        ? lookupValues?.orderProductionType
+        : objData?.orderProductionType?.id
+
+      const warehouse = lookupValues?.warehouse
+        ? lookupValues?.warehouse
+        : objData?.warehouse?.id
+
+      const currencyRate = this.propsValue?.supplare?.value
+        ? this.propsValue?.supplare?.value
+        : objData?.currencyRate?.text
+        ? objData?.currencyRate?.text
+        : objData?.currencyRate
+
+      this.filterModalProductPayloadData = {
+        tabName: this.actionUrl,
+        warehouseId: warehouse,
+        companyId: supplier,
+        orderProductionTypeId: orderProductionType,
+        dateFrom: date,
+        currencyRateVal: currencyRate,
       }
     },
 
@@ -1695,7 +1724,11 @@ export default {
     // delete Invoice
     deleteInvoice() {
       if (!this.hideButton) {
-        this.isLoading = !this.isLoading
+        this.$refs.messageBoxRef.open()
+      }
+    },
+    getEmitProp(propMessage) {
+      if (propMessage === 'confirm') {
         this.$axios
           .post(
             `/invoices/prepareDeleteInvoiceUrl`,
@@ -1710,11 +1743,9 @@ export default {
             }
           )
           .then((res) => {
-            this.isLoading = !this.isLoading
-            if (res.status === 200) this.$router.push('/purchaseinvoice.htm')
+            if (res.status === 200) this.$router.push('/saleinvoice.htm')
           })
           .catch((error) => {
-            this.isLoading = !this.isLoading
             // eslint-disable-next-line no-console
             console.log(error)
           })
@@ -1730,6 +1761,9 @@ export default {
       )
       this.uiShowHide = false
       this.makeAndUnBill = false
+
+      // function
+      this.setFilteringModalPayloadDataAction()
     },
 
     getRowElements(arr, hideBtn, id) {
@@ -1898,29 +1932,28 @@ export default {
         const lookupValues = this.lookUpValues
         const objData = this.objData
 
+        let dateBack = null
+        let sellDateBack = null
+        const pageID = this.parentID
+          ? this.parentID
+          : this.userId
+          ? this.userId
+          : null
+        if (pageID) {
+          const [day, month, year, time] = objData?.date.split(/[\s/]+/)
+          const formattedDateStr = `${year}-${month}-${day}T${time}`
+          dateBack = formattedDateStr
+          sellDateBack = formattedDateStr
+        } else {
+          dateBack = new Date(objData.date).toISOString().split('.')[0]
+          sellDateBack = new Date(objData.date).toISOString().split('.')[0]
+        }
+
         // input values
-        const dateBack = new Date(objData.date)
-          .toLocaleString('en-GB')
-          .split(',')
-          .join('')
-
-        let date = inputValues.date ? inputValues.date : dateBack
-        const splitDate = date.split(' ')
-        date = splitDate[0].split('/').reverse().join('-') + 'T' + splitDate[1]
-
-        const sellDateBack = new Date(objData.date)
-          .toLocaleString('en-GB')
-          .split(',')
-          .join('')
-
-        let sellDate = inputValues.sellDate
+        const date = inputValues.date ? inputValues.date : dateBack
+        const sellDate = inputValues.sellDate
           ? inputValues.sellDate
           : sellDateBack
-        const splitSellDate = sellDate.split(' ')
-        sellDate =
-          splitSellDate[0].split('/').reverse().join('-') +
-          'T' +
-          splitSellDate[1]
 
         const currencyRate = this.propsValue?.supplare?.value
           ? this.propsValue?.supplare?.value
@@ -2050,7 +2083,6 @@ export default {
             invoiceItems: this.invoiceList,
             invoiceNominal,
             order: { id: order },
-            paymentType: { id: Number(paymentType) },
           },
         }
 
@@ -2065,14 +2097,18 @@ export default {
               },
             }
           )
-          .then(({ data }) => {
-            this.parentID = data?.invoiceJson?.id
-            this.responseData = data?.invoiceJson?.invoiceItems
-            this.subListData = data?.invoiceJson
-            data?.invoiceJson?.invoiceItems.length && (this.uiShowHide = true)
-            if (!this.isEdit && data?.invoiceJson?.paymentType?.text)
+          .then(({ data, status }) => {
+            this.parentID = data?.id
+            this.responseData = data?.invoiceItems
+            this.subListData = data
+            data?.invoiceItems.length && (this.uiShowHide = true)
+            if (!this.isEdit && data?.paymentType?.text)
               this.makeAndUnBill = true
             else this.makeAndUnBill = false
+
+            if ((this.userId || this.parentID) && status === 200) {
+              this.$router.push(`/prepareSaleInvoiceNew.htm/${this.userId}`)
+            }
           })
           .catch((error) => {
             // eslint-disable-next-line no-console

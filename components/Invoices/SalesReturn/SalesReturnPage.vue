@@ -122,7 +122,7 @@
             class="w-[14px]"
           />
           <h1 class="font-bold text-[rgb(49,126,172)] text-[14px] uppercase">
-            Sale Invoice
+            Sales Return
           </h1>
         </div>
         <div>
@@ -192,7 +192,7 @@
             bg="rgba(54, 155, 215, 0.8)"
             textsize="13"
             margin="8"
-            @click="$router.push('/prepareSalesReturnNew.htm')"
+            @click="goToPageAction('not_person')"
           />
           <GenericButton
             name="Add New for Person"
@@ -203,7 +203,7 @@
             bg="rgba(54, 155, 215, 0.8)"
             textsize="13"
             margin="8"
-            @click="$router.push('/prepareSalesReturnNew.htm')"
+            @click="goToPageAction('yes_person')"
           />
         </div>
         <div class="mt-3 p-2">
@@ -268,7 +268,7 @@
             :tablebody="tableBody"
             :tableheadlength="tableHeadLength"
             :istherebody="isThereBody"
-            open-url="prepareSaleInvoiceNew"
+            open-url="prepareSalesReturnNew"
             height="600"
           />
         </div>
@@ -331,12 +331,23 @@ export default {
 
   // Methods
   methods: {
+    goToPageAction(prop) {
+      if (prop === 'not_person') {
+        this.$store.commit('SET_SALE_TO_PERSON', false)
+      } else if (prop === 'yes_person') {
+        this.$store.commit('SET_SALE_TO_PERSON', true)
+      }
+      this.$router.push('/prepareSalesReturnNew.htm')
+    },
+
     handleValue(checkModal) {
       this.checkModal = checkModal
     },
+
     openColumnConfig() {
       this.checkModal = true
     },
+
     getTableRequest() {
       this.isLoading = !this.isLoading
       this.$axios
@@ -411,35 +422,6 @@ export default {
       this.tableId = Array.from(arr)
     },
     // Generic Table action End
-
-    // Table Action Open button
-    getTableRowOpen(thisId) {
-      this.isLoading = !this.isLoading
-      this.$axios
-        .post(
-          `/invoices/salesReturnAjaxLoad`,
-          {
-            current_page: 1,
-            page_size: this.pageSize_value,
-            searchForm: { keyword: this.keywordValue || '', id: thisId },
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem('token')}`,
-              'x-auth-token': localStorage.getItem('authToken'),
-            },
-          }
-        )
-        .then((res) => {
-          this.isLoading = !this.isLoading
-          this.$router.push('/prepareSaleInvoiceNew.htm')
-        })
-        .catch((error) => {
-          this.isLoading = !this.isLoading
-          // eslint-disable-next-line no-console
-          console.log(error)
-        })
-    },
 
     // Generic_Date value
     getInputDateValues(value, id) {

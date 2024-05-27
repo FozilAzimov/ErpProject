@@ -1,6 +1,6 @@
 <template>
   <button
-    class="flex items-center gap-1 rounded-[5px] text-white active:scale-110 duration-[0.3s] hover:bg-gradient-to-b hover:from-transparent hover:via-transparent hover:to-[rgba(0,0,0,0.1)]"
+    class="flex items-center gap-1 rounded-[5px] text-white active:scale-110 duration-[0.3s] hover:bg-gradient-to-b hover:from-transparent hover:via-transparent hover:to-[rgba(0,0,0,0.1)] whitespace-nowrap"
     :disabled="disabled"
     :style="{
       padding: `${pt}px ${pr}px ${pb}px ${pl}px`,

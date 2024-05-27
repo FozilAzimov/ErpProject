@@ -1,35 +1,41 @@
 <template>
-  <input
-    v-model="keywordValue"
-    class="input rounded-[5px] outline-none focus:bg-gradient-to-b focus:from-transparent focus:via-transparent focus:to-[rgba(228,228,228,0.5)] duration-[0.4s] focus:shadow-[0_0_5px_#52a8ec99]"
-    :type="type"
-    :style="{
-      width: widthtype === '%' ? `${width}%` : `${width}px`,
-      height: `${height}px`,
-      padding: `${pt}px ${pr}px ${pb}px ${pl}px`,
-      fontSize: `${textsize}px`,
-      color: valuecolor,
-      border: required
-        ? '1px solid rgba(119,136,153,0.3)'
-        : '1px solid rgba(255,0,0,0.5)',
-    }"
-    :placeholder="placeholder"
-    @input="getInputValue"
-    @keyup.enter="getTableRequest"
-  />
+  <div>
+    <el-input
+      ref="enterInputREF"
+      v-model="input"
+      :type="type"
+      :placeholder="placeholder"
+      :disabled="disabled"
+      :size="size"
+      :style="{
+        width: widthtype === '%' ? `${width}%` : `${width}px`,
+        border: required ? 'none' : '1px solid red',
+        borderRadius: '5px',
+        color: valuecolor,
+      }"
+      @input="getInputValue"
+      @change="getTableRequest"
+    >
+    </el-input>
+  </div>
 </template>
+
 <script>
 export default {
   props: {
+    value: {
+      type: String,
+      default: '',
+    },
+    type: {
+      type: String,
+      default: 'text',
+    },
     width: {
       type: String,
-      default: '',
+      default: '200',
     },
     widthtype: {
-      type: String,
-      default: '',
-    },
-    height: {
       type: String,
       default: '',
     },
@@ -37,30 +43,11 @@ export default {
       type: String,
       default: '',
     },
-    pl: {
+    size: {
       type: String,
-      default: '',
+      default: 'mini',
     },
-    pt: {
-      type: String,
-      default: '',
-    },
-    pr: {
-      type: String,
-      default: '',
-    },
-    pb: {
-      type: String,
-      default: '',
-    },
-    textsize: {
-      type: String,
-      default: '',
-    },
-    type: {
-      type: String,
-      default: '',
-    },
+    disabled: { type: Boolean, default: false },
     valuecolor: {
       type: String,
       default: '',
@@ -93,12 +80,14 @@ export default {
 
   data() {
     return {
-      keywordValue: '',
+      input: this.value,
+      clearableValue: this.clearable,
     }
   },
 
   watch: {
-    keywordValue(newVal) {
+    value(newVal) {
+      this.input = newVal
       this.name === 'qty' && this.setLimitedValueAction(this.name)
       if (this.name === 'top_qty' || this.name === 'packQty')
         this.setMaxValueAction(this.name)
@@ -106,23 +95,20 @@ export default {
   },
 
   methods: {
-    getTableRequest(event) {
-      this.$emit('enter', event.target.value)
-      this.$emit('customFunction', this.name, this.keywordValue, this.order)
+    getTableRequest() {
+      this.$emit('enter', this.input)
+      this.$emit('customFunction', this.name, this.input, this.order)
     },
 
-    getInputValue({ target: { value, checked, type } }) {
-      type === 'checkbox'
-        ? (this.keywordValue = checked)
-        : (this.keywordValue = value)
-      this.$emit('input', this.keywordValue)
-      this.$emit('customFunction', this.name, this.keywordValue, this.order)
+    getInputValue() {
+      this.$emit('input', this.input)
+      this.$emit('customFunction', this.name, this.input, this.order)
     },
 
     // Filtering modaldagi qty va realCount uchun ishlaydi
     setLimitedValueAction(name) {
       if (this.isItLimitedValue) {
-        this.keywordValue = this.limitedValue?.[this.order]?.realCount
+        this.input = this.limitedValue?.[this.order]?.realCount
         this.$emit(
           'setMAXvalue',
           name,
@@ -135,8 +121,8 @@ export default {
 
     // Filtering modaldagi top_qty va packQty'ni max-valuesini tekshiradi
     setMaxValueAction(name) {
-      if (this.keywordValue >= this.maxValue) {
-        this.keywordValue = this.maxValue
+      if (this.input >= this.maxValue) {
+        this.input = this.maxValue
         this.$emit('setMAXvalue', name, this.maxValue)
       }
     },
@@ -144,9 +130,3 @@ export default {
   },
 }
 </script>
-
-<style scoped>
-.input:focus {
-  border: 1px solid #52a8eccc !important;
-}
-</style>

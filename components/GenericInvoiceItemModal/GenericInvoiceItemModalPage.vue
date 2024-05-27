@@ -1,6 +1,6 @@
 <template>
   <div
-    class="max-w-[80%] max-h-[65vh] p-3 rounded-md overflow-auto fixed bg-[rgb(208,225,243)] z-[1000] left-[50%] top-[50%] translate-x-[-50%] translate-y-[-60%] shadow-[0px_0px_50px_rgba(0,0,0,0.2)] flex justify-between"
+    class="max-w-[80%] max-h-[65vh] p-3 rounded-md overflow-auto bg-[rgb(208,225,243)] shadow-[0px_0px_50px_rgba(0,0,0,0.2)] flex justify-between"
   >
     <div>
       <div
@@ -331,13 +331,13 @@ export default {
       }
     },
 
-    getLookUpValue(key, name, value, order, resultType) {
+    getLookUpValue(key, value, order, resultType) {
       this.inputValuesObj.set(
         key,
         resultType === 'object'
-          ? { id: Number(value), text: name }
+          ? { id: Number(value) }
           : key === 'paymentTypesId'
-          ? { id: `${value}`, text: name }
+          ? { id: `${value}` }
           : value
       )
       this.removeCashboxAndBanksValueAction(key)

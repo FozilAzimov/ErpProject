@@ -1,12 +1,11 @@
 <template>
-    <OutputToPrOrder/>
+  <OutputToPrOrderPage />
 </template>
 
 <script>
-import OutputToPrOrder from '../../components/Invoices/OutputToPrOrder/OutputToPrOrder.vue';
+import OutputToPrOrderPage from '../../components/Invoices/OutputToPrOrder/OutputToPrOrderPage.vue'
 
 export default {
-components: { OutputToPrOrder },
+  components: { OutputToPrOrderPage },
 }
 </script>
-  

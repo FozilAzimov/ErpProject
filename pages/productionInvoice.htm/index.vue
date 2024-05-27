@@ -1,12 +1,11 @@
 <template>
-    <ProductionInvoice/>
-  </template>
-  
-  <script>
-  import ProductionInvoice from '../../components/Invoices/ProductionInvoice/ProductionInvoice.vue'
-  
-  export default {
-    components: { ProductionInvoice },
-  }
-  </script>
-  
+  <ProductionInvoicePage />
+</template>
+
+<script>
+import ProductionInvoicePage from '../../components/Invoices/ProductionInvoice/ProductionInvoicePage.vue'
+
+export default {
+  components: { ProductionInvoicePage },
+}
+</script>

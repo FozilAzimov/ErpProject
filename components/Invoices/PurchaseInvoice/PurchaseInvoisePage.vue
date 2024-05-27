@@ -122,7 +122,7 @@
             class="w-[14px]"
           />
           <h1 class="font-bold text-[rgb(49,126,172)] text-[14px] uppercase">
-            {{ $t('pages.purchaseinvoice.headerName') }}
+            PURCHASE INVOICE LIST
           </h1>
         </div>
         <div>
@@ -182,23 +182,25 @@
             : 'duration-[1s] h-0 overflow-hidden'
         "
       >
-        <GenericButton
-          name="Add New"
-          pl="10"
-          pt="3"
-          pr="10"
-          pb="3"
-          bg="rgba(54, 155, 215, 0.8)"
-          textsize="15"
-          margin="8"
-          @click="$router.push('/preparePurchaseInvoiceNew.htm')"
-        />
+        <div class="w-fit">
+          <generic-nuxt-link-button
+            name="Add New"
+            pl="8"
+            pt="3"
+            pr="8"
+            pb="3"
+            bg="rgba(54, 155, 215, 0.8)"
+            textsize="13"
+            margin="8"
+            to="/preparePurchaseInvoiceNew.htm"
+          />
+        </div>
         <div class="mt-3 p-2">
           <div class="flex items-center justify-between mb-1">
             <div class="text-[14px]">
               <select
                 v-model="pageSize_value"
-                class="border-[1px] border-[solid] border-[rgba(171,177,187,0.7)] w-[60px] px-[5px] py-[3px] cursor-pointer rounded-[2px] text-[14px] outline-none"
+                class="border-[1px] border-solid border-[rgba(171,177,187,0.7)] w-[60px] px-[5px] py-[3px] cursor-pointer rounded-[2px] text-[14px] outline-none"
                 @change="getTableRequest()"
               >
                 <option value="1">1</option>
@@ -276,6 +278,7 @@ import GenericSelect from '../../Select/GenericSelect.vue'
 import GenericInputDatePage from '../../InputDate/GenericInputDatePage.vue'
 import ColumnConfigPage from '../../ColumnConfig/ColumnConfigPage.vue'
 import GenericTablePage from '../../GenericTable/GenericTablePage.vue'
+import GenericNuxtLinkButton from '../../Generics/GenericNuxtLink/GenericNuxtLinkButton.vue'
 export default {
   components: {
     LoadingPage,
@@ -285,6 +288,7 @@ export default {
     GenericInputDatePage,
     ColumnConfigPage,
     GenericTablePage,
+    GenericNuxtLinkButton,
   },
   data() {
     return {
@@ -294,6 +298,7 @@ export default {
       users: [],
       tableData: [],
       tableHead: {},
+      leftMap: {},
       tableBody: [],
       tableHeadLength: null,
       isThereBody: false,
@@ -306,7 +311,6 @@ export default {
       formData: new Map(),
       checkModal: false,
       actionUrl: '',
-      leftMap: {},
       isOpenTable: true,
       isCloseTable: true,
     }
@@ -356,14 +360,14 @@ export default {
             },
           }
         )
-        .then((res) => {
+        .then(({ data }) => {
           this.tableBody = []
           this.isLoading = !this.isLoading
-          this.tableHead = res.data.rightMap
-          this.leftMap = res.data.leftMap
-          this.actionUrl = res.data.actionUrl
-          this.tableData = res.data.invoiceList
-          this.selectData = res.data.invoiceSearchDTO
+          this.tableHead = data.rightMap
+          this.leftMap = data.leftMap
+          this.actionUrl = data.actionUrl
+          this.tableData = data.invoiceList
+          this.selectData = data.invoiceSearchDTO
           this.getTableBody()
         })
         .catch((error) => {
@@ -398,35 +402,6 @@ export default {
       this.tableId = Array.from(arr)
     },
     // Generic Table action End
-
-    // Table Action Open button
-    getTableRowOpen(thisId) {
-      this.isLoading = !this.isLoading
-      this.$axios
-        .post(
-          `/invoice/preparePurchaseInvoice`,
-          {
-            current_page: 1,
-            page_size: this.pageSize_value,
-            searchForm: { keyword: this.keywordValue || '', id: thisId },
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem('token')}`,
-              'x-auth-token': localStorage.getItem('authToken'),
-            },
-          }
-        )
-        .then((res) => {
-          this.isLoading = !this.isLoading
-          this.$router.push('/preparePurchaseInvoiceNew.htm')
-        })
-        .catch((error) => {
-          this.isLoading = !this.isLoading
-          // eslint-disable-next-line no-console
-          console.log(error)
-        })
-    },
 
     // Generic_Date value
     getInputDateValues(value, id) {

@@ -1,12 +1,10 @@
 <template>
-  <PurchaseReturnPage />
+  <input-return-page />
 </template>
 
 <script>
-import PurchaseReturnPage from '../../components/Invoices/PurchaseReturnPage/PurchaseReturnPage'
+import InputReturnPage from '../../components/Invoices/InputReturn/InputReturnPage.vue'
 export default {
-  components: { PurchaseReturnPage }
+  components: { InputReturnPage },
 }
 </script>
-
-<style></style>
