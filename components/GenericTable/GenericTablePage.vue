@@ -1,18 +1,18 @@
 <template>
   <div class="flex items-start overflow-scroll" :style="`height:${height}px`">
-    <table class="w-full border-[1px] border-[solid] border-[#F0F0F0]">
+    <table class="w-full border-[1px] border-solid border-[#F0F0F0]">
       <thead class="bg-[rgb(229,235,245)]">
         <tr>
           <th
             v-for="(headName, key) in tablehead"
             :key="key"
-            class="text-[13px] font-semibold border-[1px] border-[solid] border-[rgba(119,136,153,0.2)] p-2 cursor-pointer whitespace-nowrap"
+            class="text-[13px] font-semibold border-[1px] border-solid border-[rgba(119,136,153,0.2)] p-2 cursor-pointer whitespace-nowrap"
             :class="`w-[${headName.width}px]`"
           >
             {{ headName.name }}
           </th>
           <th
-            class="text-[13px] font-semibold border-[1px] border-[solid] border-[rgba(119,136,153,0.2)] p-2 cursor-pointer"
+            class="text-[13px] font-semibold border-[1px] border-solid border-[rgba(119,136,153,0.2)] p-2 cursor-pointer"
           >
             Action
           </th>
@@ -75,7 +75,8 @@
               </span>
             </td>
             <td class="flex items-center justify-center gap-2 p-2">
-              <GenericRouterLinkButton
+              <generic-nuxt-link-button
+                v-if="!$route.path.includes('simpleProductionInvoice.htm')"
                 :to="`${openUrl}.htm/${value.id}`"
                 name="Open"
                 pl="10"
@@ -85,7 +86,33 @@
                 bg="rgb(126,183,62)"
                 textsize="14"
               />
+              <generic-nuxt-link-button
+                v-if="$route.path.includes('simpleProductionInvoice.htm')"
+                :to="`${openUrl}.htm/${value.id}`"
+                name="Edit"
+                pl="10"
+                pt="4"
+                pr="10"
+                pb="4"
+                bg="rgb(126,183,62)"
+                textsize="14"
+              />
               <GenericButton
+                v-if="
+                  !$route.path.includes('salesReturn.htm') &&
+                  !$route.path.includes('inputReturn.htm') &&
+                  !$route.path.includes('simpleProductionInvoice.htm') &&
+                  !$route.path.includes('outputToPrOrder.htm') &&
+                  !$route.path.includes('outputToServiceInvoice.htm') &&
+                  !$route.path.includes('inputToServiceInvoice.htm') &&
+                  !$route.path.includes('outputToPrOrderReturn.htm') &&
+                  !$route.path.includes('outputToProductionCompany.htm') &&
+                  !$route.path.includes(
+                    'outputToProductionCompanyReturn.htm'
+                  ) &&
+                  !$route.path.includes('purchaseServiceInvoice.htm') &&
+                  !$route.path.includes('saleServiceInvoice.htm')
+                "
                 name="qrCode"
                 pl="10"
                 pt="4"
@@ -95,6 +122,21 @@
                 textsize="14"
               />
               <GenericButton
+                v-if="
+                  !$route.path.includes('salesReturn.htm') &&
+                  !$route.path.includes('inputReturn.htm') &&
+                  !$route.path.includes('simpleProductionInvoice.htm') &&
+                  !$route.path.includes('outputToPrOrder.htm') &&
+                  !$route.path.includes('outputToServiceInvoice.htm') &&
+                  !$route.path.includes('inputToServiceInvoice.htm') &&
+                  !$route.path.includes('outputToPrOrderReturn.htm') &&
+                  !$route.path.includes('outputToProductionCompany.htm') &&
+                  !$route.path.includes(
+                    'outputToProductionCompanyReturn.htm'
+                  ) &&
+                  !$route.path.includes('purchaseServiceInvoice.htm') &&
+                  !$route.path.includes('saleServiceInvoice.htm')
+                "
                 name="forDevice"
                 pl="10"
                 pt="4"
@@ -110,7 +152,7 @@
           <tr>
             <td
               :colspan="tableheadlength"
-              class="text-center border-[1px] border-[solid] border-[#F0F0F0] text-[12px] p-3"
+              class="text-center border-[1px] border-solid border-[#F0F0F0] text-[12px] p-3"
             >
               <div
                 class="flex flex-col justify-center items-start text-[rgba(0,0,0,0.5)]"
@@ -133,9 +175,12 @@
 
 <script>
 import GenericButton from '../Button/GenericButton.vue'
-import GenericRouterLinkButton from '../Generics/GenericRouterLink/GenericRouterLinkButton.vue'
+import GenericNuxtLinkButton from '../Generics/GenericNuxtLink/GenericNuxtLinkButton.vue'
 export default {
-  components: { GenericRouterLinkButton, GenericButton },
+  components: {
+    GenericButton,
+    GenericNuxtLinkButton,
+  },
   props: {
     tablehead: {
       type: Object,

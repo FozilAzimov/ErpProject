@@ -74,42 +74,6 @@
           @change="getSelectValue"
         />
       </div>
-      <div class="flex items-center gap-1">
-        <label for="invoice" class="text-[13px] cursor-pointer"
-          >Invoice (Status)</label
-        >
-        <GenericSelect
-          id="invoice"
-          v-model="formData.invoice"
-          :data="selectData?.invoiceOnWayStatusList"
-          textsize="13"
-          @change="getSelectValue"
-        />
-      </div>
-      <div class="flex items-center gap-1">
-        <label for="departments" class="text-[13px] cursor-pointer"
-          >Departments</label
-        >
-        <GenericSelect
-          id="departments"
-          v-model="formData.departments"
-          :data="selectData?.departmentDTOList"
-          textsize="13"
-          @change="getSelectValue"
-        />
-      </div>
-      <div class="flex items-center gap-1">
-        <label for="warehouse" class="text-[13px] cursor-pointer"
-          >Warehouse</label
-        >
-        <GenericSelect
-          id="warehouse"
-          v-model="formData.warehouse"
-          :data="selectData?.warehouseList"
-          textsize="13"
-          @change="getSelectValue"
-        />
-      </div>
     </form>
     <template v-if="isCloseTable">
       <div
@@ -192,7 +156,7 @@
             bg="rgba(54, 155, 215, 0.8)"
             textsize="13"
             margin="8"
-            @click="$router.push('/prepareSaleInvoiceNew.htm')"
+            @click="goToPageAction('not_person')"
           />
           <GenericButton
             name="Add New To Device"
@@ -214,7 +178,7 @@
             bg="rgba(54, 155, 215, 0.8)"
             textsize="13"
             margin="8"
-            @click="$router.push('/prepareSaleInvoiceNew.htm')"
+            @click="goToPageAction('yes_person')"
           />
         </div>
         <div class="mt-3 p-2">
@@ -222,7 +186,7 @@
             <div class="text-[14px]">
               <select
                 v-model="pageSize_value"
-                class="border-[1px] border-[solid] border-[rgba(171,177,187,0.7)] w-[60px] px-[5px] py-[3px] cursor-pointer rounded-[2px] text-[14px] outline-none"
+                class="border-[1px] border-solid border-[rgba(171,177,187,0.7)] w-[60px] px-[5px] py-[3px] cursor-pointer rounded-[2px] text-[14px] outline-none"
                 @change="getTableRequest()"
               >
                 <option value="1">1</option>
@@ -335,6 +299,7 @@ export default {
       isCloseTable: true,
     }
   },
+
   mounted() {
     // Table function
     this.getTableRequest()
@@ -342,12 +307,32 @@ export default {
 
   // Methods
   methods: {
+    goToPageAction(prop) {
+      const dataThatStoresTrueAndFalse = {}
+      if (prop === 'not_person') {
+        dataThatStoresTrueAndFalse.saleToPerson = false
+        localStorage.setItem(
+          'allTrueAndFalseData',
+          JSON.stringify(dataThatStoresTrueAndFalse)
+        )
+      } else if (prop === 'yes_person') {
+        dataThatStoresTrueAndFalse.saleToPerson = true
+        localStorage.setItem(
+          'allTrueAndFalseData',
+          JSON.stringify(dataThatStoresTrueAndFalse)
+        )
+      }
+      this.$router.push('/prepareSaleInvoiceNew.htm')
+    },
+
     handleValue(checkModal) {
       this.checkModal = checkModal
     },
+
     openColumnConfig() {
       this.checkModal = true
     },
+
     getTableRequest() {
       this.isLoading = !this.isLoading
       this.$axios
@@ -422,35 +407,6 @@ export default {
       this.tableId = Array.from(arr)
     },
     // Generic Table action End
-
-    // Table Action Open button
-    getTableRowOpen(thisId) {
-      this.isLoading = !this.isLoading
-      this.$axios
-        .post(
-          `/invoices/saleinvoiceAjaxLoad`,
-          {
-            current_page: 1,
-            page_size: this.pageSize_value,
-            searchForm: { keyword: this.keywordValue || '', id: thisId },
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem('token')}`,
-              'x-auth-token': localStorage.getItem('authToken'),
-            },
-          }
-        )
-        .then((res) => {
-          this.isLoading = !this.isLoading
-          this.$router.push('/prepareSaleInvoiceNew.htm')
-        })
-        .catch((error) => {
-          this.isLoading = !this.isLoading
-          // eslint-disable-next-line no-console
-          console.log(error)
-        })
-    },
 
     // Generic_Date value
     getInputDateValues(value, id) {

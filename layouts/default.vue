@@ -207,7 +207,7 @@
               </template>
               <div @click="isCollapse">
                 <nuxt-link
-                  v-for="(childItem, indexChild) in item.child"
+                  v-for="(childItem, indexChild) in item.childList"
                   :key="indexChild"
                   :to="`/${childItem.url}.htm`"
                 >
@@ -250,7 +250,6 @@ export default {
     return {
       isPage: false,
       collapseMune: true,
-      isLoading: false,
       logoutMessage: false,
       dropToggle: false,
       langToggle: false,
@@ -263,6 +262,7 @@ export default {
     availableLocales() {
       return this.$i18n.locales
     },
+
     ...mapState(['isLoading', 'systemMenuList', 'firstSystemMenuList']),
   },
 

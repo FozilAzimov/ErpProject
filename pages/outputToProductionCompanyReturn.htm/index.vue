@@ -1,12 +1,11 @@
 <template>
-    <OutputToProductionCompany/>
+  <output-to-production-company-return-page />
 </template>
 
 <script>
-import OutputToProductionCompany from '../../components/Invoices/OutputToProductionCompany/OutputToProductionCompany.vue';
+import OutputToProductionCompanyReturnPage from '../../components/Invoices/OutputToProductionCompanyReturn/OutputToProductionCompanyReturnPage.vue'
 
 export default {
-components: { OutputToProductionCompany },
+  components: { OutputToProductionCompanyReturnPage },
 }
 </script>
-  

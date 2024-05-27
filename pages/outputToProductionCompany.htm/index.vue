@@ -1,12 +1,11 @@
 <template>
-    <OutputToProductionCompany/>
+  <OutputToProductionCompanyPage />
 </template>
 
 <script>
-import OutputToProductionCompany from '../../components/Invoices/OutputToProductionCompany/OutputToProductionCompany.vue';
+import OutputToProductionCompanyPage from '../../components/Invoices/OutputToProductionCompany/OutputToProductionCompanyPage.vue'
 
 export default {
-components: { OutputToProductionCompany },
+  components: { OutputToProductionCompanyPage },
 }
 </script>
-  

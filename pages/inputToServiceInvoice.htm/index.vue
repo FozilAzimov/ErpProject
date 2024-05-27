@@ -1,12 +1,10 @@
 <template>
-    <InputToServiceInvoice/>
+  <input-to-service-invoice-page />
 </template>
 
 <script>
-import InputToServiceInvoice from '../../components/InputToServiceInvoice/InputToServiceInvoice.vue';
-
+import InputToServiceInvoicePage from '../../components/Invoices/InputToServiceInvoice/InputToServiceInvoicePage.vue'
 export default {
-components: { InputToServiceInvoice },
+  components: { InputToServiceInvoicePage },
 }
 </script>
-  

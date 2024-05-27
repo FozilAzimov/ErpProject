@@ -66,12 +66,7 @@ export default {
     '@nuxtjs/pwa',
     '@nuxtjs/eslint-module',
     '@nuxtjs/i18n',
-    // '@nuxt/image',
   ],
-
-  // image: {
-  //   dir: 'static/images',
-  // },
 
   generate: {
     fallback: true,
@@ -129,8 +124,8 @@ export default {
       key: fs.readFileSync(path.resolve(__dirname, './keys/private.key')),
       cert: fs.readFileSync(path.resolve(__dirname, './keys/certificate.crt')),
     },
-    // port: 8443,
-    // host: '192.168.1.64',
+    port: 3000,
+    host: '0.0.0.0',
   },
 
   env: {},
@@ -138,12 +133,12 @@ export default {
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
     // baseURL: 'https://localhost:8443/api',
-    baseURL: 'https://localhost:443/api',
+    // baseURL: 'https://localhost:443/api',
     // baseURL: 'https://localhost:8008/api',
     // baseURL: 'https://192.168.1.159:8443/api',
     // baseURL: 'https://192.168.1.64:8443/api',
     // baseURL: 'https://192.168.1.170:443/api',
-    // baseURL: 'https://192.168.1.105:443/api',
+    baseURL: 'https://192.168.1.150:8080/api',
   },
 
   // PWA module configuration: https://go.nuxtjs.dev/pwa

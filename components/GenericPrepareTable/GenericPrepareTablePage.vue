@@ -8,13 +8,29 @@
       v-if="!tableShowHide && helperShowHideRow"
       class="fixed left-[50%] top-[8px] translate-x-[-50%]"
     />
+    <span>
+      <message-box ref="messageBoxRef" @emitProp="getEmitProp" />
+    </span>
     <div
       v-if="isOpenModal"
       class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-[10000]"
     >
       <generic-invoice-filtering-modal-page
-        v-if="$route.path.includes('prepareSaleInvoiceNew.htm')"
+        v-if="
+          $route.path.includes('prepareSaleInvoiceNew.htm') ||
+          $route.path.includes('prepareSalesReturnNew.htm') ||
+          $route.path.includes('prepareProductionInvoiceNew.htm') ||
+          $route.path.includes('prepareInputReturnNew.htm') ||
+          $route.path.includes('prepareExpenseInvoice.htm') ||
+          $route.path.includes('prepareOutputToPrOrder.htm') ||
+          $route.path.includes('prepareOutputToEquipment.htm') ||
+          $route.path.includes('prepareOutputToPrOrderReturn.htm') ||
+          $route.path.includes('prepareOutputToEquipmentReturn.htm') ||
+          $route.path.includes('prepareOutputToProductionCompanyNew.htm') ||
+          $route.path.includes('prepareOutputToProductionCompanyReturnNew.htm')
+        "
         :table-head="filteredTablehead"
+        :filtering-modal-payload-data="filteringModalPayloadData"
         @customCloseAction="closeAction"
         @modalDataAction="tableBodyAllDataAction"
       />
@@ -275,8 +291,12 @@
                       ? newEditObjData?.[indexOne]?.[value.name]?.text
                       : ''
                   "
-                  :durl="`invoiceBase/${value.durl}`"
-                  dwidth="250"
+                  :durl="`${
+                    value?.durl === 'findAllEquipments'
+                      ? 'productionReports'
+                      : 'invoiceBase'
+                  }/${value.durl}`"
+                  dwidth="200"
                   :order="indexOne"
                   :name="value.name"
                   :result-type="value.resultType"
@@ -523,6 +543,7 @@ import LookUp from '../Lookup/LookUp.vue'
 import GenericInputDatePage from '../InputDate/GenericInputDatePage.vue'
 import LoadingPage from '../Loading/LoadingPage.vue'
 import GenericInvoiceFilteringModalPage from '../GenericInvoiceFilteringModal/GenericInvoiceFilteringModalPage.vue'
+import MessageBox from '../MessageBox.vue'
 
 export default {
   // COMPONENTS
@@ -534,6 +555,7 @@ export default {
     GenericInputDatePage,
     LoadingPage,
     GenericInvoiceFilteringModalPage,
+    MessageBox,
   },
 
   // PROPS
@@ -569,6 +591,10 @@ export default {
     defaultValues: {
       type: Array,
       default: () => [],
+    },
+    filteringModalPayloadData: {
+      type: Object,
+      default: () => ({}),
     },
   },
 
@@ -734,9 +760,10 @@ export default {
         this.ResData.forEach((obj) => {
           for (const key in obj) {
             if (
-              key === 'warehouse' ||
-              key === 'invoice' ||
-              key === 'entryRef'
+              (key === 'warehouse' && obj[key]) ||
+              (key === 'invoice' && obj[key]) ||
+              (key === 'entryRef' && obj[key]) ||
+              (key === 'returnRef' && obj[key])
             ) {
               obj[key] = { id: obj[key] }
             }
@@ -804,17 +831,17 @@ export default {
     // input's Valuesini olish
 
     // Lookup's Valuesini olish
-    lookUpVal(resultType, value, name) {
-      return resultType === 'object' ? { id: Number(value), text: name } : value
+    lookUpVal(resultType, value) {
+      return resultType === 'object' ? { id: Number(value) } : value
     },
-    getLookUpValue(key, name, value, order, resultType) {
+    getLookUpValue(name, value, order, resultType) {
       this.setDefaultValues(order)
       if (this.ResData[order] && !this.newEditObjData.length) {
-        this.ResData[order][key] = this.lookUpVal(resultType, value, name)
+        this.ResData[order][name] = this.lookUpVal(resultType, value)
       } else if (this.ResData[order] && this.newEditObjData.length) {
-        this.ResData[order][key] = this.lookUpVal(resultType, value, name)
+        this.ResData[order][name] = this.lookUpVal(resultType, value)
       } else {
-        this.inputValuesObj.set(key, this.lookUpVal(resultType, value, name))
+        this.inputValuesObj.set(name, this.lookUpVal(resultType, value))
         this.ResData.push(Object.fromEntries(this.inputValuesObj))
       }
       // function
@@ -837,18 +864,36 @@ export default {
 
     // Add an Item
     addAnItemAction() {
-      if (this.addmodalorrow) {
+      if (
+        this.$route.path.includes('prepareSaleInvoiceNew.htm') ||
+        this.$route.path.includes('prepareSalesReturnNew.htm') ||
+        this.$route.path.includes('prepareProductionInvoiceNew.htm') ||
+        this.$route.path.includes('prepareInputReturnNew.htm') ||
+        this.$route.path.includes('prepareExpenseInvoice.htm') ||
+        this.$route.path.includes('prepareOutputToPrOrder.htm') ||
+        this.$route.path.includes('prepareOutputToEquipment.htm') ||
+        this.$route.path.includes('prepareOutputToPrOrderReturn.htm') ||
+        this.$route.path.includes('prepareOutputToEquipmentReturn.htm') ||
+        this.$route.path.includes('prepareOutputToProductionCompanyNew.htm') ||
+        this.$route.path.includes(
+          'prepareOutputToProductionCompanyReturnNew.htm'
+        )
+      ) {
         this.isOpenModal = true
-        this.whichTableName = 'topTable'
       } else {
-        this.tableBody.push(this.filteredTablehead)
-        this.setDefaultValues()
-        const requestObj = Object.fromEntries(this.inputValuesObj)
-        this.ResData.push(requestObj)
-        this.inputValuesObj.clear()
+        if (this.addmodalorrow) {
+          this.isOpenModal = true
+          this.whichTableName = 'topTable'
+        } else {
+          this.tableBody.push(this.filteredTablehead)
+          this.setDefaultValues()
+          const requestObj = Object.fromEntries(this.inputValuesObj)
+          this.ResData.push(requestObj)
+          this.inputValuesObj.clear()
+        }
+        this.showHideRow = false
+        this.setIndex()
       }
-      this.showHideRow = false
-      this.setIndex()
     },
     // Add an Item
 
@@ -865,25 +910,33 @@ export default {
             },
           }
         )
-        .then()
+        .then((res) => {})
         .catch((error) => {
           // eslint-disable-next-line no-console
           console.log(error)
         })
     },
 
+    getEmitProp(propMessage, id, index) {
+      if (propMessage === 'confirm') {
+        this.tableBody = this.tableBody.filter((row, inx) => inx !== index)
+        this.combinationThreeInputValues =
+          this.combinationThreeInputValues.filter((obj, inx) => inx !== index)
+        id
+          ? (this.ResData = this.ResData.filter((row) => row?.id !== id))
+          : (this.ResData = this.ResData.filter(
+              (row) => row.index !== index + 1
+            ))
+        id && this.requestAction(id)
+        this.newEditObjData = this.ResData
+        this.twoResData = this.ResData
+        this.inputValuesObj.clear()
+      }
+    },
+
     // row delete action
     rowDelAction(index, id) {
-      this.tableBody = this.tableBody.filter((row, inx) => inx !== index)
-      this.combinationThreeInputValues =
-        this.combinationThreeInputValues.filter((obj, inx) => inx !== index)
-      id
-        ? (this.ResData = this.ResData.filter((row) => row?.id !== id))
-        : (this.ResData = this.ResData.filter((row) => row.index !== index + 1))
-      id && this.requestAction(id)
-      this.newEditObjData = this.ResData
-      this.twoResData = this.ResData
-      this.inputValuesObj.clear()
+      this.$refs.messageBoxRef.open(id, index)
     },
 
     // Modal Closeobject
@@ -901,14 +954,14 @@ export default {
       // function
       this.requiredLookUpAndInputCheckerAction(this.ResData)
 
-      this.ResData.forEach((obj, index) => {
-        this.combinationThreeInputValues[index] = {
-          qty: parseFloat(obj?.qty),
-          unitPrice: parseFloat(obj?.unitPrice),
-          cashPrice: parseFloat(obj?.cashPrice),
-          vat: parseFloat(obj?.vat),
-        }
-      })
+      // this.ResData.forEach((obj, index) => {
+      //   this.combinationThreeInputValues[index] = {
+      //     qty: parseFloat(obj?.qty),
+      //     unitPrice: parseFloat(obj?.unitPrice),
+      //     cashPrice: parseFloat(obj?.cashPrice),
+      //     vat: parseFloat(obj?.vat),
+      //   }
+      // })
     },
     // Modal uchun: Accept button bosilganda ishlaydi
 
@@ -945,11 +998,11 @@ export default {
       this.showHideRow = false
       this.helperShowHideRow = false
       this.newEditObjData = this.ResData
-      this.setIndex()
 
       if (this.isCanAdd) {
         this.parentID = id
         if (this.addmodalorrow) {
+          this.setIndex()
           for (let i = 0; i < this.newEditObjData.length; i++) {
             this.tableBody.push(this.filteredTablehead)
           }
@@ -996,8 +1049,6 @@ export default {
 
       this.ResData = [...this.ResData, ...tableBodyAllData]
       this.newEditObjData = this.ResData
-
-      console.log(this.newEditObjData)
 
       // function
       this.requiredLookUpAndInputCheckerAction(this.ResData)

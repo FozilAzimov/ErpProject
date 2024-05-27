@@ -62,7 +62,7 @@
           :istherepicture="true"
         />
         <h1 class="font-bold text-[rgb(49,126,172)] text-[14px] uppercase">
-          Sale Invoice
+          Sales Return
         </h1>
       </div>
     </div>
@@ -703,7 +703,7 @@
           </tr>
         </tbody>
       </table>
-      <template>
+      <div>
         <GenericButton
           v-if="subTable || userId"
           name="Logistics Calculation"
@@ -730,7 +730,7 @@
           class="my-1"
           @click="additionInvoiceItem"
         />
-      </template>
+      </div>
       <div
         class="w-full bg-[rgba(224,230,238,0.6)] overflow-hidden"
         :class="
@@ -990,6 +990,7 @@
             :isedit="isEdit"
             :height="450"
             :default-values="productValues"
+            :filtering-modal-payload-data="filterModalProductPayloadData"
             class="bg-[rgba(255,255,255,0.5)] mt-1"
             @rowValues="getRowElements"
             @getNewList="getList"
@@ -1278,8 +1279,8 @@ export default {
         lookUp2: true,
       },
       isInvoiceItem: false,
-      rightMap: new Map(),
-      leftMap: new Map(),
+      rightMap: {},
+      leftMap: {},
       rightData: [],
       leftData: [],
       actionUrl: '',
@@ -1326,6 +1327,7 @@ export default {
       disabledButton: false,
       subDisabledButton: false,
       subTwoDisabledButton: false,
+      filterModalProductPayloadData: {},
     }
   },
 
@@ -1395,11 +1397,13 @@ export default {
         : this.userId
         ? this.userId
         : null
+      const saleToPerson = this.$store.state.saleToPerson
+
       this.isLoading = !this.isLoading
       this.$axios
         .post(
           `/invoices/prepareSalesReturnNewAjaxLoad`,
-          { id, saleToPerson: false },
+          { id, saleToPerson },
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -1474,14 +1478,14 @@ export default {
     // Filter Action
     getFilterData() {
       this.tableData.forEach((obj) => {
-        this.rightMap.set(obj.name, obj)
+        this.rightMap[obj.name] = obj
       })
       this.tableData2.forEach((obj) => {
-        this.leftMap.set(obj.name, obj)
+        this.leftMap[obj.name] = obj
       })
 
-      this.rightData = Object.fromEntries(this.rightMap)
-      this.leftData = Object.fromEntries(this.leftMap)
+      this.rightData = this.rightMap
+      this.leftData = this.leftMap
     },
 
     // translate api
@@ -1549,6 +1553,47 @@ export default {
         this.isInvoiceItem = true
       } else {
         this.isInvoiceItem = false
+      }
+
+      // function
+      this.setFilteringModalPayloadDataAction()
+    },
+
+    // Filter Modal uchun data jo'natish
+    setFilteringModalPayloadDataAction() {
+      const inputValues = this.inputValues
+      const lookupValues = this.lookUpValues
+      const objData = this.objData
+
+      const dateBack = new Date(objData.date)
+        .toLocaleString('en-GB')
+        .split(',')
+        .join('')
+      const date = inputValues.date ? inputValues.date : dateBack
+      const supplier = lookupValues?.supplier
+        ? lookupValues?.supplier
+        : objData?.supplier?.id
+      const orderProductionType = lookupValues?.orderProductionType
+        ? lookupValues?.orderProductionType
+        : objData?.orderProductionType?.id
+
+      const warehouse = lookupValues?.warehouse
+        ? lookupValues?.warehouse
+        : objData?.warehouse?.id
+
+      const currencyRate = this.propsValue?.supplare?.value
+        ? this.propsValue?.supplare?.value
+        : objData?.currencyRate?.text
+        ? objData?.currencyRate?.text
+        : objData?.currencyRate
+
+      this.filterModalProductPayloadData = {
+        tabName: this.actionUrl,
+        warehouseId: warehouse,
+        companyId: supplier,
+        orderProductionTypeId: orderProductionType,
+        dateFrom: date,
+        currencyRateVal: currencyRate,
       }
     },
 
@@ -1711,7 +1756,7 @@ export default {
           )
           .then((res) => {
             this.isLoading = !this.isLoading
-            if (res.status === 200) this.$router.push('/purchaseinvoice.htm')
+            if (res.status === 200) this.$router.push('/salesReturn.htm')
           })
           .catch((error) => {
             this.isLoading = !this.isLoading
@@ -1730,6 +1775,9 @@ export default {
       )
       this.uiShowHide = false
       this.makeAndUnBill = false
+
+      // function
+      this.setFilteringModalPayloadDataAction()
     },
 
     getRowElements(arr, hideBtn, id) {
@@ -1899,28 +1947,15 @@ export default {
         const objData = this.objData
 
         // input values
-        const dateBack = new Date(objData.date)
-          .toLocaleString('en-GB')
-          .split(',')
-          .join('')
+        const dateBack = new Date(objData.date).toISOString().split('.')[0]
 
-        let date = inputValues.date ? inputValues.date : dateBack
-        const splitDate = date.split(' ')
-        date = splitDate[0].split('/').reverse().join('-') + 'T' + splitDate[1]
+        const date = inputValues.date ? inputValues.date : dateBack
 
-        const sellDateBack = new Date(objData.date)
-          .toLocaleString('en-GB')
-          .split(',')
-          .join('')
+        const sellDateBack = new Date(objData.date).toISOString().split('.')[0]
 
-        let sellDate = inputValues.sellDate
+        const sellDate = inputValues.sellDate
           ? inputValues.sellDate
           : sellDateBack
-        const splitSellDate = sellDate.split(' ')
-        sellDate =
-          splitSellDate[0].split('/').reverse().join('-') +
-          'T' +
-          splitSellDate[1]
 
         const currencyRate = this.propsValue?.supplare?.value
           ? this.propsValue?.supplare?.value
@@ -2065,12 +2100,13 @@ export default {
               },
             }
           )
-          .then(({ data }) => {
-            this.parentID = data?.invoiceJson?.id
-            this.responseData = data?.invoiceJson?.invoiceItems
-            this.subListData = data?.invoiceJson
-            data?.invoiceJson?.invoiceItems.length && (this.uiShowHide = true)
-            if (!this.isEdit && data?.invoiceJson?.paymentType?.text)
+          .then(({ data: { invoiceJson } }) => {
+            const invoiceData = JSON.parse(invoiceJson)
+            this.parentID = invoiceData?.id
+            this.responseData = invoiceData?.invoiceItems
+            this.subListData = invoiceData
+            invoiceData?.invoiceItems.length && (this.uiShowHide = true)
+            if (!this.isEdit && invoiceData?.paymentType?.text)
               this.makeAndUnBill = true
             else this.makeAndUnBill = false
           })

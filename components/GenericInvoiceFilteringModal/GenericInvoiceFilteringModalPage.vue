@@ -1,6 +1,6 @@
 <template>
   <div
-    class="w-[90%] max-h-[85vh] p-3 rounded-md overflow-auto fixed bg-[rgb(208,225,243)] z-[1000] left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] shadow-[0px_0px_50px_rgba(0,0,0,0.2)] flex justify-between"
+    class="w-[90%] max-h-[85vh] p-3 rounded-md overflow-auto bg-[rgb(208,225,243)] shadow-[0px_0px_50px_rgba(0,0,0,0.2)] flex justify-between"
   >
     <LoadingPage
       v-if="isLoading"
@@ -38,7 +38,185 @@
       <!-- Line -->
 
       <div>
-        <div class="flex items-center justify-between gap-2">
+        <div
+          v-if="$route.path.includes('prepareProductionInvoiceNew.htm')"
+          class="flex items-end justify-between gap-2 h-[50px]"
+        >
+          <span class="flex flex-col items-start">
+            <label class="text-[13px] font-medium whitespace-nowrap pl-1"
+              >Date from</label
+            >
+            <generic-input-date-page
+              width="165"
+              height="30"
+              pl="10"
+              pr="10"
+              pt="1"
+              pb="1"
+              textsize="13"
+              type="datetime-local"
+              valuecolor="rgba(0,0,0,0.7)"
+              name="date_from"
+              :value="new Date().toISOString().split('.')[0]"
+              @customFunction="getDateValue"
+            />
+          </span>
+
+          <span class="flex flex-col items-start">
+            <label class="text-[13px] font-medium whitespace-nowrap pl-1"
+              >Date to</label
+            >
+            <generic-input-date-page
+              width="165"
+              height="30"
+              pl="10"
+              pr="10"
+              pt="1"
+              pb="1"
+              textsize="13"
+              type="datetime-local"
+              valuecolor="rgba(0,0,0,0.7)"
+              name="date_to"
+              :value="new Date().toISOString().split('.')[0]"
+              @customFunction="getDateValue"
+            />
+          </span>
+
+          <span class="flex flex-col items-start">
+            <label class="text-[13px] font-medium whitespace-nowrap pl-1"
+              >Planing No</label
+            >
+            <generic-input
+              pl="8"
+              pr="8"
+              pt="2"
+              pb="2"
+              textsize="13"
+              type="number"
+              width="100"
+              widthtype="%"
+              name="planing"
+              @customFunction="getInputValue"
+            />
+          </span>
+
+          <span class="flex flex-col items-start">
+            <label class="text-[13px] font-medium whitespace-nowrap pl-1"
+              >Planing Type</label
+            >
+            <look-up
+              dwidth="100"
+              widthtype="%"
+              dlist="100"
+              durl="invoice/findAllPlanningType"
+              name="planing_type"
+              @customFunction="getLookUpValue"
+            />
+          </span>
+
+          <span class="flex flex-col items-start">
+            <label class="text-[13px] font-medium whitespace-nowrap pl-1"
+              >Client Order</label
+            >
+            <generic-input
+              pl="8"
+              pr="8"
+              pt="2"
+              pb="2"
+              textsize="13"
+              type="text"
+              width="100"
+              widthtype="%"
+              name="client_order"
+              @customFunction="getInputValue"
+            />
+          </span>
+
+          <span class="flex flex-col items-start">
+            <label class="text-[13px] font-medium whitespace-nowrap pl-1"
+              >Order</label
+            >
+            <generic-input
+              pl="8"
+              pr="8"
+              pt="2"
+              pb="2"
+              textsize="13"
+              type="text"
+              width="100"
+              widthtype="%"
+              name="order"
+              @customFunction="getInputValue"
+            />
+          </span>
+
+          <span class="flex flex-col items-start">
+            <label class="text-[13px] font-medium whitespace-nowrap pl-1"
+              >Client Company</label
+            >
+            <look-up
+              dwidth="100"
+              widthtype="%"
+              dlist="100"
+              durl="invoice/findAllCompanyForInvoice"
+              name="client_company"
+              @customFunction="getLookUpValue"
+            />
+          </span>
+
+          <span class="flex flex-col items-start">
+            <label class="text-[13px] font-medium whitespace-nowrap pl-1"
+              >Department</label
+            >
+            <look-up
+              dwidth="100"
+              widthtype="%"
+              dlist="100"
+              durl="invoice/findAllDepartment"
+              name="department"
+              @customFunction="getLookUpValue"
+            />
+          </span>
+
+          <span class="flex flex-col items-start">
+            <label class="text-[13px] font-medium whitespace-nowrap pl-1"
+              >Start/Stop</label
+            >
+            <look-up
+              dwidth="100"
+              widthtype="%"
+              dlist="100"
+              durl="invoice/findAllPlanOpenOrClose"
+              name="start_stop"
+              @customFunction="getLookUpValue"
+            />
+          </span>
+
+          <span class="flex items-center">
+            <generic-input
+              type="checkbox"
+              class="cursor-pointer"
+              name="keep"
+              @customFunction="getInputValue"
+            />
+            <label class="text-[12px] whitespace-nowrap pl-1"
+              >Keep Window</label
+            >
+          </span>
+
+          <generic-button
+            name="Get"
+            pl="10"
+            pt="3"
+            pr="10"
+            pb="3"
+            bg="rgba(54, 155, 215, 0.8)"
+            textsize="13"
+            @click="getResponseData('less')"
+          />
+        </div>
+
+        <div v-else class="flex items-center justify-between gap-2">
           <div class="flex flex-col items-start gap-1 h-[150px]">
             <span class="flex flex-col items-start">
               <label class="text-[13px] font-medium whitespace-nowrap pl-1"
@@ -50,6 +228,7 @@
                 dlist="100"
                 durl="invoiceBase/findAllStockProductListUrl"
                 name="product"
+                :dparam="allParams"
                 @customFunction="getLookUpValue"
               />
             </span>
@@ -474,11 +653,6 @@
             </span>
             <span class="flex items-center">
               <generic-input
-                pl="8"
-                pr="8"
-                pt="2"
-                pb="2"
-                textsize="13"
                 type="checkbox"
                 class="cursor-pointer"
                 name="defect"
@@ -590,7 +764,11 @@
                     :order="indexOne"
                     :name="item.name"
                     :result-type="item.resultType"
-                    :durl="`invoiceBase/${item.durl}`"
+                    :durl="`${
+                      item?.durl === 'findAllEquipments'
+                        ? 'productionReports'
+                        : 'invoiceBase'
+                    }/${item.durl}`"
                     :dwidth="`${item.dwidth}`"
                     @customFunction="getBodyLookUpValue"
                   />
@@ -680,6 +858,7 @@
 <script>
 import GenericButton from '../Button/GenericButton.vue'
 import GenericInput from '../Input/GenericInput.vue'
+import GenericInputDatePage from '../InputDate/GenericInputDatePage.vue'
 import LookUp from '../Lookup/LookUp.vue'
 
 export default {
@@ -687,6 +866,7 @@ export default {
     GenericButton,
     LookUp,
     GenericInput,
+    GenericInputDatePage,
   },
 
   // Props
@@ -694,6 +874,10 @@ export default {
     tableHead: {
       type: Array,
       default: () => [],
+    },
+    filteringModalPayloadData: {
+      type: Object,
+      default: () => ({}),
     },
   },
 
@@ -712,19 +896,7 @@ export default {
       isItLimitedValue: false,
       clickedRalCount: [],
       tableBodyAllData: [],
-
-      array1: [
-        { name: 'ali', age: 1 },
-        { name: 'salom', age: 1 },
-        { name: 'vali', age: 1 },
-      ],
-      array2: [
-        { name: 'ali', age: 2 },
-        { name: 'salom', age: 2 },
-        { name: 'vali', age: 2 },
-        { name: 'halim', age: 2 },
-        { name: 'xali', age: 2 },
-      ],
+      allParams: {},
     }
   },
 
@@ -761,6 +933,7 @@ export default {
   // Mounted
   mounted() {
     this.headData = this.tableHead
+    this.allParamsAction()
   },
 
   // Methods
@@ -772,33 +945,37 @@ export default {
 
     // =====================================================
     // LookUp value'sini olish
-    getLookUpValue(name, value, valueID, order, resultType) {
+    getLookUpValue(name, valueID, order, resultType) {
       this.allInputLookUpValues[name] = valueID
-      if (name === 'product' && valueID) this.getResponseData()
+      if (name === 'product' && valueID) this.getResponseData('all')
     },
     // Input value'sini olish
     getInputValue(name, value) {
+      this.allInputLookUpValues[name] = value
+    },
+    // Input value'sini olish
+    getDateValue(name, value, rowID) {
       this.allInputLookUpValues[name] = value
     },
     // =====================================================
 
     // =====================================================
     // Body LookUp value'sini olish
-    getBodyLookUpValue(name, value, valueID, order, resultType) {
+    getBodyLookUpValue(name, valueID, order, resultType) {
       if (this.bodyAllInputLookUpValues?.[order] && resultType === 'object') {
         this.$set(this.bodyAllInputLookUpValues[order], name, { id: valueID })
       } else if (
         this.bodyAllInputLookUpValues?.[order] &&
         resultType !== 'object'
       ) {
-        this.$set(this.bodyAllInputLookUpValues[order], name, value)
+        this.$set(this.bodyAllInputLookUpValues[order], name, valueID)
       } else if (resultType === 'object') {
         this.bodyAllInputLookUpValues.push({
           [name]: { id: valueID },
         })
       } else {
         this.bodyAllInputLookUpValues.push({
-          [name]: value,
+          [name]: valueID,
         })
       }
     },
@@ -864,38 +1041,80 @@ export default {
       this.qtyTotalSummAction()
     },
 
-    // Product LookUp ni tanlanganda ishlaydi
-    getResponseData() {
-      const body = {
-        productId: this.allInputLookUpValues?.product || null,
-        warehouseId: 7,
-        batchNumber: this.allInputLookUpValues?.batch || '',
-        lot: this.allInputLookUpValues?.lot || '',
-        packingNumbers: this.allInputLookUpValues?.packingNumber || '',
-        prOrderId: this.allInputLookUpValues?.order || null,
-        packingTypeId: this.allInputLookUpValues?.packingType || null,
-        colorId: this.allInputLookUpValues?.color || null,
-        colorVariantId: this.allInputLookUpValues?.orderVariant || null,
-        designId: this.allInputLookUpValues?.design || null,
-        designVariantId: this.allInputLookUpValues?.designVariant || null,
-        gradeId: this.allInputLookUpValues?.grade || null,
-        sewModelSizeVariantId: null,
-        fiberClassId: this.allInputLookUpValues?.fiberClass || null,
-        currencyRateVal: 1.0,
-        clientCompanyId: this.allInputLookUpValues?.clientCompany || null,
-        tabName: 'saleInvoiceItemTable',
-        orderProductionTypeId: 1,
-        salesManagerId: 5,
-        equipmentId: this.allInputLookUpValues?.equipments || null,
-        companyId: null,
-        id: null,
-        dateFrom: '05/04/2024 9:51:14',
-        allCompanies: this.allInputLookUpValues?.all || false,
-        marriage: this.allInputLookUpValues?.order || false,
-        employeeId: null,
+    allParamsAction() {
+      if (this.$route.path.includes('prepareProductionInvoiceNew.htm')) {
+        this.allParams = {
+          ...this.filteringModalPayloadData,
+          internalStatus: this.$store.state.internalStatus || false,
+          orderNumber: this.allInputLookUpValues?.order || null,
+          clientOrder: this.allInputLookUpValues?.client_order || null,
+          stillage: '',
+          planningTypeId: this.allInputLookUpValues?.planing_type || null,
+          planningNumber: this.allInputLookUpValues?.planing || null,
+          packingNumbers: null,
+          startDate: this.allInputLookUpValues?.date_from
+            ? new Date(this.allInputLookUpValues?.date_from)
+                .toISOString()
+                .split('.')[0]
+            : new Date().toISOString().split('.')[0],
+          endDate: this.allInputLookUpValues?.date_to
+            ? new Date(this.allInputLookUpValues?.date_to)
+                .toISOString()
+                .split('.')[0]
+            : new Date().toISOString().split('.')[0],
+          clientCompanyId: this.allInputLookUpValues?.client_company || null,
+          departmentId: this.allInputLookUpValues?.department || null,
+          sewModelSizeVariantId: null,
+          planOpenOrCloseId: this.allInputLookUpValues?.start_stop || null,
+          prOrderId: null,
+          packingTypeId: null,
+          colorId: null,
+          colorVariantId: null,
+          designId: null,
+          designVariantId: null,
+          gradeId: null,
+          fiberClassId: null,
+          salesManagerId: null,
+          equipmentId: null,
+          companyId: null,
+          id: null,
+          allCompanies: false,
+          marriage: false,
+          employeeId: null,
+        }
+      } else {
+        this.allParams = {
+          ...this.filteringModalPayloadData,
+          productId: this.allInputLookUpValues?.product || null,
+          batchNumber: this.allInputLookUpValues?.batch || '',
+          lot: this.allInputLookUpValues?.lot || '',
+          packingNumbers: this.allInputLookUpValues?.packingNumber || '',
+          prOrderId: this.allInputLookUpValues?.order || null,
+          packingTypeId: this.allInputLookUpValues?.packingType || null,
+          colorId: this.allInputLookUpValues?.color || null,
+          colorVariantId: this.allInputLookUpValues?.orderVariant || null,
+          designId: this.allInputLookUpValues?.design || null,
+          designVariantId: this.allInputLookUpValues?.designVariant || null,
+          gradeId: this.allInputLookUpValues?.grade || null,
+          sewModelSizeVariantId: null,
+          fiberClassId: this.allInputLookUpValues?.fiberClass || null,
+          clientCompanyId: this.allInputLookUpValues?.clientCompany || null,
+          equipmentId: this.allInputLookUpValues?.equipments || null,
+          companyId: null,
+          id: null,
+          allCompanies: this.allInputLookUpValues?.all || false,
+          marriage: this.allInputLookUpValues?.order || false,
+          employeeId: null,
+        }
       }
-      this.isLoading = !this.isLoading
+    },
 
+    // Product LookUp ni tanlanganda ishlaydi
+    getResponseData(prop) {
+      this.allParamsAction()
+      const body = this.allParams
+
+      this.isLoading = !this.isLoading
       this.$axios
         .post(`/invoices/findInvoiceItemListUrl`, body, {
           headers: {

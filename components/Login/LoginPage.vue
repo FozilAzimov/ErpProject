@@ -126,12 +126,12 @@ export default {
           this.isLoading = !this.isLoading
           this.$axios
             .post(`/security/logIn`, {
-              username: this.form.username,
-              password: this.form.password,
-              // user: {
-              //   username: this.form.username,
-              //   password: this.form.password,
-              // },
+              // username: this.form.username,
+              // password: this.form.password,
+              user: {
+                username: this.form.username,
+                password: this.form.password,
+              },
             })
             .then((res) => {
               localStorage.setItem('authToken', res.headers['x-auth-token'])

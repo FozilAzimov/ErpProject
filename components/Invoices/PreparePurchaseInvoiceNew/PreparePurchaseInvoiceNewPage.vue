@@ -4,6 +4,7 @@
       v-if="isLoading"
       class="fixed left-[50%] top-[8px] translate-x-[-50%]"
     />
+    <message-box ref="messageBoxRef" @emitProp="getEmitProp" />
     <transition name="fade">
       <ColumnConfigPage
         v-show="checkModal"
@@ -14,7 +15,7 @@
         :autoheight="autoHeight"
         :openpopup="openPopup"
         :editopen="editOpen"
-        api="saveColumnConfigU"
+        api="saveColumnConfig"
         class="z-[10000]"
         @checkModal="handleValue"
       />
@@ -29,7 +30,7 @@
       class="border-[1px] border-solid border-[rgba(0,0,0,0.05)] p-[12px] bg-gradient-to-b from-transparent via-transparent to-gray-200 shadow-md"
     >
       <div class="flex items-center gap-[10px]">
-        <GenericButton
+        <generic-nuxt-link-button
           name="Go Back"
           pl="10"
           pt="3"
@@ -39,7 +40,7 @@
           textsize="14"
           :url="img.goBack"
           :istherepicture="true"
-          @click="$router.go(-1)"
+          to="/purchaseinvoice.htm"
         />
         <GenericButton
           name="onWay changeState"
@@ -112,13 +113,13 @@
               class="w-[17%] border-[1px] border-[solid] border-[#778899] p-[2px]"
             >
               <LookUp
-                :defvalue="userId || parentID ? objData?.paymentType?.text : ''"
+                v-if="objData?.paymentType?.text"
+                :defvalue="userId ? objData?.paymentType?.text : ''"
                 durl="invoiceBase/findAllPaymentType"
                 dwidth="100"
                 widthtype="%"
                 dlist="100"
                 name="paymentType"
-                :required="required.lookUp2"
                 :disabled="userId ? true : false"
                 @customFunction="getLookUpValue"
               />
@@ -157,7 +158,7 @@
             <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
               <LookUp
                 :defvalue="
-                  userId || parentID
+                  userId
                     ? objData?.company?.text
                     : objData?.supplierCurSymbol?.text
                 "
@@ -167,30 +168,23 @@
                 dlist="100"
                 :dparam="{
                   companyType: 'Supplier',
-                  dateFrom: userId
-                    ? objData?.date
-                    : new Date(objData?.date)
-                        .toLocaleString('en-GB')
-                        .split(',')
-                        .join(''),
+                  branchcompany: false,
                 }"
                 name="supplier"
                 :required="required.lookUp1"
                 :disabled="userId ? true : false"
-                @customEvent="getSelectedList"
                 @customFunction="getLookUpValue"
               />
             </td>
-            <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
-              {{ propsValue.supplare.name }}
-            </td>
+            <td
+              class="border-[1px] border-[solid] border-[#778899] p-[2px]"
+            ></td>
             <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
               <GenericInput
                 :value="
                   userId
                     ? objData.companyCurrencyRate
-                    : propsValue.supplare.value ||
-                      objData?.companyCurrencyRate?.text
+                    : objData?.companyCurrencyRate?.text
                 "
                 width="50"
                 widthtype="%"
@@ -324,30 +318,28 @@
             </td>
             <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
               <LookUp
+                v-if="objData?.branch?.text || objData?.branch"
                 :defvalue="userId ? objData?.branch : objData?.branch?.text"
                 durl="invoiceBase/findAllCompanyLogic"
-                dwidth="100"
-                widthtype="%"
-                dlist="100"
                 :dparam="{
                   companyType: 'Branch',
                 }"
                 name="branch"
+                dwidth="100"
+                widthtype="%"
                 :disabled="userId ? true : false"
-                @customEvent="getSelectedList"
                 @customFunction="getLookUpValue"
               />
             </td>
-            <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
-              {{ propsValue.branch.name }}
-            </td>
+            <td
+              class="border-[1px] border-[solid] border-[#778899] p-[2px]"
+            ></td>
             <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
               <GenericInput
                 :value="
                   userId
                     ? objData?.companyRefCurrencyRate
-                    : propsValue.branch.value ||
-                      objData?.companyRefCurrencyRate?.text
+                    : objData?.companyRefCurrencyRate?.text
                 "
                 width="50"
                 widthtype="%"
@@ -392,15 +384,14 @@
             </td>
             <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
               <LookUp
-                v-if="userId || objData?.department?.text"
+                v-if="objData?.department?.text || objData?.department"
                 :defvalue="
                   userId ? objData?.department : objData?.department?.text
                 "
                 durl="invoiceBase/findAllDepartmentLogic"
+                name="department"
                 dwidth="100"
                 widthtype="%"
-                dlist="100"
-                name="department"
                 :disabled="userId ? true : false"
                 @customFunction="getLookUpValue"
               />
@@ -440,13 +431,13 @@
             </td>
             <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
               <LookUp
-                v-if="objData?.warehouse?.text"
                 :defvalue="objData?.warehouse?.text"
                 durl="invoiceBase/findAllWarehouseLogic"
+                :dparam="{ departmentId }"
                 dwidth="100"
                 widthtype="%"
-                dlist="100"
-                name="wareHouseLogic"
+                name="warehouse"
+                :required="required.lookUp2"
                 :disabled="userId ? true : false"
                 @customFunction="getLookUpValue"
               />
@@ -501,19 +492,16 @@
                 }"
                 name="currency"
                 :disabled="userId ? true : false"
-                @customEvent="getSelectedList"
                 @customFunction="getLookUpValue"
               />
             </td>
-            <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
-              {{ propsValue.currency.name }}
-            </td>
+            <td
+              class="border-[1px] border-[solid] border-[#778899] p-[2px]"
+            ></td>
             <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
               <GenericInput
                 :value="
-                  userId
-                    ? objData?.currencyRate
-                    : propsValue.currency.value || objData?.currencyRate?.text
+                  userId ? objData?.currencyRate : objData?.currencyRate?.text
                 "
                 width="50"
                 widthtype="%"
@@ -604,7 +592,7 @@
             </td>
             <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
               <LookUp
-                v-if="objData?.calc_type?.text"
+                v-if="objData?.calc_type"
                 :defvalue="objData?.calc_type?.text"
                 durl="invoiceBase/findAllInvoiceCalc_type"
                 dwidth="100"
@@ -751,7 +739,7 @@
           </tr>
         </tbody>
       </table>
-      <template>
+      <span>
         <GenericButton
           v-if="subTable || userId"
           name="Logistics Calculation"
@@ -778,7 +766,7 @@
           class="my-1"
           @click="additionInvoiceItem"
         />
-      </template>
+      </span>
       <div
         class="w-full bg-[rgba(224,230,238,0.6)] overflow-hidden"
         :class="
@@ -1243,6 +1231,8 @@ import ColumnConfigPage from '../../ColumnConfig/ColumnConfigPage.vue'
 import GenericSubPrepareTablePage from '../../Generics/GenericSubPrepareTable/GenericSubPrepareTablePage.vue'
 import GenericSubPrepareTableTooPage from '../../Generics/GenericSubPrepareTableToo/GenericSubPrepareTableTooPage.vue'
 import GenericLogisticsCalculationPage from '../../Generics/GenericLogisticsCalculation/GenericLogisticsCalculationPage.vue'
+import GenericNuxtLinkButton from '../../Generics/GenericNuxtLink/GenericNuxtLinkButton.vue'
+import MessageBox from '../../MessageBox.vue'
 export default {
   // COMPONENTS
   components: {
@@ -1255,6 +1245,8 @@ export default {
     GenericSubPrepareTablePage,
     GenericSubPrepareTableTooPage,
     GenericLogisticsCalculationPage,
+    GenericNuxtLinkButton,
+    MessageBox,
   },
 
   // DATA
@@ -1311,11 +1303,6 @@ export default {
       },
       objData: {},
       selectedRow: null,
-      propsValue: {
-        supplare: {},
-        branch: {},
-        currency: {},
-      },
       tableData: [],
       tableData2: [],
       inputValuesObj: new Map(),
@@ -1324,11 +1311,12 @@ export default {
         lookUp1: true,
         lookUp2: true,
       },
+      departmentId: null,
       isInvoiceItem: false,
-      rightMap: new Map(),
-      leftMap: new Map(),
-      rightData: [],
-      leftData: [],
+      rightMap: {},
+      leftMap: {},
+      rightData: {},
+      leftData: {},
       actionUrl: '',
       checkModal: false,
       openPopup: true,
@@ -1454,6 +1442,7 @@ export default {
           }
         )
         .then(({ data }) => {
+          this.isLoading = !this.isLoading
           this.productValues = data?.invoiceJson?.invoiceItems
           this.transactionsList = data?.invoiceJson?.transactionsList
           this.transactionsExtraList = data?.invoiceJson?.transactionsExtraList
@@ -1464,6 +1453,7 @@ export default {
           this.editOpen = data?.autoEditOpen
           this.autoHeight = data?.autoHeight
           this.transactionColumns = data?.transactionColumns
+          this.departmentId = data?.invoiceJson?.department?.id
           if (this.isEdit) {
             if (data?.invoiceJson?.paymentType?.text) this.makeAndUnBill = true
             else this.makeAndUnBill = false
@@ -1479,13 +1469,13 @@ export default {
           this.getFilterData()
           // function
           this.transactionColumnsFiltered()
+
           data?.invoiceJson?.transactionsList.length &&
             (this.undoPayment.topUndoPayment = true)
           if (data?.invoiceJson?.transactionsExtraList) {
             this.editPayDiscard.editPayShowHide2 = true
             this.editPayDiscard.discardShowHide2 = false
           }
-          this.isLoading = !this.isLoading
         })
         .catch((error) => {
           this.isLoading = !this.isLoading
@@ -1520,14 +1510,14 @@ export default {
     // Filter Action
     getFilterData() {
       this.tableData.forEach((obj) => {
-        this.rightMap.set(obj.name, obj)
+        this.rightMap[obj.name] = obj
       })
       this.tableData2.forEach((obj) => {
-        this.leftMap.set(obj.name, obj)
+        this.leftMap[obj.name] = obj
       })
 
-      this.rightData = Object.fromEntries(this.rightMap)
-      this.leftData = Object.fromEntries(this.leftMap)
+      this.rightData = this.rightMap
+      this.leftData = this.leftMap
     },
 
     // translate api
@@ -1552,15 +1542,6 @@ export default {
         })
     },
 
-    // 3 ta lookup ni boshqarish
-    getSelectedList(data) {
-      if (data[1] === 'Supplier') {
-        this.propsValue.supplare = data[0]
-      } else if (data[1] === 'Branch') {
-        this.propsValue.branch = data[0]
-      } else this.propsValue.currency = data[0]
-    },
-
     // input values
     inputValue(key, value) {
       this.inputValuesObj.set(key, value)
@@ -1568,15 +1549,16 @@ export default {
     },
 
     // Lookup's Valuesini olish
-    getLookUpValue(key, value, id) {
-      this.lookupValuesObj.set(key, id)
+    getLookUpValue(key, value) {
+      console.log(key, value)
+      this.lookupValuesObj.set(key, value)
       this.lookUpValues = Object.fromEntries(this.lookupValuesObj)
 
       // LookUp required action
       this.lookupValuesObj.get('supplier')
         ? (this.required.lookUp1 = true)
         : (this.required.lookUp1 = false)
-      this.lookupValuesObj.get('paymentType')
+      this.lookupValuesObj.get('warehouse')
         ? (this.required.lookUp2 = true)
         : (this.required.lookUp2 = false)
     },
@@ -1587,7 +1569,7 @@ export default {
       this.lookupValuesObj.get('supplier')
         ? (this.required.lookUp1 = true)
         : (this.required.lookUp1 = false)
-      this.lookupValuesObj.get('paymentType')
+      this.lookupValuesObj.get('warehouse')
         ? (this.required.lookUp2 = true)
         : (this.required.lookUp2 = false)
 
@@ -1741,7 +1723,11 @@ export default {
     // delete Invoice
     deleteInvoice() {
       if (!this.hideButton) {
-        this.isLoading = !this.isLoading
+        this.$refs.messageBoxRef.open()
+      }
+    },
+    getEmitProp(propMessage) {
+      if (propMessage === 'confirm') {
         this.$axios
           .post(
             `/invoices/prepareDeleteInvoiceUrl`,
@@ -1756,11 +1742,9 @@ export default {
             }
           )
           .then((res) => {
-            this.isLoading = !this.isLoading
             if (res.status === 200) this.$router.push('/purchaseinvoice.htm')
           })
           .catch((error) => {
-            this.isLoading = !this.isLoading
             // eslint-disable-next-line no-console
             console.log(error)
           })
@@ -1944,33 +1928,30 @@ export default {
         const lookupValues = this.lookUpValues
         const objData = this.objData
 
+        let dateBack = null
+        let sellDateBack = null
+        const pageID = this.parentID
+          ? this.parentID
+          : this.userId
+          ? this.userId
+          : null
+        if (pageID) {
+          const [day, month, year, time] = objData?.date.split(/[\s/]+/)
+          const formattedDateStr = `${year}-${month}-${day}T${time}`
+          dateBack = formattedDateStr
+          sellDateBack = formattedDateStr
+        } else {
+          dateBack = new Date(objData.date).toISOString().split('.')[0]
+          sellDateBack = new Date(objData.date).toISOString().split('.')[0]
+        }
+
         // input values
-        const dateBack = new Date(objData.date)
-          .toLocaleString('en-GB')
-          .split(',')
-          .join('')
-
-        let date = inputValues.date ? inputValues.date : dateBack
-        const splitDate = date.split(' ')
-        date = splitDate[0].split('/').reverse().join('-') + 'T' + splitDate[1]
-
-        const sellDateBack = new Date(objData.date)
-          .toLocaleString('en-GB')
-          .split(',')
-          .join('')
-
-        let sellDate = inputValues.sellDate
+        const date = inputValues.date ? inputValues.date : dateBack
+        const sellDate = inputValues.sellDate
           ? inputValues.sellDate
           : sellDateBack
-        const splitSellDate = sellDate.split(' ')
-        sellDate =
-          splitSellDate[0].split('/').reverse().join('-') +
-          'T' +
-          splitSellDate[1]
 
-        const currencyRate = this.propsValue?.supplare?.value
-          ? this.propsValue?.supplare?.value
-          : objData?.currencyRate?.text
+        const currencyRate = objData?.currencyRate?.text
           ? objData?.currencyRate?.text
           : objData?.currencyRate
 
@@ -1980,16 +1961,12 @@ export default {
 
         const companyRefCurrencyRate = inputValues?.companyRefCurrencyRate
           ? this.inputValues?.companyRefCurrencyRate
-          : this.propsValue?.branch?.value
-          ? this.propsValue?.branch?.value
           : objData?.companyRefCurrencyRate?.text
           ? objData?.companyRefCurrencyRate?.text
           : objData?.companyRefCurrencyRate
 
         const companyCurrencyRate = inputValues?.companyRefCurrencyRate
           ? this.inputValues?.companyCurrencyRate
-          : this.propsValue?.supplare?.value
-          ? this.propsValue?.supplare?.value
           : objData?.companyCurrencyRate?.text
           ? objData?.companyCurrencyRate?.text
           : objData?.companyCurrencyRate
@@ -2095,14 +2072,19 @@ export default {
             id: this.isEdit ? this.id : this.parentID ? this.parentID : null,
             invoiceItems: this.invoiceList,
             invoiceNominal,
-            order,
+            order: { id: order },
             paymentType: { id: Number(paymentType) },
           },
         }
 
+        if (!paymentType) {
+          delete editRequestBody.invoice.paymentType
+          delete requestBody.invoice.paymentType
+        }
+
         this.$axios
           .post(
-            `/invoice/prepareCreateEditPurchaseInvoiceEx`,
+            `/invoices/prepareCreateEditPurchaseInvoice`,
             this.isEdit ? editRequestBody : requestBody,
             {
               headers: {
@@ -2111,7 +2093,7 @@ export default {
               },
             }
           )
-          .then(({ data }) => {
+          .then(({ data, status }) => {
             this.parentID = data?.id
             this.responseData = data?.invoiceItems
             this.subListData = data
@@ -2119,6 +2101,12 @@ export default {
             if (!this.isEdit && data?.paymentType?.text)
               this.makeAndUnBill = true
             else this.makeAndUnBill = false
+
+            if ((this.userId || this.parentID) && status === 200) {
+              this.$router.push(
+                `/preparePurchaseInvoiceNew.htm/${this.parentID}`
+              )
+            }
           })
           .catch((error) => {
             // eslint-disable-next-line no-console

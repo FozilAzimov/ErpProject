@@ -24,8 +24,10 @@ const _2fb416a8 = () => interopDefault(import('..\\pages\\internalInvoice.htm\\i
 const _7e5120b8 = () => interopDefault(import('..\\pages\\invoiceReports.htm\\index.vue' /* webpackChunkName: "pages/invoiceReports.htm/index" */))
 const _39a1c10f = () => interopDefault(import('..\\pages\\login.htm\\index.vue' /* webpackChunkName: "pages/login.htm/index" */))
 const _31b09e96 = () => interopDefault(import('..\\pages\\maintable\\index.vue' /* webpackChunkName: "pages/maintable/index" */))
+const _f8aa917e = () => interopDefault(import('..\\pages\\makeBill.htm\\index.vue' /* webpackChunkName: "pages/makeBill.htm/index" */))
 const _0dd49fb9 = () => interopDefault(import('..\\pages\\marketSalesInvoice.htm\\index.vue' /* webpackChunkName: "pages/marketSalesInvoice.htm/index" */))
 const _dc8ad6d8 = () => interopDefault(import('..\\pages\\menuSettings.htm\\index.vue' /* webpackChunkName: "pages/menuSettings.htm/index" */))
+const _0f510f18 = () => interopDefault(import('..\\pages\\openControlPageNew.htm\\index.vue' /* webpackChunkName: "pages/openControlPageNew.htm/index" */))
 const _367cb385 = () => interopDefault(import('..\\pages\\outputproductioninvoice.htm\\index.vue' /* webpackChunkName: "pages/outputproductioninvoice.htm/index" */))
 const _5312a10c = () => interopDefault(import('..\\pages\\outputProductionReturn.htm\\index.vue' /* webpackChunkName: "pages/outputProductionReturn.htm/index" */))
 const _6803b690 = () => interopDefault(import('..\\pages\\outputToProductionCompany.htm\\index.vue' /* webpackChunkName: "pages/outputToProductionCompany.htm/index" */))
@@ -34,12 +36,17 @@ const _3adf68e8 = () => interopDefault(import('..\\pages\\outputToPrOrder.htm\\i
 const _a1edd650 = () => interopDefault(import('..\\pages\\outputToPrOrderReturn.htm\\index.vue' /* webpackChunkName: "pages/outputToPrOrderReturn.htm/index" */))
 const _79cbe902 = () => interopDefault(import('..\\pages\\outputToServiceInvoice.htm\\index.vue' /* webpackChunkName: "pages/outputToServiceInvoice.htm/index" */))
 const _59afd0f1 = () => interopDefault(import('..\\pages\\personEquipmentSews.htm\\index.vue' /* webpackChunkName: "pages/personEquipmentSews.htm/index" */))
-const _12fc8f64 = () => interopDefault(import('..\\pages\\productionInvoice.htm\\index.vue' /* webpackChunkName: "pages/productionInvoice.htm/index" */))
+const _3d0cdd9b = () => interopDefault(import('..\\pages\\prepareOutputToPrOrderSimple.htm\\index.vue' /* webpackChunkName: "pages/prepareOutputToPrOrderSimple.htm/index" */))
+const _176797e2 = () => interopDefault(import('..\\pages\\productionByPackage.htm\\index.vue' /* webpackChunkName: "pages/productionByPackage.htm/index" */))
+const _340a9a08 = () => interopDefault(import('..\\pages\\productionForQrCodeList.htm\\index.vue' /* webpackChunkName: "pages/productionForQrCodeList.htm/index" */))
+const _38983978 = () => interopDefault(import('..\\pages\\productioninvoice.htm\\index.vue' /* webpackChunkName: "pages/productioninvoice.htm/index" */))
 const _63962f83 = () => interopDefault(import('..\\pages\\productionorder.htm\\index.vue' /* webpackChunkName: "pages/productionorder.htm/index" */))
 const _82c6ee96 = () => interopDefault(import('..\\pages\\productionorderplannings.htm\\index.vue' /* webpackChunkName: "pages/productionorderplannings.htm/index" */))
 const _8c424468 = () => interopDefault(import('..\\pages\\purchaseinvoice.htm\\index.vue' /* webpackChunkName: "pages/purchaseinvoice.htm/index" */))
 const _67ce2c0b = () => interopDefault(import('..\\pages\\purchaseorder.htm\\index.vue' /* webpackChunkName: "pages/purchaseorder.htm/index" */))
+const _b1e4ed06 = () => interopDefault(import('..\\pages\\purchaseServiceInvoice.htm\\index.vue' /* webpackChunkName: "pages/purchaseServiceInvoice.htm/index" */))
 const _1be90912 = () => interopDefault(import('..\\pages\\saleinvoice.htm\\index.vue' /* webpackChunkName: "pages/saleinvoice.htm/index" */))
+const _00417912 = () => interopDefault(import('..\\pages\\saleServiceInvoice.htm\\index.vue' /* webpackChunkName: "pages/saleServiceInvoice.htm/index" */))
 const _3ef45d34 = () => interopDefault(import('..\\pages\\salesorder.htm\\index.vue' /* webpackChunkName: "pages/salesorder.htm/index" */))
 const _7de78dfc = () => interopDefault(import('..\\pages\\salesReturn.htm\\index.vue' /* webpackChunkName: "pages/salesReturn.htm/index" */))
 const _273d9cb9 = () => interopDefault(import('..\\pages\\sessions.htm\\index.vue' /* webpackChunkName: "pages/sessions.htm/index" */))
@@ -50,10 +57,26 @@ const _bea727d6 = () => interopDefault(import('..\\pages\\transactionDetailRepor
 const _dc0365d6 = () => interopDefault(import('..\\pages\\transactionReports.htm\\index.vue' /* webpackChunkName: "pages/transactionReports.htm/index" */))
 const _581b1d17 = () => interopDefault(import('..\\pages\\transactionSaldoReport.htm\\index.vue' /* webpackChunkName: "pages/transactionSaldoReport.htm/index" */))
 const _7607bc89 = () => interopDefault(import('..\\pages\\index.vue' /* webpackChunkName: "pages/index" */))
+const _3cbd5a38 = () => interopDefault(import('..\\pages\\prepareExpenseInvoice.htm\\_id.vue' /* webpackChunkName: "pages/prepareExpenseInvoice.htm/_id" */))
+const _379dfa95 = () => interopDefault(import('..\\pages\\prepareInputFromProductionCompanyNew.htm\\_id.vue' /* webpackChunkName: "pages/prepareInputFromProductionCompanyNew.htm/_id" */))
+const _6b7e9eda = () => interopDefault(import('..\\pages\\prepareInputReturnNew.htm\\_id.vue' /* webpackChunkName: "pages/prepareInputReturnNew.htm/_id" */))
+const _832f6c30 = () => interopDefault(import('..\\pages\\prepareInputToServiceInvoice.htm\\_id.vue' /* webpackChunkName: "pages/prepareInputToServiceInvoice.htm/_id" */))
+const _64d84f73 = () => interopDefault(import('..\\pages\\prepareOutputToEquipment.htm\\_id.vue' /* webpackChunkName: "pages/prepareOutputToEquipment.htm/_id" */))
+const _7cd6d123 = () => interopDefault(import('..\\pages\\prepareOutputToEquipmentReturn.htm\\_id.vue' /* webpackChunkName: "pages/prepareOutputToEquipmentReturn.htm/_id" */))
+const _02283301 = () => interopDefault(import('..\\pages\\prepareOutputToProductionCompanyNew.htm\\_id.vue' /* webpackChunkName: "pages/prepareOutputToProductionCompanyNew.htm/_id" */))
+const _85037a5e = () => interopDefault(import('..\\pages\\prepareOutputToProductionCompanyReturnNew.htm\\_id.vue' /* webpackChunkName: "pages/prepareOutputToProductionCompanyReturnNew.htm/_id" */))
+const _52bc6bd5 = () => interopDefault(import('..\\pages\\prepareOutputToPrOrder.htm\\_id.vue' /* webpackChunkName: "pages/prepareOutputToPrOrder.htm/_id" */))
+const _434ec7f6 = () => interopDefault(import('..\\pages\\prepareOutputToPrOrderReturn.htm\\_id.vue' /* webpackChunkName: "pages/prepareOutputToPrOrderReturn.htm/_id" */))
+const _64d7edc5 = () => interopDefault(import('..\\pages\\prepareOutputToServiceInvoice.htm\\_id.vue' /* webpackChunkName: "pages/prepareOutputToServiceInvoice.htm/_id" */))
+const _610180a6 = () => interopDefault(import('..\\pages\\prepareProductionInvoiceNew.htm\\_id.vue' /* webpackChunkName: "pages/prepareProductionInvoiceNew.htm/_id" */))
 const _1679047d = () => interopDefault(import('..\\pages\\prepareProductionOrderItem.htm\\_id.vue' /* webpackChunkName: "pages/prepareProductionOrderItem.htm/_id" */))
 const _37aa00e5 = () => interopDefault(import('..\\pages\\preparePurchaseInvoiceNew.htm\\_id.vue' /* webpackChunkName: "pages/preparePurchaseInvoiceNew.htm/_id" */))
+const _72132f44 = () => interopDefault(import('..\\pages\\preparePurchaseServiceInvoiceNew.htm\\_id.vue' /* webpackChunkName: "pages/preparePurchaseServiceInvoiceNew.htm/_id" */))
 const _9f5db842 = () => interopDefault(import('..\\pages\\prepareSaleInvoiceNew.htm\\_id.vue' /* webpackChunkName: "pages/prepareSaleInvoiceNew.htm/_id" */))
+const _236a4fb8 = () => interopDefault(import('..\\pages\\prepareSaleServiceInvoiceNew.htm\\_id.vue' /* webpackChunkName: "pages/prepareSaleServiceInvoiceNew.htm/_id" */))
 const _57533756 = () => interopDefault(import('..\\pages\\prepareSalesReturnNew.htm\\_id.vue' /* webpackChunkName: "pages/prepareSalesReturnNew.htm/_id" */))
+const _178cb1e3 = () => interopDefault(import('..\\pages\\prepareSimpleProductionInvoice.htm\\_id.vue' /* webpackChunkName: "pages/prepareSimpleProductionInvoice.htm/_id" */))
+const _2be14e86 = () => interopDefault(import('..\\pages\\prepareSimpleProductionInvoiceManual.htm\\_id.vue' /* webpackChunkName: "pages/prepareSimpleProductionInvoiceManual.htm/_id" */))
 
 const emptyFn = () => {}
 
@@ -147,6 +170,10 @@ export const routerOptions = {
     component: _31b09e96,
     name: "maintable"
   }, {
+    path: "/makeBill.htm",
+    component: _f8aa917e,
+    name: "makeBill.htm"
+  }, {
     path: "/marketSalesInvoice.htm",
     component: _0dd49fb9,
     name: "marketSalesInvoice.htm"
@@ -154,6 +181,10 @@ export const routerOptions = {
     path: "/menuSettings.htm",
     component: _dc8ad6d8,
     name: "menuSettings.htm"
+  }, {
+    path: "/openControlPageNew.htm",
+    component: _0f510f18,
+    name: "openControlPageNew.htm"
   }, {
     path: "/outputproductioninvoice.htm",
     component: _367cb385,
@@ -187,9 +218,21 @@ export const routerOptions = {
     component: _59afd0f1,
     name: "personEquipmentSews.htm"
   }, {
-    path: "/productionInvoice.htm",
-    component: _12fc8f64,
-    name: "productionInvoice.htm"
+    path: "/prepareOutputToPrOrderSimple.htm",
+    component: _3d0cdd9b,
+    name: "prepareOutputToPrOrderSimple.htm"
+  }, {
+    path: "/productionByPackage.htm",
+    component: _176797e2,
+    name: "productionByPackage.htm"
+  }, {
+    path: "/productionForQrCodeList.htm",
+    component: _340a9a08,
+    name: "productionForQrCodeList.htm"
+  }, {
+    path: "/productioninvoice.htm",
+    component: _38983978,
+    name: "productioninvoice.htm"
   }, {
     path: "/productionorder.htm",
     component: _63962f83,
@@ -207,9 +250,17 @@ export const routerOptions = {
     component: _67ce2c0b,
     name: "purchaseorder.htm"
   }, {
+    path: "/purchaseServiceInvoice.htm",
+    component: _b1e4ed06,
+    name: "purchaseServiceInvoice.htm"
+  }, {
     path: "/saleinvoice.htm",
     component: _1be90912,
     name: "saleinvoice.htm"
+  }, {
+    path: "/saleServiceInvoice.htm",
+    component: _00417912,
+    name: "saleServiceInvoice.htm"
   }, {
     path: "/salesorder.htm",
     component: _3ef45d34,
@@ -251,6 +302,54 @@ export const routerOptions = {
     component: _7607bc89,
     name: "index"
   }, {
+    path: "/prepareExpenseInvoice.htm/:id?",
+    component: _3cbd5a38,
+    name: "prepareExpenseInvoice.htm-id"
+  }, {
+    path: "/prepareInputFromProductionCompanyNew.htm/:id?",
+    component: _379dfa95,
+    name: "prepareInputFromProductionCompanyNew.htm-id"
+  }, {
+    path: "/prepareInputReturnNew.htm/:id?",
+    component: _6b7e9eda,
+    name: "prepareInputReturnNew.htm-id"
+  }, {
+    path: "/prepareInputToServiceInvoice.htm/:id?",
+    component: _832f6c30,
+    name: "prepareInputToServiceInvoice.htm-id"
+  }, {
+    path: "/prepareOutputToEquipment.htm/:id?",
+    component: _64d84f73,
+    name: "prepareOutputToEquipment.htm-id"
+  }, {
+    path: "/prepareOutputToEquipmentReturn.htm/:id?",
+    component: _7cd6d123,
+    name: "prepareOutputToEquipmentReturn.htm-id"
+  }, {
+    path: "/prepareOutputToProductionCompanyNew.htm/:id?",
+    component: _02283301,
+    name: "prepareOutputToProductionCompanyNew.htm-id"
+  }, {
+    path: "/prepareOutputToProductionCompanyReturnNew.htm/:id?",
+    component: _85037a5e,
+    name: "prepareOutputToProductionCompanyReturnNew.htm-id"
+  }, {
+    path: "/prepareOutputToPrOrder.htm/:id?",
+    component: _52bc6bd5,
+    name: "prepareOutputToPrOrder.htm-id"
+  }, {
+    path: "/prepareOutputToPrOrderReturn.htm/:id?",
+    component: _434ec7f6,
+    name: "prepareOutputToPrOrderReturn.htm-id"
+  }, {
+    path: "/prepareOutputToServiceInvoice.htm/:id?",
+    component: _64d7edc5,
+    name: "prepareOutputToServiceInvoice.htm-id"
+  }, {
+    path: "/prepareProductionInvoiceNew.htm/:id?",
+    component: _610180a6,
+    name: "prepareProductionInvoiceNew.htm-id"
+  }, {
     path: "/prepareProductionOrderItem.htm/:id?",
     component: _1679047d,
     name: "prepareProductionOrderItem.htm-id"
@@ -259,13 +358,29 @@ export const routerOptions = {
     component: _37aa00e5,
     name: "preparePurchaseInvoiceNew.htm-id"
   }, {
+    path: "/preparePurchaseServiceInvoiceNew.htm/:id?",
+    component: _72132f44,
+    name: "preparePurchaseServiceInvoiceNew.htm-id"
+  }, {
     path: "/prepareSaleInvoiceNew.htm/:id?",
     component: _9f5db842,
     name: "prepareSaleInvoiceNew.htm-id"
   }, {
+    path: "/prepareSaleServiceInvoiceNew.htm/:id?",
+    component: _236a4fb8,
+    name: "prepareSaleServiceInvoiceNew.htm-id"
+  }, {
     path: "/prepareSalesReturnNew.htm/:id?",
     component: _57533756,
     name: "prepareSalesReturnNew.htm-id"
+  }, {
+    path: "/prepareSimpleProductionInvoice.htm/:id?",
+    component: _178cb1e3,
+    name: "prepareSimpleProductionInvoice.htm-id"
+  }, {
+    path: "/prepareSimpleProductionInvoiceManual.htm/:id?",
+    component: _2be14e86,
+    name: "prepareSimpleProductionInvoiceManual.htm-id"
   }],
 
   fallback: false
