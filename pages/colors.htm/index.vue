@@ -1,10 +1,10 @@
 <template>
-  <ColorsPage />
+  <colors-list />
 </template>
 
 <script>
-import ColorsPage from '../../components/ColorsPage/ColorsPage.vue'
+import ColorsList from '../../components/Productions/ColorsList.vue'
 export default {
-  components: { ColorsPage }
+  components: { ColorsList },
 }
 </script>

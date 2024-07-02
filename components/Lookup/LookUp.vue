@@ -6,7 +6,7 @@
     placeholder=""
     :size="size"
     :clearable="true"
-    :popper-append-to-body="false"
+    :popper-append-to-body="popperAppendToBody"
     :loading="loading"
     loading-text="Loading..."
     no-data-text="No Data"
@@ -79,6 +79,10 @@ export default {
       type: Array,
       default: () => [],
     },
+    popperAppendToBody: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   // DATA
@@ -91,13 +95,22 @@ export default {
     }
   },
 
+  // WATCH
   watch: {
     defvalue(newVal) {
       this.value = newVal
     },
-    optionsData(newVal) {
-      this.options = newVal
+    optionsData: {
+      handler(newVal) {
+        this.options = newVal
+      },
+      deep: true,
     },
+  },
+
+  // MOUNTED
+  mounted() {
+    this.options = this.optionsData
   },
 
   // METHODS

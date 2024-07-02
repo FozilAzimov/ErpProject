@@ -1549,7 +1549,7 @@ export default {
       const lookupValues = this.lookUpValues
       const objData = this.objData
 
-      const dateBack = new Date(objData.date)
+      const dateBack = new Date(objData?.date)
         .toLocaleString('en-GB')
         .split(',')
         .join('')
@@ -2107,7 +2107,7 @@ export default {
             else this.makeAndUnBill = false
 
             if ((this.userId || this.parentID) && status === 200) {
-              this.$router.push(`/prepareSaleInvoiceNew.htm/${this.userId}`)
+              this.$router.push(`/prepareSaleInvoiceNew.htm/${this.parentID}`)
             }
           })
           .catch((error) => {

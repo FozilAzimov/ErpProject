@@ -8,9 +8,7 @@
       v-if="!tableShowHide && helperShowHideRow"
       class="fixed left-[50%] top-[8px] translate-x-[-50%]"
     />
-    <span>
-      <message-box ref="messageBoxRef" @emitProp="getEmitProp" />
-    </span>
+    <message-box ref="messageBoxRef" @emitProp="getEmitProp" />
     <div
       v-if="isOpenModal"
       class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-[10000]"
@@ -27,7 +25,10 @@
           $route.path.includes('prepareOutputToPrOrderReturn.htm') ||
           $route.path.includes('prepareOutputToEquipmentReturn.htm') ||
           $route.path.includes('prepareOutputToProductionCompanyNew.htm') ||
-          $route.path.includes('prepareOutputToProductionCompanyReturnNew.htm')
+          $route.path.includes(
+            'prepareOutputToProductionCompanyReturnNew.htm'
+          ) ||
+          $route.path.includes('prepareInternalInvoiceNew.htm')
         "
         :table-head="filteredTablehead"
         :filtering-modal-payload-data="filteringModalPayloadData"
@@ -367,9 +368,8 @@
                   :required="requiredData?.[indexOne]?.[value.name]"
                   @customFunction="getInputValue"
                 />
-                <GenericInput
+                <generic-check-box
                   v-else-if="value.type === 'checkbox'"
-                  type="checkbox"
                   :order="indexOne"
                   :name="value.name"
                   :value="
@@ -544,6 +544,7 @@ import GenericInputDatePage from '../InputDate/GenericInputDatePage.vue'
 import LoadingPage from '../Loading/LoadingPage.vue'
 import GenericInvoiceFilteringModalPage from '../GenericInvoiceFilteringModal/GenericInvoiceFilteringModalPage.vue'
 import MessageBox from '../MessageBox.vue'
+import GenericCheckBox from '../Generics/GenericCheckBox.vue'
 
 export default {
   // COMPONENTS
@@ -556,6 +557,7 @@ export default {
     LoadingPage,
     GenericInvoiceFilteringModalPage,
     MessageBox,
+    GenericCheckBox,
   },
 
   // PROPS
@@ -877,7 +879,8 @@ export default {
         this.$route.path.includes('prepareOutputToProductionCompanyNew.htm') ||
         this.$route.path.includes(
           'prepareOutputToProductionCompanyReturnNew.htm'
-        )
+        ) ||
+        this.$route.path.includes('prepareInternalInvoiceNew.htm')
       ) {
         this.isOpenModal = true
       } else {

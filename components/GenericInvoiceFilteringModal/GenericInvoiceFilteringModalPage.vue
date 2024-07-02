@@ -195,7 +195,6 @@
           <span class="flex items-center">
             <generic-input
               type="checkbox"
-              class="cursor-pointer"
               name="keep"
               @customFunction="getInputValue"
             />
@@ -620,13 +619,7 @@
             class="flex flex-col items-start justify-between h-[150px] gap-1"
           >
             <span class="flex items-center">
-              <generic-input
-                pl="8"
-                pr="8"
-                pt="2"
-                pb="2"
-                textsize="13"
-                type="checkbox"
+              <generic-check-box
                 class="cursor-pointer"
                 name="keep"
                 @customFunction="getInputValue"
@@ -636,13 +629,7 @@
               >
             </span>
             <span class="flex items-center">
-              <generic-input
-                pl="8"
-                pr="8"
-                pt="2"
-                pb="2"
-                textsize="13"
-                type="checkbox"
+              <generic-check-box
                 class="cursor-pointer"
                 name="all"
                 @customFunction="getInputValue"
@@ -652,8 +639,7 @@
               >
             </span>
             <span class="flex items-center">
-              <generic-input
-                type="checkbox"
+              <generic-check-box
                 class="cursor-pointer"
                 name="defect"
                 @customFunction="getInputValue"
@@ -772,14 +758,13 @@
                     :dwidth="`${item.dwidth}`"
                     @customFunction="getBodyLookUpValue"
                   />
-                  <generic-input
+                  <generic-check-box
                     v-else-if="
                       item?.editableElement !== false &&
                       item?.type == 'checkbox'
                     "
                     :order="indexOne"
                     :name="item.name"
-                    :type="item?.type"
                     @customFunction="getBodyInputValue"
                   />
                   <generic-input
@@ -857,6 +842,7 @@
 
 <script>
 import GenericButton from '../Button/GenericButton.vue'
+import GenericCheckBox from '../Generics/GenericCheckBox.vue'
 import GenericInput from '../Input/GenericInput.vue'
 import GenericInputDatePage from '../InputDate/GenericInputDatePage.vue'
 import LookUp from '../Lookup/LookUp.vue'
@@ -867,6 +853,7 @@ export default {
     LookUp,
     GenericInput,
     GenericInputDatePage,
+    GenericCheckBox,
   },
 
   // Props

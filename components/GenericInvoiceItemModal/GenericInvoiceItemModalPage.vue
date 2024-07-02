@@ -97,9 +97,8 @@
                 :required="requiredData[0]?.[itemRight.name]"
                 @customFunction="getInputValue"
               />
-              <GenericInput
+              <generic-check-box
                 v-else-if="itemRight.type === 'checkbox'"
-                type="checkbox"
                 :name="itemRight.name"
                 @customFunction="getInputValue"
               />
@@ -173,9 +172,8 @@
                 :required="requiredData[0]?.[itemLeft.name]"
                 @customFunction="getInputValue"
               />
-              <GenericInput
+              <generic-check-box
                 v-else-if="itemLeft.type === 'checkbox'"
-                type="checkbox"
                 :name="itemLeft.name"
                 @customFunction="getInputValue"
               />
@@ -190,6 +188,7 @@
 
 <script>
 import GenericButton from '../Button/GenericButton.vue'
+import GenericCheckBox from '../Generics/GenericCheckBox.vue'
 import GenericInput from '../Input/GenericInput.vue'
 import GenericInputDatePage from '../InputDate/GenericInputDatePage.vue'
 import LookUp from '../Lookup/LookUp.vue'
@@ -200,6 +199,7 @@ export default {
     GenericButton,
     LookUp,
     GenericInputDatePage,
+    GenericCheckBox,
   },
 
   // Props

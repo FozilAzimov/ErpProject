@@ -571,12 +571,6 @@
                 :value="userId ? objData?.sequenceNumber : ''"
                 width="50"
                 widthtype="%"
-                height="23"
-                pl="10"
-                pr="10"
-                pt="2"
-                pb="2"
-                textsize="13"
                 type="text"
                 name="sequenceNumber"
                 :disabled="userId ? true : false"
@@ -776,7 +770,7 @@
         "
       >
         <div
-          class="border-[1px] border-[solid] border-[rgba(119,136,153,0.5)] p-[8px_0_8px_8px]"
+          class="border-[1px] border-solid border-[rgba(119,136,153,0.5)] p-[8px_0_8px_8px]"
         >
           <h1 class="text-[13px]">Invoice Item</h1>
           <div class="flex gap-1 flex-wrap">
@@ -1454,6 +1448,10 @@ export default {
           this.autoHeight = data?.autoHeight
           this.transactionColumns = data?.transactionColumns
           this.departmentId = data?.invoiceJson?.department?.id
+          this.lookupValuesObj.set(
+            'warehouse',
+            data?.invoiceJson?.warehouse?.id
+          )
           if (this.isEdit) {
             if (data?.invoiceJson?.paymentType?.text) this.makeAndUnBill = true
             else this.makeAndUnBill = false
@@ -1550,7 +1548,6 @@ export default {
 
     // Lookup's Valuesini olish
     getLookUpValue(key, value) {
-      console.log(key, value)
       this.lookupValuesObj.set(key, value)
       this.lookUpValues = Object.fromEntries(this.lookupValuesObj)
 

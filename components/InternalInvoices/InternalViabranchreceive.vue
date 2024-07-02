@@ -10,14 +10,14 @@
         :right="tableHead"
         :left="leftMap"
         :url="actionUrl"
+        api="saveColumnConfig"
+        class="z-[10000]"
         @checkModal="handleValue"
       />
     </transition>
     <form class="flex flex-wrap items-center gap-3 py-4">
       <div>
-        <label
-          for="from"
-          class="text-[13px] text-[] cursor-pointer tracking-[1.1]"
+        <label for="from" class="text-[13px] cursor-pointer tracking-[1.1]"
           >Date from</label
         >
         <GenericInputDatePage
@@ -32,13 +32,11 @@
           textsize="13"
           type="datetime-local"
           valuecolor="rgba(0,0,0,0.7)"
-          @change="getSelectValue"
+          @change="getInputDateValues"
         />
       </div>
       <div>
-        <label for="to" class="text-[13px] text-[] cursor-pointer"
-          >Date to</label
-        >
+        <label for="to" class="text-[13px] cursor-pointer">Date to</label>
         <GenericInputDatePage
           id="to"
           v-model="formData.to"
@@ -51,29 +49,39 @@
           textsize="13"
           type="datetime-local"
           valuecolor="rgba(0,0,0,0.7)"
-          @change="getSelectValue"
+          @change="getInputDateValues"
         />
       </div>
       <div class="flex items-center gap-1">
-        <label for="bill" class="text-[13px] text-[] cursor-pointer"
-          >Status (Bill)</label
-        >
+        <label for="pay" class="text-[13px] cursor-pointer">Status (Pay)</label>
         <GenericSelect
-          id="bill"
-          v-model="formData.from"
-          :data="selectData.billStatusList"
+          id="pay"
+          v-model="formData.pay"
+          :data="selectData?.payStatusList"
           textsize="13"
           @change="getSelectValue"
         />
       </div>
       <div class="flex items-center gap-1">
-        <label for="pay" class="text-[13px] text-[] cursor-pointer"
-          >Status (Pay)</label
+        <label for="warehouse" class="text-[13px] cursor-pointer"
+          >Sender warehouse</label
         >
         <GenericSelect
-          id="pay"
-          v-model="formData.pay"
-          :data="selectData.payStatusList"
+          id="warehouse"
+          v-model="formData.from"
+          :data="selectData?.warehouseList"
+          textsize="13"
+          @change="getSelectValue"
+        />
+      </div>
+      <div class="flex items-center gap-1">
+        <label for="warehouseRef" class="text-[13px] cursor-pointer"
+          >Warehouse Ref</label
+        >
+        <GenericSelect
+          id="warehouseRef"
+          v-model="formData.from"
+          :data="selectData?.warehouseList"
           textsize="13"
           @change="getSelectValue"
         />
@@ -90,7 +98,7 @@
             class="w-[14px]"
           />
           <h1 class="font-bold text-[rgb(49,126,172)] text-[14px] uppercase">
-            Internal list pages
+            INTERNAL LIST
           </h1>
         </div>
         <div>
@@ -150,23 +158,12 @@
             : 'duration-[1s] h-0 overflow-hidden'
         "
       >
-        <GenericButton
-          name="Add New"
-          pl="10"
-          pt="3"
-          pr="10"
-          pb="3"
-          bg="rgba(54, 155, 215, 0.8)"
-          textsize="15"
-          margin="8"
-          @click="$router.push('/preparePurchaseInvoiceNew.htm')"
-        />
         <div class="mt-3 p-2">
           <div class="flex items-center justify-between mb-1">
             <div class="text-[14px]">
               <select
                 v-model="pageSize_value"
-                class="border-[1px] border-[solid] border-[rgba(171,177,187,0.7)] w-[60px] px-[5px] py-[3px] cursor-pointer rounded-[2px] text-[14px] outline-none"
+                class="border-[1px] border-solid border-[rgba(171,177,187,0.7)] w-[60px] px-[5px] py-[3px] cursor-pointer rounded-[2px] text-[14px] outline-none"
                 @change="getTableRequest()"
               >
                 <option value="1">1</option>
@@ -190,7 +187,7 @@
                 textsize="13"
                 type="text"
                 placeholder="Search..."
-                @change="getTableRequest"
+                @enter="getTableRequest"
                 @input="getInputValue"
               />
               <GenericButton
@@ -223,7 +220,9 @@
             :tablebody="tableBody"
             :tableheadlength="tableHeadLength"
             :istherebody="isThereBody"
+            open-url="prepareReceiveInvoiceNew"
             height="600"
+            btn-name="receiveInvoiceWithQrCode"
           />
         </div>
       </div>
@@ -278,6 +277,7 @@ export default {
       isCloseTable: true,
     }
   },
+
   mounted() {
     // Table function
     this.getTableRequest()
@@ -288,14 +288,16 @@ export default {
     handleValue(checkModal) {
       this.checkModal = checkModal
     },
+
     openColumnConfig() {
       this.checkModal = true
     },
+
     getTableRequest() {
       this.isLoading = !this.isLoading
       this.$axios
         .post(
-          `/invoice/inputReturnList`,
+          `/invoices/viabranchreceive`,
           {
             current_page: 1,
             page_size: this.pageSize_value,
@@ -310,11 +312,9 @@ export default {
                 .split(',')
                 .join(''),
             },
-            billStatus: Object.fromEntries(this.formData).bill,
             payStatus: Object.fromEntries(this.formData).pay,
-            invoiceOnWayStatus: Object.fromEntries(this.formData).invoice,
-            departmentId: Object.fromEntries(this.formData).departments,
             warehouseId: Object.fromEntries(this.formData).warehouse,
+            warehouseRefId: Object.fromEntries(this.formData).warehouseRef,
           },
           {
             headers: {
@@ -323,14 +323,14 @@ export default {
             },
           }
         )
-        .then((res) => {
+        .then(({ data }) => {
           this.tableBody = []
           this.isLoading = !this.isLoading
-          this.tableHead = res.data.rightMap
-          this.leftMap = res.data.leftMap
-          this.actionUrl = res.data.actionUrl
-          this.tableData = res.data.invoiceList
-          this.selectData = res.data.invoiceSearchDTO
+          this.tableHead = data.rightMap
+          this.leftMap = data.leftMap
+          this.actionUrl = data.actionUrl
+          this.tableData = data.invoiceList
+          this.selectData = data.invoiceSearchDTO
           this.getTableBody()
         })
         .catch((error) => {
@@ -340,7 +340,7 @@ export default {
         })
     },
 
-    // Generic Table function Start
+    // Generic Table action Start
     getTableBody() {
       const arr = new Set()
       for (const obj of this.tableData) {
@@ -364,39 +364,15 @@ export default {
         : (this.isThereBody = false)
       this.tableId = Array.from(arr)
     },
-    // Generic Table function End
+    // Generic Table action End
 
-    // Table Action Open button
-    getTableRowOpen(thisId) {
-      this.isLoading = !this.isLoading
-      this.$axios
-        .post(
-          `/invoice/internalInvoice`,
-          {
-            current_page: 1,
-            page_size: this.pageSize_value,
-            searchForm: { keyword: this.keywordValue || '', id: thisId },
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem('token')}`,
-              'x-auth-token': localStorage.getItem('authToken'),
-            },
-          }
-        )
-        .then((res) => {
-          this.isLoading = !this.isLoading
-          this.$router.push('/preparePurchaseInvoiceNew.htm')
-        })
-        .catch((error) => {
-          this.isLoading = !this.isLoading
-          // eslint-disable-next-line no-console
-          console.log(error)
-        })
+    // Generic_Date value
+    getInputDateValues(value, id) {
+      this.formData.set(id, value)
     },
 
     // Generic_Select value
-    getSelectValue(value, id) {
+    getSelectValue(value, formDataId, isDefOptionTitle, index, id) {
       this.formData.set(id, value)
     },
 

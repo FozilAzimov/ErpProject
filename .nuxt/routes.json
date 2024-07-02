@@ -63,6 +63,20 @@
     "_name": "_82e50974"
   },
   {
+    "name": "colorVariantRecipeStageChild.htm",
+    "path": "/colorVariantRecipeStageChild.htm",
+    "component": "C:\\\\ErpProject\\\\pages\\\\colorVariantRecipeStageChild.htm\\\\index.vue",
+    "chunkName": "pages/colorVariantRecipeStageChild.htm/index",
+    "_name": "_064bc708"
+  },
+  {
+    "name": "colorVariantRecipeStagePicture.htm",
+    "path": "/colorVariantRecipeStagePicture.htm",
+    "component": "C:\\\\ErpProject\\\\pages\\\\colorVariantRecipeStagePicture.htm\\\\index.vue",
+    "chunkName": "pages/colorVariantRecipeStagePicture.htm/index",
+    "_name": "_488f6fa6"
+  },
+  {
     "name": "dashboard.htm",
     "path": "/dashboard.htm",
     "component": "C:\\\\ErpProject\\\\pages\\\\dashboard.htm\\\\index.vue",
@@ -70,11 +84,32 @@
     "_name": "_7a28fbf8"
   },
   {
+    "name": "designs.htm",
+    "path": "/designs.htm",
+    "component": "C:\\\\ErpProject\\\\pages\\\\designs.htm\\\\index.vue",
+    "chunkName": "pages/designs.htm/index",
+    "_name": "_2710b77a"
+  },
+  {
+    "name": "designVariants.htm",
+    "path": "/designVariants.htm",
+    "component": "C:\\\\ErpProject\\\\pages\\\\designVariants.htm\\\\index.vue",
+    "chunkName": "pages/designVariants.htm/index",
+    "_name": "_1540c9ca"
+  },
+  {
     "name": "dyeings.htm",
     "path": "/dyeings.htm",
     "component": "C:\\\\ErpProject\\\\pages\\\\dyeings.htm\\\\index.vue",
     "chunkName": "pages/dyeings.htm/index",
     "_name": "_68e935f7"
+  },
+  {
+    "name": "equipmentsRealTimeStatus.htm",
+    "path": "/equipmentsRealTimeStatus.htm",
+    "component": "C:\\\\ErpProject\\\\pages\\\\equipmentsRealTimeStatus.htm\\\\index.vue",
+    "chunkName": "pages/equipmentsRealTimeStatus.htm/index",
+    "_name": "_90cea158"
   },
   {
     "name": "expenseInvoice.htm",
@@ -231,6 +266,13 @@
     "_name": "_59afd0f1"
   },
   {
+    "name": "prepareInternalInvoiceNewDevice.htm",
+    "path": "/prepareInternalInvoiceNewDevice.htm",
+    "component": "C:\\\\ErpProject\\\\pages\\\\prepareInternalInvoiceNewDevice.htm\\\\index.vue",
+    "chunkName": "pages/prepareInternalInvoiceNewDevice.htm/index",
+    "_name": "_e3b3bf6a"
+  },
+  {
     "name": "prepareOutputToPrOrderSimple.htm",
     "path": "/prepareOutputToPrOrderSimple.htm",
     "component": "C:\\\\ErpProject\\\\pages\\\\prepareOutputToPrOrderSimple.htm\\\\index.vue",
@@ -336,11 +378,25 @@
     "_name": "_5a55c3b9"
   },
   {
+    "name": "sewmodel.htm",
+    "path": "/sewmodel.htm",
+    "component": "C:\\\\ErpProject\\\\pages\\\\sewmodel.htm\\\\index.vue",
+    "chunkName": "pages/sewmodel.htm/index",
+    "_name": "_4a9a2092"
+  },
+  {
     "name": "sewModelReport.htm",
     "path": "/sewModelReport.htm",
     "component": "C:\\\\ErpProject\\\\pages\\\\sewModelReport.htm\\\\index.vue",
     "chunkName": "pages/sewModelReport.htm/index",
     "_name": "_7cade09e"
+  },
+  {
+    "name": "sewModelVariantsSize.htm",
+    "path": "/sewModelVariantsSize.htm",
+    "component": "C:\\\\ErpProject\\\\pages\\\\sewModelVariantsSize.htm\\\\index.vue",
+    "chunkName": "pages/sewModelVariantsSize.htm/index",
+    "_name": "_c4374afa"
   },
   {
     "name": "simpleProductionInvoice.htm",
@@ -371,11 +427,60 @@
     "_name": "_581b1d17"
   },
   {
+    "name": "viabranchreceive.htm",
+    "path": "/viabranchreceive.htm",
+    "component": "C:\\\\ErpProject\\\\pages\\\\viabranchreceive.htm\\\\index.vue",
+    "chunkName": "pages/viabranchreceive.htm/index",
+    "_name": "_58d0843a"
+  },
+  {
     "name": "index",
     "path": "/",
     "component": "C:\\\\ErpProject\\\\pages\\\\index.vue",
     "chunkName": "pages/index",
     "_name": "_7607bc89"
+  },
+  {
+    "name": "prepareColor.htm-id",
+    "path": "/prepareColor.htm/:id?",
+    "component": "C:\\\\ErpProject\\\\pages\\\\prepareColor.htm\\\\_id.vue",
+    "chunkName": "pages/prepareColor.htm/_id",
+    "_name": "_99cdcb7c"
+  },
+  {
+    "name": "prepareColorDepth.htm-id",
+    "path": "/prepareColorDepth.htm/:id?",
+    "component": "C:\\\\ErpProject\\\\pages\\\\prepareColorDepth.htm\\\\_id.vue",
+    "chunkName": "pages/prepareColorDepth.htm/_id",
+    "_name": "_ce06d74e"
+  },
+  {
+    "name": "prepareColorVariantRecipeStageChild.htm-id",
+    "path": "/prepareColorVariantRecipeStageChild.htm/:id?",
+    "component": "C:\\\\ErpProject\\\\pages\\\\prepareColorVariantRecipeStageChild.htm\\\\_id.vue",
+    "chunkName": "pages/prepareColorVariantRecipeStageChild.htm/_id",
+    "_name": "_1d14f5ea"
+  },
+  {
+    "name": "prepareColorVariantRecipeStagePicture.htm-id",
+    "path": "/prepareColorVariantRecipeStagePicture.htm/:id?",
+    "component": "C:\\\\ErpProject\\\\pages\\\\prepareColorVariantRecipeStagePicture.htm\\\\_id.vue",
+    "chunkName": "pages/prepareColorVariantRecipeStagePicture.htm/_id",
+    "_name": "_4026c269"
+  },
+  {
+    "name": "prepareDesign.htm-id",
+    "path": "/prepareDesign.htm/:id?",
+    "component": "C:\\\\ErpProject\\\\pages\\\\prepareDesign.htm\\\\_id.vue",
+    "chunkName": "pages/prepareDesign.htm/_id",
+    "_name": "_03c57d0a"
+  },
+  {
+    "name": "prepareDesignVariant.htm-id",
+    "path": "/prepareDesignVariant.htm/:id?",
+    "component": "C:\\\\ErpProject\\\\pages\\\\prepareDesignVariant.htm\\\\_id.vue",
+    "chunkName": "pages/prepareDesignVariant.htm/_id",
+    "_name": "_1b6d3584"
   },
   {
     "name": "prepareExpenseInvoice.htm-id",
@@ -404,6 +509,13 @@
     "component": "C:\\\\ErpProject\\\\pages\\\\prepareInputToServiceInvoice.htm\\\\_id.vue",
     "chunkName": "pages/prepareInputToServiceInvoice.htm/_id",
     "_name": "_832f6c30"
+  },
+  {
+    "name": "prepareInternalInvoiceNew.htm-id",
+    "path": "/prepareInternalInvoiceNew.htm/:id?",
+    "component": "C:\\\\ErpProject\\\\pages\\\\prepareInternalInvoiceNew.htm\\\\_id.vue",
+    "chunkName": "pages/prepareInternalInvoiceNew.htm/_id",
+    "_name": "_7aa1e8ae"
   },
   {
     "name": "prepareOutputToEquipment.htm-id",
@@ -483,6 +595,13 @@
     "_name": "_72132f44"
   },
   {
+    "name": "prepareReceiveInvoiceNew.htm-id",
+    "path": "/prepareReceiveInvoiceNew.htm/:id?",
+    "component": "C:\\\\ErpProject\\\\pages\\\\prepareReceiveInvoiceNew.htm\\\\_id.vue",
+    "chunkName": "pages/prepareReceiveInvoiceNew.htm/_id",
+    "_name": "_1d1e350f"
+  },
+  {
     "name": "prepareSaleInvoiceNew.htm-id",
     "path": "/prepareSaleInvoiceNew.htm/:id?",
     "component": "C:\\\\ErpProject\\\\pages\\\\prepareSaleInvoiceNew.htm\\\\_id.vue",
@@ -502,6 +621,20 @@
     "component": "C:\\\\ErpProject\\\\pages\\\\prepareSalesReturnNew.htm\\\\_id.vue",
     "chunkName": "pages/prepareSalesReturnNew.htm/_id",
     "_name": "_57533756"
+  },
+  {
+    "name": "prepareSewModel.htm-id",
+    "path": "/prepareSewModel.htm/:id?",
+    "component": "C:\\\\ErpProject\\\\pages\\\\prepareSewModel.htm\\\\_id.vue",
+    "chunkName": "pages/prepareSewModel.htm/_id",
+    "_name": "_128f10b5"
+  },
+  {
+    "name": "prepareSewModelVariantsSize.htm-id",
+    "path": "/prepareSewModelVariantsSize.htm/:id?",
+    "component": "C:\\\\ErpProject\\\\pages\\\\prepareSewModelVariantsSize.htm\\\\_id.vue",
+    "chunkName": "pages/prepareSewModelVariantsSize.htm/_id",
+    "_name": "_1e90f374"
   },
   {
     "name": "prepareSimpleProductionInvoice.htm-id",

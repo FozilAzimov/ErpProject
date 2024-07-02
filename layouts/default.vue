@@ -137,7 +137,7 @@
             >
               <nuxt-link
                 :to="switchLocalePath(locale.code)"
-                class="block p-[7px_15px] hover:bg-[rgba(54,155,215,0.3)] duration-[0.2s] flex items-center gap-2 cursor-pointer"
+                class="p-[7px_15px] hover:bg-[rgba(54,155,215,0.3)] duration-[0.2s] flex items-center gap-2 cursor-pointer"
               >
                 <img
                   class="w-[11px]"
@@ -156,7 +156,7 @@
         <el-aside
           v-if="!isLoginPage && !isPage"
           :width="collapseMune ? '64px' : '300px'"
-          class="mt-1 border-t-[1px] border-t-[solid] border-t-[rgba(0,0,0,0.15)]"
+          class="mt-1 border-t-[1px] border-t-solid border-t-[rgba(0,0,0,0.15)]"
         >
           <el-menu
             default-active="1"
@@ -164,7 +164,7 @@
             :collapse="collapseMune"
           >
             <ul
-              class="p-[15px_22px] hover:bg-[#ecf5ff] hover:cursor-pointer hover:duration-[0.4s] duration-[0.4s] border-b-[1px] border-b-[solid] border-b-[rgba(0,0,0,0.15)]"
+              class="p-[15px_22px] hover:bg-[#ecf5ff] hover:cursor-pointer hover:duration-[0.4s] duration-[0.4s] border-b-[1px] border-b-solid border-b-[rgba(0,0,0,0.15)]"
               @click="isCollapse"
             >
               <li>
@@ -184,7 +184,7 @@
               v-for="(item, index) in firstSystemMenuList"
               :key="index"
               :index="String(index)"
-              class="border-b-[1px] border-b-[solid] border-b-[rgba(0,0,0,0.15)]"
+              class="border-b-[1px] border-b-solid border-b-[rgba(0,0,0,0.15)]"
             >
               <template slot="title">
                 <div class="flex items-center gap-[20px]">

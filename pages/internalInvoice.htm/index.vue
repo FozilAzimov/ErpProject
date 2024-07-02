@@ -1,12 +1,10 @@
 <template>
-  <InternanlListPage />
+  <internal-invoice />
 </template>
 
 <script>
-import InternanlListPage from '../../components/InternalListPage/InternanlListPage.vue'
+import InternalInvoice from '../../components/InternalInvoices/InternalInvoice.vue'
 export default {
-  components: { InternanlListPage }
+  components: { InternalInvoice },
 }
 </script>
-
-<style></style>

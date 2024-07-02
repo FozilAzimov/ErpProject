@@ -4,6 +4,7 @@
     :to="to"
     :target="target"
     :style="{
+      width: width ? `${width}px` : 'fit-content',
       padding: `${pt}px ${pr}px ${pb}px ${pl}px`,
       background: bggradient,
       backgroundColor: bg,
@@ -20,6 +21,10 @@
 <script>
 export default {
   props: {
+    width: {
+      type: String,
+      default: '',
+    },
     name: {
       type: String,
       default: '',
