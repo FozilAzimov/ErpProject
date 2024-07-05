@@ -153,7 +153,7 @@
             <div class="text-[14px]">
               <select
                 v-model="pageSize_value"
-                class="border-[1px] border-[solid] border-[rgba(171,177,187,0.7)] w-[60px] px-[5px] py-[3px] cursor-pointer rounded-[2px] text-[14px] outline-none"
+                class="border-[1px] border-solid border-[rgba(171,177,187,0.7)] w-[60px] px-[5px] py-[3px] cursor-pointer rounded-[2px] text-[14px] outline-none"
                 @change="getTableRequest()"
               >
                 <option value="1">1</option>
