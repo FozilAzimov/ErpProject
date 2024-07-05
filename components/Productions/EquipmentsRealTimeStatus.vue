@@ -355,7 +355,7 @@
           <div
             v-for="(obj, index) in allCardData"
             :key="index"
-            class="h-[400px] max-w-[700px] bg-[#D2D2D2] rounded-md border-[3px] border-solid border-[#778899] overflow-y-scroll"
+            class="h-[400px] max-w-[755px] bg-[#D2D2D2] rounded-md border-[3px] border-solid border-[#778899] overflow-y-scroll"
           >
             <table class="w-full">
               <thead class="bg-[rgb(206,218,240)] sticky top-0">

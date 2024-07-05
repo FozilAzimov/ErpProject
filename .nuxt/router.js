@@ -7,6 +7,7 @@ import scrollBehavior from './router.scrollBehavior.js'
 const _228336fa = () => interopDefault(import('..\\pages\\bands.htm\\index.vue' /* webpackChunkName: "pages/bands.htm/index" */))
 const _306c67b1 = () => interopDefault(import('..\\pages\\batchReports.htm\\index.vue' /* webpackChunkName: "pages/batchReports.htm/index" */))
 const _5403c495 = () => interopDefault(import('..\\pages\\batchStagesReport.htm\\index.vue' /* webpackChunkName: "pages/batchStagesReport.htm/index" */))
+const _7371bfda = () => interopDefault(import('..\\pages\\batchunions.htm\\index.vue' /* webpackChunkName: "pages/batchunions.htm/index" */))
 const _c443a1b4 = () => interopDefault(import('..\\pages\\branches.htm\\index.vue' /* webpackChunkName: "pages/branches.htm/index" */))
 const _86bb0c5a = () => interopDefault(import('..\\pages\\branchProductsStockReportByLogic.htm\\index.vue' /* webpackChunkName: "pages/branchProductsStockReportByLogic.htm/index" */))
 const _dbac8d30 = () => interopDefault(import('..\\pages\\calculationByColorVariantRecipe.htm\\index.vue' /* webpackChunkName: "pages/calculationByColorVariantRecipe.htm/index" */))
@@ -67,6 +68,7 @@ const _dc0365d6 = () => interopDefault(import('..\\pages\\transactionReports.htm
 const _581b1d17 = () => interopDefault(import('..\\pages\\transactionSaldoReport.htm\\index.vue' /* webpackChunkName: "pages/transactionSaldoReport.htm/index" */))
 const _58d0843a = () => interopDefault(import('..\\pages\\viabranchreceive.htm\\index.vue' /* webpackChunkName: "pages/viabranchreceive.htm/index" */))
 const _7607bc89 = () => interopDefault(import('..\\pages\\index.vue' /* webpackChunkName: "pages/index" */))
+const _dfdb2392 = () => interopDefault(import('..\\pages\\prepareBatchunionsNew.htm\\_id.vue' /* webpackChunkName: "pages/prepareBatchunionsNew.htm/_id" */))
 const _99cdcb7c = () => interopDefault(import('..\\pages\\prepareColor.htm\\_id.vue' /* webpackChunkName: "pages/prepareColor.htm/_id" */))
 const _ce06d74e = () => interopDefault(import('..\\pages\\prepareColorDepth.htm\\_id.vue' /* webpackChunkName: "pages/prepareColorDepth.htm/_id" */))
 const _1d14f5ea = () => interopDefault(import('..\\pages\\prepareColorVariantRecipeStageChild.htm\\_id.vue' /* webpackChunkName: "pages/prepareColorVariantRecipeStageChild.htm/_id" */))
@@ -121,6 +123,10 @@ export const routerOptions = {
     path: "/batchStagesReport.htm",
     component: _5403c495,
     name: "batchStagesReport.htm"
+  }, {
+    path: "/batchunions.htm",
+    component: _7371bfda,
+    name: "batchunions.htm"
   }, {
     path: "/branches.htm",
     component: _c443a1b4,
@@ -361,6 +367,10 @@ export const routerOptions = {
     path: "/",
     component: _7607bc89,
     name: "index"
+  }, {
+    path: "/prepareBatchunionsNew.htm/:id?",
+    component: _dfdb2392,
+    name: "prepareBatchunionsNew.htm-id"
   }, {
     path: "/prepareColor.htm/:id?",
     component: _99cdcb7c,

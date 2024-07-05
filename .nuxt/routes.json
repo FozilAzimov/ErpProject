@@ -21,6 +21,13 @@
     "_name": "_5403c495"
   },
   {
+    "name": "batchunions.htm",
+    "path": "/batchunions.htm",
+    "component": "C:\\\\ErpProject\\\\pages\\\\batchunions.htm\\\\index.vue",
+    "chunkName": "pages/batchunions.htm/index",
+    "_name": "_7371bfda"
+  },
+  {
     "name": "branches.htm",
     "path": "/branches.htm",
     "component": "C:\\\\ErpProject\\\\pages\\\\branches.htm\\\\index.vue",
@@ -439,6 +446,13 @@
     "component": "C:\\\\ErpProject\\\\pages\\\\index.vue",
     "chunkName": "pages/index",
     "_name": "_7607bc89"
+  },
+  {
+    "name": "prepareBatchunionsNew.htm-id",
+    "path": "/prepareBatchunionsNew.htm/:id?",
+    "component": "C:\\\\ErpProject\\\\pages\\\\prepareBatchunionsNew.htm\\\\_id.vue",
+    "chunkName": "pages/prepareBatchunionsNew.htm/_id",
+    "_name": "_dfdb2392"
   },
   {
     "name": "prepareColor.htm-id",

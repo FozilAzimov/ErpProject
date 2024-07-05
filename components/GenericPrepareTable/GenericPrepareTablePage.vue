@@ -284,7 +284,7 @@
                 class="border-[1px] text-[12px] p-2"
                 :class="`w-[${value.dwidth}px]`"
               >
-                <LookUp
+                <look-up
                   v-if="value.type === 'list'"
                   :defvalue="
                     newEditObjData.length &&
@@ -302,16 +302,17 @@
                   :name="value.name"
                   :result-type="value.resultType"
                   :required="requiredData?.[indexOne]?.[value.name]"
+                  :popper-append-to-body="true"
                   @customFunction="getLookUpValue"
                 />
-                <GenericInput
+                <generic-input
                   v-else-if="value.type === 'float' || value.type === 'integer'"
-                  :value="
+                  :value="`${
                     newEditObjData.length &&
                     newEditObjData?.[indexOne]?.[value.name]
                       ? newEditObjData?.[indexOne]?.[value.name]
                       : ''
-                  "
+                  }`"
                   width="150"
                   height="23"
                   pl="10"
@@ -325,14 +326,14 @@
                   :name="value.name"
                   @customFunction="getInputValue"
                 />
-                <GenericInput
+                <generic-input
                   v-else-if="value.type === 'string'"
-                  :value="
+                  :value="`${
                     newEditObjData.length &&
                     newEditObjData?.[indexOne]?.[value.name]
                       ? newEditObjData?.[indexOne]?.[value.name]
                       : ''
-                  "
+                  }`"
                   width="150"
                   height="23"
                   pl="10"
@@ -598,6 +599,14 @@ export default {
       type: Object,
       default: () => ({}),
     },
+    deleteUrlRow: {
+      type: String,
+      default: '',
+    },
+    departmentName: {
+      type: String,
+      default: '',
+    },
   },
 
   // DATA
@@ -697,7 +706,12 @@ export default {
 
     // Arrayni bo'sh object dan tozalash
     arrayFiltered() {
-      this.ResData = this.ResData.filter((obj) => Object.keys(obj).length > 8)
+      if (this.departmentName === 'production') {
+        this.ResData = this.ResData.filter((obj) => Object.keys(obj).length > 1)
+      } else {
+        this.ResData = this.ResData.filter((obj) => Object.keys(obj).length > 8)
+      }
+      this.twoResData = this.ResData
     },
     // Arrayni bo'sh object dan tozalash
 
@@ -853,14 +867,16 @@ export default {
 
     // default set values
     setDefaultValues(order) {
-      this.inputValuesObj.set('erepairStatus', 'false')
-      this.inputValuesObj.set('marriage', 'false')
-      this.inputValuesObj.set('mark', 'false')
-      this.inputValuesObj.set('waste', 'false')
-      this.inputValuesObj.set('qtyOfOne', '0')
-      this.inputValuesObj.set('price4', '0')
-      // this.inputValuesObj.set('packNumber', order + 1)
-      return this.inputValuesObj
+      if (this.departmentName === 'invoice') {
+        this.inputValuesObj.set('erepairStatus', 'false')
+        this.inputValuesObj.set('marriage', 'false')
+        this.inputValuesObj.set('mark', 'false')
+        this.inputValuesObj.set('waste', 'false')
+        this.inputValuesObj.set('qtyOfOne', '0')
+        this.inputValuesObj.set('price4', '0')
+        // this.inputValuesObj.set('packNumber', order + 1)
+        return this.inputValuesObj
+      }
     },
     // default set values
 
@@ -903,16 +919,7 @@ export default {
     // Row delete Request
     requestAction(id) {
       this.$axios
-        .post(
-          `/invoice/prepareCreateEditPurchaseInvoiceEx`,
-          { deleteItemId: id },
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem('token')}`,
-              'x-auth-token': localStorage.getItem('authToken'),
-            },
-          }
-        )
+        .post(`/${this.deleteUrlRow}`, { deleteItemId: id })
         .then((res) => {})
         .catch((error) => {
           // eslint-disable-next-line no-console
@@ -956,15 +963,6 @@ export default {
 
       // function
       this.requiredLookUpAndInputCheckerAction(this.ResData)
-
-      // this.ResData.forEach((obj, index) => {
-      //   this.combinationThreeInputValues[index] = {
-      //     qty: parseFloat(obj?.qty),
-      //     unitPrice: parseFloat(obj?.unitPrice),
-      //     cashPrice: parseFloat(obj?.cashPrice),
-      //     vat: parseFloat(obj?.vat),
-      //   }
-      // })
     },
     // Modal uchun: Accept button bosilganda ishlaydi
 

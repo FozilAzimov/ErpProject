@@ -132,7 +132,7 @@
         class="border-[1px] border-solid border-[rgba(0,0,0,0.1)]"
         :class="
           isOpenTable
-            ? 'duration-[1s] h-[700px] overflow-hidden'
+            ? 'duration-[1s] h-[755px] overflow-hidden'
             : 'duration-[1s] h-0 overflow-hidden'
         "
       >

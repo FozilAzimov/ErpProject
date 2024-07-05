@@ -29,7 +29,7 @@
         <div>
           <ul class="flex items-center gap-4">
             <li
-              class="p-[7px] rounded-[50%] cursor-pointer border-[1px] border-[solid] border-[rgba(0,0,0,0.1] hover:border-[#3b89e9] duration-[0.4s]"
+              class="p-[7px] rounded-[50%] cursor-pointer border-[1px] border-solid border-[rgba(0,0,0,0.1] hover:border-[#3b89e9] duration-[0.4s]"
               :style="{
                 background: 'radial-gradient(#fff, rgba(32,111,162,0.2))',
               }"
@@ -42,7 +42,7 @@
               />
             </li>
             <li
-              class="p-[7px] rounded-[50%] cursor-pointer border-[1px] border-[solid] border-[rgba(0,0,0,0.1] hover:border-[#3b89e9] focus:border-[#3b89e9] duration-[0.4s]"
+              class="p-[7px] rounded-[50%] cursor-pointer border-[1px] border-solid border-[rgba(0,0,0,0.1] hover:border-[#3b89e9] focus:border-[#3b89e9] duration-[0.4s]"
               :style="{
                 background: 'radial-gradient(#fff, rgba(32,111,162,0.2))',
               }"
@@ -60,7 +60,7 @@
               />
             </li>
             <li
-              class="p-[7px] rounded-[50%] cursor-pointer border-[1px] border-[solid] border-[rgba(0,0,0,0.1] hover:border-[#3b89e9] focus:border-[#3b89e9] duration-[0.4s]"
+              class="p-[7px] rounded-[50%] cursor-pointer border-[1px] border-solid border-[rgba(0,0,0,0.1] hover:border-[#3b89e9] focus:border-[#3b89e9] duration-[0.4s]"
               :style="{
                 background: 'radial-gradient(#fff, rgba(32,111,162,0.2))',
               }"
@@ -79,7 +79,7 @@
         class="border-[1px] border-solid border-[rgba(0,0,0,0.1)]"
         :class="
           isOpenTable
-            ? 'duration-[1s] h-[700px] overflow-hidden'
+            ? 'duration-[1s] h-[755px] overflow-hidden'
             : 'duration-[1s] h-0 overflow-hidden'
         "
       >

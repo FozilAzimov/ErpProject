@@ -23,13 +23,13 @@
             class="w-[14px]"
           />
           <h1 class="font-bold text-[rgb(49,126,172)] text-[14px] uppercase">
-            List of sew model variant size
+            Sew Model List
           </h1>
         </div>
         <div>
           <ul class="flex items-center gap-4">
             <li
-              class="p-[7px] rounded-[50%] cursor-pointer border-[1px] border-[solid] border-[rgba(0,0,0,0.1] hover:border-[#3b89e9] duration-[0.4s]"
+              class="p-[7px] rounded-[50%] cursor-pointer border-[1px] border-solid border-[rgba(0,0,0,0.1] hover:border-[#3b89e9] duration-[0.4s]"
               :style="{
                 background: 'radial-gradient(#fff, rgba(32,111,162,0.2))',
               }"
@@ -42,7 +42,7 @@
               />
             </li>
             <li
-              class="p-[7px] rounded-[50%] cursor-pointer border-[1px] border-[solid] border-[rgba(0,0,0,0.1] hover:border-[#3b89e9] focus:border-[#3b89e9] duration-[0.4s]"
+              class="p-[7px] rounded-[50%] cursor-pointer border-[1px] border-solid border-[rgba(0,0,0,0.1] hover:border-[#3b89e9] focus:border-[#3b89e9] duration-[0.4s]"
               :style="{
                 background: 'radial-gradient(#fff, rgba(32,111,162,0.2))',
               }"
@@ -60,7 +60,7 @@
               />
             </li>
             <li
-              class="p-[7px] rounded-[50%] cursor-pointer border-[1px] border-[solid] border-[rgba(0,0,0,0.1] hover:border-[#3b89e9] focus:border-[#3b89e9] duration-[0.4s]"
+              class="p-[7px] rounded-[50%] cursor-pointer border-[1px] border-solid border-[rgba(0,0,0,0.1] hover:border-[#3b89e9] focus:border-[#3b89e9] duration-[0.4s]"
               :style="{
                 background: 'radial-gradient(#fff, rgba(32,111,162,0.2))',
               }"
@@ -75,7 +75,6 @@
           </ul>
         </div>
       </div>
-
       <div
         class="border-[1px] border-solid border-[rgba(0,0,0,0.1)]"
         :class="
@@ -94,7 +93,7 @@
             bg="rgba(54, 155, 215, 0.8)"
             textsize="13"
             margin="8"
-            to="/prepareSewModelVariantsSize.htm"
+            to="/prepareBatchunionsNew.htm"
           />
         </div>
         <div class="mt-3 p-2">
@@ -105,6 +104,7 @@
                 class="border-[1px] border-solid border-[rgba(171,177,187,0.7)] w-[60px] px-[5px] py-[3px] cursor-pointer rounded-[2px] text-[14px] outline-none"
                 @change="getTableRequest()"
               >
+                <option value="1">1</option>
                 <option value="10">10</option>
                 <option value="25">25</option>
                 <option value="50">50</option>
@@ -147,9 +147,8 @@
             :tablebody="tableBody"
             :tableheadlength="tableHeadLength"
             :istherebody="isThereBody"
-            open-url="prepareSewModelVariantsSize"
+            open-url="prepareBatchunionsNew"
             :productions-action-buttons="true"
-            delete-row-url="sewModelVariantSize/prepareSewModelVariantsSizeDelete"
             height="600"
             @pageEmitAction="getTableRequest"
           />
@@ -181,13 +180,37 @@ export default {
   data() {
     return {
       isLoading: false,
-      pageSize_value: 10,
+      pageSize_value: 25,
       keywordValue: '',
       tableHead: {
         id: { name: 'Id', code: 'id' },
-        modelVariant: {
-          name: 'Sew model variant size name',
+        sewModelName: {
+          name: 'Sew Model Name',
           code: 'name',
+        },
+        product: {
+          name: 'Product',
+          code: 'productName',
+        },
+        codeSewModel: {
+          name: 'Code Sew Model',
+          code: 'code',
+        },
+        variantSewModel: {
+          name: 'Variant Sew Model',
+          code: 'variant',
+        },
+        style: {
+          name: 'Style',
+          code: 'style',
+        },
+        picture: {
+          name: 'Picture',
+          code: 'images',
+        },
+        company: {
+          name: 'Company',
+          code: 'companyName',
         },
       },
       tableBody: [],
@@ -219,7 +242,7 @@ export default {
     getTableRequest() {
       this.isLoading = !this.isLoading
       this.$axios
-        .post(`/sewModelVariantSize/sewModelVariantsSize`, {
+        .post(`/batchUnion/batchunionsAjaxLoad`, {
           searchForm: {
             keyword: this.keywordValue,
           },
@@ -230,9 +253,10 @@ export default {
             total: 328,
           },
         })
-        .then(({ data: { modelVariantsSizeList } }) => {
+        .then(({ data: { sewModelList } }) => {
           this.isLoading = !this.isLoading
-          this.tableBody = modelVariantsSizeList
+          this.tableBody = sewModelList
+
           this.tableBody.length
             ? (this.isThereBody = true)
             : (this.isThereBody = false)

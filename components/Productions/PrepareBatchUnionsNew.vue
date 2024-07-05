@@ -7,10 +7,6 @@
     <transition name="fade">
       <ColumnConfigPage
         v-show="checkModal"
-        :right="rightDataOperation"
-        :left="leftDataOperation"
-        url="sewModelOperationTable"
-        :createedit="true"
         api="saveColumnConfig"
         class="z-[10000]"
         @checkModal="handleValue"
@@ -131,7 +127,6 @@
                         : ''
                     "
                     :name="element?.subName"
-                    :popper-append-to-body="true"
                     @customFunction="getInputAndLookUpValueAction"
                   />
                   <generic-input
@@ -149,11 +144,11 @@
                   <generic-input
                     v-else-if="element.type === 'number'"
                     width="220"
-                    :value="`${
+                    :value="
                       editData?.[element.subName]
                         ? `${editData?.[element.subName]}`
                         : ''
-                    }`"
+                    "
                     :type="element.type"
                     :name="element?.subName"
                     @customFunction="getInputAndLookUpValueAction"
@@ -184,13 +179,7 @@
                   v-else
                   class="border-[1px] border-solid border-[#778899] pl-[10px]"
                 >
-                  <template v-if="element.subName === 'date'">{{
-                    new Date(editData?.[element.subName])
-                      .toLocaleString('en-GB')
-                      .split(',')
-                      .join('')
-                  }}</template>
-                  <template v-else>{{ editData?.[element.subName] }}</template>
+                  {{ editData?.[element.subName] }}
                 </td>
               </tr>
               <tr
@@ -256,12 +245,12 @@
             </tbody>
           </table>
 
-          <div v-if="sewModelVariantSizeShowHide" class="m-2">
-            <span class="text-[14px]"
-              >Operation.
-              <strong class="text-[14px] text-[rgb(156,0,78)]"
-                >Parent ID = {{ rowID ? rowID : userId }}</strong
-              ></span
+          <template v-if="sewModelVariantSizeShowHide">
+            <strong class="text-[15px]"
+              >Extra Payment Details.
+              <span class="text-[14px] text-[rgb(156,0,78)]"
+                >Parent ID = {{ rowID ? rowID : userId }}</span
+              ></strong
             >
             <div class="flex gap-1 flex-wrap">
               <span v-if="hideButton" class="flex gap-1 flex-wrap">
@@ -305,7 +294,6 @@
             <GenericPrepareTablePage
               ref="sewModelVariantSizeRef"
               department-name="production"
-              :addmodalorrow="false"
               :tablehead="sewModelVariantSizeHead"
               :tableheadlength="sewModelVariantSizeHead.length"
               :response-data="sewModelVariantSizeBody"
@@ -316,154 +304,7 @@
               class="bg-[rgba(255,255,255,0.5)] mt-1"
               @rowValues="getRowElements"
             />
-          </div>
-        </div>
-
-        <div v-if="sewModelOperationShowHide" class="m-2">
-          <span class="text-[14px]"
-            >Operation.
-            <strong class="text-[14px] text-[rgb(156,0,78)]"
-              >Parent ID = {{ rowID ? rowID : userId }}</strong
-            ></span
-          >
-          <div class="flex gap-1 flex-wrap">
-            <GenericButton
-              name="Column Setting"
-              pl="8"
-              pt="2"
-              pr="8"
-              pb="2"
-              textsize="14"
-              bggradient="linear-gradient(to top, rgb(25,52,79),rgba(25,52,79, 0.58))"
-              :url="img.setting"
-              :istherepicture="true"
-              @click="openColumnConfig"
-            />
-            <span v-if="hideButtonOperation" class="flex gap-1 flex-wrap">
-              <GenericButton
-                name="Save"
-                pl="8"
-                pt="2"
-                pr="8"
-                pb="2"
-                textsize="14"
-                bg="rgb(119,191,66)"
-                disabled-bg="rgba(119,191,66,0.6)"
-                @click="saveSewModelOperationAction"
-              />
-              <GenericButton
-                name="Discard"
-                pl="8"
-                pt="2"
-                pr="8"
-                pb="2"
-                bggradient="linear-gradient(to top, rgb(205,210,212),rgba(205,210,212,0.65))"
-                textsize="14"
-                color="rgb(190,72,77)"
-                @click="discardSewModalOperationAction"
-              />
-            </span>
-            <GenericButton
-              v-else
-              name="Edit"
-              pl="8"
-              pt="2"
-              pr="8"
-              pb="2"
-              textsize="14"
-              bg="rgb(119,191,66)"
-              :url="img.edit"
-              :istherepicture="true"
-              @click="editSewModalOperationAction"
-            />
-          </div>
-          <GenericPrepareTablePage
-            ref="sewModelOperationRef"
-            department-name="production"
-            :addmodalorrow="false"
-            :tablehead="sewModelOperationHead"
-            :tableheadlength="sewModelOperationHead.length"
-            :response-data="sewModelOperationBody"
-            :ui-show-hide="uiShowHideOperation"
-            :isedit="isEditOperation"
-            :height="450"
-            delete-url-row="sewModel/prepareCreateEditSewModelOperation"
-            class="bg-[rgba(255,255,255,0.5)] mt-1"
-            @rowValues="getRowElementsOperation"
-          />
-        </div>
-
-        <div v-if="sewModelRecipeShowHide" class="m-2">
-          <span class="text-[14px]"
-            >sewModelRecipe.
-            <strong class="text-[14px] text-[rgb(156,0,78)]"
-              >Parent ID = {{ rowID ? rowID : userId }}</strong
-            ></span
-          >
-          <div class="flex gap-1 flex-wrap">
-            <GenericButton
-              name="Column Setting"
-              pl="8"
-              pt="2"
-              pr="8"
-              pb="2"
-              textsize="14"
-              bggradient="linear-gradient(to top, rgb(25,52,79),rgba(25,52,79, 0.58))"
-              :url="img.setting"
-              :istherepicture="true"
-            />
-            <span v-if="hideButtonRecipe" class="flex gap-1 flex-wrap">
-              <GenericButton
-                name="Save"
-                pl="8"
-                pt="2"
-                pr="8"
-                pb="2"
-                textsize="14"
-                bg="rgb(119,191,66)"
-                disabled-bg="rgba(119,191,66,0.6)"
-                @click="saveSewModelRecipeAction"
-              />
-              <GenericButton
-                name="Discard"
-                pl="8"
-                pt="2"
-                pr="8"
-                pb="2"
-                bggradient="linear-gradient(to top, rgb(205,210,212),rgba(205,210,212,0.65))"
-                textsize="14"
-                color="rgb(190,72,77)"
-                @click="discardSewModalRecipeAction"
-              />
-            </span>
-            <GenericButton
-              v-else
-              name="Edit"
-              pl="8"
-              pt="2"
-              pr="8"
-              pb="2"
-              textsize="14"
-              bg="rgb(119,191,66)"
-              :url="img.edit"
-              :istherepicture="true"
-              @click="editSewModalRecipeAction"
-            />
-          </div>
-          <GenericPrepareTablePage
-            ref="sewModelRecipeRef"
-            department-name="production"
-            :addmodalorrow="false"
-            :tablehead="sewModelRecipeHead"
-            :tableheadlength="sewModelRecipeHead.length"
-            :response-data="sewModelRecipeBody"
-            :ui-show-hide="uiShowHideRecipe"
-            :isedit="isEditRecipe"
-            :height="450"
-            delete-url-row="sewModel/prepareCreateEditSewModelRecipe"
-            class="bg-[rgba(255,255,255,0.5)] mt-1"
-            @rowValues="getRowElementsRecipe"
-          />
+          </template>
         </div>
       </div>
     </template>
@@ -475,7 +316,6 @@
 import goBack from '../../assets/icons/go-back.png'
 import del from '../../assets/icons/delete.png'
 import edit from '../../assets/icons/editIcon.svg'
-import setting from '../../assets/icons/settings.png'
 // Components
 import GenericButton from '../Button/GenericButton.vue'
 import GenericInput from '../Input/GenericInput.vue'
@@ -484,7 +324,6 @@ import LoadingPage from '../Loading/LoadingPage.vue'
 import LookUp from '../Lookup/LookUp.vue'
 import MessageBox from '../MessageBox.vue'
 import GenericPrepareTablePage from '../GenericPrepareTable/GenericPrepareTablePage.vue'
-import ColumnConfigPage from '../ColumnConfig/ColumnConfigPage.vue'
 export default {
   components: {
     LoadingPage,
@@ -494,7 +333,6 @@ export default {
     LookUp,
     MessageBox,
     GenericPrepareTablePage,
-    ColumnConfigPage,
   },
   data() {
     return {
@@ -502,7 +340,6 @@ export default {
         goBack,
         del,
         edit,
-        setting,
       },
       isLoading: false,
       pageSize_value: 25,
@@ -510,12 +347,6 @@ export default {
       isOpenTable: true,
       isCloseTable: true,
       rowID: null,
-      rightMapOperation: {},
-      leftMapOperation: {},
-      rightDataOperation: {},
-      leftDataOperation: {},
-      tableDataOperation: [],
-      tableDataOperation2: [],
       dateDefValue: null,
       allInputAndLookUpValue: {},
       elementData: [],
@@ -524,26 +355,10 @@ export default {
       editData: {},
       sewModelVariantSizeHead: [],
       sewModelVariantSizeBody: [],
-      sewModelOperationHead: [],
-      sewModelOperationBody: [],
-      sewModelRecipeHead: [],
-      sewModelRecipeBody: [],
       uiShowHide: false,
-      uiShowHideOperation: false,
-      uiShowHideRecipe: false,
       isEdit: false,
-      isEditOperation: false,
-      isEditRecipe: false,
-      hideButton: false,
-      hideButtonOperation: false,
-      hideButtonRecipe: false,
       sewModelVariantSizeShowHide: false,
-      sewModelOperationShowHide: false,
-      sewModelRecipeShowHide: false,
       sewModelSizeItemList: [],
-      sewModelOperationList: [],
-      sewModelRecipeItemList: [],
-      columnConfigBtnClickType: false,
     }
   },
 
@@ -566,24 +381,18 @@ export default {
     this.userId = this.$route.params?.id
     if (this.userId) {
       this.isEdit = true
-      this.isEditOperation = true
-      this.isEditRecipe = true
       this.hideButton = false
-      this.hideButtonOperation = false
-      this.hideButtonRecipe = false
     }
   },
 
   // Methods
   methods: {
-    // Column Config function
     handleValue(checkModal) {
       this.checkModal = checkModal
     },
     openColumnConfig() {
       this.checkModal = true
     },
-
     // Table page ni ochish va yopish uchun
     isOpen() {
       this.isOpenTable = !this.isOpenTable
@@ -594,7 +403,7 @@ export default {
 
     // go back action
     goBackAction() {
-      this.$router.push('/sewmodel.htm')
+      this.$router.push('/batchunions.htm')
     },
 
     // edit sewModelVarintSize
@@ -608,83 +417,21 @@ export default {
       this.uiShowHide = false
     },
 
-    // edit sewModelOperation
-    editSewModalOperationAction() {
-      this.hideButtonOperation = !this.hideButtonOperation
-
-      // GenericTablePage da ishlab beruvchi function
-      this.$refs.sewModelOperationRef.getEditRowAction(
-        this.rowID ? this.rowID : this.userId
-      )
-      this.uiShowHideOperation = false
-    },
-
-    // edit sewModelRecipe
-    editSewModalRecipeAction() {
-      this.hideButtonRecipe = !this.hideButtonRecipe
-
-      // GenericTablePage da ishlab beruvchi function
-      this.$refs.sewModelRecipeRef.getEditRowAction(
-        this.rowID ? this.rowID : this.userId
-      )
-      this.uiShowHideRecipe = false
-    },
-
     // discard sewModelVarintSize
     discardSewModalVariantSizeAction() {
-      // GenericTablePage da ishlab beruvchi function
-      this.$refs.sewModelVariantSizeRef.arrayFiltered()
-
       this.hideButton = !this.hideButton
       this.uiShowHide = true
     },
 
-    // discard sewModelOperation
-    discardSewModalOperationAction() {
-      // GenericTablePage da ishlab beruvchi function
-      this.$refs.sewModelOperationRef.arrayFiltered()
-
-      this.hideButtonOperation = !this.hideButtonOperation
-      this.uiShowHideOperation = true
-    },
-
-    // discard sewModelOperation
-    discardSewModalRecipeAction() {
-      // GenericTablePage da ishlab beruvchi function
-      this.$refs.sewModelRecipeRef.arrayFiltered()
-
-      this.hideButtonRecipe = !this.hideButtonRecipe
-      this.uiShowHideRecipe = true
-    },
-
     // Filter Action
-    responseDataFilter(headData) {
+    leftRightDataFilter(headData) {
       this.sewModelVariantSizeHead = headData.filter((value) => {
         return value.showUI && value
       })
     },
 
-    // Filter Action
-    responseDataFilterOperation(headData) {
-      this.sewModelOperationHead = headData.filter((value) => {
-        return value.showUI && value
-      })
-
-      // Column config uchun
-      this.tableDataOperation = this.sewModelOperationHead
-      this.tableDataOperation2 = headData.filter((value) => {
-        return !value.showUI && value
-      })
-    },
-
-    // Filter Action
-    responseDataFilterRecipe(headData) {
-      this.sewModelRecipeHead = headData.filter((value) => {
-        return value.showUI && value
-      })
-    },
-
-    getRowElements(arr, hideBtn) {
+    getRowElements(arr, hideBtn, id) {
+      this.id = +id
       this.sewModelSizeItemList = arr
       this.sewModelSizeItemList = this.sewModelSizeItemList.map((obj) => {
         if (obj.sewModel) {
@@ -693,30 +440,6 @@ export default {
         return obj
       })
       this.hideButton = !hideBtn
-    },
-
-    getRowElementsOperation(arr, hideBtn) {
-      this.sewModelOperationList = arr
-      this.sewModelOperationList = this.sewModelOperationList.map((obj) => {
-        if (obj.sewModel) {
-          obj.sewModel = { id: obj.sewModel }
-        }
-        delete obj.objectId
-        return obj
-      })
-      this.hideButtonOperation = !hideBtn
-    },
-
-    getRowElementsRecipe(arr, hideBtn) {
-      this.sewModelRecipeItemList = arr
-      this.sewModelRecipeItemList = this.sewModelRecipeItemList.map((obj) => {
-        if (obj.sewModel) {
-          obj.sewModel = { id: obj.sewModel }
-        }
-        delete obj.objectId
-        return obj
-      })
-      this.hideButtonRecipe = !hideBtn
     },
 
     // Save btn action
@@ -733,48 +456,6 @@ export default {
         .then(({ data }) => {
           this.sewModelVariantSizeBody = data?.sewModelSizeItem
           this.uiShowHide = true
-        })
-        .catch((error) => {
-          // eslint-disable-next-line no-console
-          console.log(error)
-        })
-    },
-
-    // Save btn action
-    saveSewModelOperationAction() {
-      // GenericTablePage da ishlab beruvchi function
-      this.$refs.sewModelOperationRef.getSaveRowAction()
-
-      const body = {}
-      body.id = this.rowID
-      body.sewModelOperationList = this.sewModelOperationList
-
-      this.$axios
-        .post(`/sewModel/prepareCreateEditSewModelOperation`, body)
-        .then(({ data: { sewModelOperationListJson } }) => {
-          this.sewModelOperationBody = sewModelOperationListJson
-          this.uiShowHideOperation = true
-        })
-        .catch((error) => {
-          // eslint-disable-next-line no-console
-          console.log(error)
-        })
-    },
-
-    // Save btn action
-    saveSewModelRecipeAction() {
-      // GenericTablePage da ishlab beruvchi function
-      this.$refs.sewModelRecipeRef.getSaveRowAction()
-
-      const body = {}
-      body.id = this.rowID
-      body.sewModelRecipeItemList = this.sewModelRecipeItemList
-
-      this.$axios
-        .post(`/sewModel/prepareCreateEditSewModelRecipe`, body)
-        .then(({ data: { sewModelRecipeItemListJson } }) => {
-          this.sewModelRecipeBody = sewModelRecipeItemListJson
-          this.uiShowHideRecipe = true
         })
         .catch((error) => {
           // eslint-disable-next-line no-console
@@ -936,19 +617,6 @@ export default {
         })
     },
 
-    // Filter Action
-    getFilterData() {
-      this.tableDataOperation.forEach((obj) => {
-        this.rightMapOperation[obj.name] = obj
-      })
-      this.tableDataOperation2.forEach((obj) => {
-        this.leftMapOperation[obj.name] = obj
-      })
-
-      this.rightDataOperation = this.rightMapOperation
-      this.leftDataOperation = this.leftMapOperation
-    },
-
     // Input value action
     getInputAndLookUpValueAction(name, value) {
       if (name === 'company' || name === 'product') {
@@ -1034,24 +702,8 @@ export default {
           .post(`/sewModel/sewModelCloneUrl`, {
             id,
           })
-          .then(({ data: { sewModelJson } }) => {
-            this.rowID = sewModelJson?.id
-            const customSewModelJson = {}
-            customSewModelJson.date = new Date(sewModelJson?.date)
-              .toISOString()
-              .split('.')[0]
-            customSewModelJson.id = this.rowID
-            customSewModelJson.code = sewModelJson?.code
-            customSewModelJson.product = sewModelJson?.product?.text
-            customSewModelJson.productId = sewModelJson?.product?.id
-            customSewModelJson.name = sewModelJson?.name
-            customSewModelJson.variant = sewModelJson?.variant
-            customSewModelJson.description = sewModelJson?.description
-            customSewModelJson.style = sewModelJson?.style
-            customSewModelJson.company = sewModelJson?.company?.text
-            customSewModelJson.companyId = sewModelJson?.company?.id
-            customSewModelJson.planningType = sewModelJson?.planningType
-            this.editData = customSewModelJson
+          .then(({ data }) => {
+            console.log(data)
           })
           .catch((error) => {
             // eslint-disable-next-line no-console
@@ -1059,15 +711,35 @@ export default {
           })
       } else if (propMessage === 'confirm' && btnTypeProp === 'changePrice') {
         this.$axios
-          .put(`/sewModel/prepareSewModelChangePrice`, {
+          .post(`/sewModel/prepareSewModelChangePrice`, {
             id,
           })
-          .then(({ data }) => {})
+          .then(({ data }) => {
+            console.log(data)
+          })
           .catch((error) => {
             // eslint-disable-next-line no-console
             console.log(error)
           })
       }
+    },
+
+    // ALl buttons action
+    allBtnAction(btnTypeProp) {
+      if (btnTypeProp === 'sewModelVariantSize')
+        this.rowID && this.sewModelVariantSizeBtnAction(this.rowID)
+      else if (btnTypeProp === 'sewOperation')
+        this.rowID && this.sewOperationBtnAction(this.rowID)
+      else if (btnTypeProp === 'delete')
+        this.$refs.messageBoxRef.open(this.rowID, btnTypeProp)
+      else if (btnTypeProp === 'clone')
+        this.$refs.messageBoxRef.open(this.rowID, btnTypeProp)
+      else if (btnTypeProp === 'addImage')
+        this.rowID && this.addImageBtnAction(this.rowID)
+      else if (btnTypeProp === 'changePrice')
+        this.$refs.messageBoxRef.open(this.rowID, btnTypeProp)
+      else if (btnTypeProp === 'sewModelPrice')
+        this.rowID && this.sewModelPriceBtnAction(this.rowID)
     },
 
     // sewModelVariantSize Btn Action
@@ -1081,7 +753,7 @@ export default {
           this.sewModelVariantSizeBody = sewModelSizeItem
 
           // function
-          this.responseDataFilter(sewModelItemSizeTable)
+          this.leftRightDataFilter(sewModelItemSizeTable)
         })
         .catch((error) => {
           // eslint-disable-next-line no-console
@@ -1091,23 +763,13 @@ export default {
 
     // sewOperation Btn Action
     sewOperationBtnAction(id) {
-      this.sewModelOperationShowHide = true
       this.$axios
         .post(`/sewModel/prepareCreateEditSewModelOperation`, {
           id,
         })
-        .then(
-          ({
-            data: { sewModelOperationColumns, sewModelOperationListJson },
-          }) => {
-            this.sewModelOperationHead = sewModelOperationColumns
-            this.sewModelOperationBody = sewModelOperationListJson
-            // function
-            this.responseDataFilterOperation(sewModelOperationColumns)
-            // function
-            this.getFilterData(sewModelOperationColumns)
-          }
-        )
+        .then(({ data }) => {
+          console.log(data)
+        })
         .catch((error) => {
           // eslint-disable-next-line no-console
           console.log(error)
@@ -1129,41 +791,19 @@ export default {
         })
     },
 
-    // sewModelRecipe Btn Action
-    sewModelRecipeBtnAction(id) {
-      this.sewModelRecipeShowHide = true
+    // sewModelPrice Btn Action
+    sewModelPriceBtnAction(id) {
       this.$axios
         .post(`/sewModel/prepareCreateEditSewModelRecipe`, {
           id,
         })
-        .then(({ data: { sewModelRecipeItemColumns, recipes } }) => {
-          this.sewModelRecipeHead = sewModelRecipeItemColumns
-          this.sewModelRecipeBody = recipes
-          // function
-          this.responseDataFilterRecipe(sewModelRecipeItemColumns)
+        .then(({ data }) => {
+          console.log(data)
         })
         .catch((error) => {
           // eslint-disable-next-line no-console
           console.log(error)
         })
-    },
-
-    // ALl buttons action
-    allBtnAction(btnTypeProp) {
-      if (btnTypeProp === 'sewModelVariantSize')
-        this.rowID && this.sewModelVariantSizeBtnAction(this.rowID)
-      else if (btnTypeProp === 'sewOperation')
-        this.rowID && this.sewOperationBtnAction(this.rowID)
-      else if (btnTypeProp === 'delete')
-        this.$refs.messageBoxRef.open(this.rowID, btnTypeProp)
-      else if (btnTypeProp === 'clone')
-        this.$refs.messageBoxRef.open(this.rowID, btnTypeProp)
-      else if (btnTypeProp === 'addImage')
-        this.rowID && this.addImageBtnAction(this.rowID)
-      else if (btnTypeProp === 'changePrice')
-        this.$refs.messageBoxRef.open(this.rowID, btnTypeProp)
-      else if (btnTypeProp === 'sewModelRecipe')
-        this.rowID && this.sewModelRecipeBtnAction(this.rowID)
     },
   },
 }

@@ -643,7 +643,7 @@
       <div
         class="w-full bg-[rgba(0,0,0,0.05)] overflow-hidden"
         :class="
-          isInvoiceItam ? 'duration-[1s] h-[700px]' : 'duration-[1s] h-[0px]'
+          isInvoiceItam ? 'duration-[1s] h-[755px]' : 'duration-[1s] h-[0px]'
         "
       >
         <h1 class="text-[13px]">Invoice Item</h1>

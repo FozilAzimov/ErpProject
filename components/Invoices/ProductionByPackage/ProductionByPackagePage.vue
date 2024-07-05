@@ -70,7 +70,7 @@
         class="border-[1px] border-solid border-[rgba(0,0,0,0.1)]"
         :class="
           isOpenTable
-            ? 'duration-[1s] min-h-[700px] h-fit overflow-hidden'
+            ? 'duration-[1s] min-h-[755px] h-fit overflow-hidden'
             : 'duration-[1s] h-0 overflow-hidden'
         "
       >

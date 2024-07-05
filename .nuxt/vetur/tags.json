@@ -23,17 +23,20 @@
   "GenericInvoiceItemModalPage": {
     "description": "Auto imported from components/GenericInvoiceItemModal/GenericInvoiceItemModalPage.vue"
   },
+  "GenericPrepareTablePage": {
+    "description": "Auto imported from components/GenericPrepareTable/GenericPrepareTablePage.vue"
+  },
   "GenericCheckBox": {
     "description": "Auto imported from components/Generics/GenericCheckBox.vue"
   },
   "GenericMultipleSelect": {
     "description": "Auto imported from components/Generics/GenericMultipleSelect.vue"
   },
+  "GenericPagination": {
+    "description": "Auto imported from components/Generics/GenericPagination.vue"
+  },
   "GenericTablePage": {
     "description": "Auto imported from components/GenericTable/GenericTablePage.vue"
-  },
-  "GenericPrepareTablePage": {
-    "description": "Auto imported from components/GenericPrepareTable/GenericPrepareTablePage.vue"
   },
   "GenericTranslatePage": {
     "description": "Auto imported from components/GenericTranslate/GenericTranslatePage.vue"
@@ -95,6 +98,9 @@
   "MenuSettings": {
     "description": "Auto imported from components/MenuSettings/MenuSettings.vue"
   },
+  "BatchUnions": {
+    "description": "Auto imported from components/Productions/BatchUnions.vue"
+  },
   "ColorDepth": {
     "description": "Auto imported from components/Productions/ColorDepth.vue"
   },
@@ -115,6 +121,9 @@
   },
   "EquipmentsRealTimeStatus": {
     "description": "Auto imported from components/Productions/EquipmentsRealTimeStatus.vue"
+  },
+  "PrepareBatchUnionsNew": {
+    "description": "Auto imported from components/Productions/PrepareBatchUnionsNew.vue"
   },
   "PrepareColor": {
     "description": "Auto imported from components/Productions/PrepareColor.vue"
@@ -191,11 +200,11 @@
   "OutputProductionInvoice": {
     "description": "Auto imported from components/Invoices/OutputProductionInvoice/OutputProductionInvoice.vue"
   },
-  "OutputToProductionCompanyPage": {
-    "description": "Auto imported from components/Invoices/OutputToProductionCompany/OutputToProductionCompanyPage.vue"
-  },
   "OutputProductionReturn": {
     "description": "Auto imported from components/Invoices/OutputProductionReturn/OutputProductionReturn.vue"
+  },
+  "OutputToProductionCompanyPage": {
+    "description": "Auto imported from components/Invoices/OutputToProductionCompany/OutputToProductionCompanyPage.vue"
   },
   "OutputToProductionCompanyReturnPage": {
     "description": "Auto imported from components/Invoices/OutputToProductionCompanyReturn/OutputToProductionCompanyReturnPage.vue"
@@ -317,11 +326,11 @@
   "BandsPage": {
     "description": "Auto imported from components/Reports/BandsPage/BandsPage.vue"
   },
-  "BatchReportsPage": {
-    "description": "Auto imported from components/Reports/BatchReportsPage/BatchReportsPage.vue"
-  },
   "BatchStagesReport": {
     "description": "Auto imported from components/Reports/BatchStagesReport/BatchStagesReport.vue"
+  },
+  "BatchReportsPage": {
+    "description": "Auto imported from components/Reports/BatchReportsPage/BatchReportsPage.vue"
   },
   "BranchProductsStockReportByLogic": {
     "description": "Auto imported from components/Reports/BranchProductsStockReportByLogic/BranchProductsStockReportByLogic.vue"
@@ -338,11 +347,11 @@
   "PersonEquipmentsPage": {
     "description": "Auto imported from components/Reports/PersonEquipmentsPage/PersonEquipmentsPage.vue"
   },
-  "SewBandEquipments": {
-    "description": "Auto imported from components/Reports/SewBandsEquipments/SewBandEquipments.vue"
-  },
   "SewModelReport": {
     "description": "Auto imported from components/Reports/SewModelReport/SewModelReport.vue"
+  },
+  "SewBandEquipments": {
+    "description": "Auto imported from components/Reports/SewBandsEquipments/SewBandEquipments.vue"
   },
   "TransactionDetailReportPage": {
     "description": "Auto imported from components/Reports/TransactionDetailReportPage/TransactionDetailReportPage.vue"
