@@ -157,33 +157,17 @@ export default {
       keywordValue: '',
       tableHead: {
         id: { name: 'Id', code: 'id' },
-        sewModelName: {
-          name: 'Sew Model Name',
+        name: {
+          name: 'Name',
           code: 'name',
         },
-        product: {
-          name: 'Product',
-          code: 'productName',
+        createdDate: {
+          name: 'Created Date',
+          code: 'createdDate',
         },
-        codeSewModel: {
-          name: 'Code Sew Model',
-          code: 'code',
-        },
-        variantSewModel: {
-          name: 'Variant Sew Model',
-          code: 'variant',
-        },
-        style: {
-          name: 'Style',
-          code: 'style',
-        },
-        picture: {
-          name: 'Picture',
-          code: 'images',
-        },
-        company: {
-          name: 'Company',
-          code: 'companyName',
+        updateDate: {
+          name: 'Update Date',
+          code: 'updateDate',
         },
       },
       tableBody: [],

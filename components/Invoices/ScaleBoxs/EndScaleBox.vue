@@ -46,24 +46,15 @@
         />
       </div>
     </div>
-    <generic-button
-      name="Accept"
-      pl="10"
-      pt="3"
-      pr="10"
-      pb="3"
-      bg="rgba(54, 155, 215, 0.8)"
-      textsize="13"
-      @click="acceptAction"
-    />
+    <generic-button name="Accept" type="primary" @click="acceptAction" />
   </div>
 </template>
 
 <script>
-import GenericButton from '../Button/GenericButton.vue'
-import GenericInput from '../Input/GenericInput.vue'
-import GenericInputDatePage from '../InputDate/GenericInputDatePage.vue'
-import LookUp from '../Lookup/LookUp.vue'
+import GenericButton from '@components/Generics/GenericButton.vue'
+import GenericInput from '@components/Input/GenericInput.vue'
+import GenericInputDatePage from '@components/InputDate/GenericInputDatePage.vue'
+import LookUp from '@components/Lookup/LookUp.vue'
 export default {
   components: {
     LookUp,

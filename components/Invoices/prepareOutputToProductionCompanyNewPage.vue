@@ -14,7 +14,7 @@
         :autoheight="autoHeight"
         :openpopup="openPopup"
         :editopen="editOpen"
-        api="saveColumnConfigU"
+        api="saveColumnConfig"
         class="z-[10000]"
         @checkModal="handleValue"
       />
@@ -29,40 +29,14 @@
       class="border-[1px] border-solid border-[rgba(0,0,0,0.05)] p-[12px] bg-gradient-to-b from-transparent via-transparent to-gray-200 shadow-md"
     >
       <div class="flex items-center gap-[10px]">
-        <GenericButton
+        <generic-button
           name="Go Back"
-          pl="10"
-          pt="3"
-          pr="10"
-          pb="3"
-          bggradient="linear-gradient(to right, rgba(70,94,140,0.8),rgb(34,39,76))"
-          textsize="14"
-          :url="img.goBack"
-          :istherepicture="true"
-          @click="$router.go(-1)"
-        />
-        <GenericButton
-          name="onWay changeState"
-          pl="10"
-          pt="3"
-          pr="10"
-          pb="3"
-          bggradient="linear-gradient(to bottom, rgb(108,33,38),rgba(108,33,38,0.65))"
-          textsize="14"
-        />
-        <GenericButton
-          name="Copy Invoice"
-          pl="10"
-          pt="3"
-          pr="10"
-          pb="3"
-          bg="rgba(54, 155, 215, 0.8)"
-          textsize="14"
-          :url="img.copy"
-          :istherepicture="true"
+          type="primary"
+          icon-name-attribute="arrow-left"
+          @click="$router.push('/outputToProductionCompany.htm')"
         />
         <h1 class="font-bold text-[rgb(49,126,172)] text-[14px] uppercase">
-          Sales Return
+          Output To Production Company
         </h1>
       </div>
     </div>
@@ -112,13 +86,13 @@
               class="w-[17%] border-[1px] border-solid border-[#778899] p-[2px]"
             >
               <LookUp
+                v-if="objData?.paymentType?.text"
                 :defvalue="userId || parentID ? objData?.paymentType?.text : ''"
                 durl="invoiceBase/findAllPaymentType"
                 dwidth="100"
                 widthtype="%"
                 dlist="100"
                 name="paymentType"
-                :required="required.lookUp2"
                 :disabled="userId ? true : false"
                 @customFunction="getLookUpValue"
               />
@@ -166,13 +140,8 @@
                 widthtype="%"
                 dlist="100"
                 :dparam="{
-                  companyType: 'Supplier',
-                  dateFrom: userId
-                    ? objData?.date
-                    : new Date(objData?.date)
-                        .toLocaleString('en-GB')
-                        .split(',')
-                        .join(''),
+                  companyType: 'client',
+                  branchcompany: false,
                 }"
                 name="supplier"
                 :required="required.lookUp1"
@@ -424,13 +393,14 @@
             </td>
             <td class="border-[1px] border-solid border-[#778899] p-[2px]">
               <LookUp
-                v-if="objData?.warehouse?.text"
                 :defvalue="objData?.warehouse?.text"
                 durl="invoiceBase/findAllWarehouseLogic"
+                :dparam="{ departmentId }"
                 dwidth="100"
                 widthtype="%"
                 dlist="100"
-                name="wareHouseLogic"
+                name="warehouse"
+                :required="required.lookUp2"
                 :disabled="userId ? true : false"
                 @customFunction="getLookUpValue"
               />
@@ -704,30 +674,18 @@
         </tbody>
       </table>
       <div>
-        <GenericButton
+        <generic-button
           v-if="subTable || userId"
           name="Logistics Calculation"
-          pl="8"
-          pt="2"
-          pr="8"
-          pb="2"
-          textsize="14"
-          bggradient="linear-gradient(to top, rgb(108,105,199),rgba(108,105,199, 0.58))"
-          class="my-1"
-          :url="img.logistics"
-          :istherepicture="true"
+          type="success"
+          :margin="true"
           @click="logisticsCalculationAction"
         />
-        <GenericButton
+        <generic-button
           v-else
           name="Accept"
-          pl="8"
-          pt="2"
-          pr="8"
-          pb="2"
-          textsize="14"
-          bg="rgba(54, 155, 215, 0.8)"
-          class="my-1"
+          type="primary"
+          :margin="true"
           @click="additionInvoiceItem"
         />
       </div>
@@ -744,163 +702,62 @@
         >
           <h1 class="text-[13px]">Invoice Item</h1>
           <div class="flex gap-1 flex-wrap">
-            <GenericButton
+            <generic-button
               name="Column Setting"
-              pl="8"
-              pt="2"
-              pr="8"
-              pb="2"
-              textsize="14"
-              bggradient="linear-gradient(to top, rgb(25,52,79),rgba(25,52,79, 0.58))"
-              :url="img.setting"
-              :istherepicture="true"
+              type="warning"
+              icon-name-attribute="setting"
               @click="openColumnConfig"
             />
-            <GenericButton
+            <generic-button
               v-if="hideButton"
               name="Save"
-              pl="8"
-              pt="2"
-              pr="8"
-              pb="2"
-              textsize="14"
-              bg="rgb(119,191,66)"
+              type="primary"
               :disabled="disabledButton"
-              disabled-bg="rgba(119,191,66,0.6)"
               @click="saveInvoice"
               @customInputValueObj="getFilterData"
             />
-            <GenericButton
+            <generic-button
               v-else
               name="Edit"
-              pl="8"
-              pt="2"
-              pr="8"
-              pb="2"
-              textsize="14"
-              bg="rgb(119,191,66)"
-              :url="img.edit"
-              :istherepicture="true"
+              type="success"
+              icon-name-attribute="edit"
               @click="editInvoice"
             />
-            <GenericButton
+            <generic-button
               v-if="isMakeAndUnBill"
               name="Un Bill"
-              pl="8"
-              pt="2"
-              pr="8"
-              pb="2"
-              textsize="14"
-              bg="rgba(54, 155, 215, 0.8)"
+              type="info"
               @click="makeAndUnBillAction"
             />
-            <GenericButton
+            <generic-button
               v-else
               name="Make Bill"
-              pl="8"
-              pt="2"
-              pr="8"
-              pb="2"
-              textsize="14"
-              bg="rgba(54, 155, 215, 0.8)"
+              type="primary"
               @click="makeAndUnBillAction"
             />
-            <GenericButton
+            <generic-button
               name="Print Preview"
-              pl="8"
-              pt="2"
-              pr="8"
-              pb="2"
-              textsize="14"
-              bg="rgba(126,183,62, 0.8)"
-              :url="img.printer"
-              :istherepicture="true"
+              type="success"
+              icon-name-attribute="printer"
             />
-            <GenericButton
+            <generic-button
               v-if="!isMakeAndUnBill && !undoPayment.topUndoPayment"
               name="Delete"
-              pl="8"
-              pt="2"
-              pr="8"
-              pb="2"
-              textsize="14"
-              bggradient="linear-gradient(to top, rgb(108,33,38),rgba(108,33,38,0.65))"
-              :url="img.del"
-              :istherepicture="true"
+              type="danger"
+              icon-name-attribute="delete"
               @click="deleteInvoice"
             />
             <template v-if="isEdit || staticBtns">
-              <GenericButton
-                name="copyToInternal"
-                pl="8"
-                pt="2"
-                pr="8"
-                pb="2"
-                textsize="14"
-                bg="rgba(54, 155, 215, 0.8)"
-              />
-              <GenericButton
-                name="copyToExternal"
-                pl="8"
-                pt="2"
-                pr="8"
-                pb="2"
-                textsize="14"
-                bg="rgba(54, 155, 215, 0.8)"
-              />
-              <GenericButton
-                name="Print Barcode"
-                pl="8"
-                pt="2"
-                pr="8"
-                pb="2"
-                textsize="14"
-                bg="rgba(54, 155, 215, 0.8)"
-              />
-              <GenericButton
-                name="Sms notify"
-                pl="8"
-                pt="2"
-                pr="8"
-                pb="2"
-                textsize="14"
-                bg="rgba(54, 155, 215, 0.8)"
-              />
-              <GenericButton
-                name="Calculate Gramm 1"
-                pl="8"
-                pt="2"
-                pr="8"
-                pb="2"
-                textsize="14"
-                bg="rgba(54, 155, 215, 0.8)"
-              />
-              <GenericButton
-                name="Calculate Gramm 2"
-                pl="8"
-                pt="2"
-                pr="8"
-                pb="2"
-                textsize="14"
-                bg="rgba(54, 155, 215, 0.8)"
-              />
-              <GenericButton
-                name="Print all Barcode"
-                pl="8"
-                pt="2"
-                pr="8"
-                pb="2"
-                textsize="14"
-                bg="rgba(54, 155, 215, 0.8)"
-              />
-              <GenericButton
+              <generic-button name="copyToInternal" type="primary" />
+              <generic-button name="copyToExternal" type="primary" />
+              <generic-button name="Print Barcode" type="primary" />
+              <generic-button name="Sms notify" type="primary" />
+              <generic-button name="Calculate Gramm 1" type="primary" />
+              <generic-button name="Calculate Gramm 2" type="primary" />
+              <generic-button name="Print all Barcode" type="primary" />
+              <generic-button
                 name="changeUsedItemsPriceAccess"
-                pl="8"
-                pt="2"
-                pr="8"
-                pb="2"
-                textsize="14"
-                bggradient="linear-gradient(to top, rgb(108,33,38),rgba(108,33,38,0.65))"
+                type="danger"
                 @click="
                   changePriceAccessAndCompanyAction('changeUsedInvoiceItems')
                 "
@@ -967,14 +824,9 @@
                 @customFunction="getLookUpValue"
               />
             </span>
-            <GenericButton
+            <generic-button
               name="Change Invoice Company"
-              pl="8"
-              pt="3"
-              pr="8"
-              pb="3"
-              textsize="13"
-              bggradient="linear-gradient(to top, rgb(108,33,38),rgba(108,33,38,0.65))"
+              type="danger"
               @click="
                 changePriceAccessAndCompanyAction('changeUsedInvoiceCompany')
               "
@@ -984,7 +836,7 @@
             ref="invoiceRef"
             :tablehead="tableData"
             :tableheadlength="tableData.length"
-            :addmodalorrow="openPopup"
+            :addmodalorrow="true"
             :response-data="responseData"
             :ui-show-hide="uiShowHide"
             :isedit="isEdit"
@@ -1029,55 +881,30 @@
               ></strong
             >
             <div class="flex items-center gap-1">
-              <GenericButton
+              <generic-button
                 v-if="undoPayment.topUndoPayment"
                 name="Undo Payment"
-                pl="8"
-                pt="2"
-                pr="8"
-                pb="2"
-                bggradient="linear-gradient(to top, rgb(25,52,79),rgba(25,52,79,0.5))"
-                textsize="14"
-                color="rgb(255,229,142)"
+                type="info"
                 @click="undoPaymentTransactionColumns('topUP')"
               />
               <template v-else>
-                <GenericButton
+                <generic-button
                   v-if="editPayDiscard.editPayShowHide1"
                   name="Edit"
-                  pl="8"
-                  pt="2"
-                  pr="8"
-                  pb="2"
-                  bggradient="linear-gradient(to top, rgb(25,52,79),rgba(25,52,79,0.5))"
-                  textsize="14"
-                  :url="editPayDiscard.editPayShowHide1 ? img.edit : ''"
-                  :istherepicture="editPayDiscard.editPayShowHide1 && true"
+                  type="success"
+                  icon-name-attribute="edit"
                   @click="editTransactionColumns('topE')"
                 />
-                <GenericButton
+                <generic-button
                   v-else
                   name="Pay"
-                  pl="8"
-                  pt="2"
-                  pr="8"
-                  pb="2"
                   :disabled="subDisabledButton"
-                  disabled-bg="rgba(25,52,79,0.5)"
-                  bggradient="linear-gradient(to top, rgb(25,52,79),rgba(25,52,79,0.5))"
-                  textsize="14"
+                  type="primary"
                   @click="payTransactionColumns('topP')"
                 />
-                <GenericButton
+                <generic-button
                   v-if="editPayDiscard.discardShowHide1"
                   name="Discard"
-                  pl="8"
-                  pt="2"
-                  pr="8"
-                  pb="2"
-                  bggradient="linear-gradient(to top, rgb(205,210,212),rgba(205,210,212,0.65))"
-                  textsize="14"
-                  color="rgb(190,72,77)"
                   @click="discardTransactionColumns('topD')"
                 />
               </template>
@@ -1105,55 +932,30 @@
               ></strong
             >
             <div class="flex items-center gap-1">
-              <GenericButton
+              <generic-button
                 v-if="undoPayment.subUndoPayment"
                 name="Undo Payment"
-                pl="8"
-                pt="2"
-                pr="8"
-                pb="2"
-                bggradient="linear-gradient(to top, rgb(25,52,79),rgba(25,52,79,0.5))"
-                textsize="14"
-                color="rgb(255,229,142)"
+                type="info"
                 @click="undoPaymentTransactionColumns('subUP')"
               />
               <template v-else>
-                <GenericButton
+                <generic-button
                   v-if="editPayDiscard.editPayShowHide2"
                   name="Edit"
-                  pl="8"
-                  pt="2"
-                  pr="8"
-                  pb="2"
-                  bggradient="linear-gradient(to top, rgb(25,52,79),rgba(25,52,79,0.5))"
-                  textsize="14"
-                  :url="editPayDiscard.editPayShowHide2 ? img.edit : ''"
-                  :istherepicture="editPayDiscard.editPayShowHide2 && true"
+                  type="success"
+                  icon-name-attribute="edit"
                   @click="editTransactionColumns('subE')"
                 />
-                <GenericButton
+                <generic-button
                   v-else
                   name="Pay"
-                  pl="8"
-                  pt="2"
-                  pr="8"
-                  pb="2"
+                  type="primary"
                   :disabled="subTwoDisabledButton"
-                  disabled-bg="rgba(25,52,79,0.5)"
-                  bggradient="linear-gradient(to top, rgb(25,52,79),rgba(25,52,79,0.5))"
-                  textsize="14"
                   @click="payTransactionColumns('subP')"
                 />
-                <GenericButton
+                <generic-button
                   v-if="editPayDiscard.discardShowHide2"
                   name="Discard"
-                  pl="8"
-                  pt="2"
-                  pr="8"
-                  pb="2"
-                  bggradient="linear-gradient(to top, rgb(205,210,212),rgba(205,210,212,0.65))"
-                  textsize="14"
-                  color="rgb(190,72,77)"
                   @click="discardTransactionColumns('subD')"
                 />
               </template>
@@ -1179,24 +981,15 @@
 </template>
 
 <script>
-// Icons url
-import goBack from '../../../assets/icons/go-back.png'
-import copy from '../../../assets/icons/copy.png'
-import setting from '../../../assets/icons/settings.png'
-import printer from '../../../assets/icons/printer.png'
-import del from '../../../assets/icons/delete.png'
-import edit from '../../../assets/icons/editIcon.svg'
-import logistics from '../../../assets/icons/logistics.png'
-// Components
-import GenericButton from '../../Button/GenericButton.vue'
-import LoadingPage from '../../Loading/LoadingPage.vue'
-import LookUp from '../../Lookup/LookUp.vue'
-import GenericInput from '../../Input/GenericInput.vue'
-import GenericPrepareTablePage from '../../GenericPrepareTable/GenericPrepareTablePage.vue'
-import ColumnConfigPage from '../../ColumnConfig/ColumnConfigPage.vue'
-import GenericSubPrepareTablePage from '../../Generics/GenericSubPrepareTable/GenericSubPrepareTablePage.vue'
-import GenericSubPrepareTableTooPage from '../../Generics/GenericSubPrepareTableToo/GenericSubPrepareTableTooPage.vue'
-import GenericLogisticsCalculationPage from '../../Generics/GenericLogisticsCalculation/GenericLogisticsCalculationPage.vue'
+import GenericButton from '@components/Generics/GenericButton.vue'
+import LoadingPage from '@components/Loading/LoadingPage.vue'
+import LookUp from '@components/Lookup/LookUp.vue'
+import GenericInput from '@components/Input/GenericInput.vue'
+import GenericPrepareTablePage from '@components/GenericPrepareTable/GenericPrepareTablePage.vue'
+import ColumnConfigPage from '@components/ColumnConfig/ColumnConfigPage.vue'
+import GenericSubPrepareTablePage from '@components/Generics/GenericSubPrepareTable/GenericSubPrepareTablePage.vue'
+import GenericSubPrepareTableTooPage from '@components/Generics/GenericSubPrepareTableToo/GenericSubPrepareTableTooPage.vue'
+import GenericLogisticsCalculationPage from '@components/Generics/GenericLogisticsCalculation/GenericLogisticsCalculationPage.vue'
 export default {
   // COMPONENTS
   components: {
@@ -1254,15 +1047,6 @@ export default {
       rightColumns: [],
       tableNameTranslateObj: {},
       isLoading: false,
-      img: {
-        goBack,
-        copy,
-        setting,
-        printer,
-        del,
-        edit,
-        logistics,
-      },
       objData: {},
       selectedRow: null,
       propsValue: {
@@ -1278,6 +1062,7 @@ export default {
         lookUp1: true,
         lookUp2: true,
       },
+      departmentId: null,
       isInvoiceItem: false,
       rightMap: {},
       leftMap: {},
@@ -1397,13 +1182,11 @@ export default {
         : this.userId
         ? this.userId
         : null
-      const saleToPerson = this.$store.state.saleToPerson
-
       this.isLoading = !this.isLoading
       this.$axios
         .post(
-          `/invoices/prepareSalesReturnNewAjaxLoad`,
-          { id, saleToPerson },
+          `/invoices/prepareOutputToProductionCompanyNewAjaxLoad`,
+          { id, saleToPerson: false },
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -1422,6 +1205,7 @@ export default {
           this.editOpen = data?.autoEditOpen
           this.autoHeight = data?.autoHeight
           this.transactionColumns = data?.transactionsColumns
+          this.departmentId = data?.invoiceJson?.department?.id
           if (this.isEdit) {
             if (data?.invoiceJson?.paymentType?.text) this.makeAndUnBill = true
             else this.makeAndUnBill = false
@@ -1534,7 +1318,7 @@ export default {
       this.lookupValuesObj.get('supplier')
         ? (this.required.lookUp1 = true)
         : (this.required.lookUp1 = false)
-      this.lookupValuesObj.get('paymentType')
+      this.lookupValuesObj.get('warehouse')
         ? (this.required.lookUp2 = true)
         : (this.required.lookUp2 = false)
     },
@@ -1545,7 +1329,7 @@ export default {
       this.lookupValuesObj.get('supplier')
         ? (this.required.lookUp1 = true)
         : (this.required.lookUp1 = false)
-      this.lookupValuesObj.get('paymentType')
+      this.lookupValuesObj.get('warehouse')
         ? (this.required.lookUp2 = true)
         : (this.required.lookUp2 = false)
 
@@ -1756,7 +1540,7 @@ export default {
           )
           .then((res) => {
             this.isLoading = !this.isLoading
-            if (res.status === 200) this.$router.push('/salesReturn.htm')
+            if (res.status === 200) this.$router.push('/purchaseinvoice.htm')
           })
           .catch((error) => {
             this.isLoading = !this.isLoading
@@ -1833,7 +1617,7 @@ export default {
     getResponseTransactionsAction(prop) {
       this.$axios
         .post(
-          `/invoices/prepareSalesReturnNewAjaxLoad`,
+          `/invoices/prepareOutputToProductionCompanyNewAjaxLoad`,
           { id: this.parentID ? this.parentID : this.userId },
           {
             headers: {
@@ -1947,15 +1731,28 @@ export default {
         const objData = this.objData
 
         // input values
-        const dateBack = new Date(objData.date).toISOString().split('.')[0]
+        const dateBack = new Date(objData.date)
+          .toLocaleString('en-GB')
+          .split(',')
+          .join('')
 
-        const date = inputValues.date ? inputValues.date : dateBack
+        let date = inputValues.date ? inputValues.date : dateBack
+        const splitDate = date.split(' ')
+        date = splitDate[0].split('/').reverse().join('-') + 'T' + splitDate[1]
 
-        const sellDateBack = new Date(objData.date).toISOString().split('.')[0]
+        const sellDateBack = new Date(objData.date)
+          .toLocaleString('en-GB')
+          .split(',')
+          .join('')
 
-        const sellDate = inputValues.sellDate
+        let sellDate = inputValues.sellDate
           ? inputValues.sellDate
           : sellDateBack
+        const splitSellDate = sellDate.split(' ')
+        sellDate =
+          splitSellDate[0].split('/').reverse().join('-') +
+          'T' +
+          splitSellDate[1]
 
         const currencyRate = this.propsValue?.supplare?.value
           ? this.propsValue?.supplare?.value
@@ -2030,9 +1827,9 @@ export default {
           ? lookupValues?.department
           : objData?.department?.id
 
-        const paymentType = lookupValues?.paymentType
-          ? lookupValues?.paymentType
-          : objData?.paymentType?.id
+        // const paymentType = lookupValues?.paymentType
+        //   ? lookupValues?.paymentType
+        //   : objData?.paymentType?.id
 
         const orderProductionType = lookupValues?.orderProductionType
           ? lookupValues?.orderProductionType
@@ -2065,7 +1862,6 @@ export default {
             notes: '',
             order: { id: order },
             orderProductionType: { id: Number(orderProductionType) },
-            paymentType: { id: Number(paymentType) },
             sellDate,
             sequenceNumber: '',
             systemNumber,
@@ -2085,13 +1881,12 @@ export default {
             invoiceItems: this.invoiceList,
             invoiceNominal,
             order: { id: order },
-            paymentType: { id: Number(paymentType) },
           },
         }
 
         this.$axios
           .post(
-            `/invoices/prepareCreateEditSalesReturn`,
+            `/invoices/prepareCreateEditOutputToProductionCompany`,
             this.isEdit ? editRequestBody : requestBody,
             {
               headers: {
@@ -2100,13 +1895,12 @@ export default {
               },
             }
           )
-          .then(({ data: { invoiceJson } }) => {
-            const invoiceData = JSON.parse(invoiceJson)
-            this.parentID = invoiceData?.id
-            this.responseData = invoiceData?.invoiceItems
-            this.subListData = invoiceData
-            invoiceData?.invoiceItems.length && (this.uiShowHide = true)
-            if (!this.isEdit && invoiceData?.paymentType?.text)
+          .then(({ data }) => {
+            this.parentID = data?.invoiceJson?.id
+            this.responseData = data?.invoiceJson?.invoiceItems
+            this.subListData = data?.invoiceJson
+            data?.invoiceJson?.invoiceItems.length && (this.uiShowHide = true)
+            if (!this.isEdit && data?.invoiceJson?.paymentType?.text)
               this.makeAndUnBill = true
             else this.makeAndUnBill = false
           })

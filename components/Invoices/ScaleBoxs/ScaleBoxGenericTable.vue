@@ -1,26 +1,8 @@
 <template>
   <div class="w-[780px] border-[1px] border-solid border-[#D9DBDF] p-2">
     <div class="flex items-center justify-between gap-2 mb-2">
-      <GenericButton
-        name="Add"
-        pl="10"
-        pt="4"
-        pr="10"
-        pb="4"
-        bg="rgba(54, 155, 215, 0.8)"
-        textsize="13"
-        @click="addRowAction"
-      />
-      <GenericButton
-        name="Save"
-        pl="10"
-        pt="4"
-        pr="10"
-        pb="4"
-        bg="rgb(126,183,62)"
-        textsize="13"
-        @click="saveAction"
-      />
+      <GenericButton name="Add" type="primary" @click="addRowAction" />
+      <GenericButton name="Save" type="primary" @click="saveAction" />
     </div>
     <table class="w-full border-[1px] border-[solid] border-[#F0F0F0]">
       <thead class="bg-[rgb(229,235,245)]">
@@ -123,10 +105,9 @@
 </template>
 
 <script>
-import GenericButton from '../Button/GenericButton.vue'
-import GenericInput from '../Input/GenericInput.vue'
-import LookUp from '../Lookup/LookUp.vue'
-
+import GenericButton from '@components/Generics/GenericButton.vue'
+import GenericInput from '@components/Input/GenericInput.vue'
+import LookUp from '@components/Lookup/LookUp.vue'
 export default {
   components: {
     GenericButton,
@@ -223,12 +204,7 @@ export default {
 
       this.isLoading = !this.isLoading
       this.$axios
-        .post(`/simpleProductionInvoice/${this.saveUrl}`, body, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-            'x-auth-token': localStorage.getItem('authToken'),
-          },
-        })
+        .post(`/simpleProductionInvoice/${this.saveUrl}`, body)
         .then((res) => {
           this.isLoading = !this.isLoading
           this.$router.push('/simpleProductionInvoice.htm')

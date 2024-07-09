@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import PrepareOutputToPrOrderSimple from '../../components/Invoices/PrepareOutputToPrOrderSimple/PrepareOutputToPrOrderSimple.vue'
+import PrepareOutputToPrOrderSimple from '@components/Invoices/PrepareOutputToPrOrderSimple.vue'
 export default {
   components: { PrepareOutputToPrOrderSimple },
 }

@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import PrepareOutputToPrOrderReturnPage from '../../components/Invoices/PrepareOutputToPrOrderReturn/PrepareOutputToPrOrderReturnPage.vue'
+import PrepareOutputToPrOrderReturnPage from '@components/Invoices/PrepareOutputToPrOrderReturnPage.vue'
 export default {
   components: { PrepareOutputToPrOrderReturnPage },
 }

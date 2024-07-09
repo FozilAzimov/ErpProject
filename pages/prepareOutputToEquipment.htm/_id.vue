@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import PrepareOutputToEquipmentPage from '../../components/Invoices/PrepareOutputToEquipment/PrepareOutputToEquipmentPage.vue'
+import PrepareOutputToEquipmentPage from '@components/Invoices/PrepareOutputToEquipmentPage.vue'
 export default {
   components: { PrepareOutputToEquipmentPage },
 }

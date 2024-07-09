@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import PrepareInputToServiceInvoicePage from '../../components/Invoices/PrepareInputToServiceInvoice/PrepareInputToServiceInvoicePage.vue'
+import PrepareInputToServiceInvoicePage from '@components/Invoices/PrepareInputToServiceInvoicePage.vue'
 export default {
   components: { PrepareInputToServiceInvoicePage },
 }

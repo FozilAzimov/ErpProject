@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import PrepareSaleServiceInvoiceNewPage from '../../components/Invoices/PrepareSaleServiceInvoiceNew/PrepareSaleServiceInvoiceNewPage.vue'
+import PrepareSaleServiceInvoiceNewPage from '@components/Invoices/PrepareSaleServiceInvoiceNewPage.vue'
 export default {
   components: { PrepareSaleServiceInvoiceNewPage },
 }

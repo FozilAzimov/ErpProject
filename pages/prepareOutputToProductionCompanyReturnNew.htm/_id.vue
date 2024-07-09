@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import PrepareOutputToProductionCompanyReturnNewPage from '../../components/Invoices/PrepareOutputToProductionCompanyReturnNew/PrepareOutputToProductionCompanyReturnNewPage.vue'
+import PrepareOutputToProductionCompanyReturnNewPage from '@components/Invoices/PrepareOutputToProductionCompanyReturnNewPage.vue'
 export default {
   components: { PrepareOutputToProductionCompanyReturnNewPage },
 }

@@ -121,12 +121,16 @@
               <!-- productions uchun -->
               <td v-if="productionsActionButtons" class="border-[1px] p-2">
                 <span
-                  v-if="$route.path.includes('sewmodel.htm')"
+                  v-if="
+                    $route.path.includes('sewmodel.htm') ||
+                    $route.path.includes('batchunions.htm')
+                  "
                   class="flex items-center justify-center gap-2 p-2"
                 >
                   <generic-button
                     name="Open"
                     type="success"
+                    icon-name-attribute="edit"
                     @click="$router.push(`${openUrl}.htm/${value.id}`)"
                   />
                 </span>

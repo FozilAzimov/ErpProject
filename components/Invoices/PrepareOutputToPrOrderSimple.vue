@@ -8,17 +8,11 @@
       class="border-[1px] border-solid border-[rgba(0,0,0,0.05)] p-[12px] bg-gradient-to-b from-transparent via-transparent to-gray-200 shadow-md flex items-center justify-between"
     >
       <div class="flex items-center gap-[10px]">
-        <GenericButton
+        <generic-button
           name="Go Back"
-          pl="10"
-          pt="3"
-          pr="10"
-          pb="3"
-          bggradient="linear-gradient(to right, rgba(70,94,140,0.8),rgb(34,39,76))"
-          textsize="14"
-          :url="img.goBack"
-          :istherepicture="true"
-          @click="$router.go(-1)"
+          type="primary"
+          icon-name-attribute="arrow-left"
+          @click="$router.push('')"
         />
         <h1 class="font-bold text-[rgb(49,126,172)] text-[14px] uppercase">
           Output To Production Order Simple
@@ -33,11 +27,7 @@
               background: 'radial-gradient(#fff, rgba(32,111,162,0.2))',
             }"
           >
-            <img
-              class="w-[11px]"
-              src="../../../assets/icons/gear.png"
-              alt="gear"
-            />
+            <img class="w-[11px]" src="@assets/icons/gear.png" alt="gear" />
           </li>
           <li
             class="p-[7px] rounded-[50%] cursor-pointer border-[1px] border-[solid] border-[rgba(0,0,0,0.1] hover:border-[#3b89e9] focus:border-[#3b89e9] duration-[0.4s]"
@@ -52,7 +42,7 @@
                   ? 'rotate-[-180deg] duration-[1s]'
                   : 'rotate-[0deg] duration-[1s]'
               "
-              src="../../../assets/icons/arrow.png"
+              src="@assets/icons/arrow.png"
               alt="arrow"
             />
           </li>
@@ -62,11 +52,7 @@
               background: 'radial-gradient(#fff, rgba(32,111,162,0.2))',
             }"
           >
-            <img
-              class="w-[11px]"
-              src="../../../assets/icons/remove.png"
-              alt="remove"
-            />
+            <img class="w-[11px]" src="@assets/icons/remove.png" alt="remove" />
           </li>
         </ul>
       </div>
@@ -132,25 +118,15 @@
       <generic-button
         v-if="tableResponseData.length && !isExpenceBtn"
         name="Expense Invoice"
-        pl="8"
-        pt="2"
-        pr="8"
-        pb="2"
-        bg="rgb(126,183,62)"
-        textsize="13"
+        type="primary"
         @click="expenseInvoiceAction"
       />
 
-      <generic-nuxt-link-button
+      <generic-button
         v-if="isExpenceBtn"
         name="Expense"
-        pl="8"
-        pt="2"
-        pr="8"
-        pb="2"
-        bg="rgba(54, 155, 215, 0.8)"
-        textsize="13"
-        to="outputToPrOrder.htm"
+        type="primary"
+        @click="$router.push('/outputToPrOrder.htm')"
       />
       <div
         v-if="tableResponseData.length && !isExpenceBtn"
@@ -195,16 +171,7 @@
                 <generic-input :value="true" type="checkbox" name="check" />
               </td>
               <td class="border-[1px] text-[12px] p-2 text-center">
-                <generic-button
-                  name="Remove"
-                  pl="8"
-                  pt="2"
-                  pr="8"
-                  pb="2"
-                  bg="rgb(0,0,0,0.2)"
-                  color="#000"
-                  textsize="13"
-                />
+                <generic-button name="Remove" type="primary" />
               </td>
             </tr>
           </tbody>
@@ -215,14 +182,10 @@
 </template>
 
 <script>
-// Icons url
-import goBack from '../../../assets/icons/go-back.png'
-
-// Components
-import GenericButton from '../../Button/GenericButton.vue'
-import GenericInput from '../../Input/GenericInput.vue'
-import LoadingPage from '../../Loading/LoadingPage.vue'
-import LookUp from '../../Lookup/LookUp.vue'
+import GenericButton from '@components/Generics/GenericButton.vue'
+import GenericInput from '@components/Input/GenericInput.vue'
+import LoadingPage from '@components/Loading/LoadingPage.vue'
+import LookUp from '@components/Lookup/LookUp.vue'
 export default {
   // COMPONENTS
   components: {
@@ -236,9 +199,6 @@ export default {
   data() {
     return {
       isLoading: false,
-      img: {
-        goBack,
-      },
       allLookUpAndInputValues: {},
       tableResponseData: [],
       allBarcodeValue: [],
@@ -254,7 +214,6 @@ export default {
       handler(newVal) {
         this.newDataAction(newVal)
       },
-
       deep: true,
     },
   },
@@ -301,20 +260,11 @@ export default {
       if (productBarcode && warehouseId && qty && kroy) {
         this.isLoading = !this.isLoading
         this.$axios
-          .post(
-            `/batchProduction/batchStartStopByCardNumber`,
-            {
-              anyParam: 'expenseReadyItems',
-              productBarcode,
-              warehouseId,
-            },
-            {
-              headers: {
-                Authorization: `Bearer ${localStorage.getItem('token')}`,
-                'x-auth-token': localStorage.getItem('authToken'),
-              },
-            }
-          )
+          .post(`/batchProduction/batchStartStopByCardNumber`, {
+            anyParam: 'expenseReadyItems',
+            productBarcode,
+            warehouseId,
+          })
           .then(({ data }) => {
             this.isLoading = !this.isLoading
 
@@ -344,12 +294,7 @@ export default {
 
       this.isLoading = !this.isLoading
       this.$axios
-        .post(`/invoices/prepareCreateEditOutputToPrOrder`, body, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-            'x-auth-token': localStorage.getItem('authToken'),
-          },
-        })
+        .post(`/invoices/prepareCreateEditOutputToPrOrder`, body)
         .then(({ data: { invoiceJson } }) => {
           this.isLoading = !this.isLoading
           if (invoiceJson.id) {

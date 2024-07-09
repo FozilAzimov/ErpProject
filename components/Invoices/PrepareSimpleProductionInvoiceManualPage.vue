@@ -16,45 +16,27 @@
       class="border-[1px] border-solid border-[rgba(0,0,0,0.05)] p-[12px] bg-gradient-to-b from-transparent via-transparent to-gray-200 shadow-md flex items-center justify-between"
     >
       <div class="flex items-center gap-[10px]">
-        <GenericButton
+        <generic-button
           name="Go Back"
-          pl="10"
-          pt="3"
-          pr="10"
-          pb="3"
-          bggradient="linear-gradient(to right, rgba(70,94,140,0.8),rgb(34,39,76))"
-          textsize="14"
-          :url="img.goBack"
-          :istherepicture="true"
-          @click="$router.go(-1)"
+          type="primary"
+          icon-name-attribute="arrow-left"
+          @click="$router.push('')"
         />
-        <GenericButton
+        <generic-button
           v-if="isPage_ID"
           name="Print Preview"
-          pl="8"
-          pt="2"
-          pr="8"
-          pb="2"
-          bg="rgb(126,183,62)"
-          textsize="14"
-          :url="img.print"
-          :istherepicture="true"
+          type="success"
+          icon-name-attribute="printer"
         />
-        <GenericButton
+        <generic-button
           v-if="isPage_ID"
           name="Delete"
-          pl="8"
-          pt="2"
-          pr="8"
-          pb="2"
-          textsize="14"
-          bggradient="linear-gradient(to top, rgb(108,33,38),rgba(108,33,38,0.65))"
-          :url="img.del"
-          :istherepicture="true"
+          type="danger"
+          icon-name-attribute="delete"
           @click="deleteAction"
         />
         <h1 class="font-bold text-[rgb(49,126,172)] text-[14px] uppercase">
-          {{ 'Add Simple Production Invoice' }}
+          Add Simple Production Invoice
         </h1>
       </div>
 
@@ -66,11 +48,7 @@
               background: 'radial-gradient(#fff, rgba(32,111,162,0.2))',
             }"
           >
-            <img
-              class="w-[11px]"
-              src="../../../assets/icons/gear.png"
-              alt="gear"
-            />
+            <img class="w-[11px]" src="@assets/icons/gear.png" alt="gear" />
           </li>
           <li
             class="p-[7px] rounded-[50%] cursor-pointer border-[1px] border-[solid] border-[rgba(0,0,0,0.1] hover:border-[#3b89e9] focus:border-[#3b89e9] duration-[0.4s]"
@@ -85,7 +63,7 @@
                   ? 'rotate-[-180deg] duration-[1s]'
                   : 'rotate-[0deg] duration-[1s]'
               "
-              src="../../../assets/icons/arrow.png"
+              src="@assets/icons/arrow.png"
               alt="arrow"
             />
           </li>
@@ -95,11 +73,7 @@
               background: 'radial-gradient(#fff, rgba(32,111,162,0.2))',
             }"
           >
-            <img
-              class="w-[11px]"
-              src="../../../assets/icons/remove.png"
-              alt="remove"
-            />
+            <img class="w-[11px]" src="@assets/icons/remove.png" alt="remove" />
           </li>
         </ul>
       </div>
@@ -213,12 +187,7 @@
                   <generic-button
                     v-else-if="type === 'button'"
                     name="Open"
-                    pl="10"
-                    pt="3"
-                    pr="10"
-                    pb="3"
-                    textsize="14"
-                    bg="rgb(126,183,62)"
+                    type="primary"
                     @click="getSubTableAction(index)"
                   />
                   <generic-multiple-select
@@ -245,18 +214,12 @@
 </template>
 
 <script>
-// Icons url
-import goBack from '../../../assets/icons/go-back.png'
-import print from '../../../assets/icons/printer.png'
-import del from '../../../assets/icons/delete.png'
-
-// Components
-import GenericButton from '../../Button/GenericButton.vue'
-import LoadingPage from '../../Loading/LoadingPage.vue'
-import EndScaleBox from '../EndScaleBox.vue'
-import ScaleBox from '../ScaleBox.vue'
-import ScaleBoxGenericTable from '../ScaleBoxGenericTable.vue'
-import GenericMultipleSelect from '../../Generics/GenericMultipleSelect.vue'
+import GenericButton from '@components/Generics/GenericButton.vue'
+import LoadingPage from '@components/Loading/LoadingPage.vue'
+import GenericMultipleSelect from '@components/Generics/GenericMultipleSelect.vue'
+import EndScaleBox from '@components/Invoices/ScaleBoxs/EndScaleBox.vue'
+import ScaleBox from '@components/Invoices/ScaleBoxs/ScaleBox.vue'
+import ScaleBoxGenericTable from '@components/Invoices/ScaleBoxs/ScaleBoxGenericTable.vue'
 export default {
   // COMPONENTS
   components: {
@@ -272,11 +235,6 @@ export default {
   data() {
     return {
       isLoading: false,
-      img: {
-        goBack,
-        print,
-        del,
-      },
       checkModal: false,
       packagingId: null,
       tableHeadBodyData: [

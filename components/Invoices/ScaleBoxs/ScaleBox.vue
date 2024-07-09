@@ -2,15 +2,7 @@
   <div
     class="w-fit border-[1px] border-solid border-[#D9DBDF] flex items-center gap-1 p-2"
   >
-    <generic-button
-      name="Connect"
-      pl="10"
-      pt="3"
-      pr="10"
-      pb="3"
-      bg="rgba(54, 155, 215, 0.8)"
-      textsize="13"
-    />
+    <generic-button name="Connect" type="primary" />
     <div class="flex items-center gap-1">
       <span class="text-[15px]">Baud:</span>
       <generic-select
@@ -21,15 +13,7 @@
         is-def-option-title=""
       />
     </div>
-    <generic-button
-      name="Clear"
-      pl="10"
-      pt="3"
-      pr="10"
-      pb="3"
-      bg="rgba(54, 155, 215, 0.8)"
-      textsize="13"
-    />
+    <generic-button name="Clear" />
     <generic-input
       width="80"
       height="25"
@@ -120,22 +104,14 @@
       type="text"
       placeholder="value"
     />
-    <generic-button
-      name="Save params"
-      pl="10"
-      pt="3"
-      pr="10"
-      pb="3"
-      bg="rgba(54, 155, 215, 0.8)"
-      textsize="13"
-    />
+    <generic-button name="Save params" type="primary" />
   </div>
 </template>
 
 <script>
-import GenericButton from '../Button/GenericButton.vue'
-import GenericInput from '../Input/GenericInput.vue'
-import GenericSelect from '../Select/GenericSelect.vue'
+import GenericButton from '@components/Generics/GenericButton.vue'
+import GenericInput from '@components/Input/GenericInput.vue'
+import GenericSelect from '@components/Select/GenericSelect.vue'
 export default {
   components: {
     GenericButton,
