@@ -3,8 +3,8 @@
 </template>
 
 <script>
-import Dyeings from '../../components/Orders/Dyeings/DyeingsPage'
+import Dyeings from '@components/Orders/Dyeings/DyeingsPage'
 export default {
-  components: { Dyeings }
+  components: { Dyeings },
 }
 </script>

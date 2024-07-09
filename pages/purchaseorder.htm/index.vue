@@ -3,8 +3,8 @@
 </template>
 
 <script>
-import PurchaseOrderPage from '../../components/Orders/PurchaseOrderpage/PurchaseOrderPage.vue'
+import PurchaseOrderPage from '@components/Orders/PurchaseOrderpage/PurchaseOrderPage.vue'
 export default {
-  components: { PurchaseOrderPage }
+  components: { PurchaseOrderPage },
 }
 </script>

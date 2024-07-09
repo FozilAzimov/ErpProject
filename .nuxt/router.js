@@ -16,6 +16,7 @@ const _302d9a61 = () => interopDefault(import('..\\pages\\checkRealCountBarcode.
 const _8030abd4 = () => interopDefault(import('..\\pages\\colorDepth.htm\\index.vue' /* webpackChunkName: "pages/colorDepth.htm/index" */))
 const _82e50974 = () => interopDefault(import('..\\pages\\colors.htm\\index.vue' /* webpackChunkName: "pages/colors.htm/index" */))
 const _064bc708 = () => interopDefault(import('..\\pages\\colorVariantRecipeStageChild.htm\\index.vue' /* webpackChunkName: "pages/colorVariantRecipeStageChild.htm/index" */))
+const _9c951976 = () => interopDefault(import('..\\pages\\colorVariantRecipeStageGroup.htm\\index.vue' /* webpackChunkName: "pages/colorVariantRecipeStageGroup.htm/index" */))
 const _488f6fa6 = () => interopDefault(import('..\\pages\\colorVariantRecipeStagePicture.htm\\index.vue' /* webpackChunkName: "pages/colorVariantRecipeStagePicture.htm/index" */))
 const _7a28fbf8 = () => interopDefault(import('..\\pages\\dashboard.htm\\index.vue' /* webpackChunkName: "pages/dashboard.htm/index" */))
 const _2710b77a = () => interopDefault(import('..\\pages\\designs.htm\\index.vue' /* webpackChunkName: "pages/designs.htm/index" */))
@@ -163,6 +164,10 @@ export const routerOptions = {
     path: "/colorVariantRecipeStageChild.htm",
     component: _064bc708,
     name: "colorVariantRecipeStageChild.htm"
+  }, {
+    path: "/colorVariantRecipeStageGroup.htm",
+    component: _9c951976,
+    name: "colorVariantRecipeStageGroup.htm"
   }, {
     path: "/colorVariantRecipeStagePicture.htm",
     component: _488f6fa6,

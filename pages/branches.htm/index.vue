@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import BranchesPage from '../../components/Branches/BranchesPage.vue'
+import BranchesPage from '@components/Branches/BranchesPage.vue'
 export default {
   components: { BranchesPage },
 }

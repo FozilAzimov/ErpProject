@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import BatchesList from '../../components/Productions/BatchesList.vue'
+import BatchesList from '@components/Productions/BatchesList.vue'
 export default {
   components: { BatchesList },
 }

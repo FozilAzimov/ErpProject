@@ -3,9 +3,9 @@
 </template>
 
 <script>
-import BandsPage from '../../components/Reports/BandsPage/BandsPage'
+import BandsPage from '@components/Reports/BandsPage/BandsPage'
 
 export default {
-  components: { BandsPage }
+  components: { BandsPage },
 }
 </script>

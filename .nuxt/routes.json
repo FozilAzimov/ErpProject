@@ -84,6 +84,13 @@
     "_name": "_064bc708"
   },
   {
+    "name": "colorVariantRecipeStageGroup.htm",
+    "path": "/colorVariantRecipeStageGroup.htm",
+    "component": "C:\\\\ErpProject\\\\pages\\\\colorVariantRecipeStageGroup.htm\\\\index.vue",
+    "chunkName": "pages/colorVariantRecipeStageGroup.htm/index",
+    "_name": "_9c951976"
+  },
+  {
     "name": "colorVariantRecipeStagePicture.htm",
     "path": "/colorVariantRecipeStagePicture.htm",
     "component": "C:\\\\ErpProject\\\\pages\\\\colorVariantRecipeStagePicture.htm\\\\index.vue",

@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import PrepareColor from '../../components/Productions/PrepareColor.vue'
+import PrepareColor from '@components/Productions/PrepareColor.vue'
 export default {
   components: { PrepareColor },
 }

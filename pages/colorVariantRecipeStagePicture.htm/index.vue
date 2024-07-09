@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import ColorVariantRecipeStagePicture from '../../components/Productions/ColorVariantRecipeStagePicture.vue'
+import ColorVariantRecipeStagePicture from '@components/Productions/ColorVariantRecipeStagePicture.vue'
 export default {
   components: { ColorVariantRecipeStagePicture },
 }

@@ -1,10 +1,10 @@
 <template>
-    <TransactionDetailReportPage />
+  <TransactionDetailReportPage />
 </template>
 
 <script>
-import TransactionDetailReportPage from '../../components/Reports/TransactionDetailReportPage/TransactionDetailReportPage.vue'
+import TransactionDetailReportPage from '@components/Reports/TransactionDetailReportPage/TransactionDetailReportPage.vue'
 export default {
-  components: { TransactionDetailReportPage }
+  components: { TransactionDetailReportPage },
 }
 </script>

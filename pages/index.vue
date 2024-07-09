@@ -2,7 +2,7 @@
   <div>
     <h1>Bu page hali yaratilmadi</h1>
     <button
-      class="border-[1px] border-[solid] border-[rgba(0,0,0,0.2)] rounded-[10px] p-[5px]"
+      class="border-[1px] border-solid border-[rgba(0,0,0,0.2)] rounded-[10px] p-[5px]"
       @click="fetchUsersFromStore"
     >
       getUsers

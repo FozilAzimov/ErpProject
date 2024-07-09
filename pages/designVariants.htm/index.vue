@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import DesignVariants from '../../components/Productions/DesignVariants.vue'
+import DesignVariants from '@components/Productions/DesignVariants.vue'
 export default {
   components: { DesignVariants },
 }

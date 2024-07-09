@@ -1,12 +1,11 @@
 <template>
-    <SewModelReport/>
+  <SewModelReport />
 </template>
 
 <script>
-import SewModelReport from '../../components/Reports/SewModelReport/SewModelReport.vue';
+import SewModelReport from '@components/Reports/SewModelReport/SewModelReport.vue'
 
 export default {
-components: { SewModelReport },
+  components: { SewModelReport },
 }
 </script>
-  

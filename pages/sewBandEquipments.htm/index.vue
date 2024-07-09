@@ -3,9 +3,9 @@
 </template>
 
 <script>
-import SewBandEquipments from '../../components/Reports/SewBandsEquipments/SewBandEquipments'
+import SewBandEquipments from '@components/Reports/SewBandsEquipments/SewBandEquipments'
 
 export default {
-  components: { SewBandEquipments }
+  components: { SewBandEquipments },
 }
 </script>

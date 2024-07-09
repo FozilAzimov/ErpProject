@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import PrepareSewModelOperationName from '../../components/Productions/PrepareSewModelOperationName.vue'
+import PrepareSewModelOperationName from '@components/Productions/PrepareSewModelOperationName.vue'
 export default {
   components: { PrepareSewModelOperationName },
 }

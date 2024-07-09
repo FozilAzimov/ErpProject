@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import PrepareInternalInvoiceNewDevice from '../../components/InternalInvoices/PrepareInternalInvoiceNewDevice.vue'
+import PrepareInternalInvoiceNewDevice from '@components/InternalInvoices/PrepareInternalInvoiceNewDevice.vue'
 export default {
   components: { PrepareInternalInvoiceNewDevice },
 }

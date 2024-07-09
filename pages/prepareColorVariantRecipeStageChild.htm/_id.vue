@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import PrepareColorVariantRecipeStageChild from '../../components/Productions/PrepareColorVariantRecipeStageChild.vue'
+import PrepareColorVariantRecipeStageChild from '@components/Productions/PrepareColorVariantRecipeStageChild.vue'
 export default {
   components: { PrepareColorVariantRecipeStageChild },
 }

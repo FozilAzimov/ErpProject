@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import ColorsList from '../../components/Productions/ColorsList.vue'
+import ColorsList from '@components/Productions/ColorsList.vue'
 export default {
   components: { ColorsList },
 }

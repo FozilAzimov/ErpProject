@@ -3,8 +3,8 @@
 </template>
 
 <script>
-import ProductionOrderplannigs from '../../components/Orders/ProductionOrderPlannigs/ProductionOrderplannigs.vue'
+import ProductionOrderplannigs from '@components/Orders/ProductionOrderPlannigs/ProductionOrderplannigs.vue'
 export default {
-  components: { ProductionOrderplannigs }
+  components: { ProductionOrderplannigs },
 }
 </script>

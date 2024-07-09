@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import PrepareBatchUnionsNew from '../../components/Productions/PrepareBatchUnionsNew.vue'
+import PrepareBatchUnionsNew from '@components/Productions/PrepareBatchUnionsNew.vue'
 export default {
   components: { PrepareBatchUnionsNew },
 }

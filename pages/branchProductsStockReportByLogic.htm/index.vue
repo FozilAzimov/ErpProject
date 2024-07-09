@@ -3,8 +3,8 @@
 </template>
 
 <script>
-import BranchProductsStockReportByLogic from '../../components/Reports/BranchProductsStockReportByLogic/BranchProductsStockReportByLogic.vue'
+import BranchProductsStockReportByLogic from '@components/Reports/BranchProductsStockReportByLogic/BranchProductsStockReportByLogic.vue'
 export default {
-  components: { BranchProductsStockReportByLogic }
+  components: { BranchProductsStockReportByLogic },
 }
 </script>

@@ -3,9 +3,9 @@
 </template>
 
 <script>
-import InputStockDetailReport from '../../components/Reports/InputStockDetailReport/InputStockDetailReport'
+import InputStockDetailReport from '@components/Reports/InputStockDetailReport/InputStockDetailReport'
 
 export default {
-  components: { InputStockDetailReport }
+  components: { InputStockDetailReport },
 }
 </script>

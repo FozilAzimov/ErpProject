@@ -8,11 +8,7 @@
       <div
         class="flex items-center gap-[10px] border-[1px] border-solid border-[rgba(0,0,0,0.05)] p-[12px] bg-gradient-to-b from-transparent via-transparent to-gray-200 shadow-md"
       >
-        <img
-          src="../../assets/icons/user-black.png"
-          alt="user"
-          class="w-[14px]"
-        />
+        <img src="@assets/icons/user-black.png" alt="user" class="w-[14px]" />
         <h1 class="font-bold text-[rgb(49,126,172)] text-[14px] uppercase">
           Session List
         </h1>
@@ -23,7 +19,7 @@
         class="flex items-center gap-2 text-[14px] p-[5px_10px] border-[1px] border-[solid] border-[#ddd] rounded-[5px] mt-2 hover:border-[rgba(32,111,162,0.5)] hover:bg-[rgba(32,111,162,0.05)] duration-[0.1s]"
       >
         <img
-          src="../../assets/icons/delete.png"
+          src="@assets/icons/delete.png"
           alt="delete"
           class="w-[15px]"
         />InvaliddateSession
@@ -123,12 +119,7 @@ export default {
     // Sessions request
     this.isLoading = !this.isLoading
     this.$axios
-      .get(`/session/sessions`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-          'x-auth-token': localStorage.getItem('authToken'),
-        },
-      })
+      .get(`/session/sessions`)
       .then((res) => {
         this.isLoading = !this.isLoading
         this.sessionList = res.data

@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import PrepareReceiveInvoiceNew from '../../components/InternalInvoices/PrepareReceiveInvoiceNew.vue'
+import PrepareReceiveInvoiceNew from '@components/InternalInvoices/PrepareReceiveInvoiceNew.vue'
 export default {
   components: { PrepareReceiveInvoiceNew },
 }

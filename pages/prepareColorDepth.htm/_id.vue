@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import PrepareColorDepth from '../../components/Productions/PrepareColorDepth.vue'
+import PrepareColorDepth from '@components/Productions/PrepareColorDepth.vue'
 export default {
   components: { PrepareColorDepth },
 }

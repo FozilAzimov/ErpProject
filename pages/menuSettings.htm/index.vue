@@ -9,8 +9,7 @@
 </template>
 
 <script>
-import MenuSettings from '../../components/MenuSettings/MenuSettings.vue'
-
+import MenuSettings from '@components/MenuSettings/MenuSettings.vue'
 export default {
   components: {
     MenuSettings,
@@ -23,13 +22,7 @@ export default {
   },
   async fetch() {
     try {
-      const response = await this.$axios.get('user/quickMenuSettings', {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-          'x-auth-token': localStorage.getItem('authToken'),
-        },
-      })
-
+      const response = await this.$axios.get('user/quickMenuSettings')
       if (response) {
         this.menuObject = response
         this.activeMenuList = response.children.map((item) => ({

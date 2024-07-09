@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import ColorDepth from '../../components/Productions/ColorDepth.vue'
+import ColorDepth from '@components/Productions/ColorDepth.vue'
 export default {
   components: { ColorDepth },
 }

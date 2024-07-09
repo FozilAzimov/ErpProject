@@ -3,8 +3,8 @@
 </template>
 
 <script>
-import CheckRealCountBarcodePage from '../../components/Orders/CheckRealCountBarcodePage/CheckRealCountBarcodePage.vue'
+import CheckRealCountBarcodePage from '@components/Orders/CheckRealCountBarcodePage/CheckRealCountBarcodePage.vue'
 export default {
-  components: { CheckRealCountBarcodePage }
+  components: { CheckRealCountBarcodePage },
 }
 </script>

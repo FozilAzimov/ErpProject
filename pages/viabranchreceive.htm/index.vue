@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import InternalViabranchreceive from '../../components/InternalInvoices/InternalViabranchreceive.vue'
+import InternalViabranchreceive from '@components/InternalInvoices/InternalViabranchreceive.vue'
 export default {
   components: { InternalViabranchreceive },
 }

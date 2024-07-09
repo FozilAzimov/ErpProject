@@ -3,9 +3,9 @@
 </template>
 
 <script>
-import PersonEquipmentsPage from '../../components/Reports/PersonEquipmentsPage/PersonEquipmentsPage'
+import PersonEquipmentsPage from '@components/Reports/PersonEquipmentsPage/PersonEquipmentsPage'
 
 export default {
-  components: { PersonEquipmentsPage }
+  components: { PersonEquipmentsPage },
 }
 </script>

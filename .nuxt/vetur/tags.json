@@ -2,6 +2,9 @@
   "MessageBox": {
     "description": "Auto imported from components/MessageBox.vue"
   },
+  "ColumnConfigPage": {
+    "description": "Auto imported from components/ColumnConfig/ColumnConfigPage.vue"
+  },
   "BranchesPage": {
     "description": "Auto imported from components/Branches/BranchesPage.vue"
   },
@@ -14,20 +17,17 @@
   "GenericButton": {
     "description": "Auto imported from components/Button/GenericButton.vue"
   },
-  "ColumnConfigPage": {
-    "description": "Auto imported from components/ColumnConfig/ColumnConfigPage.vue"
-  },
-  "DashboardPage": {
-    "description": "Auto imported from components/Dashboard/DashboardPage.vue"
+  "GenericInvoiceItemModalPage": {
+    "description": "Auto imported from components/GenericInvoiceItemModal/GenericInvoiceItemModalPage.vue"
   },
   "GenericInvoiceFilteringModalPage": {
     "description": "Auto imported from components/GenericInvoiceFilteringModal/GenericInvoiceFilteringModalPage.vue"
   },
-  "GenericInvoiceItemModalPage": {
-    "description": "Auto imported from components/GenericInvoiceItemModal/GenericInvoiceItemModalPage.vue"
-  },
   "GenericPrepareTablePage": {
     "description": "Auto imported from components/GenericPrepareTable/GenericPrepareTablePage.vue"
+  },
+  "DashboardPage": {
+    "description": "Auto imported from components/Dashboard/DashboardPage.vue"
   },
   "GenericCheckBox": {
     "description": "Auto imported from components/Generics/GenericCheckBox.vue"
@@ -41,14 +41,17 @@
   "GenericPagination": {
     "description": "Auto imported from components/Generics/GenericPagination.vue"
   },
-  "GenericTablePage": {
-    "description": "Auto imported from components/GenericTable/GenericTablePage.vue"
-  },
   "GenericTranslatePage": {
     "description": "Auto imported from components/GenericTranslate/GenericTranslatePage.vue"
   },
+  "GenericTablePage": {
+    "description": "Auto imported from components/GenericTable/GenericTablePage.vue"
+  },
   "GenericInput": {
     "description": "Auto imported from components/Input/GenericInput.vue"
+  },
+  "GenericInputDatePage": {
+    "description": "Auto imported from components/InputDate/GenericInputDatePage.vue"
   },
   "InternalInvoice": {
     "description": "Auto imported from components/InternalInvoices/InternalInvoice.vue"
@@ -64,12 +67,6 @@
   },
   "PrepareReceiveInvoiceNew": {
     "description": "Auto imported from components/InternalInvoices/PrepareReceiveInvoiceNew.vue"
-  },
-  "MainList": {
-    "description": "Auto imported from components/Lists/MainList.vue"
-  },
-  "GenericInputDatePage": {
-    "description": "Auto imported from components/InputDate/GenericInputDatePage.vue"
   },
   "ExpenseInvoicePage": {
     "description": "Auto imported from components/Invoices/ExpenseInvoicePage.vue"
@@ -200,6 +197,9 @@
   "SimpleProductionInvoicePage": {
     "description": "Auto imported from components/Invoices/SimpleProductionInvoicePage.vue"
   },
+  "MainList": {
+    "description": "Auto imported from components/Lists/MainList.vue"
+  },
   "LoadingPage": {
     "description": "Auto imported from components/Loading/LoadingPage.vue"
   },
@@ -238,6 +238,9 @@
   },
   "ColorVariantRecipeStageChild": {
     "description": "Auto imported from components/Productions/ColorVariantRecipeStageChild.vue"
+  },
+  "ColorVariantRecipeStageGroup": {
+    "description": "Auto imported from components/Productions/ColorVariantRecipeStageGroup.vue"
   },
   "ColorVariantRecipeStagePicture": {
     "description": "Auto imported from components/Productions/ColorVariantRecipeStagePicture.vue"

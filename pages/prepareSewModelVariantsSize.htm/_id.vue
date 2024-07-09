@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import PrepareSewModelVariantsSize from '../../components/Productions/PrepareSewModelVariantsSize.vue'
+import PrepareSewModelVariantsSize from '@components/Productions/PrepareSewModelVariantsSize.vue'
 export default {
   components: { PrepareSewModelVariantsSize },
 }

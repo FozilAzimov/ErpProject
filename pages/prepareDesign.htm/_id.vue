@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import PrepareDesign from '../../components/Productions/PrepareDesign.vue'
+import PrepareDesign from '@components/Productions/PrepareDesign.vue'
 export default {
   components: { PrepareDesign },
 }

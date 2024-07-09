@@ -3,9 +3,9 @@
 </template>
 
 <script>
-import TransactionSaldoReport from '../../components/Reports/TransactionSaldoReport/TransactionSaldoReport.vue'
+import TransactionSaldoReport from '@components/Reports/TransactionSaldoReport/TransactionSaldoReport.vue'
 
 export default {
-  components: { TransactionSaldoReport }
+  components: { TransactionSaldoReport },
 }
 </script>
