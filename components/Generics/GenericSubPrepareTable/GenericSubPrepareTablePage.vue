@@ -15,15 +15,15 @@
       @customInputValueObj="modalAcceptAction"
     />
     <div
-      class="flex items-start overflow-scroll relative z-0 mb-5 bg-white border-[1px] border-[solid] border-[rgba(119,136,153,0.3)]"
+      class="flex items-start overflow-scroll relative z-0 mb-5 bg-white border-[1px] border-solid border-[rgba(119,136,153,0.3)]"
       :style="`max-height:${height}px`"
       style="min-height: 132px"
     >
-      <table class="w-full border-[1px] border-[solid] border-[#F0F0F0]">
+      <table class="w-full border-[1px] border-solid border-[#F0F0F0]">
         <thead class="bg-[rgb(229,235,245)]">
           <tr>
             <th
-              class="text-[13px] font-semibold border-[1px] border-[solid] border-[rgba(119,136,153,0.2)] p-2"
+              class="text-[13px] font-semibold border-[1px] border-solid border-[rgba(119,136,153,0.2)] p-2"
             >
               №
             </th>
@@ -31,7 +31,7 @@
             <th
               v-for="(headName, key) in filteredTablehead"
               :key="key"
-              class="text-[13px] font-semibold border-[1px] border-[solid] border-[rgba(119,136,153,0.2)] p-2 whitespace-nowrap"
+              class="text-[13px] font-semibold border-[1px] border-solid border-[rgba(119,136,153,0.2)] p-2 whitespace-nowrap"
               :class="headName.width ? `w-[${headName.width}px]` : ''"
             >
               <template v-if="headName.type !== 'hidden'">
@@ -40,7 +40,7 @@
             </th>
             <th
               v-if="!showHideRow"
-              class="text-[13px] font-semibold border-[1px] border-[solid] border-[rgba(119,136,153,0.2)] p-2"
+              class="text-[13px] font-semibold border-[1px] border-solid border-[rgba(119,136,153,0.2)] p-2"
             >
               Delete
             </th>
@@ -115,7 +115,7 @@
             <tr v-if="noDataRow">
               <td
                 :colspan="tableheadlength"
-                class="text-center border-[1px] border-[solid] border-[#F0F0F0] text-[12px] p-2"
+                class="text-center border-[1px] border-solid border-[#F0F0F0] text-[12px] p-2"
               >
                 <div
                   class="flex flex-col justify-center items-start text-[rgba(0,0,0,0.5)]"
@@ -132,14 +132,14 @@
             </tr>
             <tr v-else class="bg-[rgb(229,235,245)]">
               <td
-                class="border-[1px] text-[13px] p-3 text-[rgba(0,0,0,0.7)] border-[1px] border-[solid] border-[rgba(119,136,153,0.2)]"
+                class="border-[1px] text-[13px] p-3 text-[rgba(0,0,0,0.7)] border-solid border-[rgba(119,136,153,0.2)]"
               >
                 Total
               </td>
               <td
                 v-for="(item, indexToo) in filteredTablehead"
                 :key="indexToo"
-                class="border-[1px] text-[12px] p-2 text-[rgb(29,119,255)] border-[1px] border-[solid] border-[rgba(119,136,153,0.2)]"
+                class="border-[1px] text-[12px] p-2 text-[rgb(29,119,255)] border-solid border-[rgba(119,136,153,0.2)]"
               >
                 {{ item.sumColumn && totalObjMap.get(item.name)?.toFixed(2) }}
               </td>
@@ -263,7 +263,7 @@
           <tr v-if="!showHideRow">
             <td
               :colspan="tableheadlength"
-              class="text-center border-[1px] border-[solid] border-[#F0F0F0] text-[12px] py-3"
+              class="text-center border-[1px] border-solid border-[#F0F0F0] text-[12px] py-3"
             >
               <div
                 class="flex flex-col justify-center items-start text-[rgba(0,0,0,0.5)]"
