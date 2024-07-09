@@ -148,13 +148,8 @@
                   <GenericButton
                     v-else-if="item.type === 'button'"
                     :name="item.headerText"
-                    pl="10"
-                    pt="3"
-                    pr="10"
-                    pb="3"
+                    type="primary"
                     :order="indexOne"
-                    bg="rgb(156,104,183)"
-                    textsize="12"
                   />
                   <span v-else-if="row?.[item.name] && item.name === 'ammount'">
                     {{
@@ -384,13 +379,8 @@
                 <GenericButton
                   v-else-if="value.type === 'button'"
                   :name="value.headerText"
-                  pl="10"
-                  pt="3"
-                  pr="10"
-                  pb="3"
+                  type="primary"
                   :order="indexOne"
-                  bg="rgb(156,104,183)"
-                  textsize="12"
                 />
                 <span
                   v-else-if="value.type === 'label' && value.name === 'ammount'"
@@ -485,18 +475,12 @@
                 >
               </td>
               <td class="border-[1px] text-[12px] p-2 text-center">
-                <span
-                  class="flex justify-center active:scale-[1.2] duration-[0.2s]"
-                >
-                  <img
-                    :src="img.del"
-                    alt="delete"
-                    class="w-[18px] cursor-pointer"
-                    @click="
-                      rowDelAction(indexOne, newEditObjData[indexOne]?.id)
-                    "
-                  />
-                </span>
+                <generic-button
+                  type="danger"
+                  :circle="true"
+                  icon-name-attribute="delete"
+                  @click="rowDelAction(indexOne, newEditObjData[indexOne]?.id)"
+                />
               </td>
             </tr>
           </template>
@@ -512,14 +496,8 @@
               >
                 <GenericButton
                   name="Add an Item"
-                  pl="8"
-                  pt="2"
-                  pr="8"
-                  pb="2"
-                  bg="rgb(119,191,120)"
-                  textsize="14"
-                  :url="img.plus"
-                  :istherepicture="true"
+                  type="success"
+                  icon-name-attribute="circle-plus-outline"
                   @click="addAnItemAction"
                 />
               </div>
@@ -532,28 +510,23 @@
 </template>
 
 <script>
-// import icons
-import plus from '../../assets/icons/plus.png'
-import del from '../../assets/icons/delete-button.png'
-
-// import components
-import GenericButton from '../Button/GenericButton.vue'
-import GenericInvoiceItemModalPage from '../GenericInvoiceItemModal/GenericInvoiceItemModalPage.vue'
-import GenericInput from '../Input/GenericInput.vue'
-import LookUp from '../Lookup/LookUp.vue'
-import GenericInputDatePage from '../InputDate/GenericInputDatePage.vue'
-import LoadingPage from '../Loading/LoadingPage.vue'
-import GenericInvoiceFilteringModalPage from '../GenericInvoiceFilteringModal/GenericInvoiceFilteringModalPage.vue'
-import MessageBox from '../MessageBox.vue'
-import GenericCheckBox from '../Generics/GenericCheckBox.vue'
+import GenericButton from '@components/Generics/GenericButton.vue'
+import GenericInvoiceItemModalPage from '@components/GenericInvoiceItemModal/GenericInvoiceItemModalPage.vue'
+import GenericInput from '@components/Input/GenericInput.vue'
+import LookUp from '@components/Lookup/LookUp.vue'
+import GenericInputDatePage from '@components/InputDate/GenericInputDatePage.vue'
+import LoadingPage from '@components/Loading/LoadingPage.vue'
+import GenericInvoiceFilteringModalPage from '@components/GenericInvoiceFilteringModal/GenericInvoiceFilteringModalPage.vue'
+import MessageBox from '@components/MessageBox.vue'
+import GenericCheckBox from '@components/Generics/GenericCheckBox.vue'
 
 export default {
   // COMPONENTS
   components: {
     GenericButton,
     GenericInvoiceItemModalPage,
-    LookUp,
     GenericInput,
+    LookUp,
     GenericInputDatePage,
     LoadingPage,
     GenericInvoiceFilteringModalPage,
@@ -612,10 +585,6 @@ export default {
   // DATA
   data() {
     return {
-      img: {
-        plus,
-        del,
-      },
       isLoading: false,
       isOpenModal: false,
       tableBody: [],

@@ -32,8 +32,14 @@ export default {
     ],
   },
 
-  // server: {
-  // },
+  alias: {
+    '@components': '@/components',
+    '@assets': '@/assets',
+    '@generics': '@/components/Generics',
+    '@pages': '@/pages',
+    '@layouts': '@/layouts',
+    '@store': '@/store',
+  },
 
   ssr: false,
 

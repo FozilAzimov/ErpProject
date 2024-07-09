@@ -7,9 +7,13 @@
     <transition name="fade">
       <ColumnConfigPage
         v-show="checkModal"
-        :right="rightDataOperation"
-        :left="leftDataOperation"
-        url="sewModelOperationTable"
+        :right="columnConfigBtnClickType ? rightDataOperation : rightDataRecipe"
+        :left="columnConfigBtnClickType ? leftDataOperation : leftDataRecipe"
+        :url="
+          columnConfigBtnClickType
+            ? 'sewModelOperationTable'
+            : 'sewModelItemRecipeTable'
+        "
         :createedit="true"
         api="saveColumnConfig"
         class="z-[10000]"
@@ -91,14 +95,8 @@
         <div class="flex flex-col items-start m-2 gap-2">
           <generic-button
             name="Go Back"
-            pl="8"
-            pt="3"
-            pr="8"
-            pb="3"
-            bggradient="linear-gradient(to right, rgba(70,94,140,0.8),rgb(34,39,76))"
-            textsize="13"
-            :url="img.goBack"
-            :istherepicture="true"
+            type="primary"
+            icon-name-attribute="arrow-left"
             @click="goBackAction"
           />
           <table class="w-full text-[13px]">
@@ -203,35 +201,21 @@
                   <span class="flex items-center gap-1">
                     <generic-button
                       v-if="saveEditBtnType"
+                      type="primary"
                       name="Save"
-                      pl="8"
-                      pt="3"
-                      pr="8"
-                      pb="3"
-                      bg="#409EFF"
-                      textsize="13"
                       @click="saveAction()"
                     />
                     <generic-button
                       v-else
+                      type="success"
                       name="Edit"
-                      pl="8"
-                      pt="3"
-                      pr="8"
-                      pb="3"
-                      bg="#409EFF"
-                      textsize="13"
+                      icon-name-attribute="edit"
                       @click="editAction()"
                     />
                     <generic-button
                       v-if="!isNaN(rowID) && saveEditBtnType"
                       name="Cancel"
-                      pl="8"
-                      pt="3"
-                      pr="8"
-                      pb="3"
-                      bg="rgba(0,0,0,0.3)"
-                      textsize="13"
+                      icon-name-attribute="cencel"
                       @click="cancelAction()"
                     />
                     <template v-if="!isNaN($route.path.split('/').at(-1))">
@@ -239,14 +223,8 @@
                         v-for="(elem, inx) in allBtnName"
                         :key="inx"
                         :name="elem?.name"
-                        pl="8"
-                        pt="3"
-                        pr="8"
-                        pb="3"
-                        :bg="elem?.bg"
-                        textsize="13"
-                        :url="img?.del"
-                        :istherepicture="elem?.type"
+                        :type="elem?.type"
+                        :icon-name-attribute="elem?.iconName"
                         @click="allBtnAction(elem.clickType)"
                       />
                     </template>
@@ -255,6 +233,17 @@
               </tr>
             </tbody>
           </table>
+
+          <div
+            v-if="sewModelImageShowHide"
+            class="w-full h-fit border-[1px] border-solid border-[#778899] shadow-lg p-2 flex flex-col items-start gap-2"
+          >
+            <span class="text-[18px] text-[#317EAC] font-semibold"
+              >Upload And Save</span
+            >
+            <generic-image-upload />
+            <generic-button name="Save" type="primary" />
+          </div>
 
           <div v-if="sewModelVariantSizeShowHide" class="m-2">
             <span class="text-[14px]"
@@ -267,38 +256,19 @@
               <span v-if="hideButton" class="flex gap-1 flex-wrap">
                 <GenericButton
                   name="Save"
-                  pl="8"
-                  pt="2"
-                  pr="8"
-                  pb="2"
-                  textsize="14"
-                  bg="rgb(119,191,66)"
-                  disabled-bg="rgba(119,191,66,0.6)"
+                  type="primary"
                   @click="saveSewModelVariantSizeAction"
                 />
                 <GenericButton
                   name="Discard"
-                  pl="8"
-                  pt="2"
-                  pr="8"
-                  pb="2"
-                  bggradient="linear-gradient(to top, rgb(205,210,212),rgba(205,210,212,0.65))"
-                  textsize="14"
-                  color="rgb(190,72,77)"
                   @click="discardSewModalVariantSizeAction"
                 />
               </span>
               <GenericButton
                 v-else
                 name="Edit"
-                pl="8"
-                pt="2"
-                pr="8"
-                pb="2"
-                textsize="14"
-                bg="rgb(119,191,66)"
-                :url="img.edit"
-                :istherepicture="true"
+                type="success"
+                icon-name-attribute="edit"
                 @click="editSewModalVariantSizeAction"
               />
             </div>
@@ -329,51 +299,26 @@
           <div class="flex gap-1 flex-wrap">
             <GenericButton
               name="Column Setting"
-              pl="8"
-              pt="2"
-              pr="8"
-              pb="2"
-              textsize="14"
-              bggradient="linear-gradient(to top, rgb(25,52,79),rgba(25,52,79, 0.58))"
-              :url="img.setting"
-              :istherepicture="true"
-              @click="openColumnConfig"
+              type="warning"
+              icon-name-attribute="setting"
+              @click="openColumnConfig('operation')"
             />
             <span v-if="hideButtonOperation" class="flex gap-1 flex-wrap">
               <GenericButton
                 name="Save"
-                pl="8"
-                pt="2"
-                pr="8"
-                pb="2"
-                textsize="14"
-                bg="rgb(119,191,66)"
-                disabled-bg="rgba(119,191,66,0.6)"
+                type="primary"
                 @click="saveSewModelOperationAction"
               />
               <GenericButton
                 name="Discard"
-                pl="8"
-                pt="2"
-                pr="8"
-                pb="2"
-                bggradient="linear-gradient(to top, rgb(205,210,212),rgba(205,210,212,0.65))"
-                textsize="14"
-                color="rgb(190,72,77)"
                 @click="discardSewModalOperationAction"
               />
             </span>
             <GenericButton
               v-else
               name="Edit"
-              pl="8"
-              pt="2"
-              pr="8"
-              pb="2"
-              textsize="14"
-              bg="rgb(119,191,66)"
-              :url="img.edit"
-              :istherepicture="true"
+              type="success"
+              icon-name-attribute="edit"
               @click="editSewModalOperationAction"
             />
           </div>
@@ -403,50 +348,26 @@
           <div class="flex gap-1 flex-wrap">
             <GenericButton
               name="Column Setting"
-              pl="8"
-              pt="2"
-              pr="8"
-              pb="2"
-              textsize="14"
-              bggradient="linear-gradient(to top, rgb(25,52,79),rgba(25,52,79, 0.58))"
-              :url="img.setting"
-              :istherepicture="true"
+              type="warning"
+              icon-name-attribute="setting"
+              @click="openColumnConfig('recipe')"
             />
             <span v-if="hideButtonRecipe" class="flex gap-1 flex-wrap">
               <GenericButton
                 name="Save"
-                pl="8"
-                pt="2"
-                pr="8"
-                pb="2"
-                textsize="14"
-                bg="rgb(119,191,66)"
-                disabled-bg="rgba(119,191,66,0.6)"
+                type="primary"
                 @click="saveSewModelRecipeAction"
               />
               <GenericButton
                 name="Discard"
-                pl="8"
-                pt="2"
-                pr="8"
-                pb="2"
-                bggradient="linear-gradient(to top, rgb(205,210,212),rgba(205,210,212,0.65))"
-                textsize="14"
-                color="rgb(190,72,77)"
                 @click="discardSewModalRecipeAction"
               />
             </span>
             <GenericButton
               v-else
               name="Edit"
-              pl="8"
-              pt="2"
-              pr="8"
-              pb="2"
-              textsize="14"
-              bg="rgb(119,191,66)"
-              :url="img.edit"
-              :istherepicture="true"
+              type="success"
+              icon-name-attribute="edit"
               @click="editSewModalRecipeAction"
             />
           </div>
@@ -471,51 +392,53 @@
 </template>
 
 <script>
-// Icons url
-import goBack from '../../assets/icons/go-back.png'
-import del from '../../assets/icons/delete.png'
-import edit from '../../assets/icons/editIcon.svg'
-import setting from '../../assets/icons/settings.png'
-// Components
-import GenericButton from '../Button/GenericButton.vue'
-import GenericInput from '../Input/GenericInput.vue'
-import GenericInputDatePage from '../InputDate/GenericInputDatePage.vue'
-import LoadingPage from '../Loading/LoadingPage.vue'
-import LookUp from '../Lookup/LookUp.vue'
-import MessageBox from '../MessageBox.vue'
-import GenericPrepareTablePage from '../GenericPrepareTable/GenericPrepareTablePage.vue'
-import ColumnConfigPage from '../ColumnConfig/ColumnConfigPage.vue'
+import GenericButton from '@components/Generics/GenericButton.vue'
+import GenericInput from '@components/Input/GenericInput.vue'
+import GenericInputDatePage from '@components/InputDate/GenericInputDatePage.vue'
+import LoadingPage from '@components/Loading/LoadingPage.vue'
+import LookUp from '@components/Lookup/LookUp.vue'
+import MessageBox from '@components/MessageBox.vue'
+import GenericPrepareTablePage from '@components/GenericPrepareTable/GenericPrepareTablePage.vue'
+import ColumnConfigPage from '@components/ColumnConfig/ColumnConfigPage.vue'
+import GenericImageUpload from '@components/Generics/GenericImageUpload.vue'
 export default {
   components: {
-    LoadingPage,
     GenericButton,
     GenericInput,
     GenericInputDatePage,
+    LoadingPage,
     LookUp,
     MessageBox,
     GenericPrepareTablePage,
     ColumnConfigPage,
+    GenericImageUpload,
   },
+
+  // DATA
   data() {
     return {
-      img: {
-        goBack,
-        del,
-        edit,
-        setting,
-      },
       isLoading: false,
       pageSize_value: 25,
       checkModal: false,
       isOpenTable: true,
       isCloseTable: true,
       rowID: null,
+      // column config operation uchun
+      tableDataOperation: [],
+      tableDataOperation2: [],
       rightMapOperation: {},
       leftMapOperation: {},
       rightDataOperation: {},
       leftDataOperation: {},
-      tableDataOperation: [],
-      tableDataOperation2: [],
+      // column config operation uchun
+      // column config recipe uchun
+      tableDataRecipe: [],
+      tableDataRecipe2: [],
+      rightMapRecipe: {},
+      leftMapRecipe: {},
+      rightDataRecipe: {},
+      leftDataRecipe: {},
+      // column config recipe uchun
       dateDefValue: null,
       allInputAndLookUpValue: {},
       elementData: [],
@@ -540,13 +463,15 @@ export default {
       sewModelVariantSizeShowHide: false,
       sewModelOperationShowHide: false,
       sewModelRecipeShowHide: false,
+      sewModelImageShowHide: false,
       sewModelSizeItemList: [],
       sewModelOperationList: [],
       sewModelRecipeItemList: [],
-      columnConfigBtnClickType: false,
+      columnConfigBtnClickType: true,
     }
   },
 
+  // MOUNTED
   mounted() {
     this.dateDefValue = new Date().toISOString().split('.')[0]
 
@@ -574,14 +499,18 @@ export default {
     }
   },
 
-  // Methods
+  // METHODS
   methods: {
     // Column Config function
     handleValue(checkModal) {
       this.checkModal = checkModal
     },
-    openColumnConfig() {
+    openColumnConfig(btnClickType) {
       this.checkModal = true
+
+      btnClickType === 'operation'
+        ? (this.columnConfigBtnClickType = true)
+        : (this.columnConfigBtnClickType = false)
     },
 
     // Table page ni ochish va yopish uchun
@@ -670,7 +599,7 @@ export default {
         return value.showUI && value
       })
 
-      // Column config uchun
+      // Column config Operation uchun
       this.tableDataOperation = this.sewModelOperationHead
       this.tableDataOperation2 = headData.filter((value) => {
         return !value.showUI && value
@@ -681,6 +610,12 @@ export default {
     responseDataFilterRecipe(headData) {
       this.sewModelRecipeHead = headData.filter((value) => {
         return value.showUI && value
+      })
+
+      // Column config Recipe uchun
+      this.tableDataRecipe = this.sewModelRecipeHead
+      this.tableDataRecipe2 = headData.filter((value) => {
+        return !value.showUI && value
       })
     },
 
@@ -852,34 +787,39 @@ export default {
       const btnData = [
         {
           name: 'Sew Model Variant Size',
-          bg: '#409EFF',
-          type: false,
+          type: 'info',
           clickType: 'sewModelVariantSize',
         },
         {
           name: 'sewOperation',
-          bg: '#409EFF',
-          type: false,
+          type: 'info',
           clickType: 'sewOperation',
         },
-        { name: 'Delete', bg: '#F56C6C', type: true, clickType: 'delete' },
-        { name: 'Clone', bg: '#409EFF', type: false, clickType: 'clone' },
+        {
+          name: 'Delete',
+          type: 'danger',
+          clickType: 'delete',
+          iconName: 'delete',
+        },
+        {
+          name: 'Clone',
+          clickType: 'clone',
+          iconName: 'document-copy',
+        },
         {
           name: 'Add Image',
-          bg: '#409EFF',
-          type: false,
+          type: 'info',
           clickType: 'addImage',
         },
         {
           name: 'Change Price',
-          bg: '#F56C6C',
-          type: true,
+          type: 'danger',
           clickType: 'changePrice',
+          iconName: 'delete',
         },
         {
           name: 'sewModelRecipe',
-          bg: '#409EFF',
-          type: false,
+          type: 'info',
           clickType: 'sewModelRecipe',
         },
       ]
@@ -947,6 +887,19 @@ export default {
 
       this.rightDataOperation = this.rightMapOperation
       this.leftDataOperation = this.leftMapOperation
+    },
+
+    // Filter Action
+    getFilterDataRecipe() {
+      this.tableDataRecipe.forEach((obj) => {
+        this.rightMapRecipe[obj.name] = obj
+      })
+      this.tableDataRecipe2.forEach((obj) => {
+        this.leftMapRecipe[obj.name] = obj
+      })
+
+      this.rightDataRecipe = this.rightMapRecipe
+      this.leftDataRecipe = this.leftMapRecipe
     },
 
     // Input value action
@@ -1116,6 +1069,7 @@ export default {
 
     // sewOperation Btn Action
     addImageBtnAction(id) {
+      this.sewModelImageShowHide = true
       this.$axios
         .post(`/sewModel/sewModelimageList`, {
           id,
@@ -1141,6 +1095,8 @@ export default {
           this.sewModelRecipeBody = recipes
           // function
           this.responseDataFilterRecipe(sewModelRecipeItemColumns)
+          // function
+          this.getFilterDataRecipe(sewModelRecipeItemColumns)
         })
         .catch((error) => {
           // eslint-disable-next-line no-console

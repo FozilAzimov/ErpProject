@@ -5,14 +5,17 @@
   "ActualitySystem": {
     "description": "Auto imported from components/ActualitySystemPage/ActualitySystem.vue"
   },
+  "ColumnConfigPage": {
+    "description": "Auto imported from components/ColumnConfig/ColumnConfigPage.vue"
+  },
   "BranchesPage": {
     "description": "Auto imported from components/Branches/BranchesPage.vue"
   },
+  "BtnGen": {
+    "description": "Auto imported from components/Button/BtnGen.vue"
+  },
   "GenericButton": {
     "description": "Auto imported from components/Button/GenericButton.vue"
-  },
-  "ColumnConfigPage": {
-    "description": "Auto imported from components/ColumnConfig/ColumnConfigPage.vue"
   },
   "DashboardPage": {
     "description": "Auto imported from components/Dashboard/DashboardPage.vue"
@@ -20,14 +23,17 @@
   "GenericInvoiceFilteringModalPage": {
     "description": "Auto imported from components/GenericInvoiceFilteringModal/GenericInvoiceFilteringModalPage.vue"
   },
-  "GenericInvoiceItemModalPage": {
-    "description": "Auto imported from components/GenericInvoiceItemModal/GenericInvoiceItemModalPage.vue"
-  },
   "GenericPrepareTablePage": {
     "description": "Auto imported from components/GenericPrepareTable/GenericPrepareTablePage.vue"
   },
+  "GenericInvoiceItemModalPage": {
+    "description": "Auto imported from components/GenericInvoiceItemModal/GenericInvoiceItemModalPage.vue"
+  },
   "GenericCheckBox": {
     "description": "Auto imported from components/Generics/GenericCheckBox.vue"
+  },
+  "GenericImageUpload": {
+    "description": "Auto imported from components/Generics/GenericImageUpload.vue"
   },
   "GenericMultipleSelect": {
     "description": "Auto imported from components/Generics/GenericMultipleSelect.vue"
@@ -65,11 +71,86 @@
   "EndScaleBox": {
     "description": "Auto imported from components/Invoices/EndScaleBox.vue"
   },
+  "ExpenseInvoicePage": {
+    "description": "Auto imported from components/Invoices/ExpenseInvoicePage.vue"
+  },
+  "InputFromProductionCompanyPage": {
+    "description": "Auto imported from components/Invoices/InputFromProductionCompanyPage.vue"
+  },
+  "InputReturnPage": {
+    "description": "Auto imported from components/Invoices/InputReturnPage.vue"
+  },
+  "InputToServiceInvoicePage": {
+    "description": "Auto imported from components/Invoices/InputToServiceInvoicePage.vue"
+  },
+  "MakeBillPage": {
+    "description": "Auto imported from components/Invoices/MakeBillPage.vue"
+  },
+  "MarketSalesInvoice": {
+    "description": "Auto imported from components/Invoices/MarketSalesInvoice.vue"
+  },
+  "OpenControlPageNewPage": {
+    "description": "Auto imported from components/Invoices/OpenControlPageNewPage.vue"
+  },
+  "OutputProductionInvoice": {
+    "description": "Auto imported from components/Invoices/OutputProductionInvoice.vue"
+  },
+  "OutputProductionReturn": {
+    "description": "Auto imported from components/Invoices/OutputProductionReturn.vue"
+  },
+  "OutputToProductionCompanyPage": {
+    "description": "Auto imported from components/Invoices/OutputToProductionCompanyPage.vue"
+  },
+  "OutputToProductionCompanyReturnPage": {
+    "description": "Auto imported from components/Invoices/OutputToProductionCompanyReturnPage.vue"
+  },
+  "OutputToPrOrderPage": {
+    "description": "Auto imported from components/Invoices/OutputToPrOrderPage.vue"
+  },
+  "OutputToPrOrderReturnPage": {
+    "description": "Auto imported from components/Invoices/OutputToPrOrderReturnPage.vue"
+  },
+  "OutputToServiceInvoicePage": {
+    "description": "Auto imported from components/Invoices/OutputToServiceInvoicePage.vue"
+  },
+  "PrepareExpenseInvoicePage": {
+    "description": "Auto imported from components/Invoices/prepareExpenseInvoicePage.vue"
+  },
+  "PrepareInputFromProductionCompanyNewPage": {
+    "description": "Auto imported from components/Invoices/PrepareInputFromProductionCompanyNewPage.vue"
+  },
+  "ProductionByPackagePage": {
+    "description": "Auto imported from components/Invoices/ProductionByPackagePage.vue"
+  },
+  "ProductionForQrCodeListPage": {
+    "description": "Auto imported from components/Invoices/ProductionForQrCodeListPage.vue"
+  },
+  "ProductionInvoicePage": {
+    "description": "Auto imported from components/Invoices/ProductionInvoicePage.vue"
+  },
+  "PurchaseInvoisePage": {
+    "description": "Auto imported from components/Invoices/PurchaseInvoisePage.vue"
+  },
+  "PurchaseServiceInvoicePage": {
+    "description": "Auto imported from components/Invoices/PurchaseServiceInvoicePage.vue"
+  },
+  "SaleInvoicePage": {
+    "description": "Auto imported from components/Invoices/SaleInvoicePage.vue"
+  },
+  "SaleServiceInvoicePage": {
+    "description": "Auto imported from components/Invoices/SaleServiceInvoicePage.vue"
+  },
+  "SalesReturnPage": {
+    "description": "Auto imported from components/Invoices/SalesReturnPage.vue"
+  },
   "ScaleBox": {
     "description": "Auto imported from components/Invoices/ScaleBox.vue"
   },
   "ScaleBoxGenericTable": {
     "description": "Auto imported from components/Invoices/ScaleBoxGenericTable.vue"
+  },
+  "SimpleProductionInvoicePage": {
+    "description": "Auto imported from components/Invoices/SimpleProductionInvoicePage.vue"
   },
   "MainList": {
     "description": "Auto imported from components/Lists/MainList.vue"
@@ -98,6 +179,9 @@
   "MenuSettings": {
     "description": "Auto imported from components/MenuSettings/MenuSettings.vue"
   },
+  "BatchesList": {
+    "description": "Auto imported from components/Productions/BatchesList.vue"
+  },
   "BatchUnions": {
     "description": "Auto imported from components/Productions/BatchUnions.vue"
   },
@@ -121,6 +205,9 @@
   },
   "EquipmentsRealTimeStatus": {
     "description": "Auto imported from components/Productions/EquipmentsRealTimeStatus.vue"
+  },
+  "PrepareBatchNew": {
+    "description": "Auto imported from components/Productions/PrepareBatchNew.vue"
   },
   "PrepareBatchUnionsNew": {
     "description": "Auto imported from components/Productions/PrepareBatchUnionsNew.vue"
@@ -146,11 +233,17 @@
   "PrepareSewModel": {
     "description": "Auto imported from components/Productions/PrepareSewModel.vue"
   },
+  "PrepareSewModelOperationName": {
+    "description": "Auto imported from components/Productions/PrepareSewModelOperationName.vue"
+  },
   "PrepareSewModelVariantsSize": {
     "description": "Auto imported from components/Productions/PrepareSewModelVariantsSize.vue"
   },
   "SewModel": {
     "description": "Auto imported from components/Productions/SewModel.vue"
+  },
+  "SewModelOperationName": {
+    "description": "Auto imported from components/Productions/SewModelOperationName.vue"
   },
   "SewModelVariantsSize": {
     "description": "Auto imported from components/Productions/SewModelVariantsSize.vue"
@@ -175,54 +268,6 @@
   },
   "GenericSubPrepareTableTooPage": {
     "description": "Auto imported from components/Generics/GenericSubPrepareTableToo/GenericSubPrepareTableTooPage.vue"
-  },
-  "ExpenseInvoicePage": {
-    "description": "Auto imported from components/Invoices/ExpenseInvoice/ExpenseInvoicePage.vue"
-  },
-  "InputFromProductionCompanyPage": {
-    "description": "Auto imported from components/Invoices/InputFromProductionCompany/InputFromProductionCompanyPage.vue"
-  },
-  "InputReturnPage": {
-    "description": "Auto imported from components/Invoices/InputReturn/InputReturnPage.vue"
-  },
-  "InputToServiceInvoicePage": {
-    "description": "Auto imported from components/Invoices/InputToServiceInvoice/InputToServiceInvoicePage.vue"
-  },
-  "MakeBillPage": {
-    "description": "Auto imported from components/Invoices/MakeBill/MakeBillPage.vue"
-  },
-  "MarketSalesInvoice": {
-    "description": "Auto imported from components/Invoices/MarketSalesInvoice/MarketSalesInvoice.vue"
-  },
-  "OpenControlPageNewPage": {
-    "description": "Auto imported from components/Invoices/OpenControlPageNew/OpenControlPageNewPage.vue"
-  },
-  "OutputProductionInvoice": {
-    "description": "Auto imported from components/Invoices/OutputProductionInvoice/OutputProductionInvoice.vue"
-  },
-  "OutputProductionReturn": {
-    "description": "Auto imported from components/Invoices/OutputProductionReturn/OutputProductionReturn.vue"
-  },
-  "OutputToProductionCompanyPage": {
-    "description": "Auto imported from components/Invoices/OutputToProductionCompany/OutputToProductionCompanyPage.vue"
-  },
-  "OutputToProductionCompanyReturnPage": {
-    "description": "Auto imported from components/Invoices/OutputToProductionCompanyReturn/OutputToProductionCompanyReturnPage.vue"
-  },
-  "OutputToPrOrderPage": {
-    "description": "Auto imported from components/Invoices/OutputToPrOrder/OutputToPrOrderPage.vue"
-  },
-  "OutputToPrOrderReturnPage": {
-    "description": "Auto imported from components/Invoices/OutputToPrOrderReturn/OutputToPrOrderReturnPage.vue"
-  },
-  "OutputToServiceInvoicePage": {
-    "description": "Auto imported from components/Invoices/OutputToServiceInvoice/OutputToServiceInvoicePage.vue"
-  },
-  "PrepareExpenseInvoicePage": {
-    "description": "Auto imported from components/Invoices/prepareExpenseInvoice/prepareExpenseInvoicePage.vue"
-  },
-  "PrepareInputFromProductionCompanyNewPage": {
-    "description": "Auto imported from components/Invoices/PrepareInputFromProductionCompanyNew/PrepareInputFromProductionCompanyNewPage.vue"
   },
   "PrepareInputReturnNewPage": {
     "description": "Auto imported from components/Invoices/PrepareInputReturnNew/PrepareInputReturnNewPage.vue"
@@ -278,33 +323,6 @@
   "PrepareSimpleProductionInvoiceManualPage": {
     "description": "Auto imported from components/Invoices/PrepareSimpleProductionInvoiceManual/PrepareSimpleProductionInvoiceManualPage.vue"
   },
-  "ProductionByPackagePage": {
-    "description": "Auto imported from components/Invoices/ProductionByPackage/ProductionByPackagePage.vue"
-  },
-  "ProductionForQrCodeListPage": {
-    "description": "Auto imported from components/Invoices/ProductionForQrCodeList/ProductionForQrCodeListPage.vue"
-  },
-  "ProductionInvoicePage": {
-    "description": "Auto imported from components/Invoices/ProductionInvoice/ProductionInvoicePage.vue"
-  },
-  "PurchaseInvoisePage": {
-    "description": "Auto imported from components/Invoices/PurchaseInvoice/PurchaseInvoisePage.vue"
-  },
-  "PurchaseServiceInvoicePage": {
-    "description": "Auto imported from components/Invoices/PurchaseServiceInvoice/PurchaseServiceInvoicePage.vue"
-  },
-  "SaleInvoicePage": {
-    "description": "Auto imported from components/Invoices/SaleInvoice/SaleInvoicePage.vue"
-  },
-  "SaleServiceInvoicePage": {
-    "description": "Auto imported from components/Invoices/SaleServiceInvoice/SaleServiceInvoicePage.vue"
-  },
-  "SalesReturnPage": {
-    "description": "Auto imported from components/Invoices/SalesReturn/SalesReturnPage.vue"
-  },
-  "SimpleProductionInvoicePage": {
-    "description": "Auto imported from components/Invoices/SimpleProductionInvoice/SimpleProductionInvoicePage.vue"
-  },
   "CheckRealCountBarcodePage": {
     "description": "Auto imported from components/Orders/CheckRealCountBarcodePage/CheckRealCountBarcodePage.vue"
   },
@@ -326,11 +344,11 @@
   "BandsPage": {
     "description": "Auto imported from components/Reports/BandsPage/BandsPage.vue"
   },
-  "BatchStagesReport": {
-    "description": "Auto imported from components/Reports/BatchStagesReport/BatchStagesReport.vue"
-  },
   "BatchReportsPage": {
     "description": "Auto imported from components/Reports/BatchReportsPage/BatchReportsPage.vue"
+  },
+  "BatchStagesReport": {
+    "description": "Auto imported from components/Reports/BatchStagesReport/BatchStagesReport.vue"
   },
   "BranchProductsStockReportByLogic": {
     "description": "Auto imported from components/Reports/BranchProductsStockReportByLogic/BranchProductsStockReportByLogic.vue"
@@ -347,11 +365,11 @@
   "PersonEquipmentsPage": {
     "description": "Auto imported from components/Reports/PersonEquipmentsPage/PersonEquipmentsPage.vue"
   },
-  "SewModelReport": {
-    "description": "Auto imported from components/Reports/SewModelReport/SewModelReport.vue"
-  },
   "SewBandEquipments": {
     "description": "Auto imported from components/Reports/SewBandsEquipments/SewBandEquipments.vue"
+  },
+  "SewModelReport": {
+    "description": "Auto imported from components/Reports/SewModelReport/SewModelReport.vue"
   },
   "TransactionDetailReportPage": {
     "description": "Auto imported from components/Reports/TransactionDetailReportPage/TransactionDetailReportPage.vue"

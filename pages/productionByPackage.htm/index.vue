@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import ProductionByPackagePage from '../../components/Invoices/ProductionByPackage/ProductionByPackagePage.vue'
+import ProductionByPackagePage from '@components/Invoices/ProductionByPackagePage.vue'
 export default {
   components: { ProductionByPackagePage },
 }

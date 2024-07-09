@@ -17,6 +17,7 @@
     {{ name }}
   </button>
 </template>
+
 <script>
 export default {
   props: {

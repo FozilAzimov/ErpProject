@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import InputReturnPage from '../../components/Invoices/InputReturn/InputReturnPage.vue'
+import InputReturnPage from '@components/Invoices/InputReturnPage.vue'
 export default {
   components: { InputReturnPage },
 }

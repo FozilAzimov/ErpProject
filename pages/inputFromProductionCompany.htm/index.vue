@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import InputFromProductionCompanyPage from '../../components/Invoices/InputFromProductionCompany/InputFromProductionCompanyPage.vue'
+import InputFromProductionCompanyPage from '@components/Invoices/InputFromProductionCompanyPage.vue'
 
 export default {
   components: { InputFromProductionCompanyPage },

@@ -74,7 +74,7 @@
                   :src="
                     value?.[key?.code]
                       ? value?.[key?.code]
-                      : '../../assets/images/no-image.png'
+                      : '@assets/images/no-image.png'
                   "
                   :alt="value?.[key?.code]"
                   class="w-[50px]"
@@ -124,143 +124,100 @@
                   v-if="$route.path.includes('sewmodel.htm')"
                   class="flex items-center justify-center gap-2 p-2"
                 >
-                  <generic-nuxt-link-button
-                    :to="`${openUrl}.htm/${value.id}`"
+                  <generic-button
                     name="Open"
-                    pl="8"
-                    pt="2"
-                    pr="8"
-                    pb="2"
-                    bg="rgb(126,183,62)"
-                    textsize="13"
+                    type="success"
+                    @click="$router.push(`${openUrl}.htm/${value.id}`)"
                   />
                 </span>
                 <span v-else class="flex items-center justify-center gap-2 p-2">
                   <GenericButton
                     name="View"
-                    pl="8"
-                    pt="2"
-                    pr="8"
-                    pb="2"
-                    bg="rgb(126,183,62)"
-                    textsize="13"
+                    type="primary"
                     @click="goToNextAction(value?.id, 'view')"
                   />
                   <GenericButton
                     name="Edit"
-                    pl="8"
-                    pt="2"
-                    pr="8"
-                    pb="2"
-                    bg="#9E6AB8"
-                    textsize="13"
+                    type="success"
+                    icon-name-attribute="edit"
                     @click="goToNextAction(value?.id, 'edit')"
                   />
                   <GenericButton
                     name="Delete"
-                    pl="8"
-                    pt="2"
-                    pr="8"
-                    pb="2"
-                    bg="#C02C2C"
-                    textsize="13"
+                    type="danger"
+                    icon-name-attribute="delete"
                     @click="rowDelAction(value.id)"
                   />
                 </span>
               </td>
 
               <!-- invoices uchun -->
-              <td
-                v-else
-                class="border-[1px] flex items-center justify-center gap-2 p-2"
-              >
-                <generic-nuxt-link-button
-                  v-if="!$route.path.includes('simpleProductionInvoice.htm')"
-                  :to="`${openUrl}.htm/${value.id}`"
-                  name="Open"
-                  pl="8"
-                  pt="2"
-                  pr="8"
-                  pb="2"
-                  bg="rgb(126,183,62)"
-                  textsize="13"
-                />
-                <generic-nuxt-link-button
-                  v-if="$route.path.includes('simpleProductionInvoice.htm')"
-                  :to="`${openUrl}.htm/${value.id}`"
-                  name="Edit"
-                  pl="8"
-                  pt="2"
-                  pr="8"
-                  pb="2"
-                  bg="rgb(126,183,62)"
-                  textsize="13"
-                />
-                <generic-nuxt-link-button
-                  v-if="
-                    $route.path.includes('internalInvoice.htm') ||
-                    $route.path.includes('viabranchreceive.htm')
-                  "
-                  :name="btnName"
-                  pl="8"
-                  pt="2"
-                  pr="8"
-                  pb="2"
-                  bg="rgb(126,183,62)"
-                  textsize="13"
-                />
-                <GenericButton
-                  v-if="
-                    !$route.path.includes('salesReturn.htm') &&
-                    !$route.path.includes('inputReturn.htm') &&
-                    !$route.path.includes('simpleProductionInvoice.htm') &&
-                    !$route.path.includes('outputToPrOrder.htm') &&
-                    !$route.path.includes('outputToServiceInvoice.htm') &&
-                    !$route.path.includes('inputToServiceInvoice.htm') &&
-                    !$route.path.includes('outputToPrOrderReturn.htm') &&
-                    !$route.path.includes('outputToProductionCompany.htm') &&
-                    !$route.path.includes(
-                      'outputToProductionCompanyReturn.htm'
-                    ) &&
-                    !$route.path.includes('purchaseServiceInvoice.htm') &&
-                    !$route.path.includes('saleServiceInvoice.htm') &&
-                    !$route.path.includes('internalInvoice.htm') &&
-                    !$route.path.includes('viabranchreceive.htm')
-                  "
-                  name="qrCode"
-                  pl="8"
-                  pt="2"
-                  pr="8"
-                  pb="2"
-                  bg="rgb(126,183,62)"
-                  textsize="13"
-                />
-                <GenericButton
-                  v-if="
-                    !$route.path.includes('salesReturn.htm') &&
-                    !$route.path.includes('inputReturn.htm') &&
-                    !$route.path.includes('simpleProductionInvoice.htm') &&
-                    !$route.path.includes('outputToPrOrder.htm') &&
-                    !$route.path.includes('outputToServiceInvoice.htm') &&
-                    !$route.path.includes('inputToServiceInvoice.htm') &&
-                    !$route.path.includes('outputToPrOrderReturn.htm') &&
-                    !$route.path.includes('outputToProductionCompany.htm') &&
-                    !$route.path.includes(
-                      'outputToProductionCompanyReturn.htm'
-                    ) &&
-                    !$route.path.includes('purchaseServiceInvoice.htm') &&
-                    !$route.path.includes('saleServiceInvoice.htm') &&
-                    !$route.path.includes('internalInvoice.htm') &&
-                    !$route.path.includes('viabranchreceive.htm')
-                  "
-                  name="forDevice"
-                  pl="8"
-                  pt="2"
-                  pr="8"
-                  pb="2"
-                  bg="rgb(126,183,62)"
-                  textsize="13"
-                />
+              <td v-else class="border-[1px] p-2">
+                <span class="flex items-center justify-center gap-2">
+                  <generic-button
+                    v-if="!$route.path.includes('simpleProductionInvoice.htm')"
+                    name="Open"
+                    type="primary"
+                    @click="$router.push(`${openUrl}.htm/${value.id}`)"
+                  />
+                  <generic-button
+                    v-if="$route.path.includes('simpleProductionInvoice.htm')"
+                    name="Edit"
+                    type="success"
+                    icon-name-attribute="edit"
+                    @click="$router.push(`${openUrl}.htm/${value.id}`)"
+                  />
+                  <generic-button
+                    v-if="
+                      $route.path.includes('internalInvoice.htm') ||
+                      $route.path.includes('viabranchreceive.htm')
+                    "
+                    :name="btnName"
+                    type="primary"
+                  />
+                  <GenericButton
+                    v-if="
+                      !$route.path.includes('salesReturn.htm') &&
+                      !$route.path.includes('inputReturn.htm') &&
+                      !$route.path.includes('simpleProductionInvoice.htm') &&
+                      !$route.path.includes('outputToPrOrder.htm') &&
+                      !$route.path.includes('outputToServiceInvoice.htm') &&
+                      !$route.path.includes('inputToServiceInvoice.htm') &&
+                      !$route.path.includes('outputToPrOrderReturn.htm') &&
+                      !$route.path.includes('outputToProductionCompany.htm') &&
+                      !$route.path.includes(
+                        'outputToProductionCompanyReturn.htm'
+                      ) &&
+                      !$route.path.includes('purchaseServiceInvoice.htm') &&
+                      !$route.path.includes('saleServiceInvoice.htm') &&
+                      !$route.path.includes('internalInvoice.htm') &&
+                      !$route.path.includes('viabranchreceive.htm')
+                    "
+                    name="qrCode"
+                    type="success"
+                  />
+                  <GenericButton
+                    v-if="
+                      !$route.path.includes('salesReturn.htm') &&
+                      !$route.path.includes('inputReturn.htm') &&
+                      !$route.path.includes('simpleProductionInvoice.htm') &&
+                      !$route.path.includes('outputToPrOrder.htm') &&
+                      !$route.path.includes('outputToServiceInvoice.htm') &&
+                      !$route.path.includes('inputToServiceInvoice.htm') &&
+                      !$route.path.includes('outputToPrOrderReturn.htm') &&
+                      !$route.path.includes('outputToProductionCompany.htm') &&
+                      !$route.path.includes(
+                        'outputToProductionCompanyReturn.htm'
+                      ) &&
+                      !$route.path.includes('purchaseServiceInvoice.htm') &&
+                      !$route.path.includes('saleServiceInvoice.htm') &&
+                      !$route.path.includes('internalInvoice.htm') &&
+                      !$route.path.includes('viabranchreceive.htm')
+                    "
+                    name="forDevice"
+                    type="success"
+                  />
+                </span>
               </td>
             </tr>
           </template>
@@ -274,10 +231,7 @@
                   class="flex flex-col justify-center items-start text-[rgba(0,0,0,0.5)]"
                 >
                   <span class="flex flex-col items-center">
-                    <img
-                      src="../../assets/icons/no-data.png"
-                      alt="no-data-icons"
-                    />
+                    <img src="@assets/icons/no-data.png" alt="no-data-icons" />
                     No data
                   </span>
                 </div>
@@ -296,10 +250,10 @@
 </template>
 
 <script>
-import GenericButton from '../Button/GenericButton.vue'
-import GenericNuxtLinkButton from '../Generics/GenericNuxtLink/GenericNuxtLinkButton.vue'
-import MessageBox from '../MessageBox.vue'
-import GenericPagination from '../Generics/GenericPagination.vue'
+import GenericButton from '@components/Generics/GenericButton.vue'
+import GenericNuxtLinkButton from '@components/Generics/GenericNuxtLink/GenericNuxtLinkButton.vue'
+import MessageBox from '@components/MessageBox.vue'
+import GenericPagination from '@components/Generics/GenericPagination.vue'
 export default {
   components: {
     GenericButton,

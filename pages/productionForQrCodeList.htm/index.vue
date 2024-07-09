@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import ProductionForQrCodeListPage from '@/components/Invoices/ProductionForQrCodeList/ProductionForQrCodeListPage.vue'
+import ProductionForQrCodeListPage from '@/components/Invoices/ProductionForQrCodeListPage.vue'
 export default {
   components: { ProductionForQrCodeListPage },
 }

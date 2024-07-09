@@ -1,13 +1,11 @@
 <template>
-    <OutputProductionReturn/>
+  <OutputProductionReturn />
 </template>
 
 <script>
-import OutputProductionReturn from '../../components/Invoices/OutputProductionReturn/OutputProductionReturn.vue';
-
+import OutputProductionReturn from '@components/Invoices/OutputProductionReturn.vue'
 
 export default {
-components: { OutputProductionReturn },
+  components: { OutputProductionReturn },
 }
 </script>
-  

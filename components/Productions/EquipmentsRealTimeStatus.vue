@@ -125,13 +125,7 @@
             </span>
             <generic-button
               name="Set Size"
-              pl="8"
-              pt="3"
-              pr="8"
-              pb="3"
-              bg="rgba(54, 155, 215, 0.8)"
-              textsize="13"
-              margin="8"
+              type="primary"
               @click="getPageRequest"
             />
           </div>
@@ -468,11 +462,11 @@
 </template>
 <script>
 // Components
-import LoadingPage from '../Loading/LoadingPage.vue'
-import GenericSelect from '../Select/GenericSelect.vue'
-import GenericInput from '../Input/GenericInput.vue'
-import GenericButton from '../Button/GenericButton.vue'
-import LookUp from '../Lookup/LookUp.vue'
+import LoadingPage from '@components/Loading/LoadingPage.vue'
+import GenericSelect from '@components/Select/GenericSelect.vue'
+import GenericInput from '@components/Input/GenericInput.vue'
+import GenericButton from '@components/Generics/GenericButton.vue'
+import LookUp from '@components/Lookup/LookUp.vue'
 export default {
   components: {
     LoadingPage,

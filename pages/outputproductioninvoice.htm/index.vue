@@ -3,10 +3,10 @@
 </template>
 
 <script>
-import OutputProductionInvoice from '../../components/Invoices/OutputProductionInvoice/OutputProductionInvoice.vue'
+import OutputProductionInvoice from '@components/Invoices/OutputProductionInvoice.vue'
 
 export default {
-  components: { OutputProductionInvoice }
+  components: { OutputProductionInvoice },
 }
 </script>
 

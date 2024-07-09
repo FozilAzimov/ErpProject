@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import OpenControlPageNewPage from '../../components/Invoices/OpenControlPageNew/OpenControlPageNewPage.vue'
+import OpenControlPageNewPage from '@components/Invoices/OpenControlPageNewPage.vue'
 export default {
   components: { OpenControlPageNewPage },
 }

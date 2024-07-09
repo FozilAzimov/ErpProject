@@ -119,25 +119,15 @@
           <div class="flex items-center gap-3 mt-3">
             <generic-button
               name="Go Back"
-              pl="8"
-              pt="3"
-              pr="8"
-              pb="3"
-              bggradient="linear-gradient(to right, rgba(70,94,140,0.8),rgb(34,39,76))"
-              textsize="13"
-              :url="img.goBack"
-              :istherepicture="true"
+              type="primary"
+              icon-name-attribute="arrow-left"
               @click="goBackAction"
             />
             <generic-button
               v-if="!(btnType === 'view')"
               :name="btnType === 'edit' ? 'Save changes' : 'Save'"
-              pl="8"
-              pt="3"
-              pr="8"
-              pb="3"
-              bg="rgba(54, 155, 215, 0.8)"
-              textsize="13"
+              :type="btnType === 'edit' ? 'success' : 'primary'"
+              :icon-name-attribute="btnType && 'edit'"
               @click="saveAction(btnType)"
             />
           </div>
@@ -148,12 +138,9 @@
 </template>
 
 <script>
-// Icons url
-import goBack from '../../assets/icons/go-back.png'
-// Components
-import GenericButton from '../Button/GenericButton.vue'
-import GenericInput from '../Input/GenericInput.vue'
-import LoadingPage from '../Loading/LoadingPage.vue'
+import GenericButton from '@components/Generics/GenericButton.vue'
+import GenericInput from '@components/Input/GenericInput.vue'
+import LoadingPage from '@components/Loading/LoadingPage.vue'
 export default {
   components: {
     LoadingPage,
@@ -162,9 +149,6 @@ export default {
   },
   data() {
     return {
-      img: {
-        goBack,
-      },
       isLoading: false,
       pageSize_value: 10,
       checkModal: false,

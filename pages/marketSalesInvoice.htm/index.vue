@@ -1,12 +1,11 @@
 <template>
-    <MarketSalesInvoice/>
+  <MarketSalesInvoice />
 </template>
 
 <script>
-import MarketSalesInvoice from '../../components/Invoices/MarketSalesInvoice/MarketSalesInvoice.vue';
+import MarketSalesInvoice from '@components/Invoices/MarketSalesInvoice.vue'
 
 export default {
-components: { MarketSalesInvoice },
+  components: { MarketSalesInvoice },
 }
 </script>
-  

@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import ProductionInvoicePage from '../../components/Invoices/ProductionInvoice/ProductionInvoicePage.vue'
+import ProductionInvoicePage from '@components/Invoices/ProductionInvoicePage.vue'
 
 export default {
   components: { ProductionInvoicePage },

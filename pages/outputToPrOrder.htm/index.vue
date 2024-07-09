@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import OutputToPrOrderPage from '../../components/Invoices/OutputToPrOrder/OutputToPrOrderPage.vue'
+import OutputToPrOrderPage from '@components/Invoices/OutputToPrOrderPage.vue'
 
 export default {
   components: { OutputToPrOrderPage },

@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import SalesReturnPage from '../../components/Invoices/SalesReturn/SalesReturnPage.vue'
+import SalesReturnPage from '@components/Invoices/SalesReturnPage.vue'
 
 export default {
   components: { SalesReturnPage },

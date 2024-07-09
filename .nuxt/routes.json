@@ -7,6 +7,13 @@
     "_name": "_228336fa"
   },
   {
+    "name": "batches.htm",
+    "path": "/batches.htm",
+    "component": "C:\\\\ErpProject\\\\pages\\\\batches.htm\\\\index.vue",
+    "chunkName": "pages/batches.htm/index",
+    "_name": "_9d760e20"
+  },
+  {
     "name": "batchReports.htm",
     "path": "/batchReports.htm",
     "component": "C:\\\\ErpProject\\\\pages\\\\batchReports.htm\\\\index.vue",
@@ -392,6 +399,13 @@
     "_name": "_4a9a2092"
   },
   {
+    "name": "sewModelOperationName.htm",
+    "path": "/sewModelOperationName.htm",
+    "component": "C:\\\\ErpProject\\\\pages\\\\sewModelOperationName.htm\\\\index.vue",
+    "chunkName": "pages/sewModelOperationName.htm/index",
+    "_name": "_42800aaa"
+  },
+  {
     "name": "sewModelReport.htm",
     "path": "/sewModelReport.htm",
     "component": "C:\\\\ErpProject\\\\pages\\\\sewModelReport.htm\\\\index.vue",
@@ -446,6 +460,13 @@
     "component": "C:\\\\ErpProject\\\\pages\\\\index.vue",
     "chunkName": "pages/index",
     "_name": "_7607bc89"
+  },
+  {
+    "name": "prepareBatchNew.htm-id",
+    "path": "/prepareBatchNew.htm/:id?",
+    "component": "C:\\\\ErpProject\\\\pages\\\\prepareBatchNew.htm\\\\_id.vue",
+    "chunkName": "pages/prepareBatchNew.htm/_id",
+    "_name": "_36c339b3"
   },
   {
     "name": "prepareBatchunionsNew.htm-id",
@@ -642,6 +663,13 @@
     "component": "C:\\\\ErpProject\\\\pages\\\\prepareSewModel.htm\\\\_id.vue",
     "chunkName": "pages/prepareSewModel.htm/_id",
     "_name": "_128f10b5"
+  },
+  {
+    "name": "prepareSewModelOperationName.htm-id",
+    "path": "/prepareSewModelOperationName.htm/:id?",
+    "component": "C:\\\\ErpProject\\\\pages\\\\prepareSewModelOperationName.htm\\\\_id.vue",
+    "chunkName": "pages/prepareSewModelOperationName.htm/_id",
+    "_name": "_0f524352"
   },
   {
     "name": "prepareSewModelVariantsSize.htm-id",
