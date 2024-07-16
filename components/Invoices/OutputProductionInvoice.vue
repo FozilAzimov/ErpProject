@@ -686,9 +686,9 @@
 </template>
 
 <script>
-import GenericButton from '@components/Generics/GenericButton.vue'
+import GenericButton from '@generics/GenericButton.vue'
 import LoadingPage from '@components/Loading/LoadingPage.vue'
-import LookUp from '@components/Lookup/LookUp.vue'
+import LookUp from '@generics/LookUp.vue'
 import GenericInput from '@components/Input/GenericInput.vue'
 import GenericPrepareTablePage from '@components/GenericPrepareTable/GenericPrepareTablePage.vue'
 export default {

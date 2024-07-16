@@ -18,11 +18,7 @@
         class="border-[1px] border-solid border-[rgba(0,0,0,0.05)] p-[12px] bg-gradient-to-b from-transparent via-transparent to-gray-200 shadow-md flex items-center justify-between mt-1"
       >
         <div class="flex items-center gap-[10px]">
-          <img
-            src="../../assets/icons/user-black.png"
-            alt="user"
-            class="w-[14px]"
-          />
+          <img src="@assets/icons/user-black.png" alt="user" class="w-[14px]" />
           <h1 class="font-bold text-[rgb(49,126,172)] text-[14px] uppercase">
             {{ isNaN(rowID) ? 'Add' : 'Edit' }} Sew Model
           </h1>
@@ -36,11 +32,7 @@
               }"
               @click="openColumnConfig"
             >
-              <img
-                class="w-[11px]"
-                src="../../assets/icons/gear.png"
-                alt="gear"
-              />
+              <img class="w-[11px]" src="@assets/icons/gear.png" alt="gear" />
             </li>
             <li
               class="p-[7px] rounded-[50%] cursor-pointer border-[1px] border-solid border-[rgba(0,0,0,0.1] hover:border-[#3b89e9] focus:border-[#3b89e9] duration-[0.4s]"
@@ -56,7 +48,7 @@
                     ? 'rotate-[-180deg] duration-[1s]'
                     : 'rotate-[0deg] duration-[1s]'
                 "
-                src="../../assets/icons/arrow.png"
+                src="@assets/icons/arrow.png"
                 alt="arrow"
               />
             </li>
@@ -69,7 +61,7 @@
             >
               <img
                 class="w-[11px]"
-                src="../../assets/icons/remove.png"
+                src="@assets/icons/remove.png"
                 alt="remove"
               />
             </li>
@@ -312,18 +304,13 @@
 </template>
 
 <script>
-// Icons url
-import goBack from '../../assets/icons/go-back.png'
-import del from '../../assets/icons/delete.png'
-import edit from '../../assets/icons/editIcon.svg'
-// Components
-import GenericButton from '../Button/GenericButton.vue'
-import GenericInput from '../Input/GenericInput.vue'
-import GenericInputDatePage from '../InputDate/GenericInputDatePage.vue'
-import LoadingPage from '../Loading/LoadingPage.vue'
-import LookUp from '../Lookup/LookUp.vue'
-import MessageBox from '../MessageBox.vue'
-import GenericPrepareTablePage from '../GenericPrepareTable/GenericPrepareTablePage.vue'
+import GenericButton from '@components/Button/GenericButton.vue'
+import GenericInput from '@components/Input/GenericInput.vue'
+import GenericInputDatePage from '@components/InputDate/GenericInputDatePage.vue'
+import LoadingPage from '@components/Loading/LoadingPage.vue'
+import LookUp from '@generics/LookUp.vue'
+import MessageBox from '@components/MessageBox.vue'
+import GenericPrepareTablePage from '@components/GenericPrepareTable/GenericPrepareTablePage.vue'
 export default {
   components: {
     LoadingPage,
@@ -334,13 +321,10 @@ export default {
     MessageBox,
     GenericPrepareTablePage,
   },
+
+  // DATA
   data() {
     return {
-      img: {
-        goBack,
-        del,
-        edit,
-      },
       isLoading: false,
       pageSize_value: 25,
       checkModal: false,
@@ -362,6 +346,7 @@ export default {
     }
   },
 
+  // MOUNTED
   mounted() {
     this.dateDefValue = new Date().toISOString().split('.')[0]
 

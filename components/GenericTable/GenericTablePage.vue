@@ -68,6 +68,25 @@
                   class="p-[2px_5px] italic text-white font-bold rounded-[5px] bg-[rgb(102,149,51)]"
                   v-html="value[key.code]"
                 ></span>
+                <span
+                  v-else-if="
+                    (key.code === 'batchNumber' ||
+                      key.code === 'product' ||
+                      key.code === 'colorVariant' ||
+                      key.code === 'batchPrintedCount' ||
+                      key.code === 'ready_info_product' ||
+                      key.code === 'ready_info_qty' ||
+                      key.code === 'ready_info_qty2' ||
+                      key.code === 'ready_info_real_count' ||
+                      key.code === 'sale_qty' ||
+                      key.code === 'sale_qty2' ||
+                      key.code === 'sale_dates' ||
+                      key.code === 'batchColorVariantPrintedCount') &&
+                    $route.path.includes('batches.htm')
+                  "
+                  class="p-[2px_5px] italic text-white font-bold rounded-[5px] bg-[rgb(102,149,51)] text-nowrap"
+                  v-html="value[key.code]"
+                ></span>
                 <!-- Bill Status col -->
                 <img
                   v-else-if="key.code === 'images'"
@@ -123,7 +142,10 @@
                 <span
                   v-if="
                     $route.path.includes('sewmodel.htm') ||
-                    $route.path.includes('batchunions.htm')
+                    $route.path.includes('batchunions.htm') ||
+                    $route.path.includes('colorVariantRecipeStageGroup.htm') ||
+                    $route.path.includes('batches.htm') ||
+                    $route.path.includes('colorVariant.htm')
                   "
                   class="flex items-center justify-center gap-2 p-2"
                 >
@@ -162,6 +184,7 @@
                     v-if="!$route.path.includes('simpleProductionInvoice.htm')"
                     name="Open"
                     type="primary"
+                    icon-name-attribute="edit"
                     @click="$router.push(`${openUrl}.htm/${value.id}`)"
                   />
                   <generic-button

@@ -17,11 +17,7 @@
         class="border-[1px] border-solid border-[rgba(0,0,0,0.05)] p-[12px] bg-gradient-to-b from-transparent via-transparent to-gray-200 shadow-md flex items-center justify-between mt-1"
       >
         <div class="flex items-center gap-[10px]">
-          <img
-            src="../../assets/icons/user-black.png"
-            alt="user"
-            class="w-[14px]"
-          />
+          <img src="@assets/icons/user-black.png" alt="user" class="w-[14px]" />
           <h1 class="font-bold text-[rgb(49,126,172)] text-[14px] uppercase">
             COLOR DEPTH LIST
           </h1>
@@ -35,11 +31,7 @@
               }"
               @click="openColumnConfig"
             >
-              <img
-                class="w-[11px]"
-                src="../../assets/icons/gear.png"
-                alt="gear"
-              />
+              <img class="w-[11px]" src="@assets/icons/gear.png" alt="gear" />
             </li>
             <li
               class="p-[7px] rounded-[50%] cursor-pointer border-[1px] border-[solid] border-[rgba(0,0,0,0.1] hover:border-[#3b89e9] focus:border-[#3b89e9] duration-[0.4s]"
@@ -55,7 +47,7 @@
                     ? 'rotate-[-180deg] duration-[1s]'
                     : 'rotate-[0deg] duration-[1s]'
                 "
-                src="../../assets/icons/arrow.png"
+                src="@assets/icons/arrow.png"
                 alt="arrow"
               />
             </li>
@@ -68,7 +60,7 @@
             >
               <img
                 class="w-[11px]"
-                src="../../assets/icons/remove.png"
+                src="@assets/icons/remove.png"
                 alt="remove"
               />
             </li>
@@ -147,7 +139,7 @@
 
 <script>
 import LoadingPage from '@components/Loading/LoadingPage.vue'
-import GenericButton from '@components/Generics/GenericButton.vue'
+import GenericButton from '@generics/GenericButton.vue'
 import GenericInput from '@components/Input/GenericInput.vue'
 import ColumnConfigPage from '@components/ColumnConfig/ColumnConfigPage.vue'
 import GenericTablePage from '@components/GenericTable/GenericTablePage.vue'
@@ -159,10 +151,14 @@ export default {
     ColumnConfigPage,
     GenericTablePage,
   },
+
+  // DATA
   data() {
     return {
       isLoading: false,
       pageSize_value: 10,
+      btnType: '',
+      pageID: null,
       keywordValue: '',
       tableHead: {
         id: { name: 'Id', code: 'id' },
@@ -179,6 +175,22 @@ export default {
       isCloseTable: true,
     }
   },
+
+  // WATCH
+  watch: {
+    pageID(newVal) {
+      this.btnTypeSpecifyingAction()
+    },
+  },
+
+  // CREATED
+  created() {
+    this.btnType = JSON.parse(localStorage.getItem('allTrueAndFalseData'))?.type
+    // page ID sini olish
+    this.pageID = this.$route.params?.id
+  },
+
+  // MOUNTED
   mounted() {
     this.tableHeadLength = Object.keys(this.tableHead).length + 1
     // Table function
@@ -220,6 +232,13 @@ export default {
           // eslint-disable-next-line no-console
           console.log(error)
         })
+    },
+
+    // Specifying the buttun type action
+    btnTypeSpecifyingAction() {
+      if (!this.pageID) {
+        localStorage.removeItem('allTrueAndFalseData')
+      }
     },
 
     // Generic_Input value

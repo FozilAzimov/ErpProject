@@ -214,11 +214,11 @@
 </template>
 
 <script>
-import GenericButton from '../../Button/GenericButton.vue'
-import GenericActiveLookUpPage from '../../Generics/GenericActiveLookUp/GenericActiveLookUpPage.vue'
-import GenericInput from '../../Input/GenericInput.vue'
-import LookUp from '../../Lookup/LookUp.vue'
-import PageTable from './PageTable.vue'
+import GenericButton from '@components/Button/GenericButton.vue'
+import GenericActiveLookUpPage from '@generics/GenericActiveLookUp/GenericActiveLookUpPage.vue'
+import GenericInput from '@components/Input/GenericInput.vue'
+import LookUp from '@generics/LookUp.vue'
+import PageTable from '@components/Reports/TransactionReports/PageTable.vue'
 
 export default {
   components: {
@@ -229,6 +229,7 @@ export default {
     PageTable,
   },
 
+  // PROPS
   props: {
     data: {
       type: Array,
@@ -248,6 +249,7 @@ export default {
     },
   },
 
+  // DATA
   data() {
     return {
       isLoading: false,
@@ -278,6 +280,7 @@ export default {
     }
   },
 
+  // METHODS
   methods: {
     // Lookup's Valuesini olish
     getLookUpValue(key, value, id) {
@@ -308,12 +311,7 @@ export default {
           rateTypeId: this.rateTypeId,
         }
         this.$axios
-          .post(`/transactionsReport/reportContent`, requestBody, {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem('token')}`,
-              'x-auth-token': localStorage.getItem('authToken'),
-            },
-          })
+          .post(`/transactionsReport/reportContent`, requestBody)
           .then(({ data }) => {
             this.isLoading = !this.isLoading
             this.isCloseTableUI = true

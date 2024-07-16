@@ -9,11 +9,7 @@
         class="border-[1px] mt-1 border-solid border-[rgba(0,0,0,0.05)] p-[12px] bg-gradient-to-b from-transparent via-transparent to-gray-200 shadow-md flex items-center justify-between"
       >
         <div class="flex items-center gap-[10px]">
-          <img
-            src="../../../assets/icons/user-black.png"
-            alt="user"
-            class="w-[14px]"
-          />
+          <img src="@assets/icons/user-black.png" alt="user" class="w-[14px]" />
           <h1 class="font-bold text-[rgb(49,126,172)] text-[14px] uppercase">
             {{ $t('pages.reports.transactionReports.headerName') }}
           </h1>
@@ -27,11 +23,7 @@
               }"
               @click="openColumnConfig"
             >
-              <img
-                class="w-[11px]"
-                src="../../../assets/icons/gear.png"
-                alt="gear"
-              />
+              <img class="w-[11px]" src="@assets/icons/gear.png" alt="gear" />
             </li>
             <li
               class="p-[7px] rounded-[50%] cursor-pointer border-[1px] border-[solid] border-[rgba(0,0,0,0.1] hover:border-[#3b89e9] focus:border-[#3b89e9] duration-[0.4s]"
@@ -47,7 +39,7 @@
                     ? 'rotate-[-180deg] duration-[1s]'
                     : 'rotate-[0deg] duration-[1s]'
                 "
-                src="../../../assets/icons/arrow.png"
+                src="@assets/icons/arrow.png"
                 alt="arrow"
               />
             </li>
@@ -60,7 +52,7 @@
             >
               <img
                 class="w-[11px]"
-                src="../../../assets/icons/remove.png"
+                src="@assets/icons/remove.png"
                 alt="remove"
               />
             </li>
@@ -163,16 +155,16 @@
 </template>
 
 <script>
-import LoadingPage from '../../Loading/LoadingPage.vue'
-import GenericActiveLookUpPage from '../../Generics/GenericActiveLookUp/GenericActiveLookUpPage.vue'
-import GenericButton from '../../Button/GenericButton.vue'
-import SummaryReportPage1 from './SummaryReportPage1.vue'
-import SummaryReportPage2 from './SummaryReportPage2.vue'
-import SummaryReportPage3 from './SummaryReportPage3.vue'
-import SummaryReportPage4 from './SummaryReportPage4.vue'
-import SummaryReportPage5 from './SummaryReportPage5.vue'
-import SummaryReportPage6 from './SummaryReportPage6.vue'
-import SummaryReportPage7 from './SummaryReportPage7.vue'
+import LoadingPage from '@components/Loading/LoadingPage.vue'
+import GenericActiveLookUpPage from '@generics/GenericActiveLookUp/GenericActiveLookUpPage.vue'
+import GenericButton from '@components/Button/GenericButton.vue'
+import SummaryReportPage1 from '@components/Reports/TransactionReports/SummaryReportPage1.vue'
+import SummaryReportPage2 from '@components/Reports/TransactionReports/SummaryReportPage2.vue'
+import SummaryReportPage3 from '@components/Reports/TransactionReports/SummaryReportPage3.vue'
+import SummaryReportPage4 from '@components/Reports/TransactionReports/SummaryReportPage4.vue'
+import SummaryReportPage5 from '@components/Reports/TransactionReports/SummaryReportPage5.vue'
+import SummaryReportPage6 from '@components/Reports/TransactionReports/SummaryReportPage6.vue'
+import SummaryReportPage7 from '@components/Reports/TransactionReports/SummaryReportPage7.vue'
 export default {
   components: {
     LoadingPage,
@@ -187,6 +179,7 @@ export default {
     SummaryReportPage7,
   },
 
+  // DATA
   data() {
     return {
       isLoading: false,
@@ -202,19 +195,11 @@ export default {
     }
   },
 
+  // MOUNTED
   mounted() {
     this.isLoading = !this.isLoading
     this.$axios
-      .post(
-        `/transactionsReport/transactionReports`,
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-            'x-auth-token': localStorage.getItem('authToken'),
-          },
-        }
-      )
+      .post(`/transactionsReport/transactionReports`)
       .then((res) => {
         this.isLoading = !this.isLoading
         this.lookUpData = res.data
@@ -251,18 +236,9 @@ export default {
       this.lookUpValue = value
       this.isLoading = !this.isLoading
       this.$axios
-        .post(
-          `/transactionsReport/transactionReportsType`,
-          {
-            reportType: this.lookUpValue,
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem('token')}`,
-              'x-auth-token': localStorage.getItem('authToken'),
-            },
-          }
-        )
+        .post(`/transactionsReport/transactionReportsType`, {
+          reportType: this.lookUpValue,
+        })
         .then((res) => {
           this.isLoading = !this.isLoading
           this.lookUpData2 = res.data.rateTypeList
@@ -278,5 +254,3 @@ export default {
   },
 }
 </script>
-
-<style></style>

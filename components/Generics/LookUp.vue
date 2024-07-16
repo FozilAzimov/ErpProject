@@ -3,7 +3,8 @@
     v-model="value"
     filterable
     :disabled="disabled"
-    placeholder=""
+    :placeholder="placeholder"
+    :multiple="multiple"
     :size="size"
     :clearable="true"
     :popper-append-to-body="popperAppendToBody"
@@ -83,6 +84,14 @@ export default {
       type: Boolean,
       default: false,
     },
+    placeholder: {
+      type: String,
+      default: '',
+    },
+    multiple: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   // DATA
@@ -144,7 +153,15 @@ export default {
         this.loading = true
         const body = { ...this.dparam, search_key: searchKey }
         this.$axios
-          .post(`${this.durl}`, body)
+          .post(
+            `${
+              this.durl === 'findAllEquipments' ||
+              this.durl === 'findAllDyeingEquipments'
+                ? 'productionReports'
+                : 'invoiceBase'
+            }/${this.durl}`,
+            body
+          )
           .then((res) => {
             this.loading = false
             this.options = res.data

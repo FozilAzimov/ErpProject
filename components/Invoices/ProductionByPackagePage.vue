@@ -467,12 +467,12 @@
 </template>
 
 <script>
-import GenericButton from '@components/Generics/GenericButton.vue'
-import GenericCheckBox from '@components/Generics/GenericCheckBox.vue'
+import GenericButton from '@generics/GenericButton.vue'
+import GenericCheckBox from '@generics/GenericCheckBox.vue'
 import GenericInput from '@components/Input/GenericInput.vue'
 import GenericInputDatePage from '@components/InputDate/GenericInputDatePage.vue'
 import LoadingPage from '@components/Loading/LoadingPage.vue'
-import LookUp from '@components/Lookup/LookUp.vue'
+import LookUp from '@generics/LookUp.vue'
 export default {
   components: {
     LoadingPage,

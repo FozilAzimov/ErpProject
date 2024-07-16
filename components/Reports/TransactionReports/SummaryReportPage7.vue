@@ -51,22 +51,20 @@
       bg="rgb(126,183,62)"
       textsize="14"
       class="mt-[15px]"
-      :url="imgUrl.printer"
-      :istherepicture="true"
     />
   </div>
 </template>
 
 <script>
-import printer from '../../../assets/icons/printer.png'
-import GenericButton from '../../Button/GenericButton.vue'
-import GenericInput from '../../Input/GenericInput.vue'
+import GenericButton from '@components/Button/GenericButton.vue'
+import GenericInput from '@components/Input/GenericInput.vue'
 export default {
   components: {
     GenericInput,
     GenericButton,
   },
 
+  // PROPS
   props: {
     from: {
       type: String,
@@ -78,11 +76,9 @@ export default {
     },
   },
 
+  // DATA
   data() {
     return {
-      imgUrl: {
-        printer,
-      },
       dateFrom: this.from,
       dateTo: this.to,
     }

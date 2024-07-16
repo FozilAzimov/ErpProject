@@ -29,7 +29,7 @@
                     ? 'rotate-[-180deg] duration-[1s]'
                     : 'rotate-[0deg] duration-[1s]'
                 "
-                src="../../../assets/icons/arrow.png"
+                src="@assets/icons/arrow.png"
                 alt="arrow"
               />
             </li>
@@ -42,7 +42,7 @@
             >
               <img
                 class="w-[11px]"
-                src="../../../assets/icons/remove.png"
+                src="@assets/icons/remove.png"
                 alt="remove"
               />
             </li>
@@ -119,12 +119,13 @@
                 size="small"
                 class="w-[150px]"
               >
-              <el-option
-      v-for="item in options"
-      :key="item.value"
-      :label="item.label"
-      :value="item.value">
-    </el-option>
+                <el-option
+                  v-for="item in options"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                >
+                </el-option>
                 <!-- <el-option>Please Select</el-option>
                 <el-option>Cashbox</el-option>
                 <el-option>Banks</el-option>
@@ -206,52 +207,151 @@
           <div class="w-[80%]">
             <table class="w-full border-[1px] border-collapse border-black">
               <tr>
-                <td class="border-[1px] border-collapse border-black text-center"></td>
-                <td class="border-[1px] border-collapse border-black text-center">Start Report: Debit</td>
-                <td class="border-[1px] border-collapse border-black text-center">Start Report: Credit</td>
-                <td class="border-[1px] border-collapse border-black text-center">End Report: Debit</td>
-                <td class="border-[1px] border-collapse border-black text-center">End Report: Credit</td>
-                <td class="border-[1px] border-collapse border-black text-center">Start Debit</td>
-                <td class="border-[1px] border-collapse border-black text-center">Start Credit</td>
-                <td class="border-[1px] border-collapse border-black text-center">End Debit</td>
-                <td class="border-[1px] border-collapse border-black text-center">End Credit</td>
-              </tr>
-              <tr>
-                <td class=" border-[1px] border-collapse border-black text-center">Total:</td>
-                <td v-for="(item,index) in examTable" :key="index" class="border-[1px] border-collapse border-black text-center">  
-                  {{item.value}}
+                <td
+                  class="border-[1px] border-collapse border-black text-center"
+                ></td>
+                <td
+                  class="border-[1px] border-collapse border-black text-center"
+                >
+                  Start Report: Debit
+                </td>
+                <td
+                  class="border-[1px] border-collapse border-black text-center"
+                >
+                  Start Report: Credit
+                </td>
+                <td
+                  class="border-[1px] border-collapse border-black text-center"
+                >
+                  End Report: Debit
+                </td>
+                <td
+                  class="border-[1px] border-collapse border-black text-center"
+                >
+                  End Report: Credit
+                </td>
+                <td
+                  class="border-[1px] border-collapse border-black text-center"
+                >
+                  Start Debit
+                </td>
+                <td
+                  class="border-[1px] border-collapse border-black text-center"
+                >
+                  Start Credit
+                </td>
+                <td
+                  class="border-[1px] border-collapse border-black text-center"
+                >
+                  End Debit
+                </td>
+                <td
+                  class="border-[1px] border-collapse border-black text-center"
+                >
+                  End Credit
                 </td>
               </tr>
               <tr>
-                <td class=" border-[1px] border-collapse border-black text-center" >Saldo:</td>
-                <td v-for="(item,index) in examTable" :key="index" class=" border-[1px] border-collapse border-black text-center" >  
-                  {{item.value}}
+                <td
+                  class="border-[1px] border-collapse border-black text-center"
+                >
+                  Total:
+                </td>
+                <td
+                  v-for="(item, index) in examTable"
+                  :key="index"
+                  class="border-[1px] border-collapse border-black text-center"
+                >
+                  {{ item.value }}
                 </td>
               </tr>
               <tr>
-                <td class="border-[1px] border-collapse border-black text-center"></td>
-                <td class="border-[1px] border-collapse border-black text-center">Start Report: Debit</td>
-                <td class="border-[1px] border-collapse border-black text-center">Start Report: Credit</td>
-                <td class="border-[1px] border-collapse border-black text-center">End Report: Debit</td>
-                <td class="border-[1px] border-collapse border-black text-center">End Report: Credit</td>
-                <td class="border-[1px] border-collapse border-black text-center">Start Debit</td>
-                <td class="border-[1px] border-collapse border-black text-center">Start Credit</td>
-                <td class="border-[1px] border-collapse border-black text-center">End Debit</td>
-                <td class="border-[1px] border-collapse border-black text-center">End Credit</td>
-              </tr>
-              <tr>
-                <td class=" border-[1px] border-collapse border-black text-center">Total:</td>
-                <td v-for="(item,index) in examTable" :key="index" class=" border-[1px] border-collapse border-black text-center">  
-                  {{item.value}}
+                <td
+                  class="border-[1px] border-collapse border-black text-center"
+                >
+                  Saldo:
+                </td>
+                <td
+                  v-for="(item, index) in examTable"
+                  :key="index"
+                  class="border-[1px] border-collapse border-black text-center"
+                >
+                  {{ item.value }}
                 </td>
               </tr>
               <tr>
-                <td class=" border-[1px] border-collapse border-black text-center">Saldo:</td>
-                <td v-for="(item,index) in examTable" :key="index" class=" border-[1px] border-collapse border-black text-center">  
-                  {{item.value}}
+                <td
+                  class="border-[1px] border-collapse border-black text-center"
+                ></td>
+                <td
+                  class="border-[1px] border-collapse border-black text-center"
+                >
+                  Start Report: Debit
+                </td>
+                <td
+                  class="border-[1px] border-collapse border-black text-center"
+                >
+                  Start Report: Credit
+                </td>
+                <td
+                  class="border-[1px] border-collapse border-black text-center"
+                >
+                  End Report: Debit
+                </td>
+                <td
+                  class="border-[1px] border-collapse border-black text-center"
+                >
+                  End Report: Credit
+                </td>
+                <td
+                  class="border-[1px] border-collapse border-black text-center"
+                >
+                  Start Debit
+                </td>
+                <td
+                  class="border-[1px] border-collapse border-black text-center"
+                >
+                  Start Credit
+                </td>
+                <td
+                  class="border-[1px] border-collapse border-black text-center"
+                >
+                  End Debit
+                </td>
+                <td
+                  class="border-[1px] border-collapse border-black text-center"
+                >
+                  End Credit
                 </td>
               </tr>
-              
+              <tr>
+                <td
+                  class="border-[1px] border-collapse border-black text-center"
+                >
+                  Total:
+                </td>
+                <td
+                  v-for="(item, index) in examTable"
+                  :key="index"
+                  class="border-[1px] border-collapse border-black text-center"
+                >
+                  {{ item.value }}
+                </td>
+              </tr>
+              <tr>
+                <td
+                  class="border-[1px] border-collapse border-black text-center"
+                >
+                  Saldo:
+                </td>
+                <td
+                  v-for="(item, index) in examTable"
+                  :key="index"
+                  class="border-[1px] border-collapse border-black text-center"
+                >
+                  {{ item.value }}
+                </td>
+              </tr>
             </table>
           </div>
         </div>
@@ -292,15 +392,9 @@
 </template>
 
 <script>
-import axios from 'axios'
-// Icons url
-import search from '../../../assets/icons/search.png'
-import printer from '../../../assets/icons/printer.png'
-import LookUp from '../../Lookup/LookUp.vue'
-
-// Components
-import LoadingPage from '../../Loading/LoadingPage.vue'
-import GenericButton from '../../Button/GenericButton.vue'
+import LookUp from '@generics/LookUp.vue'
+import LoadingPage from '@components/Loading/LoadingPage.vue'
+import GenericButton from '@components/Button/GenericButton.vue'
 // import GenericTablePage from '../GenericTable/GenericTablePage.vue'
 
 export default {
@@ -312,7 +406,16 @@ export default {
   },
   data() {
     return {
-      examTable:[{value:1},{value:2},{value:3},{value:4},{value:5},{value:6},{value:7},{value:8}],
+      examTable: [
+        { value: 1 },
+        { value: 2 },
+        { value: 3 },
+        { value: 4 },
+        { value: 5 },
+        { value: 6 },
+        { value: 7 },
+        { value: 8 },
+      ],
       isLoading: false,
       pageSize_value: 10,
       keywordValue: '',
@@ -322,10 +425,6 @@ export default {
       tableBody: [],
       tableHeadLength: null,
       isThereBody: false,
-      imgUrl: {
-        search,
-        printer,
-      },
       tableId: [],
       selectData: {},
       formData: new Map(),
@@ -353,35 +452,27 @@ export default {
     },
     getTableRequest() {
       this.isLoading = !this.isLoading
-      axios
-        .post(
-          `https://192.168.1.55:8443/api/invoice/purchaseInvoiceList`,
-          {
-            current_page: 1,
-            page_size: this.pageSize_value,
-            searchForm: {
-              keyword: this.keywordValue,
-              from_date: new Date(Object.fromEntries(this.formData).from)
-                .toLocaleString('en-GB')
-                .split(',')
-                .join(''),
-              to_date: new Date(Object.fromEntries(this.formData).to)
-                .toLocaleString('en-GB')
-                .split(',')
-                .join(''),
-            },
-            billStatus: Object.fromEntries(this.formData).bill,
-            payStatus: Object.fromEntries(this.formData).pay,
-            invoiceOnWayStatus: Object.fromEntries(this.formData).invoice,
-            departmentId: Object.fromEntries(this.formData).departments,
-            warehouseId: Object.fromEntries(this.formData).warehouse,
+      this.$axios
+        .post(`invoice/purchaseInvoiceList`, {
+          current_page: 1,
+          page_size: this.pageSize_value,
+          searchForm: {
+            keyword: this.keywordValue,
+            from_date: new Date(Object.fromEntries(this.formData).from)
+              .toLocaleString('en-GB')
+              .split(',')
+              .join(''),
+            to_date: new Date(Object.fromEntries(this.formData).to)
+              .toLocaleString('en-GB')
+              .split(',')
+              .join(''),
           },
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem('token')}`,
-            },
-          }
-        )
+          billStatus: Object.fromEntries(this.formData).bill,
+          payStatus: Object.fromEntries(this.formData).pay,
+          invoiceOnWayStatus: Object.fromEntries(this.formData).invoice,
+          departmentId: Object.fromEntries(this.formData).departments,
+          warehouseId: Object.fromEntries(this.formData).warehouse,
+        })
         .then((res) => {
           this.tableBody = []
           this.isLoading = !this.isLoading
@@ -428,20 +519,12 @@ export default {
     // Table Action Open button
     getTableRowOpen(thisId) {
       this.isLoading = !this.isLoading
-      axios
-        .post(
-          `https://192.168.1.55:8443/api/invoice/preparePurchaseInvoice`,
-          {
-            current_page: 1,
-            page_size: this.pageSize_value,
-            searchForm: { keyword: this.keywordValue || '', id: thisId },
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem('token')}`,
-            },
-          }
-        )
+      this.$axios
+        .post(`invoice/preparePurchaseInvoice`, {
+          current_page: 1,
+          page_size: this.pageSize_value,
+          searchForm: { keyword: this.keywordValue || '', id: thisId },
+        })
         .then((res) => {
           this.isLoading = !this.isLoading
           this.$router.push('/preparePurchaseInvoiceNew.htm')
@@ -484,5 +567,4 @@ export default {
 .el-radio-group {
   display: flex !important;
 }
-
 </style>

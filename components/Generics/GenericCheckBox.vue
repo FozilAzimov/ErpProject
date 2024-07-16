@@ -1,5 +1,7 @@
 <template>
-  <el-checkbox v-model="checked" @change="getChangeValueAction"></el-checkbox>
+  <el-checkbox v-model="checked" @change="getChangeValueAction">{{
+    text
+  }}</el-checkbox>
 </template>
 <script>
 export default {
@@ -8,6 +10,10 @@ export default {
     defaultValue: {
       type: Boolean,
       default: false,
+    },
+    text: {
+      type: String,
+      default: '',
     },
     name: {
       type: String,

@@ -55,14 +55,14 @@
               class="w-[16%] border-[1px] border-solid border-[#778899] p-[2px]"
             >
               <GenericInput
-                :value="
+                :value="`${
                   userId
                     ? objData?.date
                     : new Date(objData?.date)
                         .toLocaleString('en-GB')
                         .split(',')
                         .join('')
-                "
+                }`"
                 :disabled="userId ? true : false"
                 width="100"
                 widthtype="%"
@@ -106,7 +106,7 @@
               class="w-[17%] border-[1px] border-solid border-[#778899] p-[2px]"
             >
               <GenericInput
-                :value="userId ? objData?.systemNumber : ''"
+                :value="`${userId ? objData?.systemNumber : ''}`"
                 width="50"
                 widthtype="%"
                 height="23"
@@ -160,12 +160,12 @@
             </td>
             <td class="border-[1px] border-solid border-[#778899] p-[2px]">
               <GenericInput
-                :value="
+                :value="`${
                   userId
                     ? objData.companyCurrencyRate
                     : propsValue.supplare.value ||
                       objData?.companyCurrencyRate?.text
-                "
+                }`"
                 width="50"
                 widthtype="%"
                 height="23"
@@ -191,14 +191,14 @@
             </td>
             <td class="border-[1px] border-solid border-[#778899] p-[2px]">
               <GenericInput
-                :value="
+                :value="`${
                   userId
                     ? objData?.sellDate
                     : new Date(objData?.sellDate)
                         .toLocaleString('en-GB')
                         .split(',')
                         .join('')
-                "
+                }`"
                 width="100"
                 widthtype="%"
                 height="23"
@@ -220,7 +220,9 @@
             </td>
             <td class="border-[1px] border-solid border-[#778899] p-[2px]">
               <GenericInput
-                :value="userId || parentID ? objData?.invoiceBillStatus : ''"
+                :value="`${
+                  userId || parentID ? objData?.invoiceBillStatus : ''
+                }`"
                 width="50"
                 widthtype="%"
                 height="23"
@@ -262,7 +264,7 @@
             </td>
             <td class="border-[1px] border-solid border-[#778899] p-[2px]">
               <GenericInput
-                :value="userId ? objData?.invoiceOnWayStatus : ''"
+                :value="`${userId ? objData?.invoiceOnWayStatus : ''}`"
                 width="50"
                 widthtype="%"
                 height="23"
@@ -305,12 +307,12 @@
             </td>
             <td class="border-[1px] border-solid border-[#778899] p-[2px]">
               <GenericInput
-                :value="
+                :value="`${
                   userId
                     ? objData?.companyRefCurrencyRate
                     : propsValue.branch.value ||
                       objData?.companyRefCurrencyRate?.text
-                "
+                }`"
                 width="50"
                 widthtype="%"
                 height="23"
@@ -330,7 +332,7 @@
             </td>
             <td class="border-[1px] border-solid border-[#778899] p-[2px]">
               <GenericInput
-                :value="userId ? objData?.invoiceStatus : ''"
+                :value="`${userId ? objData?.invoiceStatus : ''}`"
                 width="50"
                 widthtype="%"
                 height="23"
@@ -374,7 +376,7 @@
             </td>
             <td class="border-[1px] border-solid border-[#778899] p-[2px]">
               <GenericInput
-                :value="userId ? objData?.invoiceNo : ''"
+                :value="`${userId ? objData?.invoiceNo : ''}`"
                 width="50"
                 widthtype="%"
                 height="23"
@@ -416,7 +418,7 @@
             </td>
             <td class="border-[1px] border-solid border-[#778899] p-[2px]">
               <GenericInput
-                :value="userId ? objData?.notes : ''"
+                :value="`${userId ? objData?.notes : ''}`"
                 width="50"
                 widthtype="%"
                 height="23"
@@ -464,11 +466,11 @@
             </td>
             <td class="border-[1px] border-solid border-[#778899] p-[2px]">
               <GenericInput
-                :value="
+                :value="`${
                   userId
                     ? objData?.currencyRate
                     : propsValue.currency.value || objData?.currencyRate?.text
-                "
+                }`"
                 width="50"
                 widthtype="%"
                 height="23"
@@ -488,7 +490,7 @@
             </td>
             <td class="border-[1px] border-solid border-[#778899] p-[2px]">
               <GenericInput
-                :value="userId ? objData?.invoiceNominal : ''"
+                :value="`${userId ? objData?.invoiceNominal : ''}`"
                 width="50"
                 widthtype="%"
                 height="23"
@@ -530,7 +532,7 @@
             </td>
             <td class="border-[1px] border-solid border-[#778899] p-[2px]">
               <GenericInput
-                :value="userId ? objData?.sequenceNumber : ''"
+                :value="`${userId ? objData?.sequenceNumber : ''}`"
                 width="50"
                 widthtype="%"
                 height="23"
@@ -585,7 +587,7 @@
             </td>
             <td class="border-[1px] border-solid border-[#778899] p-[2px]">
               <GenericInput
-                :value="objData?.invoiceNominal?.text"
+                :value="`${objData?.invoiceNominal?.text}`"
                 width="50"
                 widthtype="%"
                 height="23"
@@ -609,7 +611,7 @@
             </td>
             <td class="border-[1px] border-solid border-[#778899] p-[2px]">
               <GenericInput
-                :value="userId ? objData?.invoiceNumber : ''"
+                :value="`${userId ? objData?.invoiceNumber : ''}`"
                 width="50"
                 widthtype="%"
                 height="23"
@@ -985,15 +987,15 @@
 </template>
 
 <script>
-import GenericButton from '@components/Generics/GenericButton.vue'
+import GenericButton from '@generics/GenericButton.vue'
 import LoadingPage from '@components/Loading/LoadingPage.vue'
-import LookUp from '@components/Lookup/LookUp.vue'
+import LookUp from '@generics/LookUp.vue'
 import GenericInput from '@components/Input/GenericInput.vue'
 import GenericPrepareTablePage from '@components/GenericPrepareTable/GenericPrepareTablePage.vue'
 import ColumnConfigPage from '@components/ColumnConfig/ColumnConfigPage.vue'
-import GenericSubPrepareTablePage from '@components/Generics/GenericSubPrepareTable/GenericSubPrepareTablePage.vue'
-import GenericSubPrepareTableTooPage from '@components/Generics/GenericSubPrepareTableToo/GenericSubPrepareTableTooPage.vue'
-import GenericLogisticsCalculationPage from '@components/Generics/GenericLogisticsCalculation/GenericLogisticsCalculationPage.vue'
+import GenericSubPrepareTablePage from '@generics/GenericSubPrepareTable/GenericSubPrepareTablePage.vue'
+import GenericSubPrepareTableTooPage from '@generics/GenericSubPrepareTableToo/GenericSubPrepareTableTooPage.vue'
+import GenericLogisticsCalculationPage from '@generics/GenericLogisticsCalculation/GenericLogisticsCalculationPage.vue'
 export default {
   // COMPONENTS
   components: {
@@ -1069,8 +1071,8 @@ export default {
       isInvoiceItem: false,
       rightMap: {},
       leftMap: {},
-      rightData: [],
-      leftData: [],
+      rightData: {},
+      leftData: {},
       actionUrl: '',
       checkModal: false,
       openPopup: true,
@@ -1187,16 +1189,10 @@ export default {
         : null
       this.isLoading = !this.isLoading
       this.$axios
-        .post(
-          `/invoices/prepareExpenseInvoiceAjaxLoad`,
-          { id, saleToPerson: false },
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem('token')}`,
-              'x-auth-token': localStorage.getItem('authToken'),
-            },
-          }
-        )
+        .post(`/invoices/prepareExpenseInvoiceAjaxLoad`, {
+          id,
+          saleToPerson: false,
+        })
         .then(({ data }) => {
           this.productValues = data?.invoiceJson?.invoiceItems
           this.transactionsList = data?.invoiceJson?.transactionsList

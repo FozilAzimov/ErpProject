@@ -26,13 +26,9 @@
         class="border-[1px] border-solid border-[rgba(0,0,0,0.05)] p-[12px] bg-gradient-to-b from-transparent via-transparent to-gray-200 shadow-md flex items-center justify-between mt-1"
       >
         <div class="flex items-center gap-[10px]">
-          <img
-            src="../../assets/icons/user-black.png"
-            alt="user"
-            class="w-[14px]"
-          />
+          <img src="@assets/icons/user-black.png" alt="user" class="w-[14px]" />
           <h1 class="font-bold text-[rgb(49,126,172)] text-[14px] uppercase">
-            {{ isNaN(rowID) ? 'Add' : 'Edit' }} Sew Model
+            {{ pageID ? 'Edit' : 'Add' }} Sew Model
           </h1>
         </div>
         <div>
@@ -44,11 +40,7 @@
               }"
               @click="openColumnConfig"
             >
-              <img
-                class="w-[11px]"
-                src="../../assets/icons/gear.png"
-                alt="gear"
-              />
+              <img class="w-[11px]" src="@assets/icons/gear.png" alt="gear" />
             </li>
             <li
               class="p-[7px] rounded-[50%] cursor-pointer border-[1px] border-solid border-[rgba(0,0,0,0.1] hover:border-[#3b89e9] focus:border-[#3b89e9] duration-[0.4s]"
@@ -64,7 +56,7 @@
                     ? 'rotate-[-180deg] duration-[1s]'
                     : 'rotate-[0deg] duration-[1s]'
                 "
-                src="../../assets/icons/arrow.png"
+                src="@assets/icons/arrow.png"
                 alt="arrow"
               />
             </li>
@@ -77,7 +69,7 @@
             >
               <img
                 class="w-[11px]"
-                src="../../assets/icons/remove.png"
+                src="@assets/icons/remove.png"
                 alt="remove"
               />
             </li>
@@ -109,7 +101,7 @@
                 <td
                   class="w-[150px] border-[1px] border-solid border-[#778899] pl-[10px]"
                 >
-                  {{ element?.subName }}
+                  {{ element?.name }}
                   <span v-if="element.required" class="text-[18px] text-red-600"
                     >*</span
                   >
@@ -213,7 +205,7 @@
                       @click="editAction()"
                     />
                     <generic-button
-                      v-if="!isNaN(rowID) && saveEditBtnType"
+                      v-if="pageID && saveEditBtnType"
                       name="Cancel"
                       icon-name-attribute="cencel"
                       @click="cancelAction()"
@@ -245,11 +237,12 @@
             <generic-button name="Save" type="primary" />
           </div>
 
+          <!-- --START-- Sew Model Variant Size BTN click -->
           <div v-if="sewModelVariantSizeShowHide" class="m-2">
             <span class="text-[14px]"
               >Operation.
               <strong class="text-[14px] text-[rgb(156,0,78)]"
-                >Parent ID = {{ rowID ? rowID : userId }}</strong
+                >Parent ID = {{ pageID }}</strong
               ></span
             >
             <div class="flex gap-1 flex-wrap">
@@ -287,13 +280,15 @@
               @rowValues="getRowElements"
             />
           </div>
+          <!-- --END-- Sew Model Variant Size BTN click -->
         </div>
 
+        <!-- --START-- Sew Operation BTN click -->
         <div v-if="sewModelOperationShowHide" class="m-2">
           <span class="text-[14px]"
             >Operation.
             <strong class="text-[14px] text-[rgb(156,0,78)]"
-              >Parent ID = {{ rowID ? rowID : userId }}</strong
+              >Parent ID = {{ pageID }}</strong
             ></span
           >
           <div class="flex gap-1 flex-wrap">
@@ -337,12 +332,14 @@
             @rowValues="getRowElementsOperation"
           />
         </div>
+        <!-- --END-- Sew Operation BTN click -->
 
+        <!-- --START-- Sew Model Recipe BTN click -->
         <div v-if="sewModelRecipeShowHide" class="m-2">
           <span class="text-[14px]"
             >sewModelRecipe.
             <strong class="text-[14px] text-[rgb(156,0,78)]"
-              >Parent ID = {{ rowID ? rowID : userId }}</strong
+              >Parent ID = {{ pageID }}</strong
             ></span
           >
           <div class="flex gap-1 flex-wrap">
@@ -386,21 +383,22 @@
             @rowValues="getRowElementsRecipe"
           />
         </div>
+        <!-- --EDN-- Sew Model Recipe BTN click -->
       </div>
     </template>
   </div>
 </template>
 
 <script>
-import GenericButton from '@components/Generics/GenericButton.vue'
+import GenericButton from '@generics/GenericButton.vue'
 import GenericInput from '@components/Input/GenericInput.vue'
 import GenericInputDatePage from '@components/InputDate/GenericInputDatePage.vue'
 import LoadingPage from '@components/Loading/LoadingPage.vue'
-import LookUp from '@components/Lookup/LookUp.vue'
+import LookUp from '@generics/LookUp.vue'
 import MessageBox from '@components/MessageBox.vue'
 import GenericPrepareTablePage from '@components/GenericPrepareTable/GenericPrepareTablePage.vue'
 import ColumnConfigPage from '@components/ColumnConfig/ColumnConfigPage.vue'
-import GenericImageUpload from '@components/Generics/GenericImageUpload.vue'
+import GenericImageUpload from '@generics/GenericImageUpload.vue'
 export default {
   components: {
     GenericButton,
@@ -422,7 +420,7 @@ export default {
       checkModal: false,
       isOpenTable: true,
       isCloseTable: true,
-      rowID: null,
+      pageID: null,
       // column config operation uchun
       tableDataOperation: [],
       tableDataOperation2: [],
@@ -471,25 +469,12 @@ export default {
     }
   },
 
-  // MOUNTED
-  mounted() {
-    this.dateDefValue = new Date().toISOString().split('.')[0]
-
-    // function
-    this.dataCreatedAction()
-
-    // Table function
-    this.rowID = this.$route.path.split('/').at(-1)
-    isNaN(this.rowID)
-      ? (this.saveEditBtnType = true)
-      : (this.saveEditBtnType = false)
-    if (!isNaN(this.rowID)) this.getTableRequest(this.rowID)
-  },
-
   // CREATED
   created() {
-    this.userId = this.$route.params?.id
-    if (this.userId) {
+    this.pageID = this.$route.params?.id
+    this.pageID ? (this.saveEditBtnType = false) : (this.saveEditBtnType = true)
+    if (this.pageID) {
+      this.getTableRequest(this.pageID)
       this.isEdit = true
       this.isEditOperation = true
       this.isEditRecipe = true
@@ -497,6 +482,13 @@ export default {
       this.hideButtonOperation = false
       this.hideButtonRecipe = false
     }
+  },
+
+  // MOUNTED
+  mounted() {
+    this.dateDefValue = new Date().toISOString().split('.')[0]
+    // function
+    this.dataCreatedAction()
   },
 
   // METHODS
@@ -531,9 +523,7 @@ export default {
       this.hideButton = !this.hideButton
 
       // GenericTablePage da ishlab beruvchi function
-      this.$refs.sewModelVariantSizeRef.getEditRowAction(
-        this.rowID ? this.rowID : this.userId
-      )
+      this.$refs.sewModelVariantSizeRef.getEditRowAction(this.pageID)
       this.uiShowHide = false
     },
 
@@ -542,9 +532,7 @@ export default {
       this.hideButtonOperation = !this.hideButtonOperation
 
       // GenericTablePage da ishlab beruvchi function
-      this.$refs.sewModelOperationRef.getEditRowAction(
-        this.rowID ? this.rowID : this.userId
-      )
+      this.$refs.sewModelOperationRef.getEditRowAction(this.pageID)
       this.uiShowHideOperation = false
     },
 
@@ -553,9 +541,7 @@ export default {
       this.hideButtonRecipe = !this.hideButtonRecipe
 
       // GenericTablePage da ishlab beruvchi function
-      this.$refs.sewModelRecipeRef.getEditRowAction(
-        this.rowID ? this.rowID : this.userId
-      )
+      this.$refs.sewModelRecipeRef.getEditRowAction(this.pageID)
       this.uiShowHideRecipe = false
     },
 
@@ -660,7 +646,7 @@ export default {
       this.$refs.sewModelVariantSizeRef.getSaveRowAction()
 
       const body = {}
-      body.id = this.rowID
+      body.id = this.pageID
       body.sewModelSizeItemList = this.sewModelSizeItemList
 
       this.$axios
@@ -681,7 +667,7 @@ export default {
       this.$refs.sewModelOperationRef.getSaveRowAction()
 
       const body = {}
-      body.id = this.rowID
+      body.id = this.pageID
       body.sewModelOperationList = this.sewModelOperationList
 
       this.$axios
@@ -702,7 +688,7 @@ export default {
       this.$refs.sewModelRecipeRef.getSaveRowAction()
 
       const body = {}
-      body.id = this.rowID
+      body.id = this.pageID
       body.sewModelRecipeItemList = this.sewModelRecipeItemList
 
       this.$axios
@@ -827,17 +813,17 @@ export default {
     },
 
     // Page request
-    getTableRequest(rowID) {
+    getTableRequest(pageID) {
       this.isLoading = !this.isLoading
       this.$axios
         .post(`/sewModel/prepareSewModelAjaxLoad`, {
-          id: rowID,
+          id: pageID,
           page_current: 1,
           page_size: 25,
         })
         .then(({ data: { sewModelJson } }) => {
           this.isLoading = !this.isLoading
-          if (rowID) {
+          if (pageID) {
             this.editData.date = new Date(sewModelJson?.date)
               .toISOString()
               .split('.')[0]
@@ -918,7 +904,9 @@ export default {
     // Save
     saveAction() {
       let sewModel = {}
-      if (isNaN(this.rowID)) {
+      if (this.pageID) {
+        sewModel = this.allInputAndLookUpValue
+      } else {
         sewModel = {
           code: this.allInputAndLookUpValue?.code,
           company: this.allInputAndLookUpValue?.company,
@@ -934,8 +922,6 @@ export default {
           //   id: parseFloat(this.allInputAndLookUpValue?.planningType),
           // },
         }
-      } else {
-        sewModel = this.allInputAndLookUpValue
       }
 
       if (
@@ -988,12 +974,11 @@ export default {
             id,
           })
           .then(({ data: { sewModelJson } }) => {
-            this.rowID = sewModelJson?.id
             const customSewModelJson = {}
             customSewModelJson.date = new Date(sewModelJson?.date)
               .toISOString()
               .split('.')[0]
-            customSewModelJson.id = this.rowID
+            customSewModelJson.id = this.pageID
             customSewModelJson.code = sewModelJson?.code
             customSewModelJson.product = sewModelJson?.product?.text
             customSewModelJson.productId = sewModelJson?.product?.id
@@ -1058,7 +1043,7 @@ export default {
             // function
             this.responseDataFilterOperation(sewModelOperationColumns)
             // function
-            this.getFilterData(sewModelOperationColumns)
+            this.getFilterData()
           }
         )
         .catch((error) => {
@@ -1096,7 +1081,7 @@ export default {
           // function
           this.responseDataFilterRecipe(sewModelRecipeItemColumns)
           // function
-          this.getFilterDataRecipe(sewModelRecipeItemColumns)
+          this.getFilterDataRecipe()
         })
         .catch((error) => {
           // eslint-disable-next-line no-console
@@ -1107,19 +1092,19 @@ export default {
     // ALl buttons action
     allBtnAction(btnTypeProp) {
       if (btnTypeProp === 'sewModelVariantSize')
-        this.rowID && this.sewModelVariantSizeBtnAction(this.rowID)
+        this.pageID && this.sewModelVariantSizeBtnAction(this.pageID)
       else if (btnTypeProp === 'sewOperation')
-        this.rowID && this.sewOperationBtnAction(this.rowID)
+        this.pageID && this.sewOperationBtnAction(this.pageID)
       else if (btnTypeProp === 'delete')
-        this.$refs.messageBoxRef.open(this.rowID, btnTypeProp)
+        this.$refs.messageBoxRef.open(this.pageID, btnTypeProp)
       else if (btnTypeProp === 'clone')
-        this.$refs.messageBoxRef.open(this.rowID, btnTypeProp)
+        this.$refs.messageBoxRef.open(this.pageID, btnTypeProp)
       else if (btnTypeProp === 'addImage')
-        this.rowID && this.addImageBtnAction(this.rowID)
+        this.pageID && this.addImageBtnAction(this.pageID)
       else if (btnTypeProp === 'changePrice')
-        this.$refs.messageBoxRef.open(this.rowID, btnTypeProp)
+        this.$refs.messageBoxRef.open(this.pageID, btnTypeProp)
       else if (btnTypeProp === 'sewModelRecipe')
-        this.rowID && this.sewModelRecipeBtnAction(this.rowID)
+        this.pageID && this.sewModelRecipeBtnAction(this.pageID)
     },
   },
 }

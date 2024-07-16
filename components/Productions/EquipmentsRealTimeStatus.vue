@@ -9,11 +9,7 @@
         class="border-[1px] border-solid border-[rgba(0,0,0,0.05)] p-[12px] bg-gradient-to-b from-transparent via-transparent to-gray-200 shadow-md flex items-center justify-between mt-1"
       >
         <div class="flex items-center gap-[10px]">
-          <img
-            src="../../assets/icons/user-black.png"
-            alt="user"
-            class="w-[14px]"
-          />
+          <img src="@assets/icons/user-black.png" alt="user" class="w-[14px]" />
           <h1 class="font-bold text-[rgb(49,126,172)] text-[14px] uppercase">
             List
           </h1>
@@ -27,11 +23,7 @@
               }"
               @click="openColumnConfig"
             >
-              <img
-                class="w-[11px]"
-                src="../../assets/icons/gear.png"
-                alt="gear"
-              />
+              <img class="w-[11px]" src="@assets/icons/gear.png" alt="gear" />
             </li>
             <li
               class="p-[7px] rounded-[50%] cursor-pointer border-[1px] border-[solid] border-[rgba(0,0,0,0.1] hover:border-[#3b89e9] focus:border-[#3b89e9] duration-[0.4s]"
@@ -47,7 +39,7 @@
                     ? 'rotate-[-180deg] duration-[1s]'
                     : 'rotate-[0deg] duration-[1s]'
                 "
-                src="../../assets/icons/arrow.png"
+                src="@assets/icons/arrow.png"
                 alt="arrow"
               />
             </li>
@@ -60,7 +52,7 @@
             >
               <img
                 class="w-[11px]"
-                src="../../assets/icons/remove.png"
+                src="@assets/icons/remove.png"
                 alt="remove"
               />
             </li>
@@ -152,7 +144,7 @@
             >
               <span class="flex items-center gap-2 mb-1">
                 <img
-                  src="../../assets/images/equipment.jpg"
+                  src="@assets/images/equipment.jpg"
                   width="35"
                   alt="equipment"
                 />
@@ -176,7 +168,7 @@
             >
               <span class="flex items-center gap-2">
                 <img
-                  src="../../assets/images/equipment.jpg"
+                  src="@assets/images/equipment.jpg"
                   width="35"
                   alt="equipment"
                 />
@@ -200,7 +192,7 @@
             >
               <span class="flex items-center gap-2">
                 <img
-                  src="../../assets/images/equipment.jpg"
+                  src="@assets/images/equipment.jpg"
                   width="35"
                   alt="equipment"
                 />
@@ -224,7 +216,7 @@
             >
               <span class="flex items-center gap-2">
                 <img
-                  src="../../assets/images/equipment.jpg"
+                  src="@assets/images/equipment.jpg"
                   width="35"
                   alt="equipment"
                 />
@@ -465,8 +457,8 @@
 import LoadingPage from '@components/Loading/LoadingPage.vue'
 import GenericSelect from '@components/Select/GenericSelect.vue'
 import GenericInput from '@components/Input/GenericInput.vue'
-import GenericButton from '@components/Generics/GenericButton.vue'
-import LookUp from '@components/Lookup/LookUp.vue'
+import GenericButton from '@generics/GenericButton.vue'
+import LookUp from '@generics/LookUp.vue'
 export default {
   components: {
     LoadingPage,

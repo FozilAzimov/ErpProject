@@ -8,6 +8,7 @@
       v-if="!tableShowHide && helperShowHideRow"
       class="fixed left-[50%] top-[8px] translate-x-[-50%]"
     />
+
     <message-box ref="messageBoxRef" @emitProp="getEmitProp" />
     <div
       v-if="isOpenModal"
@@ -125,13 +126,9 @@
                   :key="indexToo"
                   class="border-[1px] text-[12px] p-2"
                 >
-                  <span
-                    v-if="
-                      row?.[item.name] && typeof row?.[item.name] === 'object'
-                    "
-                    >{{ row?.[item.name]?.['text'] }}</span
-                  >
-                  <span v-else-if="row?.[item.name] && item.type === 'date'">{{
+                  <!-- <pre>{{ row }}</pre> -->
+                  <generic-check-box v-if="item.type === 'checkbox'" />
+                  <span v-else-if="item.type === 'date'">{{
                     new Date(row?.[item.name])
                       .toLocaleString('en-GB')
                       .split(',')
@@ -139,16 +136,13 @@
                   }}</span>
                   <img
                     v-else-if="item.type === 'file_image'"
-                    src="../../assets/images/no-image.png"
+                    src="@assets/images/no-image.png"
                     class="w-[60px]"
                   />
-                  <span v-else-if="item.type === 'checkbox'">{{
-                    row?.[item.name]
-                  }}</span>
                   <GenericButton
                     v-else-if="item.type === 'button'"
                     :name="item.headerText"
-                    type="primary"
+                    :type="`${item?.param?.split('-')?.at(-1)}`"
                     :order="indexOne"
                   />
                   <span v-else-if="row?.[item.name] && item.name === 'ammount'">
@@ -225,6 +219,9 @@
                         : 0
                     }}
                   </span>
+                  <span v-else-if="typeof row?.[item?.name] === 'object'">{{
+                    row?.[item.name]?.['text']
+                  }}</span>
                   <span v-else>{{ row[item.name] }}</span>
                 </td>
               </tr>
@@ -238,10 +235,7 @@
                   class="flex flex-col justify-center items-start text-[rgba(0,0,0,0.5)]"
                 >
                   <span class="flex flex-col items-center">
-                    <img
-                      src="../../assets/icons/no-data.png"
-                      alt="no-data-icons"
-                    />
+                    <img src="@assets/icons/no-data.png" alt="no-data-icons" />
                     No data
                   </span>
                 </div>
@@ -287,11 +281,7 @@
                       ? newEditObjData?.[indexOne]?.[value.name]?.text
                       : ''
                   "
-                  :durl="`${
-                    value?.durl === 'findAllEquipments'
-                      ? 'productionReports'
-                      : 'invoiceBase'
-                  }/${value.durl}`"
+                  :durl="value.durl"
                   dwidth="200"
                   :order="indexOne"
                   :name="value.name"
@@ -510,15 +500,15 @@
 </template>
 
 <script>
-import GenericButton from '@components/Generics/GenericButton.vue'
+import GenericButton from '@generics/GenericButton.vue'
 import GenericInvoiceItemModalPage from '@components/GenericInvoiceItemModal/GenericInvoiceItemModalPage.vue'
 import GenericInput from '@components/Input/GenericInput.vue'
-import LookUp from '@components/Lookup/LookUp.vue'
+import LookUp from '@generics/LookUp.vue'
 import GenericInputDatePage from '@components/InputDate/GenericInputDatePage.vue'
 import LoadingPage from '@components/Loading/LoadingPage.vue'
 import GenericInvoiceFilteringModalPage from '@components/GenericInvoiceFilteringModal/GenericInvoiceFilteringModalPage.vue'
 import MessageBox from '@components/MessageBox.vue'
-import GenericCheckBox from '@components/Generics/GenericCheckBox.vue'
+import GenericCheckBox from '@generics/GenericCheckBox.vue'
 
 export default {
   // COMPONENTS

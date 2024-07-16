@@ -2,32 +2,26 @@
   <div
     class="bg-[rgb(179,202,223)] max-w-[92%] w-fit max-h-[80vh] overflow-auto p-1 rounded-sm fixed z-[1000] left-[50%] top-[12%] translate-x-[-50%]"
   >
-    <table class="w-full border-[1px] border-[solid] border-[#F0F0F0]">
+    <table class="w-full border-[1px] border-solid border-[#F0F0F0]">
       <thead class="bg-[rgb(229,235,245)]">
         <th
-          class="text-[13px] font-semibold border-[1px] border-[solid] border-[rgba(119,136,153,0.2)] p-[5px_10px]"
+          class="text-[13px] font-semibold border-[1px] border-solid border-[rgba(119,136,153,0.2)] p-[5px_10px]"
         >
           Invoice # Recipient
         </th>
         <th
           v-for="headNameStart in tableHeadStart"
           :key="headNameStart"
-          class="text-[13px] font-semibold border-[1px] border-[solid] border-[rgba(119,136,153,0.2)] p-[5px_10px]"
+          class="text-[13px] font-semibold border-[1px] border-solid border-[rgba(119,136,153,0.2)] p-[5px_10px]"
         >
           {{ headNameStart }}
         </th>
         <th
-          class="text-[13px] font-semibold border-[1px] border-[solid] border-[rgba(119,136,153,0.2)] p-[5px_10px]"
+          class="text-[13px] font-semibold border-[1px] border-solid border-[rgba(119,136,153,0.2)] p-[5px_10px]"
         >
-          <GenericButton
+          <generic-button
             name="Ok"
-            pl="8"
-            pt="3"
-            pr="8"
-            pb="3"
-            bg="rgb(156,104,183)"
-            disabled-bg="rgba(156,104,183,0.7)"
-            textsize="14"
+            type="success"
             :disabled="centerHeadBody"
             @click="firstLastBtnAction('first')"
           />
@@ -36,24 +30,18 @@
           <th
             v-for="headNameCenterOne in tableHeadCenterOne"
             :key="headNameCenterOne.key"
-            class="text-[13px] font-semibold border-[1px] border-[solid] border-[rgba(119,136,153,0.2)] p-[5px_10px]"
+            class="text-[13px] font-semibold border-[1px] border-solid border-[rgba(119,136,153,0.2)] p-[5px_10px]"
           >
             {{ headNameCenterOne.name }}
           </th>
         </template>
         <template v-if="centerHeadBody">
           <th
-            class="text-[13px] font-semibold border-[1px] border-[solid] border-[rgba(119,136,153,0.2)] p-[5px_10px]"
+            class="text-[13px] font-semibold border-[1px] border-solid border-[rgba(119,136,153,0.2)] p-[5px_10px]"
           >
-            <GenericButton
+            <generic-button
               name="Ok"
-              pl="8"
-              pt="3"
-              pr="8"
-              pb="3"
-              bg="rgb(156,104,183)"
-              disabled-bg="rgba(156,104,183,0.7)"
-              textsize="14"
+              type="success"
               :disabled="lastOkBtn"
               @click="firstLastBtnAction('last')"
             />
@@ -61,7 +49,7 @@
           <th
             v-for="headNameCenterToo in tableHeadCenterToo"
             :key="headNameCenterToo"
-            class="text-[13px] font-semibold border-[1px] border-[solid] border-[rgba(119,136,153,0.2)] p-[5px_10px]"
+            class="text-[13px] font-semibold border-[1px] border-solid border-[rgba(119,136,153,0.2)] p-[5px_10px]"
           >
             {{ headNameCenterToo }}
           </th>
@@ -441,23 +429,23 @@
         <!-- Total start -->
         <tr v-if="centerHeadBody" class="bg-[rgb(229,235,245)] text-center">
           <td
-            class="text-[14px] p-3 text-[rgb(188,8,8)] font-semibold border-[1px] border-[solid] border-[rgba(119,136,153,0.2)]"
+            class="text-[14px] p-3 text-[rgb(188,8,8)] font-semibold border-[1px] border-solid border-[rgba(119,136,153,0.2)]"
           >
             Total
           </td>
           <td
             v-for="summ in tableHeadStart"
             :key="summ"
-            class="text-[12px] p-2 text-[rgb(188,8,8)] font-semibold border-[1px] border-[solid] border-[rgba(119,136,153,0.2)]"
+            class="text-[12px] p-2 text-[rgb(188,8,8)] font-semibold border-[1px] border-solid border-[rgba(119,136,153,0.2)]"
           ></td>
           <td
-            class="text-[12px] p-2 text-[rgb(188,8,8)] font-semibold border-[1px] border-[solid] border-[rgba(119,136,153,0.2)]"
+            class="text-[12px] p-2 text-[rgb(188,8,8)] font-semibold border-[1px] border-solid border-[rgba(119,136,153,0.2)]"
           ></td>
           <template v-if="centerHeadBody">
             <td
               v-for="summ in tableHeadCenterOne"
               :key="summ.key"
-              class="text-[12px] p-2 text-[rgb(188,8,8)] font-semibold border-[1px] border-[solid] border-[rgba(119,136,153,0.2)]"
+              class="text-[12px] p-2 text-[rgb(188,8,8)] font-semibold border-[1px] border-solid border-[rgba(119,136,153,0.2)]"
             >
               {{
                 columnTotal[summ.key]
@@ -472,11 +460,11 @@
               }}
             </td>
             <td
-              class="text-[12px] p-2 text-[rgb(188,8,8)] font-semibold border-[1px] border-[solid] border-[rgba(119,136,153,0.2)]"
+              class="text-[12px] p-2 text-[rgb(188,8,8)] font-semibold border-[1px] border-solid border-[rgba(119,136,153,0.2)]"
             ></td>
             <td
               v-if="lastHeadBody"
-              class="text-[12px] p-2 text-[rgb(188,8,8)] font-semibold border-[1px] border-[solid] border-[rgba(119,136,153,0.2)]"
+              class="text-[12px] p-2 text-[rgb(188,8,8)] font-semibold border-[1px] border-solid border-[rgba(119,136,153,0.2)]"
             ></td>
             <td
               v-for="summ in lastHeadBody
@@ -486,7 +474,7 @@
                   )
                 : tableHeadCenterToo"
               :key="summ"
-              class="text-[12px] p-2 text-[rgb(188,8,8)] font-semibold border-[1px] border-[solid] border-[rgba(119,136,153,0.2)]"
+              class="text-[12px] p-2 text-[rgb(188,8,8)] font-semibold border-[1px] border-solid border-[rgba(119,136,153,0.2)]"
             ></td>
           </template>
         </tr>
@@ -499,34 +487,18 @@
         >
           <td
             colspan="21"
-            class="p-1 border-[1px] border-[solid] border-[rgba(119,136,153,0.2)]"
+            class="p-1 border-[1px] border-solid border-[rgba(119,136,153,0.2)]"
           >
             <span class="flex items-center gap-1">
               <GenericInput
                 width="65"
-                height="29"
-                pl="6"
-                pr="6"
-                pt="1"
-                pb="1"
-                textsize="13"
                 type="number"
                 placeholder="USD Customs"
                 class="sticky left-0"
                 name="USDCutoms"
                 @customFunction="getUSDInputValue"
               />
-              <GenericButton
-                name="Save"
-                pl="8"
-                pt="3"
-                pr="8"
-                pb="3"
-                bg="rgb(54,155,215,0.7)"
-                textsize="14"
-                class="sticky left-[69px]"
-                @click="getData"
-              />
+              <generic-button name="Save" type="primary" @click="getData" />
             </span>
           </td>
         </tr>
@@ -537,9 +509,9 @@
 </template>
 
 <script>
-import GenericButton from '../../Button/GenericButton.vue'
-import GenericInput from '../../Input/GenericInput.vue'
-import GenericSelect from '../../Select/GenericSelect.vue'
+import GenericButton from '@components/Generics/GenericButton.vue'
+import GenericInput from '@components/Input/GenericInput.vue'
+import GenericSelect from '@components/Select/GenericSelect.vue'
 export default {
   components: {
     GenericButton,

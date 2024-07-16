@@ -36,7 +36,7 @@
           icon-name-attribute="arrow-left"
           @click="$router.push('/saleServiceInvoice.htm')"
         />
-        <GenericButton
+        <generic-button
           name="Copy Invoice"
           type="primary"
           icon-name-attribute="document-copy"
@@ -1029,15 +1029,15 @@
 </template>
 
 <script>
-import GenericButton from '@components/Button/GenericButton.vue'
+import GenericButton from '@generics/GenericButton.vue'
 import LoadingPage from '@components/Loading/LoadingPage.vue'
-import LookUp from '@components/Lookup/LookUp.vue'
+import LookUp from '@generics/LookUp.vue'
 import GenericInput from '@components/Input/GenericInput.vue'
 import GenericPrepareTablePage from '@components/GenericPrepareTable/GenericPrepareTablePage.vue'
 import ColumnConfigPage from '@components/ColumnConfig/ColumnConfigPage.vue'
-import GenericSubPrepareTablePage from '@components/Generics/GenericSubPrepareTable/GenericSubPrepareTablePage.vue'
-import GenericSubPrepareTableTooPage from '@components/Generics/GenericSubPrepareTableToo/GenericSubPrepareTableTooPage.vue'
-import GenericLogisticsCalculationPage from '@components/Generics/GenericLogisticsCalculation/GenericLogisticsCalculationPage.vue'
+import GenericSubPrepareTablePage from '@generics/GenericSubPrepareTable/GenericSubPrepareTablePage.vue'
+import GenericSubPrepareTableTooPage from '@generics/GenericSubPrepareTableToo/GenericSubPrepareTableTooPage.vue'
+import GenericLogisticsCalculationPage from '@generics/GenericLogisticsCalculation/GenericLogisticsCalculationPage.vue'
 import MessageBox from '@components/MessageBox.vue'
 export default {
   // COMPONENTS

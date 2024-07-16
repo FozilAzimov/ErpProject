@@ -144,7 +144,7 @@ export default {
     // baseURL: 'https://192.168.1.159:8443/api',
     // baseURL: 'https://192.168.1.64:8443/api',
     // baseURL: 'https://192.168.1.170:443/api',
-    baseURL: 'https://192.168.1.150:443/api',
+    baseURL: 'https://192.168.1.150:8443/api',
   },
 
   // PWA module configuration: https://go.nuxtjs.dev/pwa

@@ -18,7 +18,7 @@
             <li
               class="p-[7px] rounded-[50%] cursor-pointer border-[1px] border-[solid] border-[rgba(0,0,0,0.1] hover:border-[#3b89e9] focus:border-[#3b89e9] duration-[0.4s]"
               :style="{
-                background: 'radial-gradient(#fff, rgba(32,111,162,0.2))'
+                background: 'radial-gradient(#fff, rgba(32,111,162,0.2))',
               }"
               @click="isOpen"
             >
@@ -29,20 +29,20 @@
                     ? 'rotate-[-180deg] duration-[1s]'
                     : 'rotate-[0deg] duration-[1s]'
                 "
-                src="../../../assets/icons/arrow.png"
+                src="@assets/icons/arrow.png"
                 alt="arrow"
               />
             </li>
             <li
               class="p-[7px] rounded-[50%] cursor-pointer border-[1px] border-[solid] border-[rgba(0,0,0,0.1] hover:border-[#3b89e9] focus:border-[#3b89e9] duration-[0.4s]"
               :style="{
-                background: 'radial-gradient(#fff, rgba(32,111,162,0.2))'
+                background: 'radial-gradient(#fff, rgba(32,111,162,0.2))',
               }"
               @click="isClose"
             >
               <img
                 class="w-[11px]"
-                src="../../../assets/icons/remove.png"
+                src="@assets/icons/remove.png"
                 alt="remove"
               />
             </li>
@@ -57,8 +57,8 @@
             : 'duration-[1s]  overflow-hidden'
         "
       >
-		<div class="flex gap-2">
-			<GenericButton
+        <div class="flex gap-2">
+          <GenericButton
             name="Back"
             pl="15"
             pt="3"
@@ -67,7 +67,7 @@
             bggradient="linear-gradient(90deg, rgba(75,157,162,1) 0%, rgba(0,155,255,1) 0%, rgba(0,155,255,1) 99%)"
             textsize="15"
           />
-			 <GenericButton
+          <GenericButton
             name="Copy"
             pl="15"
             pt="3"
@@ -79,9 +79,8 @@
         </div>
         <!-- =============================================== -->
         <div class="flex gap-8">
-			
           <ul class="flex flex-col gap-4 justify-start w-[350px]">
-				<li class="flex justify-between">
+            <li class="flex justify-between">
               <label>Real Count Check № </label>
               <GenericInput
                 width="150"
@@ -152,7 +151,7 @@
               />
             </li>
             <li class="flex justify-between">
-              <label>Approx qty </label>     
+              <label>Approx qty </label>
               <GenericInput
                 width="150"
                 widthtype="px"
@@ -164,7 +163,7 @@
                 textsize="13"
                 type="text"
               />
-            </li>  
+            </li>
             <li class="flex justify-between">
               <label>Barcode </label>
               <GenericInput
@@ -193,17 +192,15 @@
                 type="text"
               />
             </li>
-				 <li class="flex justify-between">
+            <li class="flex justify-between">
               <label>Change Qty</label>
-              <input
-                type="checkbox"
-              />
+              <input type="checkbox" />
             </li>
           </ul>
         </div>
         <!-- =============================================== -->
         <div class="flex gap-2">
-			<GenericButton
+          <GenericButton
             name="Finish"
             pl="15"
             pt="3"
@@ -212,7 +209,7 @@
             bggradient="linear-gradient(90deg, rgba(75,157,162,1) 0%, rgba(0,155,255,1) 0%, rgba(0,155,255,1) 99%)"
             textsize="15"
           />
-			 <GenericButton
+          <GenericButton
             name="Save"
             pl="15"
             pt="3"
@@ -231,8 +228,8 @@
             textsize="15"
           />
         </div>
-		  <div class="flex gap-2">
-			<GenericButton
+        <div class="flex gap-2">
+          <GenericButton
             name="Save to all"
             pl="15"
             pt="3"
@@ -241,7 +238,7 @@
             bggradient="linear-gradient(90deg, rgba(75,157,162,1) 0%, rgba(0,155,255,1) 0%, rgba(0,155,255,1) 99%)"
             textsize="15"
           />
-			 <GenericButton
+          <GenericButton
             name="Clear all"
             pl="15"
             pt="3"
@@ -266,22 +263,16 @@
 </template>
 
 <script>
-import axios from 'axios'
-// Icons url
-import search from '../../../assets/icons/search.png'
-import printer from '../../../assets/icons/printer.png'
-import LookUp from '../../Lookup/LookUp.vue'
-
-// Components
-import LoadingPage from '../../Loading/LoadingPage.vue'
-import GenericButton from '../../Button/GenericButton.vue'
+import LookUp from '@generics/LookUp.vue'
+import LoadingPage from '@components/Loading/LoadingPage.vue'
+import GenericButton from '@components/Button/GenericButton.vue'
 // import GenericTablePage from '../GenericTable/GenericTablePage.vue'
 
 export default {
   components: {
     LoadingPage,
     GenericButton,
-    LookUp
+    LookUp,
     //  GenericTablePage
   },
   data() {
@@ -295,10 +286,6 @@ export default {
       tableBody: [],
       tableHeadLength: null,
       isThereBody: false,
-      imgUrl: {
-        search,
-        printer
-      },
       tableId: [],
       selectData: {},
       formData: new Map(),
@@ -311,9 +298,11 @@ export default {
       radio: '1',
       radioSaldo: '1',
       select: '',
-      showHidePerson: false
+      showHidePerson: false,
     }
   },
+
+  // MOUNTED
   mounted() {
     // Table function
     this.getTableRequest()
@@ -326,35 +315,27 @@ export default {
     },
     getTableRequest() {
       this.isLoading = !this.isLoading
-      axios
-        .post(
-          `https://192.168.1.55:8443/api/invoice/purchaseInvoiceList`,
-          {
-            current_page: 1,
-            page_size: this.pageSize_value,
-            searchForm: {
-              keyword: this.keywordValue,
-              from_date: new Date(Object.fromEntries(this.formData).from)
-                .toLocaleString('en-GB')
-                .split(',')
-                .join(''),
-              to_date: new Date(Object.fromEntries(this.formData).to)
-                .toLocaleString('en-GB')
-                .split(',')
-                .join('')
-            },
-            billStatus: Object.fromEntries(this.formData).bill,
-            payStatus: Object.fromEntries(this.formData).pay,
-            invoiceOnWayStatus: Object.fromEntries(this.formData).invoice,
-            departmentId: Object.fromEntries(this.formData).departments,
-            warehouseId: Object.fromEntries(this.formData).warehouse
+      this.$axios
+        .post(`invoice/purchaseInvoiceList`, {
+          current_page: 1,
+          page_size: this.pageSize_value,
+          searchForm: {
+            keyword: this.keywordValue,
+            from_date: new Date(Object.fromEntries(this.formData).from)
+              .toLocaleString('en-GB')
+              .split(',')
+              .join(''),
+            to_date: new Date(Object.fromEntries(this.formData).to)
+              .toLocaleString('en-GB')
+              .split(',')
+              .join(''),
           },
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem('token')}`
-            }
-          }
-        )
+          billStatus: Object.fromEntries(this.formData).bill,
+          payStatus: Object.fromEntries(this.formData).pay,
+          invoiceOnWayStatus: Object.fromEntries(this.formData).invoice,
+          departmentId: Object.fromEntries(this.formData).departments,
+          warehouseId: Object.fromEntries(this.formData).warehouse,
+        })
         .then((res) => {
           this.tableBody = []
           this.isLoading = !this.isLoading
@@ -401,20 +382,12 @@ export default {
     // Table Action Open button
     getTableRowOpen(thisId) {
       this.isLoading = !this.isLoading
-      axios
-        .post(
-          `https://192.168.1.55:8443/api/invoice/preparePurchaseInvoice`,
-          {
-            current_page: 1,
-            page_size: this.pageSize_value,
-            searchForm: { keyword: this.keywordValue || '', id: thisId }
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem('token')}`
-            }
-          }
-        )
+      this.$axios
+        .post(`invoice/preparePurchaseInvoice`, {
+          current_page: 1,
+          page_size: this.pageSize_value,
+          searchForm: { keyword: this.keywordValue || '', id: thisId },
+        })
         .then((res) => {
           this.isLoading = !this.isLoading
           this.$router.push('/preparePurchaseInvoiceNew.htm')
@@ -442,8 +415,8 @@ export default {
     },
     isClose() {
       this.isCloseTable = !this.isCloseTable
-    }
-  }
+    },
+  },
 }
 </script>
 

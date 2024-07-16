@@ -5,16 +5,16 @@
     <generic-button name="Connect" type="primary" />
     <div class="flex items-center gap-1">
       <span class="text-[15px]">Baud:</span>
-      <generic-select
-        textsize="13"
-        :max-width="80"
-        :min-width="50"
-        :is-def-option="true"
-        is-def-option-title=""
+      <look-up
+        dwidth="100"
+        :defvalue="`${selectedSelectValue}`"
+        :options-data="selectData"
+        :popper-append-to-body="true"
       />
     </div>
     <generic-button name="Clear" />
     <generic-input
+      :value="`${baundRate}` || ''"
       width="80"
       height="25"
       pl="10"
@@ -23,7 +23,7 @@
       pb="2"
       textsize="13"
       type="text"
-      :disabled="true"
+      :disabled="!isNaN(baundRate) ? false : true"
       placeholder="weighType"
     />
     <generic-input
@@ -38,7 +38,7 @@
       placeholder="def.commands"
     />
     <generic-input
-      value=""
+      :value="`${selectedSelectValue}` || ''"
       width="80"
       height="25"
       pl="10"
@@ -47,7 +47,8 @@
       pb="2"
       textsize="13"
       type="text"
-      :disabled="true"
+      placeholder="baundRate"
+      :disabled="!isNaN(selectedSelectValue) ? false : true"
     />
     <generic-input
       width="80"
@@ -109,14 +110,58 @@
 </template>
 
 <script>
-import GenericButton from '@components/Generics/GenericButton.vue'
+import GenericButton from '@generics/GenericButton.vue'
 import GenericInput from '@components/Input/GenericInput.vue'
-import GenericSelect from '@components/Select/GenericSelect.vue'
+import LookUp from '@generics/LookUp.vue'
 export default {
   components: {
     GenericButton,
     GenericInput,
-    GenericSelect,
+    LookUp,
+  },
+
+  // PROPS
+  props: {
+    defaultData: {
+      type: Object,
+      default: () => {},
+    },
+  },
+
+  // DATA
+  data() {
+    return {
+      selectData: [
+        { id: 110, name: 110 },
+        { id: 300, name: 300 },
+        { id: 600, name: 600 },
+        { id: 1200, name: 1200 },
+        { id: 2400, name: 2400 },
+        { id: 4800, name: 4800 },
+        { id: 9600, name: 9600 },
+        { id: 14400, name: 14400 },
+        { id: 19200, name: 19200 },
+        { id: 38400, name: 38400 },
+        { id: 57600, name: 57600 },
+        { id: 115200, name: 115200 },
+        { id: 128000, name: 128000 },
+        { id: 256000, name: 256000 },
+      ],
+      selectedSelectValue: '',
+      baundRate: '',
+    }
+  },
+
+  // WATCH
+  watch: {
+    defaultData: {
+      handler(newVal) {
+        this.selectedSelectValue = newVal?.defaultWeighBaudRate
+        this.baundRate = newVal?.defaultWeighType
+      },
+      deep: true,
+    },
   },
 }
 </script>
+LookUp

@@ -7,7 +7,7 @@
     <transition name="fade">
       <ColumnConfigPage
         v-show="checkModal"
-        :right="tableHead"
+        :right="rightMap"
         :left="leftMap"
         :url="actionUrl"
         api="saveColumnConfig"
@@ -65,7 +65,7 @@
             dwidth="200"
             :name="element.subName"
             :defvalue="''"
-            :options-data="[]"
+            :options-data="topFilterSelect"
             @customFunction="getInputAndLookUpValueAction"
           />
         </span>
@@ -76,11 +76,7 @@
         class="border-[1px] border-solid border-[rgba(0,0,0,0.05)] p-[12px] bg-gradient-to-b from-transparent via-transparent to-gray-200 shadow-md flex items-center justify-between"
       >
         <div class="flex items-center gap-[10px]">
-          <img
-            src="../../assets/icons/user-black.png"
-            alt="user"
-            class="w-[14px]"
-          />
+          <img src="@assets/icons/user-black.png" alt="user" class="w-[14px]" />
           <h1 class="font-bold text-[rgb(49,126,172)] text-[14px] uppercase">
             Batch List
           </h1>
@@ -94,11 +90,7 @@
               }"
               @click="openColumnConfig"
             >
-              <img
-                class="w-[11px]"
-                src="../../assets/icons/gear.png"
-                alt="gear"
-              />
+              <img class="w-[11px]" src="@assets/icons/gear.png" alt="gear" />
             </li>
             <li
               class="p-[7px] rounded-[50%] cursor-pointer border-[1px] border-[solid] border-[rgba(0,0,0,0.1] hover:border-[#3b89e9] focus:border-[#3b89e9] duration-[0.4s]"
@@ -114,7 +106,7 @@
                     ? 'rotate-[-180deg] duration-[1s]'
                     : 'rotate-[0deg] duration-[1s]'
                 "
-                src="../../assets/icons/arrow.png"
+                src="@assets/icons/arrow.png"
                 alt="arrow"
               />
             </li>
@@ -127,7 +119,7 @@
             >
               <img
                 class="w-[11px]"
-                src="../../assets/icons/remove.png"
+                src="@assets/icons/remove.png"
                 alt="remove"
               />
             </li>
@@ -146,7 +138,7 @@
           name="Add New"
           type="primary"
           :margin="true"
-          @click="$router.push('/prepareExpenseInvoice.htm')"
+          @click="$router.push('/prepareBatchNew.htm')"
         />
         <div class="p-2">
           <div class="flex items-center justify-between mb-1">
@@ -156,7 +148,6 @@
                 class="border-[1px] border-solid border-[rgba(171,177,187,0.7)] w-[60px] px-[5px] py-[3px] cursor-pointer rounded-[2px] text-[14px] outline-none"
                 @change="getTableRequest()"
               >
-                <option value="1">1</option>
                 <option value="10">10</option>
                 <option value="25">25</option>
                 <option value="50">50</option>
@@ -192,8 +183,10 @@
             :tablebody="tableBody"
             :tableheadlength="tableHeadLength"
             :istherebody="isThereBody"
-            open-url="prepareSaleInvoiceNew"
+            :productions-action-buttons="true"
+            open-url="prepareBatchNew"
             height="600"
+            @pageEmitAction="getTableRequest"
           />
         </div>
       </div>
@@ -202,7 +195,7 @@
 </template>
 
 <script>
-import GenericButton from '@components/Generics/GenericButton.vue'
+import GenericButton from '@generics/GenericButton.vue'
 import LoadingPage from '@components/Loading/LoadingPage.vue'
 import GenericInput from '@components/Input/GenericInput.vue'
 import GenericInputDatePage from '@components/InputDate/GenericInputDatePage.vue'
@@ -226,18 +219,20 @@ export default {
       pageSize_value: 10,
       topFilterData: [],
       allSelectAndInputValues: {},
+      leftMap: {},
+      rightMap: {},
       users: [],
-      tableData: [],
+      tableHeadData: {},
       tableHead: {},
       tableBody: [],
+      customObject: {},
       tableHeadLength: null,
       isThereBody: false,
-      tableId: [],
       checkModal: false,
       actionUrl: '',
-      leftMap: {},
       isOpenTable: true,
       isCloseTable: true,
+      topFilterSelect: [],
     }
   },
 
@@ -258,7 +253,25 @@ export default {
     },
     openColumnConfig() {
       this.checkModal = true
+
+      const body = {
+        actionUrl: 'batches',
+      }
+      this.$axios
+        .post(`/base/columnsConfig`, body)
+        .then(({ data: { leftMap, rightMap, actionUrl } }) => {
+          this.isLoading = !this.isLoading
+          this.leftMap = leftMap
+          this.rightMap = rightMap
+          this.actionUrl = actionUrl
+        })
+        .catch((error) => {
+          this.isLoading = !this.isLoading
+          // eslint-disable-next-line no-console
+          console.log(error)
+        })
     },
+    // Column config uchun ishlaydi
     // Table page ni ochish va yopish uchun
     isOpen() {
       this.isOpenTable = !this.isOpenTable
@@ -266,6 +279,7 @@ export default {
     isClose() {
       this.isCloseTable = !this.isCloseTable
     },
+    // Table page ni ochish va yopish uchun
 
     // page yuqorisidagi filterlar uchun data yaratish
     createDataFiltering() {
@@ -307,38 +321,48 @@ export default {
 
     // page request action
     getTableRequest() {
+      const body = {
+        current_page: 1,
+        page_size: this.pageSize_value,
+        searchForm: {
+          keyword: this.allSelectAndInputValues?.searchInput || '',
+        },
+        dateFrom: this.allSelectAndInputValues?.dateFrom
+          ? new Date(this.allSelectAndInputValues?.dateFrom)
+              .toLocaleString('en-GB')
+              .split(',')
+              .join('')
+          : '',
+        dateTo: this.allSelectAndInputValues?.dateTo
+          ? new Date(this.allSelectAndInputValues?.dateTo)
+              .toLocaleString('en-GB')
+              .split(',')
+              .join('')
+          : '',
+        batchYear: this.allSelectAndInputValues?.year || '',
+        batchNumber: this.allSelectAndInputValues?.batch || '',
+        colorId: this.allSelectAndInputValues?.pantoneCode || '',
+      }
+
       this.isLoading = !this.isLoading
       this.$axios
-        .post(`/batch/batchesAjaxLoad`, {
-          current_page: 1,
-          page_size: this.pageSize_value,
-          searchForm: {
-            keyword: this.allSelectAndInputValues?.searchInput || '',
-          },
-          dateFrom:
-            new Date(this.allSelectAndInputValues?.dateFrom)
-              .toLocaleString('en-GB')
-              .split(',')
-              .join('') || '',
-          dateTo:
-            new Date(this.allSelectAndInputValues?.dateTo)
-              .toLocaleString('en-GB')
-              .split(',')
-              .join('') || '',
-          batchYear: this.allSelectAndInputValues?.year || '',
-          batchNumber: this.allSelectAndInputValues?.batch || '',
-          colorId: this.allSelectAndInputValues?.pantoneCode || '',
-        })
-        .then(({ data: { response } }) => {
-          this.tableBody = []
-          this.isLoading = !this.isLoading
-          this.tableHead = response.rightMap
-          this.leftMap = response.leftMap
-          this.actionUrl = response.actionUrl
-          this.tableData = response.invoiceList
-          this.selectData = response.invoiceSearchDTO
-          this.getTableBody()
-        })
+        .post(`/batch/batchesAjaxLoad`, body)
+        .then(
+          ({
+            data: { columnNamesMap, batchListMap, colorList, actionUrl },
+          }) => {
+            this.tableBody = batchListMap
+            this.isLoading = !this.isLoading
+            this.tableHeadData = columnNamesMap
+            this.actionUrl = actionUrl
+            this.topFilterSelect = colorList
+            this.getTableBody()
+
+            this.tableBody.length
+              ? (this.isThereBody = true)
+              : (this.isThereBody = false)
+          }
+        )
         .catch((error) => {
           this.isLoading = !this.isLoading
           // eslint-disable-next-line no-console
@@ -348,27 +372,14 @@ export default {
 
     // Generic Table action Start
     getTableBody() {
-      const arr = new Set()
-      for (const obj of this.tableData) {
-        arr.add(obj.id)
-        const data = new Map()
-        for (const key in this.tableHead) {
-          const value = this.tableHead[key].code
-          if (this.tableHead[key].code in obj) {
-            if (obj[value]) {
-              if (typeof obj[value] === 'object')
-                data.set(value, obj[value].value)
-              else data.set(value, obj[value])
-            } else data.set(value, obj[value])
-          } else data.set(value, false)
+      for (const iterator in this.tableHeadData) {
+        this.customObject[iterator] = {
+          name: this.tableHeadData[iterator],
+          code: this.tableHeadData[iterator],
         }
-        this.tableBody.push(Object.fromEntries(data))
       }
-      this.tableHeadLength = Object.entries(this.tableHead).length
-      this.tableBody.length > 0
-        ? (this.isThereBody = true)
-        : (this.isThereBody = false)
-      this.tableId = Array.from(arr)
+      this.tableHead = this.customObject
+      this.tableHeadLength = Object.keys(this.tableHead).length + 1
     },
     // Generic Table action End
   },

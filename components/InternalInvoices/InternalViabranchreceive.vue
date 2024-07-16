@@ -179,39 +179,21 @@
               <GenericInput
                 v-model="keywordValue"
                 width="200"
-                height="30"
-                pl="10"
-                pr="10"
-                pt="2"
-                pb="2"
-                textsize="13"
                 type="text"
                 placeholder="Search..."
                 @enter="getTableRequest"
                 @input="getInputValue"
               />
-              <GenericButton
+              <generic-button
                 name="Search"
-                pl="10"
-                pt="4"
-                pr="10"
-                pb="4"
-                bg="rgba(54, 155, 215, 0.8)"
-                textsize="14"
-                :url="imgUrl.search"
-                :istherepicture="true"
+                type="primary"
+                icon-name-attribute="search"
                 @click="getTableRequest"
               />
-              <GenericButton
+              <generic-button
                 name="Print Preview"
-                pl="10"
-                pt="4"
-                pr="10"
-                pb="4"
-                bg="rgb(126,183,62)"
-                textsize="14"
-                :url="imgUrl.printer"
-                :istherepicture="true"
+                type="success"
+                icon-name-attribute="printer"
               />
             </div>
           </div>
@@ -231,17 +213,13 @@
 </template>
 
 <script>
-// Icons url
-import search from '../../assets/icons/search.png'
-import printer from '../../assets/icons/printer.png'
-// Components
-import LoadingPage from '../Loading/LoadingPage.vue'
-import GenericButton from '../Button/GenericButton.vue'
-import GenericInput from '../Input/GenericInput.vue'
-import GenericSelect from '../Select/GenericSelect.vue'
-import GenericInputDatePage from '../InputDate/GenericInputDatePage.vue'
-import ColumnConfigPage from '../ColumnConfig/ColumnConfigPage.vue'
-import GenericTablePage from '../GenericTable/GenericTablePage.vue'
+import LoadingPage from '@components/Loading/LoadingPage.vue'
+import GenericButton from '@components/Generics/GenericButton.vue'
+import GenericInput from '@components/Input/GenericInput.vue'
+import GenericSelect from '@components/Select/GenericSelect.vue'
+import GenericInputDatePage from '@components/InputDate/GenericInputDatePage.vue'
+import ColumnConfigPage from '@components/ColumnConfig/ColumnConfigPage.vue'
+import GenericTablePage from '@components/GenericTable/GenericTablePage.vue'
 export default {
   components: {
     LoadingPage,
@@ -263,10 +241,6 @@ export default {
       tableBody: [],
       tableHeadLength: null,
       isThereBody: false,
-      imgUrl: {
-        search,
-        printer,
-      },
       tableId: [],
       selectData: {},
       formData: new Map(),

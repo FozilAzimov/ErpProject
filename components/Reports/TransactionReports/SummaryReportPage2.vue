@@ -277,12 +277,11 @@
 </template>
 
 <script>
-import GenericButton from '../../Button/GenericButton.vue'
-import GenericActiveLookUpPage from '../../Generics/GenericActiveLookUp/GenericActiveLookUpPage.vue'
-import GenericInput from '../../Input/GenericInput.vue'
-import LookUp from '../../Lookup/LookUp.vue'
-import PageTable from './PageTable.vue'
-
+import GenericButton from '@components/Button/GenericButton.vue'
+import GenericActiveLookUpPage from '@generics/GenericActiveLookUp/GenericActiveLookUpPage.vue'
+import GenericInput from '@components/Input/GenericInput.vue'
+import LookUp from '@generics/LookUp.vue'
+import PageTable from '@components/Reports/TransactionReports/PageTable.vue'
 export default {
   components: {
     GenericButton,
@@ -292,6 +291,7 @@ export default {
     PageTable,
   },
 
+  // PROPS
   props: {
     data: {
       type: Array,
@@ -311,6 +311,7 @@ export default {
     },
   },
 
+  // DATA
   data() {
     return {
       isLoading: false,
@@ -356,6 +357,7 @@ export default {
     }
   },
 
+  // METHOD
   methods: {
     // Lookup's Valuesini olish
     getLookUpValue(key, value, id) {

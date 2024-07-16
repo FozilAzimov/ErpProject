@@ -985,15 +985,15 @@
 </template>
 
 <script>
-import GenericButton from '../Button/GenericButton.vue'
-import LoadingPage from '../Loading/LoadingPage.vue'
-import LookUp from '../Lookup/LookUp.vue'
-import GenericInput from '../Input/GenericInput.vue'
-import GenericPrepareTablePage from '../GenericPrepareTable/GenericPrepareTablePage.vue'
-import ColumnConfigPage from '../ColumnConfig/ColumnConfigPage.vue'
-import GenericSubPrepareTablePage from '../Generics/GenericSubPrepareTable/GenericSubPrepareTablePage.vue'
-import GenericSubPrepareTableTooPage from '../Generics/GenericSubPrepareTableToo/GenericSubPrepareTableTooPage.vue'
-import GenericLogisticsCalculationPage from '../Generics/GenericLogisticsCalculation/GenericLogisticsCalculationPage.vue'
+import GenericButton from '@components/Button/GenericButton.vue'
+import LoadingPage from '@components/Loading/LoadingPage.vue'
+import LookUp from '@generics/LookUp.vue'
+import GenericInput from '@components/Input/GenericInput.vue'
+import GenericPrepareTablePage from '@components/GenericPrepareTable/GenericPrepareTablePage.vue'
+import ColumnConfigPage from '@components/ColumnConfig/ColumnConfigPage.vue'
+import GenericSubPrepareTablePage from '@components/Generics/GenericSubPrepareTable/GenericSubPrepareTablePage.vue'
+import GenericSubPrepareTableTooPage from '@components/Generics/GenericSubPrepareTableToo/GenericSubPrepareTableTooPage.vue'
+import GenericLogisticsCalculationPage from '@components/Generics/GenericLogisticsCalculation/GenericLogisticsCalculationPage.vue'
 export default {
   // COMPONENTS
   components: {

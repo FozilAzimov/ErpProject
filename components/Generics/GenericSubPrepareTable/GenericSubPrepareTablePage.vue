@@ -268,16 +268,10 @@
               <div
                 class="flex flex-col justify-center items-start text-[rgba(0,0,0,0.5)]"
               >
-                <GenericButton
+                <generic-button
                   name="Add an Item"
-                  pl="10"
-                  pt="3"
-                  pr="10"
-                  pb="3"
-                  bg="rgb(119,191,120)"
-                  textsize="14"
-                  :url="img.plus"
-                  :istherepicture="true"
+                  type="success"
+                  icon-name-attribute="circle-plus-outline"
                   @click="addAnItemAction"
                 />
               </div>
@@ -290,17 +284,12 @@
 </template>
 
 <script>
-// import icons
-import plus from '../../../assets/icons/plus.png'
-import del from '../../../assets/icons/delete-button.png'
-
-// import components
-import LookUp from '../../Lookup/LookUp.vue'
-import GenericInputDatePage from '../../InputDate/GenericInputDatePage.vue'
-import LoadingPage from '../../Loading/LoadingPage.vue'
-import GenericButton from '../../Button/GenericButton.vue'
-import GenericInvoiceItemModalPage from '../../GenericInvoiceItemModal/GenericInvoiceItemModalPage.vue'
-import GenericInput from '../../Input/GenericInput.vue'
+import LookUp from '@generics/LookUp.vue'
+import GenericInputDatePage from '@components/InputDate/GenericInputDatePage.vue'
+import LoadingPage from '@components/Loading/LoadingPage.vue'
+import GenericButton from '@generics/GenericButton.vue'
+import GenericInvoiceItemModalPage from '@components/GenericInvoiceItemModal/GenericInvoiceItemModalPage.vue'
+import GenericInput from '@components/Input/GenericInput.vue'
 
 export default {
   // COMPONENTS
@@ -352,10 +341,6 @@ export default {
   // DATA
   data() {
     return {
-      img: {
-        plus,
-        del,
-      },
       isLoading: false,
       isOpenModal: false,
       tableBody: [],

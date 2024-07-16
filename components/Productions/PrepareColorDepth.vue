@@ -17,11 +17,7 @@
         class="border-[1px] border-solid border-[rgba(0,0,0,0.05)] p-[12px] bg-gradient-to-b from-transparent via-transparent to-gray-200 shadow-md flex items-center justify-between mt-1"
       >
         <div class="flex items-center gap-[10px]">
-          <img
-            src="../../assets/icons/user-black.png"
-            alt="user"
-            class="w-[14px]"
-          />
+          <img src="@assets/icons/user-black.png" alt="user" class="w-[14px]" />
           <h1 class="font-bold text-[rgb(49,126,172)] text-[14px] uppercase">
             {{
               btnType === 'view'
@@ -41,11 +37,7 @@
               }"
               @click="openColumnConfig"
             >
-              <img
-                class="w-[11px]"
-                src="../../assets/icons/gear.png"
-                alt="gear"
-              />
+              <img class="w-[11px]" src="@assets/icons/gear.png" alt="gear" />
             </li>
             <li
               class="p-[7px] rounded-[50%] cursor-pointer border-[1px] border-[solid] border-[rgba(0,0,0,0.1] hover:border-[#3b89e9] focus:border-[#3b89e9] duration-[0.4s]"
@@ -61,7 +53,7 @@
                     ? 'rotate-[-180deg] duration-[1s]'
                     : 'rotate-[0deg] duration-[1s]'
                 "
-                src="../../assets/icons/arrow.png"
+                src="@assets/icons/arrow.png"
                 alt="arrow"
               />
             </li>
@@ -74,7 +66,7 @@
             >
               <img
                 class="w-[11px]"
-                src="../../assets/icons/remove.png"
+                src="@assets/icons/remove.png"
                 alt="remove"
               />
             </li>
@@ -154,7 +146,7 @@
 </template>
 
 <script>
-import GenericButton from '@components/Generics/GenericButton.vue'
+import GenericButton from '@generics/GenericButton.vue'
 import GenericInput from '@components/Input/GenericInput.vue'
 import LoadingPage from '@components/Loading/LoadingPage.vue'
 export default {
@@ -173,7 +165,7 @@ export default {
       isOpenTable: true,
       isCloseTable: true,
       btnType: '',
-      rowID: null,
+      pageID: null,
       editData: {},
       allInputAndLookUpValue: {},
       elementData: [],
@@ -181,11 +173,22 @@ export default {
     }
   },
 
+  // WATCH
+  watch: {
+    pageID(newVal) {
+      this.btnTypeSpecifyingAction()
+    },
+  },
+
+  // CREATED
+  created() {
+    this.btnType = JSON.parse(localStorage.getItem('allTrueAndFalseData'))?.type
+    // page ID sini olish
+    this.pageID = this.$route.params?.id
+  },
+
   // MOUNTED
   mounted() {
-    this.btnType = JSON.parse(localStorage.getItem('allTrueAndFalseData'))?.type
-    this.rowID = JSON.parse(localStorage.getItem('allTrueAndFalseData'))?.id
-
     // function
     this.dataCreatedAction()
 
@@ -213,6 +216,13 @@ export default {
     goBackAction() {
       localStorage.removeItem('allTrueAndFalseData')
       this.$router.push('/colorDepth.htm')
+    },
+
+    // Specifying the buttun type action
+    btnTypeSpecifyingAction() {
+      if (!this.pageID) {
+        localStorage.removeItem('allTrueAndFalseData')
+      }
     },
 
     // Data created
@@ -254,7 +264,7 @@ export default {
         this.isLoading = !this.isLoading
         this.$axios
           .post(`/colorDepth/prepareColorDepthViewAjaxLoad`, {
-            id: this.rowID,
+            id: this.pageID,
             page_current: 1,
             page_size: 25,
           })
@@ -271,14 +281,14 @@ export default {
         this.isLoading = !this.isLoading
         this.$axios
           .post(`/colorDepth/prepareColorDepthAjaxLoad`, {
-            id: this.rowID,
+            id: this.pageID,
             page_current: 1,
             page_size: 25,
           })
           .then(({ data: { currencyList, color } }) => {
             this.isLoading = !this.isLoading
             this.editData = color
-            this.rowID = color?.id
+            this.pageID = color?.id
             this.currencyList = currencyList
             this.allInputAndLookUpValue.currencyId = currencyList?.[0]?.id
             this.allInputAndLookUpValue.name = color?.name
@@ -302,7 +312,7 @@ export default {
       if (this.allInputAndLookUpValue.name) {
         const color = {}
         if (this.btnType === 'edit') {
-          color.id = this.rowID || ''
+          color.id = this.pageID || ''
           color.name = this.allInputAndLookUpValue?.name || ''
           color.currency = { id: this.allInputAndLookUpValue?.currencyId || '' }
           color.price = this.allInputAndLookUpValue?.price || ''

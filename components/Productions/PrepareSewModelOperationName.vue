@@ -17,11 +17,7 @@
         class="border-[1px] border-solid border-[rgba(0,0,0,0.05)] p-[12px] bg-gradient-to-b from-transparent via-transparent to-gray-200 shadow-md flex items-center justify-between mt-1"
       >
         <div class="flex items-center gap-[10px]">
-          <img
-            src="../../assets/icons/user-black.png"
-            alt="user"
-            class="w-[14px]"
-          />
+          <img src="@assets/icons/user-black.png" alt="user" class="w-[14px]" />
           <h1 class="font-bold text-[rgb(49,126,172)] text-[14px] uppercase">
             {{
               btnType === 'view'
@@ -41,11 +37,7 @@
               }"
               @click="openColumnConfig"
             >
-              <img
-                class="w-[11px]"
-                src="../../assets/icons/gear.png"
-                alt="gear"
-              />
+              <img class="w-[11px]" src="@assets/icons/gear.png" alt="gear" />
             </li>
             <li
               class="p-[7px] rounded-[50%] cursor-pointer border-[1px] border-[solid] border-[rgba(0,0,0,0.1] hover:border-[#3b89e9] focus:border-[#3b89e9] duration-[0.4s]"
@@ -61,7 +53,7 @@
                     ? 'rotate-[-180deg] duration-[1s]'
                     : 'rotate-[0deg] duration-[1s]'
                 "
-                src="../../assets/icons/arrow.png"
+                src="@assets/icons/arrow.png"
                 alt="arrow"
               />
             </li>
@@ -74,7 +66,7 @@
             >
               <img
                 class="w-[11px]"
-                src="../../assets/icons/remove.png"
+                src="@assets/icons/remove.png"
                 alt="remove"
               />
             </li>
@@ -155,7 +147,7 @@
 </template>
 
 <script>
-import GenericButton from '@components/Generics/GenericButton.vue'
+import GenericButton from '@generics/GenericButton.vue'
 import GenericInput from '@components/Input/GenericInput.vue'
 import LoadingPage from '@components/Loading/LoadingPage.vue'
 export default {
@@ -175,7 +167,7 @@ export default {
       isOpenTable: true,
       isCloseTable: true,
       btnType: '',
-      rowID: null,
+      pageID: null,
       viewData: {},
       editData: {},
       inputAndLookUpValue: {},
@@ -186,18 +178,25 @@ export default {
 
   // WATCH
   watch: {
+    pageID(newVal) {
+      this.btnTypeSpecifyingAction()
+    },
     radio(newVal) {
       this.inputAndLookUpValue.entryExit = newVal
     },
+  },
+
+  // CREATED
+  created() {
+    this.btnType = JSON.parse(localStorage.getItem('allTrueAndFalseData'))?.type
+    // page ID sini olish
+    this.pageID = this.$route.params?.id
   },
 
   // MOUNTED
   mounted() {
     // function
     this.dataCreatedAction()
-
-    this.btnType = JSON.parse(localStorage.getItem('allTrueAndFalseData'))?.type
-    this.rowID = JSON.parse(localStorage.getItem('allTrueAndFalseData'))?.id
     // Table function
     this.getTableRequest()
   },
@@ -222,6 +221,13 @@ export default {
     goBackAction() {
       localStorage.removeItem('allTrueAndFalseData')
       this.$router.push('/sewModelOperationName.htm')
+    },
+
+    // Specifying the buttun type action
+    btnTypeSpecifyingAction() {
+      if (!this.pageID) {
+        localStorage.removeItem('allTrueAndFalseData')
+      }
     },
 
     // Data created
@@ -295,7 +301,7 @@ export default {
         this.isLoading = !this.isLoading
         this.$axios
           .post(`/sewModelOperationName/prepareSewModelOperationNameAjaxLoad`, {
-            id: this.rowID,
+            id: this.pageID,
             page_current: 1,
             page_size: 25,
           })
@@ -304,7 +310,7 @@ export default {
             this.viewData = colorVariantRecipeStageChild
             this.inputAndLookUpValue.name = colorVariantRecipeStageChild?.name
             this.inputAndLookUpValue.ecode = colorVariantRecipeStageChild?.ecode
-            this.rowID = colorVariantRecipeStageChild?.id
+            this.pageID = colorVariantRecipeStageChild?.id
           })
           .catch((error) => {
             this.isLoading = !this.isLoading
@@ -317,7 +323,7 @@ export default {
           .post(
             `/colorVariantRecipeStagePicture/prepareColorVariantRecipeStagePictureAjaxLoad`,
             {
-              id: this.rowID,
+              id: this.pageID,
               page_current: 1,
               page_size: 25,
             }
@@ -327,7 +333,7 @@ export default {
             this.editData = colorVariantRecipeStageChild
             this.inputAndLookUpValue.name = colorVariantRecipeStageChild?.name
             this.inputAndLookUpValue.ecode = colorVariantRecipeStageChild?.ecode
-            this.rowID = colorVariantRecipeStageChild?.id
+            this.pageID = colorVariantRecipeStageChild?.id
           })
           .catch((error) => {
             this.isLoading = !this.isLoading
@@ -338,7 +344,7 @@ export default {
         this.isLoading = !this.isLoading
         this.$axios
           .post(`/sewModelOperationName/prepareSewModelOperationNameAjaxLoad`, {
-            id: this.rowID,
+            id: this.pageID,
             page_current: 1,
             page_size: 25,
           })
@@ -347,7 +353,7 @@ export default {
             this.viewData = colorVariantRecipeStageChild
             this.inputAndLookUpValue.name = colorVariantRecipeStageChild?.name
             this.inputAndLookUpValue.ecode = colorVariantRecipeStageChild?.ecode
-            this.rowID = colorVariantRecipeStageChild?.id
+            this.pageID = colorVariantRecipeStageChild?.id
           })
           .catch((error) => {
             this.isLoading = !this.isLoading
@@ -367,7 +373,7 @@ export default {
       if (this.inputAndLookUpValue?.pictureName) {
         const colorVariantRecipeStagePicture = {}
         if (this.btnType === 'edit') {
-          colorVariantRecipeStagePicture.id = this.rowID
+          colorVariantRecipeStagePicture.id = this.pageID
           colorVariantRecipeStagePicture.pictureName =
             this.inputAndLookUpValue?.pictureName
           colorVariantRecipeStagePicture.active =

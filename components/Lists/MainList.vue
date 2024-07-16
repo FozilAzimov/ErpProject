@@ -166,11 +166,7 @@
         class="border-[1px] border-solid border-[rgba(0,0,0,0.05)] p-[12px] bg-gradient-to-b from-transparent via-transparent to-gray-200 shadow-md flex items-center justify-between"
       >
         <div class="flex items-center gap-[10px]">
-          <img
-            src="../../assets/icons/user-black.png"
-            alt="user"
-            class="w-[14px]"
-          />
+          <img src="@assets/icons/user-black.png" alt="user" class="w-[14px]" />
           <h1 class="font-bold text-[rgb(49,126,172)] text-[14px] uppercase">
             {{ $t('pages.purchaseinvoice.headerName') }}
           </h1>
@@ -184,11 +180,7 @@
               }"
               @click="openColumnConfig"
             >
-              <img
-                class="w-[11px]"
-                src="../../assets/icons/gear.png"
-                alt="gear"
-              />
+              <img class="w-[11px]" src="@assets/icons/gear.png" alt="gear" />
             </li>
             <li
               class="p-[7px] rounded-[50%] cursor-pointer border-[1px] border-[solid] border-[rgba(0,0,0,0.1] hover:border-[#3b89e9] focus:border-[#3b89e9] duration-[0.4s]"
@@ -204,7 +196,7 @@
                     ? 'rotate-[-180deg] duration-[1s]'
                     : 'rotate-[0deg] duration-[1s]'
                 "
-                src="../../assets/icons/arrow.png"
+                src="@assets/icons/arrow.png"
                 alt="arrow"
               />
             </li>
@@ -217,7 +209,7 @@
             >
               <img
                 class="w-[11px]"
-                src="../../assets/icons/remove.png"
+                src="@assets/icons/remove.png"
                 alt="remove"
               />
             </li>
@@ -232,18 +224,13 @@
             : 'duration-[1s] h-0 overflow-hidden'
         "
       >
-        <GenericButton
+        <generic-button
           name="Add New"
-          pl="10"
-          pt="3"
-          pr="10"
-          pb="3"
-          bg="rgba(54, 155, 215, 0.8)"
-          textsize="15"
-          margin="8"
+          type="primary"
+          :margin="true"
           @click="$router.push(`/${createEditUrl}.htm`)"
         />
-        <div class="mt-3 p-2">
+        <div class="p-2">
           <div class="flex items-center justify-between mb-1">
             <div class="text-[14px]">
               <select
@@ -251,7 +238,6 @@
                 class="border-[1px] border-solid border-[rgba(171,177,187,0.7)] w-[60px] px-[5px] py-[3px] cursor-pointer rounded-[2px] text-[14px] outline-none"
                 @change="getTableRequest()"
               >
-                <option value="1">1</option>
                 <option value="10">10</option>
                 <option value="25">25</option>
                 <option value="50">50</option>
@@ -264,39 +250,20 @@
               <GenericInput
                 v-model="keywordValue"
                 width="200"
-                height="30"
-                pl="10"
-                pr="10"
-                pt="2"
-                pb="2"
-                textsize="13"
                 type="text"
                 placeholder="Search..."
                 @change="getTableRequest"
                 @input="getInputValue"
               />
-              <GenericButton
+              <generic-button
                 name="Search"
-                pl="10"
-                pt="4"
-                pr="10"
-                pb="4"
-                bg="rgba(54, 155, 215, 0.8)"
-                textsize="14"
-                :url="imgUrl.search"
-                :istherepicture="true"
+                type="primary"
+                icon-name-attribute="search"
                 @click="getTableRequest"
               />
-              <GenericButton
+              <generic-button
                 name="Print Preview"
-                pl="10"
-                pt="4"
-                pr="10"
-                pb="4"
-                bg="rgb(126,183,62)"
-                textsize="14"
-                :url="imgUrl.printer"
-                :istherepicture="true"
+                icon-name-attribute="printer"
               />
             </div>
           </div>
@@ -315,18 +282,14 @@
 </template>
 
 <script>
-// Icons url
-import search from '../../assets/icons/search.png'
-import printer from '../../assets/icons/printer.png'
-// Components
-import LoadingPage from '../Loading/LoadingPage.vue'
-import GenericButton from '../Button/GenericButton.vue'
-import GenericSelect from '../Select/GenericSelect.vue'
-import GenericInputDatePage from '../InputDate/GenericInputDatePage.vue'
-import ColumnConfigPage from '../ColumnConfig/ColumnConfigPage.vue'
-import GenericTablePage from '../GenericTable/GenericTablePage.vue'
-import GenericInput from '../Input/GenericInput.vue'
-import SearchBar from '@/components/main/SearchBar.vue'
+import LoadingPage from '@components/Loading/LoadingPage.vue'
+import GenericButton from '@components/Generics/GenericButton.vue'
+import GenericSelect from '@components/Select/GenericSelect.vue'
+import GenericInputDatePage from '@components/InputDate/GenericInputDatePage.vue'
+import ColumnConfigPage from '@components/ColumnConfig/ColumnConfigPage.vue'
+import GenericTablePage from '@components/GenericTable/GenericTablePage.vue'
+import GenericInput from '@components/Input/GenericInput.vue'
+import SearchBar from '@components/main/SearchBar.vue'
 
 export default {
   components: {
@@ -360,10 +323,6 @@ export default {
       tableBody: [],
       tableHeadLength: null,
       isThereBody: false,
-      imgUrl: {
-        search,
-        printer,
-      },
       tableId: [],
       selectData: [],
       formData: new Map(),

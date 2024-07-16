@@ -137,7 +137,7 @@
 </template>
 
 <script>
-import GenericButton from '@components/Generics/GenericButton.vue'
+import GenericButton from '@generics/GenericButton.vue'
 import LoadingPage from '@components/Loading/LoadingPage.vue'
 import GenericInput from '@components/Input/GenericInput.vue'
 import ColumnConfigPage from '@components/ColumnConfig/ColumnConfigPage.vue'

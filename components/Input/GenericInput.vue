@@ -1,23 +1,21 @@
 <template>
-  <div>
-    <el-input
-      ref="enterInputREF"
-      v-model="input"
-      :type="type"
-      :placeholder="placeholder"
-      :disabled="disabled"
-      :size="size"
-      :style="{
-        width: widthtype === '%' ? `${width}%` : `${width}px`,
-        border: required ? 'none' : '1px solid red',
-        borderRadius: '5px',
-        color: valuecolor,
-      }"
-      @input="getInputValue"
-      @change="getTableRequest"
-    >
-    </el-input>
-  </div>
+  <el-input
+    ref="enterInputREF"
+    v-model="input"
+    :type="type"
+    :placeholder="placeholder"
+    :disabled="disabled"
+    :size="size"
+    :style="{
+      width: widthtype === '%' ? `${width}%` : `${width}px`,
+      border: required ? 'none' : '1px solid red',
+      borderRadius: '5px',
+      color: valuecolor,
+    }"
+    @input="getInputValue"
+    @change="getTableRequest"
+  >
+  </el-input>
 </template>
 
 <script>

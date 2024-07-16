@@ -32,8 +32,6 @@
           pb="3"
           bggradient="linear-gradient(to right, rgba(70,94,140,0.8),rgb(34,39,76))"
           textsize="14"
-          :url="img.goBack"
-          :istherepicture="true"
           to="/viabranchreceive.htm"
         />
         <h1 class="font-bold text-[rgb(49,126,172)] text-[14px] uppercase">
@@ -159,7 +157,9 @@
             </td>
             <td class="border-[1px] border-solid border-[#778899] p-[2px]">
               <GenericInput
-                :value="userId || parentID ? `${objData?.invoiceBillStatus}` : ''"
+                :value="
+                  userId || parentID ? `${objData?.invoiceBillStatus}` : ''
+                "
                 width="50"
                 widthtype="%"
                 height="23"
@@ -618,8 +618,6 @@
               pb="2"
               textsize="14"
               bggradient="linear-gradient(to top, rgb(25,52,79),rgba(25,52,79, 0.58))"
-              :url="img.setting"
-              :istherepicture="true"
               @click="openColumnConfig"
             />
             <GenericButton
@@ -640,8 +638,6 @@
               pb="2"
               textsize="14"
               bg="rgba(126,183,62, 0.8)"
-              :url="img.printer"
-              :istherepicture="true"
             />
             <GenericButton
               name="Print all Barcode"
@@ -651,8 +647,6 @@
               pb="2"
               textsize="14"
               bg="rgba(126,183,62, 0.8)"
-              :url="img.printer"
-              :istherepicture="true"
             />
           </div>
           <GenericPrepareTablePage
@@ -726,8 +720,6 @@
                   pb="2"
                   bggradient="linear-gradient(to top, rgb(25,52,79),rgba(25,52,79,0.5))"
                   textsize="14"
-                  :url="editPayDiscard.editPayShowHide1 ? img.edit : ''"
-                  :istherepicture="editPayDiscard.editPayShowHide1 && true"
                   @click="editTransactionColumns('topE')"
                 />
                 <GenericButton
@@ -802,8 +794,6 @@
                   pb="2"
                   bggradient="linear-gradient(to top, rgb(25,52,79),rgba(25,52,79,0.5))"
                   textsize="14"
-                  :url="editPayDiscard.editPayShowHide2 ? img.edit : ''"
-                  :istherepicture="editPayDiscard.editPayShowHide2 && true"
                   @click="editTransactionColumns('subE')"
                 />
                 <GenericButton
@@ -854,25 +844,16 @@
 </template>
 
 <script>
-// Icons url
-import goBack from '../../assets/icons/go-back.png'
-import copy from '../../assets/icons/copy.png'
-import setting from '../../assets/icons/settings.png'
-import printer from '../../assets/icons/printer.png'
-import del from '../../assets/icons/delete.png'
-import edit from '../../assets/icons/editIcon.svg'
-import logistics from '../../assets/icons/logistics.png'
-// Components
-import GenericButton from '../Button/GenericButton.vue'
-import LoadingPage from '../Loading/LoadingPage.vue'
-import LookUp from '../Lookup/LookUp.vue'
-import GenericInput from '../Input/GenericInput.vue'
-import GenericPrepareTablePage from '../GenericPrepareTable/GenericPrepareTablePage.vue'
-import ColumnConfigPage from '../ColumnConfig/ColumnConfigPage.vue'
-import GenericSubPrepareTablePage from '../Generics/GenericSubPrepareTable/GenericSubPrepareTablePage.vue'
-import GenericSubPrepareTableTooPage from '../Generics/GenericSubPrepareTableToo/GenericSubPrepareTableTooPage.vue'
-import GenericNuxtLinkButton from '../Generics/GenericNuxtLink/GenericNuxtLinkButton.vue'
-import MessageBox from '../MessageBox.vue'
+import GenericButton from '@components/Button/GenericButton.vue'
+import LoadingPage from '@components/Loading/LoadingPage.vue'
+import LookUp from '@generics/LookUp.vue'
+import GenericInput from '@components/Input/GenericInput.vue'
+import GenericPrepareTablePage from '@components/GenericPrepareTable/GenericPrepareTablePage.vue'
+import ColumnConfigPage from '@components/ColumnConfig/ColumnConfigPage.vue'
+import GenericSubPrepareTablePage from '@generics/GenericSubPrepareTable/GenericSubPrepareTablePage.vue'
+import GenericSubPrepareTableTooPage from '@generics/GenericSubPrepareTableToo/GenericSubPrepareTableTooPage.vue'
+import GenericNuxtLinkButton from '@generics/GenericNuxtLink/GenericNuxtLinkButton.vue'
+import MessageBox from '@components/MessageBox.vue'
 export default {
   // COMPONENTS
   components: {
@@ -933,15 +914,6 @@ export default {
       rightColumns: [],
       tableNameTranslateObj: {},
       isLoading: false,
-      img: {
-        goBack,
-        copy,
-        setting,
-        printer,
-        del,
-        edit,
-        logistics,
-      },
       objData: {},
       selectedRow: null,
       tableData: [],

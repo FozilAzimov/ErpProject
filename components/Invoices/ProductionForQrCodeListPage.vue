@@ -209,7 +209,7 @@
 import GenericInput from '@components/Input/GenericInput.vue'
 import GenericInputDatePage from '@components/InputDate/GenericInputDatePage.vue'
 import LoadingPage from '@components/Loading/LoadingPage.vue'
-import LookUp from '@components/Lookup/LookUp.vue'
+import LookUp from '@generics/LookUp.vue'
 export default {
   // COMPONENTS
   components: {

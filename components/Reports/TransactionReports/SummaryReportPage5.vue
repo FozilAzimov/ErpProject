@@ -145,9 +145,9 @@
 </template>
 
 <script>
-import GenericButton from '../../Button/GenericButton.vue'
-import GenericInput from '../../Input/GenericInput.vue'
-import PageTable from './PageTable.vue'
+import GenericButton from '@components/Button/GenericButton.vue'
+import GenericInput from '@components/Input/GenericInput.vue'
+import PageTable from '@components/Reports/TransactionReports/PageTable.vue'
 
 export default {
   components: {

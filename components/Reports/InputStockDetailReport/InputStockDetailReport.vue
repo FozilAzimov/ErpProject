@@ -14,11 +14,11 @@
           </h1>
         </div>
         <div>
-          <ul class="flex items-center gap-4"> 
+          <ul class="flex items-center gap-4">
             <li
               class="p-[7px] rounded-[50%] cursor-pointer border-[1px] border-[solid] border-[rgba(0,0,0,0.1] hover:border-[#3b89e9] focus:border-[#3b89e9] duration-[0.4s]"
               :style="{
-                background: 'radial-gradient(#fff, rgba(32,111,162,0.2))'
+                background: 'radial-gradient(#fff, rgba(32,111,162,0.2))',
               }"
               @click="isOpen"
             >
@@ -29,20 +29,20 @@
                     ? 'rotate-[-180deg] duration-[1s]'
                     : 'rotate-[0deg] duration-[1s]'
                 "
-                src="../../../assets/icons/arrow.png"
+                src="@assets/icons/arrow.png"
                 alt="arrow"
               />
             </li>
             <li
               class="p-[7px] rounded-[50%] cursor-pointer border-[1px] border-[solid] border-[rgba(0,0,0,0.1] hover:border-[#3b89e9] focus:border-[#3b89e9] duration-[0.4s]"
               :style="{
-                background: 'radial-gradient(#fff, rgba(32,111,162,0.2))'
+                background: 'radial-gradient(#fff, rgba(32,111,162,0.2))',
               }"
               @click="isClose"
             >
               <img
                 class="w-[11px]"
-                src="../../../assets/icons/remove.png"
+                src="@assets/icons/remove.png"
                 alt="remove"
               />
             </li>
@@ -340,24 +340,20 @@
 </template>
 
 <script>
-import axios from 'axios'
-// Icons url
-import search from '../../../assets/icons/search.png'
-import printer from '../../../assets/icons/printer.png'
-import LookUp from '../../Lookup/LookUp.vue'
-
-// Components
-import LoadingPage from '../../Loading/LoadingPage.vue'
-import GenericButton from '../../Button/GenericButton.vue'
+import LookUp from '@generics/LookUp.vue'
+import LoadingPage from '@components/Loading/LoadingPage.vue'
+import GenericButton from '@components/Button/GenericButton.vue'
 // import GenericTablePage from '../GenericTable/GenericTablePage.vue'
 
 export default {
   components: {
     LoadingPage,
     GenericButton,
-    LookUp
+    LookUp,
     //  GenericTablePage
   },
+
+  // DATA
   data() {
     return {
       isLoading: false,
@@ -369,10 +365,6 @@ export default {
       tableBody: [],
       tableHeadLength: null,
       isThereBody: false,
-      imgUrl: {
-        search,
-        printer
-      },
       tableId: [],
       selectData: {},
       formData: new Map(),
@@ -385,7 +377,7 @@ export default {
       radio: '1',
       radioSaldo: '1',
       select: '',
-      showHidePerson: false
+      showHidePerson: false,
     }
   },
   mounted() {
@@ -400,35 +392,27 @@ export default {
     },
     getTableRequest() {
       this.isLoading = !this.isLoading
-      axios
-        .post(
-          `https://192.168.1.55:8443/api/invoice/purchaseInvoiceList`,
-          {
-            current_page: 1,
-            page_size: this.pageSize_value,
-            searchForm: {
-              keyword: this.keywordValue,
-              from_date: new Date(Object.fromEntries(this.formData).from)
-                .toLocaleString('en-GB')
-                .split(',')
-                .join(''),
-              to_date: new Date(Object.fromEntries(this.formData).to)
-                .toLocaleString('en-GB')
-                .split(',')
-                .join('')
-            },
-            billStatus: Object.fromEntries(this.formData).bill,
-            payStatus: Object.fromEntries(this.formData).pay,
-            invoiceOnWayStatus: Object.fromEntries(this.formData).invoice,
-            departmentId: Object.fromEntries(this.formData).departments,
-            warehouseId: Object.fromEntries(this.formData).warehouse
+      this.$axios
+        .post(`invoice/purchaseInvoiceList`, {
+          current_page: 1,
+          page_size: this.pageSize_value,
+          searchForm: {
+            keyword: this.keywordValue,
+            from_date: new Date(Object.fromEntries(this.formData).from)
+              .toLocaleString('en-GB')
+              .split(',')
+              .join(''),
+            to_date: new Date(Object.fromEntries(this.formData).to)
+              .toLocaleString('en-GB')
+              .split(',')
+              .join(''),
           },
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem('token')}`
-            }
-          }
-        )
+          billStatus: Object.fromEntries(this.formData).bill,
+          payStatus: Object.fromEntries(this.formData).pay,
+          invoiceOnWayStatus: Object.fromEntries(this.formData).invoice,
+          departmentId: Object.fromEntries(this.formData).departments,
+          warehouseId: Object.fromEntries(this.formData).warehouse,
+        })
         .then((res) => {
           this.tableBody = []
           this.isLoading = !this.isLoading
@@ -475,20 +459,12 @@ export default {
     // Table Action Open button
     getTableRowOpen(thisId) {
       this.isLoading = !this.isLoading
-      axios
-        .post(
-          `https://192.168.1.55:8443/api/invoice/preparePurchaseInvoice`,
-          {
-            current_page: 1,
-            page_size: this.pageSize_value,
-            searchForm: { keyword: this.keywordValue || '', id: thisId }
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem('token')}`
-            }
-          }
-        )
+      this.$axios
+        .post(`invoice/preparePurchaseInvoice`, {
+          current_page: 1,
+          page_size: this.pageSize_value,
+          searchForm: { keyword: this.keywordValue || '', id: thisId },
+        })
         .then((res) => {
           this.isLoading = !this.isLoading
           this.$router.push('/preparePurchaseInvoiceNew.htm')
@@ -516,8 +492,8 @@ export default {
     },
     isClose() {
       this.isCloseTable = !this.isCloseTable
-    }
-  }
+    },
+  },
 }
 </script>
 

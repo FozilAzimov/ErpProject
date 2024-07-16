@@ -30,16 +30,10 @@
       class="border-[1px] border-solid border-[rgba(0,0,0,0.05)] p-[12px] bg-gradient-to-b from-transparent via-transparent to-gray-200 shadow-md"
     >
       <div class="flex items-center gap-[10px]">
-        <generic-nuxt-link-button
+        <generic-button
           name="Go Back"
-          pl="10"
-          pt="3"
-          pr="10"
-          pb="3"
-          bggradient="linear-gradient(to right, rgba(70,94,140,0.8),rgb(34,39,76))"
-          textsize="14"
-          :url="img.goBack"
-          :istherepicture="true"
+          type="primary"
+          icon-name-attribute="arrow-left"
           to="/internalInvoice.htm"
         />
         <h1 class="font-bold text-[rgb(49,126,172)] text-[14px] uppercase">
@@ -604,29 +598,16 @@
         </tbody>
       </table>
       <div>
-        <GenericButton
+        <generic-button
           v-if="subTable || userId"
           name="Logistics Calculation"
-          pl="8"
-          pt="2"
-          pr="8"
-          pb="2"
-          textsize="14"
-          bggradient="linear-gradient(to top, rgb(108,105,199),rgba(108,105,199, 0.58))"
-          class="my-1"
-          :url="img.logistics"
-          :istherepicture="true"
+          type="primary"
           @click="logisticsCalculationAction"
         />
-        <GenericButton
+        <generic-button
           v-else
           name="Accept"
-          pl="8"
-          pt="2"
-          pr="8"
-          pb="2"
-          textsize="14"
-          bg="rgba(54, 155, 215, 0.8)"
+          type="primary"
           class="my-1"
           @click="additionInvoiceItem"
         />
@@ -644,186 +625,77 @@
         >
           <h1 class="text-[13px]">Invoice Item</h1>
           <div class="flex gap-1 flex-wrap">
-            <GenericButton
+            <generic-button
               name="Column Setting"
-              pl="8"
-              pt="2"
-              pr="8"
-              pb="2"
-              textsize="14"
-              bggradient="linear-gradient(to top, rgb(25,52,79),rgba(25,52,79, 0.58))"
-              :url="img.setting"
-              :istherepicture="true"
+              type="warning"
+              icon-name-attribute="setting"
               @click="openColumnConfig"
             />
-            <GenericButton
+            <generic-button
               v-if="hideButton"
               name="Save"
-              pl="8"
-              pt="2"
-              pr="8"
-              pb="2"
-              textsize="14"
-              bg="rgb(119,191,66)"
+              type="primary"
               :disabled="disabledButton"
-              disabled-bg="rgba(119,191,66,0.6)"
               @click="saveInvoice"
               @customInputValueObj="getFilterData"
             />
-            <GenericButton
+            <generic-button
               v-else
               name="Edit"
-              pl="8"
-              pt="2"
-              pr="8"
-              pb="2"
-              textsize="14"
-              bg="rgb(119,191,66)"
-              :url="img.edit"
-              :istherepicture="true"
+              type="success"
+              icon-name-attribute="edit"
               @click="editInvoice"
             />
-            <GenericButton
+            <generic-button
               v-if="isMakeAndUnBill"
               name="Un Bill"
-              pl="8"
-              pt="2"
-              pr="8"
-              pb="2"
-              textsize="14"
-              bg="rgba(54, 155, 215, 0.8)"
+              type="info"
               @click="makeAndUnBillAction"
             />
-            <GenericButton
+            <generic-button
               v-else
               name="Make Bill"
-              pl="8"
-              pt="2"
-              pr="8"
-              pb="2"
-              textsize="14"
-              bg="rgba(54, 155, 215, 0.8)"
+              type="primary"
               @click="makeAndUnBillAction"
             />
-            <GenericButton
+            <generic-button
               name="Print Preview"
-              pl="8"
-              pt="2"
-              pr="8"
-              pb="2"
-              textsize="14"
-              bg="rgba(126,183,62, 0.8)"
-              :url="img.printer"
-              :istherepicture="true"
+              type="success"
+              icon-name-attribute="printer"
             />
-            <GenericButton
+            <generic-button
               v-if="!isMakeAndUnBill && !undoPayment.topUndoPayment"
               name="Delete"
-              pl="8"
-              pt="2"
-              pr="8"
-              pb="2"
-              textsize="14"
-              bggradient="linear-gradient(to top, rgb(108,33,38),rgba(108,33,38,0.65))"
-              :url="img.del"
-              :istherepicture="true"
+              type="danger"
+              icon-name-attribute="delete"
               @click="deleteInvoice"
             />
             <template v-if="isEdit || staticBtns">
-              <GenericButton
-                name="copyToInternal"
-                pl="8"
-                pt="2"
-                pr="8"
-                pb="2"
-                textsize="14"
-                bg="rgba(54, 155, 215, 0.8)"
-              />
-              <GenericButton
-                name="copyToExternal"
-                pl="8"
-                pt="2"
-                pr="8"
-                pb="2"
-                textsize="14"
-                bg="rgba(54, 155, 215, 0.8)"
-              />
-              <GenericButton
+              <generic-button name="copyToInternal" type="printer" />
+              <generic-button name="copyToExternal" type="printer" />
+              <generic-button
                 name="Print Barcode"
-                pl="8"
-                pt="2"
-                pr="8"
-                pb="2"
-                textsize="14"
-                bg="rgba(54, 155, 215, 0.8)"
+                type="success"
+                icon-name-attribute="printer"
               />
-              <GenericButton
-                name="Sms notify"
-                pl="8"
-                pt="2"
-                pr="8"
-                pb="2"
-                textsize="14"
-                bg="rgba(54, 155, 215, 0.8)"
-              />
-              <GenericButton
-                name="Calculate Gramm 1"
-                pl="8"
-                pt="2"
-                pr="8"
-                pb="2"
-                textsize="14"
-                bg="rgba(54, 155, 215, 0.8)"
-              />
-              <GenericButton
-                name="Calculate Gramm 2"
-                pl="8"
-                pt="2"
-                pr="8"
-                pb="2"
-                textsize="14"
-                bg="rgba(54, 155, 215, 0.8)"
-              />
-              <GenericButton
+              <generic-button name="Sms notify" type="primary" />
+              <generic-button name="Calculate Gramm 1" />
+              <generic-button name="Calculate Gramm 2" />
+              <generic-button
                 name="Print all Barcode"
-                pl="8"
-                pt="2"
-                pr="8"
-                pb="2"
-                textsize="14"
-                bg="rgba(54, 155, 215, 0.8)"
+                type="success"
+                icon-name-attribute="printer"
               />
-              <GenericButton
+              <generic-button
                 name="changeUsedItemsPriceAccess"
-                pl="8"
-                pt="2"
-                pr="8"
-                pb="2"
-                textsize="14"
-                bggradient="linear-gradient(to top, rgb(108,33,38),rgba(108,33,38,0.65))"
+                type="primary"
                 @click="
                   changePriceAccessAndCompanyAction('changeUsedInvoiceItems')
                 "
               />
+              <GenericInput width="100" type="number" placeholder="Barcode" />
               <GenericInput
                 width="100"
-                height="28"
-                pl="10"
-                pr="10"
-                pt="2"
-                pb="2"
-                textsize="13"
-                type="number"
-                placeholder="Barcode"
-              />
-              <GenericInput
-                width="100"
-                height="28"
-                pl="10"
-                pr="10"
-                pt="2"
-                pb="2"
-                textsize="13"
                 type="number"
                 placeholder="External barcode"
               />
@@ -867,14 +739,9 @@
                 @customFunction="getLookUpValue"
               />
             </span>
-            <GenericButton
+            <generic-button
               name="Change Invoice Company"
-              pl="8"
-              pt="3"
-              pr="8"
-              pb="3"
-              textsize="13"
-              bggradient="linear-gradient(to top, rgb(108,33,38),rgba(108,33,38,0.65))"
+              type="danger"
               @click="
                 changePriceAccessAndCompanyAction('changeUsedInvoiceCompany')
               "
@@ -929,55 +796,30 @@
               ></strong
             >
             <div class="flex items-center gap-1">
-              <GenericButton
+              <generic-button
                 v-if="undoPayment.topUndoPayment"
                 name="Undo Payment"
-                pl="8"
-                pt="2"
-                pr="8"
-                pb="2"
-                bggradient="linear-gradient(to top, rgb(25,52,79),rgba(25,52,79,0.5))"
-                textsize="14"
-                color="rgb(255,229,142)"
+                type="info"
                 @click="undoPaymentTransactionColumns('topUP')"
               />
               <template v-else>
-                <GenericButton
+                <generic-button
                   v-if="editPayDiscard.editPayShowHide1"
                   name="Edit"
-                  pl="8"
-                  pt="2"
-                  pr="8"
-                  pb="2"
-                  bggradient="linear-gradient(to top, rgb(25,52,79),rgba(25,52,79,0.5))"
-                  textsize="14"
-                  :url="editPayDiscard.editPayShowHide1 ? img.edit : ''"
-                  :istherepicture="editPayDiscard.editPayShowHide1 && true"
+                  type="success"
+                  icon-name-attribute="edit"
                   @click="editTransactionColumns('topE')"
                 />
-                <GenericButton
+                <generic-button
                   v-else
                   name="Pay"
-                  pl="8"
-                  pt="2"
-                  pr="8"
-                  pb="2"
+                  type="primary"
                   :disabled="subDisabledButton"
-                  disabled-bg="rgba(25,52,79,0.5)"
-                  bggradient="linear-gradient(to top, rgb(25,52,79),rgba(25,52,79,0.5))"
-                  textsize="14"
                   @click="payTransactionColumns('topP')"
                 />
-                <GenericButton
+                <generic-button
                   v-if="editPayDiscard.discardShowHide1"
                   name="Discard"
-                  pl="8"
-                  pt="2"
-                  pr="8"
-                  pb="2"
-                  bggradient="linear-gradient(to top, rgb(205,210,212),rgba(205,210,212,0.65))"
-                  textsize="14"
-                  color="rgb(190,72,77)"
                   @click="discardTransactionColumns('topD')"
                 />
               </template>
@@ -1005,55 +847,30 @@
               ></strong
             >
             <div class="flex items-center gap-1">
-              <GenericButton
+              <generic-button
                 v-if="undoPayment.subUndoPayment"
                 name="Undo Payment"
-                pl="8"
-                pt="2"
-                pr="8"
-                pb="2"
-                bggradient="linear-gradient(to top, rgb(25,52,79),rgba(25,52,79,0.5))"
-                textsize="14"
-                color="rgb(255,229,142)"
+                type="info"
                 @click="undoPaymentTransactionColumns('subUP')"
               />
               <template v-else>
-                <GenericButton
+                <generic-button
                   v-if="editPayDiscard.editPayShowHide2"
                   name="Edit"
-                  pl="8"
-                  pt="2"
-                  pr="8"
-                  pb="2"
-                  bggradient="linear-gradient(to top, rgb(25,52,79),rgba(25,52,79,0.5))"
-                  textsize="14"
-                  :url="editPayDiscard.editPayShowHide2 ? img.edit : ''"
-                  :istherepicture="editPayDiscard.editPayShowHide2 && true"
+                  type="success"
+                  icon-name-attribute="edit"
                   @click="editTransactionColumns('subE')"
                 />
-                <GenericButton
+                <generic-button
                   v-else
                   name="Pay"
-                  pl="8"
-                  pt="2"
-                  pr="8"
-                  pb="2"
+                  type="primary"
                   :disabled="subTwoDisabledButton"
-                  disabled-bg="rgba(25,52,79,0.5)"
-                  bggradient="linear-gradient(to top, rgb(25,52,79),rgba(25,52,79,0.5))"
-                  textsize="14"
                   @click="payTransactionColumns('subP')"
                 />
-                <GenericButton
+                <generic-button
                   v-if="editPayDiscard.discardShowHide2"
                   name="Discard"
-                  pl="8"
-                  pt="2"
-                  pr="8"
-                  pb="2"
-                  bggradient="linear-gradient(to top, rgb(205,210,212),rgba(205,210,212,0.65))"
-                  textsize="14"
-                  color="rgb(190,72,77)"
                   @click="discardTransactionColumns('subD')"
                 />
               </template>
@@ -1079,26 +896,16 @@
 </template>
 
 <script>
-// Icons url
-import goBack from '../../assets/icons/go-back.png'
-import copy from '../../assets/icons/copy.png'
-import setting from '../../assets/icons/settings.png'
-import printer from '../../assets/icons/printer.png'
-import del from '../../assets/icons/delete.png'
-import edit from '../../assets/icons/editIcon.svg'
-import logistics from '../../assets/icons/logistics.png'
-// Components
-import GenericButton from '../Button/GenericButton.vue'
-import LoadingPage from '../Loading/LoadingPage.vue'
-import LookUp from '../Lookup/LookUp.vue'
-import GenericInput from '../Input/GenericInput.vue'
-import GenericPrepareTablePage from '../GenericPrepareTable/GenericPrepareTablePage.vue'
-import ColumnConfigPage from '../ColumnConfig/ColumnConfigPage.vue'
-import GenericSubPrepareTablePage from '../Generics/GenericSubPrepareTable/GenericSubPrepareTablePage.vue'
-import GenericSubPrepareTableTooPage from '../Generics/GenericSubPrepareTableToo/GenericSubPrepareTableTooPage.vue'
-import GenericLogisticsCalculationPage from '../Generics/GenericLogisticsCalculation/GenericLogisticsCalculationPage.vue'
-import GenericNuxtLinkButton from '../Generics/GenericNuxtLink/GenericNuxtLinkButton.vue'
-import MessageBox from '../MessageBox.vue'
+import GenericButton from '@generics/GenericButton.vue'
+import LoadingPage from '@components/Loading/LoadingPage.vue'
+import LookUp from '@generics/LookUp.vue'
+import GenericInput from '@components/Input/GenericInput.vue'
+import GenericPrepareTablePage from '@components/GenericPrepareTable/GenericPrepareTablePage.vue'
+import ColumnConfigPage from '@components/ColumnConfig/ColumnConfigPage.vue'
+import GenericSubPrepareTablePage from '@generics/GenericSubPrepareTable/GenericSubPrepareTablePage.vue'
+import GenericSubPrepareTableTooPage from '@generics/GenericSubPrepareTableToo/GenericSubPrepareTableTooPage.vue'
+import GenericLogisticsCalculationPage from '@generics/GenericLogisticsCalculation/GenericLogisticsCalculationPage.vue'
+import MessageBox from '@components/MessageBox.vue'
 export default {
   // COMPONENTS
   components: {
@@ -1111,7 +918,6 @@ export default {
     GenericSubPrepareTablePage,
     GenericSubPrepareTableTooPage,
     GenericLogisticsCalculationPage,
-    GenericNuxtLinkButton,
     MessageBox,
   },
 
@@ -1160,15 +966,6 @@ export default {
       rightColumns: [],
       tableNameTranslateObj: {},
       isLoading: false,
-      img: {
-        goBack,
-        copy,
-        setting,
-        printer,
-        del,
-        edit,
-        logistics,
-      },
       objData: {},
       selectedRow: null,
       tableData: [],

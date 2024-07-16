@@ -151,8 +151,8 @@
 <script>
 import LoadingPage from '@components/Loading/LoadingPage.vue'
 import GenericInputDatePage from '@components/InputDate/GenericInputDatePage.vue'
-import LookUp from '@components/Lookup/LookUp.vue'
-import GenericButton from '@components/Generics/GenericButton.vue'
+import LookUp from '@generics/LookUp.vue'
+import GenericButton from '@generics/GenericButton.vue'
 export default {
   components: {
     LoadingPage,

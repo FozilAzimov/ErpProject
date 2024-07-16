@@ -10,24 +10,10 @@
       <div class="flex items-center justify-between gap-5">
         <h2 class="font-bold text-[rgb(49,126,172)]">Filtering</h2>
         <div class="flex items-center justify-between gap-2">
-          <GenericButton
-            name="Accept"
-            pl="8"
-            pt="2"
-            pr="8"
-            pb="2"
-            bg="rgb(119,191,120)"
-            textsize="13"
-            @click="acceptAction"
-          />
-          <GenericButton
+          <generic-button name="Accept" type="primary" @click="acceptAction" />
+          <generic-button
             name="Close"
-            pl="8"
-            pt="2"
-            pr="8"
-            pb="2"
-            bg="rgb(245,108,108)"
-            textsize="13"
+            icon-name-attribute="document-copy"
             @click="closeAction"
           />
         </div>
@@ -841,11 +827,11 @@
 </template>
 
 <script>
-import GenericButton from '../Button/GenericButton.vue'
-import GenericCheckBox from '../Generics/GenericCheckBox.vue'
-import GenericInput from '../Input/GenericInput.vue'
-import GenericInputDatePage from '../InputDate/GenericInputDatePage.vue'
-import LookUp from '../Lookup/LookUp.vue'
+import GenericButton from '@generics/GenericButton.vue'
+import GenericCheckBox from '@generics/GenericCheckBox.vue'
+import GenericInput from '@components/Input/GenericInput.vue'
+import GenericInputDatePage from '@components/InputDate/GenericInputDatePage.vue'
+import LookUp from '@generics/LookUp.vue'
 
 export default {
   components: {

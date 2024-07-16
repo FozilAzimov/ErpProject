@@ -262,12 +262,7 @@ export default {
         }
       }
       this.$axios
-        .post(`/base/${this.api}`, data, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-            'x-auth-token': localStorage.getItem('authToken'),
-          },
-        })
+        .post(`/base/${this.api}`, data)
         .then(() => {
           this.checkModal = false
           this.$emit('checkModal', this.checkModal)
