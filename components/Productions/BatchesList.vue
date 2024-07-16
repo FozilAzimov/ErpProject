@@ -61,7 +61,7 @@
           class="flex items-center gap-1"
         >
           <span class="text-[13px]">{{ element.name }}</span>
-          <look-up
+          <generic-look-up
             dwidth="200"
             :name="element.subName"
             :defvalue="''"
@@ -197,10 +197,11 @@
 <script>
 import GenericButton from '@generics/GenericButton.vue'
 import LoadingPage from '@components/Loading/LoadingPage.vue'
-import GenericInput from '@components/Input/GenericInput.vue'
+import GenericInput from '@generics/GenericInput.vue'
 import GenericInputDatePage from '@components/InputDate/GenericInputDatePage.vue'
 import ColumnConfigPage from '@components/ColumnConfig/ColumnConfigPage.vue'
 import GenericTablePage from '@components/GenericTable/GenericTablePage.vue'
+import GenericLookUp from '@generics/GenericLookUp.vue'
 export default {
   // COMPONENTS
   components: {
@@ -210,6 +211,7 @@ export default {
     GenericInputDatePage,
     ColumnConfigPage,
     GenericTablePage,
+    GenericLookUp,
   },
 
   // DATA

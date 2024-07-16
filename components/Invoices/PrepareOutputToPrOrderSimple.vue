@@ -66,19 +66,19 @@
       >
         <div class="flex flex-col items-start text-[13px]">
           <span>selectOrderKroy</span>
-          <look-up
+          <generic-look-up
             dwidth="200"
             name="kroy"
-            durl="invoiceBase/findAllKroyForInvoice"
+            durl="findAllKroyForInvoice"
             @customFunction="getLookUpValue"
           />
         </div>
         <div class="flex flex-col items-start text-[13px]">
           <span>Warehouse</span>
-          <look-up
+          <generic-look-up
             dwidth="200"
             name="warehouse"
-            durl="invoiceBase/findAllWarehouseByAbsoluteLogic"
+            durl="findAllWarehouseByAbsoluteLogic"
             @customFunction="getLookUpValue"
           />
         </div>
@@ -183,16 +183,16 @@
 
 <script>
 import GenericButton from '@generics/GenericButton.vue'
-import GenericInput from '@components/Input/GenericInput.vue'
+import GenericInput from '@generics/GenericInput.vue'
 import LoadingPage from '@components/Loading/LoadingPage.vue'
-import LookUp from '@generics/GenericLookUp.vue'
+import GenericLookUp from '@generics/GenericLookUp.vue'
 export default {
   // COMPONENTS
   components: {
     LoadingPage,
     GenericButton,
     GenericInput,
-    LookUp,
+    GenericLookUp,
   },
 
   // DATA,
@@ -223,7 +223,7 @@ export default {
 
   // METHOD
   methods: {
-    // LookUp value'sini olish
+    // GenericLookUp value'sini olish
     getLookUpValue(name, value, valueID, order, resultType) {
       this.allLookUpAndInputValues[name] = valueID
     },

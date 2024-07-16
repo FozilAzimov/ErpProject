@@ -5,9 +5,9 @@
     <generic-button name="Connect" type="primary" />
     <div class="flex items-center gap-1">
       <span class="text-[15px]">Baud:</span>
-      <look-up
+      <generic-look-up
         dwidth="100"
-        :defvalue="`${selectedSelectValue}`"
+        :defvalue="selectedSelectValue"
         :options-data="selectData"
         :popper-append-to-body="true"
       />
@@ -111,13 +111,13 @@
 
 <script>
 import GenericButton from '@generics/GenericButton.vue'
-import GenericInput from '@components/Input/GenericInput.vue'
-import LookUp from '@generics/GenericLookUp.vue'
+import GenericInput from '@generics/GenericInput.vue'
+import GenericLookUp from '@generics/GenericLookUp.vue'
 export default {
   components: {
     GenericButton,
     GenericInput,
-    LookUp,
+    GenericLookUp,
   },
 
   // PROPS
@@ -164,4 +164,4 @@ export default {
   },
 }
 </script>
-LookUp
+GenericLookUp

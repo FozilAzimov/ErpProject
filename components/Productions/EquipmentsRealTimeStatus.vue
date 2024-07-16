@@ -250,7 +250,7 @@
           <div class="min-h-[70px] h-fit flex flex-wrap items-center gap-3 p-2">
             <span class="flex items-center gap-1">
               <span class="text-[13px]">Customer code: </span>
-              <look-up
+              <generic-look-up
                 name="customer"
                 :popper-append-to-body="true"
                 :options-data="filteringCustomerData"
@@ -259,7 +259,7 @@
             </span>
             <span class="flex items-center gap-1">
               <span class="text-[13px]">Party code: </span>
-              <look-up
+              <generic-look-up
                 name="party"
                 :popper-append-to-body="true"
                 :options-data="filteringBatchData"
@@ -456,16 +456,16 @@
 // Components
 import LoadingPage from '@components/Loading/LoadingPage.vue'
 import GenericSelect from '@components/Select/GenericSelect.vue'
-import GenericInput from '@components/Input/GenericInput.vue'
+import GenericInput from '@generics/GenericInput.vue'
 import GenericButton from '@generics/GenericButton.vue'
-import LookUp from '@generics/GenericLookUp.vue'
+import GenericLookUp from '@generics/GenericLookUp.vue'
 export default {
   components: {
     LoadingPage,
     GenericSelect,
     GenericInput,
     GenericButton,
-    LookUp,
+    GenericLookUp,
   },
 
   // DATA
@@ -646,19 +646,19 @@ export default {
         })
     },
 
-    // LookUp value'sini olish
+    // GenericLookUp value'sini olish
     getLookUpValue(name, value, order, resultType) {
       this.allLookUpData[name] = value
     },
 
-    // LookUp options data
+    // GenericLookUp options data
     getNextEquipmentsStatusAction() {
       this.customerCodeData = []
       this.batchNumberData = []
       this.rowData = []
       this.firstCardUIData = []
 
-      // Loop action | LookUp data'sini yig'ish
+      // Loop action | GenericLookUp data'sini yig'ish
       this.dyeingEquipments.forEach((obj) => {
         this.rowData.push(JSON.parse(obj?.row))
 

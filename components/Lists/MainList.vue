@@ -288,7 +288,7 @@ import GenericSelect from '@components/Select/GenericSelect.vue'
 import GenericInputDatePage from '@components/InputDate/GenericInputDatePage.vue'
 import ColumnConfigPage from '@components/ColumnConfig/ColumnConfigPage.vue'
 import GenericTablePage from '@components/GenericTable/GenericTablePage.vue'
-import GenericInput from '@components/Input/GenericInput.vue'
+import GenericInput from '@generics/GenericInput.vue'
 import SearchBar from '@components/main/SearchBar.vue'
 
 export default {

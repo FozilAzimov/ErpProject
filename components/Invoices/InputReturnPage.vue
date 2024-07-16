@@ -241,7 +241,7 @@
 <script>
 import LoadingPage from '@components/Loading/LoadingPage.vue'
 import GenericButton from '@components/Generics/GenericButton.vue'
-import GenericInput from '@components/Input/GenericInput.vue'
+import GenericInput from '@generics/GenericInput.vue'
 import GenericSelect from '@components/Select/GenericSelect.vue'
 import GenericInputDatePage from '@components/InputDate/GenericInputDatePage.vue'
 import ColumnConfigPage from '@components/ColumnConfig/ColumnConfigPage.vue'

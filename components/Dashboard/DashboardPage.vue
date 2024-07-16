@@ -11,28 +11,20 @@
         {{ $t('pages.dashboard.headerName') }}
       </h1>
     </div>
-    <div class="flex flex-wrap justify-start items-start h-[0px] gap-10 m-5">
+    <div
+      class="flex flex-wrap items-start justify-start gap-7 p-5 mt-2 border-[1px] border-solid border-[#D9D9D9] shadow-md rounded-md"
+    >
       <nuxt-link
         v-for="(item, index) of items"
         :key="index"
         :to="item.url"
-        class="flex flex-col items-center hover:shadow-lg duration-[0.2s] w-full max-w-[150px] h-[] bg-white border border-gray-200 rounded-lg shadow"
+        class="flex flex-col items-center hover:shadow-lg duration-[0.2s] w-full max-w-[150px] bg-white border border-gray-200 rounded-lg shadow"
       >
-        <div class="flex justify-center items-center w-full p-3">
-          <img
-            class="w-[110px]"
-            src="@/assets/images/desktop.png"
-            alt="image"
-          />
-        </div>
-        <div class="p-5 w-full">
-          <div class="flex justify-center">
-            <h5
-              class="mb-2 text-[14px] truncate font-bold tracking-tight text-gray-900"
-            >
-              {{ item.name }}
-            </h5>
-          </div>
+        <img class="w-[80px]" src="@/assets/images/desktop.png" alt="image" />
+        <div class="text-center mb-2">
+          <p class="font-medium text-[13px] text-[#317EAC] line-clamp-1">
+            {{ item.name }}
+          </p>
         </div>
       </nuxt-link>
     </div>
@@ -40,9 +32,11 @@
 </template>
 
 <script>
-import LoadingPage from '../Loading/LoadingPage.vue'
+import LoadingPage from '@components/Loading/LoadingPage.vue'
 export default {
   components: { LoadingPage },
+
+  // DATA
   data() {
     return {
       menuList: null,
@@ -51,16 +45,13 @@ export default {
       isLoading: false,
     }
   },
+
+  // MOUNTED
   mounted() {
     // Menu request
     this.isLoading = !this.isLoading
     this.$axios
-      .get(`/menu`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-          'x-auth-token': localStorage.getItem('authToken'),
-        },
-      })
+      .get(`/menu`)
       .then((res) => {
         this.isLoading = !this.isLoading
         this.menuList = res.data

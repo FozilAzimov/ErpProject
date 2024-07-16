@@ -125,7 +125,7 @@
             >
               <span class="text-[14px]">{{ element.name }}</span>
               <span>
-                <look-up
+                <generic-look-up
                   v-if="element.type === 'list'"
                   dwidth="200"
                   :name="element.subName"
@@ -231,12 +231,12 @@
 
 <script>
 import GenericButton from '@generics/GenericButton.vue'
-import GenericInput from '@components/Input/GenericInput.vue'
-import LookUp from '@generics/GenericLookUp.vue'
+import GenericInput from '@generics/GenericInput.vue'
+import GenericLookUp from '@generics/GenericLookUp.vue'
 export default {
   components: {
     GenericInput,
-    LookUp,
+    GenericLookUp,
     GenericButton,
   },
 
@@ -360,7 +360,7 @@ export default {
     },
     // Table page ni ochish va yopish uchun
 
-    // LookUp value'sini olish
+    // GenericLookUp value'sini olish
     getLookUpValueAction(key, value, order, resultType) {
       this.$set(this.allLookUpAndInputValues, key, value)
     },

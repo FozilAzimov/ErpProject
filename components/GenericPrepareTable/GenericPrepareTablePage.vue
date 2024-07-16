@@ -273,7 +273,7 @@
                 class="border-[1px] text-[12px] p-2"
                 :class="`w-[${value.dwidth}px]`"
               >
-                <look-up
+                <generic-look-up
                   v-if="value.type === 'list'"
                   :defvalue="
                     newEditObjData.length &&
@@ -502,8 +502,8 @@
 <script>
 import GenericButton from '@generics/GenericButton.vue'
 import GenericInvoiceItemModalPage from '@components/GenericInvoiceItemModal/GenericInvoiceItemModalPage.vue'
-import GenericInput from '@components/Input/GenericInput.vue'
-import LookUp from '@generics/GenericLookUp.vue'
+import GenericInput from '@generics/GenericInput.vue'
+import GenericLookUp from '@generics/GenericLookUp.vue'
 import GenericInputDatePage from '@components/InputDate/GenericInputDatePage.vue'
 import LoadingPage from '@components/Loading/LoadingPage.vue'
 import GenericInvoiceFilteringModalPage from '@components/GenericInvoiceFilteringModal/GenericInvoiceFilteringModalPage.vue'
@@ -516,7 +516,7 @@ export default {
     GenericButton,
     GenericInvoiceItemModalPage,
     GenericInput,
-    LookUp,
+    GenericLookUp,
     GenericInputDatePage,
     LoadingPage,
     GenericInvoiceFilteringModalPage,
@@ -674,7 +674,7 @@ export default {
     },
     // Arrayni bo'sh object dan tozalash
 
-    // LookUp va Input'larning required'larini tekshiradi
+    // GenericLookUp va Input'larning required'larini tekshiradi
     requiredLookUpAndInputCheckerAction(data) {
       const arr = this.filteredTablehead.filter(
         (obj) =>
@@ -702,7 +702,7 @@ export default {
       else this.disabledButton = false
       this.$emit('requiredAction', this.disabledButton, 'top')
     },
-    // LookUp va Input'larning required'larini tekshiradi
+    // GenericLookUp va Input'larning required'larini tekshiradi
 
     // static filter
     ResDataFiltered() {
@@ -805,7 +805,7 @@ export default {
     },
     // input's Valuesini olish
 
-    // Lookup's Valuesini olish
+    // GenericLookUp's Valuesini olish
     lookUpVal(resultType, value) {
       return resultType === 'object' ? { id: Number(value) } : value
     },
@@ -822,7 +822,7 @@ export default {
       // function
       this.requiredLookUpAndInputCheckerAction(this.ResData, order)
     },
-    // Lookup's Valuesini olish
+    // GenericLookUp's Valuesini olish
 
     // default set values
     setDefaultValues(order) {

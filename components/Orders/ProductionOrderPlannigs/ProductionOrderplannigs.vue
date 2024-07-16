@@ -268,17 +268,13 @@
 </template>
 
 <script>
-// Icons url
-import search from '../../../assets/icons/search.png'
-import printer from '../../../assets/icons/printer.png'
-// Components
-import LoadingPage from '../../Loading/LoadingPage.vue'
-import GenericButton from '../../Button/GenericButton.vue'
-import GenericInput from '../../Input/GenericInput.vue'
-import GenericSelect from '../../Select/GenericSelect.vue'
-import GenericInputDatePage from '../../InputDate/GenericInputDatePage.vue'
-import ColumnConfigPage from '../../ColumnConfig/ColumnConfigPage.vue'
-import GenericTablePage from '../../GenericTable/GenericTablePage.vue'
+import LoadingPage from '@components/Loading/LoadingPage.vue'
+import GenericButton from '@components/Button/GenericButton.vue'
+import GenericInput from '@generics/GenericInput.vue'
+import GenericSelect from '@components/Select/GenericSelect.vue'
+import GenericInputDatePage from '@components/InputDate/GenericInputDatePage.vue'
+import ColumnConfigPage from '@components/ColumnConfig/ColumnConfigPage.vue'
+import GenericTablePage from '@components/GenericTable/GenericTablePage.vue'
 export default {
   components: {
     LoadingPage,
@@ -289,6 +285,8 @@ export default {
     ColumnConfigPage,
     GenericTablePage,
   },
+
+  // DATA
   data() {
     return {
       isLoading: false,
@@ -300,10 +298,6 @@ export default {
       tableBody: [],
       tableHeadLength: null,
       isThereBody: false,
-      imgUrl: {
-        search,
-        printer,
-      },
       tableId: [],
       selectData: {},
       formData: new Map(),
@@ -314,6 +308,8 @@ export default {
       isCloseTable: true,
     }
   },
+
+  // MOUNTED
   mounted() {
     // Table function
     this.getTableRequest()
@@ -330,35 +326,26 @@ export default {
     getTableRequest() {
       this.isLoading = !this.isLoading
       this.$axios
-        .post(
-          `/invoice/purchaseInvoiceList`,
-          {
-            current_page: 1,
-            page_size: this.pageSize_value,
-            searchForm: {
-              keyword: this.keywordValue,
-              from_date: new Date(Object.fromEntries(this.formData).from)
-                .toLocaleString('en-GB')
-                .split(',')
-                .join(''),
-              to_date: new Date(Object.fromEntries(this.formData).to)
-                .toLocaleString('en-GB')
-                .split(',')
-                .join(''),
-            },
-            billStatus: Object.fromEntries(this.formData).bill,
-            payStatus: Object.fromEntries(this.formData).pay,
-            invoiceOnWayStatus: Object.fromEntries(this.formData).invoice,
-            departmentId: Object.fromEntries(this.formData).departments,
-            warehouseId: Object.fromEntries(this.formData).warehouse,
+        .post(`/invoice/purchaseInvoiceList`, {
+          current_page: 1,
+          page_size: this.pageSize_value,
+          searchForm: {
+            keyword: this.keywordValue,
+            from_date: new Date(Object.fromEntries(this.formData).from)
+              .toLocaleString('en-GB')
+              .split(',')
+              .join(''),
+            to_date: new Date(Object.fromEntries(this.formData).to)
+              .toLocaleString('en-GB')
+              .split(',')
+              .join(''),
           },
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem('token')}`,
-              'x-auth-token': localStorage.getItem('authToken'),
-            },
-          }
-        )
+          billStatus: Object.fromEntries(this.formData).bill,
+          payStatus: Object.fromEntries(this.formData).pay,
+          invoiceOnWayStatus: Object.fromEntries(this.formData).invoice,
+          departmentId: Object.fromEntries(this.formData).departments,
+          warehouseId: Object.fromEntries(this.formData).warehouse,
+        })
         .then((res) => {
           this.tableBody = []
           this.isLoading = !this.isLoading
@@ -406,20 +393,11 @@ export default {
     getTableRowOpen(thisId) {
       this.isLoading = !this.isLoading
       this.$axios
-        .post(
-          `/invoice/preparePurchaseInvoice`,
-          {
-            current_page: 1,
-            page_size: this.pageSize_value,
-            searchForm: { keyword: this.keywordValue || '', id: thisId },
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem('token')}`,
-              'x-auth-token': localStorage.getItem('authToken'),
-            },
-          }
-        )
+        .post(`/invoice/preparePurchaseInvoice`, {
+          current_page: 1,
+          page_size: this.pageSize_value,
+          searchForm: { keyword: this.keywordValue || '', id: thisId },
+        })
         .then((res) => {
           this.isLoading = !this.isLoading
           this.$router.push('/preparePurchaseInvoiceNew.htm')

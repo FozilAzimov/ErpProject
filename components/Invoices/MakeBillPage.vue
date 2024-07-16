@@ -39,8 +39,8 @@
       </div>
       <div class="flex items-center gap-1">
         <span class="text-[13px] cursor-pointer">Company Branch</span>
-        <look-up
-          durl="invoiceBase/findAllCompanyLogic"
+        <generic-look-up
+          durl="findAllCompanyLogic"
           :dparam="{ branchcompany: true }"
           dwidth="150"
           dlist="100"
@@ -50,8 +50,8 @@
       </div>
       <div class="flex items-center gap-1">
         <span class="text-[13px] cursor-pointer">Departments</span>
-        <look-up
-          durl="invoiceBase/findAllDepartment"
+        <generic-look-up
+          durl="findAllDepartment"
           :dparam="{ branchcompany: null }"
           dwidth="150"
           dlist="100"
@@ -61,8 +61,8 @@
       </div>
       <div class="flex items-center gap-1">
         <span class="text-[13px] cursor-pointer">Warehouse</span>
-        <look-up
-          durl="invoiceBase/findAllWarehouse"
+        <generic-look-up
+          durl="findAllWarehouse"
           :dparam="{ branchcompany: null, departmentId: null }"
           dwidth="150"
           dlist="100"
@@ -72,8 +72,8 @@
       </div>
       <div class="flex items-center gap-1">
         <span class="text-[13px] cursor-pointer">Invoice Type</span>
-        <look-up
-          durl="invoiceBase/findAllInvoiceType"
+        <generic-look-up
+          durl="findAllInvoiceType"
           dwidth="150"
           dlist="100"
           name="invoiceTypeId"
@@ -151,13 +151,13 @@
 <script>
 import LoadingPage from '@components/Loading/LoadingPage.vue'
 import GenericInputDatePage from '@components/InputDate/GenericInputDatePage.vue'
-import LookUp from '@generics/GenericLookUp.vue'
+import GenericLookUp from '@generics/GenericLookUp.vue'
 import GenericButton from '@generics/GenericButton.vue'
 export default {
   components: {
     LoadingPage,
     GenericInputDatePage,
-    LookUp,
+    GenericLookUp,
     GenericButton,
   },
   data() {

@@ -131,7 +131,7 @@
 
 <script>
 import GenericButton from '@generics/GenericButton.vue'
-import GenericInput from '@components/Input/GenericInput.vue'
+import GenericInput from '@generics/GenericInput.vue'
 import LoadingPage from '@components/Loading/LoadingPage.vue'
 export default {
   components: {

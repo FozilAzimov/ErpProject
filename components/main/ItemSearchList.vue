@@ -39,7 +39,7 @@
                 <GenericInput :value="itemSearchList[item?.name]" />
               </template>
               <template v-else-if="item?.type === 'list'">
-                <LookUp :defvalue="itemSearchList[item?.name]?.text" />
+                <generic-look-up :defvalue="itemSearchList[item?.name]?.text" />
               </template>
               <template v-else-if="item?.type === 'button'">
                 <GenericButton :value="itemSearchList[item?.name]" />
@@ -53,14 +53,14 @@
 </template>
 <script>
 import GenericButton from '@components/Button/GenericButton.vue'
-import GenericInput from '@components/Input/GenericInput.vue'
+import GenericInput from '@generics/GenericInput.vue'
 import GenericInputDatePage from '@components/InputDate/GenericInputDatePage.vue'
-import LookUp from '@generics/GenericLookUp.vue'
+import GenericLookUp from '@generics/GenericLookUp.vue'
 export default {
   components: {
     GenericInput,
     GenericButton,
-    LookUp,
+    GenericLookUp,
     GenericInputDatePage,
   },
 

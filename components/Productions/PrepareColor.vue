@@ -175,7 +175,7 @@
                     >*</span
                   >
                 </span>
-                <look-up
+                <generic-look-up
                   dwidth="300"
                   :name="element.subName"
                   :defvalue="
@@ -220,17 +220,17 @@
 
 <script>
 import GenericButton from '@generics/GenericButton.vue'
-import GenericInput from '@components/Input/GenericInput.vue'
+import GenericInput from '@generics/GenericInput.vue'
 import GenericInputDatePage from '@components/InputDate/GenericInputDatePage.vue'
 import LoadingPage from '@components/Loading/LoadingPage.vue'
-import LookUp from '@generics/GenericLookUp.vue'
+import GenericLookUp from '@generics/GenericLookUp.vue'
 export default {
   components: {
     GenericButton,
     GenericInput,
     GenericInputDatePage,
     LoadingPage,
-    LookUp,
+    GenericLookUp,
   },
 
   // DATA

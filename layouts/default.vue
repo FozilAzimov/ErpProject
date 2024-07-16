@@ -12,7 +12,7 @@
         to="/dashboard.htm"
         class="flex items-center gap-2 text-[17px] text-[rgba(255,255,255,0.8)] hover:text-[rgb(255,255,255)] duration-[0.2s] font-medium"
       >
-        <img class="w-[30px] ml-1" src="../assets/icons/logo.png" alt="logo" />
+        <img class="w-[30px] ml-1" src="@assets/icons/logo.png" alt="logo" />
         <h1>ERP</h1>
       </nuxt-link>
       <div class="flex items-center gap-[5px]">
@@ -22,7 +22,7 @@
             @click="goToMenuSetting"
           >
             <img
-              src="../assets/icons/menuSetting.png"
+              src="@assets/icons/menuSetting.png"
               alt="menu-setting"
               class="w-[18px]"
             />
@@ -34,13 +34,13 @@
             @click="dropdownToggle"
           >
             <img
-              src="../assets/icons/user-black.png"
+              src="@assets/icons/user-black.png"
               alt="user"
               class="w-[14px]"
             />
             Actuality System
             <img
-              src="../assets/icons/arrow-bottom.png"
+              src="@assets/icons/arrow-bottom.png"
               alt="user"
               class="w-[8px]"
               :style="{
@@ -97,7 +97,7 @@
                 class="flex items-center gap-3 p-[7px_15px] bg-[rgba(255,0,0,0.5)] hover:bg-[rgba(54,155,215,0.3)] duration-[0.2s] cursor-pointer"
                 @click="logoutMessage = true"
               >
-                <img src="../assets/icons/logout.png" alt="logout" />
+                <img src="@assets/icons/logout.png" alt="logout" />
                 Logout
               </p>
             </li>
@@ -109,13 +109,13 @@
             @click="translateToggle"
           >
             <img
-              src="../assets/icons/translate.png"
+              src="@assets/icons/translate.png"
               alt="user"
               class="w-[14px]"
             />
             {{ language ? language : 'English' }}
             <img
-              src="../assets/icons/arrow-bottom.png"
+              src="@assets/icons/arrow-bottom.png"
               alt="user"
               class="w-[8px]"
               :style="{
@@ -141,7 +141,7 @@
               >
                 <img
                   class="w-[11px]"
-                  :src="require(`../assets/icons/${locale.url}`)"
+                  :src="require(`@assets/icons/${locale.url}`)"
                   :alt="locale.alt"
                 />
                 {{ locale.title }}
@@ -169,7 +169,7 @@
             >
               <li>
                 <img
-                  src="../assets/icons/toggle.jpg"
+                  src="@assets/icons/toggle.jpg"
                   alt="icons"
                   class="w-[20px] h-[20px]"
                   :style="{
@@ -190,9 +190,7 @@
                 <div class="flex items-center gap-[20px]">
                   <img
                     :src="
-                      item.icon
-                        ? item.icon
-                        : require('../assets/icons/list.png')
+                      item.icon ? item.icon : require('@assets/icons/list.png')
                     "
                     alt="icons"
                     class="w-[16px] h-[16px] cursor-pointer"

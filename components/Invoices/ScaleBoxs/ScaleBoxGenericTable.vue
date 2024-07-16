@@ -33,12 +33,11 @@
             :key="inx"
             class="border-[1px] text-[12px] p-2"
           >
-            <look-up
+            <generic-look-up
               v-if="element.type === 'list'"
-              durl="invoiceBase/searchProductList"
+              durl="searchProductList"
               dwidth="100"
               widthtype="%"
-              dlist="150"
               :name="element.payloadName"
               :order="index"
               result-type="object"
@@ -106,12 +105,12 @@
 
 <script>
 import GenericButton from '@generics/GenericButton.vue'
-import GenericInput from '@components/Input/GenericInput.vue'
-import LookUp from '@generics/GenericLookUp.vue'
+import GenericInput from '@generics/GenericInput.vue'
+import GenericLookUp from '@generics/GenericLookUp.vue'
 export default {
   components: {
     GenericButton,
-    LookUp,
+    GenericLookUp,
     GenericInput,
   },
 

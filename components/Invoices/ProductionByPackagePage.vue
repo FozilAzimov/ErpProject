@@ -101,12 +101,8 @@
                   v-if="element.multiple"
                   class="flex items-center gap-[2px]"
                 >
-                  <look-up
-                    :durl="
-                      element.subName === 'equipment'
-                        ? `productionReports/${element.url}`
-                        : `invoiceBase/${element.url}`
-                    "
+                  <generic-look-up
+                    :durl="element.url"
                     :dparam="
                       element.subName === 'stavkaStage'
                         ? {
@@ -185,13 +181,9 @@
                     :disabled="element.disabledTwo"
                   />
                 </span>
-                <look-up
+                <generic-look-up
                   v-else
-                  :durl="
-                    element.subName === 'equipment'
-                      ? `productionReports/${element.url}`
-                      : `invoiceBase/${element.url}`
-                  "
+                  :durl="element.url"
                   :dparam="
                     element.subName === 'stavkaStage'
                       ? {
@@ -469,16 +461,16 @@
 <script>
 import GenericButton from '@generics/GenericButton.vue'
 import GenericCheckBox from '@generics/GenericCheckBox.vue'
-import GenericInput from '@components/Input/GenericInput.vue'
+import GenericInput from '@generics/GenericInput.vue'
 import GenericInputDatePage from '@components/InputDate/GenericInputDatePage.vue'
 import LoadingPage from '@components/Loading/LoadingPage.vue'
-import LookUp from '@generics/GenericLookUp.vue'
+import GenericLookUp from '@generics/GenericLookUp.vue'
 export default {
   components: {
     LoadingPage,
     GenericInputDatePage,
     GenericInput,
-    LookUp,
+    GenericLookUp,
     GenericCheckBox,
     GenericButton,
   },
@@ -839,7 +831,7 @@ export default {
     },
     // Table page ni ochish va yopish uchun
 
-    // LookUp value'sini olish
+    // GenericLookUp value'sini olish
     getLookUpValueAction(key, value, order, resultType) {
       this.$set(this.allLookUpAndInputValues, key, value)
 

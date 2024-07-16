@@ -59,10 +59,9 @@
               class="text-[13px] text-[] cursor-pointer tracking-[1.1] text-nowrap"
               >Currency</label
             >
-            <LookUp
-              durl="invoiceBase/findAllCurrency"
+            <generic-look-up
+              durl="findAllCurrency"
               dwidth="200"
-              height="29"
               name="currency"
               :required="required2"
               @customFunction="getLookUpValue"
@@ -74,13 +73,12 @@
               class="text-[13px] text-[] cursor-pointer tracking-[1.1] text-nowrap"
               >Currency Rate</label
             >
-            <GenericActiveLookUpPage
+            <generic-look-up
               v-if="data.length"
-              v-model="requiredLookup"
+              :options-data="data"
+              :required="required"
               placeholder="Bank Sell Rate"
-              :data="data"
-              :isrequired="required"
-              @customLookupValue="bankSellRate"
+              @customFunction="bankSellRate"
             />
           </div>
         </form>
@@ -194,20 +192,18 @@
 
 <script>
 import GenericButton from '@components/Button/GenericButton.vue'
-import GenericActiveLookUpPage from '@generics/GenericActiveLookUp/GenericActiveLookUpPage.vue'
-import GenericInput from '@components/Input/GenericInput.vue'
-import LookUp from '@generics/GenericLookUp.vue'
+import GenericInput from '@generics/GenericInput.vue'
+import GenericLookUp from '@generics/GenericLookUp.vue'
 import PageTable from '@components/Reports/TransactionReports/PageTable.vue'
-
 export default {
   components: {
     GenericButton,
-    GenericActiveLookUpPage,
-    LookUp,
+    GenericLookUp,
     GenericInput,
     PageTable,
   },
 
+  // PROPS
   props: {
     data: {
       type: Array,
@@ -231,6 +227,7 @@ export default {
     },
   },
 
+  // DATA
   data() {
     return {
       isLoading: false,

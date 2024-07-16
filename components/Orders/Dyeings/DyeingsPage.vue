@@ -72,11 +72,7 @@
         class="border-[1px] border-solid border-[rgba(0,0,0,0.05)] p-[12px] bg-gradient-to-b from-transparent via-transparent to-gray-200 shadow-md flex items-center justify-between"
       >
         <div class="flex items-center gap-[10px]">
-          <img
-            src="../../../assets/icons/user-black.png"
-            alt="user"
-            class="w-[14px]"
-          />
+          <img src="@assets/icons/user-black.png" alt="user" class="w-[14px]" />
           <h1 class="font-bold text-[rgb(49,126,172)] text-[14px] uppercase">
             Dyeings List
           </h1>
@@ -84,20 +80,16 @@
         <div>
           <ul class="flex items-center gap-4">
             <li
-              class="p-[7px] rounded-[50%] cursor-pointer border-[1px] border-[solid] border-[rgba(0,0,0,0.1] hover:border-[#3b89e9] duration-[0.4s]"
+              class="p-[7px] rounded-[50%] cursor-pointer border-[1px] border-solid border-[rgba(0,0,0,0.1] hover:border-[#3b89e9] duration-[0.4s]"
               :style="{
                 background: 'radial-gradient(#fff, rgba(32,111,162,0.2))',
               }"
               @click="openColumnConfig"
             >
-              <img
-                class="w-[11px]"
-                src="../../../assets/icons/gear.png"
-                alt="gear"
-              />
+              <img class="w-[11px]" src="@assets/icons/gear.png" alt="gear" />
             </li>
             <li
-              class="p-[7px] rounded-[50%] cursor-pointer border-[1px] border-[solid] border-[rgba(0,0,0,0.1] hover:border-[#3b89e9] focus:border-[#3b89e9] duration-[0.4s]"
+              class="p-[7px] rounded-[50%] cursor-pointer border-[1px] border-solid border-[rgba(0,0,0,0.1] hover:border-[#3b89e9] focus:border-[#3b89e9] duration-[0.4s]"
               :style="{
                 background: 'radial-gradient(#fff, rgba(32,111,162,0.2))',
               }"
@@ -110,12 +102,12 @@
                     ? 'rotate-[-180deg] duration-[1s]'
                     : 'rotate-[0deg] duration-[1s]'
                 "
-                src="../../../assets/icons/arrow.png"
+                src="@assets/icons/arrow.png"
                 alt="arrow"
               />
             </li>
             <li
-              class="p-[7px] rounded-[50%] cursor-pointer border-[1px] border-[solid] border-[rgba(0,0,0,0.1] hover:border-[#3b89e9] focus:border-[#3b89e9] duration-[0.4s]"
+              class="p-[7px] rounded-[50%] cursor-pointer border-[1px] border-solid border-[rgba(0,0,0,0.1] hover:border-[#3b89e9] focus:border-[#3b89e9] duration-[0.4s]"
               :style="{
                 background: 'radial-gradient(#fff, rgba(32,111,162,0.2))',
               }"
@@ -123,7 +115,7 @@
             >
               <img
                 class="w-[11px]"
-                src="../../../assets/icons/remove.png"
+                src="@assets/icons/remove.png"
                 alt="remove"
               />
             </li>
@@ -154,7 +146,7 @@
             <div class="text-[14px]">
               <select
                 v-model="pageSize_value"
-                class="border-[1px] border-[solid] border-[rgba(171,177,187,0.7)] w-[60px] px-[5px] py-[3px] cursor-pointer rounded-[2px] text-[14px] outline-none"
+                class="border-[1px] border-solid border-[rgba(171,177,187,0.7)] w-[60px] px-[5px] py-[3px] cursor-pointer rounded-[2px] text-[14px] outline-none"
                 @change="getTableRequest()"
               >
                 <option value="1">1</option>
@@ -220,17 +212,13 @@
 </template>
 
 <script>
-// Icons url
-import search from '../../../assets/icons/search.png'
-import printer from '../../../assets/icons/printer.png'
-// Components
-import LoadingPage from '../../Loading/LoadingPage.vue'
-import GenericButton from '../../Button/GenericButton.vue'
-import GenericInput from '../../Input/GenericInput.vue'
-import GenericSelect from '../../Select/GenericSelect.vue'
-import GenericInputDatePage from '../../InputDate/GenericInputDatePage.vue'
-import ColumnConfigPage from '../../ColumnConfig/ColumnConfigPage.vue'
-import GenericTablePage from '../../GenericTable/GenericTablePage.vue'
+import LoadingPage from '@components/Loading/LoadingPage.vue'
+import GenericButton from '@components/Button/GenericButton.vue'
+import GenericInput from '@generics/GenericInput.vue'
+import GenericSelect from '@components/Select/GenericSelect.vue'
+import GenericInputDatePage from '@components/InputDate/GenericInputDatePage.vue'
+import ColumnConfigPage from '@components/ColumnConfig/ColumnConfigPage.vue'
+import GenericTablePage from '@components/GenericTable/GenericTablePage.vue'
 export default {
   components: {
     LoadingPage,
@@ -252,10 +240,6 @@ export default {
       tableBody: [],
       tableHeadLength: null,
       isThereBody: false,
-      imgUrl: {
-        search,
-        printer,
-      },
       tableId: [],
       selectData: {},
       formData: new Map(),
@@ -282,35 +266,26 @@ export default {
     getTableRequest() {
       this.isLoading = !this.isLoading
       this.$axios
-        .post(
-          `/invoice/purchaseInvoiceList`,
-          {
-            current_page: 1,
-            page_size: this.pageSize_value,
-            searchForm: {
-              keyword: this.keywordValue,
-              from_date: new Date(Object.fromEntries(this.formData).from)
-                .toLocaleString('en-GB')
-                .split(',')
-                .join(''),
-              to_date: new Date(Object.fromEntries(this.formData).to)
-                .toLocaleString('en-GB')
-                .split(',')
-                .join(''),
-            },
-            billStatus: Object.fromEntries(this.formData).bill,
-            payStatus: Object.fromEntries(this.formData).pay,
-            invoiceOnWayStatus: Object.fromEntries(this.formData).invoice,
-            departmentId: Object.fromEntries(this.formData).departments,
-            warehouseId: Object.fromEntries(this.formData).warehouse,
+        .post(`/invoice/purchaseInvoiceList`, {
+          current_page: 1,
+          page_size: this.pageSize_value,
+          searchForm: {
+            keyword: this.keywordValue,
+            from_date: new Date(Object.fromEntries(this.formData).from)
+              .toLocaleString('en-GB')
+              .split(',')
+              .join(''),
+            to_date: new Date(Object.fromEntries(this.formData).to)
+              .toLocaleString('en-GB')
+              .split(',')
+              .join(''),
           },
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem('token')}`,
-              'x-auth-token': localStorage.getItem('authToken'),
-            },
-          }
-        )
+          billStatus: Object.fromEntries(this.formData).bill,
+          payStatus: Object.fromEntries(this.formData).pay,
+          invoiceOnWayStatus: Object.fromEntries(this.formData).invoice,
+          departmentId: Object.fromEntries(this.formData).departments,
+          warehouseId: Object.fromEntries(this.formData).warehouse,
+        })
         .then((res) => {
           this.tableBody = []
           this.isLoading = !this.isLoading
@@ -358,20 +333,11 @@ export default {
     getTableRowOpen(thisId) {
       this.isLoading = !this.isLoading
       this.$axios
-        .post(
-          `/invoice/preparePurchaseInvoice`,
-          {
-            current_page: 1,
-            page_size: this.pageSize_value,
-            searchForm: { keyword: this.keywordValue || '', id: thisId },
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem('token')}`,
-              'x-auth-token': localStorage.getItem('authToken'),
-            },
-          }
-        )
+        .post(`/invoice/preparePurchaseInvoice`, {
+          current_page: 1,
+          page_size: this.pageSize_value,
+          searchForm: { keyword: this.keywordValue || '', id: thisId },
+        })
         .then((res) => {
           this.isLoading = !this.isLoading
           this.$router.push('/preparePurchaseInvoiceNew.htm')

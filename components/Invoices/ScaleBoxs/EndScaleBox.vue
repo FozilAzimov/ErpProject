@@ -9,9 +9,9 @@
         class="flex flex-col items-start"
       >
         <span class="text-[13px]">{{ element.name }}</span>
-        <look-up
+        <generic-look-up
           v-if="element.type === 'list'"
-          :durl="`invoiceBase/${element.url}`"
+          :durl="element.url"
           dwidth="100"
           widthtype="%"
           dlist="100"
@@ -52,12 +52,12 @@
 
 <script>
 import GenericButton from '@generics/GenericButton.vue'
-import GenericInput from '@components/Input/GenericInput.vue'
+import GenericInput from '@generics/GenericInput.vue'
 import GenericInputDatePage from '@components/InputDate/GenericInputDatePage.vue'
-import LookUp from '@generics/GenericLookUp.vue'
+import GenericLookUp from '@generics/GenericLookUp.vue'
 export default {
   components: {
-    LookUp,
+    GenericLookUp,
     GenericInputDatePage,
     GenericInput,
     GenericButton,
@@ -123,7 +123,7 @@ export default {
 
   // METHODS
   methods: {
-    // LookUp value'sini olish
+    // GenericLookUp value'sini olish
     getLookUpValue(name, value, valueID, order, resultType) {
       this.allInputLookUpValues[name] = valueID
       if (name === 'product' && valueID) this.getResponseData('all')

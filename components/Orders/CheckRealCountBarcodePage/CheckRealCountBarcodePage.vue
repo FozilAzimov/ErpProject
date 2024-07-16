@@ -96,8 +96,8 @@
             </li>
             <li class="flex justify-between">
               <label>Company</label>
-              <LookUp
-                durl="invoiceBase/findAllPaymentType"
+              <generic-look-up
+                durl="findAllPaymentType"
                 dwidth="150"
                 widthtype="px"
                 dlist="100"
@@ -106,8 +106,8 @@
             </li>
             <li class="flex justify-between">
               <label>Users </label>
-              <LookUp
-                durl="invoiceBase/findAllPaymentType"
+              <generic-look-up
+                durl="findAllPaymentType"
                 dwidth="150"
                 widthtype="px"
                 dlist="100"
@@ -116,8 +116,8 @@
             </li>
             <li class="flex justify-between">
               <label>Warehouse </label>
-              <LookUp
-                durl="invoiceBase/findAllPaymentType"
+              <generic-look-up
+                durl="findAllPaymentType"
                 dwidth="150"
                 widthtype="px"
                 dlist="100"
@@ -127,8 +127,8 @@
 
             <li class="flex justify-between">
               <label>Product Category </label>
-              <LookUp
-                durl="invoiceBase/findAllPaymentType"
+              <generic-look-up
+                durl="findAllPaymentType"
                 dwidth="150"
                 widthtype="px"
                 dlist="100"
@@ -263,7 +263,7 @@
 </template>
 
 <script>
-import LookUp from '@generics/GenericLookUp.vue'
+import GenericLookUp from '@generics/GenericLookUp.vue'
 import LoadingPage from '@components/Loading/LoadingPage.vue'
 import GenericButton from '@components/Button/GenericButton.vue'
 // import GenericTablePage from '../GenericTable/GenericTablePage.vue'
@@ -272,7 +272,7 @@ export default {
   components: {
     LoadingPage,
     GenericButton,
-    LookUp,
+    GenericLookUp,
     //  GenericTablePage
   },
   data() {

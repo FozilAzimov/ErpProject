@@ -71,11 +71,11 @@
         >
           <div class="flex items-center gap-2 pb-[10px]">
             <h3 class="text-[15px]">Reports</h3>
-            <GenericActiveLookUpPage
+            <generic-look-up
               v-if="lookUpData.length"
-              :data="lookUpData"
+              :options-data="lookUpData"
               placeholder="Select an Option"
-              @customLookupValue="getValueLookup"
+              @customFunction="getValueLookup"
             />
             <GenericButton
               name="Show/Hide"
@@ -155,8 +155,8 @@
 </template>
 
 <script>
+import GenericLookUp from '@generics/GenericLookUp.vue'
 import LoadingPage from '@components/Loading/LoadingPage.vue'
-import GenericActiveLookUpPage from '@generics/GenericActiveLookUp/GenericActiveLookUpPage.vue'
 import GenericButton from '@components/Button/GenericButton.vue'
 import SummaryReportPage1 from '@components/Reports/TransactionReports/SummaryReportPage1.vue'
 import SummaryReportPage2 from '@components/Reports/TransactionReports/SummaryReportPage2.vue'
@@ -168,7 +168,7 @@ import SummaryReportPage7 from '@components/Reports/TransactionReports/SummaryRe
 export default {
   components: {
     LoadingPage,
-    GenericActiveLookUpPage,
+    GenericLookUp,
     GenericButton,
     SummaryReportPage1,
     SummaryReportPage2,
@@ -232,7 +232,7 @@ export default {
     },
 
     // Look Up data sini olish
-    getValueLookup(value) {
+    getValueLookup(name, value) {
       this.lookUpValue = value
       this.isLoading = !this.isLoading
       this.$axios

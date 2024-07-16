@@ -78,8 +78,8 @@
             </li>
             <li class="flex justify-between">
               <label> Products</label>
-              <LookUp
-                durl="invoiceBase/findAllPaymentType"
+              <generic-look-up
+                durl="findAllPaymentType"
                 dwidth="150"
                 widthtype="px"
                 dlist="100"
@@ -88,8 +88,8 @@
             </li>
             <li class="flex justify-between">
               <label>Company Group </label>
-              <LookUp
-                durl="invoiceBase/findAllPaymentType"
+              <generic-look-up
+                durl="findAllPaymentType"
                 dwidth="150"
                 widthtype="px"
                 dlist="100"
@@ -98,8 +98,8 @@
             </li>
             <li class="flex justify-between">
               <label>Company Branch </label>
-              <LookUp
-                durl="invoiceBase/findAllPaymentType"
+              <generic-look-up
+                durl="findAllPaymentType"
                 dwidth="150"
                 widthtype="px"
                 dlist="100"
@@ -108,8 +108,8 @@
             </li>
             <li class="flex justify-between">
               <label>Department </label>
-              <LookUp
-                durl="invoiceBase/findAllPaymentType"
+              <generic-look-up
+                durl="findAllPaymentType"
                 dwidth="150"
                 widthtype="px"
                 dlist="100"
@@ -118,8 +118,8 @@
             </li>
             <li class="flex justify-between">
               <label>Warehouse </label>
-              <LookUp
-                durl="invoiceBase/findAllPaymentType"
+              <generic-look-up
+                durl="findAllPaymentType"
                 dwidth="150"
                 widthtype="px"
                 dlist="100"
@@ -128,8 +128,8 @@
             </li>
             <li class="flex justify-between">
               <label>External barcode </label>
-              <LookUp
-                durl="invoiceBase/findAllPaymentType"
+              <generic-look-up
+                durl="findAllPaymentType"
                 dwidth="150"
                 widthtype="px"
                 dlist="100"
@@ -138,8 +138,8 @@
             </li>
             <li class="flex justify-between">
               <label>Design Type </label>
-              <LookUp
-                durl="invoiceBase/findAllPaymentType"
+              <generic-look-up
+                durl="findAllPaymentType"
                 dwidth="150"
                 widthtype="px"
                 dlist="100"
@@ -166,8 +166,8 @@
             </li>
             <li class="flex justify-between">
               <label>Supplier </label>
-              <LookUp
-                durl="invoiceBase/findAllPaymentType"
+              <generic-look-up
+                durl="findAllPaymentType"
                 dwidth="150"
                 widthtype="px"
                 dlist="100"
@@ -176,8 +176,8 @@
             </li>
             <li class="flex justify-between">
               <label>Manufacturer </label>
-              <LookUp
-                durl="invoiceBase/findAllPaymentType"
+              <generic-look-up
+                durl="findAllPaymentType"
                 dwidth="150"
                 widthtype="px"
                 dlist="100"
@@ -186,8 +186,8 @@
             </li>
             <li class="flex justify-between">
               <label>Invoice Types </label>
-              <LookUp
-                durl="invoiceBase/findAllPaymentType"
+              <generic-look-up
+                durl="findAllPaymentType"
                 dwidth="150"
                 widthtype="px"
                 dlist="100"
@@ -196,8 +196,8 @@
             </li>
             <li class="flex justify-between">
               <label>Order Production Type </label>
-              <LookUp
-                durl="invoiceBase/findAllPaymentType"
+              <generic-look-up
+                durl="findAllPaymentType"
                 dwidth="150"
                 widthtype="px"
                 dlist="100"
@@ -206,8 +206,8 @@
             </li>
             <li class="flex justify-between">
               <label>Item Barcode </label>
-              <LookUp
-                durl="invoiceBase/findAllPaymentType"
+              <generic-look-up
+                durl="findAllPaymentType"
                 dwidth="150"
                 widthtype="px"
                 dlist="100"
@@ -216,8 +216,8 @@
             </li>
             <li class="flex justify-between">
               <label>Batch Year </label>
-              <LookUp
-                durl="invoiceBase/findAllPaymentType"
+              <generic-look-up
+                durl="findAllPaymentType"
                 dwidth="150"
                 widthtype="px"
                 dlist="100"
@@ -244,8 +244,8 @@
             </li>
             <li class="flex justify-between">
               <label>Colors </label>
-              <LookUp
-                durl="invoiceBase/findAllPaymentType"
+              <generic-look-up
+                durl="findAllPaymentType"
                 dwidth="150"
                 widthtype="px"
                 dlist="100"
@@ -254,8 +254,8 @@
             </li>
             <li class="flex justify-between">
               <label>TUP_AEN_MAYLI </label>
-              <LookUp
-                durl="invoiceBase/findAllPaymentType"
+              <generic-look-up
+                durl="findAllPaymentType"
                 dwidth="150"
                 widthtype="px"
                 dlist="100"
@@ -264,8 +264,8 @@
             </li>
             <li class="flex justify-between">
               <label>Grade </label>
-              <LookUp
-                durl="invoiceBase/findAllPaymentType"
+              <generic-look-up
+                durl="findAllPaymentType"
                 dwidth="150"
                 widthtype="px"
                 dlist="100"
@@ -274,8 +274,8 @@
             </li>
             <li class="flex justify-between">
               <label> clientOrder </label>
-              <LookUp
-                durl="invoiceBase/findAllPaymentType"
+              <generic-look-up
+                durl="findAllPaymentType"
                 dwidth="150"
                 widthtype="px"
                 dlist="100"
@@ -284,8 +284,8 @@
             </li>
             <li class="flex justify-between">
               <label> Company ( Order ) </label>
-              <LookUp
-                durl="invoiceBase/findAllPaymentType"
+              <generic-look-up
+                durl="findAllPaymentType"
                 dwidth="150"
                 widthtype="px"
                 dlist="100"
@@ -294,8 +294,8 @@
             </li>
             <li class="flex justify-between">
               <label> Product Categories </label>
-              <LookUp
-                durl="invoiceBase/findAllPaymentType"
+              <generic-look-up
+                durl="findAllPaymentType"
                 dwidth="150"
                 widthtype="px"
                 dlist="100"
@@ -340,7 +340,7 @@
 </template>
 
 <script>
-import LookUp from '@generics/GenericLookUp.vue'
+import GenericLookUp from '@generics/GenericLookUp.vue'
 import LoadingPage from '@components/Loading/LoadingPage.vue'
 import GenericButton from '@components/Button/GenericButton.vue'
 // import GenericTablePage from '../GenericTable/GenericTablePage.vue'
@@ -349,7 +349,7 @@ export default {
   components: {
     LoadingPage,
     GenericButton,
-    LookUp,
+    GenericLookUp,
     //  GenericTablePage
   },
 

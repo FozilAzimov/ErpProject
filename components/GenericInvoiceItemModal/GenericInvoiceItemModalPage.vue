@@ -29,9 +29,9 @@
               </label>
             </div>
             <div class="mt-[2px]">
-              <LookUp
+              <generic-look-up
                 v-if="itemRight.type === 'list'"
-                :durl="`invoiceBase/${itemRight.durl}`"
+                :durl="`${itemRight.durl}`"
                 dwidth="250"
                 :name="itemRight.name"
                 :result-type="itemRight.resultType"
@@ -104,9 +104,9 @@
               </label>
             </div>
             <div class="mt-[2px]">
-              <LookUp
+              <generic-look-up
                 v-if="itemLeft.type === 'list'"
-                :durl="`invoiceBase/${itemLeft.durl}`"
+                :durl="`${itemLeft.durl}`"
                 dwidth="250"
                 :name="itemLeft.name"
                 :result-type="itemLeft.resultType"
@@ -175,15 +175,15 @@
 <script>
 import GenericButton from '@generics/GenericButton.vue'
 import GenericCheckBox from '@generics/GenericCheckBox.vue'
-import GenericInput from '@components/Input/GenericInput.vue'
+import GenericInput from '@generics/GenericInput.vue'
 import GenericInputDatePage from '@components/InputDate/GenericInputDatePage.vue'
-import LookUp from '@generics/GenericLookUp.vue'
+import GenericLookUp from '@generics/GenericLookUp.vue'
 
 export default {
   components: {
     GenericInput,
     GenericButton,
-    LookUp,
+    GenericLookUp,
     GenericInputDatePage,
     GenericCheckBox,
   },
@@ -227,7 +227,7 @@ export default {
 
   // Methods
   methods: {
-    // LookUp va Input'larning required'larini tekshiradi
+    // GenericLookUp va Input'larning required'larini tekshiradi
     requiredLookUpAndInputCheckerAction(data) {
       const arr = this.modalData.filter(
         (obj) =>
@@ -250,7 +250,7 @@ export default {
         .map((obj) => Object.values(obj).includes(true))
         .at(-1)
     },
-    // LookUp va Input'larning required'larini tekshiradi
+    // GenericLookUp va Input'larning required'larini tekshiradi
 
     // Data filter
     filterData() {
@@ -301,7 +301,7 @@ export default {
       }
     },
 
-    // Lookup's Valuesini olish
+    // GenericLookUp's Valuesini olish
     getInputValue(key, value) {
       if (this.whichTableName) {
         this.inputValuesObj.set('erepairStatus', 'false')

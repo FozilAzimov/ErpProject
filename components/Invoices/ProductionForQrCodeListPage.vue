@@ -74,10 +74,10 @@
               >{{ element.name }}
               <span class="text-red-600 text-[15px]">*</span>
             </span>
-            <look-up
+            <generic-look-up
               dwidth="200"
               dlist="100"
-              durl="invoice/findAllEmployee"
+              durl="findAllEmployee"
               :name="element.payloadName"
               @customFunction="getLookUpValue"
             />
@@ -87,10 +87,10 @@
             <span class="text-[13px] whitespace-nowrap"
               >{{ element.name }}
             </span>
-            <look-up
+            <generic-look-up
               dwidth="200"
               dlist="100"
-              durl="invoice/findAllEmployee"
+              durl="findAllEmployee"
               :name="element.payloadName"
               @customFunction="getLookUpValue"
             />
@@ -206,15 +206,15 @@
 </template>
 
 <script>
-import GenericInput from '@components/Input/GenericInput.vue'
+import GenericInput from '@generics/GenericInput.vue'
 import GenericInputDatePage from '@components/InputDate/GenericInputDatePage.vue'
 import LoadingPage from '@components/Loading/LoadingPage.vue'
-import LookUp from '@generics/GenericLookUp.vue'
+import GenericLookUp from '@generics/GenericLookUp.vue'
 export default {
   // COMPONENTS
   components: {
     LoadingPage,
-    LookUp,
+    GenericLookUp,
     GenericInput,
     GenericInputDatePage,
   },
@@ -349,7 +349,7 @@ export default {
 
   // METHOD
   methods: {
-    // LookUp value'sini olish
+    // GenericLookUp value'sini olish
     getLookUpValue(name, value, valueID, order, resultType) {
       this.allInputLookUpValues[name] = valueID
     },

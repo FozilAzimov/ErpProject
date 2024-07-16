@@ -44,7 +44,7 @@
                 1 + inx
               }}</template>
               <template v-else-if="element?.type === 'select'">
-                <look-up dwidth="150" />
+                <generic-look-up dwidth="150" />
               </template>
               <template v-else-if="element?.type === 'text'">
                 <generic-input width="150" />
@@ -70,14 +70,14 @@
 
 <script>
 import GenericButton from '@generics/GenericButton.vue'
-import LookUp from '@generics/GenericLookUp.vue'
-import GenericInput from '@components/Input/GenericInput.vue'
+import GenericLookUp from '@generics/GenericLookUp.vue'
+import GenericInput from '@generics/GenericInput.vue'
 import GenericCheckBox from '@generics/GenericCheckBox.vue'
 export default {
   // COMPONENTS
   components: {
     GenericButton,
-    LookUp,
+    GenericLookUp,
     GenericInput,
     GenericCheckBox,
   },

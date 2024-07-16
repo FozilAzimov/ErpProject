@@ -29,7 +29,7 @@
   </div>
 </template>
 <script>
-import GenericInput from '../Input/GenericInput.vue'
+import GenericInput from '@generics/GenericInput.vue'
 export default {
   // COMPONENTS
   components: { GenericInput },

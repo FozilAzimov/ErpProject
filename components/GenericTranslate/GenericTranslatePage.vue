@@ -11,16 +11,7 @@ export default {
     // translate api
     getStaticTableNameValues() {
       this.$axios
-        .post(
-          `/translate`,
-          { messages: this.tableNameTranslate },
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem('token')}`,
-              'x-auth-token': localStorage.getItem('authToken'),
-            },
-          }
-        )
+        .post(`/translate`, { messages: this.tableNameTranslate })
         .then((res) => {
           this.tableNameTranslateObj = res.data
         })

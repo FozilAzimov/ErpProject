@@ -76,7 +76,7 @@
         "
       >
         <div class="m-2">
-          <look-up />
+          <generic-look-up />
         </div>
         <div class="p-2">
           <div class="flex items-center justify-between mb-1">
@@ -136,10 +136,10 @@
 <script>
 import LoadingPage from '@components/Loading/LoadingPage.vue'
 import GenericButton from '@generics/GenericButton.vue'
-import GenericInput from '@components/Input/GenericInput.vue'
+import GenericInput from '@generics/GenericInput.vue'
 import ColumnConfigPage from '@components/ColumnConfig/ColumnConfigPage.vue'
 import GenericTablePage from '@components/GenericTable/GenericTablePage.vue'
-import LookUp from '@generics/GenericLookUp.vue'
+import GenericLookUp from '@generics/GenericLookUp.vue'
 export default {
   components: {
     LoadingPage,
@@ -147,7 +147,7 @@ export default {
     GenericInput,
     ColumnConfigPage,
     GenericTablePage,
-    LookUp,
+    GenericLookUp,
   },
 
   // DATA

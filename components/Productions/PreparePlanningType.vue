@@ -112,7 +112,7 @@
                 class="flex flex-col items-start mb-1"
               >
                 <span class="text-[13px]">{{ element.name }} </span>
-                <look-up
+                <generic-look-up
                   dwidth="300"
                   :name="element.subName"
                   :options-data="selectDefaultData"
@@ -147,15 +147,17 @@
 
 <script>
 import GenericButton from '@generics/GenericButton.vue'
-import GenericInput from '@components/Input/GenericInput.vue'
+import GenericInput from '@generics/GenericInput.vue'
 import LoadingPage from '@components/Loading/LoadingPage.vue'
 import ProductionAdditionTable from '@components/Productions/ProductionAdditionTable.vue'
+import GenericLookUp from '@generics/GenericLookUp.vue'
 export default {
   components: {
     LoadingPage,
     GenericButton,
     GenericInput,
     ProductionAdditionTable,
+    GenericLookUp,
   },
 
   // DATA

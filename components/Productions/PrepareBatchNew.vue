@@ -121,13 +121,9 @@
                   v-if="saveEditBtnShowHide"
                   class="border-[1px] border-solid border-[#778899] pl-[10px]"
                 >
-                  <look-up
+                  <generic-look-up
                     v-if="element.type === 'select'"
-                    :durl="
-                      element.subName === 'equipments'
-                        ? `productionReports/${element?.url}`
-                        : `invoiceBase/${element?.url}`
-                    "
+                    :durl="element?.url"
                     :dparam="element.param"
                     dwidth="220"
                     :defvalue="''"
@@ -324,9 +320,9 @@
 
 <script>
 import GenericButton from '@generics/GenericButton.vue'
-import GenericInput from '@components/Input/GenericInput.vue'
+import GenericInput from '@generics/GenericInput.vue'
 import LoadingPage from '@components/Loading/LoadingPage.vue'
-import LookUp from '@generics/GenericLookUp.vue'
+import GenericLookUp from '@generics/GenericLookUp.vue'
 import ColumnConfigPage from '@components/ColumnConfig/ColumnConfigPage.vue'
 import GenericCheckBox from '@generics/GenericCheckBox.vue'
 import ScaleBox from '@components/Invoices/ScaleBoxs/ScaleBox.vue'
@@ -336,7 +332,7 @@ export default {
     GenericButton,
     GenericInput,
     LoadingPage,
-    LookUp,
+    GenericLookUp,
     ColumnConfigPage,
     GenericCheckBox,
     ScaleBox,

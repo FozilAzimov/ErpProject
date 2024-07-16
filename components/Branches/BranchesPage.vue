@@ -14,7 +14,7 @@
         >
           {{ $t('pages.branches.branchLookUpName') }}
           <img
-            src="../../assets/icons/arrow-bottom.png"
+            src="@assets/icons/arrow-bottom.png"
             alt="user"
             class="w-[8px]"
             :style="{
@@ -47,7 +47,7 @@
 </template>
 
 <script>
-import LoadingPage from '../Loading/LoadingPage.vue'
+import LoadingPage from '@components/Loading/LoadingPage.vue'
 export default {
   components: { LoadingPage },
   // Data

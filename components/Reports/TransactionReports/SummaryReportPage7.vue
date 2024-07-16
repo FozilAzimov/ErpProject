@@ -57,7 +57,7 @@
 
 <script>
 import GenericButton from '@components/Button/GenericButton.vue'
-import GenericInput from '@components/Input/GenericInput.vue'
+import GenericInput from '@generics/GenericInput.vue'
 export default {
   components: {
     GenericInput,

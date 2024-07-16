@@ -64,8 +64,8 @@
             <td
               class="w-[17%] border-[1px] border-[solid] border-[#778899] p-[2px]"
             >
-              <LookUp
-                durl="invoiceBase/findAllPaymentType"
+              <generic-look-up
+                durl="findAllPaymentType"
                 dwidth="100"
                 widthtype="%"
                 dlist="100"
@@ -102,9 +102,9 @@
               {{ tableNameTranslateObj.supplier }}
             </td>
             <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
-              <LookUp
+              <generic-look-up
                 :value="objData?.supplierCurSymbol?.text"
-                durl="invoiceBase/findAllCompanyForInvoice"
+                durl="findAllCompanyForInvoice"
                 dwidth="100"
                 widthtype="%"
                 dlist="100"
@@ -205,10 +205,10 @@
               {{ tableNameTranslateObj['menu.companies.group'] }}
             </td>
             <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
-              <LookUp
+              <generic-look-up
                 v-if="objData?.companyGroup?.text"
                 :defvalue="objData?.companyGroup?.text"
-                durl="invoiceBase/findAllCompanyGroups"
+                durl="findAllCompanyGroups"
                 dwidth="100"
                 widthtype="%"
                 dlist="100"
@@ -244,10 +244,10 @@
               {{ tableNameTranslateObj.branch }}
             </td>
             <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
-              <LookUp
+              <generic-look-up
                 v-if="objData?.branch?.text"
                 :defvalue="objData?.branch?.text"
-                durl="invoiceBase/findAllCompanyLogic"
+                durl="findAllCompanyLogic"
                 dwidth="100"
                 widthtype="%"
                 dlist="100"
@@ -303,10 +303,10 @@
               {{ tableNameTranslateObj.department }}
             </td>
             <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
-              <LookUp
+              <generic-look-up
                 v-if="objData?.department?.text"
                 :defvalue="objData?.department?.text"
-                durl="invoiceBase/findAllDepartmentLogic"
+                durl="findAllDepartmentLogic"
                 dwidth="100"
                 widthtype="%"
                 dlist="100"
@@ -342,10 +342,10 @@
               {{ tableNameTranslateObj.warehouse }}
             </td>
             <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
-              <LookUp
+              <generic-look-up
                 v-if="objData?.warehouse?.text"
                 :defvalue="objData?.warehouse?.text"
-                durl="invoiceBase/findAllWarehouseLogic"
+                durl="findAllWarehouseLogic"
                 dwidth="100"
                 widthtype="%"
                 dlist="100"
@@ -381,10 +381,10 @@
               {{ tableNameTranslateObj.currency }}
             </td>
             <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
-              <LookUp
+              <generic-look-up
                 v-if="objData?.currency?.text"
                 :defvalue="objData?.currency?.text"
-                durl="invoiceBase/findAllCurrency"
+                durl="findAllCurrency"
                 dwidth="100"
                 widthtype="%"
                 dlist="100"
@@ -443,10 +443,10 @@
               {{ tableNameTranslateObj.orderProductionType }}
             </td>
             <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
-              <LookUp
+              <generic-look-up
                 v-if="objData?.orderProductionType?.text"
                 :defvalue="objData?.orderProductionType?.text"
-                durl="invoiceBase/findAllOrderProductionType"
+                durl="findAllOrderProductionType"
                 dwidth="100"
                 widthtype="%"
                 dlist="100"
@@ -482,10 +482,10 @@
               {{ tableNameTranslateObj.calculationType }}
             </td>
             <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
-              <LookUp
+              <generic-look-up
                 v-if="objData?.calc_type?.text"
                 :defvalue="objData?.calc_type?.text"
-                durl="invoiceBase/findAllInvoiceCalc_type"
+                durl="findAllInvoiceCalc_type"
                 dwidth="100"
                 widthtype="%"
                 dlist="100"
@@ -495,8 +495,8 @@
               {{ tableNameTranslateObj.contract }}
             </td>
             <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
-              <LookUp
-                durl="invoiceBase/findAllContracts"
+              <generic-look-up
+                durl="findAllContracts"
                 dwidth="100"
                 widthtype="%"
                 dlist="100"
@@ -559,8 +559,8 @@
               {{ tableNameTranslateObj.plateNumber }}
             </td>
             <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
-              <LookUp
-                durl="invoiceBase/findAllPlateNumber"
+              <generic-look-up
+                durl="findAllPlateNumber"
                 dwidth="100"
                 widthtype="%"
                 dlist="100"
@@ -586,8 +586,8 @@
               {{ tableNameTranslateObj.car }}
             </td>
             <td class="border-[1px] border-[solid] border-[#778899] p-[2px]">
-              <LookUp
-                durl="invoiceBase/findAllCar"
+              <generic-look-up
+                durl="findAllCar"
                 dwidth="100"
                 widthtype="%"
                 dlist="100"
@@ -663,16 +663,12 @@
           />
         </div>
         <div class="mt-1">
-          <LookUp
-            durl="invoiceBase/findAllCompanyForInvoice"
+          <generic-look-up
+            durl="findAllCompanyForInvoice"
             dwidth="200"
             dlist="200"
           />
-          <LookUp
-            durl="invoiceBase/findAllPaymentType"
-            dwidth="200"
-            dlist="200"
-          />
+          <generic-look-up durl="findAllPaymentType" dwidth="200" dlist="200" />
         </div>
         <GenericPrepareTablePage
           :tablehead="tableData"
@@ -688,15 +684,15 @@
 <script>
 import GenericButton from '@generics/GenericButton.vue'
 import LoadingPage from '@components/Loading/LoadingPage.vue'
-import LookUp from '@generics/GenericLookUp.vue'
-import GenericInput from '@components/Input/GenericInput.vue'
+import GenericLookUp from '@generics/GenericLookUp.vue'
+import GenericInput from '@generics/GenericInput.vue'
 import GenericPrepareTablePage from '@components/GenericPrepareTable/GenericPrepareTablePage.vue'
 export default {
   // COMPONENTS
   components: {
     LoadingPage,
     GenericButton,
-    LookUp,
+    GenericLookUp,
     GenericInput,
     GenericPrepareTablePage,
   },

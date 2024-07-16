@@ -162,9 +162,9 @@
                 class="border-[1px] text-[12px] p-2"
                 :class="`w-[${value.dwidth}px]`"
               >
-                <LookUp
+                <generic-look-up
                   v-if="value.type === 'list'"
-                  :durl="`invoiceBase/${value.durl}`"
+                  :durl="`${value.durl}`"
                   :defvalue="
                     newEditResData.length &&
                     newEditResData?.[indexOne]?.[value.name]
@@ -284,12 +284,12 @@
 </template>
 
 <script>
-import LookUp from '@generics/GenericLookUp.vue'
+import GenericLookUp from '@generics/GenericLookUp.vue'
 import GenericInputDatePage from '@components/InputDate/GenericInputDatePage.vue'
 import LoadingPage from '@components/Loading/LoadingPage.vue'
 import GenericButton from '@generics/GenericButton.vue'
 import GenericInvoiceItemModalPage from '@components/GenericInvoiceItemModal/GenericInvoiceItemModalPage.vue'
-import GenericInput from '@components/Input/GenericInput.vue'
+import GenericInput from '@generics/GenericInput.vue'
 
 export default {
   // COMPONENTS
@@ -297,7 +297,7 @@ export default {
     LoadingPage,
     GenericButton,
     GenericInputDatePage,
-    LookUp,
+    GenericLookUp,
     GenericInvoiceItemModalPage,
     GenericInput,
   },
@@ -419,7 +419,7 @@ export default {
     },
     // Arrayni bo'sh object dan tozalash
 
-    // LookUp va Input'larning required'larini tekshiradi
+    // GenericLookUp va Input'larning required'larini tekshiradi
     requiredLookUpAndInputCheckerAction(data) {
       const arr = this.filteredTablehead.filter(
         (obj) =>
@@ -445,7 +445,7 @@ export default {
       else this.disabledButtun = false
       this.$emit('requiredAction', this.disabledButtun, 'subBottom')
     },
-    // LookUp va Input'larning required'larini tekshiradi
+    // GenericLookUp va Input'larning required'larini tekshiradi
 
     // Save action dan keyin filter qiluvchi input funksiyasi
     filterAction(name, value) {

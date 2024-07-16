@@ -24,7 +24,7 @@
           class="flex flex-col items-start"
         >
           <span class="text-[13px]">{{ element.name }}</span>
-          <look-up
+          <generic-look-up
             :dwidth="element?.width"
             :name="element?.subName"
             :durl="element?.url"
@@ -97,12 +97,14 @@
 
 <script>
 import LoadingPage from '@components/Loading/LoadingPage.vue'
-import GenericInput from '@components/Input/GenericInput.vue'
+import GenericInput from '@generics/GenericInput.vue'
+import GenericLookUp from '@generics/GenericLookUp.vue'
 export default {
   // COMPONENTS
   components: {
     LoadingPage,
     GenericInput,
+    GenericLookUp,
   },
 
   // DATA

@@ -110,9 +110,9 @@
                   v-if="saveEditBtnType"
                   class="border-[1px] border-solid border-[#778899] pl-[10px]"
                 >
-                  <look-up
+                  <generic-look-up
                     v-if="element.type === 'select'"
-                    :durl="`invoiceBase/${element?.url}`"
+                    :durl="element?.url"
                     :dparam="element.param"
                     dwidth="220"
                     :defvalue="
@@ -391,10 +391,10 @@
 
 <script>
 import GenericButton from '@generics/GenericButton.vue'
-import GenericInput from '@components/Input/GenericInput.vue'
+import GenericInput from '@generics/GenericInput.vue'
 import GenericInputDatePage from '@components/InputDate/GenericInputDatePage.vue'
 import LoadingPage from '@components/Loading/LoadingPage.vue'
-import LookUp from '@generics/GenericLookUp.vue'
+import GenericLookUp from '@generics/GenericLookUp.vue'
 import MessageBox from '@components/MessageBox.vue'
 import GenericPrepareTablePage from '@components/GenericPrepareTable/GenericPrepareTablePage.vue'
 import ColumnConfigPage from '@components/ColumnConfig/ColumnConfigPage.vue'
@@ -405,7 +405,7 @@ export default {
     GenericInput,
     GenericInputDatePage,
     LoadingPage,
-    LookUp,
+    GenericLookUp,
     MessageBox,
     GenericPrepareTablePage,
     ColumnConfigPage,

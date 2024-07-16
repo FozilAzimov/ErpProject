@@ -17,7 +17,7 @@
               {{ headName.name }}
             </th>
             <th
-              class="text-[13px] font-semibold border-[1px] border-solid border-[rgba(119,136,153,0.2)] p-2 cursor-pointer"
+              class="w-[100px] text-[13px] font-semibold border-[1px] border-solid border-[rgba(119,136,153,0.2)] p-2 cursor-pointer"
             >
               Action
             </th>
@@ -119,18 +119,7 @@
                     key?.code === 'recipe'
                   "
                 >
-                  <generic-nuxt-link-button
-                    name="recipeDesignItem"
-                    pl="8"
-                    pt="3"
-                    pr="8"
-                    pb="3"
-                    bg="rgba(54, 155, 215, 0.8)"
-                    textsize="13"
-                    margin="8"
-                  />
-                  <!-- recipeDesignItem btn ning  url li -->
-                  <!-- to="/prepareDesignColorVariant.htm" -->
+                  <generic-button name="recipeDesignItem" type="primary" />
                 </span>
                 <span v-else>
                   {{ value[key.code] }}
@@ -278,14 +267,12 @@
 
 <script>
 import GenericButton from '@components/Generics/GenericButton.vue'
-import GenericNuxtLinkButton from '@components/Generics/GenericNuxtLink/GenericNuxtLinkButton.vue'
 import MessageBox from '@components/MessageBox.vue'
 import GenericPagination from '@components/Generics/GenericPagination.vue'
 export default {
   components: {
     GenericButton,
     MessageBox,
-    GenericNuxtLinkButton,
     GenericPagination,
   },
 

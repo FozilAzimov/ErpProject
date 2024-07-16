@@ -510,7 +510,7 @@
 
 <script>
 import GenericButton from '@components/Generics/GenericButton.vue'
-import GenericInput from '@components/Input/GenericInput.vue'
+import GenericInput from '@generics/GenericInput.vue'
 import GenericSelect from '@components/Select/GenericSelect.vue'
 export default {
   components: {

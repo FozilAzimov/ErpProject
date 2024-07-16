@@ -24,15 +24,11 @@
       class="border-[1px] border-solid border-[rgba(0,0,0,0.05)] p-[12px] bg-gradient-to-b from-transparent via-transparent to-gray-200 shadow-md"
     >
       <div class="flex items-center gap-[10px]">
-        <generic-nuxt-link-button
+        <generic-button
           name="Go Back"
-          pl="10"
-          pt="3"
-          pr="10"
-          pb="3"
-          bggradient="linear-gradient(to right, rgba(70,94,140,0.8),rgb(34,39,76))"
-          textsize="14"
-          to="/viabranchreceive.htm"
+          type="primary"
+          icon-name-attribute="arrow-left"
+          @click="$router.push('viabranchreceive.htm')"
         />
         <h1 class="font-bold text-[rgb(49,126,172)] text-[14px] uppercase">
           Receive - Internal Invoice
@@ -84,9 +80,9 @@
             <td
               class="w-[17%] border-[1px] border-solid border-[#778899] p-[2px]"
             >
-              <LookUp
+              <generic-look-up
                 :defvalue="userId || parentID ? objData?.paymentType?.text : ''"
-                durl="invoiceBase/findAllPaymentType"
+                durl="findAllPaymentType"
                 dwidth="100"
                 widthtype="%"
                 dlist="100"
@@ -182,10 +178,10 @@
               {{ tableNameTranslateObj['menu.companies.group'] }}
             </td>
             <td class="border-[1px] border-solid border-[#778899] p-[2px]">
-              <LookUp
+              <generic-look-up
                 v-if="objData?.companyGroup?.text"
                 :defvalue="objData?.companyGroup?.text"
-                durl="invoiceBase/findAllCompanyGroups"
+                durl="findAllCompanyGroups"
                 dwidth="100"
                 widthtype="%"
                 dlist="100"
@@ -224,9 +220,9 @@
               {{ tableNameTranslateObj.branch }}
             </td>
             <td class="border-[1px] border-solid border-[#778899] p-[2px]">
-              <LookUp
+              <generic-look-up
                 :defvalue="userId ? objData?.branch : objData?.branch?.text"
-                durl="invoiceBase/findAllCompanyLogic"
+                durl="findAllCompanyLogic"
                 dwidth="100"
                 widthtype="%"
                 dlist="100"
@@ -288,12 +284,12 @@
               {{ tableNameTranslateObj.department }}
             </td>
             <td class="border-[1px] border-solid border-[#778899] p-[2px]">
-              <LookUp
+              <generic-look-up
                 v-if="userId || objData?.department?.text"
                 :defvalue="
                   userId ? objData?.department : objData?.department?.text
                 "
-                durl="invoiceBase/findAllDepartmentLogic"
+                durl="findAllDepartmentLogic"
                 dwidth="100"
                 widthtype="%"
                 dlist="100"
@@ -332,9 +328,9 @@
               {{ tableNameTranslateObj.warehouse }}
             </td>
             <td class="border-[1px] border-solid border-[#778899] p-[2px]">
-              <LookUp
+              <generic-look-up
                 :defvalue="objData?.warehouse?.text"
-                durl="invoiceBase/findAllWarehouseLogic"
+                durl="findAllWarehouseLogic"
                 :dparam="{ departmentId }"
                 dwidth="100"
                 widthtype="%"
@@ -375,10 +371,10 @@
               {{ tableNameTranslateObj.currency }}
             </td>
             <td class="border-[1px] border-solid border-[#778899] p-[2px]">
-              <LookUp
+              <generic-look-up
                 v-if="objData?.currency?.text"
                 :defvalue="objData?.currency?.text"
-                durl="invoiceBase/findAllCurrency"
+                durl="findAllCurrency"
                 dwidth="100"
                 widthtype="%"
                 dlist="100"
@@ -442,10 +438,10 @@
               {{ tableNameTranslateObj.orderProductionType }}
             </td>
             <td class="border-[1px] border-solid border-[#778899] p-[2px]">
-              <LookUp
+              <generic-look-up
                 v-if="objData?.orderProductionType?.text"
                 :defvalue="objData?.orderProductionType?.text"
-                durl="invoiceBase/findAllOrderProductionType"
+                durl="findAllOrderProductionType"
                 dwidth="100"
                 widthtype="%"
                 dlist="100"
@@ -502,10 +498,10 @@
               {{ tableNameTranslateObj.calculationType }}
             </td>
             <td class="border-[1px] border-solid border-[#778899] p-[2px]">
-              <LookUp
+              <generic-look-up
                 v-if="objData?.calc_type?.text"
                 :defvalue="objData?.calc_type?.text"
-                durl="invoiceBase/findAllInvoiceCalc_type"
+                durl="findAllInvoiceCalc_type"
                 dwidth="100"
                 widthtype="%"
                 dlist="100"
@@ -518,9 +514,9 @@
               {{ tableNameTranslateObj.plateNumber }}
             </td>
             <td class="border-[1px] border-solid border-[#778899] p-[2px]">
-              <LookUp
+              <generic-look-up
                 :value="userId ? objData?.plateNumber : ''"
-                durl="invoiceBase/findAllPlateNumber"
+                durl="findAllPlateNumber"
                 dwidth="100"
                 widthtype="%"
                 dlist="100"
@@ -557,13 +553,13 @@
               {{ tableNameTranslateObj.warehouseRef }}
             </td>
             <td class="border-[1px] border-solid border-[#778899] p-[2px]">
-              <LookUp
+              <generic-look-up
                 :defvalue="
                   userId || parentID
                     ? objData?.company?.text
                     : objData?.supplierCurSymbol?.text
                 "
-                durl="invoiceBase/findAllWarehouseRef"
+                durl="findAllWarehouseRef"
                 dwidth="100"
                 widthtype="%"
                 dlist="100"
@@ -581,9 +577,9 @@
               {{ tableNameTranslateObj.car }}
             </td>
             <td class="border-[1px] border-solid border-[#778899] p-[2px]">
-              <LookUp
+              <generic-look-up
                 :defvalue="userId ? objData?.car : ''"
-                durl="invoiceBase/findAllCar"
+                durl="findAllCar"
                 dwidth="100"
                 widthtype="%"
                 dlist="100"
@@ -846,26 +842,24 @@
 <script>
 import GenericButton from '@components/Button/GenericButton.vue'
 import LoadingPage from '@components/Loading/LoadingPage.vue'
-import LookUp from '@generics/GenericLookUp.vue'
-import GenericInput from '@components/Input/GenericInput.vue'
+import GenericLookUp from '@generics/GenericLookUp.vue'
+import GenericInput from '@generics/GenericInput.vue'
 import GenericPrepareTablePage from '@components/GenericPrepareTable/GenericPrepareTablePage.vue'
 import ColumnConfigPage from '@components/ColumnConfig/ColumnConfigPage.vue'
 import GenericSubPrepareTablePage from '@generics/GenericSubPrepareTable/GenericSubPrepareTablePage.vue'
 import GenericSubPrepareTableTooPage from '@generics/GenericSubPrepareTableToo/GenericSubPrepareTableTooPage.vue'
-import GenericNuxtLinkButton from '@generics/GenericNuxtLink/GenericNuxtLinkButton.vue'
 import MessageBox from '@components/MessageBox.vue'
 export default {
   // COMPONENTS
   components: {
     LoadingPage,
     GenericButton,
-    LookUp,
+    GenericLookUp,
     GenericInput,
     GenericPrepareTablePage,
     ColumnConfigPage,
     GenericSubPrepareTablePage,
     GenericSubPrepareTableTooPage,
-    GenericNuxtLinkButton,
     MessageBox,
   },
 
@@ -1172,7 +1166,7 @@ export default {
     getLookUpValue(key, value, order) {
       this.lookupValuesObj.set(key, value)
       this.lookUpValues = Object.fromEntries(this.lookupValuesObj)
-      // LookUp required action
+      // GenericLookUp required action
       this.lookupValuesObj.get('warehouse')
         ? (this.required.lookUp1 = true)
         : (this.required.lookUp1 = false)
@@ -1183,7 +1177,7 @@ export default {
 
     // Accept button action
     additionInvoiceItem() {
-      // LookUp required action
+      // GenericLookUp required action
       this.lookupValuesObj.get('warehouse')
         ? (this.required.lookUp1 = true)
         : (this.required.lookUp1 = false)

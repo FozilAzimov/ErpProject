@@ -90,11 +90,11 @@
             <label class="text-[13px] font-medium whitespace-nowrap pl-1"
               >Planing Type</label
             >
-            <look-up
+            <generic-look-up
               dwidth="100"
               widthtype="%"
               dlist="100"
-              durl="invoice/findAllPlanningType"
+              durl="findAllPlanningType"
               name="planing_type"
               @customFunction="getLookUpValue"
             />
@@ -140,7 +140,7 @@
             <label class="text-[13px] font-medium whitespace-nowrap pl-1"
               >Client Company</label
             >
-            <look-up
+            <generic-look-up
               dwidth="100"
               widthtype="%"
               dlist="100"
@@ -154,7 +154,7 @@
             <label class="text-[13px] font-medium whitespace-nowrap pl-1"
               >Department</label
             >
-            <look-up
+            <generic-look-up
               dwidth="100"
               widthtype="%"
               dlist="100"
@@ -168,7 +168,7 @@
             <label class="text-[13px] font-medium whitespace-nowrap pl-1"
               >Start/Stop</label
             >
-            <look-up
+            <generic-look-up
               dwidth="100"
               widthtype="%"
               dlist="100"
@@ -207,7 +207,7 @@
               <label class="text-[13px] font-medium whitespace-nowrap pl-1"
                 >Product</label
               >
-              <look-up
+              <generic-look-up
                 dwidth="100"
                 widthtype="%"
                 dlist="100"
@@ -221,7 +221,7 @@
               <label class="text-[13px] font-medium whitespace-nowrap pl-1"
                 >Client Company</label
               >
-              <look-up
+              <generic-look-up
                 dwidth="100"
                 widthtype="%"
                 dlist="100"
@@ -234,7 +234,7 @@
               <label class="text-[13px] font-medium whitespace-nowrap pl-1"
                 >Pr Order</label
               >
-              <look-up
+              <generic-look-up
                 dwidth="100"
                 widthtype="%"
                 dlist="100"
@@ -289,7 +289,7 @@
               <label class="text-[13px] font-medium whitespace-nowrap pl-1"
                 >Packing Type</label
               >
-              <look-up
+              <generic-look-up
                 dwidth="100"
                 widthtype="%"
                 dlist="100"
@@ -344,7 +344,7 @@
               <label class="text-[13px] font-medium whitespace-nowrap pl-1"
                 >Color</label
               >
-              <look-up
+              <generic-look-up
                 dwidth="100"
                 widthtype="%"
                 dlist="100"
@@ -394,7 +394,7 @@
               <label class="text-[13px] font-medium whitespace-nowrap pl-1"
                 >Color Variant</label
               >
-              <look-up
+              <generic-look-up
                 dwidth="100"
                 widthtype="%"
                 dlist="100"
@@ -444,7 +444,7 @@
               <label class="text-[13px] font-medium whitespace-nowrap pl-1"
                 >Design</label
               >
-              <look-up
+              <generic-look-up
                 dwidth="100"
                 widthtype="%"
                 dlist="100"
@@ -494,7 +494,7 @@
               <label class="text-[13px] font-medium whitespace-nowrap pl-1"
                 >Design Variant</label
               >
-              <look-up
+              <generic-look-up
                 dwidth="100"
                 widthtype="%"
                 dlist="100"
@@ -527,7 +527,7 @@
               <label class="text-[13px] font-medium whitespace-nowrap pl-1"
                 >fiberClass</label
               >
-              <look-up
+              <generic-look-up
                 dwidth="100"
                 widthtype="%"
                 dlist="100"
@@ -560,7 +560,7 @@
               <label class="text-[13px] font-medium whitespace-nowrap pl-1"
                 >Equipments</label
               >
-              <look-up
+              <generic-look-up
                 dwidth="100"
                 widthtype="%"
                 dlist="100"
@@ -573,7 +573,7 @@
               <label class="text-[13px] font-medium whitespace-nowrap pl-1"
                 >Size</label
               >
-              <look-up
+              <generic-look-up
                 dwidth="100"
                 widthtype="%"
                 dlist="100"
@@ -636,7 +636,7 @@
               <label class="text-[13px] font-medium whitespace-nowrap pl-1"
                 >Grade</label
               >
-              <look-up
+              <generic-look-up
                 dwidth="100"
                 widthtype="%"
                 dlist="100"
@@ -729,7 +729,7 @@
                   :key="indexToo"
                   class="border-[1px] border-solid border-[rgb(169,184,199)] text-[12px] p-2"
                 >
-                  <LookUp
+                  <generic-look-up
                     v-if="
                       item?.editableElement !== false && item.type == 'list'
                     "
@@ -829,14 +829,14 @@
 <script>
 import GenericButton from '@generics/GenericButton.vue'
 import GenericCheckBox from '@generics/GenericCheckBox.vue'
-import GenericInput from '@components/Input/GenericInput.vue'
+import GenericInput from '@generics/GenericInput.vue'
 import GenericInputDatePage from '@components/InputDate/GenericInputDatePage.vue'
-import LookUp from '@generics/GenericLookUp.vue'
+import GenericLookUp from '@generics/GenericLookUp.vue'
 
 export default {
   components: {
     GenericButton,
-    LookUp,
+    GenericLookUp,
     GenericInput,
     GenericInputDatePage,
     GenericCheckBox,
@@ -917,7 +917,7 @@ export default {
     },
 
     // =====================================================
-    // LookUp value'sini olish
+    // GenericLookUp value'sini olish
     getLookUpValue(name, valueID, order, resultType) {
       this.allInputLookUpValues[name] = valueID
       if (name === 'product' && valueID) this.getResponseData('all')
@@ -933,7 +933,7 @@ export default {
     // =====================================================
 
     // =====================================================
-    // Body LookUp value'sini olish
+    // Body GenericLookUp value'sini olish
     getBodyLookUpValue(name, valueID, order, resultType) {
       if (this.bodyAllInputLookUpValues?.[order] && resultType === 'object') {
         this.$set(this.bodyAllInputLookUpValues[order], name, { id: valueID })
@@ -1082,7 +1082,7 @@ export default {
       }
     },
 
-    // Product LookUp ni tanlanganda ishlaydi
+    // Product GenericLookUp ni tanlanganda ishlaydi
     getResponseData(prop) {
       this.allParamsAction()
       const body = this.allParams
