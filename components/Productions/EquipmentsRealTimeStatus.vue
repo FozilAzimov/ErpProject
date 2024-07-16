@@ -458,7 +458,7 @@ import LoadingPage from '@components/Loading/LoadingPage.vue'
 import GenericSelect from '@components/Select/GenericSelect.vue'
 import GenericInput from '@components/Input/GenericInput.vue'
 import GenericButton from '@generics/GenericButton.vue'
-import LookUp from '@generics/LookUp.vue'
+import LookUp from '@generics/GenericLookUp.vue'
 export default {
   components: {
     LoadingPage,

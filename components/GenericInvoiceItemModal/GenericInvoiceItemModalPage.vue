@@ -177,7 +177,7 @@ import GenericButton from '@generics/GenericButton.vue'
 import GenericCheckBox from '@generics/GenericCheckBox.vue'
 import GenericInput from '@components/Input/GenericInput.vue'
 import GenericInputDatePage from '@components/InputDate/GenericInputDatePage.vue'
-import LookUp from '@generics/LookUp.vue'
+import LookUp from '@generics/GenericLookUp.vue'
 
 export default {
   components: {

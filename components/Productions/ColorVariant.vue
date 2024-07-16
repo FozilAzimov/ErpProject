@@ -139,7 +139,7 @@ import GenericButton from '@generics/GenericButton.vue'
 import GenericInput from '@components/Input/GenericInput.vue'
 import ColumnConfigPage from '@components/ColumnConfig/ColumnConfigPage.vue'
 import GenericTablePage from '@components/GenericTable/GenericTablePage.vue'
-import LookUp from '@generics/LookUp.vue'
+import LookUp from '@generics/GenericLookUp.vue'
 export default {
   components: {
     LoadingPage,

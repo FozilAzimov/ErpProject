@@ -280,7 +280,7 @@
 import GenericButton from '@components/Button/GenericButton.vue'
 import GenericActiveLookUpPage from '@generics/GenericActiveLookUp/GenericActiveLookUpPage.vue'
 import GenericInput from '@components/Input/GenericInput.vue'
-import LookUp from '@generics/LookUp.vue'
+import LookUp from '@generics/GenericLookUp.vue'
 import PageTable from '@components/Reports/TransactionReports/PageTable.vue'
 export default {
   components: {

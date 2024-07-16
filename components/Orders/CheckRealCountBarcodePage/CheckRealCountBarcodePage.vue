@@ -263,7 +263,7 @@
 </template>
 
 <script>
-import LookUp from '@generics/LookUp.vue'
+import LookUp from '@generics/GenericLookUp.vue'
 import LoadingPage from '@components/Loading/LoadingPage.vue'
 import GenericButton from '@components/Button/GenericButton.vue'
 // import GenericTablePage from '../GenericTable/GenericTablePage.vue'

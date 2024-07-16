@@ -3,854 +3,732 @@
     "name": "bands.htm",
     "path": "/bands.htm",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\bands.htm\\\\index.vue",
-    "chunkName": "pages/bands.htm/index",
-    "_name": "_503dcf88"
+    "chunkName": "pages/bands.htm/index"
   },
   {
     "name": "batches.htm",
     "path": "/batches.htm",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\batches.htm\\\\index.vue",
-    "chunkName": "pages/batches.htm/index",
-    "_name": "_f2a0dc9c"
+    "chunkName": "pages/batches.htm/index"
   },
   {
     "name": "batchProcess.htm",
     "path": "/batchProcess.htm",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\batchProcess.htm\\\\index.vue",
-    "chunkName": "pages/batchProcess.htm/index",
-    "_name": "_d0159502"
+    "chunkName": "pages/batchProcess.htm/index"
   },
   {
     "name": "batchProcessStages.htm",
     "path": "/batchProcessStages.htm",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\batchProcessStages.htm\\\\index.vue",
-    "chunkName": "pages/batchProcessStages.htm/index",
-    "_name": "_83de6cec"
+    "chunkName": "pages/batchProcessStages.htm/index"
   },
   {
     "name": "batchReports.htm",
     "path": "/batchReports.htm",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\batchReports.htm\\\\index.vue",
-    "chunkName": "pages/batchReports.htm/index",
-    "_name": "_4e260fa2"
+    "chunkName": "pages/batchReports.htm/index"
   },
   {
     "name": "batchStagesReport.htm",
     "path": "/batchStagesReport.htm",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\batchStagesReport.htm\\\\index.vue",
-    "chunkName": "pages/batchStagesReport.htm/index",
-    "_name": "_e7405a52"
+    "chunkName": "pages/batchStagesReport.htm/index"
   },
   {
     "name": "batchunions.htm",
     "path": "/batchunions.htm",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\batchunions.htm\\\\index.vue",
-    "chunkName": "pages/batchunions.htm/index",
-    "_name": "_2703b0c8"
+    "chunkName": "pages/batchunions.htm/index"
   },
   {
     "name": "branches.htm",
     "path": "/branches.htm",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\branches.htm\\\\index.vue",
-    "chunkName": "pages/branches.htm/index",
-    "_name": "_75c6aea4"
+    "chunkName": "pages/branches.htm/index"
   },
   {
     "name": "branchProductsStockReportByLogic.htm",
     "path": "/branchProductsStockReportByLogic.htm",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\branchProductsStockReportByLogic.htm\\\\index.vue",
-    "chunkName": "pages/branchProductsStockReportByLogic.htm/index",
-    "_name": "_6283df51"
+    "chunkName": "pages/branchProductsStockReportByLogic.htm/index"
   },
   {
     "name": "calculationByColorVariantRecipe.htm",
     "path": "/calculationByColorVariantRecipe.htm",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\calculationByColorVariantRecipe.htm\\\\index.vue",
-    "chunkName": "pages/calculationByColorVariantRecipe.htm/index",
-    "_name": "_23e6ac2a"
+    "chunkName": "pages/calculationByColorVariantRecipe.htm/index"
   },
   {
     "name": "checkRealCountBarcode.htm",
     "path": "/checkRealCountBarcode.htm",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\checkRealCountBarcode.htm\\\\index.vue",
-    "chunkName": "pages/checkRealCountBarcode.htm/index",
-    "_name": "_b91690ba"
+    "chunkName": "pages/checkRealCountBarcode.htm/index"
   },
   {
     "name": "colorDepth.htm",
     "path": "/colorDepth.htm",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\colorDepth.htm\\\\index.vue",
-    "chunkName": "pages/colorDepth.htm/index",
-    "_name": "_3fae4214"
+    "chunkName": "pages/colorDepth.htm/index"
   },
   {
     "name": "colors.htm",
     "path": "/colors.htm",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\colors.htm\\\\index.vue",
-    "chunkName": "pages/colors.htm/index",
-    "_name": "_96287b78"
+    "chunkName": "pages/colors.htm/index"
   },
   {
     "name": "colorVariant.htm",
     "path": "/colorVariant.htm",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\colorVariant.htm\\\\index.vue",
-    "chunkName": "pages/colorVariant.htm/index",
-    "_name": "_d5000fdc"
+    "chunkName": "pages/colorVariant.htm/index"
   },
   {
     "name": "colorVariantRecipeStage.htm",
     "path": "/colorVariantRecipeStage.htm",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\colorVariantRecipeStage.htm\\\\index.vue",
-    "chunkName": "pages/colorVariantRecipeStage.htm/index",
-    "_name": "_4def674c"
+    "chunkName": "pages/colorVariantRecipeStage.htm/index"
   },
   {
     "name": "colorVariantRecipeStageChild.htm",
     "path": "/colorVariantRecipeStageChild.htm",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\colorVariantRecipeStageChild.htm\\\\index.vue",
-    "chunkName": "pages/colorVariantRecipeStageChild.htm/index",
-    "_name": "_2170c8f4"
+    "chunkName": "pages/colorVariantRecipeStageChild.htm/index"
   },
   {
     "name": "colorVariantRecipeStageGroup.htm",
     "path": "/colorVariantRecipeStageGroup.htm",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\colorVariantRecipeStageGroup.htm\\\\index.vue",
-    "chunkName": "pages/colorVariantRecipeStageGroup.htm/index",
-    "_name": "_ca9d707a"
+    "chunkName": "pages/colorVariantRecipeStageGroup.htm/index"
   },
   {
     "name": "colorVariantRecipeStagePicture.htm",
     "path": "/colorVariantRecipeStagePicture.htm",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\colorVariantRecipeStagePicture.htm\\\\index.vue",
-    "chunkName": "pages/colorVariantRecipeStagePicture.htm/index",
-    "_name": "_3c2fc6b8"
+    "chunkName": "pages/colorVariantRecipeStagePicture.htm/index"
   },
   {
     "name": "dashboard.htm",
     "path": "/dashboard.htm",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\dashboard.htm\\\\index.vue",
-    "chunkName": "pages/dashboard.htm/index",
-    "_name": "_2fda1b74"
+    "chunkName": "pages/dashboard.htm/index"
   },
   {
     "name": "designs.htm",
     "path": "/designs.htm",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\designs.htm\\\\index.vue",
-    "chunkName": "pages/designs.htm/index",
-    "_name": "_7c3b85f6"
+    "chunkName": "pages/designs.htm/index"
   },
   {
     "name": "designTypes.htm",
     "path": "/designTypes.htm",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\designTypes.htm\\\\index.vue",
-    "chunkName": "pages/designTypes.htm/index",
-    "_name": "_263503df"
+    "chunkName": "pages/designTypes.htm/index"
   },
   {
     "name": "designVariants.htm",
     "path": "/designVariants.htm",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\designVariants.htm\\\\index.vue",
-    "chunkName": "pages/designVariants.htm/index",
-    "_name": "_c0419a70"
+    "chunkName": "pages/designVariants.htm/index"
   },
   {
     "name": "dyeings.htm",
     "path": "/dyeings.htm",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\dyeings.htm\\\\index.vue",
-    "chunkName": "pages/dyeings.htm/index",
-    "_name": "_3e53ceb9"
+    "chunkName": "pages/dyeings.htm/index"
   },
   {
     "name": "equipmentsRealTimeStatus.htm",
     "path": "/equipmentsRealTimeStatus.htm",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\equipmentsRealTimeStatus.htm\\\\index.vue",
-    "chunkName": "pages/equipmentsRealTimeStatus.htm/index",
-    "_name": "_8f831a5c"
+    "chunkName": "pages/equipmentsRealTimeStatus.htm/index"
   },
   {
     "name": "expenseInvoice.htm",
     "path": "/expenseInvoice.htm",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\expenseInvoice.htm\\\\index.vue",
-    "chunkName": "pages/expenseInvoice.htm/index",
-    "_name": "_f9c6bf42"
+    "chunkName": "pages/expenseInvoice.htm/index"
   },
   {
     "name": "grades.htm",
     "path": "/grades.htm",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\grades.htm\\\\index.vue",
-    "chunkName": "pages/grades.htm/index",
-    "_name": "_3cfdeab8"
+    "chunkName": "pages/grades.htm/index"
   },
   {
     "name": "inputFromProductionCompany.htm",
     "path": "/inputFromProductionCompany.htm",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\inputFromProductionCompany.htm\\\\index.vue",
-    "chunkName": "pages/inputFromProductionCompany.htm/index",
-    "_name": "_26659438"
+    "chunkName": "pages/inputFromProductionCompany.htm/index"
   },
   {
     "name": "inputReturn.htm",
     "path": "/inputReturn.htm",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\inputReturn.htm\\\\index.vue",
-    "chunkName": "pages/inputReturn.htm/index",
-    "_name": "_96dfac80"
+    "chunkName": "pages/inputReturn.htm/index"
   },
   {
     "name": "inputStockDetailReport.htm",
     "path": "/inputStockDetailReport.htm",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\inputStockDetailReport.htm\\\\index.vue",
-    "chunkName": "pages/inputStockDetailReport.htm/index",
-    "_name": "_c7b909ba"
+    "chunkName": "pages/inputStockDetailReport.htm/index"
   },
   {
     "name": "inputToServiceInvoice.htm",
     "path": "/inputToServiceInvoice.htm",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\inputToServiceInvoice.htm\\\\index.vue",
-    "chunkName": "pages/inputToServiceInvoice.htm/index",
-    "_name": "_3d2bf33d"
+    "chunkName": "pages/inputToServiceInvoice.htm/index"
   },
   {
     "name": "internalInvoice.htm",
     "path": "/internalInvoice.htm",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\internalInvoice.htm\\\\index.vue",
-    "chunkName": "pages/internalInvoice.htm/index",
-    "_name": "_0e3a652c"
+    "chunkName": "pages/internalInvoice.htm/index"
   },
   {
     "name": "invoiceReports.htm",
     "path": "/invoiceReports.htm",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\invoiceReports.htm\\\\index.vue",
-    "chunkName": "pages/invoiceReports.htm/index",
-    "_name": "_4b75d8a2"
+    "chunkName": "pages/invoiceReports.htm/index"
   },
   {
     "name": "login.htm",
     "path": "/login.htm",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\login.htm\\\\index.vue",
-    "chunkName": "pages/login.htm/index",
-    "_name": "_2200bb5e"
+    "chunkName": "pages/login.htm/index"
   },
   {
     "name": "maintable",
     "path": "/maintable",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\maintable\\\\index.vue",
-    "chunkName": "pages/maintable/index",
-    "_name": "_31e30050"
+    "chunkName": "pages/maintable/index"
   },
   {
     "name": "makeBill.htm",
     "path": "/makeBill.htm",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\makeBill.htm\\\\index.vue",
-    "chunkName": "pages/makeBill.htm/index",
-    "_name": "_5b9336bf"
+    "chunkName": "pages/makeBill.htm/index"
   },
   {
     "name": "marketSalesInvoice.htm",
     "path": "/marketSalesInvoice.htm",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\marketSalesInvoice.htm\\\\index.vue",
-    "chunkName": "pages/marketSalesInvoice.htm/index",
-    "_name": "_3e0b4c92"
+    "chunkName": "pages/marketSalesInvoice.htm/index"
   },
   {
     "name": "menuSettings.htm",
     "path": "/menuSettings.htm",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\menuSettings.htm\\\\index.vue",
-    "chunkName": "pages/menuSettings.htm/index",
-    "_name": "_3a3b2512"
+    "chunkName": "pages/menuSettings.htm/index"
   },
   {
     "name": "openControlPageNew.htm",
     "path": "/openControlPageNew.htm",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\openControlPageNew.htm\\\\index.vue",
-    "chunkName": "pages/openControlPageNew.htm/index",
-    "_name": "_3b126dd4"
+    "chunkName": "pages/openControlPageNew.htm/index"
   },
   {
     "name": "orderproductiontypes.htm",
     "path": "/orderproductiontypes.htm",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\orderproductiontypes.htm\\\\index.vue",
-    "chunkName": "pages/orderproductiontypes.htm/index",
-    "_name": "_64a83b3c"
+    "chunkName": "pages/orderproductiontypes.htm/index"
   },
   {
     "name": "outputproductioninvoice.htm",
     "path": "/outputproductioninvoice.htm",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\outputproductioninvoice.htm\\\\index.vue",
-    "chunkName": "pages/outputproductioninvoice.htm/index",
-    "_name": "_171cef72"
+    "chunkName": "pages/outputproductioninvoice.htm/index"
   },
   {
     "name": "outputProductionReturn.htm",
     "path": "/outputProductionReturn.htm",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\outputProductionReturn.htm\\\\index.vue",
-    "chunkName": "pages/outputProductionReturn.htm/index",
-    "_name": "_48af2c0a"
+    "chunkName": "pages/outputProductionReturn.htm/index"
   },
   {
     "name": "outputToProductionCompany.htm",
     "path": "/outputToProductionCompany.htm",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\outputToProductionCompany.htm\\\\index.vue",
-    "chunkName": "pages/outputToProductionCompany.htm/index",
-    "_name": "_7c1662d2"
+    "chunkName": "pages/outputToProductionCompany.htm/index"
   },
   {
     "name": "outputToProductionCompanyReturn.htm",
     "path": "/outputToProductionCompanyReturn.htm",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\outputToProductionCompanyReturn.htm\\\\index.vue",
-    "chunkName": "pages/outputToProductionCompanyReturn.htm/index",
-    "_name": "_0c59117c"
+    "chunkName": "pages/outputToProductionCompanyReturn.htm/index"
   },
   {
     "name": "outputToPrOrder.htm",
     "path": "/outputToPrOrder.htm",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\outputToPrOrder.htm\\\\index.vue",
-    "chunkName": "pages/outputToPrOrder.htm/index",
-    "_name": "_040e1faa"
+    "chunkName": "pages/outputToPrOrder.htm/index"
   },
   {
     "name": "outputToPrOrderReturn.htm",
     "path": "/outputToPrOrderReturn.htm",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\outputToPrOrderReturn.htm\\\\index.vue",
-    "chunkName": "pages/outputToPrOrderReturn.htm/index",
-    "_name": "_2250321a"
+    "chunkName": "pages/outputToPrOrderReturn.htm/index"
   },
   {
     "name": "outputToServiceInvoice.htm",
     "path": "/outputToServiceInvoice.htm",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\outputToServiceInvoice.htm\\\\index.vue",
-    "chunkName": "pages/outputToServiceInvoice.htm/index",
-    "_name": "_6f687400"
+    "chunkName": "pages/outputToServiceInvoice.htm/index"
   },
   {
     "name": "packaging.htm",
     "path": "/packaging.htm",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\packaging.htm\\\\index.vue",
-    "chunkName": "pages/packaging.htm/index",
-    "_name": "_b185ad12"
+    "chunkName": "pages/packaging.htm/index"
   },
   {
     "name": "personEquipmentSews.htm",
     "path": "/personEquipmentSews.htm",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\personEquipmentSews.htm\\\\index.vue",
-    "chunkName": "pages/personEquipmentSews.htm/index",
-    "_name": "_297d529a"
+    "chunkName": "pages/personEquipmentSews.htm/index"
   },
   {
     "name": "planningTypes.htm",
     "path": "/planningTypes.htm",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\planningTypes.htm\\\\index.vue",
-    "chunkName": "pages/planningTypes.htm/index",
-    "_name": "_5655cf3e"
+    "chunkName": "pages/planningTypes.htm/index"
   },
   {
     "name": "prepareInternalInvoiceNewDevice.htm",
     "path": "/prepareInternalInvoiceNewDevice.htm",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\prepareInternalInvoiceNewDevice.htm\\\\index.vue",
-    "chunkName": "pages/prepareInternalInvoiceNewDevice.htm/index",
-    "_name": "_1fe3130d"
+    "chunkName": "pages/prepareInternalInvoiceNewDevice.htm/index"
   },
   {
     "name": "prepareOutputToPrOrderSimple.htm",
     "path": "/prepareOutputToPrOrderSimple.htm",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\prepareOutputToPrOrderSimple.htm\\\\index.vue",
-    "chunkName": "pages/prepareOutputToPrOrderSimple.htm/index",
-    "_name": "_2608b219"
+    "chunkName": "pages/prepareOutputToPrOrderSimple.htm/index"
   },
   {
     "name": "productionByPackage.htm",
     "path": "/productionByPackage.htm",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\productionByPackage.htm\\\\index.vue",
-    "chunkName": "pages/productionByPackage.htm/index",
-    "_name": "_ae0dc4b8"
+    "chunkName": "pages/productionByPackage.htm/index"
   },
   {
     "name": "productionForQrCodeList.htm",
     "path": "/productionForQrCodeList.htm",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\productionForQrCodeList.htm\\\\index.vue",
-    "chunkName": "pages/productionForQrCodeList.htm/index",
-    "_name": "_b820f084"
+    "chunkName": "pages/productionForQrCodeList.htm/index"
   },
   {
     "name": "productioninvoice.htm",
     "path": "/productioninvoice.htm",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\productioninvoice.htm\\\\index.vue",
-    "chunkName": "pages/productioninvoice.htm/index",
-    "_name": "_1c0ff186"
+    "chunkName": "pages/productioninvoice.htm/index"
   },
   {
     "name": "productionorder.htm",
     "path": "/productionorder.htm",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\productionorder.htm\\\\index.vue",
-    "chunkName": "pages/productionorder.htm/index",
-    "_name": "_2cc4e645"
+    "chunkName": "pages/productionorder.htm/index"
   },
   {
     "name": "productionorderplannings.htm",
     "path": "/productionorderplannings.htm",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\productionorderplannings.htm\\\\index.vue",
-    "chunkName": "pages/productionorderplannings.htm/index",
-    "_name": "_817b679a"
+    "chunkName": "pages/productionorderplannings.htm/index"
   },
   {
     "name": "productproductiontypes.htm",
     "path": "/productproductiontypes.htm",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\productproductiontypes.htm\\\\index.vue",
-    "chunkName": "pages/productproductiontypes.htm/index",
-    "_name": "_7201d503"
+    "chunkName": "pages/productproductiontypes.htm/index"
   },
   {
     "name": "purchaseinvoice.htm",
     "path": "/purchaseinvoice.htm",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\purchaseinvoice.htm\\\\index.vue",
-    "chunkName": "pages/purchaseinvoice.htm/index",
-    "_name": "_f9e4d6e4"
+    "chunkName": "pages/purchaseinvoice.htm/index"
   },
   {
     "name": "purchaseorder.htm",
     "path": "/purchaseorder.htm",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\purchaseorder.htm\\\\index.vue",
-    "chunkName": "pages/purchaseorder.htm/index",
-    "_name": "_6140a966"
+    "chunkName": "pages/purchaseorder.htm/index"
   },
   {
     "name": "purchaseServiceInvoice.htm",
     "path": "/purchaseServiceInvoice.htm",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\purchaseServiceInvoice.htm\\\\index.vue",
-    "chunkName": "pages/purchaseServiceInvoice.htm/index",
-    "_name": "_c6abd70a"
+    "chunkName": "pages/purchaseServiceInvoice.htm/index"
   },
   {
     "name": "saleinvoice.htm",
     "path": "/saleinvoice.htm",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\saleinvoice.htm\\\\index.vue",
-    "chunkName": "pages/saleinvoice.htm/index",
-    "_name": "_d6151e58"
+    "chunkName": "pages/saleinvoice.htm/index"
   },
   {
     "name": "saleServiceInvoice.htm",
     "path": "/saleServiceInvoice.htm",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\saleServiceInvoice.htm\\\\index.vue",
-    "chunkName": "pages/saleServiceInvoice.htm/index",
-    "_name": "_59f60516"
+    "chunkName": "pages/saleServiceInvoice.htm/index"
   },
   {
     "name": "salesorder.htm",
     "path": "/salesorder.htm",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\salesorder.htm\\\\index.vue",
-    "chunkName": "pages/salesorder.htm/index",
-    "_name": "_828a159c"
+    "chunkName": "pages/salesorder.htm/index"
   },
   {
     "name": "salesReturn.htm",
     "path": "/salesReturn.htm",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\salesReturn.htm\\\\index.vue",
-    "chunkName": "pages/salesReturn.htm/index",
-    "_name": "_12181484"
+    "chunkName": "pages/salesReturn.htm/index"
   },
   {
     "name": "sessions.htm",
     "path": "/sessions.htm",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\sessions.htm\\\\index.vue",
-    "chunkName": "pages/sessions.htm/index",
-    "_name": "_01b3c792"
+    "chunkName": "pages/sessions.htm/index"
   },
   {
     "name": "sewBandEquipments.htm",
     "path": "/sewBandEquipments.htm",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\sewBandEquipments.htm\\\\index.vue",
-    "chunkName": "pages/sewBandEquipments.htm/index",
-    "_name": "_da9c5c0a"
+    "chunkName": "pages/sewBandEquipments.htm/index"
   },
   {
     "name": "sewmodel.htm",
     "path": "/sewmodel.htm",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\sewmodel.htm\\\\index.vue",
-    "chunkName": "pages/sewmodel.htm/index",
-    "_name": "_2282a010"
+    "chunkName": "pages/sewmodel.htm/index"
   },
   {
     "name": "sewModelOperationName.htm",
     "path": "/sewModelOperationName.htm",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\sewModelOperationName.htm\\\\index.vue",
-    "chunkName": "pages/sewModelOperationName.htm/index",
-    "_name": "_9471b028"
+    "chunkName": "pages/sewModelOperationName.htm/index"
   },
   {
     "name": "sewModelReport.htm",
     "path": "/sewModelReport.htm",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\sewModelReport.htm\\\\index.vue",
-    "chunkName": "pages/sewModelReport.htm/index",
-    "_name": "_074c499c"
+    "chunkName": "pages/sewModelReport.htm/index"
   },
   {
     "name": "sewModelVariantsSize.htm",
     "path": "/sewModelVariantsSize.htm",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\sewModelVariantsSize.htm\\\\index.vue",
-    "chunkName": "pages/sewModelVariantsSize.htm/index",
-    "_name": "_3e838d01"
+    "chunkName": "pages/sewModelVariantsSize.htm/index"
   },
   {
     "name": "sewOrderOnlineStatus.htm",
     "path": "/sewOrderOnlineStatus.htm",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\sewOrderOnlineStatus.htm\\\\index.vue",
-    "chunkName": "pages/sewOrderOnlineStatus.htm/index",
-    "_name": "_662ecc86"
+    "chunkName": "pages/sewOrderOnlineStatus.htm/index"
   },
   {
     "name": "simpleProductionInvoice.htm",
     "path": "/simpleProductionInvoice.htm",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\simpleProductionInvoice.htm\\\\index.vue",
-    "chunkName": "pages/simpleProductionInvoice.htm/index",
-    "_name": "_03a24d38"
+    "chunkName": "pages/simpleProductionInvoice.htm/index"
   },
   {
     "name": "stages.htm",
     "path": "/stages.htm",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\stages.htm\\\\index.vue",
-    "chunkName": "pages/stages.htm/index",
-    "_name": "_1dba8042"
+    "chunkName": "pages/stages.htm/index"
   },
   {
     "name": "transactionDetailReport.htm",
     "path": "/transactionDetailReport.htm",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\transactionDetailReport.htm\\\\index.vue",
-    "chunkName": "pages/transactionDetailReport.htm/index",
-    "_name": "_5ea140d7"
+    "chunkName": "pages/transactionDetailReport.htm/index"
   },
   {
     "name": "transactionReports.htm",
     "path": "/transactionReports.htm",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\transactionReports.htm\\\\index.vue",
-    "chunkName": "pages/transactionReports.htm/index",
-    "_name": "_65240713"
+    "chunkName": "pages/transactionReports.htm/index"
   },
   {
     "name": "transactionSaldoReport.htm",
     "path": "/transactionSaldoReport.htm",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\transactionSaldoReport.htm\\\\index.vue",
-    "chunkName": "pages/transactionSaldoReport.htm/index",
-    "_name": "_4db7a815"
+    "chunkName": "pages/transactionSaldoReport.htm/index"
   },
   {
     "name": "viabranchreceive.htm",
     "path": "/viabranchreceive.htm",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\viabranchreceive.htm\\\\index.vue",
-    "chunkName": "pages/viabranchreceive.htm/index",
-    "_name": "_303fdf61"
+    "chunkName": "pages/viabranchreceive.htm/index"
   },
   {
     "name": "index",
     "path": "/",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\index.vue",
-    "chunkName": "pages/index",
-    "_name": "_c36bdef2"
+    "chunkName": "pages/index"
   },
   {
     "name": "prepareBatchNew.htm-id",
     "path": "/prepareBatchNew.htm/:id?",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\prepareBatchNew.htm\\\\_id.vue",
-    "chunkName": "pages/prepareBatchNew.htm/_id",
-    "_name": "_c3568e16"
+    "chunkName": "pages/prepareBatchNew.htm/_id"
   },
   {
     "name": "prepareBatchProcess.htm-id",
     "path": "/prepareBatchProcess.htm/:id?",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\prepareBatchProcess.htm\\\\_id.vue",
-    "chunkName": "pages/prepareBatchProcess.htm/_id",
-    "_name": "_5ac03186"
+    "chunkName": "pages/prepareBatchProcess.htm/_id"
   },
   {
     "name": "prepareBatchProcessStage.htm-id",
     "path": "/prepareBatchProcessStage.htm/:id?",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\prepareBatchProcessStage.htm\\\\_id.vue",
-    "chunkName": "pages/prepareBatchProcessStage.htm/_id",
-    "_name": "_266be73a"
+    "chunkName": "pages/prepareBatchProcessStage.htm/_id"
   },
   {
     "name": "prepareBatchunionsNew.htm-id",
     "path": "/prepareBatchunionsNew.htm/:id?",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\prepareBatchunionsNew.htm\\\\_id.vue",
-    "chunkName": "pages/prepareBatchunionsNew.htm/_id",
-    "_name": "_21a3f3f9"
+    "chunkName": "pages/prepareBatchunionsNew.htm/_id"
   },
   {
     "name": "prepareColor.htm-id",
     "path": "/prepareColor.htm/:id?",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\prepareColor.htm\\\\_id.vue",
-    "chunkName": "pages/prepareColor.htm/_id",
-    "_name": "_32dfb240"
+    "chunkName": "pages/prepareColor.htm/_id"
   },
   {
     "name": "prepareColorDepth.htm-id",
     "path": "/prepareColorDepth.htm/:id?",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\prepareColorDepth.htm\\\\_id.vue",
-    "chunkName": "pages/prepareColorDepth.htm/_id",
-    "_name": "_622b4b1b"
+    "chunkName": "pages/prepareColorDepth.htm/_id"
   },
   {
     "name": "prepareColorVariant.htm-id",
     "path": "/prepareColorVariant.htm/:id?",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\prepareColorVariant.htm\\\\_id.vue",
-    "chunkName": "pages/prepareColorVariant.htm/_id",
-    "_name": "_999f064e"
+    "chunkName": "pages/prepareColorVariant.htm/_id"
   },
   {
     "name": "prepareColorVariantRecipeStage.htm-id",
     "path": "/prepareColorVariantRecipeStage.htm/:id?",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\prepareColorVariantRecipeStage.htm\\\\_id.vue",
-    "chunkName": "pages/prepareColorVariantRecipeStage.htm/_id",
-    "_name": "_7485d516"
+    "chunkName": "pages/prepareColorVariantRecipeStage.htm/_id"
   },
   {
     "name": "prepareColorVariantRecipeStageChild.htm-id",
     "path": "/prepareColorVariantRecipeStageChild.htm/:id?",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\prepareColorVariantRecipeStageChild.htm\\\\_id.vue",
-    "chunkName": "pages/prepareColorVariantRecipeStageChild.htm/_id",
-    "_name": "_07c0cf4d"
+    "chunkName": "pages/prepareColorVariantRecipeStageChild.htm/_id"
   },
   {
     "name": "prepareColorVariantRecipeStageGroup.htm-id",
     "path": "/prepareColorVariantRecipeStageGroup.htm/:id?",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\prepareColorVariantRecipeStageGroup.htm\\\\_id.vue",
-    "chunkName": "pages/prepareColorVariantRecipeStageGroup.htm/_id",
-    "_name": "_493266ca"
+    "chunkName": "pages/prepareColorVariantRecipeStageGroup.htm/_id"
   },
   {
     "name": "prepareColorVariantRecipeStagePicture.htm-id",
     "path": "/prepareColorVariantRecipeStagePicture.htm/:id?",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\prepareColorVariantRecipeStagePicture.htm\\\\_id.vue",
-    "chunkName": "pages/prepareColorVariantRecipeStagePicture.htm/_id",
-    "_name": "_1e6ef7aa"
+    "chunkName": "pages/prepareColorVariantRecipeStagePicture.htm/_id"
   },
   {
     "name": "prepareDesign.htm-id",
     "path": "/prepareDesign.htm/:id?",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\prepareDesign.htm\\\\_id.vue",
-    "chunkName": "pages/prepareDesign.htm/_id",
-    "_name": "_7729a93d"
+    "chunkName": "pages/prepareDesign.htm/_id"
   },
   {
     "name": "prepareDesignType.htm-id",
     "path": "/prepareDesignType.htm/:id?",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\prepareDesignType.htm\\\\_id.vue",
-    "chunkName": "pages/prepareDesignType.htm/_id",
-    "_name": "_44f63923"
+    "chunkName": "pages/prepareDesignType.htm/_id"
   },
   {
     "name": "prepareDesignVariant.htm-id",
     "path": "/prepareDesignVariant.htm/:id?",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\prepareDesignVariant.htm\\\\_id.vue",
-    "chunkName": "pages/prepareDesignVariant.htm/_id",
-    "_name": "_7521c188"
+    "chunkName": "pages/prepareDesignVariant.htm/_id"
   },
   {
     "name": "prepareExpenseInvoice.htm-id",
     "path": "/prepareExpenseInvoice.htm/:id?",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\prepareExpenseInvoice.htm\\\\_id.vue",
-    "chunkName": "pages/prepareExpenseInvoice.htm/_id",
-    "_name": "_7332d8a6"
+    "chunkName": "pages/prepareExpenseInvoice.htm/_id"
   },
   {
     "name": "prepareInputFromProductionCompanyNew.htm-id",
     "path": "/prepareInputFromProductionCompanyNew.htm/:id?",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\prepareInputFromProductionCompanyNew.htm\\\\_id.vue",
-    "chunkName": "pages/prepareInputFromProductionCompanyNew.htm/_id",
-    "_name": "_2a880eda"
+    "chunkName": "pages/prepareInputFromProductionCompanyNew.htm/_id"
   },
   {
     "name": "prepareInputReturnNew.htm-id",
     "path": "/prepareInputReturnNew.htm/:id?",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\prepareInputReturnNew.htm\\\\_id.vue",
-    "chunkName": "pages/prepareInputReturnNew.htm/_id",
-    "_name": "_5bd23655"
+    "chunkName": "pages/prepareInputReturnNew.htm/_id"
   },
   {
     "name": "prepareInputToServiceInvoice.htm-id",
     "path": "/prepareInputToServiceInvoice.htm/:id?",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\prepareInputToServiceInvoice.htm\\\\_id.vue",
-    "chunkName": "pages/prepareInputToServiceInvoice.htm/_id",
-    "_name": "_2cab25e6"
+    "chunkName": "pages/prepareInputToServiceInvoice.htm/_id"
   },
   {
     "name": "prepareInternalInvoiceNew.htm-id",
     "path": "/prepareInternalInvoiceNew.htm/:id?",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\prepareInternalInvoiceNew.htm\\\\_id.vue",
-    "chunkName": "pages/prepareInternalInvoiceNew.htm/_id",
-    "_name": "_feb83f2a"
+    "chunkName": "pages/prepareInternalInvoiceNew.htm/_id"
   },
   {
     "name": "prepareOrderProductionType.htm-id",
     "path": "/prepareOrderProductionType.htm/:id?",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\prepareOrderProductionType.htm\\\\_id.vue",
-    "chunkName": "pages/prepareOrderProductionType.htm/_id",
-    "_name": "_aa2fee3c"
+    "chunkName": "pages/prepareOrderProductionType.htm/_id"
   },
   {
     "name": "prepareOutputToEquipment.htm-id",
     "path": "/prepareOutputToEquipment.htm/:id?",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\prepareOutputToEquipment.htm\\\\_id.vue",
-    "chunkName": "pages/prepareOutputToEquipment.htm/_id",
-    "_name": "_5a74da71"
+    "chunkName": "pages/prepareOutputToEquipment.htm/_id"
   },
   {
     "name": "prepareOutputToEquipmentReturn.htm-id",
     "path": "/prepareOutputToEquipmentReturn.htm/:id?",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\prepareOutputToEquipmentReturn.htm\\\\_id.vue",
-    "chunkName": "pages/prepareOutputToEquipmentReturn.htm/_id",
-    "_name": "_65d2a5a1"
+    "chunkName": "pages/prepareOutputToEquipmentReturn.htm/_id"
   },
   {
     "name": "prepareOutputToProductionCompanyNew.htm-id",
     "path": "/prepareOutputToProductionCompanyNew.htm/:id?",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\prepareOutputToProductionCompanyNew.htm\\\\_id.vue",
-    "chunkName": "pages/prepareOutputToProductionCompanyNew.htm/_id",
-    "_name": "_18737d43"
+    "chunkName": "pages/prepareOutputToProductionCompanyNew.htm/_id"
   },
   {
     "name": "prepareOutputToProductionCompanyReturnNew.htm-id",
     "path": "/prepareOutputToProductionCompanyReturnNew.htm/:id?",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\prepareOutputToProductionCompanyReturnNew.htm\\\\_id.vue",
-    "chunkName": "pages/prepareOutputToProductionCompanyReturnNew.htm/_id",
-    "_name": "_3ff558da"
+    "chunkName": "pages/prepareOutputToProductionCompanyReturnNew.htm/_id"
   },
   {
     "name": "prepareOutputToPrOrder.htm-id",
     "path": "/prepareOutputToPrOrder.htm/:id?",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\prepareOutputToPrOrder.htm\\\\_id.vue",
-    "chunkName": "pages/prepareOutputToPrOrder.htm/_id",
-    "_name": "_1948c35a"
+    "chunkName": "pages/prepareOutputToPrOrder.htm/_id"
   },
   {
     "name": "prepareOutputToPrOrderReturn.htm-id",
     "path": "/prepareOutputToPrOrderReturn.htm/:id?",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\prepareOutputToPrOrderReturn.htm\\\\_id.vue",
-    "chunkName": "pages/prepareOutputToPrOrderReturn.htm/_id",
-    "_name": "_4c9b7803"
+    "chunkName": "pages/prepareOutputToPrOrderReturn.htm/_id"
   },
   {
     "name": "prepareOutputToServiceInvoice.htm-id",
     "path": "/prepareOutputToServiceInvoice.htm/:id?",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\prepareOutputToServiceInvoice.htm\\\\_id.vue",
-    "chunkName": "pages/prepareOutputToServiceInvoice.htm/_id",
-    "_name": "_821edcf2"
+    "chunkName": "pages/prepareOutputToServiceInvoice.htm/_id"
   },
   {
     "name": "preparePackaging.htm-id",
     "path": "/preparePackaging.htm/:id?",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\preparePackaging.htm\\\\_id.vue",
-    "chunkName": "pages/preparePackaging.htm/_id",
-    "_name": "_638f5c20"
+    "chunkName": "pages/preparePackaging.htm/_id"
   },
   {
     "name": "preparePlanningType.htm-id",
     "path": "/preparePlanningType.htm/:id?",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\preparePlanningType.htm\\\\_id.vue",
-    "chunkName": "pages/preparePlanningType.htm/_id",
-    "_name": "_87215338"
+    "chunkName": "pages/preparePlanningType.htm/_id"
   },
   {
     "name": "prepareProductionInvoiceNew.htm-id",
     "path": "/prepareProductionInvoiceNew.htm/:id?",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\prepareProductionInvoiceNew.htm\\\\_id.vue",
-    "chunkName": "pages/prepareProductionInvoiceNew.htm/_id",
-    "_name": "_38dc2822"
+    "chunkName": "pages/prepareProductionInvoiceNew.htm/_id"
   },
   {
     "name": "prepareProductionOrderItem.htm-id",
     "path": "/prepareProductionOrderItem.htm/:id?",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\prepareProductionOrderItem.htm\\\\_id.vue",
-    "chunkName": "pages/prepareProductionOrderItem.htm/_id",
-    "_name": "_171ec7fb"
+    "chunkName": "pages/prepareProductionOrderItem.htm/_id"
   },
   {
     "name": "prepareProductProductionType.htm-id",
     "path": "/prepareProductProductionType.htm/:id?",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\prepareProductProductionType.htm\\\\_id.vue",
-    "chunkName": "pages/prepareProductProductionType.htm/_id",
-    "_name": "_2813b5a1"
+    "chunkName": "pages/prepareProductProductionType.htm/_id"
   },
   {
     "name": "preparePurchaseInvoiceNew.htm-id",
     "path": "/preparePurchaseInvoiceNew.htm/:id?",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\preparePurchaseInvoiceNew.htm\\\\_id.vue",
-    "chunkName": "pages/preparePurchaseInvoiceNew.htm/_id",
-    "_name": "_14c254b2"
+    "chunkName": "pages/preparePurchaseInvoiceNew.htm/_id"
   },
   {
     "name": "preparePurchaseServiceInvoiceNew.htm-id",
     "path": "/preparePurchaseServiceInvoiceNew.htm/:id?",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\preparePurchaseServiceInvoiceNew.htm\\\\_id.vue",
-    "chunkName": "pages/preparePurchaseServiceInvoiceNew.htm/_id",
-    "_name": "_604f155c"
+    "chunkName": "pages/preparePurchaseServiceInvoiceNew.htm/_id"
   },
   {
     "name": "prepareReceiveInvoiceNew.htm-id",
     "path": "/prepareReceiveInvoiceNew.htm/:id?",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\prepareReceiveInvoiceNew.htm\\\\_id.vue",
-    "chunkName": "pages/prepareReceiveInvoiceNew.htm/_id",
-    "_name": "_12bac00d"
+    "chunkName": "pages/prepareReceiveInvoiceNew.htm/_id"
   },
   {
     "name": "prepareSaleInvoiceNew.htm-id",
     "path": "/prepareSaleInvoiceNew.htm/:id?",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\prepareSaleInvoiceNew.htm\\\\_id.vue",
-    "chunkName": "pages/prepareSaleInvoiceNew.htm/_id",
-    "_name": "_41e2a9a1"
+    "chunkName": "pages/prepareSaleInvoiceNew.htm/_id"
   },
   {
     "name": "prepareSaleServiceInvoiceNew.htm-id",
     "path": "/prepareSaleServiceInvoiceNew.htm/:id?",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\prepareSaleServiceInvoiceNew.htm\\\\_id.vue",
-    "chunkName": "pages/prepareSaleServiceInvoiceNew.htm/_id",
-    "_name": "_5c8db422"
+    "chunkName": "pages/prepareSaleServiceInvoiceNew.htm/_id"
   },
   {
     "name": "prepareSalesReturnNew.htm-id",
     "path": "/prepareSalesReturnNew.htm/:id?",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\prepareSalesReturnNew.htm\\\\_id.vue",
-    "chunkName": "pages/prepareSalesReturnNew.htm/_id",
-    "_name": "_65e7ea17"
+    "chunkName": "pages/prepareSalesReturnNew.htm/_id"
   },
   {
     "name": "prepareSewModel.htm-id",
     "path": "/prepareSewModel.htm/:id?",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\prepareSewModel.htm\\\\_id.vue",
-    "chunkName": "pages/prepareSewModel.htm/_id",
-    "_name": "_7a208ff7"
+    "chunkName": "pages/prepareSewModel.htm/_id"
   },
   {
     "name": "prepareSewModelOperationName.htm-id",
     "path": "/prepareSewModelOperationName.htm/:id?",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\prepareSewModelOperationName.htm\\\\_id.vue",
-    "chunkName": "pages/prepareSewModelOperationName.htm/_id",
-    "_name": "_6699ba55"
+    "chunkName": "pages/prepareSewModelOperationName.htm/_id"
   },
   {
     "name": "prepareSewModelVariantsSize.htm-id",
     "path": "/prepareSewModelVariantsSize.htm/:id?",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\prepareSewModelVariantsSize.htm\\\\_id.vue",
-    "chunkName": "pages/prepareSewModelVariantsSize.htm/_id",
-    "_name": "_04ca3288"
+    "chunkName": "pages/prepareSewModelVariantsSize.htm/_id"
   },
   {
     "name": "prepareSimpleProductionInvoice.htm-id",
     "path": "/prepareSimpleProductionInvoice.htm/:id?",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\prepareSimpleProductionInvoice.htm\\\\_id.vue",
-    "chunkName": "pages/prepareSimpleProductionInvoice.htm/_id",
-    "_name": "_00888661"
+    "chunkName": "pages/prepareSimpleProductionInvoice.htm/_id"
   },
   {
     "name": "prepareSimpleProductionInvoiceManual.htm-id",
     "path": "/prepareSimpleProductionInvoiceManual.htm/:id?",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\prepareSimpleProductionInvoiceManual.htm\\\\_id.vue",
-    "chunkName": "pages/prepareSimpleProductionInvoiceManual.htm/_id",
-    "_name": "_c5a5528a"
+    "chunkName": "pages/prepareSimpleProductionInvoiceManual.htm/_id"
   },
   {
     "name": "prepareStage.htm-id",
     "path": "/prepareStage.htm/:id?",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\prepareStage.htm\\\\_id.vue",
-    "chunkName": "pages/prepareStage.htm/_id",
-    "_name": "_16ec1285"
+    "chunkName": "pages/prepareStage.htm/_id"
   }
 ]

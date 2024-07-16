@@ -284,7 +284,7 @@
 </template>
 
 <script>
-import LookUp from '@generics/LookUp.vue'
+import LookUp from '@generics/GenericLookUp.vue'
 import GenericInputDatePage from '@components/InputDate/GenericInputDatePage.vue'
 import LoadingPage from '@components/Loading/LoadingPage.vue'
 import GenericButton from '@generics/GenericButton.vue'
