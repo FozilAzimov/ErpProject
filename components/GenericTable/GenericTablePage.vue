@@ -353,7 +353,7 @@ export default {
             },
           })
           .then(({ status }) => {
-            if (status === 200) this.$emit('pageEmitAction', true)
+            if (status < 300) this.$emit('pageEmitAction', true)
           })
       }
     },

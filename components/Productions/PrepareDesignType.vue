@@ -21,10 +21,10 @@
           <h1 class="font-bold text-[rgb(49,126,172)] text-[14px] uppercase">
             {{
               btnType === 'view'
-                ? 'View Design'
+                ? 'View Packaging'
                 : btnType === 'edit'
-                ? 'Edit Design'
-                : 'Add Design'
+                ? 'Edit Packaging'
+                : 'Packaging Create'
             }}
           </h1>
         </div>
@@ -77,7 +77,7 @@
         class="border-[1px] border-solid border-[rgba(0,0,0,0.1)]"
         :class="
           isOpenTable
-            ? 'duration-[1s] h-[755px] overflow-hidden'
+            ? 'duration-[1s] h-fit overflow-hidden'
             : 'duration-[1s] h-0 overflow-hidden'
         "
       >
@@ -92,35 +92,17 @@
                   >{{ element.name }}
                   <span v-if="element.required" class="text-[18px] text-red-600"
                     >*</span
-                  >
-                </span>
+                  ></span
+                >
                 <generic-input
                   :value="
-                    editData?.[element.defValName]
-                      ? editData?.[element.defValName]
+                    editData?.[element?.subName]
+                      ? editData?.[element?.subName]
                       : ''
                   "
                   width="300"
                   type="text"
                   :name="element.subName"
-                  :disabled="element.disabled"
-                  @customFunction="getInputAndLookUpValueAction"
-                />
-              </span>
-              <span
-                v-else-if="element.type === 'select'"
-                class="flex flex-col items-start mb-1"
-              >
-                <span class="text-[13px]">{{ element.name }} </span>
-                <generic-look-up
-                  dwidth="300"
-                  durl="invoiceBase/findAllPlanningType"
-                  :name="element.subName"
-                  :defvalue="
-                    editData?.[element.defValName]?.text
-                      ? editData?.[element.defValName]?.text
-                      : ''
-                  "
                   :disabled="element.disabled"
                   @customFunction="getInputAndLookUpValueAction"
                 />
@@ -139,7 +121,7 @@
               :name="btnType === 'edit' ? 'Save changes' : 'Save'"
               :type="btnType === 'edit' ? 'success' : 'primary'"
               :icon-name-attribute="btnType && 'edit'"
-              @click="saveAction(btnType)"
+              @click="saveAction()"
             />
           </div>
         </div>
@@ -152,33 +134,46 @@
 import GenericButton from '@generics/GenericButton.vue'
 import GenericInput from '@generics/GenericInput.vue'
 import LoadingPage from '@components/Loading/LoadingPage.vue'
-import GenericLookUp from '@generics/GenericLookUp.vue'
 export default {
   components: {
     LoadingPage,
     GenericButton,
     GenericInput,
-    GenericLookUp,
   },
+
+  // DATA
   data() {
     return {
       isLoading: false,
       pageSize_value: 25,
+      btnType: '',
+      pageID: null,
       checkModal: false,
       isOpenTable: true,
       isCloseTable: true,
-      btnType: '',
-      rowID: null,
       editData: {},
       allInputAndLookUpValue: {},
       elementData: [],
+      selectDefaultData: [],
     }
   },
 
-  mounted() {
-    this.btnType = JSON.parse(localStorage.getItem('allTrueAndFalseData'))?.type
-    this.rowID = JSON.parse(localStorage.getItem('allTrueAndFalseData'))?.id
+  // WATCH
+  watch: {
+    pageID(newVal) {
+      this.btnTypeSpecifyingAction()
+    },
+  },
 
+  // CREATED
+  created() {
+    this.btnType = JSON.parse(localStorage.getItem('allTrueAndFalseData'))?.type
+    // page ID sini olish
+    this.pageID = this.$route.params?.id
+  },
+
+  // MOUNTED
+  mounted() {
     // function
     this.dataCreatedAction()
 
@@ -186,7 +181,7 @@ export default {
     this.getTableRequest()
   },
 
-  // Methods
+  // METHODS
   methods: {
     handleValue(checkModal) {
       this.checkModal = checkModal
@@ -205,37 +200,26 @@ export default {
     // go back action
     goBackAction() {
       localStorage.removeItem('allTrueAndFalseData')
-      this.$router.push('/designs.htm')
+      this.$router.push('/designTypes.htm')
+    },
+
+    // Specifying the buttun type action
+    btnTypeSpecifyingAction() {
+      if (!this.pageID) {
+        localStorage.removeItem('allTrueAndFalseData')
+      }
     },
 
     // Data created
     dataCreatedAction() {
       const data = [
         {
-          name: 'Design Name',
+          name: 'Design Type Name',
           subName: 'name',
-          defValName: 'name',
           type: 'text',
           required: true,
           show: true,
           disabled: this.btnType === 'view',
-        },
-        {
-          name: 'Design Code',
-          subName: 'code',
-          defValName: 'code',
-          type: 'text',
-          required: false,
-          show: true,
-          disabled: this.btnType === 'view',
-        },
-        {
-          name: 'Planning Type',
-          subName: 'planningTypeId',
-          defValName: 'planningtype',
-          type: 'select',
-          required: false,
-          show: this.btnType !== 'view',
         },
       ]
       this.elementData = data
@@ -243,39 +227,38 @@ export default {
 
     // Page request
     getTableRequest() {
-      if (this.btnType === 'view') {
+      if (this.pageID && this.btnType === 'view') {
         this.isLoading = !this.isLoading
         this.$axios
-          .post(`/design/prepareDesignViewAjaxLoad`, {
-            id: this.rowID,
+          .post(`/designType/prepareDesignTypeViewAjaxLoad`, {
+            id: this.pageID,
             page_current: 1,
-            page_size: 25,
+            page_size: this.pageSize_value,
           })
-          .then(({ data: { design } }) => {
+          .then(({ data: { designType } }) => {
             this.isLoading = !this.isLoading
-            this.editData = design
+            this.editData = designType
           })
           .catch((error) => {
             this.isLoading = !this.isLoading
             // eslint-disable-next-line no-console
             console.log(error)
           })
-      } else if (this.btnType === 'edit') {
+      } else if (this.pageID && this.btnType === 'edit') {
         this.isLoading = !this.isLoading
         this.$axios
-          .post(`/design/prepareDesignAjaxLoad`, {
-            id: this.rowID,
+          .post(`/designType/prepareDesignTypeAjaxLoad`, {
+            id: this.pageID,
             page_current: 1,
-            page_size: 25,
+            page_size: this.pageSize_value,
           })
-          .then(({ data: { designJson } }) => {
+          .then(({ data }) => {
+            this.selectDefaultData = data?.department
+            this.editData = data?.packaging
+            this.editData.department_id = data?.department_id
+            // function
+            this.departmentFindNameAction(data?.department, data?.department_id)
             this.isLoading = !this.isLoading
-            this.editData = JSON.parse(designJson)
-            this.allInputAndLookUpValue.planningTypeId =
-              this.editData?.planningtype?.id || ''
-            this.allInputAndLookUpValue.code = this.editData?.code || ''
-            this.allInputAndLookUpValue.name = this.editData?.name || ''
-            this.rowID = this.editData?.id
           })
           .catch((error) => {
             this.isLoading = !this.isLoading
@@ -290,29 +273,21 @@ export default {
       this.$set(this.allInputAndLookUpValue, name, value)
     },
 
-    // Save Changes action
+    // SAVE and Changes action
     saveAction() {
-      if (this.allInputAndLookUpValue.name) {
-        const body = {}
-        if (this.btnType === 'edit') {
-          body.id = this.rowID || ''
-          body.confirmed = this.allInputAndLookUpValue?.confirmed || ''
-          body.name = this.allInputAndLookUpValue?.name || ''
-          body.code = this.allInputAndLookUpValue?.code || ''
-          body.planningTypeId =
-            this.allInputAndLookUpValue?.planningTypeId || ''
-        } else {
-          body.name = this.allInputAndLookUpValue?.name || ''
-          body.planningTypeId =
-            this.allInputAndLookUpValue?.planningTypeId || ''
-          body.code = this.allInputAndLookUpValue?.code || ''
+      if (this.allInputAndLookUpValue.name || this.editData?.name) {
+        const designType = {}
+        if (this.pageID && this.btnType === 'edit') {
+          designType.id = this.pageID
+        } else if (!this.pageID) {
+          designType.name = this.allInputAndLookUpValue?.name
         }
         this.isLoading = !this.isLoading
         this.$axios
-          .post(`/design/prepareCreateEditDesign`, body)
+          .post(`/designType/addDesignType`, { designType })
           .then(({ status }) => {
             this.isLoading = !this.isLoading
-            if (status === 200) this.$router.push('/designs.htm')
+            if (status === 200) this.$router.push('/designTypes.htm')
           })
           .catch((error) => {
             this.isLoading = !this.isLoading
@@ -320,6 +295,12 @@ export default {
             console.log(error)
           })
       }
+    },
+
+    // Department LookUp name ni olish
+    departmentFindNameAction(optionData, id) {
+      const foundObj = optionData.find((obj) => id === obj?.id && obj?.name)
+      this.editData.departmentName = foundObj ? foundObj.name : ''
     },
   },
 }

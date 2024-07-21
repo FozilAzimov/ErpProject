@@ -1,12 +1,5 @@
-<template>
-  <div></div>
-</template>
-
 <script>
 export default {
-  data() {
-    return {}
-  },
   methods: {
     // translate api
     getStaticTableNameValues() {
@@ -23,5 +16,3 @@ export default {
   },
 }
 </script>
-
-<style></style>

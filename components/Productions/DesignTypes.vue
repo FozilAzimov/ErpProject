@@ -121,7 +121,7 @@
             :istherebody="isThereBody"
             open-url="prepareDesignType"
             :productions-action-buttons="true"
-            delete-row-url="packag/deletePackaging"
+            delete-row-url="designType/prepareDesignTypeDelete"
             height="600"
             @pageEmitAction="getTableRequest"
           />
@@ -183,7 +183,7 @@ export default {
     getTableRequest() {
       this.isLoading = !this.isLoading
       this.$axios
-        .post(`/designTypes/designTypesAjaxLoad`, {
+        .post(`/designType/designTypesAjaxLoad`, {
           searchForm: {
             keyword: this.keywordValue,
           },
@@ -194,9 +194,9 @@ export default {
             total: 328,
           },
         })
-        .then(({ data: { designList } }) => {
+        .then(({ data: { designTypeList } }) => {
           this.isLoading = !this.isLoading
-          this.tableBody = designList
+          this.tableBody = designTypeList
 
           this.tableBody.length
             ? (this.isThereBody = true)

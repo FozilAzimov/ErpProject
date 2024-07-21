@@ -8,29 +8,32 @@
   "BranchesPage": {
     "description": "Auto imported from components/Branches/BranchesPage.vue"
   },
-  "ColumnConfigPage": {
-    "description": "Auto imported from components/ColumnConfig/ColumnConfigPage.vue"
-  },
-  "DashboardPage": {
-    "description": "Auto imported from components/Dashboard/DashboardPage.vue"
-  },
   "BtnGen": {
     "description": "Auto imported from components/Button/BtnGen.vue"
   },
   "GenericButton": {
     "description": "Auto imported from components/Button/GenericButton.vue"
   },
+  "DashboardPage": {
+    "description": "Auto imported from components/Dashboard/DashboardPage.vue"
+  },
+  "ColumnConfigPage": {
+    "description": "Auto imported from components/ColumnConfig/ColumnConfigPage.vue"
+  },
   "GenericInvoiceFilteringModalPage": {
     "description": "Auto imported from components/GenericInvoiceFilteringModal/GenericInvoiceFilteringModalPage.vue"
-  },
-  "GenericPrepareTablePage": {
-    "description": "Auto imported from components/GenericPrepareTable/GenericPrepareTablePage.vue"
   },
   "GenericInvoiceItemModalPage": {
     "description": "Auto imported from components/GenericInvoiceItemModal/GenericInvoiceItemModalPage.vue"
   },
+  "GenericPrepareTablePage": {
+    "description": "Auto imported from components/GenericPrepareTable/GenericPrepareTablePage.vue"
+  },
   "GenericTablePage": {
     "description": "Auto imported from components/GenericTable/GenericTablePage.vue"
+  },
+  "GenericTranslatePage": {
+    "description": "Auto imported from components/GenericTranslate/GenericTranslatePage.vue"
   },
   "GenericCheckBox": {
     "description": "Auto imported from components/Generics/GenericCheckBox.vue"
@@ -49,9 +52,6 @@
   },
   "GenericPagination": {
     "description": "Auto imported from components/Generics/GenericPagination.vue"
-  },
-  "GenericTranslatePage": {
-    "description": "Auto imported from components/GenericTranslate/GenericTranslatePage.vue"
   },
   "GenericInputDatePage": {
     "description": "Auto imported from components/InputDate/GenericInputDatePage.vue"
@@ -392,14 +392,14 @@
   "CheckRealCountBarcodePage": {
     "description": "Auto imported from components/Orders/CheckRealCountBarcodePage/CheckRealCountBarcodePage.vue"
   },
-  "ProductionOrderPage": {
-    "description": "Auto imported from components/Orders/ProductionOrderPage/ProductionOrderPage.vue"
-  },
   "DyeingsPage": {
     "description": "Auto imported from components/Orders/Dyeings/DyeingsPage.vue"
   },
   "ProductionOrderplannigs": {
     "description": "Auto imported from components/Orders/ProductionOrderPlannigs/ProductionOrderplannigs.vue"
+  },
+  "ProductionOrderPage": {
+    "description": "Auto imported from components/Orders/ProductionOrderPage/ProductionOrderPage.vue"
   },
   "PurchaseOrderPage": {
     "description": "Auto imported from components/Orders/PurchaseOrderpage/PurchaseOrderPage.vue"
@@ -413,11 +413,11 @@
   "BatchReportsPage": {
     "description": "Auto imported from components/Reports/BatchReportsPage/BatchReportsPage.vue"
   },
-  "BranchProductsStockReportByLogic": {
-    "description": "Auto imported from components/Reports/BranchProductsStockReportByLogic/BranchProductsStockReportByLogic.vue"
-  },
   "BatchStagesReport": {
     "description": "Auto imported from components/Reports/BatchStagesReport/BatchStagesReport.vue"
+  },
+  "BranchProductsStockReportByLogic": {
+    "description": "Auto imported from components/Reports/BranchProductsStockReportByLogic/BranchProductsStockReportByLogic.vue"
   },
   "GradePage": {
     "description": "Auto imported from components/Reports/GradePage/GradePage.vue"
@@ -428,20 +428,17 @@
   "InvoiceReportsPage": {
     "description": "Auto imported from components/Reports/InvoiceReportsPage/InvoiceReportsPage.vue"
   },
-  "SewBandEquipments": {
-    "description": "Auto imported from components/Reports/SewBandsEquipments/SewBandEquipments.vue"
-  },
   "PersonEquipmentsPage": {
     "description": "Auto imported from components/Reports/PersonEquipmentsPage/PersonEquipmentsPage.vue"
   },
-  "TransactionDetailReportPage": {
-    "description": "Auto imported from components/Reports/TransactionDetailReportPage/TransactionDetailReportPage.vue"
+  "SewBandEquipments": {
+    "description": "Auto imported from components/Reports/SewBandsEquipments/SewBandEquipments.vue"
   },
   "SewModelReport": {
     "description": "Auto imported from components/Reports/SewModelReport/SewModelReport.vue"
   },
-  "TransactionSaldoReport": {
-    "description": "Auto imported from components/Reports/TransactionSaldoReport/TransactionSaldoReport.vue"
+  "TransactionDetailReportPage": {
+    "description": "Auto imported from components/Reports/TransactionDetailReportPage/TransactionDetailReportPage.vue"
   },
   "PageTable": {
     "description": "Auto imported from components/Reports/TransactionReports/PageTable.vue"
@@ -469,5 +466,8 @@
   },
   "TransactionReportsPage": {
     "description": "Auto imported from components/Reports/TransactionReports/TransactionReportsPage.vue"
+  },
+  "TransactionSaldoReport": {
+    "description": "Auto imported from components/Reports/TransactionSaldoReport/TransactionSaldoReport.vue"
   }
 }

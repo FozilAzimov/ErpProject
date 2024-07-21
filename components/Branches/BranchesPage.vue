@@ -30,11 +30,11 @@
           }"
         >
           <li v-for="(item, index) in branchesData" :key="index">
-            <a
-              :href="item.url"
+            <nuxt-link
+              :to="item.url"
               class="block p-[7px_15px] hover:bg-[rgba(54,155,215,0.3)] duration-[0.2s]"
               @click="getData(item.id)"
-              >{{ item.branchName }}</a
+              >{{ item.branchName }}</nuxt-link
             >
           </li>
         </ul>
@@ -47,6 +47,7 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
 import LoadingPage from '@components/Loading/LoadingPage.vue'
 export default {
   components: { LoadingPage },
@@ -60,16 +61,14 @@ export default {
   },
   // Mounted
   mounted() {
+    // System Menu
+    this.GET_SYSTEM_MENU()
+
     window.addEventListener('click', this.handleWindowClick)
     // Branches request
     this.isLoading = !this.isLoading
     this.$axios
-      .get(`/companies/branches`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-          'x-auth-token': localStorage.getItem('authToken'),
-        },
-      })
+      .get(`/companies/branches`)
       .then((res) => {
         this.branchesData = res.data
         this.isLoading = !this.isLoading
@@ -86,6 +85,9 @@ export default {
   },
   // Methods
   methods: {
+    // Store actions
+    ...mapActions('systemMenu', ['GET_SYSTEM_MENU']),
+
     // Dropdown toggle
     dropdownToggle() {
       this.dropToggle = !this.dropToggle
@@ -103,10 +105,6 @@ export default {
       this.$axios
         .post(`/companies/postBranch`, {
           id,
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-            'x-auth-token': localStorage.getItem('authToken'),
-          },
         })
         .then(({ data }) => {
           this.branchesData = data

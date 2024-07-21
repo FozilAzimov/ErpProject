@@ -96,8 +96,8 @@
                 >
                 <generic-input
                   :value="
-                    editData?.[element?.defValName]
-                      ? editData?.[element?.defValName]
+                    editData?.[element?.subName]
+                      ? editData?.[element?.subName]
                       : ''
                   "
                   width="300"
@@ -111,10 +111,11 @@
                 v-else-if="element.type === 'select'"
                 class="flex flex-col items-start mb-1"
               >
-                <span class="text-[13px]">{{ element.name }} </span>
+                <span class="text-[13px]">{{ element.name }}</span>
                 <generic-look-up
                   dwidth="300"
                   :name="element.subName"
+                  :defvalue="editData[element?.subName]"
                   :options-data="selectDefaultData"
                   :disabled="element.disabled"
                   @customFunction="getInputAndLookUpValueAction"
@@ -254,7 +255,7 @@ export default {
         },
         {
           name: 'Card Number',
-          subName: 'cardNumber',
+          subName: 'cardnumber',
           type: 'text',
           required: false,
           show: true,
@@ -262,7 +263,7 @@ export default {
         },
         {
           name: 'Department Name',
-          subName: 'departmentId',
+          subName: 'departmentName',
           type: 'select',
           required: false,
           show: this.btnType !== 'view',
@@ -273,51 +274,50 @@ export default {
 
     // Page request
     getTableRequest() {
-      if (this.btnType === 'view') {
+      if (this.pageID && this.btnType === 'view') {
         this.isLoading = !this.isLoading
         this.$axios
           .post(`/packagings/viewPackagingAjaxLoad`, {
             id: this.pageID,
             page_current: 1,
-            page_size: 25,
+            page_size: this.pageSize_value,
           })
-          .then(({ data: { design } }) => {
+          .then(({ data: { packaging } }) => {
             this.isLoading = !this.isLoading
-            this.editData = design
+            this.editData = packaging
           })
           .catch((error) => {
             this.isLoading = !this.isLoading
             // eslint-disable-next-line no-console
             console.log(error)
           })
-      } else if (this.btnType === 'edit') {
+      } else if (this.pageID && this.btnType === 'edit') {
         this.isLoading = !this.isLoading
         this.$axios
-          .post(`/packagings/prepareDesignAjaxLoad`, {
+          .post(`/packagings/preparePackagingAjaxLoad`, {
             id: this.pageID,
             page_current: 1,
-            page_size: 25,
+            page_size: this.pageSize_value,
           })
-          .then(({ data: { designJson } }) => {
+          .then(({ data }) => {
+            this.selectDefaultData = data?.department
+            this.editData = data?.packaging
+            this.editData.department_id = data?.department_id
+            // function
+            this.departmentFindNameAction(data?.department, data?.department_id)
             this.isLoading = !this.isLoading
-            this.editData = JSON.parse(designJson)
-            this.allInputAndLookUpValue.planningTypeId =
-              this.editData?.planningtype?.id || ''
-            this.allInputAndLookUpValue.code = this.editData?.code || ''
-            this.allInputAndLookUpValue.name = this.editData?.name || ''
-            this.pageID = this.editData?.id
           })
           .catch((error) => {
             this.isLoading = !this.isLoading
             // eslint-disable-next-line no-console
             console.log(error)
           })
-      } else {
+      } else if (!this.pageID) {
         this.isLoading = !this.isLoading
         this.$axios
           .post(`/packagings/preparePackagingAjaxLoad`, {
             page_current: 1,
-            page_size: 25,
+            page_size: this.pageSize_value,
           })
           .then(({ data: { departmentList } }) => {
             this.isLoading = !this.isLoading
@@ -338,23 +338,31 @@ export default {
 
     // SAVE and Changes action
     saveAction() {
-      if (this.allInputAndLookUpValue.name) {
+      if (this.allInputAndLookUpValue.name || this.editData?.name) {
         const body = {}
-        if (this.btnType === 'edit') {
-          body.id = this.pageID || ''
-          body.confirmed = this.allInputAndLookUpValue?.confirmed || ''
-          body.name = this.allInputAndLookUpValue?.name || ''
-          body.code = this.allInputAndLookUpValue?.code || ''
-          body.planningTypeId =
-            this.allInputAndLookUpValue?.planningTypeId || ''
-        } else {
-          const packaging = {}
+        const packaging = {}
+        if (this.pageID && this.btnType === 'edit') {
+          packaging.id = this.pageID
+          packaging.name =
+            this.allInputAndLookUpValue?.name || this.editData?.name || ''
+          packaging.code =
+            this.allInputAndLookUpValue?.code || this.editData?.code || ''
+          packaging.cardnumber =
+            this.allInputAndLookUpValue?.cardnumber ||
+            this.editData?.cardnumber ||
+            ''
+          body.department_id =
+            this.allInputAndLookUpValue?.departmentName ||
+            this.editData?.department_id ||
+            ''
+        } else if (!this.pageID) {
           packaging.name = this.allInputAndLookUpValue?.name || ''
-          packaging.cardnumber = this.allInputAndLookUpValue?.cardNumber || ''
+          packaging.cardnumber = this.allInputAndLookUpValue?.cardnumber || ''
           packaging.code = this.allInputAndLookUpValue?.code || ''
-          body.packaging = packaging
-          body.department_id = this.allInputAndLookUpValue?.departmentId || ''
+          body.department_id = this.allInputAndLookUpValue?.departmentName || ''
         }
+
+        body.packaging = packaging
         this.isLoading = !this.isLoading
         this.$axios
           .post(`/packagings/addEditPackaging`, body)
@@ -368,6 +376,12 @@ export default {
             console.log(error)
           })
       }
+    },
+
+    // Department LookUp name ni olish
+    departmentFindNameAction(optionData, id) {
+      const foundObj = optionData.find((obj) => id === obj?.id && obj?.name)
+      this.editData.departmentName = foundObj ? foundObj.name : ''
     },
   },
 }

@@ -33,11 +33,13 @@ export default {
   },
 
   alias: {
-    '@components': '@/components',
+    '@images': '@/static/images',
+    '@icons': '@/static/icons',
     '@assets': '@/assets',
+    '@components': '@/components',
     '@generics': '@/components/Generics',
-    '@pages': '@/pages',
     '@layouts': '@/layouts',
+    '@pages': '@/pages',
     '@store': '@/store',
   },
 

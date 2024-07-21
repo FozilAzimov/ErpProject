@@ -12,7 +12,7 @@
       </h1>
     </div>
     <div
-      class="flex flex-wrap items-start justify-start gap-7 p-5 mt-2 border-[1px] border-solid border-[#D9D9D9] shadow-md rounded-md"
+      class="flex flex-wrap items-start justify-start gap-7 p-5 mt-2 border-[1px] border-solid border-[#D9D9D9] shadow-md rounded-sm"
     >
       <nuxt-link
         v-for="(item, index) of items"
@@ -20,7 +20,7 @@
         :to="item.url"
         class="flex flex-col items-center hover:shadow-lg duration-[0.2s] w-full max-w-[150px] bg-white border border-gray-200 rounded-lg shadow"
       >
-        <img class="w-[80px]" src="@/assets/images/desktop.png" alt="image" />
+        <img class="w-[80px]" src="@images/desktop.png" alt="image" />
         <div class="text-center mb-2">
           <p class="font-medium text-[13px] text-[#317EAC] line-clamp-1">
             {{ item.name }}

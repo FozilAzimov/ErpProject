@@ -121,7 +121,7 @@
             :istherebody="isThereBody"
             open-url="preparePackaging"
             :productions-action-buttons="true"
-            delete-row-url="packag/deletePackaging"
+            delete-row-url="packagings/deletePackaging"
             height="600"
             @pageEmitAction="getTableRequest"
           />

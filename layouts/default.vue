@@ -12,7 +12,7 @@
         to="/dashboard.htm"
         class="flex items-center gap-2 text-[17px] text-[rgba(255,255,255,0.8)] hover:text-[rgb(255,255,255)] duration-[0.2s] font-medium"
       >
-        <img class="w-[30px] ml-1" src="@assets/icons/logo.png" alt="logo" />
+        <img class="w-[30px] ml-1" src="@icons/logo.png" alt="logo" />
         <h1>ERP</h1>
       </nuxt-link>
       <div class="flex items-center gap-[5px]">
@@ -181,9 +181,9 @@
               </li>
             </ul>
             <el-submenu
-              v-for="(item, index) in firstSystemMenuList"
+              v-for="(item, index) in GET_SYSTEM_MENU_LIST"
               :key="index"
-              :index="String(index)"
+              :index="`${index}`"
               class="border-b-[1px] border-b-solid border-b-[rgba(0,0,0,0.15)]"
             >
               <template slot="title">
@@ -241,11 +241,13 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 export default {
   // DATA
   data() {
     return {
+      isLoading: false,
+      isLoginPage: false,
       isPage: false,
       collapseMune: true,
       logoutMessage: false,
@@ -261,7 +263,8 @@ export default {
       return this.$i18n.locales
     },
 
-    ...mapState(['isLoading', 'systemMenuList', 'firstSystemMenuList']),
+    // Store getters
+    ...mapGetters('systemMenu', ['GET_LOADING', 'GET_SYSTEM_MENU_LIST']),
   },
 
   // WATCH
@@ -273,6 +276,10 @@ export default {
       if (!token && to.path !== '/login.htm') {
         this.$router.push('/login.htm')
       }
+    },
+
+    GET_LOADING(newVal) {
+      this.isLoading = newVal
     },
   },
 
@@ -292,7 +299,7 @@ export default {
   // MOUNTED
   mounted() {
     // System Menu
-    this.$store.dispatch('fetchSystemMenu')
+    this.GET_SYSTEM_MENU()
     // Drop Toggle
     window.addEventListener('click', this.handleWindowClick)
     window.addEventListener('click', this.handleWindowClickTranslate)
@@ -306,19 +313,18 @@ export default {
 
   // METHODS
   methods: {
+    // Store actions
+    ...mapActions('systemMenu', ['GET_SYSTEM_MENU']),
+
     isCollapse() {
       this.collapseMune = !this.collapseMune
     },
 
     // Log Out
     getLogout() {
+      this.isLoading = !this.isLoading
       this.$axios
-        .delete(`/security/logout`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-            'x-auth-token': localStorage.getItem('authToken'),
-          },
-        })
+        .delete(`/security/logout`)
         .then((res) => {
           if (res.status < 300) {
             localStorage.removeItem('token')
@@ -328,9 +334,11 @@ export default {
               message: 'Siz Proyekt dan muvaffaqqiyatli chiqdingiz!',
               type: 'success',
             })
+            this.isLoading = !this.isLoading
           }
         })
         .catch((error) => {
+          this.isLoading = !this.isLoading
           // eslint-disable-next-line no-console
           console.error('Login request failed', error)
           this.$message.error(
@@ -371,13 +379,9 @@ export default {
 
     // Language Request
     getLanguage(lang, value) {
+      this.isLoading = !this.isLoading
       this.$axios
-        .get(`/lang?lang=${lang}`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-            'x-auth-token': localStorage.getItem('authToken'),
-          },
-        })
+        .get(`/lang?lang=${lang}`)
         .then((res) => {
           if (res.status === 200) {
             localStorage.setItem('langValue', value)
@@ -388,9 +392,11 @@ export default {
               type: 'success',
             })
             window.location.reload()
+            this.isLoading = !this.isLoading
           }
         })
         .catch((error) => {
+          this.isLoading = !this.isLoading
           // eslint-disable-next-line no-console
           console.error('Login request failed', error)
           this.$message.error(
