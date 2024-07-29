@@ -1,29 +1,45 @@
 <template>
-  <div>
-    <h1>Bu page hali yaratilmadi</h1>
-    <button
-      class="border-[1px] border-solid border-[rgba(0,0,0,0.2)] rounded-[10px] p-[5px]"
-      @click="fetchUsersFromStore"
-    >
-      getUsers
-    </button>
-    <pre v-for="user in getUsers" :key="user.id">{{ user }}</pre>
+  <div class="w-full flex flex-col items-center gap-5">
+    <h1>{{ GET_TRANSLATE_VALUE }}</h1>
+    <generic-look-up
+      dwidth="200"
+      placeholder="Selected"
+      :options-data="optionData"
+      @customFunction="selectedAction"
+    />
+
+    <generic-date />
   </div>
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
+import GenericLookUp from '@generics/GenericLookUp.vue'
 export default {
-  name: 'IndexPage',
+  components: {
+    GenericLookUp,
+  },
+
+  data() {
+    return {
+      optionData: [
+        { id: 1, name: 'English' },
+        { id: 2, name: 'Russian' },
+        { id: 3, name: 'O`zbekistan' },
+        { id: 4, name: 'Turkiya' },
+      ],
+    }
+  },
 
   computed: {
-    ...mapGetters(['getUsers']),
+    ...mapGetters('translate', ['GET_TRANSLATE_VALUE']),
   },
 
   methods: {
-    ...mapActions(['fetchUsers']),
-    fetchUsersFromStore() {
-      this.fetchUsers()
+    ...mapActions('translate', ['CHANGE_TRANSLATE']),
+
+    selectedAction(name, value) {
+      this.CHANGE_TRANSLATE(value)
     },
   },
 }

@@ -20,7 +20,7 @@
         <thead class="bg-[rgb(229,235,245)]">
           <tr>
             <th
-              v-for="(headName, key) in rowData"
+              v-for="(headName, key) in data"
               :key="key"
               class="text-[13px] font-semibold border-[1px] border-solid border-[rgba(119,136,153,0.3)] p-6 cursor-pointer whitespace-nowrap"
               :class="`w-[${headName?.width}px]`"
@@ -43,16 +43,25 @@
               <template v-if="element?.type === 'label'">{{
                 1 + inx
               }}</template>
+              <template v-else-if="element?.type === 'date'">
+                <generic-input-date-page type="datetime-local" />
+              </template>
               <template v-else-if="element?.type === 'select'">
                 <generic-look-up dwidth="150" />
               </template>
               <template v-else-if="element?.type === 'text'">
-                <generic-input width="150" />
+                <generic-input width="150" type="text" />
+              </template>
+              <template v-else-if="element?.type === 'textarea'">
+                <generic-input width="150" type="textarea" />
               </template>
               <template v-else-if="element?.type === 'checkbox'">
                 <generic-check-box />
               </template>
               <template v-else-if="element?.type === 'button'">
+                <generic-button type="success" :name="element?.btnName" />
+              </template>
+              <template v-else-if="element?.type === 'del'">
                 <generic-button
                   type="danger"
                   :circle="true"
@@ -73,6 +82,7 @@ import GenericButton from '@generics/GenericButton.vue'
 import GenericLookUp from '@generics/GenericLookUp.vue'
 import GenericInput from '@generics/GenericInput.vue'
 import GenericCheckBox from '@generics/GenericCheckBox.vue'
+import GenericInputDatePage from '@components/InputDate/GenericInputDatePage.vue'
 export default {
   // COMPONENTS
   components: {
@@ -80,6 +90,7 @@ export default {
     GenericLookUp,
     GenericInput,
     GenericCheckBox,
+    GenericInputDatePage,
   },
 
   props: {
@@ -87,98 +98,16 @@ export default {
       type: String,
       default: '',
     },
+    data: {
+      type: Array,
+      default: () => [],
+    },
   },
 
   // DATA
   data() {
     return {
       tableData: [],
-      rowData: [
-        {
-          name: 'Id',
-          subName: 'id',
-          width: '120',
-          type: 'label',
-        },
-        {
-          name: 'Product Name',
-          subName: 'name',
-          width: '120',
-          type: 'select',
-        },
-        {
-          name: 'Qty',
-          subName: 'qty',
-          width: '120',
-          type: 'text',
-        },
-        {
-          name: 'Unit Measurement Type1 Value',
-          subName: 'unitMeasurementType1Value',
-          width: '120',
-          type: 'text',
-        },
-        {
-          name: 'Unit Measurement Type1',
-          subName: 'unitMeasurementType1',
-          width: '120',
-          type: 'select',
-        },
-        {
-          name: 'Unit Measurement Type2 Value',
-          subName: 'unitMeasurementType2Value',
-          width: '120',
-          type: 'text',
-        },
-        {
-          name: 'Unit Measurement Type2',
-          subName: 'unitMeasurementType2',
-          width: '120',
-          type: 'select',
-        },
-        {
-          name: 'Unit Measurement Type3 Value',
-          subName: 'unitMeasurementType3Value',
-          width: '120',
-          type: 'text',
-        },
-        {
-          name: 'Unit Measurement Type3',
-          subName: 'unitMeasurementType3',
-          width: '120',
-          type: 'select',
-        },
-        {
-          name: 'Unit Measurement Type4 Value',
-          subName: 'unitMeasurementType4Value',
-          width: '120',
-          type: 'text',
-        },
-        {
-          name: 'Unit Measurement Type4',
-          subName: 'unitMeasurementType4',
-          width: '120',
-          type: 'select',
-        },
-        {
-          name: 'Notes',
-          subName: 'notes',
-          width: '120',
-          type: 'text',
-        },
-        {
-          name: 'Expense',
-          subName: 'expense',
-          width: '120',
-          type: 'checkbox',
-        },
-        {
-          name: 'Action',
-          subName: 'delete',
-          width: '120',
-          type: 'button',
-        },
-      ],
     }
   },
 
@@ -186,7 +115,7 @@ export default {
   methods: {
     // Addition action
     addRowAction() {
-      this.tableData.push(this.rowData)
+      this.tableData.push(this.data)
     },
 
     // Row Delete action

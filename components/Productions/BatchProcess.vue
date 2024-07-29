@@ -121,7 +121,7 @@
             :istherebody="isThereBody"
             open-url="prepareBatchProcess"
             :productions-action-buttons="true"
-            delete-row-url="packag/deletePackaging"
+            delete-row-url="batchProcess/prepareBatchProcessDelete"
             height="600"
             @pageEmitAction="getTableRequest"
           />
@@ -218,9 +218,9 @@ export default {
             total: 328,
           },
         })
-        .then(({ data: { designList } }) => {
+        .then(({ data: { batchProcessList } }) => {
           this.isLoading = !this.isLoading
-          this.tableBody = designList
+          this.tableBody = batchProcessList
 
           this.tableBody.length
             ? (this.isThereBody = true)

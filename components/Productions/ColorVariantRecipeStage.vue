@@ -19,7 +19,7 @@
         <div class="flex items-center gap-[10px]">
           <img src="@assets/icons/user-black.png" alt="user" class="w-[14px]" />
           <h1 class="font-bold text-[rgb(49,126,172)] text-[14px] uppercase">
-            Packaging list
+            Color Variant Recipe Stage List
           </h1>
         </div>
         <div>
@@ -121,7 +121,7 @@
             :istherebody="isThereBody"
             open-url="prepareColorVariantRecipeStage"
             :productions-action-buttons="true"
-            delete-row-url="packag/deletePackaging"
+            delete-row-url="colorVariantRecipeStage/prepareColorVariantRecipeStageDelete"
             height="600"
             @pageEmitAction="getTableRequest"
           />
@@ -156,9 +156,29 @@ export default {
       keywordValue: '',
       tableHead: {
         id: { name: 'Id', code: 'id' },
+        picture: {
+          name: 'Picture',
+          code: 'picture',
+        },
         name: {
-          name: 'Name',
+          name: 'Color Variant Recipe Stage Name',
           code: 'name',
+        },
+        nominal: {
+          name: 'Nominal',
+          code: 'nominal',
+        },
+        nominal2: {
+          name: 'Nominal2',
+          code: 'nominal2',
+        },
+        group: {
+          name: 'Group',
+          code: 'group',
+        },
+        code: {
+          name: 'E Code',
+          code: 'code',
         },
       },
       tableBody: [],
@@ -203,7 +223,7 @@ export default {
     getTableRequest() {
       this.isLoading = !this.isLoading
       this.$axios
-        .post(`/packagings/packaging`, {
+        .post(`/colorVariantRecipeStage/colorVariantRecipeStageAjaxLoad`, {
           searchForm: {
             keyword: this.keywordValue,
           },

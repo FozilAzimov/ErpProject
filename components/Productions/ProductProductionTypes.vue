@@ -119,9 +119,9 @@
             :tablebody="tableBody"
             :tableheadlength="tableHeadLength"
             :istherebody="isThereBody"
-            open-url="prepareProductProductionType"
+            open-url="prepareStage"
             :productions-action-buttons="true"
-            delete-row-url="packag/deletePackaging"
+            delete-row-url="stage/prepareStageDelete"
             height="600"
             @pageEmitAction="getTableRequest"
           />
@@ -156,9 +156,9 @@ export default {
       keywordValue: '',
       tableHead: {
         id: { name: 'Id', code: 'id' },
-        name: {
-          name: 'Product Production Type',
-          code: 'orderProductionType',
+        product: {
+          name: 'Product Production',
+          code: 'product',
         },
         status: {
           name: 'Status',
@@ -218,9 +218,9 @@ export default {
             total: 328,
           },
         })
-        .then(({ data: { packagingList } }) => {
+        .then(({ data: { stageList } }) => {
           this.isLoading = !this.isLoading
-          this.tableBody = packagingList
+          this.tableBody = stageList
 
           this.tableBody.length
             ? (this.isThereBody = true)

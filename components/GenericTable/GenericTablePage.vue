@@ -37,6 +37,133 @@
               >
                 <span
                   v-if="
+                    (key?.code === 'status' &&
+                      $route.path.includes('batchProcess.htm')) ||
+                    (key?.code === 'status' &&
+                      $route.path.includes('stages.htm')) ||
+                    (key?.code === 'active' &&
+                      $route.path.includes('batchProcessStages.htm'))
+                  "
+                  class="p-[2px_5px] italic text-white font-bold rounded-[5px]"
+                >
+                  <span
+                    v-if="JSON.parse(value.active)"
+                    class="bg-[rgb(102,149,51)] px-[5px] rounded-md"
+                    >Enebled</span
+                  >
+                  <span v-else class="bg-[#BD4247] px-[5px] rounded-md"
+                    >Disabled</span
+                  >
+                </span>
+                <span
+                  v-else-if="
+                    key?.code === 'saleInfoParam' &&
+                    $route.path.includes('batchProcessStages.htm')
+                  "
+                  class="p-[2px_5px] italic text-white font-bold rounded-[5px]"
+                >
+                  <span
+                    v-if="JSON.parse(value.saleInfoParam)"
+                    class="bg-[rgb(102,149,51)] px-[5px] rounded-md"
+                    >Enebled</span
+                  >
+                  <span v-else class="bg-[#BD4247] px-[5px] rounded-md"
+                    >Disabled</span
+                  >
+                </span>
+                <span
+                  v-else-if="
+                    key?.code === 'autoSave' &&
+                    $route.path.includes('batchProcessStages.htm')
+                  "
+                  class="p-[2px_5px] italic text-white font-bold rounded-[5px]"
+                >
+                  <span
+                    v-if="JSON.parse(value.autoSave)"
+                    class="bg-[rgb(102,149,51)] px-[5px] rounded-md"
+                    >Enebled</span
+                  >
+                  <span v-else class="bg-[#BD4247] px-[5px] rounded-md"
+                    >Disabled</span
+                  >
+                </span>
+                <span
+                  v-else-if="
+                    key?.code === 'onlyOnceInColorVariant' &&
+                    $route.path.includes('batchProcessStages.htm')
+                  "
+                  class="p-[2px_5px] italic text-white font-bold rounded-[5px]"
+                >
+                  <span
+                    v-if="JSON.parse(value.onlyOnceInColorVariant)"
+                    class="bg-[rgb(102,149,51)] px-[5px] rounded-md"
+                    >Enebled</span
+                  >
+                  <span v-else class="bg-[#BD4247] px-[5px] rounded-md"
+                    >Disabled</span
+                  >
+                </span>
+                <span
+                  v-else-if="
+                    key?.code === 'autoStartStopBefore' &&
+                    $route.path.includes('batchProcessStages.htm')
+                  "
+                  class="p-[2px_5px] italic text-white font-bold rounded-[5px]"
+                >
+                  <span
+                    v-if="JSON.parse(value.autoStartStopBefore)"
+                    class="bg-[rgb(102,149,51)] px-[5px] rounded-md"
+                    >Enebled</span
+                  >
+                  <span v-else class="bg-[#BD4247] px-[5px] rounded-md"
+                    >Disabled</span
+                  >
+                </span>
+                <span
+                  v-else-if="
+                    key?.code === 'useEquipment' &&
+                    $route.path.includes('batchProcessStages.htm')
+                  "
+                  class="p-[2px_5px] italic text-white font-bold rounded-[5px]"
+                >
+                  <span
+                    v-if="JSON.parse(value.useEquipment)"
+                    class="bg-[rgb(102,149,51)] px-[5px] rounded-md"
+                    >Enebled</span
+                  >
+                  <span v-else class="bg-[#BD4247] px-[5px] rounded-md"
+                    >Disabled</span
+                  >
+                </span>
+                <span
+                  v-else-if="
+                    key?.code === 'checkPreviousStageEndStatus' &&
+                    $route.path.includes('batchProcessStages.htm')
+                  "
+                  class="p-[2px_5px] italic text-white font-bold rounded-[5px]"
+                >
+                  <span
+                    v-if="JSON.parse(value.checkPreviousStageEndStatus)"
+                    class="bg-[rgb(102,149,51)] px-[5px] rounded-md"
+                    >Enebled</span
+                  >
+                  <span v-else class="bg-[#BD4247] px-[5px] rounded-md"
+                    >Disabled</span
+                  >
+                </span>
+                <span
+                  v-else-if="
+                    key?.code === 'processStatusStr' &&
+                    $route.path.includes('batchProcessStages.htm')
+                  "
+                  class="p-[2px_5px] italic text-white font-bold rounded-[5px]"
+                >
+                  <span class="bg-[rgb(102,149,51)] px-[5px] rounded-md">{{
+                    value[key.code]
+                  }}</span>
+                </span>
+                <span
+                  v-else-if="
                     key?.code === 'status' ||
                     key?.code === 'invoiceOnWayStatus' ||
                     key?.code === 'type' ||
@@ -44,7 +171,8 @@
                   "
                   class="p-[2px_5px] italic text-white font-bold rounded-[5px] bg-[rgb(102,149,51)]"
                   v-html="value[key.code]"
-                ></span>
+                >
+                </span>
                 <span
                   v-else-if="key.code === 'invoiceConfirmedStatus'"
                   class="p-[2px_5px] italic text-white font-bold rounded-[5px] bg-[rgb(221,86,0)]"
@@ -241,15 +369,14 @@
             <tr>
               <td
                 :colspan="tableheadlength"
-                class="text-center border-[1px] border-solid border-[#F0F0F0] text-[12px] p-3"
+                class="border-[1px] border-solid border-[#F0F0F0] text-[12px] p-3"
               >
-                <div
-                  class="flex flex-col justify-center items-start text-[rgba(0,0,0,0.5)]"
-                >
-                  <span class="flex flex-col items-center">
-                    <img src="@assets/icons/no-data.png" alt="no-data-icons" />
-                    No data
-                  </span>
+                <div class="flex justify-start">
+                  <el-empty
+                    :image-size="70"
+                    description="No Data"
+                    style="padding: 0"
+                  ></el-empty>
                 </div>
               </td>
             </tr>

@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 
 import systemMenu from '@store/systemMenu'
+import translate from '@store/translate'
 
 Vue.use(Vuex)
 
@@ -25,6 +26,7 @@ const store = () =>
     // MODULES
     modules: {
       systemMenu,
+      translate,
     },
   })
 

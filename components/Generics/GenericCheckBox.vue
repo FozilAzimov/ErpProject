@@ -1,7 +1,12 @@
 <template>
-  <el-checkbox v-model="checked" @change="getChangeValueAction">{{
-    text
-  }}</el-checkbox>
+  <el-checkbox
+    v-model="checked"
+    :disabled="disabled"
+    :label="text"
+    :border="border"
+    :size="size"
+    @change="getChangeValueAction"
+  ></el-checkbox>
 </template>
 <script>
 export default {
@@ -10,6 +15,10 @@ export default {
     defaultValue: {
       type: Boolean,
       default: false,
+    },
+    size: {
+      type: String,
+      default: 'mini',
     },
     text: {
       type: String,
@@ -22,6 +31,14 @@ export default {
     order: {
       type: Number,
       default: 0,
+    },
+    disabled: {
+      type: Boolean,
+      default: false,
+    },
+    border: {
+      type: Boolean,
+      default: false,
     },
   },
 

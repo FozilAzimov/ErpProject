@@ -21,10 +21,10 @@
           <h1 class="font-bold text-[rgb(49,126,172)] text-[14px] uppercase">
             {{
               btnType === 'view'
-                ? 'View Packaging'
+                ? 'VIEW CHARACTERISTIC'
                 : btnType === 'edit'
-                ? 'Edit Packaging'
-                : 'Packaging Create'
+                ? 'Editing of sew model variant size'
+                : 'Addition of sew model variant size'
             }}
           </h1>
         </div>
@@ -77,50 +77,50 @@
         class="border-[1px] border-solid border-[rgba(0,0,0,0.1)]"
         :class="
           isOpenTable
-            ? 'duration-[1s] h-fit overflow-hidden'
+            ? 'duration-[1s] h-[755px] overflow-hidden'
             : 'duration-[1s] h-0 overflow-hidden'
         "
       >
         <div class="w-fit flex flex-col items-start m-2 gap-1">
           <div v-for="(element, index) in elementData" :key="index">
-            <template v-if="element.show">
-              <span
-                v-if="element.type === 'text'"
-                class="flex flex-col items-start mb-1"
-              >
-                <span class="text-[13px]"
-                  >{{ element.name }}
-                  <span v-if="element.required" class="text-[18px] text-red-600"
-                    >*</span
-                  ></span
+            <span
+              v-if="element.type === 'text'"
+              class="flex flex-col items-start mb-1"
+            >
+              <span class="text-[13px]">{{ element.name }}</span>
+              <generic-input
+                :value="''"
+                width="300"
+                type="text"
+                :name="element.subName"
+                :disabled="element.disabled"
+                @customFunction="getInputValueAction"
+              />
+            </span>
+            <span
+              v-else-if="element.type === 'radio'"
+              class="flex flex-col items-start mb-1"
+            >
+              <span class="text-[13px]">{{ element.name }}</span>
+              <span class="flex items-center">
+                <el-radio
+                  v-model="radio"
+                  label="enabled"
+                  border
+                  size="mini"
+                  :disabled="element.disabled"
+                  >Enabled</el-radio
                 >
-                <generic-input
-                  :value="
-                    editData?.[element?.defValName]
-                      ? editData?.[element?.defValName]
-                      : ''
-                  "
-                  width="300"
-                  type="text"
-                  :name="element.subName"
+                <el-radio
+                  v-model="radio"
+                  label="disabled"
+                  border
+                  size="mini"
                   :disabled="element.disabled"
-                  @customFunction="getInputAndLookUpValueAction"
-                />
+                  >Disabled</el-radio
+                >
               </span>
-              <span
-                v-else-if="element.type === 'select'"
-                class="flex flex-col items-start mb-1"
-              >
-                <span class="text-[13px]">{{ element.name }} </span>
-                <generic-look-up
-                  dwidth="300"
-                  :name="element.subName"
-                  :options-data="selectDefaultData"
-                  :disabled="element.disabled"
-                  @customFunction="getInputAndLookUpValueAction"
-                />
-              </span>
-            </template>
+            </span>
           </div>
           <div class="flex items-center gap-3 mt-3">
             <generic-button
@@ -130,16 +130,14 @@
               @click="goBackAction"
             />
             <generic-button
-              v-if="!(btnType === 'view')"
+              v-if="btnType !== 'view'"
               :name="btnType === 'edit' ? 'Save changes' : 'Save'"
               :type="btnType === 'edit' ? 'success' : 'primary'"
               :icon-name-attribute="btnType && 'edit'"
-              @click="saveAction()"
+              @click="saveAction(btnType)"
             />
           </div>
         </div>
-
-        <production-addition-table class="mt-10 p-2" />
       </div>
     </template>
   </div>
@@ -149,31 +147,27 @@
 import GenericButton from '@generics/GenericButton.vue'
 import GenericInput from '@generics/GenericInput.vue'
 import LoadingPage from '@components/Loading/LoadingPage.vue'
-import ProductionAdditionTable from '@components/Productions/ProductionAdditionTable.vue'
-import GenericLookUp from '@generics/GenericLookUp.vue'
 export default {
   components: {
     LoadingPage,
     GenericButton,
     GenericInput,
-    ProductionAdditionTable,
-    GenericLookUp,
   },
 
   // DATA
   data() {
     return {
       isLoading: false,
-      pageSize_value: 25,
+      pageSize_value: 10,
       checkModal: false,
       isOpenTable: true,
       isCloseTable: true,
       btnType: '',
       pageID: null,
-      editData: {},
-      allInputAndLookUpValue: {},
       elementData: [],
-      selectDefaultData: [],
+      editData: {},
+      inputValue: '',
+      radio: '',
     }
   },
 
@@ -200,7 +194,7 @@ export default {
     this.getTableRequest()
   },
 
-  // METHODS
+  // Methods
   methods: {
     handleValue(checkModal) {
       this.checkModal = checkModal
@@ -229,38 +223,25 @@ export default {
       }
     },
 
+    // Input value action
+    getInputValueAction(name, value) {
+      this.inputValue = value
+    },
+
     // Data created
     dataCreatedAction() {
       const data = [
         {
-          name: 'Name',
-          subName: 'name',
+          name: 'Order Production Type',
+          subName: 'orderProductionType',
           type: 'text',
-          required: true,
-          show: true,
           disabled: this.btnType === 'view',
         },
         {
-          name: 'Code',
-          subName: 'code',
-          type: 'text',
-          required: false,
-          show: this.btnType !== 'view',
-        },
-        {
-          name: 'Card Number',
-          subName: 'cardNumber',
-          type: 'text',
-          required: false,
-          show: true,
+          name: 'Status',
+          subName: 'status',
+          type: 'radio',
           disabled: this.btnType === 'view',
-        },
-        {
-          name: 'Department Name',
-          subName: 'departmentId',
-          type: 'select',
-          required: false,
-          show: this.btnType !== 'view',
         },
       ]
       this.elementData = data
@@ -268,55 +249,34 @@ export default {
 
     // Page request
     getTableRequest() {
-      if (this.btnType === 'view') {
+      if (this.pageID && this.btnType === 'view') {
         this.isLoading = !this.isLoading
         this.$axios
-          .post(`/packagings/viewPackagingAjaxLoad`, {
+          .post(`/orderproductiontypes/prepareSewModelVariantsSizeView`, {
             id: this.pageID,
             page_current: 1,
             page_size: 25,
           })
-          .then(({ data: { design } }) => {
+          .then(({ data }) => {
             this.isLoading = !this.isLoading
-            this.editData = design
+            this.editData = data
           })
           .catch((error) => {
             this.isLoading = !this.isLoading
             // eslint-disable-next-line no-console
             console.log(error)
           })
-      } else if (this.btnType === 'edit') {
+      } else if (this.pageID && this.btnType === 'edit') {
         this.isLoading = !this.isLoading
         this.$axios
-          .post(`/packagings/prepareDesignAjaxLoad`, {
+          .post(`/orderproductiontypes/prepareSewModelVariantsSize`, {
             id: this.pageID,
             page_current: 1,
             page_size: 25,
           })
-          .then(({ data: { designJson } }) => {
+          .then(({ data }) => {
             this.isLoading = !this.isLoading
-            this.editData = JSON.parse(designJson)
-            this.allInputAndLookUpValue.planningTypeId =
-              this.editData?.planningtype?.id || ''
-            this.allInputAndLookUpValue.code = this.editData?.code || ''
-            this.allInputAndLookUpValue.name = this.editData?.name || ''
-            this.pageID = this.editData?.id
-          })
-          .catch((error) => {
-            this.isLoading = !this.isLoading
-            // eslint-disable-next-line no-console
-            console.log(error)
-          })
-      } else {
-        this.isLoading = !this.isLoading
-        this.$axios
-          .post(`/packagings/preparePackagingAjaxLoad`, {
-            page_current: 1,
-            page_size: 25,
-          })
-          .then(({ data: { departmentList } }) => {
-            this.isLoading = !this.isLoading
-            this.selectDefaultData = departmentList
+            this.editData = data
           })
           .catch((error) => {
             this.isLoading = !this.isLoading
@@ -326,36 +286,21 @@ export default {
       }
     },
 
-    // Input value action
-    getInputAndLookUpValueAction(name, value) {
-      this.$set(this.allInputAndLookUpValue, name, value)
-    },
-
-    // SAVE and Changes action
+    // Save Changes action
     saveAction() {
-      if (this.allInputAndLookUpValue.name) {
-        const body = {}
-        if (this.btnType === 'edit') {
-          body.id = this.pageID || ''
-          body.confirmed = this.allInputAndLookUpValue?.confirmed || ''
-          body.name = this.allInputAndLookUpValue?.name || ''
-          body.code = this.allInputAndLookUpValue?.code || ''
-          body.planningTypeId =
-            this.allInputAndLookUpValue?.planningTypeId || ''
-        } else {
-          const packaging = {}
-          packaging.name = this.allInputAndLookUpValue?.name || ''
-          packaging.cardnumber = this.allInputAndLookUpValue?.cardNumber || ''
-          packaging.code = this.allInputAndLookUpValue?.code || ''
-          body.packaging = packaging
-          body.department_id = this.allInputAndLookUpValue?.departmentId || ''
-        }
+      if (this.inputValue) {
         this.isLoading = !this.isLoading
         this.$axios
-          .post(`/packagings/addEditPackaging`, body)
+          .post(
+            `/orderproductiontypes/${
+              this.btnType === 'edit'
+                ? 'editSewModelVariantsSize'
+                : 'addSewModelVariantsSize'
+            }`
+          )
           .then(({ status }) => {
             this.isLoading = !this.isLoading
-            if (status === 200) this.$router.push('/packaging.htm')
+            this.$router.push('/orderproductiontypes.htm')
           })
           .catch((error) => {
             this.isLoading = !this.isLoading

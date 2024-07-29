@@ -131,7 +131,7 @@
               @click="goBackAction"
             />
             <generic-button
-              v-if="!(btnType === 'view')"
+              v-if="btnType !== 'view'"
               :name="btnType === 'edit' ? 'Save changes' : 'Save'"
               :type="btnType === 'edit' ? 'success' : 'primary'"
               :icon-name-attribute="btnType && 'edit'"
@@ -145,6 +145,7 @@
           v-if="btnType === 'edit'"
           class="mt-10 p-2"
           :page-id="pageID"
+          :data="rowData"
         />
       </div>
     </template>
@@ -180,6 +181,92 @@ export default {
       allInputAndLookUpValue: {},
       elementData: [],
       selectDefaultData: [],
+      rowData: [
+        {
+          name: 'Id',
+          subName: 'id',
+          width: '120',
+          type: 'label',
+        },
+        {
+          name: 'Product Name',
+          subName: 'name',
+          width: '120',
+          type: 'select',
+        },
+        {
+          name: 'Qty',
+          subName: 'qty',
+          width: '120',
+          type: 'text',
+        },
+        {
+          name: 'Unit Measurement Type1 Value',
+          subName: 'unitMeasurementType1Value',
+          width: '120',
+          type: 'text',
+        },
+        {
+          name: 'Unit Measurement Type1',
+          subName: 'unitMeasurementType1',
+          width: '120',
+          type: 'select',
+        },
+        {
+          name: 'Unit Measurement Type2 Value',
+          subName: 'unitMeasurementType2Value',
+          width: '120',
+          type: 'text',
+        },
+        {
+          name: 'Unit Measurement Type2',
+          subName: 'unitMeasurementType2',
+          width: '120',
+          type: 'select',
+        },
+        {
+          name: 'Unit Measurement Type3 Value',
+          subName: 'unitMeasurementType3Value',
+          width: '120',
+          type: 'text',
+        },
+        {
+          name: 'Unit Measurement Type3',
+          subName: 'unitMeasurementType3',
+          width: '120',
+          type: 'select',
+        },
+        {
+          name: 'Unit Measurement Type4 Value',
+          subName: 'unitMeasurementType4Value',
+          width: '120',
+          type: 'text',
+        },
+        {
+          name: 'Unit Measurement Type4',
+          subName: 'unitMeasurementType4',
+          width: '120',
+          type: 'select',
+        },
+        {
+          name: 'Notes',
+          subName: 'notes',
+          width: '120',
+          type: 'text',
+        },
+        {
+          name: 'Expense',
+          subName: 'expense',
+          width: '120',
+          type: 'checkbox',
+        },
+        {
+          name: 'Action',
+          subName: 'delete',
+          width: '120',
+          type: 'del',
+        },
+      ],
     }
   },
 

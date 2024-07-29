@@ -70,6 +70,13 @@
     "_name": "_23e6ac2a"
   },
   {
+    "name": "changeProductColorVariant.htm",
+    "path": "/changeProductColorVariant.htm",
+    "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\changeProductColorVariant.htm\\\\index.vue",
+    "chunkName": "pages/changeProductColorVariant.htm/index",
+    "_name": "_f973b24e"
+  },
+  {
     "name": "checkRealCountBarcode.htm",
     "path": "/checkRealCountBarcode.htm",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\checkRealCountBarcode.htm\\\\index.vue",
@@ -166,6 +173,13 @@
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\equipmentsRealTimeStatus.htm\\\\index.vue",
     "chunkName": "pages/equipmentsRealTimeStatus.htm/index",
     "_name": "_8f831a5c"
+  },
+  {
+    "name": "equipmentsRealTimeStatus2.htm",
+    "path": "/equipmentsRealTimeStatus2.htm",
+    "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\equipmentsRealTimeStatus2.htm\\\\index.vue",
+    "chunkName": "pages/equipmentsRealTimeStatus2.htm/index",
+    "_name": "_5c77a04a"
   },
   {
     "name": "expenseInvoice.htm",

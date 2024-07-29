@@ -14,6 +14,7 @@ const _2703b0c8 = () => interopDefault(import('..\\pages\\batchunions.htm\\index
 const _75c6aea4 = () => interopDefault(import('..\\pages\\branches.htm\\index.vue' /* webpackChunkName: "pages/branches.htm/index" */))
 const _6283df51 = () => interopDefault(import('..\\pages\\branchProductsStockReportByLogic.htm\\index.vue' /* webpackChunkName: "pages/branchProductsStockReportByLogic.htm/index" */))
 const _23e6ac2a = () => interopDefault(import('..\\pages\\calculationByColorVariantRecipe.htm\\index.vue' /* webpackChunkName: "pages/calculationByColorVariantRecipe.htm/index" */))
+const _f973b24e = () => interopDefault(import('..\\pages\\changeProductColorVariant.htm\\index.vue' /* webpackChunkName: "pages/changeProductColorVariant.htm/index" */))
 const _b91690ba = () => interopDefault(import('..\\pages\\checkRealCountBarcode.htm\\index.vue' /* webpackChunkName: "pages/checkRealCountBarcode.htm/index" */))
 const _3fae4214 = () => interopDefault(import('..\\pages\\colorDepth.htm\\index.vue' /* webpackChunkName: "pages/colorDepth.htm/index" */))
 const _96287b78 = () => interopDefault(import('..\\pages\\colors.htm\\index.vue' /* webpackChunkName: "pages/colors.htm/index" */))
@@ -28,6 +29,7 @@ const _263503df = () => interopDefault(import('..\\pages\\designTypes.htm\\index
 const _c0419a70 = () => interopDefault(import('..\\pages\\designVariants.htm\\index.vue' /* webpackChunkName: "pages/designVariants.htm/index" */))
 const _3e53ceb9 = () => interopDefault(import('..\\pages\\dyeings.htm\\index.vue' /* webpackChunkName: "pages/dyeings.htm/index" */))
 const _8f831a5c = () => interopDefault(import('..\\pages\\equipmentsRealTimeStatus.htm\\index.vue' /* webpackChunkName: "pages/equipmentsRealTimeStatus.htm/index" */))
+const _5c77a04a = () => interopDefault(import('..\\pages\\equipmentsRealTimeStatus2.htm\\index.vue' /* webpackChunkName: "pages/equipmentsRealTimeStatus2.htm/index" */))
 const _f9c6bf42 = () => interopDefault(import('..\\pages\\expenseInvoice.htm\\index.vue' /* webpackChunkName: "pages/expenseInvoice.htm/index" */))
 const _3cfdeab8 = () => interopDefault(import('..\\pages\\grades.htm\\index.vue' /* webpackChunkName: "pages/grades.htm/index" */))
 const _26659438 = () => interopDefault(import('..\\pages\\inputFromProductionCompany.htm\\index.vue' /* webpackChunkName: "pages/inputFromProductionCompany.htm/index" */))
@@ -179,6 +181,10 @@ export const routerOptions = {
     component: _23e6ac2a,
     name: "calculationByColorVariantRecipe.htm"
   }, {
+    path: "/changeProductColorVariant.htm",
+    component: _f973b24e,
+    name: "changeProductColorVariant.htm"
+  }, {
     path: "/checkRealCountBarcode.htm",
     component: _b91690ba,
     name: "checkRealCountBarcode.htm"
@@ -234,6 +240,10 @@ export const routerOptions = {
     path: "/equipmentsRealTimeStatus.htm",
     component: _8f831a5c,
     name: "equipmentsRealTimeStatus.htm"
+  }, {
+    path: "/equipmentsRealTimeStatus2.htm",
+    component: _5c77a04a,
+    name: "equipmentsRealTimeStatus2.htm"
   }, {
     path: "/expenseInvoice.htm",
     component: _f9c6bf42,

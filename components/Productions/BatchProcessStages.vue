@@ -121,7 +121,7 @@
             :istherebody="isThereBody"
             open-url="prepareBatchProcessStage"
             :productions-action-buttons="true"
-            delete-row-url="packag/deletePackaging"
+            delete-row-url="batchProcessStage/prepareBatchProcessStageDelete"
             height="600"
             @pageEmitAction="getTableRequest"
           />
@@ -132,9 +132,9 @@
 </template>
 
 <script>
-import LoadingPage from '@components/Loading/LoadingPage.vue'
-import GenericButton from '@generics/GenericButton.vue'
 import GenericInput from '@generics/GenericInput.vue'
+import GenericButton from '@generics/GenericButton.vue'
+import LoadingPage from '@components/Loading/LoadingPage.vue'
 import ColumnConfigPage from '@components/ColumnConfig/ColumnConfigPage.vue'
 import GenericTablePage from '@components/GenericTable/GenericTablePage.vue'
 export default {
@@ -157,8 +157,48 @@ export default {
       tableHead: {
         id: { name: 'Id', code: 'id' },
         name: {
-          name: 'Name',
+          name: 'Batch Process Stage Name',
           code: 'name',
+        },
+        last: {
+          name: 'Last',
+          code: 'processStatusStr',
+        },
+        checkPreviousStageEndStatus: {
+          name: 'Check Previous Stage End Status',
+          code: 'checkPreviousStageEndStatus',
+        },
+        useEquipment: {
+          name: 'Use Equipment',
+          code: 'useEquipment',
+        },
+        autoStartStopBefore: {
+          name: 'Auto Start Stop Before',
+          code: 'autoStartStopBefore',
+        },
+        ratio: {
+          name: 'Ratio',
+          code: 'ratio',
+        },
+        entryExitLogic: {
+          name: 'EntryExitLogic',
+          code: 'entryExitLogic',
+        },
+        onlyOnceInColorVariant: {
+          name: 'Only Once In Color Variant',
+          code: 'onlyOnceInColorVariant',
+        },
+        autoSave: {
+          name: 'Auto Save',
+          code: 'autoSave',
+        },
+        saleInfoParam: {
+          name: 'Information about the party',
+          code: 'saleInfoParam',
+        },
+        status: {
+          name: 'Status',
+          code: 'active',
         },
       },
       tableBody: [],
@@ -191,7 +231,7 @@ export default {
     this.getTableRequest()
   },
 
-  // Methods
+  // METHODS
   methods: {
     handleValue(checkModal) {
       this.checkModal = checkModal
@@ -203,7 +243,7 @@ export default {
     getTableRequest() {
       this.isLoading = !this.isLoading
       this.$axios
-        .post(`/packagings/packaging`, {
+        .post(`/batchProcessStage/batchProcessStagesAjaxLoad`, {
           searchForm: {
             keyword: this.keywordValue,
           },
@@ -214,13 +254,12 @@ export default {
             total: 328,
           },
         })
-        .then(({ data: { packagingList } }) => {
-          this.isLoading = !this.isLoading
-          this.tableBody = packagingList
-
+        .then(({ data: { batchProcessStageList } }) => {
+          this.tableBody = batchProcessStageList
           this.tableBody.length
             ? (this.isThereBody = true)
             : (this.isThereBody = false)
+          this.isLoading = !this.isLoading
         })
         .catch((error) => {
           this.isLoading = !this.isLoading

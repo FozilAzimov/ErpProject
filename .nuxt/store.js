@@ -19,9 +19,12 @@ let store = {};
   // Enforce store modules
   store.modules = store.modules || {}
 
+  resolveStoreModules(require('..\\store\\translate\\index.js'), 'translate/index.js')
   resolveStoreModules(require('..\\store\\systemMenu\\index.js'), 'systemMenu/index.js')
   resolveStoreModules(require('..\\store\\systemMenu\\actions.js'), 'systemMenu/actions.js')
   resolveStoreModules(require('..\\store\\systemMenu\\mutations.js'), 'systemMenu/mutations.js')
+  resolveStoreModules(require('..\\store\\translate\\actions.js'), 'translate/actions.js')
+  resolveStoreModules(require('..\\store\\translate\\mutations.js'), 'translate/mutations.js')
 
   // If the environment supports hot reloading...
 
@@ -29,9 +32,12 @@ let store = {};
     // Whenever any Vuex module is updated...
     module.hot.accept([
       '..\\store\\index.js',
+      '..\\store\\translate\\index.js',
       '..\\store\\systemMenu\\index.js',
       '..\\store\\systemMenu\\actions.js',
       '..\\store\\systemMenu\\mutations.js',
+      '..\\store\\translate\\actions.js',
+      '..\\store\\translate\\mutations.js',
     ], () => {
       // Update `root.modules` with the latest definitions.
       updateModules()

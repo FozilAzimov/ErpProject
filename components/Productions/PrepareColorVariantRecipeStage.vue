@@ -95,11 +95,7 @@
                   >
                 </span>
                 <generic-input
-                  :value="
-                    editData?.[element.defValName]
-                      ? editData?.[element.defValName]
-                      : ''
-                  "
+                  :value="''"
                   width="300"
                   type="text"
                   :name="element.subName"
@@ -108,19 +104,13 @@
                 />
               </span>
               <span
-                v-else-if="element.type === 'select'"
+                v-else-if="element.type === 'checkbox'"
                 class="flex flex-col items-start mb-1"
               >
-                <span class="text-[13px]">{{ element.name }} </span>
-                <generic-look-up
-                  dwidth="300"
-                  durl="findAllPlanningType"
+                <generic-check-box
+                  :text="element.name"
                   :name="element.subName"
-                  :defvalue="
-                    editData?.[element.defValName]?.text
-                      ? editData?.[element.defValName]?.text
-                      : ''
-                  "
+                  :border="true"
                   :disabled="element.disabled"
                   @customFunction="getInputAndLookUpValueAction"
                 />
@@ -135,7 +125,7 @@
               @click="goBackAction"
             />
             <generic-button
-              v-if="!(btnType === 'view')"
+              v-if="btnType !== 'view'"
               :name="btnType === 'edit' ? 'Save changes' : 'Save'"
               :type="btnType === 'edit' ? 'success' : 'primary'"
               :icon-name-attribute="btnType && 'edit'"
@@ -152,13 +142,11 @@
 import GenericButton from '@generics/GenericButton.vue'
 import GenericInput from '@generics/GenericInput.vue'
 import LoadingPage from '@components/Loading/LoadingPage.vue'
-import GenericLookUp from '@generics/GenericLookUp.vue'
 export default {
   components: {
     LoadingPage,
     GenericButton,
     GenericInput,
-    GenericLookUp,
   },
   data() {
     return {
@@ -217,7 +205,7 @@ export default {
     // go back action
     goBackAction() {
       localStorage.removeItem('allTrueAndFalseData')
-      this.$router.push('/packaging.htm')
+      this.$router.push('/colorVariantRecipeStage.htm')
     },
 
     // Specifying the buttun type action
@@ -231,28 +219,62 @@ export default {
     dataCreatedAction() {
       const data = [
         {
-          name: 'Design Name',
+          name: 'Color Variant Recipe Stage Name',
           subName: 'name',
-          defValName: 'name',
           type: 'text',
           required: true,
           show: true,
           disabled: this.btnType === 'view',
         },
         {
-          name: 'Design Code',
-          subName: 'code',
-          defValName: 'code',
+          name: 'Nominal',
+          subName: 'nominal',
           type: 'text',
           required: false,
           show: true,
           disabled: this.btnType === 'view',
         },
         {
-          name: 'Planning Type',
-          subName: 'planningTypeId',
-          defValName: 'planningtype',
-          type: 'select',
+          name: 'Nominal2',
+          subName: 'Nominal2',
+          type: 'text',
+          required: false,
+          show: true,
+          disabled: this.btnType === 'view',
+        },
+        {
+          name: 'Group',
+          subName: 'group',
+          type: 'text',
+          required: false,
+          show: true,
+          disabled: this.btnType === 'view',
+        },
+        {
+          name: 'E Code',
+          subName: 'code',
+          type: 'text',
+          required: false,
+          show: this.btnType !== 'view',
+        },
+        {
+          name: 'Dyeing',
+          subName: 'dyeing',
+          type: 'checkbox',
+          required: false,
+          show: this.btnType !== 'view',
+        },
+        {
+          name: 'Dyeing Type',
+          subName: 'dyeingType',
+          type: 'text',
+          required: false,
+          show: this.btnType !== 'view',
+        },
+        {
+          name: 'Type',
+          subName: 'type',
+          type: 'text',
           required: false,
           show: this.btnType !== 'view',
         },
@@ -262,7 +284,7 @@ export default {
 
     // Page request
     getTableRequest() {
-      if (this.btnType === 'view') {
+      if (this.pageID && this.btnType === 'view') {
         this.isLoading = !this.isLoading
         this.$axios
           .post(`/design/prepareDesignViewAjaxLoad`, {
@@ -272,14 +294,13 @@ export default {
           })
           .then(({ data: { design } }) => {
             this.isLoading = !this.isLoading
-            this.editData = design
           })
           .catch((error) => {
             this.isLoading = !this.isLoading
             // eslint-disable-next-line no-console
             console.log(error)
           })
-      } else if (this.btnType === 'edit') {
+      } else if (this.pageID && this.btnType === 'edit') {
         this.isLoading = !this.isLoading
         this.$axios
           .post(`/design/prepareDesignAjaxLoad`, {
@@ -289,33 +310,6 @@ export default {
           })
           .then(({ data: { designJson } }) => {
             this.isLoading = !this.isLoading
-            this.editData = JSON.parse(designJson)
-            this.allInputAndLookUpValue.planningTypeId =
-              this.editData?.planningtype?.id || ''
-            this.allInputAndLookUpValue.code = this.editData?.code || ''
-            this.allInputAndLookUpValue.name = this.editData?.name || ''
-            this.pageID = this.editData?.id
-          })
-          .catch((error) => {
-            this.isLoading = !this.isLoading
-            // eslint-disable-next-line no-console
-            console.log(error)
-          })
-      } else {
-        this.isLoading = !this.isLoading
-        this.$axios
-          .post(`/packagings/preparePackagingAjaxLoad`, {
-            page_current: 1,
-            page_size: 25,
-          })
-          .then(({ data: { designJson } }) => {
-            this.isLoading = !this.isLoading
-            this.editData = JSON.parse(designJson)
-            this.allInputAndLookUpValue.planningTypeId =
-              this.editData?.planningtype?.id || ''
-            this.allInputAndLookUpValue.code = this.editData?.code || ''
-            this.allInputAndLookUpValue.name = this.editData?.name || ''
-            this.pageID = this.editData?.id
           })
           .catch((error) => {
             this.isLoading = !this.isLoading

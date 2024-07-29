@@ -88,16 +88,11 @@
                 v-if="element.type === 'text'"
                 class="flex flex-col items-start mb-1"
               >
-                <span class="text-[13px]"
-                  >{{ element.name }}
-                  <span v-if="element.required" class="text-[18px] text-red-600"
-                    >*</span
-                  >
-                </span>
+                <span class="text-[13px]">{{ element.name }}</span>
                 <generic-input
                   :value="
-                    editData?.[element.defValName]
-                      ? editData?.[element.defValName]
+                    editData?.[element.subName]
+                      ? editData?.[element.subName]
                       : ''
                   "
                   width="300"
@@ -108,25 +103,66 @@
                 />
               </span>
               <span
-                v-else-if="element.type === 'select'"
+                v-else-if="element.type === 'number'"
                 class="flex flex-col items-start mb-1"
               >
-                <span class="text-[13px]">{{ element.name }} </span>
-                <generic-look-up
-                  dwidth="300"
-                  durl="findAllPlanningType"
-                  :name="element.subName"
-                  :defvalue="
-                    editData?.[element.defValName]?.text
-                      ? editData?.[element.defValName]?.text
+                <span class="text-[13px]">{{ element.name }}</span>
+                <generic-input
+                  :value="`${
+                    editData?.[element.subName]
+                      ? editData?.[element.subName]
                       : ''
-                  "
+                  }`"
+                  width="300"
+                  type="number"
+                  :name="element.subName"
                   :disabled="element.disabled"
                   @customFunction="getInputAndLookUpValueAction"
                 />
               </span>
+              <span
+                v-else-if="element.type === 'select'"
+                class="flex flex-col items-start mb-1"
+              >
+                <span class="text-[13px]">{{ element.name }}</span>
+                <generic-look-up
+                  dwidth="300"
+                  :name="element.subName"
+                  defvalue="USA Dollor"
+                  :options-data="currencyData"
+                  :disabled="element.disabled"
+                  @customFunction="getInputAndLookUpValueAction"
+                />
+              </span>
+              <span
+                v-else-if="element.type === 'checkbox'"
+                class="flex flex-col items-start mb-1"
+              >
+                <generic-check-box
+                  :text="element?.name"
+                  :name="element?.subName"
+                  :disabled="element.disabled"
+                  :default-value="
+                    editData?.[element.subName]
+                      ? editData?.[element.subName]
+                      : false
+                  "
+                  @customFunction="getInputAndLookUpValueAction"
+                />
+              </span>
+              <span
+                v-else-if="element.type === 'radio'"
+                class="flex flex-col items-start mb-1"
+              >
+                <el-radio
+                  v-model="radio"
+                  :disabled="element.disabled"
+                  :label="element.subName"
+                ></el-radio>
+              </span>
             </template>
           </div>
+
           <div class="flex items-center gap-3 mt-3">
             <generic-button
               name="Go Back"
@@ -135,7 +171,7 @@
               @click="goBackAction"
             />
             <generic-button
-              v-if="!(btnType === 'view')"
+              v-if="btnType !== 'view'"
               :name="btnType === 'edit' ? 'Save changes' : 'Save'"
               :type="btnType === 'edit' ? 'success' : 'primary'"
               :icon-name-attribute="btnType && 'edit'"
@@ -153,12 +189,14 @@ import GenericButton from '@generics/GenericButton.vue'
 import GenericInput from '@generics/GenericInput.vue'
 import LoadingPage from '@components/Loading/LoadingPage.vue'
 import GenericLookUp from '@generics/GenericLookUp.vue'
+import GenericCheckBox from '@generics/GenericCheckBox.vue'
 export default {
   components: {
     LoadingPage,
     GenericButton,
     GenericInput,
     GenericLookUp,
+    GenericCheckBox,
   },
 
   // DATA
@@ -174,6 +212,8 @@ export default {
       editData: {},
       allInputAndLookUpValue: {},
       elementData: [],
+      radio: null,
+      currencyData: [],
     }
   },
 
@@ -181,6 +221,11 @@ export default {
   watch: {
     pageID(newVal) {
       this.btnTypeSpecifyingAction()
+    },
+    radio(newVal) {
+      if (newVal === 'enabled') this.allInputAndLookUpValue.active = true
+      else if (newVal === 'disabled') this.allInputAndLookUpValue.active = false
+      else this.allInputAndLookUpValue.active = false
     },
   },
 
@@ -219,7 +264,7 @@ export default {
     // go back action
     goBackAction() {
       localStorage.removeItem('allTrueAndFalseData')
-      this.$router.push('/designs.htm')
+      this.$router.push('/batchProcess.htm')
     },
 
     // Specifying the buttun type action
@@ -233,30 +278,53 @@ export default {
     dataCreatedAction() {
       const data = [
         {
-          name: 'Design Name',
+          name: 'Batch Process Name',
           subName: 'name',
-          defValName: 'name',
           type: 'text',
-          required: true,
           show: true,
           disabled: this.btnType === 'view',
         },
         {
-          name: 'Design Code',
+          name: 'Code',
           subName: 'code',
-          defValName: 'code',
           type: 'text',
-          required: false,
           show: true,
           disabled: this.btnType === 'view',
         },
         {
-          name: 'Planning Type',
-          subName: 'planningTypeId',
-          defValName: 'planningtype',
+          name: 'Currency',
+          subName: 'currency',
           type: 'select',
-          required: false,
-          show: this.btnType !== 'view',
+          show: this.btnType === 'edit',
+          disabled: this.btnType === 'view',
+        },
+        {
+          name: 'Price',
+          subName: 'price',
+          type: 'number',
+          show: this.btnType === 'edit',
+          disabled: this.btnType === 'view',
+        },
+        {
+          name: 'Save name',
+          subName: 'savename',
+          type: 'checkbox',
+          show: true,
+          disabled: this.btnType === 'view',
+        },
+        {
+          name: 'Status',
+          subName: 'enabled',
+          type: 'radio',
+          show: true,
+          disabled: this.btnType === 'view',
+        },
+        {
+          name: 'Status',
+          subName: 'disabled',
+          type: 'radio',
+          show: true,
+          disabled: this.btnType === 'view',
         },
       ]
       this.elementData = data
@@ -267,7 +335,7 @@ export default {
       if (this.btnType === 'view') {
         this.isLoading = !this.isLoading
         this.$axios
-          .post(`/design/prepareDesignViewAjaxLoad`, {
+          .post(`/batchProcess/prepareBatchProcessViewAjaxLoad`, {
             id: this.pageID,
             page_current: 1,
             page_size: 25,
@@ -284,19 +352,18 @@ export default {
       } else if (this.btnType === 'edit') {
         this.isLoading = !this.isLoading
         this.$axios
-          .post(`/design/prepareDesignAjaxLoad`, {
+          .post(`/batchProcess/prepareBatchProcessAjaxLoad`, {
             id: this.pageID,
             page_current: 1,
             page_size: 25,
           })
-          .then(({ data: { designJson } }) => {
+          .then(({ data: { batchProcess, currencyList } }) => {
             this.isLoading = !this.isLoading
-            this.editData = JSON.parse(designJson)
-            this.allInputAndLookUpValue.planningTypeId =
-              this.editData?.planningtype?.id || ''
-            this.allInputAndLookUpValue.code = this.editData?.code || ''
-            this.allInputAndLookUpValue.name = this.editData?.name || ''
-            this.pageID = this.editData?.id
+            this.editData = batchProcess
+            this.currencyData = currencyList
+            batchProcess.active
+              ? (this.radio = 'enabled')
+              : (this.radio = 'disabled')
           })
           .catch((error) => {
             this.isLoading = !this.isLoading
@@ -313,34 +380,54 @@ export default {
 
     // Save Changes action
     saveAction() {
-      if (this.allInputAndLookUpValue.name) {
-        const body = {}
-        if (this.btnType === 'edit') {
-          body.id = this.pageID || ''
-          body.confirmed = this.allInputAndLookUpValue?.confirmed || ''
-          body.name = this.allInputAndLookUpValue?.name || ''
-          body.code = this.allInputAndLookUpValue?.code || ''
-          body.planningTypeId =
-            this.allInputAndLookUpValue?.planningTypeId || ''
-        } else {
-          body.name = this.allInputAndLookUpValue?.name || ''
-          body.planningTypeId =
-            this.allInputAndLookUpValue?.planningTypeId || ''
-          body.code = this.allInputAndLookUpValue?.code || ''
+      let body = {}
+      let batchProcess = {}
+      if (this.pageID && this.btnType === 'edit') {
+        batchProcess = {
+          id: this.pageID,
+          name: this.allInputAndLookUpValue?.name || this.editData.name || '',
+          savename:
+            this.allInputAndLookUpValue?.savename ||
+            this.editData.savename ||
+            '',
+          code: this.allInputAndLookUpValue?.code || this.editData.code || '',
+          active:
+            this.allInputAndLookUpValue?.active || this.editData.active || '',
+          currency: {
+            id: this.allInputAndLookUpValue?.currency || '',
+          },
+          price: this.allInputAndLookUpValue?.price || '',
         }
-        this.isLoading = !this.isLoading
-        this.$axios
-          .post(`/design/prepareCreateEditDesign`, body)
-          .then(({ status }) => {
-            this.isLoading = !this.isLoading
-            if (status === 200) this.$router.push('/designs.htm')
-          })
-          .catch((error) => {
-            this.isLoading = !this.isLoading
-            // eslint-disable-next-line no-console
-            console.log(error)
-          })
+      } else {
+        batchProcess = {
+          name: this.allInputAndLookUpValue?.name,
+          savename: this.allInputAndLookUpValue?.savename,
+          code: this.allInputAndLookUpValue?.code,
+          active: this.allInputAndLookUpValue?.active,
+        }
       }
+      body = {
+        page_size: this.pageSize_value,
+        page_current: 1,
+        rightData: '',
+        batchProcess,
+      }
+
+      this.isLoading = !this.isLoading
+      const method = this.pageID ? 'put' : 'post'
+      this.$axios[method](
+        `/batchProcess/${this.pageID ? 'editBatchProcess' : 'addBatchProcess'}`,
+        body
+      )
+        .then(() => {
+          this.isLoading = !this.isLoading
+          this.$router.push('/batchProcess.htm')
+        })
+        .catch((error) => {
+          this.isLoading = !this.isLoading
+          // eslint-disable-next-line no-console
+          console.log(error)
+        })
     },
   },
 }

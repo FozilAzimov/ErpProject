@@ -119,9 +119,9 @@
             :tablebody="tableBody"
             :tableheadlength="tableHeadLength"
             :istherebody="isThereBody"
-            open-url="planningTypes"
+            open-url="preparePlanningType"
             :productions-action-buttons="true"
-            delete-row-url="packag/deletePackaging"
+            delete-row-url="planningTypes/prepareStageDelete"
             height="600"
             @pageEmitAction="getTableRequest"
           />
@@ -160,9 +160,9 @@ export default {
           name: 'Planning Type Name',
           code: 'name',
         },
-        qty2: {
+        useQty2: {
           name: 'Use Qty2',
-          code: 'qty2',
+          code: 'useQty2',
         },
         status: {
           name: 'Status',
@@ -222,9 +222,9 @@ export default {
             total: 328,
           },
         })
-        .then(({ data: { packagingList } }) => {
+        .then(({ data: { stageList } }) => {
           this.isLoading = !this.isLoading
-          this.tableBody = packagingList
+          this.tableBody = stageList
 
           this.tableBody.length
             ? (this.isThereBody = true)

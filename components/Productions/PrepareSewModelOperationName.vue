@@ -133,7 +133,7 @@
               @click="goBackAction"
             />
             <generic-button
-              v-if="!(btnType === 'view')"
+              v-if="btnType !== 'view'"
               :name="btnType === 'edit' ? 'Save changes' : 'Save'"
               :type="btnType === 'edit' ? 'success' : 'primary'"
               :icon-name-attribute="btnType && 'edit'"

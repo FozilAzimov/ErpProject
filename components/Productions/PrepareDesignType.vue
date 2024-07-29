@@ -117,7 +117,7 @@
               @click="goBackAction"
             />
             <generic-button
-              v-if="!(btnType === 'view')"
+              v-if="btnType !== 'view'"
               :name="btnType === 'edit' ? 'Save changes' : 'Save'"
               :type="btnType === 'edit' ? 'success' : 'primary'"
               :icon-name-attribute="btnType && 'edit'"
@@ -152,9 +152,8 @@ export default {
       isOpenTable: true,
       isCloseTable: true,
       editData: {},
-      allInputAndLookUpValue: {},
+      inputValues: {},
       elementData: [],
-      selectDefaultData: [],
     }
   },
 
@@ -252,12 +251,8 @@ export default {
             page_current: 1,
             page_size: this.pageSize_value,
           })
-          .then(({ data }) => {
-            this.selectDefaultData = data?.department
-            this.editData = data?.packaging
-            this.editData.department_id = data?.department_id
-            // function
-            this.departmentFindNameAction(data?.department, data?.department_id)
+          .then(({ data: { designType } }) => {
+            this.editData = designType
             this.isLoading = !this.isLoading
           })
           .catch((error) => {
@@ -270,24 +265,28 @@ export default {
 
     // Input value action
     getInputAndLookUpValueAction(name, value) {
-      this.$set(this.allInputAndLookUpValue, name, value)
+      this.$set(this.inputValues, name, value)
     },
 
     // SAVE and Changes action
     saveAction() {
-      if (this.allInputAndLookUpValue.name || this.editData?.name) {
+      if (this.inputValues.name || this.editData?.name) {
         const designType = {}
         if (this.pageID && this.btnType === 'edit') {
           designType.id = this.pageID
+          designType.name = this.inputValues?.name || this.editData?.name || ''
         } else if (!this.pageID) {
-          designType.name = this.allInputAndLookUpValue?.name
+          designType.name = this.inputValues?.name
         }
         this.isLoading = !this.isLoading
         this.$axios
-          .post(`/designType/addDesignType`, { designType })
-          .then(({ status }) => {
+          .post(
+            `/designType/${this.pageID ? 'editDesignType' : 'addDesignType'}`,
+            { designType }
+          )
+          .then(() => {
+            this.$router.push('/designTypes.htm')
             this.isLoading = !this.isLoading
-            if (status === 200) this.$router.push('/designTypes.htm')
           })
           .catch((error) => {
             this.isLoading = !this.isLoading
@@ -295,12 +294,6 @@ export default {
             console.log(error)
           })
       }
-    },
-
-    // Department LookUp name ni olish
-    departmentFindNameAction(optionData, id) {
-      const foundObj = optionData.find((obj) => id === obj?.id && obj?.name)
-      this.editData.departmentName = foundObj ? foundObj.name : ''
     },
   },
 }

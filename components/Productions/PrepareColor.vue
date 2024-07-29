@@ -77,7 +77,7 @@
         class="border-[1px] border-solid border-[rgba(0,0,0,0.1)]"
         :class="
           isOpenTable
-            ? 'duration-[1s] h-[755px] overflow-hidden'
+            ? 'duration-[1s] h-fit overflow-hidden'
             : 'duration-[1s] h-0 overflow-hidden'
         "
       >
@@ -205,7 +205,7 @@
               @click="goBackAction"
             />
             <generic-button
-              v-if="!(btnType === 'view')"
+              v-if="btnType !== 'view'"
               :name="btnType === 'edit' ? 'Save changes' : 'Save'"
               :type="btnType === 'edit' ? 'success' : 'primary'"
               :icon-name-attribute="btnType && 'edit'"
@@ -213,6 +213,13 @@
             />
           </div>
         </div>
+
+        <production-addition-table
+          v-if="btnType"
+          class="mt-10 p-2"
+          :page-id="pageID"
+          :data="rowData"
+        />
       </div>
     </template>
   </div>
@@ -224,6 +231,7 @@ import GenericInput from '@generics/GenericInput.vue'
 import GenericInputDatePage from '@components/InputDate/GenericInputDatePage.vue'
 import LoadingPage from '@components/Loading/LoadingPage.vue'
 import GenericLookUp from '@generics/GenericLookUp.vue'
+import ProductionAdditionTable from '@components/Productions/ProductionAdditionTable.vue'
 export default {
   components: {
     GenericButton,
@@ -231,6 +239,7 @@ export default {
     GenericInputDatePage,
     LoadingPage,
     GenericLookUp,
+    ProductionAdditionTable,
   },
 
   // DATA
@@ -250,6 +259,130 @@ export default {
       elementData: [],
       companyList: [],
       colorGroupList: [],
+      rowData: [
+        {
+          name: 'Id',
+          subName: 'id',
+          width: '120',
+          type: 'label',
+          show: true,
+          disabled: this.btnType === 'view',
+        },
+        {
+          name: 'RPT',
+          subName: 'rtp',
+          width: '120',
+          type: 'button',
+          btnName: 'Add New RPT',
+          show: this.btnType !== 'view',
+          disabled: this.btnType === 'view',
+        },
+        {
+          name: 'Date',
+          subName: 'date',
+          width: '120',
+          type: 'date',
+          show: true,
+          disabled: this.btnType === 'view',
+        },
+        {
+          name: 'Name',
+          subName: 'name',
+          width: '120',
+          type: 'text',
+          show: true,
+          disabled: this.btnType === 'view',
+        },
+        {
+          name: 'Color Depth',
+          subName: 'colorDepth',
+          width: '120',
+          type: 'select',
+          show: true,
+          disabled: this.btnType === 'view',
+        },
+        {
+          name: 'Product Type',
+          subName: 'productType',
+          width: '120',
+          type: 'select',
+          show: true,
+          disabled: this.btnType === 'view',
+        },
+        {
+          name: 'Product',
+          subName: 'product',
+          width: '120',
+          type: 'select',
+          show: true,
+          disabled: this.btnType === 'view',
+        },
+        {
+          name: 'Batch Process Stage',
+          subName: 'batchProcessStage',
+          width: '120',
+          type: 'select',
+          show: true,
+          disabled: this.btnType === 'view',
+        },
+        {
+          name: 'Color Variant Type',
+          subName: 'colorVariantType',
+          width: '120',
+          type: 'select',
+          show: true,
+          disabled: this.btnType === 'view',
+        },
+        {
+          name: 'Color Method',
+          subName: 'colorMethod',
+          width: '120',
+          type: 'select',
+          show: true,
+          disabled: this.btnType === 'view',
+        },
+        {
+          name: 'Note',
+          subName: 'note',
+          width: '100',
+          type: 'textarea',
+          show: true,
+          disabled: this.btnType === 'view',
+        },
+        {
+          name: 'Confirm',
+          subName: 'confirm',
+          type: 'checkbox',
+          show: true,
+          disabled: this.btnType === 'view',
+        },
+        {
+          name: 'Open',
+          subName: 'open',
+          width: '120',
+          type: 'button',
+          btnName: 'Open',
+          show: this.btnType !== 'view',
+          disabled: this.btnType === 'view',
+        },
+        {
+          name: 'Main',
+          subName: 'main',
+          width: '120',
+          type: 'button',
+          btnName: 'Main',
+          show: this.btnType !== 'view',
+          disabled: this.btnType === 'view',
+        },
+        {
+          name: 'Delete',
+          subName: 'delete',
+          width: '120',
+          type: 'del',
+          show: this.btnType !== 'view',
+          disabled: this.btnType === 'view',
+        },
+      ],
     }
   },
 

@@ -121,7 +121,7 @@
             :istherebody="isThereBody"
             open-url="prepareStage"
             :productions-action-buttons="true"
-            delete-row-url="packag/deletePackaging"
+            delete-row-url="stage/prepareStageDelete"
             height="600"
             @pageEmitAction="getTableRequest"
           />
@@ -160,13 +160,13 @@ export default {
           name: 'Stage Name',
           code: 'name',
         },
-        qty: {
+        useQty: {
           name: 'Use Qty',
           code: 'qty',
         },
-        qty2: {
+        useQty2: {
           name: 'Use Qty2',
-          code: 'qty2',
+          code: 'useQty2',
         },
         status: {
           name: 'Status',
@@ -226,9 +226,9 @@ export default {
             total: 328,
           },
         })
-        .then(({ data: { packagingList } }) => {
+        .then(({ data: { stageList } }) => {
           this.isLoading = !this.isLoading
-          this.tableBody = packagingList
+          this.tableBody = stageList
 
           this.tableBody.length
             ? (this.isThereBody = true)

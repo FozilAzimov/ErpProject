@@ -1,10 +1,10 @@
 <template>
-  <product-production-types />
+  <prepare-product-production-type />
 </template>
 
 <script>
-import ProductProductionTypes from '@components/Productions/ProductProductionTypes.vue'
+import PrepareProductProductionType from '@components/Productions/PrepareProductProductionType.vue'
 export default {
-  components: { ProductProductionTypes },
+  components: { PrepareProductProductionType },
 }
 </script>

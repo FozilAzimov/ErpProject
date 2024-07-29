@@ -74,54 +74,62 @@
         </div>
       </div>
       <div
-        class="border-[1px] border-solid border-[rgba(0,0,0,0.1)]"
+        class="flex items-start gap-5 border-[1px] border-solid border-[rgba(0,0,0,0.1)]"
         :class="
           isOpenTable
-            ? 'duration-[1s] h-fit overflow-hidden'
+            ? 'duration-[1s] h-[755px] overflow-hidden'
             : 'duration-[1s] h-0 overflow-hidden'
         "
       >
         <div class="w-fit flex flex-col items-start m-2 gap-1">
           <div v-for="(element, index) in elementData" :key="index">
-            <template v-if="element.show">
-              <span
-                v-if="element.type === 'text'"
-                class="flex flex-col items-start mb-1"
+            <span
+              v-if="element.type === 'text'"
+              class="flex flex-col items-start mb-1"
+            >
+              <span class="text-[13px]"
+                >{{ element.name }}
+                <span v-if="element.required" class="text-[18px] text-red-600"
+                  >*</span
+                ></span
               >
-                <span class="text-[13px]"
-                  >{{ element.name }}
-                  <span v-if="element.required" class="text-[18px] text-red-600"
-                    >*</span
-                  ></span
+              <generic-input
+                :value="''"
+                width="300"
+                type="text"
+                :name="element.subName"
+                :disabled="element.disabled"
+                @customFunction="getInputAndLookUpValueAction"
+              />
+            </span>
+            <span
+              v-else-if="element.type === 'radio'"
+              class="flex flex-col items-start mb-1"
+            >
+              <span class="text-[13px]">{{ element.name }}</span>
+              <span class="flex items-center">
+                <el-radio
+                  v-model="radio"
+                  label="enabled"
+                  border
+                  size="mini"
+                  :disabled="element.disabled"
+                  @change="getInputAndLookUpValueAction"
+                  >Enabled</el-radio
                 >
-                <generic-input
-                  :value="
-                    editData?.[element?.defValName]
-                      ? editData?.[element?.defValName]
-                      : ''
-                  "
-                  width="300"
-                  type="text"
-                  :name="element.subName"
+                <el-radio
+                  v-model="radio"
+                  label="disabled"
+                  border
+                  size="mini"
                   :disabled="element.disabled"
-                  @customFunction="getInputAndLookUpValueAction"
-                />
+                  @change="getInputAndLookUpValueAction"
+                  >Disabled</el-radio
+                >
               </span>
-              <span
-                v-else-if="element.type === 'select'"
-                class="flex flex-col items-start mb-1"
-              >
-                <span class="text-[13px]">{{ element.name }} </span>
-                <generic-look-up
-                  dwidth="300"
-                  :name="element.subName"
-                  :options-data="selectDefaultData"
-                  :disabled="element.disabled"
-                  @customFunction="getInputAndLookUpValueAction"
-                />
-              </span>
-            </template>
+            </span>
           </div>
+
           <div class="flex items-center gap-3 mt-3">
             <generic-button
               name="Go Back"
@@ -130,7 +138,7 @@
               @click="goBackAction"
             />
             <generic-button
-              v-if="!(btnType === 'view')"
+              v-if="btnType !== 'view'"
               :name="btnType === 'edit' ? 'Save changes' : 'Save'"
               :type="btnType === 'edit' ? 'success' : 'primary'"
               :icon-name-attribute="btnType && 'edit'"
@@ -138,8 +146,7 @@
             />
           </div>
         </div>
-
-        <production-addition-table class="mt-10 p-2" />
+        <generic-transfer v-if="btnType !== 'view'" class="mt-5" />
       </div>
     </template>
   </div>
@@ -149,15 +156,13 @@
 import GenericButton from '@generics/GenericButton.vue'
 import GenericInput from '@generics/GenericInput.vue'
 import LoadingPage from '@components/Loading/LoadingPage.vue'
-import ProductionAdditionTable from '@components/Productions/ProductionAdditionTable.vue'
-import GenericLookUp from '@generics/GenericLookUp.vue'
+import GenericTransfer from '@generics/GenericTransfer.vue'
 export default {
   components: {
     LoadingPage,
     GenericButton,
     GenericInput,
-    ProductionAdditionTable,
-    GenericLookUp,
+    GenericTransfer,
   },
   data() {
     return {
@@ -172,6 +177,7 @@ export default {
       allInputAndLookUpValue: {},
       elementData: [],
       selectDefaultData: [],
+      radio: '',
     }
   },
 
@@ -231,34 +237,18 @@ export default {
     dataCreatedAction() {
       const data = [
         {
-          name: 'Name',
-          subName: 'name',
+          name: 'Product Production',
+          subName: 'product',
           type: 'text',
           required: true,
-          show: true,
           disabled: this.btnType === 'view',
         },
         {
-          name: 'Code',
-          subName: 'code',
-          type: 'text',
+          name: 'Status',
+          subName: 'status',
+          type: 'radio',
           required: false,
-          show: this.btnType !== 'view',
-        },
-        {
-          name: 'Card Number',
-          subName: 'cardNumber',
-          type: 'text',
-          required: false,
-          show: true,
           disabled: this.btnType === 'view',
-        },
-        {
-          name: 'Department Name',
-          subName: 'departmentId',
-          type: 'select',
-          required: false,
-          show: this.btnType !== 'view',
         },
       ]
       this.elementData = data
@@ -266,39 +256,32 @@ export default {
 
     // Page request
     getTableRequest() {
-      if (this.btnType === 'view') {
+      if (this.pageID && this.btnType === 'view') {
         this.isLoading = !this.isLoading
         this.$axios
-          .post(`/packagings/viewPackagingAjaxLoad`, {
+          .post(`/stage/prepareStageViewAjaxLoad`, {
             id: this.pageID,
             page_current: 1,
             page_size: 25,
           })
           .then(({ data: { design } }) => {
             this.isLoading = !this.isLoading
-            this.editData = design
           })
           .catch((error) => {
             this.isLoading = !this.isLoading
             // eslint-disable-next-line no-console
             console.log(error)
           })
-      } else if (this.btnType === 'edit') {
+      } else if (this.pageID && this.btnType === 'edit') {
         this.isLoading = !this.isLoading
         this.$axios
-          .post(`/packagings/prepareDesignAjaxLoad`, {
+          .post(`/stage/prepareStageAjaxLoad`, {
             id: this.pageID,
             page_current: 1,
             page_size: 25,
           })
           .then(({ data: { designJson } }) => {
             this.isLoading = !this.isLoading
-            this.editData = JSON.parse(designJson)
-            this.allInputAndLookUpValue.planningTypeId =
-              this.editData?.planningtype?.id || ''
-            this.allInputAndLookUpValue.code = this.editData?.code || ''
-            this.allInputAndLookUpValue.name = this.editData?.name || ''
-            this.pageID = this.editData?.id
           })
           .catch((error) => {
             this.isLoading = !this.isLoading
@@ -308,7 +291,7 @@ export default {
       } else {
         this.isLoading = !this.isLoading
         this.$axios
-          .post(`/packagings/preparePackagingAjaxLoad`, {
+          .post(`/stage/prepareStageAjaxLoad`, {
             page_current: 1,
             page_size: 25,
           })
@@ -353,7 +336,7 @@ export default {
           .post(`/packagings/addEditPackaging`, body)
           .then(({ status }) => {
             this.isLoading = !this.isLoading
-            if (status === 200) this.$router.push('/packaging.htm')
+            this.$router.push('/productproductiontypes.htm')
           })
           .catch((error) => {
             this.isLoading = !this.isLoading
