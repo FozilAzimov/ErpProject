@@ -146,6 +146,20 @@
           class="mt-10 p-2"
           :page-id="pageID"
           :data="rowData"
+          title="Packaging"
+          :buttons="[
+            {
+              name: 'Add new',
+              type: 'primary',
+              iconNameAttribute: 'circle-plus-outline',
+              action: 'add',
+            },
+            {
+              name: 'Save Change',
+              type: 'primary',
+              action: 'save',
+            },
+          ]"
         />
       </div>
     </template>

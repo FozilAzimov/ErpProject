@@ -4,14 +4,15 @@
     class="input rounded-[5px] border-[1px] border-solid border-[rgba(119,136,153,0.3)] outline-none focus:bg-gradient-to-b focus:from-transparent focus:via-transparent focus:to-[rgba(228,228,228,0.5)] duration-[0.4s] focus:shadow-[0_0_5px_#52a8ec99]"
     :type="type"
     :style="{
-      width: `${width}px`,
+      width: `${widthtype === '%' ? `${width}%` : `${width}px`}`,
       height: `${height}px`,
-      padding: `${pt}px ${pr}px ${pb}px ${pl}px`,
+      padding: '2px 12px',
       fontSize: `${textsize}px`,
       color: valuecolor,
       border: required
         ? '1px solid rgb(228,228,228)'
         : '1px solid rgba(255,0,0,0.5)',
+      cursor: 'pointer',
     }"
     :placeholder="placeholder"
     @change="getSelectValue"
@@ -24,6 +25,10 @@ export default {
       type: String,
       default: '',
     },
+    widthtype: {
+      type: String,
+      default: '',
+    },
     width: {
       type: String,
       default: '',
@@ -33,22 +38,6 @@ export default {
       default: '',
     },
     placeholder: {
-      type: String,
-      default: '',
-    },
-    pl: {
-      type: String,
-      default: '',
-    },
-    pt: {
-      type: String,
-      default: '',
-    },
-    pr: {
-      type: String,
-      default: '',
-    },
-    pb: {
       type: String,
       default: '',
     },

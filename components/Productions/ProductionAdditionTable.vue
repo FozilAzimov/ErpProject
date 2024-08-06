@@ -1,17 +1,17 @@
 <template>
   <div>
     <span class="flex items-center gap-2">
-      <span class="text-[16px] font-semibold text-[#317eac]">Packaging</span>
+      <span v-if="title" class="text-[16px] font-semibold text-[#317eac]">{{
+        title
+      }}</span>
+
       <generic-button
-        name="Add new"
-        type="primary"
-        icon-name-attribute="circle-plus-outline"
-        @click="addRowAction"
-      />
-      <generic-button
-        name="Save Change"
-        type="primary"
-        @click="saveChangeAction"
+        v-for="(elem, index) in buttons"
+        :key="index"
+        :name="elem?.name"
+        :type="elem?.type"
+        :icon-name-attribute="elem?.iconNameAttribute"
+        @click="handleButtonClick(elem?.action)"
       />
     </span>
 
@@ -102,6 +102,14 @@ export default {
       type: Array,
       default: () => [],
     },
+    title: {
+      type: String,
+      default: '',
+    },
+    buttons: {
+      type: Array,
+      default: () => [],
+    },
   },
 
   // DATA
@@ -113,32 +121,33 @@ export default {
 
   // METHODS
   methods: {
-    // Addition action
-    addRowAction() {
-      this.tableData.push(this.data)
-    },
-
     // Row Delete action
     deleteRowAction(index, rows) {
       rows.splice(index, 1)
     },
 
-    // Save Changes Action
-    saveChangeAction() {
-      const body = {
-        id: this.pageId,
+    handleButtonClick(action) {
+      this.customFunctionAction(action)
+    },
+    customFunctionAction(name) {
+      if (name === 'add') {
+        this.tableData.push(this.data)
+      } else if (name === 'save') {
+        const body = {
+          id: this.pageId,
+        }
+        this.isLoading = !this.isLoading
+        this.$axios
+          .post(`/packagings/addPackagingDetails`, body)
+          .then(() => {
+            this.isLoading = !this.isLoading
+          })
+          .catch((error) => {
+            this.isLoading = !this.isLoading
+            // eslint-disable-next-line no-console
+            console.log(error)
+          })
       }
-      this.isLoading = !this.isLoading
-      this.$axios
-        .post(`/packagings/addPackagingDetails`, body)
-        .then(() => {
-          this.isLoading = !this.isLoading
-        })
-        .catch((error) => {
-          this.isLoading = !this.isLoading
-          // eslint-disable-next-line no-console
-          console.log(error)
-        })
     },
   },
 }

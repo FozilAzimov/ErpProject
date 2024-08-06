@@ -1,10 +1,10 @@
 <template>
-  <ProductionOrderplannigs />
+  <production-order-plannings />
 </template>
 
 <script>
-import ProductionOrderplannigs from '@components/Orders/ProductionOrderPlannigs/ProductionOrderplannigs.vue'
+import ProductionOrderPlannings from '@components/Orders/ProductionOrderPlannings.vue'
 export default {
-  components: { ProductionOrderplannigs },
+  components: { ProductionOrderPlannings },
 }
 </script>

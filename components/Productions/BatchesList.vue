@@ -223,7 +223,6 @@ export default {
       allSelectAndInputValues: {},
       leftMap: {},
       rightMap: {},
-      users: [],
       tableHeadData: {},
       tableHead: {},
       tableBody: [],

@@ -84,6 +84,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    slotName: {
+      type: String,
+      default: '',
+    },
   },
 
   // METHODS

@@ -20,6 +20,7 @@
           name="Go Back"
           type="primary"
           icon-name-attribute="arrow-left"
+          @click="$router.push('simpleProductionInvoice.htm')"
         />
         <generic-button
           v-if="isPage_ID"

@@ -231,7 +231,7 @@
         </div>
 
         <!-- --START-- Batch Details Table uchun -->
-        <div class="m-2">
+        <div v-if="pageID" class="m-2">
           <span class="text-[14px]"
             >Batch Details.
             <strong class="text-[14px] text-[rgb(156,0,78)]"
@@ -533,7 +533,6 @@ export default {
       this.tableDataDetails2 = headData.filter((value) => {
         return !value.showUI && value
       })
-      return 'Assalom'
     },
     // Filter Action Stages
     responseDataFilterStages(headData) {

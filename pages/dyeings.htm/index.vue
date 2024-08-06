@@ -1,10 +1,10 @@
 <template>
-  <Dyeings />
+  <dyeings-list />
 </template>
 
 <script>
-import Dyeings from '@components/Orders/Dyeings/DyeingsPage'
+import DyeingsList from '@components/Orders/DyeingsList.vue'
 export default {
-  components: { Dyeings },
+  components: { DyeingsList },
 }
 </script>

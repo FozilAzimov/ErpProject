@@ -112,7 +112,7 @@
                 >
                   <generic-look-up
                     v-if="element.type === 'select'"
-                    :durl="`${element?.url}`"
+                    :durl="element?.url"
                     :dparam="element.param"
                     dwidth="220"
                     :defvalue="

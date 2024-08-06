@@ -42,7 +42,7 @@
         <div class="flex items-center gap-[10px]">
           <img src="@assets/icons/user-black.png" alt="user" class="w-[14px]" />
           <h1 class="font-bold text-[rgb(49,126,172)] text-[14px] uppercase">
-            Sew Orde rOnline Status
+            Sew Order Online Status
           </h1>
         </div>
         <div>
@@ -115,16 +115,20 @@ export default {
       allSelectAndInputValues: {},
       isOpenTable: true,
       isCloseTable: true,
+      resultDataResponse: [],
+      resultDataResponseColumns: [],
     }
   },
 
   // MOUNTED
-  created() {
+  mounted() {
     this.allSelectAndInputValues.autorefresh = 50
     // Table function
     this.getTableRequest()
     // function
     this.createDataFiltering()
+    // function
+    this.realTimeRequest(this.allSelectAndInputValues?.autorefresh)
   },
 
   // METHODS
@@ -156,7 +160,7 @@ export default {
         },
         {
           name: 'Order',
-          subName: 'order',
+          subName: 'productionOrderId',
           type: 'select',
           width: '200',
           url: 'findAllPrOrder',
@@ -167,7 +171,7 @@ export default {
         },
         {
           name: 'SewModel',
-          subName: 'sewmodel',
+          subName: 'sewModelId',
           type: 'select',
           width: '200',
           url: 'findAllSewModel',
@@ -177,7 +181,7 @@ export default {
         },
         {
           name: 'Color',
-          subName: 'color',
+          subName: 'colorId',
           type: 'select',
           width: '200',
           url: 'findAllColor',
@@ -189,28 +193,47 @@ export default {
     // get Input, date, select datasini olish
     getInputAndLookUpValueAction(name, value) {
       this.$set(this.allSelectAndInputValues, name, value)
+      // function
+      this.getTableRequest()
+      if (name === 'autorefresh') {
+        // function
+        this.realTimeRequest(value)
+      }
     },
 
     // page request action
     getTableRequest() {
       const body = {
-        colorId: null,
+        colorId: this.allSelectAndInputValues?.colorId || null,
         fromAccept: true,
-        productionOrderId: null,
-        sewModelId: null,
+        productionOrderId:
+          this.allSelectAndInputValues?.productionOrderId || null,
+        sewModelId: this.allSelectAndInputValues?.sewModelId || null,
       }
 
       this.isLoading = !this.isLoading
       this.$axios
         .post(`/sew/sewOrderOnlineStatusContent`, body)
-        .then(({ data }) => {
-          this.isLoading = !this.isLoading
+        .then(({ data: { resultDataResponse, resultDataResponseColumns } }) => {
+          this.resultDataResponse = resultDataResponse
+          this.resultDataResponseColumns = resultDataResponseColumns
+          this.this.isLoading = !this.isLoading
         })
         .catch((error) => {
           this.isLoading = !this.isLoading
           // eslint-disable-next-line no-console
           console.log(error)
         })
+    },
+
+    realTimeRequest(value) {
+      setInterval(
+        () => {
+          // function
+          this.getTableRequest()
+        },
+        value ? parseInt(value) * 1000 : 1000
+      )
     },
   },
 }

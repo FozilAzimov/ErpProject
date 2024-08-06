@@ -1,10 +1,24 @@
 [
   {
+    "name": "accounts.htm",
+    "path": "/accounts.htm",
+    "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\accounts.htm\\\\index.vue",
+    "chunkName": "pages/accounts.htm/index",
+    "_name": "_15ed15ce"
+  },
+  {
     "name": "bands.htm",
     "path": "/bands.htm",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\bands.htm\\\\index.vue",
     "chunkName": "pages/bands.htm/index",
     "_name": "_503dcf88"
+  },
+  {
+    "name": "banks.htm",
+    "path": "/banks.htm",
+    "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\banks.htm\\\\index.vue",
+    "chunkName": "pages/banks.htm/index",
+    "_name": "_0c862a43"
   },
   {
     "name": "batches.htm",
@@ -56,6 +70,13 @@
     "_name": "_75c6aea4"
   },
   {
+    "name": "branchess.htm",
+    "path": "/branchess.htm",
+    "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\branchess.htm\\\\index.vue",
+    "chunkName": "pages/branchess.htm/index",
+    "_name": "_d3ff9752"
+  },
+  {
     "name": "branchProductsStockReportByLogic.htm",
     "path": "/branchProductsStockReportByLogic.htm",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\branchProductsStockReportByLogic.htm\\\\index.vue",
@@ -70,18 +91,18 @@
     "_name": "_23e6ac2a"
   },
   {
+    "name": "cashboxs.htm",
+    "path": "/cashboxs.htm",
+    "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\cashboxs.htm\\\\index.vue",
+    "chunkName": "pages/cashboxs.htm/index",
+    "_name": "_5609314e"
+  },
+  {
     "name": "changeProductColorVariant.htm",
     "path": "/changeProductColorVariant.htm",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\changeProductColorVariant.htm\\\\index.vue",
     "chunkName": "pages/changeProductColorVariant.htm/index",
     "_name": "_f973b24e"
-  },
-  {
-    "name": "checkRealCountBarcode.htm",
-    "path": "/checkRealCountBarcode.htm",
-    "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\checkRealCountBarcode.htm\\\\index.vue",
-    "chunkName": "pages/checkRealCountBarcode.htm/index",
-    "_name": "_b91690ba"
   },
   {
     "name": "colorDepth.htm",
@@ -131,6 +152,20 @@
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\colorVariantRecipeStagePicture.htm\\\\index.vue",
     "chunkName": "pages/colorVariantRecipeStagePicture.htm/index",
     "_name": "_3c2fc6b8"
+  },
+  {
+    "name": "contractRegistration.htm",
+    "path": "/contractRegistration.htm",
+    "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\contractRegistration.htm\\\\index.vue",
+    "chunkName": "pages/contractRegistration.htm/index",
+    "_name": "_617ae0a9"
+  },
+  {
+    "name": "currencies.htm",
+    "path": "/currencies.htm",
+    "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\currencies.htm\\\\index.vue",
+    "chunkName": "pages/currencies.htm/index",
+    "_name": "_5d8caa36"
   },
   {
     "name": "dashboard.htm",
@@ -238,6 +273,20 @@
     "_name": "_4b75d8a2"
   },
   {
+    "name": "iplikLotStavka.htm",
+    "path": "/iplikLotStavka.htm",
+    "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\iplikLotStavka.htm\\\\index.vue",
+    "chunkName": "pages/iplikLotStavka.htm/index",
+    "_name": "_2d729544"
+  },
+  {
+    "name": "iplikStages.htm",
+    "path": "/iplikStages.htm",
+    "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\iplikStages.htm\\\\index.vue",
+    "chunkName": "pages/iplikStages.htm/index",
+    "_name": "_fadc8204"
+  },
+  {
     "name": "login.htm",
     "path": "/login.htm",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\login.htm\\\\index.vue",
@@ -285,6 +334,13 @@
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\orderproductiontypes.htm\\\\index.vue",
     "chunkName": "pages/orderproductiontypes.htm/index",
     "_name": "_64a83b3c"
+  },
+  {
+    "name": "orderSalePlannerCalendar.htm",
+    "path": "/orderSalePlannerCalendar.htm",
+    "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\orderSalePlannerCalendar.htm\\\\index.vue",
+    "chunkName": "pages/orderSalePlannerCalendar.htm/index",
+    "_name": "_6eca7159"
   },
   {
     "name": "outputproductioninvoice.htm",
@@ -341,6 +397,13 @@
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\packaging.htm\\\\index.vue",
     "chunkName": "pages/packaging.htm/index",
     "_name": "_b185ad12"
+  },
+  {
+    "name": "paymenttypes.htm",
+    "path": "/paymenttypes.htm",
+    "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\paymenttypes.htm\\\\index.vue",
+    "chunkName": "pages/paymenttypes.htm/index",
+    "_name": "_61765d61"
   },
   {
     "name": "personEquipmentSews.htm",
@@ -525,11 +588,25 @@
     "_name": "_1dba8042"
   },
   {
+    "name": "transactionCharacters.htm",
+    "path": "/transactionCharacters.htm",
+    "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\transactionCharacters.htm\\\\index.vue",
+    "chunkName": "pages/transactionCharacters.htm/index",
+    "_name": "_ecd73c1c"
+  },
+  {
     "name": "transactionDetailReport.htm",
     "path": "/transactionDetailReport.htm",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\transactionDetailReport.htm\\\\index.vue",
     "chunkName": "pages/transactionDetailReport.htm/index",
     "_name": "_5ea140d7"
+  },
+  {
+    "name": "transactionMovements.htm",
+    "path": "/transactionMovements.htm",
+    "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\transactionMovements.htm\\\\index.vue",
+    "chunkName": "pages/transactionMovements.htm/index",
+    "_name": "_d7c63c64"
   },
   {
     "name": "transactionReports.htm",
@@ -560,6 +637,27 @@
     "_name": "_c36bdef2"
   },
   {
+    "name": "planningsByProductionOrder.htm-id",
+    "path": "/planningsByProductionOrder.htm/:id?",
+    "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\planningsByProductionOrder.htm\\\\_id.vue",
+    "chunkName": "pages/planningsByProductionOrder.htm/_id",
+    "_name": "_40c5aa18"
+  },
+  {
+    "name": "prepareAccount.htm-id",
+    "path": "/prepareAccount.htm/:id?",
+    "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\prepareAccount.htm\\\\_id.vue",
+    "chunkName": "pages/prepareAccount.htm/_id",
+    "_name": "_772a5eb6"
+  },
+  {
+    "name": "prepareBank.htm-id",
+    "path": "/prepareBank.htm/:id?",
+    "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\prepareBank.htm\\\\_id.vue",
+    "chunkName": "pages/prepareBank.htm/_id",
+    "_name": "_db3a9f02"
+  },
+  {
     "name": "prepareBatchNew.htm-id",
     "path": "/prepareBatchNew.htm/:id?",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\prepareBatchNew.htm\\\\_id.vue",
@@ -586,6 +684,20 @@
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\prepareBatchunionsNew.htm\\\\_id.vue",
     "chunkName": "pages/prepareBatchunionsNew.htm/_id",
     "_name": "_21a3f3f9"
+  },
+  {
+    "name": "prepareBranche.htm-id",
+    "path": "/prepareBranche.htm/:id?",
+    "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\prepareBranche.htm\\\\_id.vue",
+    "chunkName": "pages/prepareBranche.htm/_id",
+    "_name": "_5e9565a0"
+  },
+  {
+    "name": "prepareCashbox.htm-id",
+    "path": "/prepareCashbox.htm/:id?",
+    "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\prepareCashbox.htm\\\\_id.vue",
+    "chunkName": "pages/prepareCashbox.htm/_id",
+    "_name": "_39dd1dea"
   },
   {
     "name": "prepareColor.htm-id",
@@ -635,6 +747,13 @@
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\prepareColorVariantRecipeStagePicture.htm\\\\_id.vue",
     "chunkName": "pages/prepareColorVariantRecipeStagePicture.htm/_id",
     "_name": "_1e6ef7aa"
+  },
+  {
+    "name": "prepareCurrency.htm-id",
+    "path": "/prepareCurrency.htm/:id?",
+    "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\prepareCurrency.htm\\\\_id.vue",
+    "chunkName": "pages/prepareCurrency.htm/_id",
+    "_name": "_05e66a6c"
   },
   {
     "name": "prepareDesign.htm-id",
@@ -691,6 +810,20 @@
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\prepareInternalInvoiceNew.htm\\\\_id.vue",
     "chunkName": "pages/prepareInternalInvoiceNew.htm/_id",
     "_name": "_feb83f2a"
+  },
+  {
+    "name": "prepareIplikLotStavka.htm-id",
+    "path": "/prepareIplikLotStavka.htm/:id?",
+    "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\prepareIplikLotStavka.htm\\\\_id.vue",
+    "chunkName": "pages/prepareIplikLotStavka.htm/_id",
+    "_name": "_4a8c2165"
+  },
+  {
+    "name": "PrepareIplikStage.htm-id",
+    "path": "/PrepareIplikStage.htm/:id?",
+    "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\PrepareIplikStage.htm\\\\_id.vue",
+    "chunkName": "pages/PrepareIplikStage.htm/_id",
+    "_name": "_5407f684"
   },
   {
     "name": "prepareOrderProductionType.htm-id",
@@ -756,6 +889,13 @@
     "_name": "_638f5c20"
   },
   {
+    "name": "preparePaymentType.htm-id",
+    "path": "/preparePaymentType.htm/:id?",
+    "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\preparePaymentType.htm\\\\_id.vue",
+    "chunkName": "pages/preparePaymentType.htm/_id",
+    "_name": "_6e206f63"
+  },
+  {
     "name": "preparePlanningType.htm-id",
     "path": "/preparePlanningType.htm/:id?",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\preparePlanningType.htm\\\\_id.vue",
@@ -812,6 +952,13 @@
     "_name": "_41e2a9a1"
   },
   {
+    "name": "prepareSaleOrder.htm-id",
+    "path": "/prepareSaleOrder.htm/:id?",
+    "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\prepareSaleOrder.htm\\\\_id.vue",
+    "chunkName": "pages/prepareSaleOrder.htm/_id",
+    "_name": "_12d506dc"
+  },
+  {
     "name": "prepareSaleServiceInvoiceNew.htm-id",
     "path": "/prepareSaleServiceInvoiceNew.htm/:id?",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\prepareSaleServiceInvoiceNew.htm\\\\_id.vue",
@@ -866,5 +1013,12 @@
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\prepareStage.htm\\\\_id.vue",
     "chunkName": "pages/prepareStage.htm/_id",
     "_name": "_16ec1285"
+  },
+  {
+    "name": "prepareTransactionCharacter.htm-id",
+    "path": "/prepareTransactionCharacter.htm/:id?",
+    "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\prepareTransactionCharacter.htm\\\\_id.vue",
+    "chunkName": "pages/prepareTransactionCharacter.htm/_id",
+    "_name": "_cc46dda0"
   }
 ]

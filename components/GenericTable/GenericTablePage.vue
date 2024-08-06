@@ -262,7 +262,10 @@
                     $route.path.includes('batchunions.htm') ||
                     $route.path.includes('colorVariantRecipeStageGroup.htm') ||
                     $route.path.includes('batches.htm') ||
-                    $route.path.includes('colorVariant.htm')
+                    $route.path.includes('colorVariant.htm') ||
+                    $route.path.includes('salesorder.htm') ||
+                    $route.path.includes('purchaseorder.htm') ||
+                    $route.path.includes('iplikLotStavka.htm')
                   "
                   class="flex items-center justify-center gap-2 p-2"
                 >
@@ -314,10 +317,12 @@
                   <generic-button
                     v-if="
                       $route.path.includes('internalInvoice.htm') ||
-                      $route.path.includes('viabranchreceive.htm')
+                      $route.path.includes('viabranchreceive.htm') ||
+                      $route.path.includes('productionorder.htm')
                     "
                     :name="btnName"
                     type="primary"
+                    @click="$router.push(`${openUrlTwo}.htm/${value.id}`)"
                   />
                   <GenericButton
                     v-if="
@@ -335,7 +340,8 @@
                       !$route.path.includes('purchaseServiceInvoice.htm') &&
                       !$route.path.includes('saleServiceInvoice.htm') &&
                       !$route.path.includes('internalInvoice.htm') &&
-                      !$route.path.includes('viabranchreceive.htm')
+                      !$route.path.includes('viabranchreceive.htm') &&
+                      !$route.path.includes('productionorder.htm')
                     "
                     name="qrCode"
                     type="success"
@@ -356,7 +362,8 @@
                       !$route.path.includes('purchaseServiceInvoice.htm') &&
                       !$route.path.includes('saleServiceInvoice.htm') &&
                       !$route.path.includes('internalInvoice.htm') &&
-                      !$route.path.includes('viabranchreceive.htm')
+                      !$route.path.includes('viabranchreceive.htm') &&
+                      !$route.path.includes('productionorder.htm')
                     "
                     name="forDevice"
                     type="success"
@@ -426,6 +433,10 @@ export default {
       default: '0',
     },
     openUrl: {
+      type: String,
+      default: '',
+    },
+    openUrlTwo: {
       type: String,
       default: '',
     },

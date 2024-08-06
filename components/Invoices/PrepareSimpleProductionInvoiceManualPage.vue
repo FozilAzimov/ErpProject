@@ -20,7 +20,7 @@
           name="Go Back"
           type="primary"
           icon-name-attribute="arrow-left"
-          @click="$router.push('')"
+          @click="$router.push('simpleProductionInvoice.htm')"
         />
         <generic-button
           v-if="isPage_ID"
@@ -190,9 +190,8 @@
                     type="primary"
                     @click="getSubTableAction(index)"
                   />
-                  <generic-multiple-select
+                  <generic-look-up
                     v-else-if="type === 'list'"
-                    size="small"
                     :options-data="lookUpData"
                   />
                 </td>
@@ -216,7 +215,7 @@
 <script>
 import GenericButton from '@components/Generics/GenericButton.vue'
 import LoadingPage from '@components/Loading/LoadingPage.vue'
-import GenericMultipleSelect from '@components/Generics/GenericMultipleSelect.vue'
+import GenericLookUp from '@components/Generics/GenericLookUp.vue'
 import EndScaleBox from '@components/Invoices/ScaleBoxs/EndScaleBox.vue'
 import ScaleBox from '@components/Invoices/ScaleBoxs/ScaleBox.vue'
 import ScaleBoxGenericTable from '@components/Invoices/ScaleBoxs/ScaleBoxGenericTable.vue'
@@ -225,10 +224,10 @@ export default {
   components: {
     LoadingPage,
     GenericButton,
+    GenericLookUp,
     ScaleBox,
     EndScaleBox,
     ScaleBoxGenericTable,
-    GenericMultipleSelect,
   },
 
   // DATA,

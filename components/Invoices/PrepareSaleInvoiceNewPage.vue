@@ -1074,8 +1074,6 @@ export default {
       checkModal: false,
       openPopup: true,
       invoiceList: [],
-      isEdit: false,
-      showHideRow: false,
       lookUpValues: {},
       inputValues: {},
       hideButton: true,
@@ -1102,6 +1100,7 @@ export default {
       responseData: [],
       logisticsCalcData: {},
       showHideLogistic: false,
+      isEdit: false,
       uiShowHide: false,
       subUiShowHide: false,
       subUiShowHideTwo: false,
@@ -1162,7 +1161,6 @@ export default {
     this.userId = this.$route.params?.id
     if (this.userId) {
       this.isEdit = true
-      this.checkIsEdit = true
       this.hideButton = false
     }
   },
@@ -1244,7 +1242,7 @@ export default {
 
     // Filter Action
     leftRightDataFilter() {
-      if (this.rightColumns) {
+      if (this.rightColumns.length) {
         this.tableData = this.rightColumns.filter((value) => {
           return value.showUI && value
         })

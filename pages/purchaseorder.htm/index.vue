@@ -1,10 +1,10 @@
 <template>
-  <PurchaseOrderPage />
+  <purchase-order />
 </template>
 
 <script>
-import PurchaseOrderPage from '@components/Orders/PurchaseOrderpage/PurchaseOrderPage.vue'
+import PurchaseOrder from '@components/Orders/PurchaseOrder.vue'
 export default {
-  components: { PurchaseOrderPage },
+  components: { PurchaseOrder },
 }
 </script>

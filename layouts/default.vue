@@ -271,7 +271,7 @@ export default {
   watch: {
     $route(to, from) {
       this.isLoginPage = to.path === '/login.htm'
-      this.isPage = to.path === '/branches.htm'
+      this.isPage = to.path === '/branchess.htm'
       const token = localStorage.getItem('token')
       if (!token && to.path !== '/login.htm') {
         this.$router.push('/login.htm')
@@ -286,7 +286,7 @@ export default {
   // CREATED
   created() {
     this.isLoginPage = this.$route.path === '/login.htm'
-    this.isPage = this.$route.path === '/branches.htm'
+    this.isPage = this.$route.path === '/branchess.htm'
     const token = localStorage.getItem('token')
     if (token === 'undefined' || token === '') {
       localStorage.removeItem('token')

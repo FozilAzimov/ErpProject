@@ -78,7 +78,7 @@
           <input
             type="button"
             :value="$t('pages.login.btnValue')"
-            class="w-[250px] p-[5px_10px] mt-[10px] rounded-[3px] text-[13px] bg-[#5dc2f4] text-white text-[15px] cursor-pointer hover:bg-[#40b2e9] active:bg-[#249fdb] duration-[0.4s] outline-none"
+            class="w-[250px] p-[5px_10px] mt-[10px] rounded-[3px] text-[13px] bg-[#5dc2f4] text-white cursor-pointer hover:bg-[#40b2e9] active:bg-[#249fdb] duration-[0.4s] outline-none"
             @click="getResponse"
           />
           <p class="text-[13px]">{{ $t('pages.login.loginSubText') }}</p>
@@ -139,7 +139,7 @@ export default {
 
               document.cookie = `x-auth-token=${res.headers['x-auth-token']}; domain=localhost; secure; SameSite=None;`
 
-              this.$router.push('/branches.htm')
+              this.$router.push('/branchess.htm')
               this.isLoading = !this.isLoading
               this.$message({
                 message: "Siz LogIn dan muvaffaqqiyatli o'tdingiz!",

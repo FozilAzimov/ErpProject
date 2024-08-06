@@ -268,7 +268,6 @@ export default {
       tableBody: [],
       tableHeadLength: null,
       isThereBody: false,
-      tableId: [],
       selectData: {},
       formData: new Map(),
       checkModal: false,
@@ -352,7 +351,6 @@ export default {
       this.tableBody.length > 0
         ? (this.isThereBody = true)
         : (this.isThereBody = false)
-      this.tableId = Array.from(arr)
     },
     // Generic Table action End
 

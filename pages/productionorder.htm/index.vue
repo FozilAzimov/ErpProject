@@ -1,13 +1,10 @@
 <template>
-  <MainList
-    main-action-url="productionOrder/productionorderAjaxLoad"
-    main-create-url="prepareProductionOrderItem"
-  />
+  <production-order />
 </template>
 
 <script>
-import MainList from '@/components/Lists/MainList.vue'
+import ProductionOrder from '@components/Orders/ProductionOrder.vue'
 export default {
-  components: { MainList },
+  components: { ProductionOrder },
 }
 </script>

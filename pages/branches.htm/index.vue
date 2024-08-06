@@ -1,10 +1,10 @@
 <template>
-  <BranchesPage />
+  <branches-list />
 </template>
 
 <script>
-import BranchesPage from '@components/Branches/BranchesPage.vue'
+import BranchesList from '@components/Banks/BranchesList.vue'
 export default {
-  components: { BranchesPage },
+  components: { BranchesList },
 }
 </script>
