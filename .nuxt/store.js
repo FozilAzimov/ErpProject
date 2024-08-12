@@ -8,8 +8,6 @@ const VUEX_PROPERTIES = ['state', 'getters', 'actions', 'mutations']
 let store = {};
 
 (function updateModules () {
-  store = normalizeRoot(require('..\\store\\index.js'), 'store/index.js')
-
   // If store is an exported method = classic mode (deprecated)
 
   if (typeof store === 'function') {
@@ -19,25 +17,16 @@ let store = {};
   // Enforce store modules
   store.modules = store.modules || {}
 
-  resolveStoreModules(require('..\\store\\translate\\index.js'), 'translate/index.js')
-  resolveStoreModules(require('..\\store\\systemMenu\\index.js'), 'systemMenu/index.js')
-  resolveStoreModules(require('..\\store\\systemMenu\\actions.js'), 'systemMenu/actions.js')
-  resolveStoreModules(require('..\\store\\systemMenu\\mutations.js'), 'systemMenu/mutations.js')
-  resolveStoreModules(require('..\\store\\translate\\actions.js'), 'translate/actions.js')
-  resolveStoreModules(require('..\\store\\translate\\mutations.js'), 'translate/mutations.js')
+  resolveStoreModules(require('..\\store\\systemMenu.js'), 'systemMenu.js')
+  resolveStoreModules(require('..\\store\\translate.js'), 'translate.js')
 
   // If the environment supports hot reloading...
 
   if (process.client && module.hot) {
     // Whenever any Vuex module is updated...
     module.hot.accept([
-      '..\\store\\index.js',
-      '..\\store\\translate\\index.js',
-      '..\\store\\systemMenu\\index.js',
-      '..\\store\\systemMenu\\actions.js',
-      '..\\store\\systemMenu\\mutations.js',
-      '..\\store\\translate\\actions.js',
-      '..\\store\\translate\\mutations.js',
+      '..\\store\\systemMenu.js',
+      '..\\store\\translate.js',
     ], () => {
       // Update `root.modules` with the latest definitions.
       updateModules()

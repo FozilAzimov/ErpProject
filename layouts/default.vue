@@ -299,7 +299,7 @@ export default {
   // MOUNTED
   mounted() {
     // System Menu
-    this.GET_SYSTEM_MENU()
+    this.FETCH_SYSTEM_MENU()
     // Drop Toggle
     window.addEventListener('click', this.handleWindowClick)
     window.addEventListener('click', this.handleWindowClickTranslate)
@@ -314,7 +314,7 @@ export default {
   // METHODS
   methods: {
     // Store actions
-    ...mapActions('systemMenu', ['GET_SYSTEM_MENU']),
+    ...mapActions('systemMenu', ['FETCH_SYSTEM_MENU']),
 
     isCollapse() {
       this.collapseMune = !this.collapseMune

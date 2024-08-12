@@ -17,6 +17,7 @@
               {{ headName.name }}
             </th>
             <th
+              v-if="showHideActionCol"
               class="w-[100px] text-[13px] font-semibold border-[1px] border-solid border-[rgba(119,136,153,0.2)] p-2 cursor-pointer"
             >
               Action
@@ -255,7 +256,10 @@
               </td>
 
               <!-- productions uchun -->
-              <td v-if="productionsActionButtons" class="border-[1px] p-2">
+              <td
+                v-if="productionsActionButtons && showHideActionCol"
+                class="border-[1px] p-2"
+              >
                 <span
                   v-if="
                     $route.path.includes('sewmodel.htm') ||
@@ -265,7 +269,11 @@
                     $route.path.includes('colorVariant.htm') ||
                     $route.path.includes('salesorder.htm') ||
                     $route.path.includes('purchaseorder.htm') ||
-                    $route.path.includes('iplikLotStavka.htm')
+                    $route.path.includes('iplikLotStavka.htm') ||
+                    $route.path.includes('tableRowAccessSysUser.htm') ||
+                    $route.path.includes('languages.htm') ||
+                    $route.path.includes('discounts.htm') ||
+                    $route.path.includes('columnSettings.htm')
                   "
                   class="flex items-center justify-center gap-2 p-2"
                 >
@@ -298,7 +306,7 @@
               </td>
 
               <!-- invoices uchun -->
-              <td v-else class="border-[1px] p-2">
+              <td v-else-if="showHideActionCol" class="border-[1px] p-2">
                 <span class="flex items-center justify-center gap-2">
                   <generic-button
                     v-if="!$route.path.includes('simpleProductionInvoice.htm')"
@@ -447,6 +455,10 @@ export default {
     productionsActionButtons: {
       type: Boolean,
       default: false,
+    },
+    showHideActionCol: {
+      type: Boolean,
+      default: true,
     },
     deleteRowUrl: {
       type: String,

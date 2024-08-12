@@ -2,9 +2,6 @@
   "MessageBox": {
     "description": "Auto imported from components/MessageBox.vue"
   },
-  "BranchesPage": {
-    "description": "Auto imported from components/Branches/BranchesPage.vue"
-  },
   "ActualitySystem": {
     "description": "Auto imported from components/ActualitySystemPage/ActualitySystem.vue"
   },
@@ -17,6 +14,9 @@
   "BranchesList": {
     "description": "Auto imported from components/Banks/BranchesList.vue"
   },
+  "CurrenRates": {
+    "description": "Auto imported from components/Banks/CurrenRates.vue"
+  },
   "PrepareAccount": {
     "description": "Auto imported from components/Banks/PrepareAccount.vue"
   },
@@ -25,6 +25,9 @@
   },
   "PrepareBranche": {
     "description": "Auto imported from components/Banks/PrepareBranche.vue"
+  },
+  "BranchesPage": {
+    "description": "Auto imported from components/Branches/BranchesPage.vue"
   },
   "BtnGen": {
     "description": "Auto imported from components/Button/BtnGen.vue"
@@ -50,11 +53,62 @@
   "TransactionCharacters": {
     "description": "Auto imported from components/Cashboxs/TransactionCharacters.vue"
   },
-  "DashboardPage": {
-    "description": "Auto imported from components/Dashboard/DashboardPage.vue"
+  "ClusterCamera": {
+    "description": "Auto imported from components/Cluster/ClusterCamera.vue"
+  },
+  "ClusterSeason": {
+    "description": "Auto imported from components/Cluster/ClusterSeason.vue"
+  },
+  "ClusterSeasonPriceList": {
+    "description": "Auto imported from components/Cluster/ClusterSeasonPriceList.vue"
+  },
+  "ClusterSeasonReport": {
+    "description": "Auto imported from components/Cluster/ClusterSeasonReport.vue"
+  },
+  "ClusterYear": {
+    "description": "Auto imported from components/Cluster/ClusterYear.vue"
+  },
+  "DistanceToTerminalList": {
+    "description": "Auto imported from components/Cluster/DistanceToTerminalList.vue"
+  },
+  "PrepareClusterSeason": {
+    "description": "Auto imported from components/Cluster/PrepareClusterSeason.vue"
+  },
+  "PrepareClusterSeasonPriceList": {
+    "description": "Auto imported from components/Cluster/PrepareClusterSeasonPriceList.vue"
+  },
+  "PrepareClusterYear": {
+    "description": "Auto imported from components/Cluster/PrepareClusterYear.vue"
+  },
+  "PrepareDistanceToTerminal": {
+    "description": "Auto imported from components/Cluster/PrepareDistanceToTerminal.vue"
   },
   "ColumnConfigPage": {
     "description": "Auto imported from components/ColumnConfig/ColumnConfigPage.vue"
+  },
+  "DashboardPage": {
+    "description": "Auto imported from components/Dashboard/DashboardPage.vue"
+  },
+  "EquipmentExpenses": {
+    "description": "Auto imported from components/EquipmentReports/EquipmentExpenses.vue"
+  },
+  "EquipmentReports": {
+    "description": "Auto imported from components/EquipmentReports/EquipmentReports.vue"
+  },
+  "EquipmentsOnlineStatus": {
+    "description": "Auto imported from components/EquipmentReports/EquipmentsOnlineStatus.vue"
+  },
+  "EquipmentsOrderReports": {
+    "description": "Auto imported from components/EquipmentReports/EquipmentsOrderReports.vue"
+  },
+  "EquipmentsPersonOnlineStatus": {
+    "description": "Auto imported from components/EquipmentReports/EquipmentsPersonOnlineStatus.vue"
+  },
+  "EquipmentsPersonReports": {
+    "description": "Auto imported from components/EquipmentReports/EquipmentsPersonReports.vue"
+  },
+  "PrepareEquipmentExpenses": {
+    "description": "Auto imported from components/EquipmentReports/PrepareEquipmentExpenses.vue"
   },
   "GenericInvoiceFilteringModalPage": {
     "description": "Auto imported from components/GenericInvoiceFilteringModal/GenericInvoiceFilteringModalPage.vue"
@@ -92,6 +146,90 @@
   "GenericTranslatePage": {
     "description": "Auto imported from components/GenericTranslate/GenericTranslatePage.vue"
   },
+  "AttendanceSchedule": {
+    "description": "Auto imported from components/HRMS/AttendanceSchedule.vue"
+  },
+  "CheckPoints": {
+    "description": "Auto imported from components/HRMS/CheckPoints.vue"
+  },
+  "DischargeList": {
+    "description": "Auto imported from components/HRMS/DischargeList.vue"
+  },
+  "DoorsList": {
+    "description": "Auto imported from components/HRMS/DoorsList.vue"
+  },
+  "EntryExitByDoors": {
+    "description": "Auto imported from components/HRMS/EntryExitByDoors.vue"
+  },
+  "HolidaysList": {
+    "description": "Auto imported from components/HRMS/HolidaysList.vue"
+  },
+  "HrDevices": {
+    "description": "Auto imported from components/HRMS/HrDevices.vue"
+  },
+  "HrEvents": {
+    "description": "Auto imported from components/HRMS/HrEvents.vue"
+  },
+  "HronlinesList": {
+    "description": "Auto imported from components/HRMS/HronlinesList.vue"
+  },
+  "LeavesList": {
+    "description": "Auto imported from components/HRMS/LeavesList.vue"
+  },
+  "LeaveType": {
+    "description": "Auto imported from components/HRMS/LeaveType.vue"
+  },
+  "PersonListReport": {
+    "description": "Auto imported from components/HRMS/PersonListReport.vue"
+  },
+  "PersonSalaries": {
+    "description": "Auto imported from components/HRMS/PersonSalaries.vue"
+  },
+  "PrepareCheckPoint": {
+    "description": "Auto imported from components/HRMS/PrepareCheckPoint.vue"
+  },
+  "PrepareDischarge": {
+    "description": "Auto imported from components/HRMS/PrepareDischarge.vue"
+  },
+  "PrepareDoor": {
+    "description": "Auto imported from components/HRMS/PrepareDoor.vue"
+  },
+  "PrepareHoliday": {
+    "description": "Auto imported from components/HRMS/PrepareHoliday.vue"
+  },
+  "PrepareHrDevice": {
+    "description": "Auto imported from components/HRMS/PrepareHrDevice.vue"
+  },
+  "PrepareLeaves": {
+    "description": "Auto imported from components/HRMS/PrepareLeaves.vue"
+  },
+  "PrepareLeaveType": {
+    "description": "Auto imported from components/HRMS/PrepareLeaveType.vue"
+  },
+  "PreparePersonSalary": {
+    "description": "Auto imported from components/HRMS/PreparePersonSalary.vue"
+  },
+  "PrepareRetentionType": {
+    "description": "Auto imported from components/HRMS/PrepareRetentionType.vue"
+  },
+  "PrepareTimeZone": {
+    "description": "Auto imported from components/HRMS/PrepareTimeZone.vue"
+  },
+  "PrepareUser": {
+    "description": "Auto imported from components/HRMS/PrepareUser.vue"
+  },
+  "PrepareUserPersonal": {
+    "description": "Auto imported from components/HRMS/PrepareUserPersonal.vue"
+  },
+  "RetentionType": {
+    "description": "Auto imported from components/HRMS/RetentionType.vue"
+  },
+  "SalariesList": {
+    "description": "Auto imported from components/HRMS/SalariesList.vue"
+  },
+  "TimeZones": {
+    "description": "Auto imported from components/HRMS/TimeZones.vue"
+  },
   "GenericInputDatePage": {
     "description": "Auto imported from components/InputDate/GenericInputDatePage.vue"
   },
@@ -109,6 +247,9 @@
   },
   "PrepareReceiveInvoiceNew": {
     "description": "Auto imported from components/InternalInvoices/PrepareReceiveInvoiceNew.vue"
+  },
+  "LoadingPage": {
+    "description": "Auto imported from components/Loading/LoadingPage.vue"
   },
   "ExpenseInvoicePage": {
     "description": "Auto imported from components/Invoices/ExpenseInvoicePage.vue"
@@ -239,14 +380,8 @@
   "SimpleProductionInvoicePage": {
     "description": "Auto imported from components/Invoices/SimpleProductionInvoicePage.vue"
   },
-  "LoadingPage": {
-    "description": "Auto imported from components/Loading/LoadingPage.vue"
-  },
   "LoginPage": {
     "description": "Auto imported from components/Login/LoginPage.vue"
-  },
-  "MenuSettings": {
-    "description": "Auto imported from components/MenuSettings/MenuSettings.vue"
   },
   "ItemSearchList": {
     "description": "Auto imported from components/main/ItemSearchList.vue"
@@ -259,6 +394,9 @@
   },
   "SearchBar": {
     "description": "Auto imported from components/main/SearchBar.vue"
+  },
+  "MenuSettings": {
+    "description": "Auto imported from components/MenuSettings/MenuSettings.vue"
   },
   "ContractRegistration": {
     "description": "Auto imported from components/Orders/ContractRegistration.vue"
@@ -455,6 +593,213 @@
   "SessionsPage": {
     "description": "Auto imported from components/Sessions/SessionsPage.vue"
   },
+  "ArticlesList": {
+    "description": "Auto imported from components/Settings/ArticlesList.vue"
+  },
+  "BasicTools": {
+    "description": "Auto imported from components/Settings/BasicTools.vue"
+  },
+  "CapitalsList": {
+    "description": "Auto imported from components/Settings/CapitalsList.vue"
+  },
+  "CarList": {
+    "description": "Auto imported from components/Settings/CarList.vue"
+  },
+  "CharacterDetails": {
+    "description": "Auto imported from components/Settings/CharacterDetails.vue"
+  },
+  "CharacteristicsList": {
+    "description": "Auto imported from components/Settings/CharacteristicsList.vue"
+  },
+  "CityList": {
+    "description": "Auto imported from components/Settings/CityList.vue"
+  },
+  "ColumnSettings": {
+    "description": "Auto imported from components/Settings/ColumnSettings.vue"
+  },
+  "CompaniesList": {
+    "description": "Auto imported from components/Settings/CompaniesList.vue"
+  },
+  "CountryList": {
+    "description": "Auto imported from components/Settings/CountryList.vue"
+  },
+  "DepartmentsList": {
+    "description": "Auto imported from components/Settings/DepartmentsList.vue"
+  },
+  "DiscountsList": {
+    "description": "Auto imported from components/Settings/DiscountsList.vue"
+  },
+  "DistrictList": {
+    "description": "Auto imported from components/Settings/DistrictList.vue"
+  },
+  "EquipmentsList": {
+    "description": "Auto imported from components/Settings/EquipmentsList.vue"
+  },
+  "FilesList": {
+    "description": "Auto imported from components/Settings/FilesList.vue"
+  },
+  "InboxList": {
+    "description": "Auto imported from components/Settings/InboxList.vue"
+  },
+  "LanguagesList": {
+    "description": "Auto imported from components/Settings/LanguagesList.vue"
+  },
+  "LogsList": {
+    "description": "Auto imported from components/Settings/LogsList.vue"
+  },
+  "ManufacturersList": {
+    "description": "Auto imported from components/Settings/ManufacturersList.vue"
+  },
+  "ObligationsList": {
+    "description": "Auto imported from components/Settings/ObligationsList.vue"
+  },
+  "PermissionGroups": {
+    "description": "Auto imported from components/Settings/PermissionGroups.vue"
+  },
+  "PhoneNumbers": {
+    "description": "Auto imported from components/Settings/PhoneNumbers.vue"
+  },
+  "PlateNumber": {
+    "description": "Auto imported from components/Settings/PlateNumber.vue"
+  },
+  "PositionsList": {
+    "description": "Auto imported from components/Settings/PositionsList.vue"
+  },
+  "PrepareArticle": {
+    "description": "Auto imported from components/Settings/PrepareArticle.vue"
+  },
+  "PrepareBasicTools": {
+    "description": "Auto imported from components/Settings/PrepareBasicTools.vue"
+  },
+  "PrepareCapitals": {
+    "description": "Auto imported from components/Settings/PrepareCapitals.vue"
+  },
+  "PrepareCar": {
+    "description": "Auto imported from components/Settings/PrepareCar.vue"
+  },
+  "PrepareCharacterDetail": {
+    "description": "Auto imported from components/Settings/PrepareCharacterDetail.vue"
+  },
+  "PrepareCharacteristic": {
+    "description": "Auto imported from components/Settings/PrepareCharacteristic.vue"
+  },
+  "PrepareCity": {
+    "description": "Auto imported from components/Settings/PrepareCity.vue"
+  },
+  "PrepareColumnSettings": {
+    "description": "Auto imported from components/Settings/PrepareColumnSettings.vue"
+  },
+  "PrepareCompany": {
+    "description": "Auto imported from components/Settings/PrepareCompany.vue"
+  },
+  "PrepareCountry": {
+    "description": "Auto imported from components/Settings/PrepareCountry.vue"
+  },
+  "PrepareDepartment": {
+    "description": "Auto imported from components/Settings/PrepareDepartment.vue"
+  },
+  "PrepareDiscount": {
+    "description": "Auto imported from components/Settings/PrepareDiscount.vue"
+  },
+  "PrepareDistrict": {
+    "description": "Auto imported from components/Settings/PrepareDistrict.vue"
+  },
+  "PrepareEquipment": {
+    "description": "Auto imported from components/Settings/PrepareEquipment.vue"
+  },
+  "PrepareLanguage": {
+    "description": "Auto imported from components/Settings/PrepareLanguage.vue"
+  },
+  "PrepareManufacturer": {
+    "description": "Auto imported from components/Settings/PrepareManufacturer.vue"
+  },
+  "PrepareObligations": {
+    "description": "Auto imported from components/Settings/PrepareObligations.vue"
+  },
+  "PreparePermissionGroup": {
+    "description": "Auto imported from components/Settings/PreparePermissionGroup.vue"
+  },
+  "PreparePhoneNumber": {
+    "description": "Auto imported from components/Settings/PreparePhoneNumber.vue"
+  },
+  "PreparePlateNumber": {
+    "description": "Auto imported from components/Settings/PreparePlateNumber.vue"
+  },
+  "PreparePosition": {
+    "description": "Auto imported from components/Settings/PreparePosition.vue"
+  },
+  "PrepareProductCategory": {
+    "description": "Auto imported from components/Settings/PrepareProductCategory.vue"
+  },
+  "PrepareProductEntryType": {
+    "description": "Auto imported from components/Settings/PrepareProductEntryType.vue"
+  },
+  "PrepareProductionArticle": {
+    "description": "Auto imported from components/Settings/PrepareProductionArticle.vue"
+  },
+  "PrepareProducts": {
+    "description": "Auto imported from components/Settings/PrepareProducts.vue"
+  },
+  "PrepareProductTransferCode": {
+    "description": "Auto imported from components/Settings/PrepareProductTransferCode.vue"
+  },
+  "PrepareProfitsAndLosses": {
+    "description": "Auto imported from components/Settings/prepareProfitsAndLosses.vue"
+  },
+  "PrepareStreet": {
+    "description": "Auto imported from components/Settings/PrepareStreet.vue"
+  },
+  "PrepareSubDepartments": {
+    "description": "Auto imported from components/Settings/PrepareSubDepartments.vue"
+  },
+  "PrepareTableRowAccessSysUser": {
+    "description": "Auto imported from components/Settings/PrepareTableRowAccessSysUser.vue"
+  },
+  "PrepareTara": {
+    "description": "Auto imported from components/Settings/PrepareTara.vue"
+  },
+  "PrepareUnitMeasurement": {
+    "description": "Auto imported from components/Settings/PrepareUnitMeasurement.vue"
+  },
+  "PrepareWarehouse": {
+    "description": "Auto imported from components/Settings/PrepareWarehouse.vue"
+  },
+  "ProductCategories": {
+    "description": "Auto imported from components/Settings/ProductCategories.vue"
+  },
+  "ProductEntryTypes": {
+    "description": "Auto imported from components/Settings/ProductEntryTypes.vue"
+  },
+  "ProductionArticles": {
+    "description": "Auto imported from components/Settings/ProductionArticles.vue"
+  },
+  "ProductsList": {
+    "description": "Auto imported from components/Settings/ProductsList.vue"
+  },
+  "ProductTransferCodes": {
+    "description": "Auto imported from components/Settings/ProductTransferCodes.vue"
+  },
+  "ProfitsAndLosses": {
+    "description": "Auto imported from components/Settings/ProfitsAndLosses.vue"
+  },
+  "StreetList": {
+    "description": "Auto imported from components/Settings/StreetList.vue"
+  },
+  "SubDepartments": {
+    "description": "Auto imported from components/Settings/SubDepartments.vue"
+  },
+  "TableRowAccessSysUser": {
+    "description": "Auto imported from components/Settings/TableRowAccessSysUser.vue"
+  },
+  "TarasList": {
+    "description": "Auto imported from components/Settings/TarasList.vue"
+  },
+  "UnitMeasurement": {
+    "description": "Auto imported from components/Settings/UnitMeasurement.vue"
+  },
+  "WarehousesList": {
+    "description": "Auto imported from components/Settings/WarehousesList.vue"
+  },
   "PaymentTypes": {
     "description": "Auto imported from components/Transactions/PaymentTypes.vue"
   },
@@ -463,6 +808,12 @@
   },
   "TransactionMovements": {
     "description": "Auto imported from components/Transactions/TransactionMovements.vue"
+  },
+  "PrepareWeight": {
+    "description": "Auto imported from components/Weights/PrepareWeight.vue"
+  },
+  "WeightsList": {
+    "description": "Auto imported from components/Weights/WeightsList.vue"
   },
   "GenericLogisticsCalculationPage": {
     "description": "Auto imported from components/Generics/GenericLogisticsCalculation/GenericLogisticsCalculationPage.vue"
@@ -482,17 +833,17 @@
   "ScaleBoxGenericTable": {
     "description": "Auto imported from components/Invoices/ScaleBoxs/ScaleBoxGenericTable.vue"
   },
-  "BatchReportsPage": {
-    "description": "Auto imported from components/Reports/BatchReportsPage/BatchReportsPage.vue"
-  },
-  "BranchProductsStockReportByLogic": {
-    "description": "Auto imported from components/Reports/BranchProductsStockReportByLogic/BranchProductsStockReportByLogic.vue"
-  },
   "BandsPage": {
     "description": "Auto imported from components/Reports/BandsPage/BandsPage.vue"
   },
+  "BatchReportsPage": {
+    "description": "Auto imported from components/Reports/BatchReportsPage/BatchReportsPage.vue"
+  },
   "BatchStagesReport": {
     "description": "Auto imported from components/Reports/BatchStagesReport/BatchStagesReport.vue"
+  },
+  "BranchProductsStockReportByLogic": {
+    "description": "Auto imported from components/Reports/BranchProductsStockReportByLogic/BranchProductsStockReportByLogic.vue"
   },
   "GradePage": {
     "description": "Auto imported from components/Reports/GradePage/GradePage.vue"
