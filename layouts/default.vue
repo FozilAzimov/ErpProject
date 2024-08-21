@@ -1,11 +1,11 @@
 <template>
   <div>
     <LoadingPage
-      v-if="isLoading && !isLoginPage && !isPage"
+      v-if="isLoading && !isLoginPage && !isBranchessPage"
       class="absolute left-[50%] top-[8px] translate-x-[-50%]"
     />
     <div
-      v-if="!isLoginPage && !isPage"
+      v-if="!isLoginPage && !isBranchessPage"
       class="w-full h-[50px] bg-[rgba(32,111,162,0.7)] flex justify-between items-center px-3"
     >
       <nuxt-link
@@ -154,7 +154,7 @@
     <div class="w-full flex items-start gap-[5px]">
       <el-container>
         <el-aside
-          v-if="!isLoginPage && !isPage"
+          v-if="!isLoginPage && !isBranchessPage"
           :width="collapseMune ? '64px' : '300px'"
           class="mt-1 border-t-[1px] border-t-solid border-t-[rgba(0,0,0,0.15)]"
         >
@@ -224,7 +224,7 @@
     </div>
     <div
       v-show="logoutMessage"
-      v-if="!isLoginPage && !isPage"
+      v-if="!isLoginPage && !isBranchessPage"
       class="absolute left-0 top-0 right-0 bottom-0 bg-[rgba(0,0,0,0.3)]"
     ></div>
     <div
@@ -248,7 +248,7 @@ export default {
     return {
       isLoading: false,
       isLoginPage: false,
-      isPage: false,
+      isBranchessPage: false,
       collapseMune: true,
       logoutMessage: false,
       dropToggle: false,
@@ -271,7 +271,7 @@ export default {
   watch: {
     $route(to, from) {
       this.isLoginPage = to.path === '/login.htm'
-      this.isPage = to.path === '/branchess.htm'
+      this.isBranchessPage = to.path === '/branchess.htm'
       const token = localStorage.getItem('token')
       if (!token && to.path !== '/login.htm') {
         this.$router.push('/login.htm')
@@ -286,7 +286,7 @@ export default {
   // CREATED
   created() {
     this.isLoginPage = this.$route.path === '/login.htm'
-    this.isPage = this.$route.path === '/branchess.htm'
+    this.isBranchessPage = this.$route.path === '/branchess.htm'
     const token = localStorage.getItem('token')
     if (token === 'undefined' || token === '') {
       localStorage.removeItem('token')
@@ -407,7 +407,7 @@ export default {
 
     // go to Menu Setting
     goToMenuSetting() {
-      this.$router.push('menuSettings.htm')
+      this.$router.push('quickMenuSettings.htm')
     },
   },
 }

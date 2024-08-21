@@ -130,12 +130,7 @@
             : 'duration-[1s] h-0 overflow-hidden'
         "
       >
-        <generic-button
-          name="Market Invoice"
-          type="primary"
-          :margin="true"
-          @click="$router.push('/prepareSalesReturnNew.htm')"
-        />
+        <generic-button name="Market Invoice" type="primary" :margin="true" />
         <div class="p-2">
           <div class="flex items-center justify-between mb-1">
             <div class="text-[14px]">

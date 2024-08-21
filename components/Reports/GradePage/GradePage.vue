@@ -79,12 +79,8 @@
         <div class="flex items-center gap-2 m-[8px]">
           <GenericButton
             name="Add New"
-            pl="10"
-            pt="3"
-            pr="10"
-            pb="3"
-            bg="rgba(54, 155, 215, 0.8)"
-            textsize="15"
+            type="primary"
+            icon-name-attribute="circle-plus-outline"
             @click="$router.push('/prepareSalesReturnNew.htm')"
           />
         </div>
@@ -108,12 +104,6 @@
               <GenericInput
                 v-model="keywordValue"
                 width="200"
-                height="30"
-                pl="10"
-                pr="10"
-                pt="2"
-                pb="2"
-                textsize="13"
                 type="text"
                 placeholder="Search..."
                 @change="getTableRequest"
@@ -121,26 +111,14 @@
               />
               <GenericButton
                 name="Search"
-                pl="10"
-                pt="4"
-                pr="10"
-                pb="4"
-                bg="rgba(54, 155, 215, 0.8)"
-                textsize="14"
-                :url="imgUrl.search"
-                :istherepicture="true"
+                type="primary"
+                icon-name-attribute="search"
                 @click="getTableRequest"
               />
               <GenericButton
                 name="Print Preview"
-                pl="10"
-                pt="4"
-                pr="10"
-                pb="4"
-                bg="rgb(126,183,62)"
-                textsize="14"
-                :url="imgUrl.printer"
-                :istherepicture="true"
+                type="success"
+                icon-name-attribute="printer"
               />
             </div>
           </div>
@@ -158,7 +136,7 @@
 
 <script>
 import LoadingPage from '@components/Loading/LoadingPage.vue'
-import GenericButton from '@components/Button/GenericButton.vue'
+import GenericButton from '@generics/GenericButton.vue'
 import GenericInput from '@generics/GenericInput.vue'
 import ColumnConfigPage from '@components/ColumnConfig/ColumnConfigPage.vue'
 import GenericTablePage from '@components/GenericTable/GenericTablePage.vue'

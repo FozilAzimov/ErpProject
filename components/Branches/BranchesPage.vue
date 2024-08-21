@@ -62,7 +62,7 @@ export default {
   // Mounted
   mounted() {
     // System Menu
-    this.GET_SYSTEM_MENU()
+    this.FETCH_SYSTEM_MENU()
 
     window.addEventListener('click', this.handleWindowClick)
     // Branches request
@@ -86,7 +86,7 @@ export default {
   // Methods
   methods: {
     // Store actions
-    ...mapActions('systemMenu', ['GET_SYSTEM_MENU']),
+    ...mapActions('systemMenu', ['FETCH_SYSTEM_MENU']),
 
     // Dropdown toggle
     dropdownToggle() {

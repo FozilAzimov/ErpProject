@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import PrepareUser from '@components/HRMS/PrepareUser.vue'
+import PrepareUser from '@components/Settings/PrepareUser.vue'
 export default {
   components: { PrepareUser },
 }

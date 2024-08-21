@@ -4,6 +4,14 @@
       v-if="isLoading"
       class="absolute left-[50%] top-[8px] translate-x-[-50%]"
     />
+    <transition name="fade">
+      <ColumnConfigPage
+        v-show="checkModal"
+        api="saveColumnConfig"
+        class="z-[10000]"
+        @checkModal="handleValue"
+      />
+    </transition>
     <template v-if="isCloseTable">
       <div
         class="border-[1px] border-solid border-[rgba(0,0,0,0.05)] p-[12px] bg-gradient-to-b from-transparent via-transparent to-gray-200 shadow-md flex items-center justify-between"
@@ -54,22 +62,67 @@
         class="border-[1px] border-solid border-[rgba(0,0,0,0.1)]"
         :class="
           isOpenTable
-            ? 'duration-[1s] h-[755px] overflow-hidden'
+            ? 'duration-[1s] h-fit overflow-hidden'
             : 'duration-[1s] h-0 overflow-hidden'
         "
       >
-        <div class="flex items-center gap-3 m-3">
-          <span class="text-[14px]">Department Name</span>
-          <generic-look-up
-            dwidth="250"
-            name="departmentId"
-            placeholder="-- Please Select --"
-            @customFunction="getInputAndLookUpValueAction"
-          />
-          <generic-button
-            type="primary"
-            icon-name-attribute="refresh"
-            :circle="true"
+        <div class="p-2">
+          <div
+            class="flex flex-col items-start gap-5 p-4 shadow-lg rounded-lg border-[1px] border-solid border-[#E5E5E5] mb-4"
+          >
+            <div class="flex flex-wrap gap-4">
+              <span
+                v-for="(element, index) in topFilterData"
+                :key="index"
+                class="flex items-end"
+              >
+                <span
+                  v-if="element.type === 'select'"
+                  class="flex flex-col items-start"
+                >
+                  <span class="text-[13px]">{{ element.name }}</span>
+                  <generic-look-up
+                    dwidth="200"
+                    :name="element.subName"
+                    :defvalue="''"
+                    :options-data="[]"
+                    @customFunction="getInputAndLookUpValueAction"
+                  />
+                </span>
+                <span
+                  v-else-if="element.type === 'number'"
+                  class="flex flex-col items-start"
+                >
+                  <span class="text-[13px]">{{ element.name }}</span>
+                  <generic-input
+                    type="number"
+                    :value="''"
+                    :name="element.subName"
+                    width="200"
+                    @customFunction="getInputAndLookUpValueAction"
+                  />
+                </span>
+              </span>
+            </div>
+
+            <generic-button
+              name="Accept"
+              type="primary"
+              @click="getTableAction"
+            />
+          </div>
+
+          <GenericTablePage
+            v-if="isShowHideTable"
+            :tablehead="tableHead"
+            :tablebody="tableBody"
+            :tableheadlength="tableHeadLength"
+            :istherebody="isThereBody"
+            open-url="prepareBatchProcess"
+            :productions-action-buttons="true"
+            delete-row-url="batchProcess/prepareBatchProcessDelete"
+            height="600"
+            @pageEmitAction="getTableRequest"
           />
         </div>
       </div>
@@ -79,96 +132,102 @@
 
 <script>
 import LoadingPage from '@components/Loading/LoadingPage.vue'
-import GenericLookUp from '@generics/GenericLookUp.vue'
+import ColumnConfigPage from '@components/ColumnConfig/ColumnConfigPage.vue'
+import GenericLookUp from '@components/Generics/GenericLookUp.vue'
 import GenericButton from '@generics/GenericButton.vue'
+import GenericInput from '@generics/GenericInput.vue'
 export default {
-  // COMPONENTS
   components: {
     LoadingPage,
+    ColumnConfigPage,
     GenericLookUp,
     GenericButton,
+    GenericInput,
   },
 
   // DATA
   data() {
     return {
       isLoading: false,
-      bodyData: [],
-      allSelectAndInputValues: {},
+      pageSize_value: 25,
+      topFilterData: [],
+      btnType: '',
+      pageID: null,
+      keywordValue: '',
+      tableHead: {
+        id: { name: 'Id', code: 'id' },
+        name: {
+          name: 'Batch Process Name',
+          code: 'name',
+        },
+        status: {
+          name: 'Status',
+          code: 'status',
+        },
+      },
+      tableBody: [],
+      tableHeadLength: null,
+      isThereBody: false,
+      checkModal: false,
       isOpenTable: true,
       isCloseTable: true,
+      isShowHideTable: false,
     }
   },
 
-  // MOUNTED
+  // WATCH
+  watch: {
+    pageID(newVal) {
+      this.btnTypeSpecifyingAction()
+    },
+  },
+
+  // CREATED
   created() {
+    this.btnType = JSON.parse(localStorage.getItem('allTrueAndFalseData'))?.type
+    // page ID sini olish
+    this.pageID = this.$route.params?.id
+  },
+
+  // MOUNTED
+  mounted() {
+    this.tableHeadLength = Object.keys(this.tableHead).length + 1
     // Table function
     this.getTableRequest()
     // function
     this.createDataFiltering()
   },
 
-  // METHODS
+  // Methods
   methods: {
-    // Table page ni ochish va yopish uchun
-    isOpen() {
-      this.isOpenTable = !this.isOpenTable
+    handleValue(checkModal) {
+      this.checkModal = checkModal
     },
-    isClose() {
-      this.isCloseTable = !this.isCloseTable
-    },
-    // Table page ni ochish va yopish uchun
-
-    // get Input, date, select datasini olish
-    getInputAndLookUpValueAction(name, value) {
-      this.$set(this.allSelectAndInputValues, name, value)
+    openColumnConfig() {
+      this.checkModal = true
     },
 
-    // created data
-    createDataFiltering() {
-      const createDate = [
-        {
-          name: 'Color',
-          subName: 'color',
-          type: 'select',
-          url: 'findAllColor',
-        },
-        {
-          name: 'Color Variant',
-          subName: 'colorVariant',
-          type: 'select',
-          url: 'findAllColorVariant',
-        },
-        {
-          name: 'Color Depth',
-          subName: 'colorDepth',
-          type: 'select',
-          url: 'findAllColorDepth',
-        },
-        {
-          name: 'Products',
-          subName: 'products',
-          type: 'select',
-          url: 'searchProductList',
-        },
-        {
-          name: 'Qty',
-          subName: 'qty',
-          type: 'number',
-        },
-      ]
-      this.bodyData = createDate
-    },
-
-    // page request action
     getTableRequest() {
-      const body = {}
-
       this.isLoading = !this.isLoading
       this.$axios
-        .post(`/sew/sewOrderOnlineStatusContent`, body)
-        .then(({ data }) => {
+        .post(`/batchProcess/batchProcessAjaxLoad`, {
+          searchForm: {
+            keyword: this.keywordValue,
+          },
+          pagingForm: {
+            pageSize: this.pageSize_value,
+            currentPage: 1,
+            pageCount: 14,
+            total: 328,
+          },
+        })
+        .then(({ data: { batchProcessList } }) => {
           this.isLoading = !this.isLoading
+          this.tableBody = batchProcessList
+
+          this.tableBody.length
+            ? (this.isThereBody = true)
+            : (this.isThereBody = false)
         })
         .catch((error) => {
           this.isLoading = !this.isLoading
@@ -176,6 +235,85 @@ export default {
           console.log(error)
         })
     },
+
+    // Specifying the buttun type action
+    btnTypeSpecifyingAction() {
+      if (!this.pageID) {
+        localStorage.removeItem('allTrueAndFalseData')
+      }
+    },
+
+    // Generic_Input value
+    getInputValue(inputVal) {
+      this.keywordValue = inputVal
+    },
+
+    // Table page ni ochish va yopish uchun
+    isOpen() {
+      this.isOpenTable = !this.isOpenTable
+    },
+    isClose() {
+      this.isCloseTable = !this.isCloseTable
+    },
+
+    getTableAction() {
+      this.isShowHideTable = true
+    },
+
+    // page yuqorisidagi filterlar uchun data yaratish
+    createDataFiltering() {
+      const createDate = [
+        {
+          name: 'Color',
+          subName: 'colorId',
+          type: 'select',
+        },
+        {
+          name: 'Color Variant',
+          subName: 'colorVariantId',
+          type: 'select',
+        },
+        {
+          name: 'Color Depth',
+          subName: 'colorDepthId',
+          type: 'select',
+        },
+        {
+          name: 'Products',
+          subName: 'productsId',
+          type: 'select',
+        },
+        {
+          name: 'Qty',
+          subName: 'qty',
+          type: 'number',
+        },
+        {
+          name: 'Products',
+          subName: 'subProductsId',
+          type: 'select',
+        },
+        {
+          name: 'Qty',
+          subName: 'subQty',
+          type: 'number',
+        },
+      ]
+      this.topFilterData = createDate
+    },
   },
 }
 </script>
+
+<style>
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
+}
+
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
+  transform: translateY(-20px);
+}
+</style>

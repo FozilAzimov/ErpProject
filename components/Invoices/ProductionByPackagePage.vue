@@ -478,7 +478,306 @@ export default {
   // DATA
   data() {
     return {
-      boxAllData: [
+      boxAllData: [],
+      boxAdditionalData: [],
+      isLoading: false,
+      pageSize_value: 10,
+      keywordValue: '',
+      isOpenTable: true,
+      isCloseTable: true,
+      allLookUpAndInputValues: {},
+      stavkaStageFirstData: {},
+      stavkaStageSecondData: [],
+      drawUIData: [],
+      drawGropTotalQty: [],
+      drawGropTotalQty2: [],
+    }
+  },
+
+  // WATCH
+  watch: {
+    stavkaStageSecondData: {
+      handler(newVal) {
+        this.drawUIDataAction(newVal)
+      },
+      deep: true,
+    },
+  },
+
+  // MOUNTED
+  mounted() {
+    this.allLookUpAndInputValues.rows = '30'
+
+    // function
+    this.createdDataAction()
+  },
+
+  // METHODS
+  methods: {
+    // Table page ni ochish va yopish uchun
+    isOpen() {
+      this.isOpenTable = !this.isOpenTable
+    },
+    isClose() {
+      this.isCloseTable = !this.isCloseTable
+    },
+    // Table page ni ochish va yopish uchun
+
+    // GenericLookUp value'sini olish
+    getLookUpValueAction(key, value, order, resultType) {
+      this.$set(this.allLookUpAndInputValues, key, value)
+
+      // function
+      key === 'packaging' &&
+        this.packagingInfoRequestAction(this.allLookUpAndInputValues?.packaging)
+      // function
+      key === 'tara' &&
+        this.bruttoInputAction(this.allLookUpAndInputValues?.brutto || 0)
+      // function
+      if (
+        key === 'stavkaStage' &&
+        value &&
+        this.allLookUpAndInputValues?.iplikStavka
+      ) {
+        this.stavkaStageIdChange(value)
+      }
+    },
+
+    // Input value'sini olish
+    getInputValueAction(key, value, order) {
+      this.$set(this.allLookUpAndInputValues, key, value)
+
+      // brutto action
+      if (key === 'brutto') this.bruttoInputAction(value)
+    },
+
+    // Input value'sini olish
+    getCheckBoxValueAction(key, value) {
+      this.$set(this.allLookUpAndInputValues, key, value)
+    },
+
+    // Date Input value'sini olish
+    getInputDateValueAction(key, value, order) {
+      this.$set(this.allLookUpAndInputValues, key, value)
+    },
+
+    // Stavka Stage change qilinganda ishlaydi
+    stavkaStageIdChange(value) {
+      this.isLoading = !this.isLoading
+      const body = {
+        batchNumber: this.allLookUpAndInputValues?.batch || 0,
+        stavkaId: this.allLookUpAndInputValues?.iplikStavka,
+        stavkaStageId: value,
+        year:
+          this.allLookUpAndInputValues?.startDate?.split('-')[0] ||
+          new Date().getFullYear(),
+      }
+      this.$axios
+        .post(`/invoices/prepareByYearAndBatchNumber`, body)
+        .then((res) => {
+          this.isLoading = !this.isLoading
+          this.stavkaStageFirstData = {
+            ...this.stavkaStageFirstData,
+            ...res.data,
+          }
+          // function
+          this.changePackageQty(res.data)
+          // Brutto input'ga focus qaratish
+          document.querySelector('.focusInput').focus()
+          // qo'shimcha buttun'larni qo'shish
+          this.boxAllData.splice(26, 0, ...this.boxAdditionalData)
+        })
+        .catch(() => {
+          this.isLoading = !this.isLoading
+        })
+    },
+
+    // Stavka Stage change qilinganda "invoice_id" borligini tekshirib action bajaradi
+    changePackageQty(propObj) {
+      if (propObj.invoice_id) {
+        this.isLoading = !this.isLoading
+        this.$axios
+          .post(`/invoices/changePackageQty`, {
+            stavkaStageId: propObj?.stavkaStageId,
+          })
+          .then((res) => {
+            this.isLoading = !this.isLoading
+            this.stavkaStageSecondData = JSON.parse(res.data?.resultJson)
+            // function
+            this.secondDataFindValue(this.stavkaStageSecondData)
+          })
+          .catch(() => {
+            this.isLoading = !this.isLoading
+          })
+      }
+    },
+
+    secondDataFindValue(propSecondData) {
+      const obj = propSecondData.find((obj) => obj.personName && obj)
+      this.stavkaStageFirstData = { ...this.stavkaStageFirstData, ...obj }
+      // function
+      this.bruttoInputAction(this.allLookUpAndInputValues?.brutto || 0)
+    },
+
+    // Packaging change Action
+    packagingInfoRequestAction(selectedID) {
+      this.$axios
+        .post(`/packaging/findPackagingInfoUrl`, {
+          id: selectedID,
+        })
+        .then((res) => {
+          this.stavkaStageFirstData = {
+            ...this.stavkaStageFirstData,
+            ...res?.data,
+          }
+          this.stavkaStageFirstData.packagingTwo = 20
+          // function
+          this.bruttoInputAction(this.allLookUpAndInputValues?.brutto || 0)
+        })
+    },
+
+    // Brutto Calculation Action
+    bruttoInputAction(value) {
+      const sum = this.stavkaStageFirstData?.sum
+        ? parseFloat(this.stavkaStageFirstData?.sum)
+        : 0
+      const sumOnce = this.stavkaStageFirstData?.sumOnce
+        ? parseFloat(this.stavkaStageFirstData?.sumOnce)
+        : 0
+      const packagingTwo = this.stavkaStageFirstData.packagingTwo
+        ? parseFloat(this.stavkaStageFirstData.packagingTwo)
+        : 0
+      const tara =
+        this.allLookUpAndInputValues?.tara ||
+        this.stavkaStageFirstData?.taraName
+          ? parseFloat(
+              this.allLookUpAndInputValues?.tara ||
+                this.stavkaStageFirstData?.taraName
+            )
+          : 0
+      const summary = sum * packagingTwo + tara + sumOnce
+
+      this.$set(
+        this.stavkaStageFirstData,
+        'bruttoTwo',
+        parseFloat(value || 0) - summary?.toFixed(2)
+      )
+
+      // Sub Total Tara set val
+      this.$set(this.stavkaStageFirstData, 'subTotalTara', summary?.toFixed(2))
+    },
+
+    // Brutto Enter event action
+    getEnterAction(value) {
+      if (value) {
+        const [day, month, year, time] = this.allLookUpAndInputValues?.startDate
+          ? this.allLookUpAndInputValues?.startDate.split(/[-/T]+/)
+          : new Date()
+              .toISOString()
+              .split('.')[0]
+              .split(/[-/T]+/)
+        const formattedDateStr = `${year}/${month}/${day} ${time}`
+
+        const body = {
+          autoPrintToPDF: this.allLookUpAndInputValues?.autoPrint || false,
+          batchStr: this.stavkaStageFirstData?.batch || '',
+          colorId: this.stavkaStageFirstData?.colorId || '',
+          dateTo: formattedDateStr,
+          defectStillage: this.allLookUpAndInputValues?.defectStillage || '',
+          description: this.stavkaStageFirstData?.invoiceDescription || '',
+          employeeId: this.stavkaStageFirstData?.personId || '',
+          equipmentId: this.stavkaStageFirstData?.equipmentId || '',
+          gradeStillage: this.allLookUpAndInputValues?.gradeStillage || '',
+          invoiceId: this.stavkaStageFirstData?.invoice_id || '',
+          lot: this.stavkaStageFirstData?.itemLot || '',
+          packagingId: this.stavkaStageFirstData?.packagingId || '',
+          productBarcode: value || '',
+          qty: this.stavkaStageFirstData?.bruttoTwo || '',
+          qty2: value || '',
+          sequence: this.stavkaStageSecondData.length || '',
+          stavkaPlanId: this.stavkaStageFirstData?.stavkaPlanId || '',
+          stavkaStageId: this.stavkaStageFirstData?.stavkaStageId || '',
+          stillage: this.allLookUpAndInputValues?.stillage || '',
+          taraId: this.stavkaStageFirstData?.taraId || '',
+          warehouseId: this.stavkaStageFirstData?.warehouseId || '',
+        }
+        this.$axios.post(`/invoices/readSaveByPackage`, body).then((res) => {
+          this.stavkaStageSecondData = JSON.parse(res.data?.itemBarcodes)
+        })
+      }
+    },
+
+    // All data draw UI
+    drawUIDataAction(newVal) {
+      function chunkArray(array, chunkSize) {
+        if (array.length) {
+          return array?.reduce((result, item, index) => {
+            item.index = index + 1
+            const chunkIndex = Math.floor(index / chunkSize)
+            if (!result[chunkIndex]) {
+              result[chunkIndex] = [] // yangi group array yaratish
+            }
+            result[chunkIndex].push({
+              realQty: `${item?.realQty}`,
+              id: `${item?.id}`,
+              index: `${item?.index}`,
+              qty: `${item?.qty}`,
+              qty2: `${item?.qty2}`,
+            })
+            return result
+          }, [])
+        }
+      }
+      this.drawUIData = chunkArray(newVal, this.allLookUpAndInputValues.rows)
+
+      // Qty av Qty2 summasini hisoblash
+      this.drawUIData.forEach((arr, index) => {
+        let summQty = 0
+        let summQty2 = 0
+        arr.forEach((obj) => {
+          summQty += parseFloat(obj?.qty)
+          summQty2 += parseFloat(obj?.qty2)
+        })
+        this.drawGropTotalQty[index] = summQty?.toFixed(2)
+        this.drawGropTotalQty2[index] = summQty2?.toFixed(2)
+      })
+    },
+
+    // All Buttun action
+    clickedBtnAction(propName) {
+      if (
+        this.allLookUpAndInputValues?.stavkaStage &&
+        this.stavkaStageFirstData.itemLot
+      ) {
+        if (propName === 'printB') {
+          alert('Not action')
+        } else if (propName === 'print') {
+          alert('Not action')
+        } else if (propName === 'controlOne') {
+          localStorage.setItem(
+            'allTrueAndFalseData',
+            JSON.stringify({
+              packageValue: propName,
+              stavkaStageId: this.allLookUpAndInputValues?.stavkaStage,
+            })
+          )
+          window.open('/openControlPageNew.htm', '_blank')
+        } else if (propName === 'controlTwo') {
+          localStorage.setItem(
+            'allTrueAndFalseData',
+            JSON.stringify({
+              packageValue: propName,
+              lot: this.stavkaStageFirstData.itemLot,
+            })
+          )
+          window.open('/openControlPageNew.htm', '_blank')
+        }
+      }
+    },
+
+    // all box data created
+    createdDataAction() {
+      const data = [
         {
           width: '180',
           name: 'Start Date',
@@ -767,8 +1066,9 @@ export default {
           required: false,
           disabled: true,
         },
-      ],
-      boxAdditionalData: [
+      ]
+
+      const twoData = [
         {
           widthTwo: '80',
           subNameTwo: 'printBobbinInput',
@@ -790,297 +1090,10 @@ export default {
           disabled: false,
           btnDifferentiate: 'controlOne',
         },
-      ],
-      isLoading: false,
-      pageSize_value: 10,
-      keywordValue: '',
-      isOpenTable: true,
-      isCloseTable: true,
-      allLookUpAndInputValues: {},
-      stavkaStageFirstData: {},
-      stavkaStageSecondData: [],
-      drawUIData: [],
-      drawGropTotalQty: [],
-      drawGropTotalQty2: [],
-    }
-  },
+      ]
 
-  // WATCH
-  watch: {
-    stavkaStageSecondData: {
-      handler(newVal) {
-        this.drawUIDataAction(newVal)
-      },
-      deep: true,
-    },
-  },
-
-  // MOUNTED
-  mounted() {
-    this.allLookUpAndInputValues.rows = '30'
-  },
-
-  // METHODS
-  methods: {
-    // Table page ni ochish va yopish uchun
-    isOpen() {
-      this.isOpenTable = !this.isOpenTable
-    },
-    isClose() {
-      this.isCloseTable = !this.isCloseTable
-    },
-    // Table page ni ochish va yopish uchun
-
-    // GenericLookUp value'sini olish
-    getLookUpValueAction(key, value, order, resultType) {
-      this.$set(this.allLookUpAndInputValues, key, value)
-
-      // function
-      key === 'packaging' &&
-        this.packagingInfoRequestAction(this.allLookUpAndInputValues?.packaging)
-      // function
-      key === 'tara' &&
-        this.bruttoInputAction(this.allLookUpAndInputValues?.brutto || 0)
-      // function
-      if (
-        key === 'stavkaStage' &&
-        value &&
-        this.allLookUpAndInputValues?.iplikStavka
-      ) {
-        this.stavkaStageIdChange(value)
-      }
-    },
-
-    // Input value'sini olish
-    getInputValueAction(key, value, order) {
-      this.$set(this.allLookUpAndInputValues, key, value)
-
-      // brutto action
-      if (key === 'brutto') this.bruttoInputAction(value)
-    },
-
-    // Input value'sini olish
-    getCheckBoxValueAction(key, value) {
-      this.$set(this.allLookUpAndInputValues, key, value)
-    },
-
-    // Date Input value'sini olish
-    getInputDateValueAction(key, value, order) {
-      this.$set(this.allLookUpAndInputValues, key, value)
-    },
-
-    // Stavka Stage change qilinganda ishlaydi
-    stavkaStageIdChange(value) {
-      this.isLoading = !this.isLoading
-      const body = {
-        batchNumber: this.allLookUpAndInputValues?.batch || 0,
-        stavkaId: this.allLookUpAndInputValues?.iplikStavka,
-        stavkaStageId: value,
-        year:
-          this.allLookUpAndInputValues?.startDate?.split('-')[0] ||
-          new Date().getFullYear(),
-      }
-      this.$axios
-        .post(`/invoices/prepareByYearAndBatchNumber`, body)
-        .then((res) => {
-          this.isLoading = !this.isLoading
-          this.stavkaStageFirstData = {
-            ...this.stavkaStageFirstData,
-            ...res.data,
-          }
-          // function
-          this.changePackageQty(res.data)
-          // Brutto input'ga focus qaratish
-          document.querySelector('.focusInput').focus()
-          // qo'shimcha buttun'larni qo'shish
-          this.boxAllData.splice(26, 0, ...this.boxAdditionalData)
-        })
-        .catch(() => {
-          this.isLoading = !this.isLoading
-        })
-    },
-
-    // Stavka Stage change qilinganda "invoice_id" borligini tekshirib action bajaradi
-    changePackageQty(propObj) {
-      if (propObj.invoice_id) {
-        this.isLoading = !this.isLoading
-        this.$axios
-          .post(`/invoices/changePackageQty`, {
-            stavkaStageId: propObj?.stavkaStageId,
-          })
-          .then((res) => {
-            this.isLoading = !this.isLoading
-            this.stavkaStageSecondData = JSON.parse(res.data?.resultJson)
-            // function
-            this.secondDataFindValue(this.stavkaStageSecondData)
-          })
-          .catch(() => {
-            this.isLoading = !this.isLoading
-          })
-      }
-    },
-
-    secondDataFindValue(propSecondData) {
-      const obj = propSecondData.find((obj) => obj.personName && obj)
-      this.stavkaStageFirstData = { ...this.stavkaStageFirstData, ...obj }
-      // function
-      this.bruttoInputAction(this.allLookUpAndInputValues?.brutto || 0)
-    },
-
-    // Packaging change Action
-    packagingInfoRequestAction(selectedID) {
-      this.$axios
-        .post(`/packaging/findPackagingInfoUrl`, {
-          id: selectedID,
-        })
-        .then((res) => {
-          this.stavkaStageFirstData = {
-            ...this.stavkaStageFirstData,
-            ...res?.data,
-          }
-          this.stavkaStageFirstData.packagingTwo = 20
-          // function
-          this.bruttoInputAction(this.allLookUpAndInputValues?.brutto || 0)
-        })
-    },
-
-    // Brutto Calculation Action
-    bruttoInputAction(value) {
-      const sum = this.stavkaStageFirstData?.sum
-        ? parseFloat(this.stavkaStageFirstData?.sum)
-        : 0
-      const sumOnce = this.stavkaStageFirstData?.sumOnce
-        ? parseFloat(this.stavkaStageFirstData?.sumOnce)
-        : 0
-      const packagingTwo = this.stavkaStageFirstData.packagingTwo
-        ? parseFloat(this.stavkaStageFirstData.packagingTwo)
-        : 0
-      const tara =
-        this.allLookUpAndInputValues?.tara ||
-        this.stavkaStageFirstData?.taraName
-          ? parseFloat(
-              this.allLookUpAndInputValues?.tara ||
-                this.stavkaStageFirstData?.taraName
-            )
-          : 0
-      const summary = sum * packagingTwo + tara + sumOnce
-
-      this.$set(
-        this.stavkaStageFirstData,
-        'bruttoTwo',
-        parseFloat(value || 0) - summary?.toFixed(2)
-      )
-
-      // Sub Total Tara set val
-      this.$set(this.stavkaStageFirstData, 'subTotalTara', summary?.toFixed(2))
-    },
-
-    // Brutto Enter event action
-    getEnterAction(value) {
-      if (value) {
-        const [day, month, year, time] = this.allLookUpAndInputValues?.startDate
-          ? this.allLookUpAndInputValues?.startDate.split(/[-/T]+/)
-          : new Date()
-              .toISOString()
-              .split('.')[0]
-              .split(/[-/T]+/)
-        const formattedDateStr = `${year}/${month}/${day} ${time}`
-
-        const body = {
-          autoPrintToPDF: this.allLookUpAndInputValues?.autoPrint || false,
-          batchStr: this.stavkaStageFirstData?.batch || '',
-          colorId: this.stavkaStageFirstData?.colorId || '',
-          dateTo: formattedDateStr,
-          defectStillage: this.allLookUpAndInputValues?.defectStillage || '',
-          description: this.stavkaStageFirstData?.invoiceDescription || '',
-          employeeId: this.stavkaStageFirstData?.personId || '',
-          equipmentId: this.stavkaStageFirstData?.equipmentId || '',
-          gradeStillage: this.allLookUpAndInputValues?.gradeStillage || '',
-          invoiceId: this.stavkaStageFirstData?.invoice_id || '',
-          lot: this.stavkaStageFirstData?.itemLot || '',
-          packagingId: this.stavkaStageFirstData?.packagingId || '',
-          productBarcode: value || '',
-          qty: this.stavkaStageFirstData?.bruttoTwo || '',
-          qty2: value || '',
-          sequence: this.stavkaStageSecondData.length || '',
-          stavkaPlanId: this.stavkaStageFirstData?.stavkaPlanId || '',
-          stavkaStageId: this.stavkaStageFirstData?.stavkaStageId || '',
-          stillage: this.allLookUpAndInputValues?.stillage || '',
-          taraId: this.stavkaStageFirstData?.taraId || '',
-          warehouseId: this.stavkaStageFirstData?.warehouseId || '',
-        }
-        this.$axios.post(`/invoices/readSaveByPackage`, body).then((res) => {
-          this.stavkaStageSecondData = JSON.parse(res.data?.itemBarcodes)
-        })
-      }
-    },
-
-    // All data draw UI
-    drawUIDataAction(newVal) {
-      function chunkArray(array, chunkSize) {
-        if (array.length) {
-          return array?.reduce((result, item, index) => {
-            item.index = index + 1
-            const chunkIndex = Math.floor(index / chunkSize)
-            if (!result[chunkIndex]) {
-              result[chunkIndex] = [] // yangi group array yaratish
-            }
-            result[chunkIndex].push({
-              realQty: `${item?.realQty}`,
-              id: `${item?.id}`,
-              index: `${item?.index}`,
-              qty: `${item?.qty}`,
-              qty2: `${item?.qty2}`,
-            })
-            return result
-          }, [])
-        }
-      }
-      this.drawUIData = chunkArray(newVal, this.allLookUpAndInputValues.rows)
-
-      // Qty av Qty2 summasini hisoblash
-      this.drawUIData.forEach((arr, index) => {
-        let summQty = 0
-        let summQty2 = 0
-        arr.forEach((obj) => {
-          summQty += parseFloat(obj?.qty)
-          summQty2 += parseFloat(obj?.qty2)
-        })
-        this.drawGropTotalQty[index] = summQty?.toFixed(2)
-        this.drawGropTotalQty2[index] = summQty2?.toFixed(2)
-      })
-    },
-
-    // All Buttun action
-    clickedBtnAction(propName) {
-      if (
-        this.allLookUpAndInputValues?.stavkaStage &&
-        this.stavkaStageFirstData.itemLot
-      ) {
-        if (propName === 'printB') {
-          alert('Not action')
-        } else if (propName === 'print') {
-          alert('Not action')
-        } else if (propName === 'controlOne') {
-          localStorage.setItem(
-            'allTrueAndFalseData',
-            JSON.stringify({
-              packageValue: propName,
-              stavkaStageId: this.allLookUpAndInputValues?.stavkaStage,
-            })
-          )
-          window.open('/openControlPageNew.htm', '_blank')
-        } else if (propName === 'controlTwo') {
-          localStorage.setItem(
-            'allTrueAndFalseData',
-            JSON.stringify({
-              packageValue: propName,
-              lot: this.stavkaStageFirstData.itemLot,
-            })
-          )
-          window.open('/openControlPageNew.htm', '_blank')
-        }
-      }
+      this.boxAllData = data
+      this.boxAdditionalData = twoData
     },
   },
 }

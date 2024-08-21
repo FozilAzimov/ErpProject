@@ -61,7 +61,9 @@
       </div>
 
       <!-- LIST UI -->
-      <template v-if="dyeingWorkType === 'uzerp'">
+      <template
+        v-if="dyeingWorkType === 'uzerp' || dyeingWorkType === 'single'"
+      >
         <div
           class="border-[1px] border-solid border-[rgba(0,0,0,0.1)]"
           :class="
@@ -238,7 +240,7 @@
       </template>
 
       <!-- SIMPLE LIST UI -->
-      <template v-if="dyeingWorkType === 'simple'">
+      <template v-else-if="dyeingWorkType === 'simple'">
         <div
           class="border-[1px] border-solid border-[rgba(0,0,0,0.1)]"
           :class="

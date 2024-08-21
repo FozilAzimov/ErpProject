@@ -853,6 +853,7 @@
             :height="450"
             :default-values="productValues"
             :filtering-modal-payload-data="filterModalProductPayloadData"
+            delete-url-row="prepareCreateEditSalesReturn"
             class="bg-[rgba(255,255,255,0.5)] mt-1"
             @rowValues="getRowElements"
             @getNewList="getList"

@@ -158,11 +158,11 @@
         class="border-[1px] border-solid border-[rgba(0,0,0,0.1)]"
         :class="
           isOpenTable
-            ? 'duration-[1s] h-[700px] overflow-hidden'
+            ? 'duration-[1s] h-[750px] overflow-hidden'
             : 'duration-[1s] h-0 overflow-hidden'
         "
       >
-        <div class="flex items-center p-3">
+        <div class="flex items-center gap-2 m-2">
           <generic-button
             name="Internal Invoice"
             type="primary"

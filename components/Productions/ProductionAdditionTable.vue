@@ -47,13 +47,13 @@
                 <generic-input-date-page type="datetime-local" />
               </template>
               <template v-else-if="element?.type === 'select'">
-                <generic-look-up dwidth="150" />
+                <generic-look-up :dwidth="element?.width" />
               </template>
               <template v-else-if="element?.type === 'text'">
-                <generic-input width="150" type="text" />
+                <generic-input :width="element?.width" type="text" />
               </template>
               <template v-else-if="element?.type === 'textarea'">
-                <generic-input width="150" type="textarea" />
+                <generic-input :width="element?.width" type="textarea" />
               </template>
               <template v-else-if="element?.type === 'checkbox'">
                 <generic-check-box />

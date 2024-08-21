@@ -22,7 +22,12 @@
         class="border-[1px] border-solid border-[rgba(0,0,0,0.05)] p-[12px] bg-gradient-to-b from-transparent via-transparent to-gray-200 shadow-md flex items-center justify-between mt-1"
       >
         <div class="flex items-center gap-[10px]">
-          <img src="@assets/icons/user-black.png" alt="user" class="w-[14px]" />
+          <generic-button
+            name="Go Back"
+            type="primary"
+            icon-name-attribute="arrow-left"
+            @click="$router.push('/batches.htm')"
+          />
           <h1 class="font-bold text-[rgb(49,126,172)] text-[14px] uppercase">
             {{ isNaN(pageID) ? 'Add' : 'Edit' }} Batch
           </h1>
@@ -98,12 +103,6 @@
           />
         </div>
         <div class="flex flex-col items-start m-2 gap-2">
-          <generic-button
-            name="Go Back"
-            type="primary"
-            icon-name-attribute="arrow-left"
-            @click="$router.push('/batches.htm')"
-          />
           <table class="w-full text-[13px]">
             <tbody>
               <tr

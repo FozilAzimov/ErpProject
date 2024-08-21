@@ -1,10 +1,10 @@
 <template>
-  <PurchaseInvoisePage />
+  <purchase-invoice />
 </template>
 
 <script>
-import PurchaseInvoisePage from '@components/Invoices/PurchaseInvoisePage.vue'
+import PurchaseInvoice from '@components/Invoices/PurchaseInvoice.vue'
 export default {
-  components: { PurchaseInvoisePage },
+  components: { PurchaseInvoice },
 }
 </script>

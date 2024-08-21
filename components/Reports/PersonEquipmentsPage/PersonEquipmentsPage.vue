@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full p-[0px_10px_4px_4px]">
+  <div class="w-full p-[0px_12px_0px_10px]">
     <LoadingPage
       v-if="isLoading"
       class="absolute left-[50%] top-[8px] translate-x-[-50%]"
@@ -7,26 +7,25 @@
     <transition name="fade">
       <ColumnConfigPage
         v-show="checkModal"
-        :right="tableHead"
-        :left="leftMap"
-        :url="actionUrl"
+        api="saveColumnConfig"
+        class="z-[10000]"
         @checkModal="handleValue"
       />
     </transition>
     <template v-if="isCloseTable">
       <div
-        class="border-[1px] border-solid border-[rgba(0,0,0,0.05)] p-[12px] bg-gradient-to-b from-transparent via-transparent to-gray-200 shadow-md flex items-center justify-between"
+        class="border-[1px] border-solid border-[rgba(0,0,0,0.05)] p-[12px] bg-gradient-to-b from-transparent via-transparent to-gray-200 shadow-md flex items-center justify-between mt-1"
       >
         <div class="flex items-center gap-[10px]">
           <img src="@assets/icons/user-black.png" alt="user" class="w-[14px]" />
           <h1 class="font-bold text-[rgb(49,126,172)] text-[14px] uppercase">
-            Person Equipment SewList
+            Person Equipment Sew List
           </h1>
         </div>
         <div>
           <ul class="flex items-center gap-4">
             <li
-              class="p-[7px] rounded-[50%] cursor-pointer border-[1px] border-solid border-[rgba(0,0,0,0.1] hover:border-[#3b89e9] duration-[0.4s]"
+              class="p-[7px] rounded-[50%] cursor-pointer border-[1px] border-[solid] border-[rgba(0,0,0,0.1] hover:border-[#3b89e9] duration-[0.4s]"
               :style="{
                 background: 'radial-gradient(#fff, rgba(32,111,162,0.2))',
               }"
@@ -35,7 +34,7 @@
               <img class="w-[11px]" src="@assets/icons/gear.png" alt="gear" />
             </li>
             <li
-              class="p-[7px] rounded-[50%] cursor-pointer border-[1px] border-solid border-[rgba(0,0,0,0.1] hover:border-[#3b89e9] focus:border-[#3b89e9] duration-[0.4s]"
+              class="p-[7px] rounded-[50%] cursor-pointer border-[1px] border-[solid] border-[rgba(0,0,0,0.1] hover:border-[#3b89e9] focus:border-[#3b89e9] duration-[0.4s]"
               :style="{
                 background: 'radial-gradient(#fff, rgba(32,111,162,0.2))',
               }"
@@ -53,7 +52,7 @@
               />
             </li>
             <li
-              class="p-[7px] rounded-[50%] cursor-pointer border-[1px] border-solid border-[rgba(0,0,0,0.1] hover:border-[#3b89e9] focus:border-[#3b89e9] duration-[0.4s]"
+              class="p-[7px] rounded-[50%] cursor-pointer border-[1px] border-[solid] border-[rgba(0,0,0,0.1] hover:border-[#3b89e9] focus:border-[#3b89e9] duration-[0.4s]"
               :style="{
                 background: 'radial-gradient(#fff, rgba(32,111,162,0.2))',
               }"
@@ -72,23 +71,18 @@
         class="border-[1px] border-solid border-[rgba(0,0,0,0.1)]"
         :class="
           isOpenTable
-            ? 'duration-[1s] h-[700px] overflow-hidden'
+            ? 'duration-[1s] h-[755px] overflow-hidden'
             : 'duration-[1s] h-0 overflow-hidden'
         "
       >
-        <div class="flex items-center gap-2 m-[8px]">
-          <GenericButton
-            name="Add New"
-            pl="10"
-            pt="3"
-            pr="10"
-            pb="3"
-            bg="rgba(54, 155, 215, 0.8)"
-            textsize="15"
-            @click="$router.push('/prepareSalesReturnNew.htm')"
-          />
-        </div>
-        <div class="mt-3 p-2">
+        <generic-button
+          name="Add New"
+          type="primary"
+          :margin="true"
+          icon-name-attribute="circle-plus-outline"
+          @click="$router.push('/preparePersonEquipmentSew.htm')"
+        />
+        <div class="p-2">
           <div class="flex items-center justify-between mb-1">
             <div class="text-[14px]">
               <select
@@ -108,39 +102,16 @@
               <GenericInput
                 v-model="keywordValue"
                 width="200"
-                height="30"
-                pl="10"
-                pr="10"
-                pt="2"
-                pb="2"
-                textsize="13"
                 type="text"
                 placeholder="Search..."
-                @change="getTableRequest"
+                @enter="getTableRequest"
                 @input="getInputValue"
               />
               <GenericButton
                 name="Search"
-                pl="10"
-                pt="4"
-                pr="10"
-                pb="4"
-                bg="rgba(54, 155, 215, 0.8)"
-                textsize="14"
-                :url="imgUrl.search"
-                :istherepicture="true"
+                type="primary"
+                icon-name-attribute="search"
                 @click="getTableRequest"
-              />
-              <GenericButton
-                name="Print Preview"
-                pl="10"
-                pt="4"
-                pr="10"
-                pb="4"
-                bg="rgb(126,183,62)"
-                textsize="14"
-                :url="imgUrl.printer"
-                :istherepicture="true"
               />
             </div>
           </div>
@@ -149,6 +120,11 @@
             :tablebody="tableBody"
             :tableheadlength="tableHeadLength"
             :istherebody="isThereBody"
+            open-url="preparePersonEquipmentSew"
+            :productions-action-buttons="true"
+            delete-row-url="batchProcess/prepareBatchProcessDelete"
+            height="600"
+            @pageEmitAction="getTableRequest"
           />
         </div>
       </div>
@@ -158,7 +134,7 @@
 
 <script>
 import LoadingPage from '@components/Loading/LoadingPage.vue'
-import GenericButton from '@components/Button/GenericButton.vue'
+import GenericButton from '@generics/GenericButton.vue'
 import GenericInput from '@generics/GenericInput.vue'
 import ColumnConfigPage from '@components/ColumnConfig/ColumnConfigPage.vue'
 import GenericTablePage from '@components/GenericTable/GenericTablePage.vue'
@@ -170,28 +146,52 @@ export default {
     ColumnConfigPage,
     GenericTablePage,
   },
+
+  // DATA
   data() {
     return {
       isLoading: false,
-      pageSize_value: 10,
+      pageSize_value: 25,
+      btnType: '',
+      pageID: null,
       keywordValue: '',
-      users: [],
-      tableData: [],
-      tableHead: {},
+      tableHead: {
+        id: { name: 'Id', code: 'id' },
+        name: {
+          name: 'Batch Process Name',
+          code: 'name',
+        },
+        status: {
+          name: 'Status',
+          code: 'status',
+        },
+      },
       tableBody: [],
       tableHeadLength: null,
       isThereBody: false,
-      tableId: [],
-      selectData: {},
-      formData: new Map(),
       checkModal: false,
-      actionUrl: '',
-      leftMap: {},
       isOpenTable: true,
       isCloseTable: true,
     }
   },
+
+  // WATCH
+  watch: {
+    pageID(newVal) {
+      this.btnTypeSpecifyingAction()
+    },
+  },
+
+  // CREATED
+  created() {
+    this.btnType = JSON.parse(localStorage.getItem('allTrueAndFalseData'))?.type
+    // page ID sini olish
+    this.pageID = this.$route.params?.id
+  },
+
+  // MOUNTED
   mounted() {
+    this.tableHeadLength = Object.keys(this.tableHead).length + 1
     // Table function
     this.getTableRequest()
   },
@@ -204,46 +204,28 @@ export default {
     openColumnConfig() {
       this.checkModal = true
     },
+
     getTableRequest() {
       this.isLoading = !this.isLoading
       this.$axios
-        .post(
-          `https://192.168.1.55:8443/api/invoice/salesReturnList`,
-          {
-            current_page: 1,
-            page_size: this.pageSize_value,
-            searchForm: {
-              keyword: this.keywordValue,
-              from_date: new Date(Object.fromEntries(this.formData).from)
-                .toLocaleString('en-GB')
-                .split(',')
-                .join(''),
-              to_date: new Date(Object.fromEntries(this.formData).to)
-                .toLocaleString('en-GB')
-                .split(',')
-                .join(''),
-            },
-            billStatus: Object.fromEntries(this.formData).bill,
-            payStatus: Object.fromEntries(this.formData).pay,
-            invoiceOnWayStatus: Object.fromEntries(this.formData).invoice,
-            departmentId: Object.fromEntries(this.formData).departments,
-            warehouseId: Object.fromEntries(this.formData).warehouse,
+        .post(`/batchProcess/batchProcessAjaxLoad`, {
+          searchForm: {
+            keyword: this.keywordValue,
           },
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem('token')}`,
-            },
-          }
-        )
-        .then((res) => {
-          this.tableBody = []
+          pagingForm: {
+            pageSize: this.pageSize_value,
+            currentPage: 1,
+            pageCount: 14,
+            total: 328,
+          },
+        })
+        .then(({ data: { batchProcessList } }) => {
           this.isLoading = !this.isLoading
-          this.tableHead = res.data.rightMap
-          this.leftMap = res.data.leftMap
-          this.actionUrl = res.data.actionUrl
-          this.tableData = res.data.invoiceList
-          this.selectData = res.data.invoiceSearchDTO
-          this.getTableBody()
+          this.tableBody = batchProcessList
+
+          this.tableBody.length
+            ? (this.isThereBody = true)
+            : (this.isThereBody = false)
         })
         .catch((error) => {
           this.isLoading = !this.isLoading
@@ -252,63 +234,11 @@ export default {
         })
     },
 
-    // Generic Table function Start
-    getTableBody() {
-      const arr = new Set()
-      for (const obj of this.tableData) {
-        arr.add(obj.id)
-        const data = new Map()
-        for (const key in this.tableHead) {
-          const value = this.tableHead[key].code
-          if (this.tableHead[key].code in obj) {
-            if (obj[value]) {
-              if (typeof obj[value] === 'object')
-                data.set(value, obj[value].value)
-              else data.set(value, obj[value])
-            } else data.set(value, '-')
-          } else data.set(value, false)
-        }
-        this.tableBody.push(Object.fromEntries(data))
+    // Specifying the buttun type action
+    btnTypeSpecifyingAction() {
+      if (!this.pageID) {
+        localStorage.removeItem('allTrueAndFalseData')
       }
-      this.tableHeadLength = Object.entries(this.tableHead).length
-      this.tableBody.length > 0
-        ? (this.isThereBody = true)
-        : (this.isThereBody = false)
-      this.tableId = Array.from(arr)
-    },
-    // Generic Table function End
-
-    // Table Action Open button
-    getTableRowOpen(thisId) {
-      this.isLoading = !this.isLoading
-      this.$axios
-        .post(
-          `https://192.168.1.55:8443/api/invoice/preparePurchaseInvoice`,
-          {
-            current_page: 1,
-            page_size: this.pageSize_value,
-            searchForm: { keyword: this.keywordValue || '', id: thisId },
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem('token')}`,
-            },
-          }
-        )
-        .then((res) => {
-          this.isLoading = !this.isLoading
-          this.$router.push('/preparePurchaseInvoiceNew.htm')
-        })
-        .catch((error) => {
-          this.isLoading = !this.isLoading
-          // eslint-disable-next-line no-console
-          console.log(error)
-        })
-    },
-
-    // Generic_Select value
-    getSelectValue(value, id) {
-      this.formData.set(id, value)
     },
 
     // Generic_Input value

@@ -1,10 +1,12 @@
 <template>
-  <BranchesPage />
+  <calculation-by-color-variant-recipe />
 </template>
 
 <script>
-import BranchesPage from '@components/Branches/BranchesPage.vue'
+import CalculationByColorVariantRecipe from '@components/Orders/CalculationByColorVariantRecipe.vue'
 export default {
-  components: { BranchesPage },
+  components: { CalculationByColorVariantRecipe },
 }
 </script>
+
+<style></style>
