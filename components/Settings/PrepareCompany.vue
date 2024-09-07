@@ -20,9 +20,9 @@
           <img src="@assets/icons/user-black.png" alt="user" class="w-[14px]" />
           <h1 class="font-bold text-[rgb(49,126,172)] text-[14px] uppercase">
             {{
-              btnType === 'view'
+              pageType === 'view'
                 ? 'View Company'
-                : btnType === 'edit'
+                : pageType === 'edit'
                 ? 'Edit Company'
                 : 'Add Company'
             }}
@@ -168,14 +168,14 @@
               name="Go Back"
               type="primary"
               icon-name-attribute="arrow-left"
-              @click="goBackAction"
+              @click="$router.push('/companies.htm')"
             />
             <generic-button
-              v-if="btnType !== 'view'"
-              :name="btnType === 'edit' ? 'Save changes' : 'Save'"
-              :type="btnType === 'edit' ? 'success' : 'primary'"
-              :icon-name-attribute="btnType && 'edit'"
-              @click="saveAction(btnType)"
+              v-if="pageType !== 'view'"
+              :name="pageType === 'edit' ? 'Save changes' : 'Save'"
+              :type="pageType === 'edit' ? 'success' : 'primary'"
+              :icon-name-attribute="pageType && 'edit'"
+              @click="saveAction"
             />
           </div>
         </div>
@@ -207,7 +207,7 @@ export default {
       checkModal: false,
       isOpenTable: true,
       isCloseTable: true,
-      btnType: '',
+      pageType: null,
       pageID: null,
       editData: {},
       allInputAndLookUpValue: {},
@@ -219,9 +219,6 @@ export default {
 
   // WATCH
   watch: {
-    pageID(newVal) {
-      this.btnTypeSpecifyingAction()
-    },
     radio(newVal) {
       if (newVal === 'enabled') this.allInputAndLookUpValue.active = true
       else if (newVal === 'disabled') this.allInputAndLookUpValue.active = false
@@ -231,16 +228,16 @@ export default {
 
   // CREATED
   created() {
-    this.btnType = JSON.parse(localStorage.getItem('allTrueAndFalseData'))?.type
     // page ID sini olish
     this.pageID = this.$route.params?.id
+    // page TYPE ni aniqlash
+    this.pageType = this.$route?.query?.page_type
   },
 
   // MOUNTED
   mounted() {
     // function
     this.dataCreatedAction()
-
     // Table function
     this.getTableRequest()
   },
@@ -261,19 +258,6 @@ export default {
       this.isCloseTable = !this.isCloseTable
     },
 
-    // go back action
-    goBackAction() {
-      localStorage.removeItem('allTrueAndFalseData')
-      this.$router.push('/companies.htm')
-    },
-
-    // Specifying the buttun type action
-    btnTypeSpecifyingAction() {
-      if (!this.pageID) {
-        localStorage.removeItem('allTrueAndFalseData')
-      }
-    },
-
     // Data created
     dataCreatedAction() {
       const data = [
@@ -282,49 +266,49 @@ export default {
           subName: 'name',
           type: 'text',
           show: true,
-          disabled: this.btnType === 'view',
+          disabled: this.pageType === 'view',
         },
         {
           name: 'Code',
           subName: 'code',
           type: 'text',
           show: true,
-          disabled: this.btnType === 'view',
+          disabled: this.pageType === 'view',
         },
         {
           name: 'Currency',
           subName: 'currency',
           type: 'select',
-          show: this.btnType === 'edit',
-          disabled: this.btnType === 'view',
+          show: this.pageType === 'edit',
+          disabled: this.pageType === 'view',
         },
         {
           name: 'Price',
           subName: 'price',
           type: 'number',
-          show: this.btnType === 'edit',
-          disabled: this.btnType === 'view',
+          show: this.pageType === 'edit',
+          disabled: this.pageType === 'view',
         },
         {
           name: 'Save name',
           subName: 'savename',
           type: 'checkbox',
           show: true,
-          disabled: this.btnType === 'view',
+          disabled: this.pageType === 'view',
         },
         {
           name: 'Status',
           subName: 'enabled',
           type: 'radio',
           show: true,
-          disabled: this.btnType === 'view',
+          disabled: this.pageType === 'view',
         },
         {
           name: 'Status',
           subName: 'disabled',
           type: 'radio',
           show: true,
-          disabled: this.btnType === 'view',
+          disabled: this.pageType === 'view',
         },
       ]
       this.elementData = data
@@ -332,7 +316,7 @@ export default {
 
     // Page request
     getTableRequest() {
-      if (this.btnType === 'view') {
+      if (this.pageType === 'view') {
         this.isLoading = !this.isLoading
         this.$axios
           .post(`/batchProcess/prepareBatchProcessViewAjaxLoad`, {
@@ -349,7 +333,7 @@ export default {
             // eslint-disable-next-line no-console
             console.log(error)
           })
-      } else if (this.btnType === 'edit') {
+      } else if (this.pageType === 'edit') {
         this.isLoading = !this.isLoading
         this.$axios
           .post(`/batchProcess/prepareBatchProcessAjaxLoad`, {
@@ -382,7 +366,7 @@ export default {
     saveAction() {
       let body = {}
       let batchProcess = {}
-      if (this.pageID && this.btnType === 'edit') {
+      if (this.pageID && this.pageType === 'edit') {
         batchProcess = {
           id: this.pageID,
           name: this.allInputAndLookUpValue?.name || this.editData.name || '',

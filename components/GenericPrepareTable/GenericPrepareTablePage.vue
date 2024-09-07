@@ -550,7 +550,7 @@ export default {
       type: Boolean,
       default: true,
     },
-    isedit: {
+    isEdit: {
       type: Boolean,
       default: false,
     },
@@ -591,7 +591,7 @@ export default {
       whichTableName: '',
       ResData: [],
       twoResData: [],
-      isCanAdd: this.isedit,
+      isCanAdd: this.isEdit,
       combinationThreeInputValues: [],
       parentID: null,
       tableShowHide: false,
@@ -609,7 +609,7 @@ export default {
 
   // WATCH
   watch: {
-    isedit(newVal) {
+    isEdit(newVal) {
       this.isCanAdd = newVal
     },
     uiShowHide(value) {

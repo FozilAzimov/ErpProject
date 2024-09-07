@@ -20,9 +20,9 @@
           <img src="@assets/icons/user-black.png" alt="user" class="w-[14px]" />
           <h1 class="font-bold text-[rgb(49,126,172)] text-[14px] uppercase">
             {{
-              btnType === 'view'
+              pageType === 'view'
                 ? 'VIEW of sew model Operation Name'
-                : btnType === 'edit'
+                : pageType === 'edit'
                 ? 'EDIT of sew model Operation Name'
                 : 'ADD of sew model Operation Name'
             }}
@@ -95,7 +95,7 @@
                   >
                 </span>
                 <generic-input
-                  :value="''"
+                  :value="viewEditData?.[element.subName] || ''"
                   width="300"
                   type="text"
                   :name="element.subName"
@@ -111,16 +111,23 @@
                 <generic-look-up
                   dwidth="300"
                   :name="element.subName"
-                  :defvalue="''"
-                  :options-data="[]"
+                  :defvalue="
+                    viewEditData?.[element.subName] ||
+                    viewEditData?.[element.defValName] ||
+                    ''
+                  "
+                  :options-data="optionsData?.[element?.subName]"
                   :disabled="element.disabled"
                   @customFunction="getInputAndLookUpValueAction"
                 />
               </span>
               <span v-else-if="element.type === 'radio'">
-                <el-radio v-model="radio" :label="element.label">{{
-                  element.name
-                }}</el-radio>
+                <el-radio
+                  v-model="radio"
+                  :label="element.label"
+                  :disabled="element.disabled"
+                  >{{ element.name }}</el-radio
+                >
               </span>
             </template>
           </div>
@@ -130,14 +137,14 @@
               name="Go Back"
               type="primary"
               icon-name-attribute="arrow-left"
-              @click="goBackAction"
+              @click="$router.push('/sewModelOperationName.htm')"
             />
             <generic-button
-              v-if="btnType !== 'view'"
-              :name="btnType === 'edit' ? 'Save changes' : 'Save'"
-              :type="btnType === 'edit' ? 'success' : 'primary'"
-              :icon-name-attribute="btnType && 'edit'"
-              @click="saveAction(btnType)"
+              v-if="pageType !== 'view'"
+              :name="pageType === 'edit' ? 'Save changes' : 'Save'"
+              :type="pageType === 'edit' ? 'success' : 'primary'"
+              :icon-name-attribute="pageType && 'edit'"
+              @click="saveAction"
             />
           </div>
         </div>
@@ -168,21 +175,18 @@ export default {
       checkModal: false,
       isOpenTable: true,
       isCloseTable: true,
-      btnType: '',
+      pageType: null,
       pageID: null,
-      viewData: {},
-      editData: {},
+      viewEditData: {},
       inputAndLookUpValue: {},
       radio: null,
       elementData: [],
+      optionsData: {},
     }
   },
 
   // WATCH
   watch: {
-    pageID(newVal) {
-      this.btnTypeSpecifyingAction()
-    },
     radio(newVal) {
       this.inputAndLookUpValue.entryExit = newVal
     },
@@ -190,9 +194,10 @@ export default {
 
   // CREATED
   created() {
-    this.btnType = JSON.parse(localStorage.getItem('allTrueAndFalseData'))?.type
     // page ID sini olish
     this.pageID = this.$route.params?.id
+    // page TYPE ni aniqlash
+    this.pageType = this.$route?.query?.page_type
   },
 
   // MOUNTED
@@ -219,19 +224,6 @@ export default {
       this.isCloseTable = !this.isCloseTable
     },
 
-    // go back action
-    goBackAction() {
-      localStorage.removeItem('allTrueAndFalseData')
-      this.$router.push('/sewModelOperationName.htm')
-    },
-
-    // Specifying the buttun type action
-    btnTypeSpecifyingAction() {
-      if (!this.pageID) {
-        localStorage.removeItem('allTrueAndFalseData')
-      }
-    },
-
     // Data created
     dataCreatedAction() {
       const data = [
@@ -241,21 +233,23 @@ export default {
           type: 'text',
           required: true,
           show: true,
-          disabled: this.btnType === 'view',
+          disabled: this.pageType === 'view',
         },
         {
           name: 'Warehouse',
           subName: 'warehouse',
+          defValName: 'warehouseName',
           type: 'select',
           required: false,
-          show: this.btnType !== 'view',
+          show: this.pageType !== 'view',
         },
         {
           name: 'Planning type',
           subName: 'planningType',
+          defValName: 'planingTypeName',
           type: 'select',
           required: false,
-          show: this.btnType !== 'view',
+          show: this.pageType !== 'view',
         },
         {
           name: 'Reception',
@@ -264,7 +258,7 @@ export default {
           type: 'radio',
           required: false,
           show: true,
-          disabled: this.btnType === 'view',
+          disabled: this.pageType === 'view',
         },
         {
           name: 'Transfer',
@@ -273,7 +267,7 @@ export default {
           type: 'radio',
           required: false,
           show: true,
-          disabled: this.btnType === 'view',
+          disabled: this.pageType === 'view',
         },
         {
           name: 'Neatural',
@@ -282,7 +276,7 @@ export default {
           type: 'radio',
           required: false,
           show: true,
-          disabled: this.btnType === 'view',
+          disabled: this.pageType === 'view',
         },
         {
           name: 'Quality',
@@ -290,8 +284,8 @@ export default {
           label: 4,
           type: 'radio',
           required: false,
-          show: this.btnType !== 'view',
-          disabled: this.btnType === 'view',
+          show: this.pageType !== 'view',
+          disabled: this.pageType === 'view',
         },
       ]
       this.elementData = data
@@ -299,7 +293,28 @@ export default {
 
     // Page request
     getTableRequest() {
-      if (this.btnType === 'view') {
+      if (this.pageType === 'view') {
+        this.isLoading = !this.isLoading
+        this.$axios
+          .post(
+            `/sewModelOperationName/prepareSewModelOperationNameViewAjaxLoad`,
+            {
+              id: this.pageID,
+              page_current: 1,
+              page_size: 25,
+            }
+          )
+          .then(({ data: { sewModelOperationName } }) => {
+            this.viewEditData = sewModelOperationName
+            this.radio = sewModelOperationName?.entryExit
+            this.isLoading = !this.isLoading
+          })
+          .catch((error) => {
+            this.isLoading = !this.isLoading
+            // eslint-disable-next-line no-console
+            console.log(error)
+          })
+      } else if (this.pageType === 'edit') {
         this.isLoading = !this.isLoading
         this.$axios
           .post(`/sewModelOperationName/prepareSewModelOperationNameAjaxLoad`, {
@@ -307,36 +322,17 @@ export default {
             page_current: 1,
             page_size: 25,
           })
-          .then(({ data: { colorVariantRecipeStageChild } }) => {
-            this.isLoading = !this.isLoading
-            this.viewData = colorVariantRecipeStageChild
-            this.inputAndLookUpValue.name = colorVariantRecipeStageChild?.name
-            this.inputAndLookUpValue.ecode = colorVariantRecipeStageChild?.ecode
-            this.pageID = colorVariantRecipeStageChild?.id
-          })
-          .catch((error) => {
-            this.isLoading = !this.isLoading
-            // eslint-disable-next-line no-console
-            console.log(error)
-          })
-      } else if (this.btnType === 'edit') {
-        this.isLoading = !this.isLoading
-        this.$axios
-          .post(
-            `/colorVariantRecipeStagePicture/prepareColorVariantRecipeStagePictureAjaxLoad`,
-            {
-              id: this.pageID,
-              page_current: 1,
-              page_size: 25,
+          .then(
+            ({
+              data: { sewModelOperationName, planningTypeList, warehouseList },
+            }) => {
+              this.viewEditData = sewModelOperationName
+              this.radio = sewModelOperationName?.entryExit
+              this.optionsData.planningType = planningTypeList
+              this.optionsData.warehouse = warehouseList
+              this.isLoading = !this.isLoading
             }
           )
-          .then(({ data: { colorVariantRecipeStageChild } }) => {
-            this.isLoading = !this.isLoading
-            this.editData = colorVariantRecipeStageChild
-            this.inputAndLookUpValue.name = colorVariantRecipeStageChild?.name
-            this.inputAndLookUpValue.ecode = colorVariantRecipeStageChild?.ecode
-            this.pageID = colorVariantRecipeStageChild?.id
-          })
           .catch((error) => {
             this.isLoading = !this.isLoading
             // eslint-disable-next-line no-console
@@ -350,12 +346,10 @@ export default {
             page_current: 1,
             page_size: 25,
           })
-          .then(({ data: { colorVariantRecipeStageChild } }) => {
+          .then(({ data: { planningTypeList, warehouseList } }) => {
             this.isLoading = !this.isLoading
-            this.viewData = colorVariantRecipeStageChild
-            this.inputAndLookUpValue.name = colorVariantRecipeStageChild?.name
-            this.inputAndLookUpValue.ecode = colorVariantRecipeStageChild?.ecode
-            this.pageID = colorVariantRecipeStageChild?.id
+            this.optionsData.planningType = planningTypeList
+            this.optionsData.warehouse = warehouseList
           })
           .catch((error) => {
             this.isLoading = !this.isLoading
@@ -372,36 +366,49 @@ export default {
 
     // Save Changes action
     saveAction() {
-      if (this.inputAndLookUpValue?.pictureName) {
-        const colorVariantRecipeStagePicture = {}
-        if (this.btnType === 'edit') {
-          colorVariantRecipeStagePicture.id = this.pageID
-          colorVariantRecipeStagePicture.pictureName =
-            this.inputAndLookUpValue?.pictureName
-          colorVariantRecipeStagePicture.active =
-            this.inputAndLookUpValue?.active
+      if (this.inputAndLookUpValue?.name || this.viewEditData?.name) {
+        const sewModelOperationName = {}
+        if (this.pageType === 'edit') {
+          sewModelOperationName.id = this.pageID
+          sewModelOperationName.name =
+            this.inputAndLookUpValue.name || this.viewEditData?.name || ''
+          sewModelOperationName.warehouse = {
+            id:
+              this.inputAndLookUpValue?.warehouse ||
+              this.viewEditData?.warehouseId ||
+              '',
+          }
+          sewModelOperationName.planningType = {
+            id:
+              this.inputAndLookUpValue?.planningType ||
+              this.viewEditData?.planningTypeId ||
+              '',
+          }
         } else {
-          colorVariantRecipeStagePicture.pictureName =
-            this.inputAndLookUpValue?.pictureName
-          colorVariantRecipeStagePicture.active =
-            this.inputAndLookUpValue?.active
+          sewModelOperationName.name = this.inputAndLookUpValue?.name
+          sewModelOperationName.entryExit = this.inputAndLookUpValue?.entryExit
+          sewModelOperationName.warehouse = {
+            id: this.inputAndLookUpValue?.warehouse,
+          }
+          sewModelOperationName.planningType = {
+            id: this.inputAndLookUpValue?.planningType,
+          }
         }
+
         this.isLoading = !this.isLoading
-        this.$axios
-          .post(
-            `/colorVariantRecipeStagePicture/${
-              this.btnType === 'edit'
-                ? 'editColorVariantRecipeStagePicture'
-                : 'addColorVariantRecipeStagePicture'
-            }`,
-            {
-              colorVariantRecipeStagePicture,
-            }
-          )
-          .then(({ status }) => {
+        this.$axios[this.pageType === 'edit' ? 'put' : 'post'](
+          `/sewModelOperationName/${
+            this.pageType === 'edit'
+              ? 'editSewModelOperationName'
+              : 'addSewModelOperationName'
+          }`,
+          {
+            sewModelOperationName,
+          }
+        )
+          .then(() => {
             this.isLoading = !this.isLoading
-            if (status === 200)
-              this.$router.push('/colorVariantRecipeStagePicture.htm')
+            this.$router.push('/sewModelOperationName.htm')
           })
           .catch((error) => {
             this.isLoading = !this.isLoading

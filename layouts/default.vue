@@ -344,6 +344,7 @@ export default {
           this.$message.error(
             'Siz Proyekt dan chiqishda xotolikka uchradingiz.'
           )
+          this.logoutMessage = false
         })
     },
 

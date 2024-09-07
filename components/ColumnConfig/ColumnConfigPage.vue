@@ -3,7 +3,7 @@
   <div class="settings-container">
     <h2>Column config</h2>
     <ul
-      v-if="createedit"
+      v-if="createEdit"
       class="w-[97%] flex items-center justify-between p-2 border border-[#ccc]"
     >
       <li>
@@ -109,7 +109,7 @@ export default {
   // PROPS
   props: {
     checkColumnConfig: Boolean,
-    createedit: {
+    createEdit: {
       type: Boolean,
       default: false,
     },
@@ -247,7 +247,7 @@ export default {
       })
 
       let data = {}
-      if (this.createedit) {
+      if (this.createEdit) {
         data = {
           actionUrl: this.url,
           userColumns: rightItemsName,

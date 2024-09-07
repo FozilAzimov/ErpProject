@@ -20,9 +20,9 @@
           <img src="@assets/icons/user-black.png" alt="user" class="w-[14px]" />
           <h1 class="font-bold text-[rgb(49,126,172)] text-[14px] uppercase">
             {{
-              btnType === 'view'
+              pageType === 'view'
                 ? 'View Packaging'
-                : btnType === 'edit'
+                : pageType === 'edit'
                 ? 'Edit Packaging'
                 : 'Packaging Create'
             }}
@@ -91,7 +91,7 @@
             >
               <span class="text-[13px]">{{ element.name }}</span>
               <generic-input
-                :value="''"
+                :value="editData?.[element?.subName]"
                 width="300"
                 type="text"
                 :name="element.subName"
@@ -105,7 +105,11 @@
             >
               <span class="text-[13px]">{{ element.name }}</span>
               <generic-input
-                :value="''"
+                :value="`${
+                  element?.subName === 'defaultTimeOutMinutes'
+                    ? parseInt(editData?.[element?.subName] / 60)
+                    : editData?.[element?.subName]
+                }`"
                 width="300"
                 type="number"
                 :name="element.subName"
@@ -121,7 +125,7 @@
               <generic-look-up
                 dwidth="300"
                 :name="element.subName"
-                :defvalue="''"
+                :defvalue="editData?.[element?.subName]"
                 :disabled="element.disabled"
                 :options-data="selectData[element?.selectedName]"
                 @customFunction="getInputAndLookUpValueAction"
@@ -134,6 +138,7 @@
               <generic-check-box
                 :text="element.name"
                 :name="element.subName"
+                :default-value="Boolean(editData?.[element?.subName])"
                 :border="true"
                 :disabled="element.disabled"
                 @customFunction="getInputAndLookUpValueAction"
@@ -170,14 +175,14 @@
             name="Go Back"
             type="primary"
             icon-name-attribute="arrow-left"
-            @click="goBackAction"
+            @click="$router.push('/batchProcessStages.htm')"
           />
           <generic-button
-            v-if="btnType !== 'view'"
-            :name="btnType === 'edit' ? 'Save changes' : 'Save'"
-            :type="btnType === 'edit' ? 'success' : 'primary'"
-            :icon-name-attribute="btnType && 'edit'"
-            @click="saveAction(btnType)"
+            v-if="pageType !== 'view'"
+            :name="pageType === 'edit' ? 'Save changes' : 'Save'"
+            :type="pageType === 'edit' ? 'success' : 'primary'"
+            :icon-name-attribute="pageType && 'edit'"
+            @click="saveAction"
           />
         </div>
       </div>
@@ -208,27 +213,20 @@ export default {
       checkModal: false,
       isOpenTable: true,
       isCloseTable: true,
-      btnType: '',
+      pageType: null,
       pageID: null,
       editData: {},
+      saveEditData: {},
       allInputAndLookUpValue: {},
       elementData: [],
       radio: null,
       // all select data
-      selectData: {
-        batchProcessStage: [],
-        currencyList: [],
-        departmentList: [],
-        warehouseList: [],
-      },
+      selectData: {},
     }
   },
 
   // WATCH
   watch: {
-    pageID(newVal) {
-      this.btnTypeSpecifyingAction()
-    },
     radio(newVal) {
       this.allInputAndLookUpValue.active = newVal === 'enabled'
     },
@@ -236,9 +234,10 @@ export default {
 
   // CREATED
   created() {
-    this.btnType = JSON.parse(localStorage.getItem('allTrueAndFalseData'))?.type
     // page ID sini olish
     this.pageID = this.$route.params?.id
+    // page TYPE ni aniqlash
+    this.pageType = this.$route?.query?.page_type
   },
 
   // MOUNTED
@@ -247,7 +246,6 @@ export default {
     this.radio = 'enabled'
     // function
     this.dataCreatedAction()
-
     // Table function
     this.getTableRequest()
   },
@@ -268,19 +266,6 @@ export default {
       this.isCloseTable = !this.isCloseTable
     },
 
-    // go back action
-    goBackAction() {
-      localStorage.removeItem('allTrueAndFalseData')
-      this.$router.push('/batchProcessStages.htm')
-    },
-
-    // Specifying the buttun type action
-    btnTypeSpecifyingAction() {
-      if (!this.pageID) {
-        localStorage.removeItem('allTrueAndFalseData')
-      }
-    },
-
     // Data created
     dataCreatedAction() {
       const data = [
@@ -288,125 +273,125 @@ export default {
           name: 'Batch Process Stage Name',
           subName: 'name',
           type: 'text',
-          disabled: this.btnType === 'view',
+          disabled: this.pageType === 'view',
         },
         {
           name: 'Department',
           subName: 'departmentId',
           selectedName: 'departmentList',
           type: 'select',
-          disabled: this.btnType === 'view',
+          disabled: this.pageType === 'view',
         },
         {
           name: 'Warehouse',
           subName: 'warehouseId',
           selectedName: 'warehouseList',
           type: 'select',
-          disabled: this.btnType === 'view',
+          disabled: this.pageType === 'view',
         },
         {
           name: 'Currency',
           subName: 'currencyId',
           selectedName: 'currencyList',
           type: 'select',
-          disabled: this.btnType === 'view',
+          disabled: this.pageType === 'view',
         },
         {
           name: 'Process Status',
           subName: 'processStatusId',
-          selectedName: 'batchProcessStage',
+          selectedName: 'processStageList',
           type: 'select',
-          disabled: this.btnType === 'view',
+          disabled: this.pageType === 'view',
         },
         {
           name: 'Check Previous Stage End Status',
           subName: 'checkPreviousStageEndStatus',
           type: 'checkbox',
-          disabled: this.btnType === 'view',
+          disabled: this.pageType === 'view',
         },
         {
           name: 'Use Equipment',
           subName: 'useEquipment',
           type: 'checkbox',
-          disabled: this.btnType === 'view',
+          disabled: this.pageType === 'view',
         },
         {
           name: 'Auto Start Stop Before',
           subName: 'autoStartStopBefore',
           type: 'checkbox',
-          disabled: this.btnType === 'view',
+          disabled: this.pageType === 'view',
         },
         {
           name: 'create Expense Entry Or Exite Status',
           subName: 'createExpenseEntryOrExiteStatus',
           type: 'checkbox',
-          disabled: this.btnType === 'view',
+          disabled: this.pageType === 'view',
         },
         {
           name: 'WasteCalcType',
-          subName: 'wasteCalcType',
+          subName: 'calcWaste',
           type: 'checkbox',
-          disabled: this.btnType === 'view',
+          disabled: this.pageType === 'view',
         },
         {
           name: 'Waste%',
           subName: 'waste',
           type: 'number',
-          disabled: this.btnType === 'view',
+          disabled: this.pageType === 'view',
         },
         {
           name: 'Price',
           subName: 'price',
           type: 'number',
-          disabled: this.btnType === 'view',
+          disabled: this.pageType === 'view',
         },
         {
           name: 'only Once In Color Variant',
           subName: 'onlyOnceInColorVariant',
           type: 'checkbox',
-          disabled: this.btnType === 'view',
+          disabled: this.pageType === 'view',
         },
         {
           name: 'auto Save',
           subName: 'autoSave',
           type: 'checkbox',
-          disabled: this.btnType === 'view',
+          disabled: this.pageType === 'view',
         },
         {
           name: 'Information about the party',
           subName: 'saleInfoParam',
           type: 'checkbox',
-          disabled: this.btnType === 'view',
+          disabled: this.pageType === 'view',
         },
         {
           name: 'Ratio',
           subName: 'ratio',
           type: 'number',
-          disabled: this.btnType === 'view',
+          disabled: this.pageType === 'view',
         },
         {
           name: 'DefaultElapsedMinutes',
-          subName: 'defaultElapsedMinutes',
+          subName: 'defaultTimeOutMinutes',
           type: 'number',
-          disabled: this.btnType === 'view',
+          disabled: this.pageType === 'view',
         },
         {
           name: 'SortOrder',
           subName: 'report_sort',
           type: 'number',
-          disabled: this.btnType === 'view',
+          disabled: this.pageType === 'view',
         },
         {
           name: 'EntryExitLogic',
           subName: 'entryExitLogic',
           type: 'number',
-          disabled: this.btnType === 'view',
+          disabled: this.pageType === 'view',
         },
         {
           name: 'Status',
           subName: 'status',
           type: 'radio',
-          disabled: this.btnType === 'view',
+          disabled: this.pageType === 'view',
         },
       ]
       this.elementData = data
@@ -414,7 +399,7 @@ export default {
 
     // Page request
     getTableRequest() {
-      if (this.pageID && this.btnType === 'view') {
+      if (this.pageID && this.pageType === 'view') {
         this.isLoading = !this.isLoading
         this.$axios
           .post(`/batchProcessStage/prepareBatchProcessStageViewAjaxLoad`, {
@@ -430,7 +415,7 @@ export default {
             // eslint-disable-next-line no-console
             console.log(error)
           })
-      } else if (this.pageID && this.btnType === 'edit') {
+      } else if (this.pageID && this.pageType === 'edit') {
         this.isLoading = !this.isLoading
         this.$axios
           .post(`/batchProcessStage/prepareBatchProcessStageAjaxLoad`, {
@@ -438,9 +423,34 @@ export default {
             page_current: 1,
             page_size: 25,
           })
-          .then(({ data: { designJson } }) => {
-            this.isLoading = !this.isLoading
-          })
+          .then(
+            ({
+              data: {
+                batchProcessStage,
+                processStageList,
+                currencyList,
+                departmentList,
+                warehouseList,
+              },
+            }) => {
+              this.saveEditData = batchProcessStage
+              this.editData = structuredClone(this.saveEditData)
+              this.editData.departmentId = batchProcessStage?.departmentName
+              this.editData.warehouseId = batchProcessStage?.warehouseName
+              this.editData.currencyId = batchProcessStage?.currencyName
+              this.editData.processStatusId =
+                batchProcessStage?.processStatusStr
+
+              this.selectData.processStageList = processStageList
+              this.selectData.currencyList = currencyList
+              this.selectData.departmentList = departmentList
+              this.selectData.warehouseList = warehouseList
+              batchProcessStage?.active
+                ? (this.radio = 'enabled')
+                : (this.radio = 'disabled')
+              this.isLoading = !this.isLoading
+            }
+          )
           .catch((error) => {
             this.isLoading = !this.isLoading
             // eslint-disable-next-line no-console
@@ -462,11 +472,11 @@ export default {
                 warehouseList,
               },
             }) => {
-              this.isLoading = !this.isLoading
               this.selectData.batchProcessStage = batchProcessStage
               this.selectData.currencyList = currencyList
               this.selectData.departmentList = departmentList
               this.selectData.warehouseList = warehouseList
+              this.isLoading = !this.isLoading
             }
           )
           .catch((error) => {
@@ -484,29 +494,101 @@ export default {
 
     // Save Changes action
     saveAction() {
-      if (this.allInputAndLookUpValue.name) {
+      if (this.allInputAndLookUpValue.name || this.saveEditData?.name) {
         const batchProcessStage = {}
-        if (this.btnType === 'edit') {
+        if (this.pageType === 'edit') {
           batchProcessStage.id = this.pageID || ''
-          batchProcessStage.confirmed =
-            this.allInputAndLookUpValue?.confirmed || ''
-          batchProcessStage.name = this.allInputAndLookUpValue?.name || ''
-          batchProcessStage.code = this.allInputAndLookUpValue?.code || ''
-          batchProcessStage.planningTypeId =
-            this.allInputAndLookUpValue?.planningTypeId || ''
+          batchProcessStage.name =
+            this.allInputAndLookUpValue?.name ?? this.saveEditData?.name ?? ''
+          batchProcessStage.department = {
+            id:
+              this.allInputAndLookUpValue?.departmentId ??
+              this.saveEditData?.departmentId ??
+              '',
+          }
+          batchProcessStage.warehouse = {
+            id:
+              this.allInputAndLookUpValue?.warehouseId ??
+              this.saveEditData?.warehouseId ??
+              '',
+          }
+          batchProcessStage.currency = {
+            id:
+              this.allInputAndLookUpValue?.currencyId ??
+              this.saveEditData?.currencyId ??
+              '',
+          }
+          batchProcessStage.processStatus =
+            this.allInputAndLookUpValue?.processStatusId ??
+            this.saveEditData?.processStatus ??
+            ''
+          batchProcessStage.checkPreviousStageEndStatus =
+            this.allInputAndLookUpValue?.checkPreviousStageEndStatus ||
+            this.saveEditData?.checkPreviousStageEndStatus ||
+            false
+          batchProcessStage.useEquipment =
+            this.allInputAndLookUpValue?.useEquipment ||
+            this.saveEditData?.useEquipment ||
+            false
+          batchProcessStage.autoStartStopBefore =
+            this.allInputAndLookUpValue?.autoStartStopBefore ||
+            this.saveEditData?.autoStartStopBefore ||
+            false
+          batchProcessStage.createExpenseEntryOrExiteStatus =
+            this.allInputAndLookUpValue?.createExpenseEntryOrExiteStatus ||
+            this.saveEditData?.createExpenseEntryOrExiteStatus ||
+            false
+          batchProcessStage.waste =
+            this.allInputAndLookUpValue?.waste || this.saveEditData?.waste || ''
+          batchProcessStage.calcWaste =
+            this.allInputAndLookUpValue?.calcWaste ??
+            this.saveEditData?.calcWaste ??
+            ''
+          batchProcessStage.price =
+            this.allInputAndLookUpValue?.price ?? this.saveEditData?.price ?? ''
+          batchProcessStage.onlyOnceInColorVariant =
+            this.allInputAndLookUpValue?.onlyOnceInColorVariant ||
+            this.saveEditData?.onlyOnceInColorVariant ||
+            false
+          batchProcessStage.autoSave =
+            this.allInputAndLookUpValue?.autoSave ||
+            this.saveEditData?.autoSave ||
+            false
+          batchProcessStage.saleInfoParam =
+            this.allInputAndLookUpValue?.saleInfoParam ||
+            this.saveEditData?.saleInfoParam ||
+            false
+          batchProcessStage.ratio =
+            this.allInputAndLookUpValue?.ratio ?? this.saveEditData?.ratio ?? ''
+          batchProcessStage.defaultElapsedMinutes =
+            this.allInputAndLookUpValue?.defaultElapsedMinutes ??
+            this.saveEditData?.defaultTimeOutMinutes ??
+            ''
+          batchProcessStage.report_sort =
+            this.allInputAndLookUpValue?.report_sort ??
+            this.saveEditData?.report_sort ??
+            ''
+          batchProcessStage.entryExitLogic =
+            this.allInputAndLookUpValue?.entryExitLogic ??
+            this.saveEditData?.entryExitLogic ??
+            ''
+          batchProcessStage.active =
+            this.allInputAndLookUpValue?.active ||
+            this.saveEditData?.active ||
+            false
         } else {
           batchProcessStage.name = this.allInputAndLookUpValue?.name || ''
           batchProcessStage.department = {
-            id: this.allInputAndLookUpValue?.departmentId || '',
+            id: this.allInputAndLookUpValue?.departmentId ?? '',
           }
           batchProcessStage.warehouse = {
-            id: this.allInputAndLookUpValue?.warehouseId || '',
+            id: this.allInputAndLookUpValue?.warehouseId ?? '',
           }
           batchProcessStage.currency = {
-            id: this.allInputAndLookUpValue?.currencyId || '',
+            id: this.allInputAndLookUpValue?.currencyId ?? '',
           }
           batchProcessStage.processStatus =
-            this.allInputAndLookUpValue?.processStatusId || ''
+            this.allInputAndLookUpValue?.processStatusId ?? ''
           batchProcessStage.checkPreviousStageEndStatus =
             this.allInputAndLookUpValue?.checkPreviousStageEndStatus || false
           batchProcessStage.useEquipment =
@@ -516,30 +598,36 @@ export default {
           batchProcessStage.createExpenseEntryOrExiteStatus =
             this.allInputAndLookUpValue?.createExpenseEntryOrExiteStatus ||
             false
-          batchProcessStage.waste = this.allInputAndLookUpValue?.waste || ''
+          batchProcessStage.waste = this.allInputAndLookUpValue?.waste ?? ''
           batchProcessStage.calcWaste =
             this.allInputAndLookUpValue?.wasteCalcType || false
-          batchProcessStage.price = this.allInputAndLookUpValue?.price || ''
+          batchProcessStage.price = this.allInputAndLookUpValue?.price ?? ''
           batchProcessStage.onlyOnceInColorVariant =
             this.allInputAndLookUpValue?.onlyOnceInColorVariant || false
           batchProcessStage.autoSave =
             this.allInputAndLookUpValue?.autoSave || false
           batchProcessStage.saleInfoParam =
             this.allInputAndLookUpValue?.saleInfoParam || false
-          batchProcessStage.ratio = this.allInputAndLookUpValue?.ratio || ''
+          batchProcessStage.ratio = this.allInputAndLookUpValue?.ratio ?? ''
           batchProcessStage.defaultElapsedMinutes =
-            this.allInputAndLookUpValue?.defaultElapsedMinutes || ''
+            this.allInputAndLookUpValue?.defaultElapsedMinutes ?? ''
           batchProcessStage.report_sort =
-            this.allInputAndLookUpValue?.report_sort || ''
+            this.allInputAndLookUpValue?.report_sort ?? ''
           batchProcessStage.entryExitLogic =
-            this.allInputAndLookUpValue?.entryExitLogic || ''
-          batchProcessStage.active = this.allInputAndLookUpValue?.active || ''
+            this.allInputAndLookUpValue?.entryExitLogic ?? ''
+          batchProcessStage.active =
+            this.allInputAndLookUpValue?.active || false
         }
+
         this.isLoading = !this.isLoading
-        this.$axios
-          .post(`/batchProcessStage/addBatchProcessStage`, {
+        this.$axios[this.pageID ? 'put' : 'post'](
+          `/batchProcessStage/${
+            this.pageID ? 'editBatchProcessStage' : 'addBatchProcessStage'
+          }`,
+          {
             batchProcessStage,
-          })
+          }
+        )
           .then(({ status }) => {
             this.isLoading = !this.isLoading
             this.$router.push('/batchProcessStages.htm')

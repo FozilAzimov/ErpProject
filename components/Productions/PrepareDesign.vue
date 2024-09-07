@@ -20,9 +20,9 @@
           <img src="@assets/icons/user-black.png" alt="user" class="w-[14px]" />
           <h1 class="font-bold text-[rgb(49,126,172)] text-[14px] uppercase">
             {{
-              btnType === 'view'
+              pageType === 'view'
                 ? 'View Design'
-                : btnType === 'edit'
+                : pageType === 'edit'
                 ? 'Edit Design'
                 : 'Add Design'
             }}
@@ -132,14 +132,14 @@
               name="Go Back"
               type="primary"
               icon-name-attribute="arrow-left"
-              @click="goBackAction"
+              @click="$router.push('/designs.htm')"
             />
             <generic-button
-              v-if="btnType !== 'view'"
-              :name="btnType === 'edit' ? 'Save changes' : 'Save'"
-              :type="btnType === 'edit' ? 'success' : 'primary'"
-              :icon-name-attribute="btnType && 'edit'"
-              @click="saveAction(btnType)"
+              v-if="pageType !== 'view'"
+              :name="pageType === 'edit' ? 'Save changes' : 'Save'"
+              :type="pageType === 'edit' ? 'success' : 'primary'"
+              :icon-name-attribute="pageType && 'edit'"
+              @click="saveAction"
             />
           </div>
         </div>
@@ -169,7 +169,7 @@ export default {
       checkModal: false,
       isOpenTable: true,
       isCloseTable: true,
-      btnType: '',
+      pageType: null,
       pageID: null,
       editData: {},
       allInputAndLookUpValue: {},
@@ -177,25 +177,18 @@ export default {
     }
   },
 
-  // WATCH
-  watch: {
-    pageID(newVal) {
-      this.btnTypeSpecifyingAction()
-    },
-  },
-
   // CREATED
   created() {
-    this.btnType = JSON.parse(localStorage.getItem('allTrueAndFalseData'))?.type
     // page ID sini olish
     this.pageID = this.$route.params?.id
+    // page TYPE ni aniqlash
+    this.pageType = this.$route?.query?.page_type
   },
 
   // MOUNTED
   mounted() {
     // function
     this.dataCreatedAction()
-
     // Table function
     this.getTableRequest()
   },
@@ -216,19 +209,6 @@ export default {
       this.isCloseTable = !this.isCloseTable
     },
 
-    // go back action
-    goBackAction() {
-      localStorage.removeItem('allTrueAndFalseData')
-      this.$router.push('/designs.htm')
-    },
-
-    // Specifying the buttun type action
-    btnTypeSpecifyingAction() {
-      if (!this.pageID) {
-        localStorage.removeItem('allTrueAndFalseData')
-      }
-    },
-
     // Data created
     dataCreatedAction() {
       const data = [
@@ -239,7 +219,7 @@ export default {
           type: 'text',
           required: true,
           show: true,
-          disabled: this.btnType === 'view',
+          disabled: this.pageType === 'view',
         },
         {
           name: 'Design Code',
@@ -248,7 +228,7 @@ export default {
           type: 'text',
           required: false,
           show: true,
-          disabled: this.btnType === 'view',
+          disabled: this.pageType === 'view',
         },
         {
           name: 'Planning Type',
@@ -256,7 +236,7 @@ export default {
           defValName: 'planningtype',
           type: 'select',
           required: false,
-          show: this.btnType !== 'view',
+          show: this.pageType !== 'view',
         },
       ]
       this.elementData = data
@@ -264,7 +244,7 @@ export default {
 
     // Page request
     getTableRequest() {
-      if (this.btnType === 'view') {
+      if (this.pageType === 'view') {
         this.isLoading = !this.isLoading
         this.$axios
           .post(`/design/prepareDesignViewAjaxLoad`, {
@@ -281,7 +261,7 @@ export default {
             // eslint-disable-next-line no-console
             console.log(error)
           })
-      } else if (this.btnType === 'edit') {
+      } else if (this.pageType === 'edit') {
         this.isLoading = !this.isLoading
         this.$axios
           .post(`/design/prepareDesignAjaxLoad`, {
@@ -315,7 +295,7 @@ export default {
     saveAction() {
       if (this.allInputAndLookUpValue.name) {
         const body = {}
-        if (this.btnType === 'edit') {
+        if (this.pageType === 'edit') {
           body.id = this.pageID || ''
           body.confirmed = this.allInputAndLookUpValue?.confirmed || ''
           body.name = this.allInputAndLookUpValue?.name || ''

@@ -20,9 +20,9 @@
           <img src="@assets/icons/user-black.png" alt="user" class="w-[14px]" />
           <h1 class="font-bold text-[rgb(49,126,172)] text-[14px] uppercase">
             {{
-              btnType === 'view'
+              pageType === 'view'
                 ? 'VIEW DESIGN'
-                : btnType === 'edit'
+                : pageType === 'edit'
                 ? 'EDIT DESIGN'
                 : 'ADD DESIGN'
             }}
@@ -129,14 +129,14 @@
               name="Go Back"
               type="primary"
               icon-name-attribute="arrow-left"
-              @click="goBackAction"
+              @click="$router.push('/colorDepth.htm')"
             />
             <generic-button
-              v-if="btnType !== 'view'"
-              :name="btnType === 'edit' ? 'Save changes' : 'Save'"
-              :type="btnType === 'edit' ? 'success' : 'primary'"
-              :icon-name-attribute="btnType && 'edit'"
-              @click="saveAction(btnType)"
+              v-if="pageType !== 'view'"
+              :name="pageType === 'edit' ? 'Save changes' : 'Save'"
+              :type="pageType === 'edit' ? 'success' : 'primary'"
+              :icon-name-attribute="pageType && 'edit'"
+              @click="saveAction"
             />
           </div>
         </div>
@@ -166,7 +166,7 @@ export default {
       checkModal: false,
       isOpenTable: true,
       isCloseTable: true,
-      btnType: '',
+      pageType: null,
       pageID: null,
       editData: {},
       allInputAndLookUpValue: {},
@@ -175,25 +175,18 @@ export default {
     }
   },
 
-  // WATCH
-  watch: {
-    pageID(newVal) {
-      this.btnTypeSpecifyingAction()
-    },
-  },
-
   // CREATED
   created() {
-    this.btnType = JSON.parse(localStorage.getItem('allTrueAndFalseData'))?.type
     // page ID sini olish
     this.pageID = this.$route.params?.id
+    // page TYPE ni aniqlash
+    this.pageType = this.$route?.query?.page_type
   },
 
   // MOUNTED
   mounted() {
     // function
     this.dataCreatedAction()
-
     // Table function
     this.getTableRequest()
   },
@@ -214,19 +207,6 @@ export default {
       this.isCloseTable = !this.isCloseTable
     },
 
-    // go back action
-    goBackAction() {
-      localStorage.removeItem('allTrueAndFalseData')
-      this.$router.push('/colorDepth.htm')
-    },
-
-    // Specifying the buttun type action
-    btnTypeSpecifyingAction() {
-      if (!this.pageID) {
-        localStorage.removeItem('allTrueAndFalseData')
-      }
-    },
-
     // Data created
     dataCreatedAction() {
       const data = [
@@ -237,7 +217,7 @@ export default {
           type: 'text',
           required: true,
           show: true,
-          disabled: this.btnType === 'view',
+          disabled: this.pageType === 'view',
         },
         {
           name: 'Currency',
@@ -245,7 +225,7 @@ export default {
           defValName: 'currencyName',
           type: 'select',
           required: false,
-          show: this.btnType === 'edit',
+          show: this.pageType === 'edit',
         },
 
         {
@@ -254,7 +234,7 @@ export default {
           defValName: 'price',
           type: 'text',
           required: false,
-          show: this.btnType === 'edit',
+          show: this.pageType === 'edit',
         },
       ]
       this.elementData = data
@@ -262,7 +242,7 @@ export default {
 
     // Page request
     getTableRequest() {
-      if (this.btnType === 'view') {
+      if (this.pageType === 'view') {
         this.isLoading = !this.isLoading
         this.$axios
           .post(`/colorDepth/prepareColorDepthViewAjaxLoad`, {
@@ -279,7 +259,7 @@ export default {
             // eslint-disable-next-line no-console
             console.log(error)
           })
-      } else if (this.btnType === 'edit') {
+      } else if (this.pageType === 'edit') {
         this.isLoading = !this.isLoading
         this.$axios
           .post(`/colorDepth/prepareColorDepthAjaxLoad`, {
@@ -313,7 +293,7 @@ export default {
     saveAction() {
       if (this.allInputAndLookUpValue.name) {
         const color = {}
-        if (this.btnType === 'edit') {
+        if (this.pageType === 'edit') {
           color.id = this.pageID || ''
           color.name = this.allInputAndLookUpValue?.name || ''
           color.currency = { id: this.allInputAndLookUpValue?.currencyId || '' }
@@ -325,7 +305,7 @@ export default {
         this.$axios
           .post(
             `/colorDepth/${
-              this.btnType === 'edit' ? 'editColorDepth' : 'addColorDepth'
+              this.pageType === 'edit' ? 'editColorDepth' : 'addColorDepth'
             }`,
             {
               color,

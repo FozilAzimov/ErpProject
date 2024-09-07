@@ -80,7 +80,12 @@
           type="primary"
           :margin="true"
           icon-name-attribute="circle-plus-outline"
-          @click="$router.push('/preparePlateNumber.htm')"
+          @click="
+            $router.push({
+              path: '/preparePlateNumber.htm',
+              query: { page_type: 'create' },
+            })
+          "
         />
         <div class="p-2">
           <div class="flex items-center justify-between mb-1">
@@ -152,8 +157,6 @@ export default {
     return {
       isLoading: false,
       pageSize_value: 25,
-      btnType: '',
-      pageID: null,
       keywordValue: '',
       tableHead: {
         id: { name: 'Id', code: 'id' },
@@ -175,20 +178,6 @@ export default {
     }
   },
 
-  // WATCH
-  watch: {
-    pageID(newVal) {
-      this.btnTypeSpecifyingAction()
-    },
-  },
-
-  // CREATED
-  created() {
-    this.btnType = JSON.parse(localStorage.getItem('allTrueAndFalseData'))?.type
-    // page ID sini olish
-    this.pageID = this.$route.params?.id
-  },
-
   // MOUNTED
   mounted() {
     this.tableHeadLength = Object.keys(this.tableHead).length + 1
@@ -205,6 +194,7 @@ export default {
       this.checkModal = true
     },
 
+    // Page Request
     getTableRequest() {
       this.isLoading = !this.isLoading
       this.$axios
@@ -232,13 +222,6 @@ export default {
           // eslint-disable-next-line no-console
           console.log(error)
         })
-    },
-
-    // Specifying the buttun type action
-    btnTypeSpecifyingAction() {
-      if (!this.pageID) {
-        localStorage.removeItem('allTrueAndFalseData')
-      }
     },
 
     // Generic_Input value

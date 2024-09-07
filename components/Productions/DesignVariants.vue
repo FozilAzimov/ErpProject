@@ -79,7 +79,13 @@
           name="Add New"
           type="primary"
           :margin="true"
-          @click="$router.push('/prepareDesignVariant.htm')"
+          icon-name-attribute="circle-plus-outline"
+          @click="
+            $router.push({
+              path: '/prepareDesignVariant.htm',
+              query: { page_type: 'create' },
+            })
+          "
         />
         <div class="p-2">
           <div class="flex items-center justify-between mb-1">
@@ -157,8 +163,6 @@ export default {
     return {
       isLoading: false,
       pageSize_value: 25,
-      btnType: '',
-      pageID: null,
       keywordValue: '',
       tableHead: {
         id: { name: 'Id', code: 'id' },
@@ -186,20 +190,6 @@ export default {
       isOpenTable: true,
       isCloseTable: true,
     }
-  },
-
-  // WATCH
-  watch: {
-    pageID(newVal) {
-      this.btnTypeSpecifyingAction()
-    },
-  },
-
-  // CREATED
-  created() {
-    this.btnType = JSON.parse(localStorage.getItem('allTrueAndFalseData'))?.type
-    // page ID sini olish
-    this.pageID = this.$route.params?.id
   },
 
   // MOUNTED
@@ -245,13 +235,6 @@ export default {
           // eslint-disable-next-line no-console
           console.log(error)
         })
-    },
-
-    // Specifying the buttun type action
-    btnTypeSpecifyingAction() {
-      if (!this.pageID) {
-        localStorage.removeItem('allTrueAndFalseData')
-      }
     },
 
     // Generic_Input value

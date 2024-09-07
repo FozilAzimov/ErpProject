@@ -43,7 +43,13 @@
                     (key?.code === 'status' &&
                       $route.path.includes('stages.htm')) ||
                     (key?.code === 'active' &&
-                      $route.path.includes('batchProcessStages.htm'))
+                      $route.path.includes('batchProcessStages.htm')) ||
+                    (key?.code === 'active' &&
+                      $route.path.includes('orderproductiontypes.htm')) ||
+                    (key?.code === 'active' &&
+                      $route.path.includes('planningTypes.htm')) ||
+                    (key?.code === 'active' &&
+                      $route.path.includes('productproductiontypes.htm'))
                   "
                   class="p-[2px_5px] italic text-white font-bold rounded-[5px]"
                 >
@@ -242,14 +248,24 @@
                   </span>
                   {{ value[key.code] }}
                 </span>
-                <span
+                <div
                   v-else-if="
                     $route.path.includes('designVariants.htm') &&
                     key?.code === 'recipe'
                   "
+                  class="align-middle text-center"
                 >
-                  <generic-button name="recipeDesignItem" type="primary" />
-                </span>
+                  <generic-button
+                    name="recipeDesignItem"
+                    type="primary"
+                    icon-name-attribute="zoom-in"
+                    @click="
+                      $router.push(
+                        `/prepareDesignColorVariant.htm/${value.colorVariantId}`
+                      )
+                    "
+                  />
+                </div>
                 <span v-else>
                   {{ value[key.code] }}
                 </span>
@@ -288,6 +304,7 @@
                   <GenericButton
                     name="View"
                     type="primary"
+                    icon-name-attribute="zoom-in"
                     @click="goToNextAction(value?.id, 'view')"
                   />
                   <GenericButton
@@ -328,7 +345,7 @@
                       $route.path.includes('viabranchreceive.htm') ||
                       $route.path.includes('productionorder.htm')
                     "
-                    :name="btnName"
+                    :name="pageType"
                     type="primary"
                     @click="$router.push(`${openUrlTwo}.htm/${value.id}`)"
                   />
@@ -448,10 +465,6 @@ export default {
       type: String,
       default: '',
     },
-    btnName: {
-      type: String,
-      default: '',
-    },
     productionsActionButtons: {
       type: Boolean,
       default: false,
@@ -468,18 +481,11 @@ export default {
 
   // METHODS
   methods: {
-    goToNextAction(rowID, btnName) {
-      if (btnName === 'view')
-        localStorage.setItem(
-          'allTrueAndFalseData',
-          JSON.stringify({ id: rowID, type: 'view' })
-        )
-      else if (btnName === 'edit')
-        localStorage.setItem(
-          'allTrueAndFalseData',
-          JSON.stringify({ id: rowID, type: 'edit' })
-        )
-      this.$router.push(`${this.openUrl}.htm/${rowID}`)
+    goToNextAction(rowID, pageType) {
+      this.$router.push({
+        path: `${this.openUrl}.htm/${rowID}`,
+        query: { page_type: pageType },
+      })
     },
 
     // row delete action

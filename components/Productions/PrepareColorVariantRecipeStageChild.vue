@@ -20,9 +20,9 @@
           <img src="@assets/icons/user-black.png" alt="user" class="w-[14px]" />
           <h1 class="font-bold text-[rgb(49,126,172)] text-[14px] uppercase">
             {{
-              btnType === 'view'
+              pageType === 'view'
                 ? 'VIEW Color Variant Recipe Stage Child'
-                : btnType === 'edit'
+                : pageType === 'edit'
                 ? 'EDIT Color Variant Recipe Stage Child'
                 : 'ADD Color Variant Recipe Stage Child'
             }}
@@ -83,43 +83,43 @@
       >
         <div class="w-fit flex flex-col items-start m-2 gap-1">
           <div class="flex flex-col items-start gap-2">
-            <span>
+            <span class="flex flex-col items-start">
               <span class="text-[14px]"
                 >Color Variant Recipe Stage Child Name
                 <span class="text-red-500 text-[18px]">*</span>
               </span>
               <generic-input
                 :value="
-                  btnType === 'view'
+                  pageType === 'view'
                     ? viewData?.name
-                    : btnType === 'edit'
+                    : pageType === 'edit'
                     ? editData?.name
                     : ''
                 "
                 width="300"
                 type="text"
                 name="name"
-                :disabled="btnType === 'view' ? true : false"
+                :disabled="pageType === 'view' ? true : false"
                 @customFunction="getInputValueAction"
               />
             </span>
-            <span>
+            <span class="flex flex-col items-start">
               <span class="text-[14px]"
                 >Color Variant Recipe Stage Child ecode
                 <span class="text-red-500 text-[18px]">*</span></span
               >
               <generic-input
                 :value="
-                  btnType === 'view'
+                  pageType === 'view'
                     ? viewData?.ecode
-                    : btnType === 'edit'
+                    : pageType === 'edit'
                     ? editData?.ecode
                     : ''
                 "
                 width="300"
                 type="text"
                 name="ecode"
-                :disabled="btnType === 'view' ? true : false"
+                :disabled="pageType === 'view' ? true : false"
                 @customFunction="getInputValueAction"
               />
             </span>
@@ -129,14 +129,14 @@
               name="Go Back"
               type="primary"
               icon-name-attribute="arrow-left"
-              @click="goBackAction"
+              @click="$router.push('/colorVariantRecipeStageChild.htm')"
             />
             <generic-button
-              v-if="btnType !== 'view'"
-              :name="btnType === 'edit' ? 'Save changes' : 'Save'"
-              :type="btnType === 'edit' ? 'success' : 'primary'"
-              :icon-name-attribute="btnType && 'edit'"
-              @click="saveAction(btnType)"
+              v-if="pageType !== 'view'"
+              :name="pageType === 'edit' ? 'Save changes' : 'Save'"
+              :type="pageType === 'edit' ? 'success' : 'primary'"
+              :icon-name-attribute="pageType && 'edit'"
+              @click="saveAction(pageType)"
             />
           </div>
         </div>
@@ -164,32 +164,24 @@ export default {
       checkModal: false,
       isOpenTable: true,
       isCloseTable: true,
-      btnType: '',
-      rowID: null,
+      pageType: null,
+      pageID: null,
       viewData: {},
       editData: {},
       allInputValue: {},
     }
   },
 
-  // WATCH
-  watch: {
-    pageID(newVal) {
-      this.btnTypeSpecifyingAction()
-    },
-  },
-
   // CREATED
   created() {
-    this.btnType = JSON.parse(localStorage.getItem('allTrueAndFalseData'))?.type
     // page ID sini olish
     this.pageID = this.$route.params?.id
+    // page TYPE ni aniqlash
+    this.pageType = this.$route?.query?.page_type
   },
 
   // MOUNTED
   mounted() {
-    this.btnType = JSON.parse(localStorage.getItem('allTrueAndFalseData'))?.type
-    this.rowID = JSON.parse(localStorage.getItem('allTrueAndFalseData'))?.id
     // Table function
     this.getTableRequest()
   },
@@ -210,28 +202,15 @@ export default {
       this.isCloseTable = !this.isCloseTable
     },
 
-    // go back action
-    goBackAction() {
-      localStorage.removeItem('allTrueAndFalseData')
-      this.$router.push('/colorVariantRecipeStageChild.htm')
-    },
-
-    // Specifying the buttun type action
-    btnTypeSpecifyingAction() {
-      if (!this.pageID) {
-        localStorage.removeItem('allTrueAndFalseData')
-      }
-    },
-
     // Page request
     getTableRequest() {
-      if (this.btnType === 'view') {
+      if (this.pageType === 'view') {
         this.isLoading = !this.isLoading
         this.$axios
           .post(
             `/colorVariantRecipeStageChild/prepareColorVariantRecipeStageChildViewAjaxLoad`,
             {
-              id: this.rowID,
+              id: this.pageID,
               page_current: 1,
               page_size: 25,
             }
@@ -241,20 +220,20 @@ export default {
             this.viewData = colorVariantRecipeStageChild
             this.allInputValue.name = colorVariantRecipeStageChild?.name
             this.allInputValue.ecode = colorVariantRecipeStageChild?.ecode
-            this.rowID = colorVariantRecipeStageChild?.id
+            this.pageID = colorVariantRecipeStageChild?.id
           })
           .catch((error) => {
             this.isLoading = !this.isLoading
             // eslint-disable-next-line no-console
             console.log(error)
           })
-      } else if (this.btnType === 'edit') {
+      } else if (this.pageType === 'edit') {
         this.isLoading = !this.isLoading
         this.$axios
           .post(
             `/colorVariantRecipeStageChild/prepareColorVariantRecipeStageChildAjaxLoad`,
             {
-              id: this.rowID,
+              id: this.pageID,
               page_current: 1,
               page_size: 25,
             }
@@ -264,7 +243,7 @@ export default {
             this.editData = colorVariantRecipeStageChild
             this.allInputValue.name = colorVariantRecipeStageChild?.name
             this.allInputValue.ecode = colorVariantRecipeStageChild?.ecode
-            this.rowID = colorVariantRecipeStageChild?.id
+            this.pageID = colorVariantRecipeStageChild?.id
           })
           .catch((error) => {
             this.isLoading = !this.isLoading
@@ -283,8 +262,8 @@ export default {
     saveAction() {
       if (this.allInputValue?.name && this.allInputValue?.ecode) {
         const colorVariantRecipeStageChild = {}
-        if (this.btnType === 'edit') {
-          colorVariantRecipeStageChild.id = this.rowID
+        if (this.pageType === 'edit') {
+          colorVariantRecipeStageChild.id = this.pageID
           colorVariantRecipeStageChild.name = this.allInputValue?.name
           colorVariantRecipeStageChild.ecode = this.allInputValue?.ecode
         } else {
@@ -295,7 +274,7 @@ export default {
         this.$axios
           .post(
             `/colorVariantRecipeStageChild/${
-              this.btnType === 'edit'
+              this.pageType === 'edit'
                 ? 'editColorVariantRecipeStageChild'
                 : 'addColorVariantRecipeStageChild'
             }`,

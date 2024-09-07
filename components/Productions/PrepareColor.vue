@@ -20,9 +20,9 @@
           <img src="@assets/icons/user-black.png" alt="user" class="w-[14px]" />
           <h1 class="font-bold text-[rgb(49,126,172)] text-[14px] uppercase">
             {{
-              btnType === 'view'
+              pageType === 'view'
                 ? 'View color'
-                : btnType === 'edit'
+                : pageType === 'edit'
                 ? 'Edit color'
                 : 'Add color'
             }}
@@ -202,20 +202,19 @@
               name="Go Back"
               type="primary"
               icon-name-attribute="arrow-left"
-              @click="goBackAction"
+              @click="$router.push('/colors.htm')"
             />
             <generic-button
-              v-if="btnType !== 'view'"
-              :name="btnType === 'edit' ? 'Save changes' : 'Save'"
-              :type="btnType === 'edit' ? 'success' : 'primary'"
-              :icon-name-attribute="btnType && 'edit'"
-              @click="saveAction(btnType)"
+              v-if="pageType !== 'view'"
+              :name="pageType === 'edit' ? 'Save changes' : 'Save'"
+              :type="pageType === 'edit' ? 'success' : 'primary'"
+              :icon-name-attribute="pageType && 'edit'"
+              @click="saveAction"
             />
           </div>
         </div>
-
         <production-addition-table
-          v-if="btnType"
+          v-if="pageType !== 'create'"
           class="mt-10 p-2"
           :page-id="pageID"
           :data="rowData"
@@ -250,7 +249,7 @@ export default {
       checkModal: false,
       isOpenTable: true,
       isCloseTable: true,
-      btnType: '',
+      pageType: null,
       pageID: null,
       viewData: {},
       editData: {},
@@ -266,7 +265,7 @@ export default {
           width: '120',
           type: 'label',
           show: true,
-          disabled: this.btnType === 'view',
+          disabled: this.pageType === 'view',
         },
         {
           name: 'RPT',
@@ -274,8 +273,8 @@ export default {
           width: '120',
           type: 'button',
           btnName: 'Add New RPT',
-          show: this.btnType !== 'view',
-          disabled: this.btnType === 'view',
+          show: this.pageType !== 'view',
+          disabled: this.pageType === 'view',
         },
         {
           name: 'Date',
@@ -283,7 +282,7 @@ export default {
           width: '120',
           type: 'date',
           show: true,
-          disabled: this.btnType === 'view',
+          disabled: this.pageType === 'view',
         },
         {
           name: 'Name',
@@ -291,7 +290,7 @@ export default {
           width: '120',
           type: 'text',
           show: true,
-          disabled: this.btnType === 'view',
+          disabled: this.pageType === 'view',
         },
         {
           name: 'Color Depth',
@@ -299,7 +298,7 @@ export default {
           width: '120',
           type: 'select',
           show: true,
-          disabled: this.btnType === 'view',
+          disabled: this.pageType === 'view',
         },
         {
           name: 'Product Type',
@@ -307,7 +306,7 @@ export default {
           width: '120',
           type: 'select',
           show: true,
-          disabled: this.btnType === 'view',
+          disabled: this.pageType === 'view',
         },
         {
           name: 'Product',
@@ -315,7 +314,7 @@ export default {
           width: '120',
           type: 'select',
           show: true,
-          disabled: this.btnType === 'view',
+          disabled: this.pageType === 'view',
         },
         {
           name: 'Batch Process Stage',
@@ -323,7 +322,7 @@ export default {
           width: '120',
           type: 'select',
           show: true,
-          disabled: this.btnType === 'view',
+          disabled: this.pageType === 'view',
         },
         {
           name: 'Color Variant Type',
@@ -331,7 +330,7 @@ export default {
           width: '120',
           type: 'select',
           show: true,
-          disabled: this.btnType === 'view',
+          disabled: this.pageType === 'view',
         },
         {
           name: 'Color Method',
@@ -339,7 +338,7 @@ export default {
           width: '120',
           type: 'select',
           show: true,
-          disabled: this.btnType === 'view',
+          disabled: this.pageType === 'view',
         },
         {
           name: 'Note',
@@ -347,14 +346,14 @@ export default {
           width: '100',
           type: 'textarea',
           show: true,
-          disabled: this.btnType === 'view',
+          disabled: this.pageType === 'view',
         },
         {
           name: 'Confirm',
           subName: 'confirm',
           type: 'checkbox',
           show: true,
-          disabled: this.btnType === 'view',
+          disabled: this.pageType === 'view',
         },
         {
           name: 'Open',
@@ -362,8 +361,8 @@ export default {
           width: '120',
           type: 'button',
           btnName: 'Open',
-          show: this.btnType !== 'view',
-          disabled: this.btnType === 'view',
+          show: this.pageType !== 'view',
+          disabled: this.pageType === 'view',
         },
         {
           name: 'Main',
@@ -371,40 +370,33 @@ export default {
           width: '120',
           type: 'button',
           btnName: 'Main',
-          show: this.btnType !== 'view',
-          disabled: this.btnType === 'view',
+          show: this.pageType !== 'view',
+          disabled: this.pageType === 'view',
         },
         {
           name: 'Delete',
           subName: 'delete',
           width: '120',
           type: 'del',
-          show: this.btnType !== 'view',
-          disabled: this.btnType === 'view',
+          show: this.pageType !== 'view',
+          disabled: this.pageType === 'view',
         },
       ],
     }
   },
 
-  // WATCH
-  watch: {
-    pageID(newVal) {
-      this.btnTypeSpecifyingAction()
-    },
-  },
-
   // CREATED
   created() {
-    this.btnType = JSON.parse(localStorage.getItem('allTrueAndFalseData'))?.type
     // page ID sini olish
     this.pageID = this.$route.params?.id
+    // page TYPE ni aniqlash
+    this.pageType = this.$route?.query?.page_type
   },
 
   // MOUNTED
   mounted() {
     // function
     this.dataCreatedAction()
-
     // Table function
     this.getTableRequest()
   },
@@ -425,19 +417,6 @@ export default {
       this.isCloseTable = !this.isCloseTable
     },
 
-    // go back action
-    goBackAction() {
-      localStorage.removeItem('allTrueAndFalseData')
-      this.$router.push('/colors.htm')
-    },
-
-    // Specifying the buttun type action
-    btnTypeSpecifyingAction() {
-      if (!this.pageID) {
-        localStorage.removeItem('allTrueAndFalseData')
-      }
-    },
-
     // Data created
     dataCreatedAction() {
       const data = [
@@ -448,7 +427,7 @@ export default {
           type: 'text',
           required: true,
           show: true,
-          disabled: this.btnType === 'view',
+          disabled: this.pageType === 'view',
         },
         {
           name: 'Color Name 2',
@@ -456,8 +435,8 @@ export default {
           defValName: 'name2',
           type: 'text',
           required: false,
-          show: this.btnType !== 'view',
-          disabled: this.btnType === 'view',
+          show: this.pageType !== 'view',
+          disabled: this.pageType === 'view',
         },
         {
           name: 'Color Name 3',
@@ -465,8 +444,8 @@ export default {
           defValName: 'name3',
           type: 'text',
           required: false,
-          show: this.btnType !== 'view',
-          disabled: this.btnType === 'view',
+          show: this.pageType !== 'view',
+          disabled: this.pageType === 'view',
         },
         {
           name: 'Company',
@@ -474,8 +453,8 @@ export default {
           defValName: 'companyName',
           type: 'select',
           required: false,
-          show: this.btnType !== 'view',
-          disabled: this.btnType === 'view',
+          show: this.pageType !== 'view',
+          disabled: this.pageType === 'view',
         },
         {
           name: 'Color Request No',
@@ -483,8 +462,8 @@ export default {
           defValName: 'colorRequest',
           type: 'select',
           required: false,
-          show: this.btnType === 'edit',
-          disabled: this.btnType === 'view',
+          show: this.pageType === 'edit',
+          disabled: this.pageType === 'view',
         },
         {
           name: 'Color Code',
@@ -493,7 +472,7 @@ export default {
           type: 'color',
           required: false,
           show: true,
-          disabled: this.btnType === 'view',
+          disabled: this.pageType === 'view',
         },
         {
           name: 'Color Group',
@@ -502,7 +481,7 @@ export default {
           type: 'select',
           required: true,
           show: true,
-          disabled: this.btnType === 'view',
+          disabled: this.pageType === 'view',
         },
         {
           name: 'Pantone Code',
@@ -511,7 +490,7 @@ export default {
           type: 'text',
           required: false,
           show: true,
-          disabled: this.btnType === 'view',
+          disabled: this.pageType === 'view',
         },
         {
           name: 'Deying Code',
@@ -520,7 +499,7 @@ export default {
           type: 'text',
           required: false,
           show: true,
-          disabled: this.btnType === 'view',
+          disabled: this.pageType === 'view',
         },
         {
           name: 'Date',
@@ -528,8 +507,8 @@ export default {
           defValName: 'date',
           type: 'date',
           required: false,
-          show: this.btnType !== 'view',
-          disabled: this.btnType === 'view',
+          show: this.pageType !== 'view',
+          disabled: this.pageType === 'view',
         },
       ]
       this.elementData = data
@@ -537,7 +516,7 @@ export default {
 
     // Page request
     getTableRequest() {
-      if (this.btnType === 'view') {
+      if (this.pageType === 'view') {
         this.isLoading = !this.isLoading
         this.$axios
           .post(`/color/prepareColorView`, {
@@ -550,7 +529,6 @@ export default {
             this.colorGroupList = colorGroupList
             this.formatterCompanyListAction(companyList)
             this.editData = color
-            this.pageID = color?.id
             this.editDate = date
           })
           .catch((error) => {
@@ -558,7 +536,7 @@ export default {
             // eslint-disable-next-line no-console
             console.log(error)
           })
-      } else if (this.btnType === 'edit') {
+      } else if (this.pageType === 'edit') {
         this.isLoading = !this.isLoading
         this.$axios
           .post(`/color/prepareColorAjaxLoad`, {
@@ -571,7 +549,6 @@ export default {
             this.colorGroupList = colorGroupList
             this.formatterCompanyListAction(companyList)
             this.editData = color
-            this.pageID = color?.id
             this.editDate = date
             this.allInputAndLookUpValue = color
             this.allInputAndLookUpValue.date = date
@@ -644,7 +621,7 @@ export default {
       ) {
         const body = {}
         const color = {}
-        if (this.btnType === 'edit') {
+        if (this.pageType === 'edit') {
           color.id = this.allInputAndLookUpValue?.id || ''
           color.colorVariantListStr = ''
           color.uncheckedColorVariantListStr = ''
@@ -683,7 +660,7 @@ export default {
         this.isLoading = !this.isLoading
         this.$axios
           .post(
-            `/color/${this.btnType === 'edit' ? 'editColor' : 'addColor'}`,
+            `/color/${this.pageType === 'edit' ? 'editColor' : 'addColor'}`,
             body
           )
           .then(({ status }) => {

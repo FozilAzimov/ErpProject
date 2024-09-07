@@ -105,13 +105,23 @@
             name="Add New"
             type="primary"
             icon-name-attribute="circle-plus-outline"
-            @click="$router.push('/prepareUser.htm')"
+            @click="
+              $router.push({
+                path: '/prepareUser.htm',
+                query: { page_type: 'create' },
+              })
+            "
           />
           <generic-button
             name="Add Employee"
             type="primary"
             icon-name-attribute="circle-plus-outline"
-            @click="$router.push('/prepareUserPersonal.htm')"
+            @click="
+              $router.push({
+                path: '/prepareUserPersonal.htm',
+                query: { page_type: 'create' },
+              })
+            "
           />
           <generic-file-upload />
           <generic-button
@@ -195,8 +205,6 @@ export default {
       isLoading: false,
       pageSize_value: 25,
       topFilterData: [],
-      btnType: '',
-      pageID: null,
       keywordValue: '',
       tableHead: {
         id: { name: 'Id', code: 'id' },
@@ -216,20 +224,6 @@ export default {
       isOpenTable: true,
       isCloseTable: true,
     }
-  },
-
-  // WATCH
-  watch: {
-    pageID(newVal) {
-      this.btnTypeSpecifyingAction()
-    },
-  },
-
-  // CREATED
-  created() {
-    this.btnType = JSON.parse(localStorage.getItem('allTrueAndFalseData'))?.type
-    // page ID sini olish
-    this.pageID = this.$route.params?.id
   },
 
   // MOUNTED
@@ -277,13 +271,6 @@ export default {
           // eslint-disable-next-line no-console
           console.log(error)
         })
-    },
-
-    // Specifying the buttun type action
-    btnTypeSpecifyingAction() {
-      if (!this.pageID) {
-        localStorage.removeItem('allTrueAndFalseData')
-      }
     },
 
     // Generic_Input value

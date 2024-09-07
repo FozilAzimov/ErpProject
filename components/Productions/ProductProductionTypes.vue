@@ -79,7 +79,12 @@
           name="Add New"
           type="primary"
           :margin="true"
-          @click="$router.push('/prepareProductProductionType.htm')"
+          @click="
+            $router.push({
+              path: '/prepareProductProductionType.htm',
+              query: { page_type: 'create' },
+            })
+          "
         />
         <div class="p-2">
           <div class="flex items-center justify-between mb-1">
@@ -119,7 +124,7 @@
             :tablebody="tableBody"
             :tableheadlength="tableHeadLength"
             :istherebody="isThereBody"
-            open-url="prepareStage"
+            open-url="prepareProductProductionType"
             :productions-action-buttons="true"
             delete-row-url="stage/prepareStageDelete"
             height="600"
@@ -151,18 +156,16 @@ export default {
     return {
       isLoading: false,
       pageSize_value: 25,
-      btnType: '',
-      pageID: null,
       keywordValue: '',
       tableHead: {
         id: { name: 'Id', code: 'id' },
         product: {
           name: 'Product Production',
-          code: 'product',
+          code: 'name',
         },
-        status: {
+        active: {
           name: 'Status',
-          code: 'status',
+          code: 'active',
         },
       },
       tableBody: [],
@@ -172,20 +175,6 @@ export default {
       isOpenTable: true,
       isCloseTable: true,
     }
-  },
-
-  // WATCH
-  watch: {
-    pageID(newVal) {
-      this.btnTypeSpecifyingAction()
-    },
-  },
-
-  // CREATED
-  created() {
-    this.btnType = JSON.parse(localStorage.getItem('allTrueAndFalseData'))?.type
-    // page ID sini olish
-    this.pageID = this.$route.params?.id
   },
 
   // MOUNTED
@@ -207,7 +196,7 @@ export default {
     getTableRequest() {
       this.isLoading = !this.isLoading
       this.$axios
-        .post(`/productproductiontypes/productproductiontypesAjaxLoad`, {
+        .post(`productionType/productproductiontypesAjaxLoad`, {
           searchForm: {
             keyword: this.keywordValue,
           },
@@ -218,9 +207,9 @@ export default {
             total: 328,
           },
         })
-        .then(({ data: { stageList } }) => {
+        .then(({ data: { productProductionTypeList } }) => {
+          this.tableBody = productProductionTypeList
           this.isLoading = !this.isLoading
-          this.tableBody = stageList
 
           this.tableBody.length
             ? (this.isThereBody = true)
@@ -231,13 +220,6 @@ export default {
           // eslint-disable-next-line no-console
           console.log(error)
         })
-    },
-
-    // Specifying the buttun type action
-    btnTypeSpecifyingAction() {
-      if (!this.pageID) {
-        localStorage.removeItem('allTrueAndFalseData')
-      }
     },
 
     // Generic_Input value

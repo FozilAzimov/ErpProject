@@ -17,7 +17,7 @@
         <span v-if="element.type === 'date'" class="flex items-center gap-1">
           <span class="text-[13px]">{{ element.name }}</span>
           <generic-input-date-page
-            :value="''"
+            :value="element?.defValue"
             width="165"
             pl="10"
             pr="10"
@@ -165,7 +165,6 @@ export default {
       isLoading: false,
       pageSize_value: 25,
       topFilterData: [],
-      btnType: '',
       pageID: null,
       tableHead: {
         id: { name: 'Id', code: 'id' },
@@ -186,20 +185,6 @@ export default {
       isCloseTable: true,
       allSelectAndInputValues: {},
     }
-  },
-
-  // WATCH
-  watch: {
-    pageID(newVal) {
-      this.btnTypeSpecifyingAction()
-    },
-  },
-
-  // CREATED
-  created() {
-    this.btnType = JSON.parse(localStorage.getItem('allTrueAndFalseData'))?.type
-    // page ID sini olish
-    this.pageID = this.$route.params?.id
   },
 
   // MOUNTED
@@ -229,9 +214,9 @@ export default {
     getTableRequest() {
       this.isLoading = !this.isLoading
       this.$axios
-        .post(`/batchProcess/batchProcessAjaxLoad`, {
+        .post(`/batch/batchDetailsList`, {
           searchForm: {
-            keyword: this.allSelectAndInputValues?.keyword,
+            keyword: this.allSelectAndInputValues?.keyword || '',
           },
           pagingForm: {
             pageSize: this.pageSize_value,
@@ -255,13 +240,6 @@ export default {
         })
     },
 
-    // Specifying the buttun type action
-    btnTypeSpecifyingAction() {
-      if (!this.pageID) {
-        localStorage.removeItem('allTrueAndFalseData')
-      }
-    },
-
     // Table page ni ochish va yopish uchun
     isOpen() {
       this.isOpenTable = !this.isOpenTable
@@ -277,11 +255,13 @@ export default {
           name: 'Date From',
           subName: 'dateFrom',
           type: 'date',
+          defValue: new Date().toISOString().split('.')[0],
         },
         {
           name: 'Date To',
           subName: 'dateTo',
           type: 'date',
+          defValue: new Date().toISOString().split('.')[0],
         },
       ]
       this.topFilterData = createDate

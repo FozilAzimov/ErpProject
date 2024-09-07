@@ -26,6 +26,9 @@
               :class="`w-[${headName?.width}px]`"
             >
               {{ headName?.name }}
+              <span v-if="headName?.required" class="text-red-600 text-[16px]"
+                >*</span
+              >
             </th>
           </tr>
         </thead>
@@ -44,19 +47,41 @@
                 1 + inx
               }}</template>
               <template v-else-if="element?.type === 'date'">
-                <generic-input-date-page type="datetime-local" />
+                <generic-input-date-page
+                  type="datetime-local"
+                  :name="element?.subName"
+                  @customFunction="getSelectAndInputValueAction"
+                />
               </template>
               <template v-else-if="element?.type === 'select'">
-                <generic-look-up :dwidth="element?.width" />
+                <generic-look-up
+                  :dwidth="element?.width"
+                  :name="element?.subName"
+                  :options-data="allSelectData?.[element?.subName]"
+                  @customFunction="getSelectAndInputValueAction"
+                />
               </template>
               <template v-else-if="element?.type === 'text'">
-                <generic-input :width="element?.width" type="text" />
+                <generic-input
+                  :width="element?.width"
+                  :name="element?.subName"
+                  type="text"
+                  @customFunction="getSelectAndInputValueAction"
+                />
               </template>
               <template v-else-if="element?.type === 'textarea'">
-                <generic-input :width="element?.width" type="textarea" />
+                <generic-input
+                  :width="element?.width"
+                  :name="element?.subName"
+                  type="textarea"
+                  @customFunction="getSelectAndInputValueAction"
+                />
               </template>
               <template v-else-if="element?.type === 'checkbox'">
-                <generic-check-box />
+                <generic-check-box
+                  :name="element?.subName"
+                  @customFunction="getSelectAndInputValueAction"
+                />
               </template>
               <template v-else-if="element?.type === 'button'">
                 <generic-button type="success" :name="element?.btnName" />
@@ -102,6 +127,10 @@ export default {
       type: Array,
       default: () => [],
     },
+    allSelectData: {
+      type: Object,
+      default: () => ({}),
+    },
     title: {
       type: String,
       default: '',
@@ -116,7 +145,18 @@ export default {
   data() {
     return {
       tableData: [],
+      allSelectAndInputValue: {},
     }
+  },
+
+  // MOUNTED
+  watch: {
+    data: {
+      handler() {
+        this.tableData.push(this.data)
+      },
+      deep: true,
+    },
   },
 
   // METHODS
@@ -148,6 +188,16 @@ export default {
             console.log(error)
           })
       }
+    },
+
+    // Select and Input values set
+    getSelectAndInputValueAction(name, value) {
+      this.$set(this.allSelectAndInputValue, name, value)
+    },
+
+    // Emit action
+    additionTableValuesAction() {
+      this.$emit('getTableValue', this.allSelectAndInputValue)
     },
   },
 }

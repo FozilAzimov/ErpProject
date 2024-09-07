@@ -241,6 +241,7 @@ const _05e66a6c = () => interopDefault(import('..\\pages\\prepareCurrency.htm\\_
 const _676c2dd0 = () => interopDefault(import('..\\pages\\prepareDefectType.htm\\_id.vue' /* webpackChunkName: "pages/prepareDefectType.htm/_id" */))
 const _1d537a29 = () => interopDefault(import('..\\pages\\prepareDepartment.htm\\_id.vue' /* webpackChunkName: "pages/prepareDepartment.htm/_id" */))
 const _7729a93d = () => interopDefault(import('..\\pages\\prepareDesign.htm\\_id.vue' /* webpackChunkName: "pages/prepareDesign.htm/_id" */))
+const _20c77fbb = () => interopDefault(import('..\\pages\\prepareDesignColorVariant.htm\\_id.vue' /* webpackChunkName: "pages/prepareDesignColorVariant.htm/_id" */))
 const _44f63923 = () => interopDefault(import('..\\pages\\prepareDesignType.htm\\_id.vue' /* webpackChunkName: "pages/prepareDesignType.htm/_id" */))
 const _7521c188 = () => interopDefault(import('..\\pages\\prepareDesignVariant.htm\\_id.vue' /* webpackChunkName: "pages/prepareDesignVariant.htm/_id" */))
 const _8f78257e = () => interopDefault(import('..\\pages\\prepareDischarge.htm\\_id.vue' /* webpackChunkName: "pages/prepareDischarge.htm/_id" */))
@@ -1288,6 +1289,10 @@ export const routerOptions = {
     path: "/prepareDesign.htm/:id?",
     component: _7729a93d,
     name: "prepareDesign.htm-id"
+  }, {
+    path: "/prepareDesignColorVariant.htm/:id?",
+    component: _20c77fbb,
+    name: "prepareDesignColorVariant.htm-id"
   }, {
     path: "/prepareDesignType.htm/:id?",
     component: _44f63923,

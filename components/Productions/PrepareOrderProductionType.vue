@@ -20,9 +20,9 @@
           <img src="@assets/icons/user-black.png" alt="user" class="w-[14px]" />
           <h1 class="font-bold text-[rgb(49,126,172)] text-[14px] uppercase">
             {{
-              btnType === 'view'
+              pageType === 'view'
                 ? 'VIEW CHARACTERISTIC'
-                : btnType === 'edit'
+                : pageType === 'edit'
                 ? 'Editing of sew model variant size'
                 : 'Addition of sew model variant size'
             }}
@@ -89,7 +89,7 @@
             >
               <span class="text-[13px]">{{ element.name }}</span>
               <generic-input
-                :value="''"
+                :value="viewEditData?.[element?.subName]"
                 width="300"
                 type="text"
                 :name="element.subName"
@@ -127,14 +127,14 @@
               name="Go Back"
               type="primary"
               icon-name-attribute="arrow-left"
-              @click="goBackAction"
+              @click="$router.push('/orderproductiontypes.htm')"
             />
             <generic-button
-              v-if="btnType !== 'view'"
-              :name="btnType === 'edit' ? 'Save changes' : 'Save'"
-              :type="btnType === 'edit' ? 'success' : 'primary'"
-              :icon-name-attribute="btnType && 'edit'"
-              @click="saveAction(btnType)"
+              v-if="pageType !== 'view'"
+              :name="pageType === 'edit' ? 'Save changes' : 'Save'"
+              :type="pageType === 'edit' ? 'success' : 'primary'"
+              :icon-name-attribute="pageType && 'edit'"
+              @click="saveAction"
             />
           </div>
         </div>
@@ -162,34 +162,36 @@ export default {
       checkModal: false,
       isOpenTable: true,
       isCloseTable: true,
-      btnType: '',
+      pageType: null,
       pageID: null,
       elementData: [],
-      editData: {},
-      inputValue: '',
-      radio: '',
+      viewEditData: {},
+      allInputAndRadioValues: {},
+      radio: 'enabled',
     }
   },
 
   // WATCH
   watch: {
-    pageID(newVal) {
-      this.btnTypeSpecifyingAction()
+    radio(newVal) {
+      if (newVal === 'enabled') this.allInputAndRadioValues.active = true
+      else if (newVal === 'disabled') this.allInputAndRadioValues.active = false
+      else this.allInputAndRadioValues.active = false
     },
   },
 
   // CREATED
   created() {
-    this.btnType = JSON.parse(localStorage.getItem('allTrueAndFalseData'))?.type
     // page ID sini olish
     this.pageID = this.$route.params?.id
+    // page TYPE ni aniqlash
+    this.pageType = this.$route?.query?.page_type
   },
 
   // MOUNTED
   mounted() {
     // function
     this.dataCreatedAction()
-
     // Table function
     this.getTableRequest()
   },
@@ -210,22 +212,9 @@ export default {
       this.isCloseTable = !this.isCloseTable
     },
 
-    // go back action
-    goBackAction() {
-      localStorage.removeItem('allTrueAndFalseData')
-      this.$router.push('/orderproductiontypes.htm')
-    },
-
-    // Specifying the buttun type action
-    btnTypeSpecifyingAction() {
-      if (!this.pageID) {
-        localStorage.removeItem('allTrueAndFalseData')
-      }
-    },
-
     // Input value action
     getInputValueAction(name, value) {
-      this.inputValue = value
+      this.$set(this.allInputAndRadioValues, name, value)
     },
 
     // Data created
@@ -233,15 +222,15 @@ export default {
       const data = [
         {
           name: 'Order Production Type',
-          subName: 'orderProductionType',
+          subName: 'name',
           type: 'text',
-          disabled: this.btnType === 'view',
+          disabled: this.pageType === 'view',
         },
         {
           name: 'Status',
-          subName: 'status',
+          subName: 'active',
           type: 'radio',
-          disabled: this.btnType === 'view',
+          disabled: this.pageType === 'view',
         },
       ]
       this.elementData = data
@@ -249,34 +238,40 @@ export default {
 
     // Page request
     getTableRequest() {
-      if (this.pageID && this.btnType === 'view') {
+      if (this.pageID && this.pageType === 'view') {
         this.isLoading = !this.isLoading
         this.$axios
-          .post(`/orderproductiontypes/prepareSewModelVariantsSizeView`, {
+          .post(`/orderProductionType/prepareOrderProductionTypeViewAjaxLoad`, {
             id: this.pageID,
             page_current: 1,
             page_size: 25,
           })
-          .then(({ data }) => {
+          .then(({ data: { orderProductionType } }) => {
             this.isLoading = !this.isLoading
-            this.editData = data
+            this.viewEditData = orderProductionType
+            orderProductionType?.active
+              ? (this.radio = 'enabled')
+              : (this.radio = 'disabled')
           })
           .catch((error) => {
             this.isLoading = !this.isLoading
             // eslint-disable-next-line no-console
             console.log(error)
           })
-      } else if (this.pageID && this.btnType === 'edit') {
+      } else if (this.pageID && this.pageType === 'edit') {
         this.isLoading = !this.isLoading
         this.$axios
-          .post(`/orderproductiontypes/prepareSewModelVariantsSize`, {
+          .post(`/orderProductionType/prepareOrderProductionTypeAjaxLoad`, {
             id: this.pageID,
             page_current: 1,
             page_size: 25,
           })
-          .then(({ data }) => {
+          .then(({ data: { orderProductionType } }) => {
             this.isLoading = !this.isLoading
-            this.editData = data
+            this.viewEditData = orderProductionType
+            orderProductionType?.active
+              ? (this.radio = 'enabled')
+              : (this.radio = 'disabled')
           })
           .catch((error) => {
             this.isLoading = !this.isLoading
@@ -288,26 +283,35 @@ export default {
 
     // Save Changes action
     saveAction() {
-      if (this.inputValue) {
-        this.isLoading = !this.isLoading
-        this.$axios
-          .post(
-            `/orderproductiontypes/${
-              this.btnType === 'edit'
-                ? 'editSewModelVariantsSize'
-                : 'addSewModelVariantsSize'
-            }`
-          )
-          .then(({ status }) => {
-            this.isLoading = !this.isLoading
-            this.$router.push('/orderproductiontypes.htm')
-          })
-          .catch((error) => {
-            this.isLoading = !this.isLoading
-            // eslint-disable-next-line no-console
-            console.log(error)
-          })
+      const orderProductionType = {}
+      if (this.pageID) {
+        orderProductionType.id = this.pageID || ''
+        orderProductionType.name =
+          this.allInputAndRadioValues?.name ?? this.viewEditData?.name ?? ''
+        orderProductionType.active =
+          this.allInputAndRadioValues?.active ?? this.viewEditData?.active
+      } else {
+        orderProductionType.name = this.allInputAndRadioValues?.name || ''
+        orderProductionType.active =
+          this.allInputAndRadioValues?.active || false
       }
+
+      this.isLoading = !this.isLoading
+      this.$axios[this.pageID ? 'put' : 'post'](
+        `/orderProductionType/${
+          this.pageID ? 'editOrderProductionType' : 'addOrderproductiontype'
+        }`,
+        { orderProductionType }
+      )
+        .then(() => {
+          this.isLoading = !this.isLoading
+          this.$router.push('/orderproductiontypes.htm')
+        })
+        .catch((error) => {
+          this.isLoading = !this.isLoading
+          // eslint-disable-next-line no-console
+          console.log(error)
+        })
     },
   },
 }

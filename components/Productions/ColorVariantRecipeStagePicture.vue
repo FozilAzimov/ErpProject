@@ -19,7 +19,7 @@
         <div class="flex items-center gap-[10px]">
           <img src="@assets/icons/user-black.png" alt="user" class="w-[14px]" />
           <h1 class="font-bold text-[rgb(49,126,172)] text-[14px] uppercase">
-            Color Variant Recipe Stage Child List
+            Color Variant Recipe Stage Picture List
           </h1>
         </div>
         <div>
@@ -79,7 +79,13 @@
           name="Add New"
           type="primary"
           :margin="true"
-          @click="$router.push('/prepareColorVariantRecipeStagePicture.htm')"
+          icon-name-attribute="circle-plus-outline"
+          @click="
+            $router.push({
+              path: '/prepareColorVariantRecipeStagePicture.htm',
+              query: { page_type: 'create' },
+            })
+          "
         />
         <div class="p-2">
           <div class="flex items-center justify-between mb-1">
@@ -127,7 +133,7 @@
             :istherebody="isThereBody"
             open-url="prepareColorVariantRecipeStagePicture"
             :productions-action-buttons="true"
-            delete-row-url="colorVariantRecipeStageChild/prepareColorVariantRecipeStageChildDelete"
+            delete-row-url="colorVariantRecipeStagePicture/prepareColorVariantRecipeStagePictureDelete"
             height="600"
             @pageEmitAction="getTableRequest"
           />
@@ -157,8 +163,6 @@ export default {
     return {
       isLoading: false,
       pageSize_value: 10,
-      btnType: '',
-      pageID: null,
       keywordValue: '',
       tableHead: {
         id: { name: 'Id', code: 'id' },
@@ -168,7 +172,7 @@ export default {
         },
         name: {
           name: 'Name',
-          code: 'name',
+          code: 'pictureName',
         },
       },
       tableBody: [],
@@ -178,20 +182,6 @@ export default {
       isOpenTable: true,
       isCloseTable: true,
     }
-  },
-
-  // WATCH
-  watch: {
-    pageID(newVal) {
-      this.btnTypeSpecifyingAction()
-    },
-  },
-
-  // CREATED
-  created() {
-    this.btnType = JSON.parse(localStorage.getItem('allTrueAndFalseData'))?.type
-    // page ID sini olish
-    this.pageID = this.$route.params?.id
   },
 
   // MOUNTED
@@ -214,7 +204,7 @@ export default {
       this.isLoading = !this.isLoading
       this.$axios
         .post(
-          `/colorVariantRecipeStagePicture/colorVariantRecipeStagePictureAjaxLoad`,
+          `/colorVariantRecipeStagePicture/colorVariantRecipeStagePicture`,
           {
             searchForm: {
               keyword: this.keywordValue,
@@ -227,9 +217,9 @@ export default {
             },
           }
         )
-        .then(({ data: { colorVariantRecipeStagePicture } }) => {
+        .then(({ data: { colorVariantRecipeStagePictureList } }) => {
           this.isLoading = !this.isLoading
-          this.tableBody = colorVariantRecipeStagePicture
+          this.tableBody = colorVariantRecipeStagePictureList
           this.tableBody.length
             ? (this.isThereBody = true)
             : (this.isThereBody = false)
@@ -239,13 +229,6 @@ export default {
           // eslint-disable-next-line no-console
           console.log(error)
         })
-    },
-
-    // Specifying the buttun type action
-    btnTypeSpecifyingAction() {
-      if (!this.pageID) {
-        localStorage.removeItem('allTrueAndFalseData')
-      }
     },
 
     // Generic_Input value

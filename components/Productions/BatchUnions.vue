@@ -79,6 +79,7 @@
           name="Add New"
           type="primary"
           :margin="true"
+          icon-name-attribute="circle-plus-outline"
           @click="$router.push('/prepareBatchunionsNew.htm')"
         />
         <div class="p-2">
@@ -87,7 +88,7 @@
               <select
                 v-model="pageSize_value"
                 class="border-[1px] border-solid border-[rgba(171,177,187,0.7)] w-[60px] px-[5px] py-[3px] cursor-pointer rounded-[2px] text-[14px] outline-none"
-                @change="getTableRequest()"
+                @change="getTableRequest"
               >
                 <option value="10">10</option>
                 <option value="25">25</option>
@@ -150,6 +151,8 @@ export default {
     ColumnConfigPage,
     GenericTablePage,
   },
+
+  // DATA
   data() {
     return {
       isLoading: false,
@@ -176,8 +179,13 @@ export default {
       checkModal: false,
       isOpenTable: true,
       isCloseTable: true,
+      actionUrl: null,
+      rightMap: {},
+      leftMap: {},
     }
   },
+
+  // MOUNTED
   mounted() {
     this.tableHeadLength = Object.keys(this.tableHead).length + 1
     // Table function
@@ -196,7 +204,7 @@ export default {
     getTableRequest() {
       this.isLoading = !this.isLoading
       this.$axios
-        .post(`/batchUnion/batchunionsAjaxLoad`, {
+        .post(`/batchUnion/batchunions`, {
           searchForm: {
             keyword: this.keywordValue,
           },
@@ -207,9 +215,12 @@ export default {
             total: 328,
           },
         })
-        .then(({ data: { sewModelList } }) => {
+        .then(({ data: { batchUnionList, actionUrl, rightMap, leftMap } }) => {
           this.isLoading = !this.isLoading
-          this.tableBody = sewModelList
+          this.tableBody = batchUnionList
+          this.actionUrl = actionUrl
+          this.rightMap = rightMap
+          this.leftMap = leftMap
 
           this.tableBody.length
             ? (this.isThereBody = true)

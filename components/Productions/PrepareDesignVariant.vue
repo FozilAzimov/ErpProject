@@ -20,11 +20,11 @@
           <img src="@assets/icons/user-black.png" alt="user" class="w-[14px]" />
           <h1 class="font-bold text-[rgb(49,126,172)] text-[14px] uppercase">
             {{
-              btnType === 'view'
-                ? 'View Design'
-                : btnType === 'edit'
-                ? 'Edit Design'
-                : 'Add Design'
+              pageType === 'view'
+                ? 'View DESIGN VARIANT'
+                : pageType === 'edit'
+                ? 'Edit DESIGN VARIANT'
+                : 'Add DESIGN VARIANT'
             }}
           </h1>
         </div>
@@ -82,97 +82,82 @@
         "
       >
         <div class="w-fit flex flex-col items-start m-2 gap-1">
-          <div
-            class="max-w-[700px] flex gap-x-[10px] justify-between items-center flex-wrap"
-          >
-            <div v-for="(element, index) in elementData" :key="index">
-              <template v-if="element.show">
-                <span
-                  v-if="element.type === 'select'"
-                  class="flex flex-col items-start mb-1"
+          <div v-for="(element, index) in elementData" :key="index">
+            <span
+              v-if="element.type === 'select'"
+              class="flex flex-col items-start mb-1"
+            >
+              <span class="text-[13px]"
+                >{{ element.name }}
+                <span v-if="element.required" class="text-[18px] text-red-600"
+                  >*</span
+                ></span
+              >
+              <generic-look-up
+                dwidth="300"
+                :name="element.subName"
+                :defvalue="
+                  vuewEditData?.[element.defValName]?.text
+                    ? vuewEditData?.[element.defValName]?.text
+                    : ''
+                "
+                :options-data="selectData"
+                :disabled="element.disabled"
+                @customFunction="getInputAndLookUpValueAction"
+              />
+            </span>
+            <span
+              v-else-if="element.type === 'text'"
+              class="flex flex-col items-start mb-1"
+            >
+              <span class="text-[13px]"
+                >{{ element.name }}
+                <span v-if="element.required" class="text-[18px] text-red-600"
+                  >*</span
                 >
-                  <span class="text-[13px]"
-                    >{{ element.name }}
-                    <span
-                      v-if="element.required"
-                      class="text-[18px] text-red-600"
-                      >*</span
-                    ></span
-                  >
-                  <generic-look-up
-                    dwidth="300"
-                    :name="element.subName"
-                    :defvalue="
-                      editData?.[element.defValName]?.text
-                        ? editData?.[element.defValName]?.text
-                        : ''
-                    "
-                    :options-data="
-                      element.subName === 'designName'
-                        ? allSelectData.name
-                        : element.subName === 'colorDepth'
-                        ? allSelectData.colorDepth
-                        : element.subName === 'productType'
-                        ? allSelectData.productType
-                        : element.subName === 'product'
-                        ? allSelectData.product
-                        : element.subName === 'colorGroup'
-                        ? allSelectData.colorGroup
-                        : element.subName === 'batchProcessStage'
-                        ? allSelectData.batchProcessStage
-                        : element.subName === 'designVariantType'
-                        ? allSelectData.designVariantType
-                        : []
-                    "
-                    :disabled="element.disabled"
-                    @customFunction="getInputAndLookUpValueAction"
-                  />
-                </span>
-                <span
-                  v-else-if="
-                    element.type === 'text' || element.type === 'textarea'
-                  "
-                  class="flex flex-col items-start mb-1"
-                >
-                  <span class="text-[13px]"
-                    >{{ element.name }}
-                    <span
-                      v-if="element.required"
-                      class="text-[18px] text-red-600"
-                      >*</span
-                    >
-                  </span>
-                  <generic-input
-                    :value="
-                      editData?.[element.defValName]
-                        ? editData?.[element.defValName]
-                        : ''
-                    "
-                    width="300"
-                    :type="element.type"
-                    :name="element.subName"
-                    :disabled="element.disabled"
-                    @customFunction="getInputAndLookUpValueAction"
-                  />
-                </span>
-              </template>
-            </div>
+              </span>
+              <generic-input
+                :value="
+                  vuewEditData?.[element.defValName]
+                    ? vuewEditData?.[element.defValName]
+                    : ''
+                "
+                width="300"
+                :type="element.type"
+                :name="element.subName"
+                :disabled="element.disabled"
+                @customFunction="getInputAndLookUpValueAction"
+              />
+            </span>
           </div>
-          <div class="flex items-center gap-3 mt-3">
-            <generic-button
-              name="Go Back"
-              type="primary"
-              icon-name-attribute="arrow-left"
-              @click="goBackAction"
-            />
-            <generic-button
-              v-if="btnType !== 'view'"
-              :name="btnType === 'edit' ? 'Save changes' : 'Save'"
-              :type="btnType === 'edit' ? 'success' : 'primary'"
-              :icon-name-attribute="btnType && 'edit'"
-              @click="saveAction(btnType)"
-            />
-          </div>
+        </div>
+
+        <!-- Component Add table -->
+        <production-addition-table
+          v-if="pageType !== 'view'"
+          ref="additionTableRef"
+          class="p-2"
+          :page-id="pageID"
+          :data="rowData"
+          :all-select-data="additionTabelSelectData"
+          title="Design Variant"
+          @getTableValue="getAdditionTableValueAction"
+        />
+
+        <div class="flex items-center gap-3 mt-3 p-2">
+          <generic-button
+            name="Go Back"
+            type="primary"
+            icon-name-attribute="arrow-left"
+            @click="$router.push('/designVariants.htm')"
+          />
+          <generic-button
+            v-if="pageType !== 'view'"
+            :name="pageType === 'edit' ? 'Save changes' : 'Save'"
+            :type="pageType === 'edit' ? 'success' : 'primary'"
+            :icon-name-attribute="pageType && 'edit'"
+            @click="saveAction"
+          />
         </div>
       </div>
     </template>
@@ -184,12 +169,14 @@ import GenericButton from '@generics/GenericButton.vue'
 import GenericInput from '@generics/GenericInput.vue'
 import LoadingPage from '@components/Loading/LoadingPage.vue'
 import GenericLookUp from '@generics/GenericLookUp.vue'
+import ProductionAdditionTable from '@components/Productions/ProductionAdditionTable.vue'
 export default {
   components: {
     LoadingPage,
     GenericButton,
     GenericInput,
     GenericLookUp,
+    ProductionAdditionTable,
   },
 
   // DATA
@@ -200,13 +187,15 @@ export default {
       checkModal: false,
       isOpenTable: true,
       isCloseTable: true,
-      btnType: '',
+      pageType: null,
       pageID: null,
-      editData: {},
+      vuewEditData: {},
       allInputAndLookUpValue: {},
+      additionTableData: {},
       elementData: [],
-      allSelectData: {
-        name: [],
+      rowData: [],
+      selectData: [],
+      additionTabelSelectData: {
         colorDepth: [],
         productType: [],
         product: [],
@@ -217,25 +206,18 @@ export default {
     }
   },
 
-  // WATCH
-  watch: {
-    pageID(newVal) {
-      this.btnTypeSpecifyingAction()
-    },
-  },
-
   // CREATED
   created() {
-    this.btnType = JSON.parse(localStorage.getItem('allTrueAndFalseData'))?.type
     // page ID sini olish
     this.pageID = this.$route.params?.id
+    // page TYPE ni aniqlash
+    this.pageType = this.$route?.query?.page_type
   },
 
   // MOUNTED
   mounted() {
     // function
     this.dataCreatedAction()
-
     // Table function
     this.getTableRequest()
   },
@@ -256,144 +238,150 @@ export default {
       this.isCloseTable = !this.isCloseTable
     },
 
-    // go back action
-    goBackAction() {
-      localStorage.removeItem('allTrueAndFalseData')
-      this.$router.push('/designVariants.htm')
-    },
-
-    // Specifying the buttun type action
-    btnTypeSpecifyingAction() {
-      if (!this.pageID) {
-        localStorage.removeItem('allTrueAndFalseData')
-      }
-    },
-
     // Data created
     dataCreatedAction() {
       const data = [
         {
           name: 'Design Name',
-          subName: 'designName',
+          subName: 'name',
           defValName: 'designName',
           type: 'select',
           required: true,
-          show: true,
-          disabled: this.btnType === 'view',
+          disabled: this.pageType === 'view',
         },
         {
           name: 'Design Variant Name',
           subName: 'designVariantName',
-          defValName: 'designVariantName',
-          type: 'text',
-          required: true,
-          show: true,
-          disabled: this.btnType === 'view',
-        },
-        {
-          name: 'Name',
-          subName: 'name',
           defValName: 'name',
           type: 'text',
           required: true,
-          show: this.btnType !== 'view',
+          disabled: this.pageType === 'view',
+        },
+      ]
+      this.elementData = data
+
+      const rowData = [
+        {
+          name: 'Name',
+          subName: 'name',
+          width: '120',
+          type: 'text',
+          required: true,
         },
         {
           name: 'Color Depth',
           subName: 'colorDepth',
-          defValName: 'colorDepth',
+          width: '120',
           type: 'select',
           required: false,
-          show: this.btnType !== 'view',
         },
         {
           name: 'Product Type',
           subName: 'productType',
-          defValName: 'productType',
+          width: '120',
           type: 'select',
           required: false,
-          show: this.btnType !== 'view',
         },
         {
           name: 'Product',
           subName: 'product',
-          defValName: 'product',
+          width: '120',
           type: 'select',
           required: false,
-          show: this.btnType !== 'view',
         },
         {
           name: 'Color Group',
           subName: 'colorGroup',
-          defValName: 'colorGroup',
+          width: '120',
           type: 'select',
           required: false,
-          show: this.btnType !== 'view',
         },
         {
           name: 'Batch Process Stage',
           subName: 'batchProcessStage',
-          defValName: 'batchProcessStage',
+          width: '120',
           type: 'select',
           required: true,
-          show: this.btnType !== 'view',
         },
         {
           name: 'Design Variant Type',
           subName: 'designVariantType',
-          defValName: 'designVariantType',
+          width: '120',
           type: 'select',
           required: true,
-          show: this.btnType !== 'view',
         },
         {
           name: 'Note',
           subName: 'note',
-          defValName: 'note',
+          width: '100',
           type: 'textarea',
           required: false,
-          show: this.btnType !== 'view',
+        },
+        {
+          name: 'Delete',
+          subName: 'delete',
+          width: '120',
+          type: 'del',
+          required: false,
         },
       ]
-      this.elementData = data
+      this.rowData = rowData
     },
 
     // Page request
     getTableRequest() {
-      if (this.btnType === 'view') {
+      if (this.pageType === 'view') {
         this.isLoading = !this.isLoading
         this.$axios
-          .post(`/design/prepareDesignViewAjaxLoad`, {
+          .post(`/designVariant/prepareDesignVariantViewAjaxLoad`, {
             id: this.pageID,
             page_current: 1,
             page_size: 25,
           })
-          .then(({ data: { design } }) => {
+          .then(({ data: { designVariant } }) => {
             this.isLoading = !this.isLoading
-            this.editData = design
+            this.vuewEditData = designVariant
           })
           .catch((error) => {
             this.isLoading = !this.isLoading
             // eslint-disable-next-line no-console
             console.log(error)
           })
-      } else if (this.btnType === 'edit') {
+      } else if (this.pageType === 'edit') {
         this.isLoading = !this.isLoading
         this.$axios
-          .post(`/design/prepareDesignAjaxLoad`, {
+          .post(`/designVariant/prepareDesignVariantAjaxLoad`, {
             id: this.pageID,
             page_current: 1,
             page_size: 25,
           })
-          .then(({ data: { designJson } }) => {
-            this.isLoading = !this.isLoading
-            this.editData = JSON.parse(designJson)
-            this.allInputAndLookUpValue.planningTypeId =
-              this.editData?.planningtype?.id || ''
-            this.allInputAndLookUpValue.code = this.editData?.code || ''
-            this.allInputAndLookUpValue.name = this.editData?.name || ''
-            this.pageID = this.editData?.id
-          })
+          .then(
+            ({
+              data: {
+                designList,
+                colorDepthList,
+                productTypeList,
+                productList,
+                colorGroupList,
+                batchProcessStageList,
+                colorVariantTypeList,
+                designVariant,
+              },
+            }) => {
+              this.selectData = designList
+              this.additionTabelSelectData.colorDepth = colorDepthList
+              this.additionTabelSelectData.productType = productTypeList
+              this.additionTabelSelectData.productType = productTypeList
+              this.additionTabelSelectData.product = productList
+              this.additionTabelSelectData.colorGroup = colorGroupList
+              this.additionTabelSelectData.batchProcessStage =
+                batchProcessStageList
+              this.additionTabelSelectData.designVariantType =
+                colorVariantTypeList
+              this.vuewEditData = designVariant
+              this.isLoading = !this.isLoading
+            }
+          )
           .catch((error) => {
             this.isLoading = !this.isLoading
             // eslint-disable-next-line no-console
@@ -419,14 +407,17 @@ export default {
                 colorVariantTypeList,
               },
             }) => {
+              this.selectData = designList
+              this.additionTabelSelectData.colorDepth = colorDepthList
+              this.additionTabelSelectData.productType = productTypeList
+              this.additionTabelSelectData.productType = productTypeList
+              this.additionTabelSelectData.product = productList
+              this.additionTabelSelectData.colorGroup = colorGroupList
+              this.additionTabelSelectData.batchProcessStage =
+                batchProcessStageList
+              this.additionTabelSelectData.designVariantType =
+                colorVariantTypeList
               this.isLoading = !this.isLoading
-              this.allSelectData.name = designList
-              this.allSelectData.colorDepth = colorDepthList
-              this.allSelectData.productType = productTypeList
-              this.allSelectData.product = productList
-              this.allSelectData.colorGroup = colorGroupList
-              this.allSelectData.batchProcessStage = batchProcessStageList
-              this.allSelectData.designVariantType = colorVariantTypeList
             }
           )
           .catch((error) => {
@@ -445,62 +436,80 @@ export default {
     // Save Changes action
     saveAction() {
       if (
-        this.allInputAndLookUpValue.designName &&
-        this.allInputAndLookUpValue.name &&
-        this.allInputAndLookUpValue.designVariantType &&
-        this.allInputAndLookUpValue.designVariantName &&
-        this.allInputAndLookUpValue.batchProcessStage
+        (this.allInputAndLookUpValue.name || this.vuewEditData?.name) &&
+        (this.allInputAndLookUpValue.designVariantName ||
+          this.vuewEditData?.designVariantName)
       ) {
-        const body = {}
-        if (this.btnType === 'edit') {
-          body.id = this.pageID || ''
-          body.confirmed = this.allInputAndLookUpValue?.confirmed || ''
-          body.name = this.allInputAndLookUpValue?.name || ''
-          body.code = this.allInputAndLookUpValue?.code || ''
-          body.planningTypeId =
-            this.allInputAndLookUpValue?.planningTypeId || ''
-        } else {
-          const designVariant = {}
-          const colorVariant = {}
-          designVariant.design = { id: this.allInputAndLookUpValue?.designName }
-          designVariant.name = this.allInputAndLookUpValue?.designVariantName
-          colorVariant.name = this.allInputAndLookUpValue?.name
-          colorVariant.colorDepth = {
-            id: this.allInputAndLookUpValue?.colorDepth,
-          }
-          colorVariant.productType = {
-            id: this.allInputAndLookUpValue?.productType,
-          }
-          colorVariant.product = {
-            id: this.allInputAndLookUpValue?.product,
-          }
-          colorVariant.colorGroup = {
-            id: this.allInputAndLookUpValue?.colorGroup,
-          }
-          colorVariant.batchProcessStage = {
-            id: this.allInputAndLookUpValue?.batchProcessStage,
-          }
-          colorVariant.colorVariantType = {
-            id: this.allInputAndLookUpValue?.designVariantType,
-          }
-          colorVariant.note = this.allInputAndLookUpValue?.note
+        // Production Addition Table da ishliydi
+        this.$refs.additionTableRef.additionTableValuesAction()
 
-          body.designVariant = designVariant
-          body.colorVariant = colorVariant
+        if (
+          this.additionTableData.name &&
+          this.additionTableData.batchProcessStage &&
+          this.additionTableData.designVariantType
+        ) {
+          const body = {}
+          if (this.pageType === 'edit') {
+            body.id = this.pageID || ''
+            body.confirmed = this.allInputAndLookUpValue?.confirmed || ''
+            body.name = this.allInputAndLookUpValue?.name || ''
+            body.code = this.allInputAndLookUpValue?.code || ''
+            body.planningTypeId =
+              this.allInputAndLookUpValue?.planningTypeId || ''
+          } else {
+            const designVariant = {}
+            const colorVariant = {}
+            designVariant.design = {
+              id: this.allInputAndLookUpValue?.name ?? '',
+            }
+            designVariant.name =
+              this.allInputAndLookUpValue?.designVariantName ?? ''
+            colorVariant.name = this.additionTableData?.name ?? ''
+            colorVariant.colorDepth = {
+              id: this.additionTableData?.colorDepth ?? '',
+            }
+            colorVariant.productType = {
+              id: this.additionTableData?.productType ?? '',
+            }
+            colorVariant.product = {
+              id: this.additionTableData?.product ?? '',
+            }
+            colorVariant.colorGroup = {
+              id: this.additionTableData?.colorGroup ?? '',
+            }
+            colorVariant.batchProcessStage = {
+              id: this.additionTableData?.batchProcessStage ?? '',
+            }
+            colorVariant.colorVariantType = {
+              id: this.additionTableData?.designVariantType ?? '',
+            }
+            colorVariant.note = this.additionTableData?.note ?? ''
+            body.designVariant = designVariant
+            body.colorVariant = colorVariant
+          }
+          this.isLoading = !this.isLoading
+          this.$axios[this.pageID ? 'put' : 'post'](
+            `/designVariant/${
+              this.pageID ? 'editDesignVariant' : 'addDesignVariant'
+            }`,
+            body
+          )
+            .then(() => {
+              this.isLoading = !this.isLoading
+              this.$router.push('/designVariants.htm')
+            })
+            .catch((error) => {
+              this.isLoading = !this.isLoading
+              // eslint-disable-next-line no-console
+              console.log(error)
+            })
         }
-        this.isLoading = !this.isLoading
-        this.$axios
-          .post(`/designVariant/addDesignVariant`, body)
-          .then(({ status }) => {
-            this.isLoading = !this.isLoading
-            if (status === 200) this.$router.push('/designVariants.htm')
-          })
-          .catch((error) => {
-            this.isLoading = !this.isLoading
-            // eslint-disable-next-line no-console
-            console.log(error)
-          })
       }
+    },
+
+    // Production Addition Table value'sini olish
+    getAdditionTableValueAction(tableValuesObject) {
+      this.additionTableData = tableValuesObject
     },
   },
 }

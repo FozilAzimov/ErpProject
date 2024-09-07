@@ -20,9 +20,9 @@
           <img src="@assets/icons/user-black.png" alt="user" class="w-[14px]" />
           <h1 class="font-bold text-[rgb(49,126,172)] text-[14px] uppercase">
             {{
-              btnType === 'view'
+              pageType === 'view'
                 ? 'View Packaging'
-                : btnType === 'edit'
+                : pageType === 'edit'
                 ? 'Edit Packaging'
                 : 'Packaging Create'
             }}
@@ -94,7 +94,11 @@
                 ></span
               >
               <generic-input
-                :value="''"
+                :value="
+                  viewEditData?.[element?.subName]
+                    ? viewEditData?.[element?.subName]
+                    : ''
+                "
                 width="300"
                 type="text"
                 :name="element.subName"
@@ -108,7 +112,11 @@
             >
               <span class="text-[13px]">{{ element.name }}</span>
               <generic-input
-                :value="''"
+                :value="
+                  viewEditData?.[element?.subName]
+                    ? viewEditData?.[element?.subName]
+                    : ''
+                "
                 width="300"
                 type="number"
                 :name="element.subName"
@@ -124,6 +132,11 @@
                 :text="element.name"
                 :name="element.subName"
                 :border="true"
+                :default-value="
+                  viewEditData?.[element?.subName]
+                    ? viewEditData?.[element?.subName]
+                    : false
+                "
                 :disabled="element.disabled"
                 @customFunction="getInputAndLookUpValueAction"
               />
@@ -161,14 +174,14 @@
               name="Go Back"
               type="primary"
               icon-name-attribute="arrow-left"
-              @click="goBackAction"
+              @click="$router.push('/planningTypes.htm')"
             />
             <generic-button
-              v-if="btnType !== 'view'"
-              :name="btnType === 'edit' ? 'Save changes' : 'Save'"
-              :type="btnType === 'edit' ? 'success' : 'primary'"
-              :icon-name-attribute="btnType && 'edit'"
-              @click="saveAction()"
+              v-if="pageType !== 'view'"
+              :name="pageType === 'edit' ? 'Save changes' : 'Save'"
+              :type="pageType === 'edit' ? 'success' : 'primary'"
+              :icon-name-attribute="pageType && 'edit'"
+              @click="saveAction"
             />
           </div>
         </div>
@@ -198,35 +211,36 @@ export default {
       checkModal: false,
       isOpenTable: true,
       isCloseTable: true,
-      btnType: '',
+      pageType: null,
       pageID: null,
-      editData: {},
+      viewEditData: {},
       allInputAndLookUpValue: {},
       elementData: [],
       selectDefaultData: [],
-      radio: '',
+      radio: 'enabled',
     }
   },
 
   // WATCH
   watch: {
-    pageID(newVal) {
-      this.btnTypeSpecifyingAction()
+    radio(newVal) {
+      this.allInputAndLookUpValue.active = newVal
     },
   },
 
   // CREATED
   created() {
-    this.btnType = JSON.parse(localStorage.getItem('allTrueAndFalseData'))?.type
     // page ID sini olish
     this.pageID = this.$route.params?.id
+    // page TYPE ni aniqlash
+    this.pageType = this.$route?.query?.page_type
+    this.allInputAndLookUpValue.active = 'enabled'
   },
 
   // MOUNTED
   mounted() {
     // function
     this.dataCreatedAction()
-
     // Table function
     this.getTableRequest()
   },
@@ -247,19 +261,6 @@ export default {
       this.isCloseTable = !this.isCloseTable
     },
 
-    // go back action
-    goBackAction() {
-      localStorage.removeItem('allTrueAndFalseData')
-      this.$router.push('/planningTypes.htm')
-    },
-
-    // Specifying the buttun type action
-    btnTypeSpecifyingAction() {
-      if (!this.pageID) {
-        localStorage.removeItem('allTrueAndFalseData')
-      }
-    },
-
     // Data created
     dataCreatedAction() {
       const data = [
@@ -268,56 +269,56 @@ export default {
           subName: 'name',
           type: 'text',
           required: true,
-          disabled: this.btnType === 'view',
+          disabled: this.pageType === 'view',
         },
         {
           name: 'Use Qty2',
           subName: 'useQty2',
           type: 'checkbox',
           required: false,
-          disabled: this.btnType === 'view',
+          disabled: this.pageType === 'view',
         },
         {
           name: 'Planning Type Param',
           subName: 'planningTypeParam',
           type: 'checkbox',
           required: false,
-          disabled: this.btnType === 'view',
+          disabled: this.pageType === 'view',
         },
         {
           name: 'Use Recipe is Reserve',
-          subName: 'useRecipeIsReserve',
+          subName: 'useRecipeReserve',
           type: 'checkbox',
           required: false,
-          disabled: this.btnType === 'view',
+          disabled: this.pageType === 'view',
         },
         {
           name: 'Report Sequence',
           subName: 'reportSequence',
           type: 'number',
           required: false,
-          disabled: this.btnType === 'view',
+          disabled: this.pageType === 'view',
         },
         {
           name: 'Simple Production Invoice',
           subName: 'simpleProductionInvoice',
           type: 'checkbox',
           required: false,
-          disabled: this.btnType === 'view',
+          disabled: this.pageType === 'view',
         },
         {
           name: 'Free Production Param',
           subName: 'freeProductionParam',
           type: 'checkbox',
           required: false,
-          disabled: this.btnType === 'view',
+          disabled: this.pageType === 'view',
         },
         {
           name: 'Status',
           subName: 'status',
           type: 'radio',
           required: false,
-          disabled: this.btnType === 'view',
+          disabled: this.pageType === 'view',
         },
       ]
       this.elementData = data
@@ -325,15 +326,17 @@ export default {
 
     // Page request
     getTableRequest() {
-      if (this.pageID && this.btnType === 'view') {
+      if (this.pageID && this.pageType === 'view') {
         this.isLoading = !this.isLoading
         this.$axios
-          .post(`/stage/prepareStageViewAjaxLoad`, {
+          .post(`/planningType/preparePlanningTypeViewAjaxLoad`, {
             id: this.pageID,
             page_current: 1,
             page_size: 25,
           })
-          .then(({ data: { design } }) => {
+          .then(({ data: { planningType } }) => {
+            this.viewEditData = planningType
+            this.radio = planningType?.active ? 'enabled' : 'disabled'
             this.isLoading = !this.isLoading
           })
           .catch((error) => {
@@ -341,15 +344,17 @@ export default {
             // eslint-disable-next-line no-console
             console.log(error)
           })
-      } else if (this.pageID && this.btnType === 'edit') {
+      } else if (this.pageID && this.pageType === 'edit') {
         this.isLoading = !this.isLoading
         this.$axios
-          .post(`/stage/prepareStageAjaxLoad`, {
+          .post(`/planningType/preparePlanningTypeAjaxLoad`, {
             id: this.pageID,
             page_current: 1,
             page_size: 25,
           })
-          .then(({ data: { designJson } }) => {
+          .then(({ data: { planningType } }) => {
+            this.viewEditData = planningType
+            this.radio = planningType?.active ? 'enabled' : 'disabled'
             this.isLoading = !this.isLoading
           })
           .catch((error) => {
@@ -367,29 +372,70 @@ export default {
 
     // SAVE and Changes action
     saveAction() {
-      if (this.allInputAndLookUpValue.name) {
+      if (this.allInputAndLookUpValue?.name || this.viewEditData?.name) {
         const body = {}
-        if (this.btnType === 'edit') {
-          body.id = this.pageID || ''
-          body.confirmed = this.allInputAndLookUpValue?.confirmed || ''
-          body.name = this.allInputAndLookUpValue?.name || ''
-          body.code = this.allInputAndLookUpValue?.code || ''
-          body.planningTypeId =
-            this.allInputAndLookUpValue?.planningTypeId || ''
+        if (this.pageType === 'edit') {
+          const planningType = {}
+          planningType.id = this.pageID || ''
+          planningType.name =
+            this.allInputAndLookUpValue?.name ?? this.viewEditData?.name ?? ''
+          planningType.useQty2 =
+            this.allInputAndLookUpValue?.useQty2 ??
+            this.viewEditData?.useQty2 ??
+            false
+          planningType.planningTypeParam =
+            this.allInputAndLookUpValue?.planningTypeParam ??
+            this.viewEditData?.planningTypeParam ??
+            false
+          planningType.useRecipeReserve =
+            this.allInputAndLookUpValue?.useRecipeReserve ??
+            this.viewEditData?.useRecipeReserve ??
+            false
+          planningType.reportSequence =
+            this.allInputAndLookUpValue?.reportSequence ??
+            this.viewEditData?.reportSequence ??
+            ''
+          planningType.active =
+            this.allInputAndLookUpValue?.active === 'enabled' ??
+            this.viewEditData?.active ??
+            false
+          planningType.simpleProductionInvoice =
+            this.allInputAndLookUpValue?.simpleProductionInvoice ??
+            this.viewEditData?.simpleProductionInvoice ??
+            false
+          planningType.freeProductionParam =
+            this.allInputAndLookUpValue?.freeProductionParam ??
+            this.viewEditData?.freeProductionParam ??
+            false
+          body.planningType = planningType
         } else {
-          const packaging = {}
-          packaging.name = this.allInputAndLookUpValue?.name || ''
-          packaging.cardnumber = this.allInputAndLookUpValue?.cardNumber || ''
-          packaging.code = this.allInputAndLookUpValue?.code || ''
-          body.packaging = packaging
-          body.department_id = this.allInputAndLookUpValue?.departmentId || ''
+          const planningType = {}
+          planningType.name = this.allInputAndLookUpValue?.name ?? ''
+          planningType.useQty2 = this.allInputAndLookUpValue?.useQty2 ?? false
+          planningType.planningTypeParam =
+            this.allInputAndLookUpValue?.planningTypeParam ?? false
+          planningType.useRecipeReserve =
+            this.allInputAndLookUpValue?.useRecipeReserve ?? false
+          planningType.reportSequence =
+            this.allInputAndLookUpValue?.reportSequence ?? ''
+          planningType.active =
+            this.allInputAndLookUpValue?.active === 'enabled'
+          planningType.simpleProductionInvoice =
+            this.allInputAndLookUpValue?.simpleProductionInvoice ?? false
+          planningType.freeProductionParam =
+            this.allInputAndLookUpValue?.freeProductionParam ?? false
+          body.planningType = planningType
         }
         this.isLoading = !this.isLoading
-        this.$axios
-          .post(`/packagings/addEditPackaging`, body)
-          .then(({ status }) => {
+        this.$axios[this.pageID ? 'put' : 'post'](
+          `/planningType/${
+            this.pageID ? 'editPlanningType' : 'addPlanningType'
+          }`,
+          body
+        )
+          .then(() => {
             this.isLoading = !this.isLoading
-            if (status === 200) this.$router.push('/packaging.htm')
+            this.$router.push('/planningTypes.htm')
           })
           .catch((error) => {
             this.isLoading = !this.isLoading

@@ -79,7 +79,12 @@
           name="Add New"
           type="primary"
           :margin="true"
-          @click="$router.push('/prepareOrderProductionType.htm')"
+          @click="
+            $router.push({
+              path: '/prepareOrderProductionType.htm',
+              query: { page_type: 'create' },
+            })
+          "
         />
         <div class="p-2">
           <div class="flex items-center justify-between mb-1">
@@ -87,7 +92,7 @@
               <select
                 v-model="pageSize_value"
                 class="border-[1px] border-solid border-[rgba(171,177,187,0.7)] w-[60px] px-[5px] py-[3px] cursor-pointer rounded-[2px] text-[14px] outline-none"
-                @change="getTableRequest()"
+                @change="getTableRequest"
               >
                 <option value="10">10</option>
                 <option value="25">25</option>
@@ -121,7 +126,7 @@
             :istherebody="isThereBody"
             open-url="prepareOrderProductionType"
             :productions-action-buttons="true"
-            delete-row-url="packag/deletePackaging"
+            delete-row-url="orderProductionType/prepareOrderProductionTypeDelete"
             height="600"
             @pageEmitAction="getTableRequest"
           />
@@ -151,18 +156,16 @@ export default {
     return {
       isLoading: false,
       pageSize_value: 25,
-      btnType: '',
-      pageID: null,
       keywordValue: '',
       tableHead: {
         id: { name: 'Id', code: 'id' },
         name: {
           name: 'Order Production Type',
-          code: 'orderProductionType',
+          code: 'name',
         },
-        status: {
+        active: {
           name: 'Status',
-          code: 'status',
+          code: 'active',
         },
       },
       tableBody: [],
@@ -172,20 +175,6 @@ export default {
       isOpenTable: true,
       isCloseTable: true,
     }
-  },
-
-  // WATCH
-  watch: {
-    pageID(newVal) {
-      this.btnTypeSpecifyingAction()
-    },
-  },
-
-  // CREATED
-  created() {
-    this.btnType = JSON.parse(localStorage.getItem('allTrueAndFalseData'))?.type
-    // page ID sini olish
-    this.pageID = this.$route.params?.id
   },
 
   // MOUNTED
@@ -207,7 +196,7 @@ export default {
     getTableRequest() {
       this.isLoading = !this.isLoading
       this.$axios
-        .post(`/orderproductiontypes/orderproductiontypesAjaxLoad`, {
+        .post(`/orderProductionType/orderproductiontypes`, {
           searchForm: {
             keyword: this.keywordValue,
           },
@@ -218,9 +207,9 @@ export default {
             total: 328,
           },
         })
-        .then(({ data: { packagingList } }) => {
+        .then(({ data: { orderProductionTypeList } }) => {
           this.isLoading = !this.isLoading
-          this.tableBody = packagingList
+          this.tableBody = orderProductionTypeList
 
           this.tableBody.length
             ? (this.isThereBody = true)
@@ -231,13 +220,6 @@ export default {
           // eslint-disable-next-line no-console
           console.log(error)
         })
-    },
-
-    // Specifying the buttun type action
-    btnTypeSpecifyingAction() {
-      if (!this.pageID) {
-        localStorage.removeItem('allTrueAndFalseData')
-      }
     },
 
     // Generic_Input value

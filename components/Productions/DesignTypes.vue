@@ -79,7 +79,13 @@
           name="Add New"
           type="primary"
           :margin="true"
-          @click="$router.push('/prepareDesignType.htm')"
+          icon-name-attribute="circle-plus-outline"
+          @click="
+            $router.push({
+              path: '/prepareDesignType.htm',
+              query: { page_type: 'create' },
+            })
+          "
         />
         <div class="p-2">
           <div class="flex items-center justify-between mb-1">
@@ -145,6 +151,8 @@ export default {
     ColumnConfigPage,
     GenericTablePage,
   },
+
+  // DATA
   data() {
     return {
       isLoading: false,
@@ -165,6 +173,8 @@ export default {
       isCloseTable: true,
     }
   },
+
+  // MOUNTED
   mounted() {
     this.tableHeadLength = Object.keys(this.tableHead).length + 1
     // Table function

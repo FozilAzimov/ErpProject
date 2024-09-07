@@ -20,9 +20,9 @@
           <img src="@assets/icons/user-black.png" alt="user" class="w-[14px]" />
           <h1 class="font-bold text-[rgb(49,126,172)] text-[14px] uppercase">
             {{
-              btnType === 'view'
+              pageType === 'view'
                 ? 'View Packaging'
-                : btnType === 'edit'
+                : pageType === 'edit'
                 ? 'Edit Packaging'
                 : 'Packaging Create'
             }}
@@ -94,7 +94,11 @@
                 ></span
               >
               <generic-input
-                :value="''"
+                :value="
+                  viewEditData?.[element?.subName]
+                    ? viewEditData?.[element?.subName]
+                    : ''
+                "
                 width="300"
                 type="text"
                 :name="element.subName"
@@ -135,18 +139,25 @@
               name="Go Back"
               type="primary"
               icon-name-attribute="arrow-left"
-              @click="goBackAction"
+              @click="$router.push('/productproductiontypes.htm')"
             />
             <generic-button
-              v-if="btnType !== 'view'"
-              :name="btnType === 'edit' ? 'Save changes' : 'Save'"
-              :type="btnType === 'edit' ? 'success' : 'primary'"
-              :icon-name-attribute="btnType && 'edit'"
-              @click="saveAction()"
+              v-if="pageType !== 'view'"
+              :name="pageType === 'edit' ? 'Save changes' : 'Save'"
+              :type="pageType === 'edit' ? 'success' : 'primary'"
+              :icon-name-attribute="pageType && 'edit'"
+              @click="saveAction"
             />
           </div>
         </div>
-        <generic-transfer v-if="btnType !== 'view'" class="mt-5" />
+        <generic-transfer
+          v-if="pageType !== 'view'"
+          ref="transferRef"
+          class="mt-5"
+          :left-data="transferLeftData"
+          :right-data="transferRightData"
+          @customFunction="getTransferLeftRightData"
+        />
       </div>
     </template>
   </div>
@@ -164,6 +175,8 @@ export default {
     GenericInput,
     GenericTransfer,
   },
+
+  // DATA
   data() {
     return {
       isLoading: false,
@@ -171,35 +184,41 @@ export default {
       checkModal: false,
       isOpenTable: true,
       isCloseTable: true,
-      btnType: '',
+      pageType: null,
       pageID: null,
-      editData: {},
+      viewEditData: {},
       allInputAndLookUpValue: {},
       elementData: [],
-      selectDefaultData: [],
-      radio: '',
+      radio: 'enabled',
+      transferLeftData: [],
+      transferRightData: [],
+      planningTypeLeft: [],
+      planningTypeRight: [],
     }
   },
 
   // WATCH
   watch: {
-    pageID(newVal) {
-      this.btnTypeSpecifyingAction()
+    radio(newVal) {
+      newVal === 'enabled'
+        ? (this.allInputAndLookUpValue.active = true)
+        : (this.allInputAndLookUpValue.active = false)
     },
   },
 
   // CREATED
   created() {
-    this.btnType = JSON.parse(localStorage.getItem('allTrueAndFalseData'))?.type
     // page ID sini olish
     this.pageID = this.$route.params?.id
+    // page TYPE ni aniqlash
+    this.pageType = this.$route?.query?.page_type
+    this.allInputAndLookUpValue.active = true
   },
 
   // MOUNTED
   mounted() {
     // function
     this.dataCreatedAction()
-
     // Table function
     this.getTableRequest()
   },
@@ -220,35 +239,22 @@ export default {
       this.isCloseTable = !this.isCloseTable
     },
 
-    // go back action
-    goBackAction() {
-      localStorage.removeItem('allTrueAndFalseData')
-      this.$router.push('/productproductiontypes.htm')
-    },
-
-    // Specifying the buttun type action
-    btnTypeSpecifyingAction() {
-      if (!this.pageID) {
-        localStorage.removeItem('allTrueAndFalseData')
-      }
-    },
-
     // Data created
     dataCreatedAction() {
       const data = [
         {
           name: 'Product Production',
-          subName: 'product',
+          subName: 'name',
           type: 'text',
           required: true,
-          disabled: this.btnType === 'view',
+          disabled: this.pageType === 'view',
         },
         {
           name: 'Status',
           subName: 'status',
           type: 'radio',
           required: false,
-          disabled: this.btnType === 'view',
+          disabled: this.pageType === 'view',
         },
       ]
       this.elementData = data
@@ -256,15 +262,17 @@ export default {
 
     // Page request
     getTableRequest() {
-      if (this.pageID && this.btnType === 'view') {
+      if (this.pageID && this.pageType === 'view') {
         this.isLoading = !this.isLoading
         this.$axios
-          .post(`/stage/prepareStageViewAjaxLoad`, {
+          .post(`/productionType/prepareProductProductionTypeViewAjaxLoad`, {
             id: this.pageID,
             page_current: 1,
             page_size: 25,
           })
-          .then(({ data: { design } }) => {
+          .then(({ data: { productProductionType } }) => {
+            this.viewEditData = productProductionType
+            this.radio = productProductionType?.active ? 'enabled' : 'disabled'
             this.isLoading = !this.isLoading
           })
           .catch((error) => {
@@ -272,17 +280,28 @@ export default {
             // eslint-disable-next-line no-console
             console.log(error)
           })
-      } else if (this.pageID && this.btnType === 'edit') {
+      } else if (this.pageID && this.pageType === 'edit') {
         this.isLoading = !this.isLoading
         this.$axios
-          .post(`/stage/prepareStageAjaxLoad`, {
+          .post(`/productionType/prepareProductProductionTypeAjaxLoad`, {
             id: this.pageID,
             page_current: 1,
             page_size: 25,
           })
-          .then(({ data: { designJson } }) => {
-            this.isLoading = !this.isLoading
-          })
+          .then(
+            ({
+              data: {
+                planingTypeLeft,
+                planingTypeRight,
+                productProductionType,
+              },
+            }) => {
+              this.transferLeftData = planingTypeLeft
+              this.transferRightData = planingTypeRight
+              this.viewEditData = productProductionType
+              this.isLoading = !this.isLoading
+            }
+          )
           .catch((error) => {
             this.isLoading = !this.isLoading
             // eslint-disable-next-line no-console
@@ -291,13 +310,13 @@ export default {
       } else {
         this.isLoading = !this.isLoading
         this.$axios
-          .post(`/stage/prepareStageAjaxLoad`, {
+          .post(`/productionType/prepareProductProductionTypeAjaxLoad`, {
             page_current: 1,
             page_size: 25,
           })
-          .then(({ data: { departmentList } }) => {
+          .then(({ data: { planingTypeLeft } }) => {
+            this.transferLeftData = planingTypeLeft
             this.isLoading = !this.isLoading
-            this.selectDefaultData = departmentList
           })
           .catch((error) => {
             this.isLoading = !this.isLoading
@@ -314,9 +333,12 @@ export default {
 
     // SAVE and Changes action
     saveAction() {
-      if (this.allInputAndLookUpValue.name) {
+      if (this.allInputAndLookUpValue?.name || this.viewEditData?.name) {
+        // Transfer da ishlab beradigan function
+        this.$refs.transferRef.refTransferAction()
+
         const body = {}
-        if (this.btnType === 'edit') {
+        if (this.pageType === 'edit') {
           body.id = this.pageID || ''
           body.confirmed = this.allInputAndLookUpValue?.confirmed || ''
           body.name = this.allInputAndLookUpValue?.name || ''
@@ -324,17 +346,25 @@ export default {
           body.planningTypeId =
             this.allInputAndLookUpValue?.planningTypeId || ''
         } else {
-          const packaging = {}
-          packaging.name = this.allInputAndLookUpValue?.name || ''
-          packaging.cardnumber = this.allInputAndLookUpValue?.cardNumber || ''
-          packaging.code = this.allInputAndLookUpValue?.code || ''
-          body.packaging = packaging
-          body.department_id = this.allInputAndLookUpValue?.departmentId || ''
+          const productProductionType = {}
+          productProductionType.name = this.allInputAndLookUpValue?.name ?? ''
+          productProductionType.active =
+            this.allInputAndLookUpValue?.active ?? false
+          body.productProductionType = productProductionType
+          body.planningTypeLeft = this.planningTypeLeft
+          body.planningTypeRight = this.planningTypeRight
         }
+
         this.isLoading = !this.isLoading
-        this.$axios
-          .post(`/packagings/addEditPackaging`, body)
-          .then(({ status }) => {
+        this.$axios[this.pageID ? 'put' : 'post'](
+          `/productionType/${
+            this.pageID
+              ? 'editProductproductiontype'
+              : 'addProductproductiontype'
+          }`,
+          body
+        )
+          .then(() => {
             this.isLoading = !this.isLoading
             this.$router.push('/productproductiontypes.htm')
           })
@@ -344,6 +374,19 @@ export default {
             console.log(error)
           })
       }
+    },
+
+    // Emit Transfer function
+    getTransferLeftRightData(leftPropData, rightID) {
+      const removeMatchingObjects = (array1, array2) =>
+        array1.filter((obj) => !array2.includes(obj.id))
+      const updatedArray = removeMatchingObjects(leftPropData, rightID)
+      const leftID = []
+      updatedArray.forEach(({ id }) => {
+        leftID.push(id)
+      })
+      this.planningTypeLeft = leftID
+      this.planningTypeRight = rightID
     },
   },
 }

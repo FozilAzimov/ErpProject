@@ -1659,6 +1659,13 @@
     "_name": "_7729a93d"
   },
   {
+    "name": "prepareDesignColorVariant.htm-id",
+    "path": "/prepareDesignColorVariant.htm/:id?",
+    "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\prepareDesignColorVariant.htm\\\\_id.vue",
+    "chunkName": "pages/prepareDesignColorVariant.htm/_id",
+    "_name": "_20c77fbb"
+  },
+  {
     "name": "prepareDesignType.htm-id",
     "path": "/prepareDesignType.htm/:id?",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\prepareDesignType.htm\\\\_id.vue",

@@ -20,9 +20,9 @@
           <img src="@assets/icons/user-black.png" alt="user" class="w-[14px]" />
           <h1 class="font-bold text-[rgb(49,126,172)] text-[14px] uppercase">
             {{
-              btnType === 'view'
+              pageType === 'view'
                 ? 'VIEW Color Variant Recipe Stage Child'
-                : btnType === 'edit'
+                : pageType === 'edit'
                 ? 'EDIT Color Variant Recipe Stage Child'
                 : 'ADD Color Variant Recipe Stage Child'
             }}
@@ -83,23 +83,17 @@
       >
         <div class="w-fit flex flex-col items-start m-2 gap-1">
           <div class="flex flex-col items-start gap-2">
-            <span>
+            <span class="flex flex-col items-start">
               <span class="text-[14px]"
                 >Color Variant Recipe Stage Child Name
                 <span class="text-red-500 text-[18px]">*</span>
               </span>
               <generic-input
-                :value="
-                  btnType === 'view'
-                    ? viewData?.name
-                    : btnType === 'edit'
-                    ? editData?.name
-                    : ''
-                "
+                :value="pageType ? viewEditData?.pictureName : ''"
                 width="300"
                 type="text"
                 name="pictureName"
-                :disabled="btnType === 'view' ? true : false"
+                :disabled="pageType === 'view' ? true : false"
                 @customFunction="getInputValueAction"
               />
             </span>
@@ -113,14 +107,14 @@
               name="Go Back"
               type="primary"
               icon-name-attribute="arrow-left"
-              @click="goBackAction"
+              @click="$router.push('/colorVariantRecipeStagePicture.htm')"
             />
             <generic-button
-              v-if="btnType !== 'view'"
-              :name="btnType === 'edit' ? 'Save changes' : 'Save'"
-              :type="btnType === 'edit' ? 'success' : 'primary'"
-              :icon-name-attribute="btnType && 'edit'"
-              @click="saveAction(btnType)"
+              v-if="pageType !== 'view'"
+              :name="pageType === 'edit' ? 'Save changes' : 'Save'"
+              :type="pageType === 'edit' ? 'success' : 'primary'"
+              :icon-name-attribute="pageType && 'edit'"
+              @click="saveAction"
             />
           </div>
         </div>
@@ -148,10 +142,9 @@ export default {
       checkModal: false,
       isOpenTable: true,
       isCloseTable: true,
-      btnType: '',
+      pageType: '',
       pageID: null,
-      viewData: {},
-      editData: {},
+      viewEditData: {},
       allInputValue: {},
       radio: true,
     }
@@ -159,9 +152,6 @@ export default {
 
   // WATCH
   watch: {
-    pageID(newVal) {
-      this.btnTypeSpecifyingAction()
-    },
     radio(newVal) {
       this.allInputValue.active = newVal
     },
@@ -169,9 +159,10 @@ export default {
 
   // CREATED
   created() {
-    this.btnType = JSON.parse(localStorage.getItem('allTrueAndFalseData'))?.type
     // page ID sini olish
     this.pageID = this.$route.params?.id
+    // page TYPE ni aniqlash
+    this.pageType = this.$route?.query?.page_type
   },
 
   // MOUNTED
@@ -197,15 +188,9 @@ export default {
       this.isCloseTable = !this.isCloseTable
     },
 
-    // go back action
-    goBackAction() {
-      localStorage.removeItem('allTrueAndFalseData')
-      this.$router.push('/colorVariantRecipeStagePicture.htm')
-    },
-
     // Page request
     getTableRequest() {
-      if (this.btnType === 'view') {
+      if (this.pageType === 'view') {
         this.isLoading = !this.isLoading
         this.$axios
           .post(
@@ -216,18 +201,20 @@ export default {
               page_size: 25,
             }
           )
-          .then(({ data: { colorVariantRecipeStageChild } }) => {
+          .then(({ data: { colorVariantRecipeStagePicture } }) => {
             this.isLoading = !this.isLoading
-            this.viewData = colorVariantRecipeStageChild
-            this.allInputValue.name = colorVariantRecipeStageChild?.name
-            this.allInputValue.ecode = colorVariantRecipeStageChild?.ecode
+            this.viewEditData = colorVariantRecipeStagePicture
+            this.allInputValue.pictureName =
+              colorVariantRecipeStagePicture?.pictureName
+            this.allInputValue.active = colorVariantRecipeStagePicture?.active
+            this.radio = colorVariantRecipeStagePicture?.active
           })
           .catch((error) => {
             this.isLoading = !this.isLoading
             // eslint-disable-next-line no-console
             console.log(error)
           })
-      } else if (this.btnType === 'edit') {
+      } else if (this.pageType === 'edit') {
         this.isLoading = !this.isLoading
         this.$axios
           .post(
@@ -238,11 +225,11 @@ export default {
               page_size: 25,
             }
           )
-          .then(({ data: { colorVariantRecipeStageChild } }) => {
+          .then(({ data: { colorVariantRecipeStagePicture } }) => {
             this.isLoading = !this.isLoading
-            this.editData = colorVariantRecipeStageChild
-            this.allInputValue.name = colorVariantRecipeStageChild?.name
-            this.allInputValue.ecode = colorVariantRecipeStageChild?.ecode
+            this.viewEditData = colorVariantRecipeStagePicture
+            this.allInputValue.active = colorVariantRecipeStagePicture?.active
+            this.radio = colorVariantRecipeStagePicture?.active
           })
           .catch((error) => {
             this.isLoading = !this.isLoading
@@ -261,7 +248,7 @@ export default {
     saveAction() {
       if (this.allInputValue?.pictureName) {
         const colorVariantRecipeStagePicture = {}
-        if (this.btnType === 'edit') {
+        if (this.pageType === 'edit') {
           colorVariantRecipeStagePicture.id = this.pageID
           colorVariantRecipeStagePicture.pictureName =
             this.allInputValue?.pictureName
@@ -271,11 +258,12 @@ export default {
             this.allInputValue?.pictureName
           colorVariantRecipeStagePicture.active = this.allInputValue?.active
         }
+
         this.isLoading = !this.isLoading
         this.$axios
           .post(
             `/colorVariantRecipeStagePicture/${
-              this.btnType === 'edit'
+              this.pageType === 'edit'
                 ? 'editColorVariantRecipeStagePicture'
                 : 'addColorVariantRecipeStagePicture'
             }`,

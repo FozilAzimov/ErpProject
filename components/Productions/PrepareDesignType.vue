@@ -20,9 +20,9 @@
           <img src="@assets/icons/user-black.png" alt="user" class="w-[14px]" />
           <h1 class="font-bold text-[rgb(49,126,172)] text-[14px] uppercase">
             {{
-              btnType === 'view'
+              pageType === 'view'
                 ? 'View Packaging'
-                : btnType === 'edit'
+                : pageType === 'edit'
                 ? 'Edit Packaging'
                 : 'Packaging Create'
             }}
@@ -114,14 +114,14 @@
               name="Go Back"
               type="primary"
               icon-name-attribute="arrow-left"
-              @click="goBackAction"
+              @click="$router.push('/designTypes.htm')"
             />
             <generic-button
-              v-if="btnType !== 'view'"
-              :name="btnType === 'edit' ? 'Save changes' : 'Save'"
-              :type="btnType === 'edit' ? 'success' : 'primary'"
-              :icon-name-attribute="btnType && 'edit'"
-              @click="saveAction()"
+              v-if="pageType !== 'view'"
+              :name="pageType === 'edit' ? 'Save changes' : 'Save'"
+              :type="pageType === 'edit' ? 'success' : 'primary'"
+              :icon-name-attribute="pageType && 'edit'"
+              @click="saveAction"
             />
           </div>
         </div>
@@ -146,7 +146,7 @@ export default {
     return {
       isLoading: false,
       pageSize_value: 25,
-      btnType: '',
+      pageType: null,
       pageID: null,
       checkModal: false,
       isOpenTable: true,
@@ -157,25 +157,18 @@ export default {
     }
   },
 
-  // WATCH
-  watch: {
-    pageID(newVal) {
-      this.btnTypeSpecifyingAction()
-    },
-  },
-
   // CREATED
   created() {
-    this.btnType = JSON.parse(localStorage.getItem('allTrueAndFalseData'))?.type
     // page ID sini olish
     this.pageID = this.$route.params?.id
+    // page TYPE ni aniqlash
+    this.pageType = this.$route?.query?.page_type
   },
 
   // MOUNTED
   mounted() {
     // function
     this.dataCreatedAction()
-
     // Table function
     this.getTableRequest()
   },
@@ -196,19 +189,6 @@ export default {
       this.isCloseTable = !this.isCloseTable
     },
 
-    // go back action
-    goBackAction() {
-      localStorage.removeItem('allTrueAndFalseData')
-      this.$router.push('/designTypes.htm')
-    },
-
-    // Specifying the buttun type action
-    btnTypeSpecifyingAction() {
-      if (!this.pageID) {
-        localStorage.removeItem('allTrueAndFalseData')
-      }
-    },
-
     // Data created
     dataCreatedAction() {
       const data = [
@@ -218,7 +198,7 @@ export default {
           type: 'text',
           required: true,
           show: true,
-          disabled: this.btnType === 'view',
+          disabled: this.pageType === 'view',
         },
       ]
       this.elementData = data
@@ -226,7 +206,7 @@ export default {
 
     // Page request
     getTableRequest() {
-      if (this.pageID && this.btnType === 'view') {
+      if (this.pageID && this.pageType === 'view') {
         this.isLoading = !this.isLoading
         this.$axios
           .post(`/designType/prepareDesignTypeViewAjaxLoad`, {
@@ -243,7 +223,7 @@ export default {
             // eslint-disable-next-line no-console
             console.log(error)
           })
-      } else if (this.pageID && this.btnType === 'edit') {
+      } else if (this.pageID && this.pageType === 'edit') {
         this.isLoading = !this.isLoading
         this.$axios
           .post(`/designType/prepareDesignTypeAjaxLoad`, {
@@ -272,7 +252,7 @@ export default {
     saveAction() {
       if (this.inputValues.name || this.editData?.name) {
         const designType = {}
-        if (this.pageID && this.btnType === 'edit') {
+        if (this.pageID && this.pageType === 'edit') {
           designType.id = this.pageID
           designType.name = this.inputValues?.name || this.editData?.name || ''
         } else if (!this.pageID) {

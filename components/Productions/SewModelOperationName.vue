@@ -79,7 +79,13 @@
           name="Add New"
           type="primary"
           :margin="true"
-          @click="$router.push('/prepareSewModelOperationName.htm')"
+          icon-name-attribute="circle-plus-outline"
+          @click="
+            $router.push({
+              path: '/prepareSewModelOperationName.htm',
+              query: { page_type: 'create' },
+            })
+          "
         />
         <div class="p-2">
           <div class="flex items-center justify-between mb-1">
@@ -157,18 +163,20 @@ export default {
     return {
       isLoading: false,
       pageSize_value: 10,
-      btnType: '',
-      pageID: null,
       keywordValue: '',
       tableHead: {
         id: { name: 'Id', code: 'id' },
-        picture: {
-          name: 'Picture',
-          code: 'id',
-        },
         name: {
           name: 'Name',
           code: 'name',
+        },
+        type: {
+          name: 'Type',
+          code: 'entryExit',
+        },
+        planingTypeName: {
+          name: 'Planing Type Name',
+          code: 'planingTypeName',
         },
       },
       tableBody: [],
@@ -178,20 +186,6 @@ export default {
       isOpenTable: true,
       isCloseTable: true,
     }
-  },
-
-  // WATCH
-  watch: {
-    pageID(newVal) {
-      this.btnTypeSpecifyingAction()
-    },
-  },
-
-  // CREATED
-  created() {
-    this.btnType = JSON.parse(localStorage.getItem('allTrueAndFalseData'))?.type
-    // page ID sini olish
-    this.pageID = this.$route.params?.id
   },
 
   // MOUNTED
@@ -224,9 +218,9 @@ export default {
             total: 328,
           },
         })
-        .then(({ data: { colorVariantRecipeStagePicture } }) => {
+        .then(({ data: { sewModelOperationNameList } }) => {
           this.isLoading = !this.isLoading
-          this.tableBody = colorVariantRecipeStagePicture
+          this.tableBody = sewModelOperationNameList
           this.tableBody.length
             ? (this.isThereBody = true)
             : (this.isThereBody = false)
@@ -236,13 +230,6 @@ export default {
           // eslint-disable-next-line no-console
           console.log(error)
         })
-    },
-
-    // Specifying the buttun type action
-    btnTypeSpecifyingAction() {
-      if (!this.pageID) {
-        localStorage.removeItem('allTrueAndFalseData')
-      }
     },
 
     // Generic_Input value
