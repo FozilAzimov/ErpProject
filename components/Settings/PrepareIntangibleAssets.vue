@@ -21,10 +21,10 @@
           <h1 class="font-bold text-[rgb(49,126,172)] text-[14px] uppercase">
             {{
               pageType === 'view'
-                ? 'View City'
+                ? 'View PROFITS AND LOSSES'
                 : pageType === 'edit'
-                ? 'Edit City'
-                : 'Add City'
+                ? 'Edit PROFITS AND LOSSES'
+                : 'Add PROFITS AND LOSSES'
             }}
           </h1>
         </div>
@@ -168,7 +168,7 @@
               name="Go Back"
               type="primary"
               icon-name-attribute="arrow-left"
-              @click="$router.push('/city.htm')"
+              @click="$router.push('/intangibleAssets.htm')"
             />
             <generic-button
               v-if="pageType !== 'view'"

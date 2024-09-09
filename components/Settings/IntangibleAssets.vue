@@ -19,7 +19,7 @@
         <div class="flex items-center gap-[10px]">
           <img src="@assets/icons/user-black.png" alt="user" class="w-[14px]" />
           <h1 class="font-bold text-[rgb(49,126,172)] text-[14px] uppercase">
-            POSITION LIST
+            PROFITS AND LOSSES LIST
           </h1>
         </div>
         <div>
@@ -82,7 +82,7 @@
           icon-name-attribute="circle-plus-outline"
           @click="
             $router.push({
-              path: '/preparePosition.htm',
+              path: '/prepareIntangibleAssets.htm',
               query: { page_type: 'create' },
             })
           "
@@ -125,7 +125,7 @@
             :tablebody="tableBody"
             :tableheadlength="tableHeadLength"
             :istherebody="isThereBody"
-            open-url="preparePosition"
+            open-url="prepareProfitsAndLosses"
             :productions-action-buttons="true"
             delete-row-url="batchProcess/prepareBatchProcessDelete"
             height="600"

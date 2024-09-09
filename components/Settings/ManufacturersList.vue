@@ -80,7 +80,12 @@
           type="primary"
           :margin="true"
           icon-name-attribute="circle-plus-outline"
-          @click="$router.push('/prepareManufacturer.htm')"
+          @click="
+            $router.push({
+              path: '/prepareManufacturer.htm',
+              query: { page_type: 'create' },
+            })
+          "
         />
         <div class="p-2">
           <div class="flex items-center justify-between mb-1">
@@ -88,7 +93,7 @@
               <select
                 v-model="pageSize_value"
                 class="border-[1px] border-solid border-[rgba(171,177,187,0.7)] w-[60px] px-[5px] py-[3px] cursor-pointer rounded-[2px] text-[14px] outline-none"
-                @change="getTableRequest()"
+                @change="getTableRequest"
               >
                 <option value="10">10</option>
                 <option value="25">25</option>
@@ -152,8 +157,6 @@ export default {
     return {
       isLoading: false,
       pageSize_value: 25,
-      btnType: '',
-      pageID: null,
       keywordValue: '',
       tableHead: {
         id: { name: 'Id', code: 'id' },
@@ -173,20 +176,6 @@ export default {
       isOpenTable: true,
       isCloseTable: true,
     }
-  },
-
-  // WATCH
-  watch: {
-    pageID(newVal) {
-      this.btnTypeSpecifyingAction()
-    },
-  },
-
-  // CREATED
-  created() {
-    this.btnType = JSON.parse(localStorage.getItem('allTrueAndFalseData'))?.type
-    // page ID sini olish
-    this.pageID = this.$route.params?.id
   },
 
   // MOUNTED
@@ -232,13 +221,6 @@ export default {
           // eslint-disable-next-line no-console
           console.log(error)
         })
-    },
-
-    // Specifying the buttun type action
-    btnTypeSpecifyingAction() {
-      if (!this.pageID) {
-        localStorage.removeItem('allTrueAndFalseData')
-      }
     },
 
     // Generic_Input value

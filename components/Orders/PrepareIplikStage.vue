@@ -20,9 +20,9 @@
           <img src="@assets/icons/user-black.png" alt="user" class="w-[14px]" />
           <h1 class="font-bold text-[rgb(49,126,172)] text-[14px] uppercase">
             {{
-              btnType === 'view'
+              pageType === 'view'
                 ? 'VIEW CHARACTERISTIC'
-                : btnType === 'edit'
+                : pageType === 'edit'
                 ? 'Editing of sew model variant size'
                 : 'Addition of sew model variant size'
             }}
@@ -85,16 +85,16 @@
           <span class="text-[14px]">Sew model variant size name</span>
           <generic-input
             :value="
-              btnType === 'view'
+              pageType === 'view'
                 ? viewData?.name
-                : btnType === 'edit'
+                : pageType === 'edit'
                 ? editData?.name
                 : ''
             "
             width="300"
             type="text"
             name="sequenceNumber"
-            :disabled="btnType === 'view' ? true : false"
+            :disabled="pageType === 'view' ? true : false"
             @customFunction="getInputValueAction"
           />
           <div class="flex items-center gap-3 mt-3">
@@ -102,14 +102,14 @@
               name="Go Back"
               type="primary"
               icon-name-attribute="arrow-left"
-              @click="goBackAction"
+              @click="$router.push('/iplikStages.htm')"
             />
             <generic-button
-              v-if="btnType !== 'view'"
-              :name="btnType === 'edit' ? 'Save changes' : 'Save'"
-              :type="btnType === 'edit' ? 'success' : 'primary'"
-              :icon-name-attribute="btnType && 'edit'"
-              @click="saveAction(btnType)"
+              v-if="pageType !== 'view'"
+              :name="pageType === 'edit' ? 'Save changes' : 'Save'"
+              :type="pageType === 'edit' ? 'success' : 'primary'"
+              :icon-name-attribute="pageType && 'edit'"
+              @click="saveAction"
             />
           </div>
         </div>
@@ -135,7 +135,7 @@ export default {
       checkModal: false,
       isOpenTable: true,
       isCloseTable: true,
-      btnType: '',
+      pageType: null,
       pageID: null,
       viewData: {},
       editData: {},
@@ -143,18 +143,12 @@ export default {
     }
   },
 
-  // WATCH
-  watch: {
-    pageID(newVal) {
-      this.btnTypeSpecifyingAction()
-    },
-  },
-
   // CREATED
   created() {
-    this.btnType = JSON.parse(localStorage.getItem('allTrueAndFalseData'))?.type
     // page ID sini olish
     this.pageID = this.$route.params?.id
+    // page TYPE ni aniqlash
+    this.pageType = this.$route?.query?.page_type
   },
 
   // MOUNTED
@@ -179,22 +173,9 @@ export default {
       this.isCloseTable = !this.isCloseTable
     },
 
-    // go back action
-    goBackAction() {
-      localStorage.removeItem('allTrueAndFalseData')
-      this.$router.push('/iplikStages.htm')
-    },
-
-    // Specifying the buttun type action
-    btnTypeSpecifyingAction() {
-      if (!this.pageID) {
-        localStorage.removeItem('allTrueAndFalseData')
-      }
-    },
-
     // Page request
     getTableRequest() {
-      if (this.btnType === 'view') {
+      if (this.pageType === 'view') {
         this.isLoading = !this.isLoading
         this.$axios
           .post(`/sewModelVariantSize/prepareSewModelVariantsSizeView`, {
@@ -211,7 +192,7 @@ export default {
             // eslint-disable-next-line no-console
             console.log(error)
           })
-      } else if (this.btnType === 'edit') {
+      } else if (this.pageType === 'edit') {
         this.isLoading = !this.isLoading
         this.$axios
           .post(`/sewModelVariantSize/prepareSewModelVariantsSize`, {
@@ -242,7 +223,7 @@ export default {
     saveAction() {
       if (this.inputValue) {
         const sewModelVariantsSize = {}
-        if (this.btnType === 'edit') {
+        if (this.pageType === 'edit') {
           sewModelVariantsSize.id = this.pageID
           sewModelVariantsSize.name = this.inputValue
         } else {
@@ -252,7 +233,7 @@ export default {
         this.$axios
           .post(
             `/sewModelVariantSize/${
-              this.btnType === 'edit'
+              this.pageType === 'edit'
                 ? 'editSewModelVariantsSize'
                 : 'addSewModelVariantsSize'
             }`,

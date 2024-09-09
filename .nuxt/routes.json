@@ -609,6 +609,13 @@
     "_name": "_3d2bf33d"
   },
   {
+    "name": "intangibleAssets.htm",
+    "path": "/intangibleAssets.htm",
+    "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\intangibleAssets.htm\\\\index.vue",
+    "chunkName": "pages/intangibleAssets.htm/index",
+    "_name": "_79dcc598"
+  },
+  {
     "name": "internalInvoice.htm",
     "path": "/internalInvoice.htm",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\internalInvoice.htm\\\\index.vue",
@@ -1783,6 +1790,13 @@
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\prepareInputToServiceInvoice.htm\\\\_id.vue",
     "chunkName": "pages/prepareInputToServiceInvoice.htm/_id",
     "_name": "_2cab25e6"
+  },
+  {
+    "name": "prepareIntangibleAssets.htm-id",
+    "path": "/prepareIntangibleAssets.htm/:id?",
+    "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\prepareIntangibleAssets.htm\\\\_id.vue",
+    "chunkName": "pages/prepareIntangibleAssets.htm/_id",
+    "_name": "_808e0a0a"
   },
   {
     "name": "prepareInternalInvoiceNew.htm-id",

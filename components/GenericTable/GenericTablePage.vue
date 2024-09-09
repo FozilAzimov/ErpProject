@@ -405,10 +405,14 @@
               >
                 <div class="flex justify-start">
                   <el-empty
-                    :image-size="70"
+                    :image-size="60"
                     description="No Data"
                     style="padding: 0"
-                  ></el-empty>
+                  >
+                    <template #description>
+                      <p style="font-size: 13px; margin-top: -10px">No Data</p>
+                    </template>
+                  </el-empty>
                 </div>
               </td>
             </tr>

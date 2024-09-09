@@ -229,15 +229,18 @@
             <tr v-if="noDataRow">
               <td
                 :colspan="tableheadlength"
-                class="text-center border-[1px] border-solid border-[#F0F0F0] text-[12px] p-2"
+                class="border-[1px] border-solid border-[#F0F0F0] text-[12px] p-3"
               >
-                <div
-                  class="flex flex-col justify-center items-start text-[rgba(0,0,0,0.5)]"
-                >
-                  <span class="flex flex-col items-center">
-                    <img src="@assets/icons/no-data.png" alt="no-data-icons" />
-                    No data
-                  </span>
+                <div class="flex justify-start">
+                  <el-empty
+                    :image-size="60"
+                    description="No Data"
+                    style="padding: 0"
+                  >
+                    <template #description>
+                      <p style="font-size: 13px; margin-top: -10px">No Data</p>
+                    </template>
+                  </el-empty>
                 </div>
               </td>
             </tr>

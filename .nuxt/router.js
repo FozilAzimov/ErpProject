@@ -91,6 +91,7 @@ const _26659438 = () => interopDefault(import('..\\pages\\inputFromProductionCom
 const _96dfac80 = () => interopDefault(import('..\\pages\\inputReturn.htm\\index.vue' /* webpackChunkName: "pages/inputReturn.htm/index" */))
 const _c7b909ba = () => interopDefault(import('..\\pages\\inputStockDetailReport.htm\\index.vue' /* webpackChunkName: "pages/inputStockDetailReport.htm/index" */))
 const _3d2bf33d = () => interopDefault(import('..\\pages\\inputToServiceInvoice.htm\\index.vue' /* webpackChunkName: "pages/inputToServiceInvoice.htm/index" */))
+const _79dcc598 = () => interopDefault(import('..\\pages\\intangibleAssets.htm\\index.vue' /* webpackChunkName: "pages/intangibleAssets.htm/index" */))
 const _0e3a652c = () => interopDefault(import('..\\pages\\internalInvoice.htm\\index.vue' /* webpackChunkName: "pages/internalInvoice.htm/index" */))
 const _4b75d8a2 = () => interopDefault(import('..\\pages\\invoiceReports.htm\\index.vue' /* webpackChunkName: "pages/invoiceReports.htm/index" */))
 const _2d729544 = () => interopDefault(import('..\\pages\\iplikLotStavka.htm\\index.vue' /* webpackChunkName: "pages/iplikLotStavka.htm/index" */))
@@ -259,6 +260,7 @@ const _cef6314a = () => interopDefault(import('..\\pages\\prepareHrdevice.htm\\_
 const _2a880eda = () => interopDefault(import('..\\pages\\prepareInputFromProductionCompanyNew.htm\\_id.vue' /* webpackChunkName: "pages/prepareInputFromProductionCompanyNew.htm/_id" */))
 const _5bd23655 = () => interopDefault(import('..\\pages\\prepareInputReturnNew.htm\\_id.vue' /* webpackChunkName: "pages/prepareInputReturnNew.htm/_id" */))
 const _2cab25e6 = () => interopDefault(import('..\\pages\\prepareInputToServiceInvoice.htm\\_id.vue' /* webpackChunkName: "pages/prepareInputToServiceInvoice.htm/_id" */))
+const _808e0a0a = () => interopDefault(import('..\\pages\\prepareIntangibleAssets.htm\\_id.vue' /* webpackChunkName: "pages/prepareIntangibleAssets.htm/_id" */))
 const _feb83f2a = () => interopDefault(import('..\\pages\\prepareInternalInvoiceNew.htm\\_id.vue' /* webpackChunkName: "pages/prepareInternalInvoiceNew.htm/_id" */))
 const _4a8c2165 = () => interopDefault(import('..\\pages\\prepareIplikLotStavka.htm\\_id.vue' /* webpackChunkName: "pages/prepareIplikLotStavka.htm/_id" */))
 const _5407f684 = () => interopDefault(import('..\\pages\\PrepareIplikStage.htm\\_id.vue' /* webpackChunkName: "pages/PrepareIplikStage.htm/_id" */))
@@ -689,6 +691,10 @@ export const routerOptions = {
     path: "/inputToServiceInvoice.htm",
     component: _3d2bf33d,
     name: "inputToServiceInvoice.htm"
+  }, {
+    path: "/intangibleAssets.htm",
+    component: _79dcc598,
+    name: "intangibleAssets.htm"
   }, {
     path: "/internalInvoice.htm",
     component: _0e3a652c,
@@ -1361,6 +1367,10 @@ export const routerOptions = {
     path: "/prepareInputToServiceInvoice.htm/:id?",
     component: _2cab25e6,
     name: "prepareInputToServiceInvoice.htm-id"
+  }, {
+    path: "/prepareIntangibleAssets.htm/:id?",
+    component: _808e0a0a,
+    name: "prepareIntangibleAssets.htm-id"
   }, {
     path: "/prepareInternalInvoiceNew.htm/:id?",
     component: _feb83f2a,
