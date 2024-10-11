@@ -7,6 +7,9 @@
     <transition name="fade">
       <ColumnConfigPage
         v-show="checkModal"
+        :right="tableHead"
+        :left="leftMap"
+        :url="actionUrl"
         api="saveColumnConfig"
         class="z-[10000]"
         @checkModal="handleValue"
@@ -19,7 +22,7 @@
         <div class="flex items-center gap-[10px]">
           <img src="@assets/icons/user-black.png" alt="user" class="w-[14px]" />
           <h1 class="font-bold text-[rgb(49,126,172)] text-[14px] uppercase">
-            Color Variant Recipe Stage Group
+            Color Variant List
           </h1>
         </div>
         <div>
@@ -76,7 +79,12 @@
         "
       >
         <div class="m-2">
-          <generic-look-up />
+          <generic-look-up
+            dwidth="300"
+            durl="findAllCompany"
+            name="companyId"
+            @customFunction="getSelectAndInputValueAction"
+          />
         </div>
         <div class="p-2">
           <div class="flex items-center justify-between mb-1">
@@ -84,7 +92,7 @@
               <select
                 v-model="pageSize_value"
                 class="border-[1px] border-solid border-[rgba(171,177,187,0.7)] w-[60px] px-[5px] py-[3px] cursor-pointer rounded-[2px] text-[14px] outline-none"
-                @change="getTableRequest()"
+                @change="getTableRequest"
               >
                 <option value="10">10</option>
                 <option value="25">25</option>
@@ -96,18 +104,11 @@
             </div>
             <div class="flex items-center gap-2">
               <GenericInput
-                v-model="keywordValue"
                 width="200"
-                height="30"
-                pl="10"
-                pr="10"
-                pt="2"
-                pb="2"
-                textsize="13"
-                type="text"
                 placeholder="Search..."
+                name="keywordValue"
                 @enter="getTableRequest"
-                @input="getInputValue"
+                @customFunction="getSelectAndInputValueAction"
               />
               <generic-button
                 name="Search"
@@ -122,8 +123,8 @@
             :tablebody="tableBody"
             :tableheadlength="tableHeadLength"
             :istherebody="isThereBody"
-            open-url="prepareColorVariantRecipeStageGroup"
-            :productions-action-buttons="true"
+            open-url="prepareColorVariant"
+            delete-row-elements="colorVariant/prepareDeleteColorVariantItemUrl"
             height="600"
             @pageEmitAction="getTableRequest"
           />
@@ -155,62 +156,22 @@ export default {
     return {
       isLoading: false,
       pageSize_value: 25,
-      keywordValue: '',
-      tableHead: {
-        id: { name: 'Id', code: 'id' },
-        name: {
-          name: 'Color Variant Recipe Stage Name',
-          code: 'name',
-        },
-        color: {
-          name: 'Color',
-          code: 'color',
-        },
-        pantoneCode: {
-          name: 'Pantone Code',
-          code: 'pantoneCode',
-        },
-        dyeingCode: {
-          name: 'Dyeing Code',
-          code: 'dyeingCode',
-        },
-        colorDepth: {
-          name: 'Color Depth',
-          code: 'colorDepth',
-        },
-        colorGroup: {
-          name: 'Color Group',
-          code: 'colorGroup',
-        },
-        product: {
-          name: 'Product',
-          code: 'product',
-        },
-        productType: {
-          name: 'Product Type',
-          code: 'productType',
-        },
-        batchProcessStage: {
-          name: 'Batch Process Stage',
-          code: 'batchProcessStage',
-        },
-        status: {
-          name: 'Status',
-          code: 'status',
-        },
-      },
+      tableData: [],
+      tableHead: {},
       tableBody: [],
       tableHeadLength: null,
+      leftMap: {},
+      actionUrl: null,
       isThereBody: false,
       checkModal: false,
       isOpenTable: true,
       isCloseTable: true,
+      allSelectAndInputValue: {},
     }
   },
 
   // MOUNTED
   mounted() {
-    this.tableHeadLength = Object.keys(this.tableHead).length + 1
     // Table function
     this.getTableRequest()
   },
@@ -224,28 +185,28 @@ export default {
       this.checkModal = true
     },
 
+    // Page Request Action
     getTableRequest() {
       this.isLoading = !this.isLoading
       this.$axios
-        .post(`/colorVariant/colorVariantAjaxLoad`, {
+        .post(`/colorVariant/colorVariants`, {
           searchForm: {
-            keyword: this.keywordValue,
+            keyword: this.allSelectAndInputValue?.keywordValue ?? '',
           },
-          pagingForm: {
-            pageSize: this.pageSize_value,
-            currentPage: 1,
-            pageCount: 88,
-            total: 2179,
-          },
+          companyId: this.allSelectAndInputValue?.companyId,
+          current_page: 1,
+          page_size: this.pageSize_value,
         })
-        .then(({ data: { sewModelList } }) => {
-          this.isLoading = !this.isLoading
-          this.tableBody = sewModelList
-
-          this.tableBody.length
-            ? (this.isThereBody = true)
-            : (this.isThereBody = false)
-        })
+        .then(
+          ({ data: { actionUrl, colorVariantList, rightMap, leftMap } }) => {
+            this.actionUrl = actionUrl
+            this.tableHead = rightMap
+            this.leftMap = leftMap
+            this.tableData = colorVariantList
+            this.getTableBody()
+            this.isLoading = !this.isLoading
+          }
+        )
         .catch((error) => {
           this.isLoading = !this.isLoading
           // eslint-disable-next-line no-console
@@ -253,9 +214,29 @@ export default {
         })
     },
 
+    // Generic Table action Start
+    getTableBody() {
+      this.tableBody = []
+      this.tableData.forEach((obj) => {
+        const newObj = {}
+        newObj.colorId = obj?.colorId
+        if ('getDefaultColumns' in obj) {
+          for (const key in obj?.getDefaultColumns) {
+            newObj[key] = obj.getDefaultColumns[key]?.value
+          }
+          this.tableBody.push(newObj)
+        }
+      })
+      this.tableHeadLength = Object.keys(this.tableHead).length + 1
+      this.tableBody.length > 0
+        ? (this.isThereBody = true)
+        : (this.isThereBody = false)
+    },
+    // Generic Table action End
+
     // Generic_Input value
-    getInputValue(inputVal) {
-      this.keywordValue = inputVal
+    getSelectAndInputValueAction(name, value) {
+      this.$set(this.allSelectAndInputValue, name, value)
     },
 
     // Table page ni ochish va yopish uchun

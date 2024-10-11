@@ -1,8 +1,8 @@
 <template>
-  <div class="w-full p-[4px_10px_4px_4px]">
+  <div class="w-full px-1">
     <LoadingPage
       v-if="isLoading"
-      class="fixed left-[50%] top-[8px] translate-x-[-50%]"
+      class="absolute left-[50%] top-[8px] translate-x-[-50%]"
     />
     <transition name="fade">
       <ColumnConfigPage
@@ -10,423 +10,539 @@
         :right="rightData"
         :left="leftData"
         :url="actionUrl"
-        :createedit="true"
-        :autoheight="false"
-        :openpopup="false"
-        :editopen="false"
+        :create-edit="true"
+        :openpopup="openPopUp"
         api="saveColumnConfig"
         class="z-[10000]"
         @checkModal="handleValue"
       />
     </transition>
-    <div
-      class="border-[1px] border-solid border-[rgba(0,0,0,0.05)] p-[12px] bg-gradient-to-b from-transparent via-transparent to-gray-200 shadow-md"
-    >
-      <div class="flex items-center gap-[10px]">
-        <generic-button
-          name="Go Back"
-          type="primary"
-          icon-name-attribute="arrow-left"
-          @click="$router.push('/iplikLotStavka.htm')"
-        />
-        <h1 class="font-bold text-[rgb(49,126,172)] text-[14px] uppercase">
-          {{ `${pageID ? 'Edit' : 'Add'} Iplik Lot Stavka` }}
-        </h1>
-      </div>
-    </div>
-
-    <!-- Top static table -->
-    <table class="w-full text-[13px] mt-2">
-      <tbody>
-        <tr
-          v-for="(row, indexOne) in topStaticTableData"
-          :key="indexOne"
-          class="bg-[rgba(239,243,249,0.7)] hover:bg-gradient-to-b hover:from-transparent hover:via-transparent hover:to-[rgba(220,229,243,0.7)]"
-        >
-          <td
-            v-for="(col, indexTwo) in row"
-            :key="indexTwo"
-            :style="`width: ${col?.width}`"
-            class="border-[1px] border-solid border-[#778899] p-[2px]"
-          >
-            <template v-if="col?.type === 'label'">
-              <span v-if="col?.required">
-                <span>{{ col?.name }}</span>
-                <span class="text-red-500">*</span>
-              </span>
-              <span v-else>{{ col?.name }} </span>
-            </template>
-            <template v-else-if="col?.type === 'date'">
-              <generic-input-date-page
-                :width="col?.width"
-                type="datetime-local"
-                :name="col?.subName"
-                :disabled="col?.disabled"
-                @customFunction="getLookUpAndInputsValueAction"
-              />
-            </template>
-            <template v-else-if="col?.type === 'select'">
-              <generic-look-up
-                :dwidth="col?.width"
-                :name="col?.subName"
-                :durl="col?.url"
-                :dparam="col?.params"
-                :disabled="col?.disabled"
-                @customFunction="getLookUpAndInputsValueAction"
-              />
-            </template>
-            <template v-else-if="col?.type === 'number'">
-              <generic-input
-                :value="allLookUpAndInputsValue[col?.subName] || ''"
-                :width="col?.width"
-                type="number"
-                :name="col?.subName"
-                :disabled="col?.disabled"
-                @customFunction="getLookUpAndInputsValueAction"
-              />
-            </template>
-            <template v-else-if="col?.type === 'text'">
-              <generic-input
-                :value="allLookUpAndInputsValue[col?.subName] || ''"
-                :width="col?.width"
-                type="text"
-                :name="col?.subName"
-                :disabled="col?.disabled"
-                @customFunction="getLookUpAndInputsValueAction"
-              />
-            </template>
-          </td>
-        </tr>
-        <tr
-          class="bg-[rgba(239,243,249,0.7)] hover:bg-gradient-to-b hover:from-transparent hover:via-transparent hover:to-[rgba(220,229,243,0.7)]"
-        >
-          <td
-            class="border-[1px] border-solid border-[#778899] p-[2px]"
-            colspan="2"
-          >
-            <span class="flex items-center gap-2">
-              <generic-button v-if="!pageID" type="primary" name="Save" />
-              <generic-button
-                v-if="pageID"
-                type="success"
-                name="Edit"
-                icon-name-attribute="edit"
-              />
-              <generic-button v-if="pageID" name="Plan" />
-              <generic-button v-if="pageID" type="primary" name="Reserve" />
-              <generic-button v-if="pageID" type="primary" name="Stage" />
-              <generic-button
-                v-if="pageID"
-                type="danger"
-                name="Delete"
-                icon-name-attribute="delete"
-              />
-              <generic-button type="success" name="Open Or Close" />
-            </span>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-    <!-- Top static table -->
-
-    <div
-      class="w-full bg-[rgba(224,230,238,0.6)] overflow-hidden border-[1px] border-solid border-[#778899] mt-4"
-      :class="true ? 'duration-[1s] h-fit' : 'duration-[1s] h-[0px]'"
-    >
-      <!-- --START-- Batch Details Table uchun -->
-      <div v-if="true" class="m-2">
-        <span class="text-[14px]"
-          >Sale Order Item
-          <strong v-if="pageID" class="text-[14px] text-[rgb(156,0,78)]"
-            >Parent ID = {{ pageID }}</strong
-          ></span
-        >
-        <div class="flex gap-1 flex-wrap">
+    <message-box ref="messageBoxRef" @emitProp="getEmitProp" />
+    <template v-if="isCloseTable">
+      <div
+        class="border-[1px] border-solid border-[rgba(0,0,0,0.05)] p-[12px] bg-gradient-to-b from-transparent via-transparent to-gray-200 shadow-md flex items-center justify-between mt-1"
+      >
+        <div class="flex items-center gap-[10px]">
           <generic-button
-            name="Column Setting"
-            type="warning"
-            icon-name-attribute="setting"
-            @click="openColumnConfig"
+            name="Go Back"
+            type="primary"
+            icon-name-attribute="arrow-left"
+            @click="$router.push('/iplikLotStavka.htm')"
           />
-          <generic-button
-            v-if="isSaveEditDiscard"
-            name="Edit"
-            type="success"
-            icon-name-attribute="edit"
-            @click="editAction"
-          />
-          <template v-else>
-            <generic-button
-              name="Save"
-              type="primary"
-              :disabled="disabledButton"
-              @click="saveAction"
-              @customInputValueObj="getFilterData"
-            />
-            <generic-button
-              v-if="pageID"
-              name="Discard"
-              @click="discardAction"
-            />
-          </template>
+          <h1 class="font-bold text-[rgb(49,126,172)] text-[14px] uppercase">
+            {{ pageID ? 'Edit' : 'Add' }} Iplik Lot Stavka
+          </h1>
         </div>
-        <generic-prepare-table-page
-          ref="ordersRef"
-          department-name="invoice"
-          :addmodalorrow="false"
-          :tablehead="tableData"
-          :tableheadlength="tableData.length"
-          :response-data="responseData"
-          :ui-show-hide="uiShowHide"
-          :isedit="isEdit"
-          :height="450"
-          :default-values="[]"
-          class="bg-[rgba(255,255,255,0.5)] mt-1"
-          @rowValues="getRowElements"
-          @getNewList="getList"
-          @requiredAction="getDisabledValue"
-        />
+        <div>
+          <ul class="flex items-center gap-4">
+            <li
+              class="p-[7px] rounded-[50%] cursor-pointer border-[1px] border-solid border-[rgba(0,0,0,0.1] hover:border-[#3b89e9] duration-[0.4s]"
+              :style="{
+                background: 'radial-gradient(#fff, rgba(32,111,162,0.2))',
+              }"
+              @click="openColumnConfig"
+            >
+              <img class="w-[11px]" src="@assets/icons/gear.png" alt="gear" />
+            </li>
+            <li
+              class="p-[7px] rounded-[50%] cursor-pointer border-[1px] border-solid border-[rgba(0,0,0,0.1] hover:border-[#3b89e9] focus:border-[#3b89e9] duration-[0.4s]"
+              :style="{
+                background: 'radial-gradient(#fff, rgba(32,111,162,0.2))',
+              }"
+              @click="isOpen"
+            >
+              <img
+                class="w-[11px]"
+                :class="
+                  isOpenTable
+                    ? 'rotate-[-180deg] duration-[1s]'
+                    : 'rotate-[0deg] duration-[1s]'
+                "
+                src="@assets/icons/arrow.png"
+                alt="arrow"
+              />
+            </li>
+            <li
+              class="p-[7px] rounded-[50%] cursor-pointer border-[1px] border-solid border-[rgba(0,0,0,0.1] hover:border-[#3b89e9] focus:border-[#3b89e9] duration-[0.4s]"
+              :style="{
+                background: 'radial-gradient(#fff, rgba(32,111,162,0.2))',
+              }"
+              @click="isClose"
+            >
+              <img
+                class="w-[11px]"
+                src="@assets/icons/remove.png"
+                alt="remove"
+              />
+            </li>
+          </ul>
+        </div>
       </div>
-      <!-- --END-- Batch Details Table uchun -->
-    </div>
+      <div
+        class="border-[1px] border-solid border-[rgba(0,0,0,0.1)]"
+        :class="
+          isOpenTable
+            ? 'duration-[1s] h-fit overflow-hidden'
+            : 'duration-[1s] h-0 overflow-hidden'
+        "
+      >
+        <div class="flex flex-col items-start m-1 gap-2">
+          <table class="w-full text-[13px]">
+            <tbody>
+              <tr
+                v-for="(element, index) in elementData"
+                :key="index"
+                class="bg-[rgba(239,243,249,0.7)] hover:bg-gradient-to-b hover:from-transparent hover:via-transparent hover:to-[rgba(220,229,243,0.7)]"
+              >
+                <td
+                  class="w-[200px] border-[1px] border-solid border-[#778899] px-1"
+                >
+                  {{ element?.name }}
+                  <span v-if="element.required" class="text-[18px] text-red-600"
+                    >*</span
+                  >
+                </td>
+                <td
+                  v-if="saveEditBtnType"
+                  class="border-[1px] border-solid border-[#778899] px-1"
+                >
+                  <generic-look-up
+                    v-if="element.type === 'select'"
+                    :durl="element?.url"
+                    :dparam="element.param"
+                    dwidth="220"
+                    :defvalue="
+                      editData?.[element.subName]?.text
+                        ? `${editData?.[element.subName]?.text}`
+                        : ''
+                    "
+                    :name="element?.subName"
+                    :required="
+                      !element?.required ||
+                      allInputAndLookUpValue?.[element?.subName] ||
+                      editData?.[element?.subName]?.id
+                        ? true
+                        : false
+                    "
+                    @customFunction="getInputAndLookUpValueAction"
+                  />
+                  <generic-input
+                    v-else-if="
+                      element.type === 'text' || element.type === 'number'
+                    "
+                    width="220"
+                    :value="
+                      editData?.[element.subName]
+                        ? `${editData?.[element.subName]}`
+                        : ''
+                    "
+                    :type="element.type"
+                    :name="element?.subName"
+                    :required="
+                      !element?.required ||
+                      allInputAndLookUpValue?.[element?.subName] ||
+                      editData?.[element?.subName]
+                        ? true
+                        : false
+                    "
+                    @customFunction="getInputAndLookUpValueAction"
+                  />
+                  <generic-input-date-page
+                    v-else-if="element.type === 'date'"
+                    :value="
+                      editData?.[element?.subName]
+                        ? `${
+                            new Date(editData?.[element?.subName])
+                              .toISOString()
+                              .split('.')[0]
+                          }`
+                        : ''
+                    "
+                    width="220"
+                    height="28"
+                    pl="12"
+                    pr="12"
+                    pt="1"
+                    pb="1"
+                    textsize="13"
+                    type="datetime-local"
+                    valuecolor="rgba(0,0,0,0.7)"
+                    :name="element.subName"
+                    :required="
+                      !element?.required ||
+                      allInputAndLookUpValue?.[element?.subName] ||
+                      editData?.[element?.subName]
+                        ? true
+                        : false
+                    "
+                    @customFunction="getInputAndLookUpValueAction"
+                  />
+                  <span
+                    v-else-if="element?.subName === 'openClose'"
+                    class="text-green-600 font-semibold text-[14px]"
+                    >{{
+                      editData?.[element.subName] ? 'OPENED' : 'CLOSED'
+                    }}</span
+                  >
+                  <span v-else>{{
+                    editData?.[element?.subName]?.text ||
+                    editData?.[element.subName]
+                  }}</span>
+                </td>
+                <td
+                  v-else
+                  class="border-[1px] border-solid border-[#778899] px-1"
+                >
+                  <template v-if="element.subName === 'date'">{{
+                    new Date(editData?.[element.subName])
+                      .toLocaleString('en-GB')
+                      .split(',')
+                      .join('')
+                  }}</template>
+                  <span
+                    v-else-if="element?.subName === 'openClose'"
+                    class="text-green-600 font-semibold text-[14px]"
+                    >{{
+                      editData?.[element.subName] ? 'OPENED' : 'closed'
+                    }}</span
+                  >
+                  <template v-else>{{
+                    editData?.[element.subName]?.text ||
+                    editData?.[element.subName]
+                  }}</template>
+                </td>
+              </tr>
+
+              <tr
+                class="bg-[rgba(239,243,249,0.7)] hover:bg-gradient-to-b hover:from-transparent hover:via-transparent hover:to-[rgba(220,229,243,0.7)]"
+              >
+                <td
+                  colspan="2"
+                  class="w-[150px] border-[1px] border-solid border-[#778899] p-1"
+                >
+                  <span class="flex items-center gap-1">
+                    <generic-button
+                      v-if="saveEditBtnType"
+                      type="primary"
+                      name="Save"
+                      @click="saveAction"
+                    />
+                    <generic-button
+                      v-else
+                      type="success"
+                      name="Edit"
+                      icon-name-attribute="edit"
+                      @click="editCencelAction('edit')"
+                    />
+                    <generic-button
+                      v-if="pageID && saveEditBtnType"
+                      name="Cancel"
+                      icon-name-attribute="cencel"
+                      @click="editCencelAction('cencel')"
+                    />
+                    <template v-if="pageID">
+                      <generic-button
+                        v-for="(elem, inx) in allBtnName"
+                        :key="inx"
+                        :name="elem?.name"
+                        :type="elem?.type"
+                        :icon-name-attribute="elem?.iconName"
+                        @click="allBtnAction(elem.clickType, pageID)"
+                      />
+                    </template>
+                  </span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- --START-- PLAN Table UI -->
+        <div v-if="pageID" class="m-1">
+          <span class="text-[14px]"
+            >Plan.
+            <strong class="text-[14px] text-[rgb(156,0,78)]"
+              >Parent ID = {{ pageID }}</strong
+            ></span
+          >
+          <div class="flex gap-1 flex-wrap">
+            <GenericButton
+              name="Column Setting"
+              type="warning"
+              icon-name-attribute="setting"
+              @click="openColumnConfig('plan')"
+            />
+            <span v-if="planHideButton" class="flex gap-1 flex-wrap">
+              <GenericButton
+                name="Save"
+                type="primary"
+                @click="planSaveAction"
+              />
+              <GenericButton name="Discard" @click="planDiscardAction" />
+            </span>
+            <GenericButton
+              v-else
+              name="Edit"
+              type="success"
+              icon-name-attribute="edit"
+              @click="planEditAction"
+            />
+          </div>
+          <!-- TABLE -->
+          <GenericPrepareTablePage
+            ref="planRef"
+            department-name="production"
+            tab-name="iplikLotStavkaPlanTable"
+            filter-type="min"
+            :addmodalorrow="true"
+            :tablehead="planHead"
+            :tableheadlength="planHead?.length"
+            :response-data="planBody"
+            :ui-show-hide="planUiShowHide"
+            :is-edit="isPlanEdit"
+            :height="450"
+            delete-url-row="iplikLotStavka/prepareCreateEditIplikLotStavkaPlan"
+            class="bg-[rgba(255,255,255,0.5)] mt-1"
+            @rowValues="planGetRowElements"
+          />
+        </div>
+        <!-- --END-- PLAN Table UI -->
+
+        <!-- --START-- RESERVE Table UI -->
+        <div v-if="pageID" class="m-1">
+          <span class="text-[14px]"
+            >Reserve.
+            <strong class="text-[14px] text-[rgb(156,0,78)]"
+              >Parent ID = {{ pageID }}</strong
+            ></span
+          >
+          <div class="flex gap-1 flex-wrap">
+            <GenericButton
+              name="Column Setting"
+              type="warning"
+              icon-name-attribute="setting"
+              @click="openColumnConfig('reserve')"
+            />
+            <span v-if="reserveHideButton" class="flex gap-1 flex-wrap">
+              <GenericButton
+                name="Save"
+                type="primary"
+                @click="reserveSaveAction"
+              />
+              <GenericButton name="Discard" @click="reserveDiscardAction" />
+            </span>
+            <GenericButton
+              v-else
+              name="Edit"
+              type="success"
+              icon-name-attribute="edit"
+              @click="reserveEditAction"
+            />
+          </div>
+          <!-- TABLE -->
+          <GenericPrepareTablePage
+            ref="reserveRef"
+            department-name="production"
+            tab-name="iplikLotStavkaReserveTable"
+            filter-type="max"
+            :addmodalorrow="true"
+            :tablehead="reserveHead"
+            :tableheadlength="reserveHead?.length"
+            :response-data="reserveBody"
+            :ui-show-hide="reserveUiShowHide"
+            :is-edit="isReserveEdit"
+            :height="450"
+            delete-url-row="iplikLotStavka/prepareCreateEditIplikLotStavkaReserve"
+            class="bg-[rgba(255,255,255,0.5)] mt-1"
+            @rowValues="reserveGetRowElements"
+          />
+        </div>
+        <!-- --END-- RESERVE Table UI -->
+
+        <!-- --START-- STAGE Table UI -->
+        <div v-if="pageID" class="m-1">
+          <span class="text-[14px]"
+            >Stage.
+            <strong class="text-[14px] text-[rgb(156,0,78)]"
+              >Parent ID = {{ pageID }}</strong
+            ></span
+          >
+          <div class="flex gap-1 flex-wrap">
+            <GenericButton
+              name="Column Setting"
+              type="warning"
+              icon-name-attribute="setting"
+              @click="openColumnConfig('stage')"
+            />
+            <span v-if="stageHideButton" class="flex gap-1 flex-wrap">
+              <GenericButton
+                name="Save"
+                type="primary"
+                @click="stageSaveAction"
+              />
+              <GenericButton name="Discard" @click="stageDiscardAction" />
+            </span>
+            <GenericButton
+              v-else
+              name="Edit"
+              type="success"
+              icon-name-attribute="edit"
+              @click="stageEditAction"
+            />
+          </div>
+          <!-- TABLE -->
+          <GenericPrepareTablePage
+            ref="stageRef"
+            department-name="orders"
+            :addmodalorrow="openPopUp"
+            :tablehead="stageHead"
+            :tableheadlength="stageHead?.length"
+            :response-data="stageBody"
+            :ui-show-hide="stageUiShowHide"
+            :is-edit="isStageEdit"
+            :height="450"
+            delete-url-row="iplikLotStavka/prepareCreateEditIplikLotStavkaStage"
+            class="bg-[rgba(255,255,255,0.5)] mt-1"
+            @rowValues="stageGetRowElements"
+          />
+        </div>
+        <!-- --END-- STAGE Table UI -->
+      </div>
+    </template>
   </div>
 </template>
 
 <script>
 import GenericButton from '@generics/GenericButton.vue'
-import LoadingPage from '@components/Loading/LoadingPage.vue'
-import ColumnConfigPage from '@components/ColumnConfig/ColumnConfigPage.vue'
-import GenericInputDatePage from '@components/InputDate/GenericInputDatePage.vue'
-import GenericLookUp from '@generics/GenericLookUp.vue'
 import GenericInput from '@generics/GenericInput.vue'
+import GenericInputDatePage from '@components/InputDate/GenericInputDatePage.vue'
+import LoadingPage from '@components/Loading/LoadingPage.vue'
+import GenericLookUp from '@generics/GenericLookUp.vue'
+import MessageBox from '@components/MessageBox.vue'
 import GenericPrepareTablePage from '@components/GenericPrepareTable/GenericPrepareTablePage.vue'
+import ColumnConfigPage from '@components/ColumnConfig/ColumnConfigPage.vue'
 export default {
-  // COMPONENTS
   components: {
-    LoadingPage,
     GenericButton,
-    ColumnConfigPage,
-    GenericInputDatePage,
-    GenericLookUp,
     GenericInput,
+    GenericInputDatePage,
+    LoadingPage,
+    GenericLookUp,
+    MessageBox,
     GenericPrepareTablePage,
+    ColumnConfigPage,
   },
 
   // DATA
   data() {
     return {
       isLoading: false,
-      actionUrl: '',
+      pageSize_value: 25,
       checkModal: false,
+      isOpenTable: true,
+      isCloseTable: true,
       pageID: null,
-      topStaticTableData: [],
-      allLookUpAndInputsValue: {},
-      rightColumns: [],
-      tableData: [],
-      tableData2: [],
-      rightMap: {},
-      leftMap: {},
-      rightData: {},
+      allInputAndLookUpValue: {},
+      elementData: [],
+      allBtnName: [],
+      saveEditBtnType: false,
+      editData: {},
+
+      // Column config
+      actionUrl: null,
+      openPopUp: null,
       leftData: {},
-      isSaveEditDiscard: false,
-      uiShowHide: false,
-      isEdit: false,
-      invoiceList: [],
-      id: null,
-      newListData: [],
-      disabledButton: false,
-      objData: {},
-      responseData: [],
+      rightData: {},
+      // Column config
+
+      // Plan Table Start
+      planHead: [],
+      planBody: [],
+      planUiShowHide: null,
+      isPlanEdit: null,
+      planHideButton: null,
+      // Plan Table End
+
+      // Reserve Table Start
+      reserveHead: [],
+      reserveBody: [],
+      reserveUiShowHide: null,
+      isReserveEdit: null,
+      reserveHideButton: null,
+      // Reserve Table End
+
+      // Stage Table Start
+      stageHead: [],
+      stageBody: [],
+      stageUiShowHide: null,
+      isStageEdit: null,
+      stageHideButton: null,
+      // Stage Table End
     }
   },
 
-  // WATCH
-  watch: {},
+  // COMPUTED
+  computed: {
+    headDataFiltered() {
+      return this.planHead.filter((headName) => headName?.showUI)
+    },
+  },
 
   // CREATED
   created() {
     this.pageID = this.$route.params?.id
-
+    this.pageID ? (this.saveEditBtnType = false) : (this.saveEditBtnType = true)
+    // function
+    this.pageRequestAction(this.pageID)
+    // function
+    this.dataCreatedAction()
+    // PAGE id bo'lsa ishliydi
     if (this.pageID) {
-      this.isEdit = true
-      this.isSaveEditDiscard = true
+      // Plan
+      this.planUiShowHide = true
+      this.isPlanEdit = true
+      this.planHideButton = false
+      // Reserve
+      this.reserveUiShowHide = true
+      this.isReserveEdit = true
+      this.reserveHideButton = false
+      // Stage
+      this.stageUiShowHide = true
+      this.isStageEdit = true
+      this.stageHideButton = false
     }
   },
 
-  // MOUNTED
-  mounted() {
-    // function
-    this.getPageRequest()
-    // function
-    this.createdStaticTableDataAction()
-  },
-
-  // METHOD
+  // METHODS
   methods: {
     // Column Config function
     handleValue(checkModal) {
+      // function
+      this.getFilterData([], [])
       this.checkModal = checkModal
     },
-    openColumnConfig() {
-      this.checkModal = true
-    },
-    // Column Config function
+    openColumnConfig(btnClickType) {
+      // request body
+      this.actionUrl =
+        btnClickType === 'plan'
+          ? 'iplikLotStavkaPlanTable'
+          : btnClickType === 'reserve'
+          ? 'iplikLotStavkaReserveTable'
+          : btnClickType === 'stage'
+          ? 'iplikLotStavkaStageTable'
+          : ''
 
-    // created top static table data
-    createdStaticTableDataAction() {
-      const data = [
-        [
-          { name: 'Date', type: 'label', required: true, width: '20%' },
-          {
-            subName: 'dateFrom',
-            type: 'date',
-            disabled: !!this.pageID,
-            width: '300',
-          },
-        ],
-        [
-          { name: 'Year', type: 'label', required: true, width: '20%' },
-          {
-            subName: 'year',
-            type: 'number',
-            disabled: !!this.pageID,
-            width: '300',
-          },
-        ],
-        [
-          { name: 'Lot', type: 'label', required: true, width: '20%' },
-          {
-            subName: 'lot',
-            type: 'number',
-            disabled: !!this.pageID,
-            width: '300',
-          },
-        ],
-        [
-          { name: 'Name', type: 'label', required: false, width: '20%' },
-          {
-            type: 'label',
-          },
-        ],
-        [
-          { name: 'Qty', type: 'label', required: true, width: '20%' },
-          {
-            subName: 'qty',
-            type: 'number',
-            disabled: !!this.pageID,
-            width: '300',
-          },
-        ],
-        [
-          { name: 'Note', type: 'label', required: false, width: '20%' },
-          {
-            subName: 'note',
-            type: 'text',
-            disabled: !!this.pageID,
-            width: '300',
-          },
-        ],
-        [
-          { name: 'Department', type: 'label', required: true, width: '20%' },
-          {
-            subName: 'departmentId',
-            type: 'select',
-            disabled: !!this.pageID,
-            width: '300',
-            url: 'findAllDepartmentLogic',
-          },
-        ],
-        [
-          {
-            name: 'Product Production Type',
-            type: 'label',
-            required: true,
-            width: '20%',
-          },
-          {
-            subName: 'productId',
-            type: 'select',
-            disabled: !!this.pageID,
-            width: '300',
-            url: 'findAllProductProduction',
-          },
-        ],
-        [
-          {
-            name: 'Status',
-            type: 'label',
-            width: '20%',
-          },
-          {
-            name: 'Closed',
-            type: 'label',
-          },
-        ],
-      ]
-
-      this.topStaticTableData = data
-    },
-
-    // set LOOK UP and INPUTS value
-    getLookUpAndInputsValueAction(name, value) {
-      if (name === 'dateFrom' || name === 'dueDate') {
-        const dateVal = new Date(value)
-          .toLocaleString('en-GB')
-          .split(',')
-          .join('')
-        this.$set(this.allLookUpAndInputsValue, name, dateVal)
-      } else if (name === 'departmentId') {
-        this.$set(this.allLookUpAndInputsValue, name, value)
-      } else {
-        this.$set(this.allLookUpAndInputsValue, name, value)
-        value
-          ? this.setInputValueAction(name, value)
-          : this.$set(this.allLookUpAndInputsValue, `sub_${name}`, '')
-      }
-    },
-
-    // look up click action
-    setInputValueAction(name, value) {
-      const body = {
-        settingsRateType: 'SALE',
-        dateFrom: this.allLookUpAndInputsValue?.dateFrom,
-      }
-      name === 'currencyId'
-        ? (body.currencyId = value)
-        : (body.branchCompanyId = value)
-
-      this.$axios
-        .post(`/invoiceBase/getCurrentCurrencyRate`, body)
-        .then(({ data: { paramsObject } }) => {
-          this.$set(
-            this.allLookUpAndInputsValue,
-            `sub_${name}`,
-            paramsObject?.value
-          )
-        })
-        .catch((error) => {
-          // eslint-disable-next-line no-console
-          console.log(error)
-        })
-    },
-
-    // page request action
-    getPageRequest() {
       this.isLoading = !this.isLoading
       this.$axios
-        .post(`/invoices/prepareExpenseInvoiceAjaxLoad`, {
-          id: this.pageID ? this.pageID : null,
-          saleToPerson: false,
+        .post(`/base/columnsConfigU`, {
+          actionUrl: this.actionUrl,
         })
-        .then(({ data }) => {
+        .then(({ data: { leftColumns, rightColumns, openPopup } }) => {
+          this.openPopUp = openPopup
+          // function
+          this.getFilterData(leftColumns, rightColumns)
+          this.checkModal = true
           this.isLoading = !this.isLoading
-          this.actionUrl = data?.actionUrl
-          this.rightColumns = data?.rightColumns
-          this.objData = data?.invoiceJson
-          // function
-          this.leftRightDataFilter()
-          // function
-          this.getFilterData()
         })
         .catch((error) => {
           this.isLoading = !this.isLoading
@@ -435,254 +551,519 @@ export default {
         })
     },
 
-    // EDIT Action
-    editAction() {
-      this.isSaveEditDiscard = false
-      // GenericTablePage da ishlab beruvchi function
-      this.$refs.invoiceRef.getEditRowAction(
-        this.parentID ? this.parentID : this.userId
-      )
-      this.uiShowHide = false
+    // Filter Action Column Config uchun
+    getFilterData(leftColumns, rightColumns) {
+      const leftMap = {}
+      const rightMap = {}
+      rightColumns.forEach((obj) => {
+        rightMap[obj.name] = obj
+      })
+      leftColumns.forEach((obj) => {
+        leftMap[obj.name] = obj
+      })
+      this.leftData = leftMap
+      this.rightData = rightMap
     },
 
-    // DISCARD Action
-    discardAction() {
-      this.isSaveEditDiscard = true
+    // Table page ni ochish va yopish uchun
+    isOpen() {
+      this.isOpenTable = !this.isOpenTable
+    },
+    isClose() {
+      this.isCloseTable = !this.isCloseTable
     },
 
-    getRowElements(arr, hideBtn, id) {
-      this.id = +id
-      this.invoiceList = arr
-      this.isSaveEditDiscard = !hideBtn
+    // Input value action
+    getInputAndLookUpValueAction(name, value) {
+      this.$set(this.allInputAndLookUpValue, name, value)
     },
 
-    // new List olish
-    getList(arr) {
-      this.newListData = arr
-    },
-
-    // Save || Pay button'larni disabled qilish
-    getDisabledValue(disabledVal, type) {
-      if (type === 'top') this.disabledButton = disabledVal
-      //   else if (type === 'bottom') this.subDisabledButton = disabledVal
-      //   else if (type === 'subBottom') this.subTwoDisabledButton = disabledVal
-    },
-
-    // Filter Action
-    leftRightDataFilter() {
-      if (this.rightColumns.length) {
-        this.tableData = this.rightColumns.filter((value) => {
-          return value.showUI && value
+    // Page request
+    pageRequestAction(id) {
+      this.isLoading = !this.isLoading
+      this.$axios
+        .post(`/iplikLotStavka/prepareIplikLotStavkaAjaxLoad`, {
+          id,
+          page_current: 1,
+          page_size: 25,
         })
-        this.tableData2 = this.rightColumns.filter((value) => {
-          return !value.showUI && value
+        .then(({ data: { iplikLotStavkaJson } }) => {
+          this.editData = iplikLotStavkaJson
+          if (id) {
+            // function's
+            this.planAction(id)
+            this.reserveAction(id)
+            this.stageAction(id)
+          }
+          this.isLoading = !this.isLoading
         })
+        .catch((error) => {
+          this.isLoading = !this.isLoading
+          // eslint-disable-next-line no-console
+          console.log(error)
+        })
+    },
+
+    // Save
+    saveAction() {
+      let iplikLotStavka = {}
+      if (this.pageID) {
+        iplikLotStavka = {
+          id: this.pageID,
+          date:
+            this.allInputAndLookUpValue?.date ||
+            new Date(this.editData?.date).toISOString().split('.')[0],
+          department: this.allInputAndLookUpValue?.department
+            ? {
+                id: this.allInputAndLookUpValue?.department,
+              }
+            : this.editData?.department,
+          lot: this.allInputAndLookUpValue?.lot ?? this.editData?.lot,
+          name: this.allInputAndLookUpValue?.name ?? this.editData?.name,
+          note: this.allInputAndLookUpValue?.note ?? this.editData?.note,
+          productProductionType: this.allInputAndLookUpValue
+            ?.productProductionType
+            ? {
+                id: this.allInputAndLookUpValue?.productProductionType,
+              }
+            : this.editData?.productProductionType,
+          qty: this.allInputAndLookUpValue?.qty ?? this.editData?.qty,
+          year: this.allInputAndLookUpValue?.year ?? this.editData?.year,
+        }
+      } else {
+        iplikLotStavka = {
+          date:
+            this.allInputAndLookUpValue?.date ||
+            new Date(this.editData?.date).toISOString().split('.')[0],
+          department: this.allInputAndLookUpValue?.department
+            ? {
+                id: this.allInputAndLookUpValue?.department,
+              }
+            : null,
+          lot: this.allInputAndLookUpValue?.lot ?? '',
+          name: this.allInputAndLookUpValue?.name ?? '',
+          note: this.allInputAndLookUpValue?.note ?? '',
+          productProductionType: this.allInputAndLookUpValue
+            ?.productProductionType
+            ? {
+                id: this.allInputAndLookUpValue?.productProductionType,
+              }
+            : null,
+          qty: this.allInputAndLookUpValue?.qty ?? '',
+          year: this.allInputAndLookUpValue?.year ?? '',
+        }
+      }
+
+      if (
+        iplikLotStavka?.date &&
+        iplikLotStavka?.year &&
+        iplikLotStavka?.lot &&
+        iplikLotStavka?.qty &&
+        iplikLotStavka?.department?.id &&
+        iplikLotStavka?.productProductionType?.id
+      ) {
+        this.isLoading = !this.isLoading
+        this.$axios
+          .post(`/iplikLotStavka/prepareCreateEditIplikLotStavka`, {
+            iplikLotStavka,
+          })
+          .then(({ data }) => {
+            this.editData = data
+            this.$router.push(`/prepareIplikLotStavka.htm/${data?.id}`)
+            this.saveEditBtnType = false
+            this.isLoading = !this.isLoading
+          })
+          .catch((error) => {
+            this.isLoading = !this.isLoading
+            // eslint-disable-next-line no-console
+            console.log(error)
+          })
+      } else {
+        this.$notification(`Ma'lumotni to'liq kiriting!`)
       }
     },
 
-    // Filter Action
-    getFilterData() {
-      this.tableData.forEach((obj) => {
-        this.rightMap[obj.name] = obj
-      })
-      this.tableData2.forEach((obj) => {
-        this.leftMap[obj.name] = obj
-      })
-
-      this.rightData = this.rightMap
-      this.leftData = this.leftMap
+    // Edit Cencel Action
+    editCencelAction(btnType) {
+      if (btnType === 'edit') this.saveEditBtnType = true
+      else if (btnType === 'cencel') this.saveEditBtnType = false
     },
 
-    // SAVE Action
-    saveAction() {
-      if (!this.disabledButton) {
-        // GenericTablePage da ishlab beruvchi function
-        this.$refs.ordersRef.getSaveRowAction()
+    // ALl buttons action
+    allBtnAction(btnTypeProp, id) {
+      if (btnTypeProp === 'plan') id && this.planAction(id)
+      else if (btnTypeProp === 'reserve') id && this.reserveAction(id)
+      else if (btnTypeProp === 'stage') id && this.stageAction(id)
+      else if (btnTypeProp === 'delete')
+        this.$refs.messageBoxRef.open(id, btnTypeProp)
+      else if (btnTypeProp === 'openOrClose')
+        this.$refs.messageBoxRef.open(id, btnTypeProp)
+    },
 
-        // GenericTablePage da subTable uchun
-        this.subListShowHide = true
-        this.subTable = true
-        const inputValues = this.inputValues
-        const lookupValues = this.lookUpValues
-        const objData = this.objData
-
-        let dateBack = null
-        let sellDateBack = null
-
-        if (this.pageID) {
-          const [day, month, year, time] = objData?.date.split(/[\s/]+/)
-          const formattedDateStr = `${year}-${month}-${day}T${time}`
-          dateBack = formattedDateStr
-          sellDateBack = formattedDateStr
-        } else {
-          dateBack = objData?.date
-            ? new Date(objData?.date).toISOString().split('.')[0]
-            : ''
-          sellDateBack = objData?.date
-            ? new Date(objData?.date).toISOString().split('.')[0]
-            : ''
-        }
-
-        // input values
-        const date = inputValues?.date ? inputValues?.date : dateBack
-        const sellDate = inputValues?.sellDate
-          ? inputValues?.sellDate
-          : sellDateBack
-
-        const currencyRate = this.propsValue?.supplare?.value
-          ? this.propsValue?.supplare?.value
-          : objData?.currencyRate?.text
-          ? objData?.currencyRate?.text
-          : objData?.currencyRate
-
-        const driverName = inputValues?.driverName
-          ? this.inputValues?.driverName
-          : ''
-
-        const companyRefCurrencyRate = inputValues?.companyRefCurrencyRate
-          ? this.inputValues?.companyRefCurrencyRate
-          : this.propsValue?.branch?.value
-          ? this.propsValue?.branch?.value
-          : objData?.companyRefCurrencyRate?.text
-          ? objData?.companyRefCurrencyRate?.text
-          : objData?.companyRefCurrencyRate
-
-        const companyCurrencyRate = inputValues?.companyRefCurrencyRate
-          ? this.inputValues?.companyCurrencyRate
-          : this.propsValue?.supplare?.value
-          ? this.propsValue?.supplare?.value
-          : objData?.companyCurrencyRate?.text
-          ? objData?.companyCurrencyRate?.text
-          : objData?.companyCurrencyRate
-
-        const invoiceNominal = this.inputValues?.invoiceNominal
-          ? this.inputValues?.invoiceNominal
-          : objData?.invoiceNominal?.text
-          ? objData?.invoiceNominal?.text
-          : objData?.invoiceNominal
-
-        const systemNumber = inputValues?.systemNumber
-          ? this.inputValues?.systemNumber
-          : ''
-
-        const invoiceStatus = inputValues?.invoiceStatus
-          ? this.inputValues?.invoiceStatus
-          : ''
-
-        const invoiceBillStatus = inputValues?.invoiceBillStatus
-          ? this.inputValues?.invoiceBillStatus
-          : ''
-
-        // lookup values
-        const calcType = lookupValues?.calc_type
-          ? lookupValues?.calc_type
-          : objData?.calc_type?.id
-
-        const order = lookupValues?.order
-          ? lookupValues?.order
-          : objData?.order?.id
-
-        const branch = lookupValues?.branch
-          ? lookupValues?.branch
-          : objData.branch?.id
-
-        const companyGroup = lookupValues?.companyGroup
-          ? lookupValues?.companyGroup
-          : objData?.companyGroup?.id
-
-        const supplier = lookupValues?.supplier
-          ? lookupValues?.supplier
-          : objData?.supplier?.id
-
-        const currency = lookupValues?.currency
-          ? lookupValues?.currency
-          : objData?.currency?.id
-
-        const department = lookupValues?.department
-          ? lookupValues?.department
-          : objData?.department?.id
-
-        const paymentType = lookupValues?.paymentType
-          ? lookupValues?.paymentType
-          : objData?.paymentType?.id
-
-        const orderProductionType = lookupValues?.orderProductionType
-          ? lookupValues?.orderProductionType
-          : objData?.orderProductionType?.id
-
-        const warehouse = lookupValues?.warehouse
-          ? lookupValues?.warehouse
-          : objData?.warehouse?.id
-
-        const requestBody = {
-          invoice: {
-            branch: { id: Number(branch) },
-            calc_type: calcType,
-            company: { id: Number(supplier) },
-            companyCurrencyRate,
-            companyGroup: { id: Number(companyGroup) },
-            companyRefCurrencyRate,
-            currency: { id: Number(currency) },
-            currencyRate,
-            date,
-            department: { id: Number(department) },
-            driverName,
-            id: this.isEdit ? this.id : this.parentID ? this.parentID : null,
-            invoiceBillStatus,
-            invoiceItems: this.invoiceList,
-            invoiceNo: '',
-            invoiceNominal,
-            invoiceNumber: '',
-            invoiceStatus,
-            notes: '',
-            order: { id: order },
-            orderProductionType: { id: Number(orderProductionType) },
-            paymentType: { id: Number(paymentType) },
-            sellDate,
-            sequenceNumber: '',
-            systemNumber,
-            warehouse: { id: Number(warehouse) },
-          },
-        }
-
-        // Open qilib kirilganda jo'natiladigan 'request body'
-        const editRequestBody = {
-          invoice: {
-            calc_type: calcType,
-            companyCurrencyRate,
-            companyRefCurrencyRate,
-            currency: { id: Number(currency) },
-            currencyRate,
-            id: this.isEdit ? this.id : this.parentID ? this.parentID : null,
-            invoiceItems: this.invoiceList,
-            invoiceNominal,
-            order: { id: order },
-          },
-        }
-
+    // Message box action
+    getEmitProp(propMessage, id, btnTypeProp) {
+      if (propMessage === 'confirm' && btnTypeProp === 'delete') {
         this.$axios
-          .post(
-            `/invoices/prepareCreateEditSaleInvoice`,
-            this.isEdit ? editRequestBody : requestBody
-          )
-          .then(({ data, status }) => {
-            this.parentID = data?.id
-            this.responseData = data?.invoiceItems
-            this.subListData = data
-            data?.invoiceItems.length && (this.uiShowHide = true)
-            if (!this.isEdit && data?.paymentType?.text)
-              this.makeAndUnBill = true
-            else this.makeAndUnBill = false
-
-            if ((this.userId || this.parentID) && status === 200) {
-              this.$router.push(`/prepareSaleOrder.htm/${this.parentID}`)
-            }
+          .delete(`/iplikLotStavka/prepareIplikLotStavkaDelete`, {
+            data: {
+              deleteItemId: id,
+            },
+          })
+          .then(() => {
+            this.$router.push('/iplikLotStavka.htm')
           })
           .catch((error) => {
             // eslint-disable-next-line no-console
             console.log(error)
           })
       }
+    },
+
+    // PLAN TABLE ACTIONS start - =============================
+    // Plan Btn Action
+    planAction(id) {
+      this.isLoading = !this.isLoading
+      this.$axios
+        .post(`/iplikLotStavka/prepareCreateEditIplikLotStavkaPlan`, {
+          id,
+        })
+        .then(
+          ({
+            data: { iplikLotStavkaPlanColumns, iplikLotStavkaPlanListJson },
+          }) => {
+            this.planBody = iplikLotStavkaPlanListJson
+            this.planHead = iplikLotStavkaPlanColumns
+            this.planUiShowHide = true
+            this.isLoading = !this.isLoading
+          }
+        )
+        .catch((error) => {
+          this.isLoading = !this.isLoading
+          // eslint-disable-next-line no-console
+          console.log(error)
+        })
+    },
+
+    // edit Action
+    planEditAction() {
+      this.planHideButton = !this.planHideButton
+      // GenericTablePage da ishlab beruvchi function
+      this.$refs.planRef.getEditRowAction(this.pageID)
+      this.planUiShowHide = false
+    },
+
+    // discard Action
+    planDiscardAction() {
+      this.planHideButton = !this.planHideButton
+      // GenericTablePage da ishlab beruvchi function
+      this.$refs.planRef.arrayFiltered()
+      this.planUiShowHide = true
+    },
+
+    // Response dan qaytgan data ni filter qilish
+    responseArrayFilteredAction(resArray) {
+      // const newData = []
+      this.headDataFiltered.forEach(({ param, type, name }) => {
+        if (!param && type === 'list') {
+          resArray.forEach((obj, index) => {
+            for (const key in obj) {
+              if (
+                name in obj &&
+                obj?.[key] !== null &&
+                typeof obj?.[key] === 'object'
+              ) {
+                console.log(name, key, obj[key])
+              }
+            }
+          })
+        }
+      })
+      // console.log(resArray)
+    },
+    // Response dan qaytgan data ni filter qilish
+
+    // Plan EMIT action
+    planGetRowElements(arr, hideBtn) {
+      this.planHideButton = !hideBtn
+      // list set qilish
+      this.responseArrayFilteredAction(arr)
+      // this.planBody = arr
+
+      // console.log(this.planBody)
+
+      // this.isLoading = !this.isLoading
+      // this.$axios
+      //   .post(`/sewModel/prepareCreateEditSewModelSize`, {
+      //     id: this.pageID,
+      //     iplikLotStavkaPlanList: this.planBody,
+      //   })
+      //   .then(({ data }) => {
+      //     this.planBody = data?.sewModelSizeItem
+      //     this.planUiShowHide = true
+      //     this.isLoading = !this.isLoading
+      //     this.$notification(`Ma'lumot saqlandi!`, 'Success', 'success')
+      //   })
+      //   .catch((error) => {
+      //     this.isLoading = !this.isLoading
+      //     // eslint-disable-next-line no-console
+      //     console.log(error)
+      //     this.$notification(`Ma'lumot saqlanmadi!`, 'Error', 'error')
+      //   })
+    },
+
+    // Save Plan action
+    planSaveAction() {
+      // GenericTablePage da ishlab beruvchi function
+      this.$refs.planRef.getSaveRowAction()
+    },
+    // PLAN TABLE ACTIONS end - =============================
+
+    // RESERVE TABLE ACTIONS start - =============================
+    // Reserve Btn Acton
+    reserveAction(id) {
+      this.isLoading = !this.isLoading
+      this.$axios
+        .post(`/iplikLotStavka/prepareCreateEditIplikLotStavkaReserve`, {
+          id,
+        })
+        .then(
+          ({
+            data: {
+              iplikLotStavkaReserveColumns,
+              iplikLotStavkaReserveListJson,
+            },
+          }) => {
+            this.reserveHead = iplikLotStavkaReserveColumns
+            this.reserveBody = iplikLotStavkaReserveListJson
+            this.reserveUiShowHide = true
+            this.isLoading = !this.isLoading
+          }
+        )
+        .catch((error) => {
+          this.isLoading = !this.isLoading
+          // eslint-disable-next-line no-console
+          console.log(error)
+        })
+    },
+
+    // edit Action
+    reserveEditAction() {
+      this.reserveHideButton = !this.reserveHideButton
+      // GenericTablePage da ishlab beruvchi function
+      this.$refs.reserveRef.getEditRowAction(this.pageID)
+      this.reserveUiShowHide = false
+    },
+
+    // discard Action
+    reserveDiscardAction() {
+      this.reserveHideButton = !this.reserveHideButton
+      // GenericTablePage da ishlab beruvchi function
+      this.$refs.reserveRef.arrayFiltered()
+      this.reserveUiShowHide = true
+    },
+
+    // reserve EMIT action
+    reserveGetRowElements(arr, hideBtn) {
+      this.reserveHideButton = !hideBtn
+      // list set qilish
+      this.reserveBody = arr
+
+      this.isLoading = !this.isLoading
+      this.$axios
+        .post(`/sewModel/prepareCreateEditSewModelSize`, {
+          id: this.pageID,
+          iplikLotStavkaReserveList: this.reserveBody,
+        })
+        .then(({ data }) => {
+          this.reserveBody = data?.sewModelSizeItem
+          this.reserveUiShowHide = true
+          this.isLoading = !this.isLoading
+          this.$notification(`Ma'lumot saqlandi!`, 'Success', 'success')
+        })
+        .catch((error) => {
+          this.isLoading = !this.isLoading
+          // eslint-disable-next-line no-console
+          console.log(error)
+          this.$notification(`Ma'lumot saqlanmadi!`, 'Error', 'error')
+        })
+    },
+
+    // Save Reserve action
+    reserveSaveAction() {
+      // GenericTablePage da ishlab beruvchi function
+      this.$refs.reserveRef.getSaveRowAction()
+    },
+    // RESERVE TABLE ACTIONS end - =============================
+
+    // STAGE TABLE ACTIONS start - =============================
+    // Stage Btn Acton
+    stageAction(id) {
+      this.isLoading = !this.isLoading
+      this.$axios
+        .post(`/iplikLotStavka/prepareCreateEditIplikLotStavkaStage`, {
+          id,
+        })
+        .then(
+          ({
+            data: {
+              openPopup,
+              iplikLotStavkaStageColumns,
+              iplikLotStavkaStageListJson,
+            },
+          }) => {
+            this.openPopUp = openPopup
+            this.stageHead = iplikLotStavkaStageColumns
+            this.stageBody = iplikLotStavkaStageListJson
+            this.isLoading = !this.isLoading
+          }
+        )
+        .catch((error) => {
+          this.isLoading = !this.isLoading
+          // eslint-disable-next-line no-console
+          console.log(error)
+        })
+    },
+
+    // edit Action
+    stageEditAction() {
+      this.stageHideButton = !this.stageHideButton
+      // GenericTablePage da ishlab beruvchi function
+      this.$refs.stageRef.getEditRowAction(this.pageID)
+      this.stageUiShowHide = false
+    },
+
+    // discard Action
+    stageDiscardAction() {
+      this.stageHideButton = !this.stageHideButton
+      // GenericTablePage da ishlab beruvchi function
+      this.$refs.stageRef.arrayFiltered()
+      this.stageUiShowHide = true
+    },
+
+    // stage EMIT action
+    stageGetRowElements(arr, hideBtn) {
+      this.stageHideButton = !hideBtn
+      // list set qilish
+      this.stageBody = arr
+
+      this.isLoading = !this.isLoading
+      this.$axios
+        .post(`/iplikLotStavka/prepareCreateEditIplikLotStavkaStage`, {
+          id: this.pageID,
+          iplikLotStavkaStageList: this.stageBody,
+        })
+        .then(({ data: { openPopup, iplikLotStavkaStageListJson } }) => {
+          this.openPopUp = openPopup
+          this.stageBody = iplikLotStavkaStageListJson
+          this.stageUiShowHide = true
+          this.isLoading = !this.isLoading
+          this.$notification(`Ma'lumot saqlandi!`, 'Success', 'success')
+        })
+        .catch((error) => {
+          this.isLoading = !this.isLoading
+          // eslint-disable-next-line no-console
+          console.log(error)
+          this.$notification(`Ma'lumot saqlanmadi!`, 'Error', 'error')
+        })
+    },
+
+    // Save Stage action
+    stageSaveAction() {
+      // GenericTablePage da ishlab beruvchi function
+      this.$refs.stageRef.getSaveRowAction()
+    },
+    // STAGE TABLE ACTIONS end - =============================
+
+    // Data created
+    dataCreatedAction() {
+      const data = [
+        {
+          name: 'Date',
+          subName: 'date',
+          type: 'date',
+          required: true,
+        },
+        {
+          name: 'Year',
+          subName: 'year',
+          type: 'number',
+          required: true,
+        },
+        {
+          name: 'Lot',
+          subName: 'lot',
+          type: 'number',
+          required: true,
+        },
+        {
+          name: 'Name',
+          subName: 'name',
+          type: 'label',
+        },
+        {
+          name: 'Qty',
+          subName: 'qty',
+          type: 'number',
+          required: true,
+        },
+        {
+          name: 'Note',
+          subName: 'note',
+          type: 'text',
+          required: false,
+        },
+        {
+          name: 'Department',
+          subName: 'department',
+          type: 'select',
+          url: 'findAllDepartmentLogic',
+          param: { typeStr: '0,5' },
+          required: true,
+        },
+        {
+          name: 'Product Production Type',
+          subName: 'productProductionType',
+          type: 'select',
+          url: 'findAllProductProduction',
+          required: true,
+        },
+        {
+          name: 'Status',
+          subName: 'openClose',
+          type: 'label',
+        },
+      ]
+      this.elementData = data
+
+      const btnData = [
+        {
+          name: 'Plan',
+          type: 'info',
+          clickType: 'plan',
+        },
+        {
+          name: 'Reserve',
+          type: 'info',
+          clickType: 'reserve',
+        },
+        {
+          name: 'Stage',
+          type: 'info',
+          clickType: 'stage',
+        },
+        {
+          name: 'Delete',
+          type: 'danger',
+          clickType: 'delete',
+          iconName: 'delete',
+        },
+        {
+          name: 'OpenOrClose',
+          type: 'success',
+          clickType: 'openOrClose',
+        },
+      ]
+      this.allBtnName = btnData
     },
   },
 }
@@ -693,6 +1074,7 @@ export default {
 .fade-leave-active {
   transition: opacity 0.5s;
 }
+
 .fade-enter,
 .fade-leave-to {
   opacity: 0;

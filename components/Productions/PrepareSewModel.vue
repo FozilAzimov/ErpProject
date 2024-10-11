@@ -195,20 +195,20 @@
                       v-if="saveEditBtnType"
                       type="primary"
                       name="Save"
-                      @click="saveAction()"
+                      @click="saveAction"
                     />
                     <generic-button
                       v-else
                       type="success"
                       name="Edit"
                       icon-name-attribute="edit"
-                      @click="editAction()"
+                      @click="editAction"
                     />
                     <generic-button
                       v-if="pageID && saveEditBtnType"
                       name="Cancel"
                       icon-name-attribute="cencel"
-                      @click="cancelAction()"
+                      @click="cancelAction"
                     />
                     <template v-if="!isNaN($route.path.split('/').at(-1))">
                       <generic-button

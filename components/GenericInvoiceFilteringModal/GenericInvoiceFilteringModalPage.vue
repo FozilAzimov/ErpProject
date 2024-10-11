@@ -23,119 +23,172 @@
       <span class="block h-[1px] w-full bg-[rgb(119,136,153)] my-2"></span>
       <!-- Line -->
 
-      <div>
-        <div
-          v-if="$route.path.includes('prepareProductionInvoiceNew.htm')"
-          class="flex items-end justify-between gap-2 h-[50px]"
-        >
-          <span class="flex flex-col items-start">
-            <label class="text-[13px] font-medium whitespace-nowrap pl-1"
-              >Date from</label
-            >
-            <generic-input-date-page
-              width="165"
-              height="30"
-              pl="10"
-              pr="10"
-              pt="1"
-              pb="1"
-              textsize="13"
-              type="datetime-local"
-              valuecolor="rgba(0,0,0,0.7)"
-              name="date_from"
-              :value="new Date().toISOString().split('.')[0]"
-              @customFunction="getDateValue"
-            />
-          </span>
+      <div
+        v-if="
+          $route.path.includes('prepareProductionInvoiceNew.htm') ||
+          $route.path.includes('prepareIplikLotStavka.htm')
+        "
+        class="flex items-end justify-between gap-2 h-[50px]"
+      >
+        <span class="flex flex-col items-start">
+          <label class="text-[13px] font-medium whitespace-nowrap pl-1"
+            >Date from</label
+          >
+          <generic-input-date-page
+            width="165"
+            height="30"
+            pl="10"
+            pr="10"
+            pt="1"
+            pb="1"
+            textsize="13"
+            type="datetime-local"
+            valuecolor="rgba(0,0,0,0.7)"
+            name="date_from"
+            :value="new Date().toISOString().split('.')[0]"
+            @customFunction="getDateValue"
+          />
+        </span>
 
-          <span class="flex flex-col items-start">
-            <label class="text-[13px] font-medium whitespace-nowrap pl-1"
-              >Date to</label
-            >
-            <generic-input-date-page
-              width="165"
-              height="30"
-              pl="10"
-              pr="10"
-              pt="1"
-              pb="1"
-              textsize="13"
-              type="datetime-local"
-              valuecolor="rgba(0,0,0,0.7)"
-              name="date_to"
-              :value="new Date().toISOString().split('.')[0]"
-              @customFunction="getDateValue"
-            />
-          </span>
+        <span class="flex flex-col items-start">
+          <label class="text-[13px] font-medium whitespace-nowrap pl-1"
+            >Date to</label
+          >
+          <generic-input-date-page
+            width="165"
+            height="30"
+            pl="10"
+            pr="10"
+            pt="1"
+            pb="1"
+            textsize="13"
+            type="datetime-local"
+            valuecolor="rgba(0,0,0,0.7)"
+            name="date_to"
+            :value="new Date().toISOString().split('.')[0]"
+            @customFunction="getDateValue"
+          />
+        </span>
 
-          <span class="flex flex-col items-start">
-            <label class="text-[13px] font-medium whitespace-nowrap pl-1"
-              >Planing No</label
-            >
-            <generic-input
-              pl="8"
-              pr="8"
-              pt="2"
-              pb="2"
-              textsize="13"
-              type="number"
-              width="100"
-              widthtype="%"
-              name="planing"
-              @customFunction="getInputValue"
-            />
-          </span>
+        <span class="flex flex-col items-start">
+          <label class="text-[13px] font-medium whitespace-nowrap pl-1"
+            >Planing No</label
+          >
+          <generic-input
+            type="number"
+            width="100"
+            widthtype="%"
+            name="planing"
+            @customFunction="getInputValue"
+          />
+        </span>
 
+        <span class="flex flex-col items-start">
+          <label class="text-[13px] font-medium whitespace-nowrap pl-1"
+            >Planing Type</label
+          >
+          <generic-look-up
+            dwidth="100"
+            widthtype="%"
+            durl="findAllPlanningType"
+            name="planing_type"
+            @customFunction="getLookUpValue"
+          />
+        </span>
+
+        <span class="flex flex-col items-start">
+          <label class="text-[13px] font-medium whitespace-nowrap pl-1"
+            >Client Order</label
+          >
+          <generic-input
+            width="100"
+            widthtype="%"
+            name="client_order"
+            @customFunction="getInputValue"
+          />
+        </span>
+
+        <span class="flex flex-col items-start">
+          <label class="text-[13px] font-medium whitespace-nowrap pl-1"
+            >Order</label
+          >
+          <generic-input
+            width="100"
+            widthtype="%"
+            name="order"
+            @customFunction="getInputValue"
+          />
+        </span>
+
+        <span class="flex flex-col items-start">
+          <label class="text-[13px] font-medium whitespace-nowrap pl-1"
+            >Client Company</label
+          >
+          <generic-look-up
+            dwidth="100"
+            widthtype="%"
+            durl="invoice/findAllCompanyForInvoice"
+            name="client_company"
+            @customFunction="getLookUpValue"
+          />
+        </span>
+
+        <span class="flex flex-col items-start">
+          <label class="text-[13px] font-medium whitespace-nowrap pl-1"
+            >Department</label
+          >
+          <generic-look-up
+            dwidth="100"
+            widthtype="%"
+            durl="invoice/findAllDepartment"
+            name="department"
+            @customFunction="getLookUpValue"
+          />
+        </span>
+
+        <span class="flex flex-col items-start">
+          <label class="text-[13px] font-medium whitespace-nowrap pl-1"
+            >Start/Stop</label
+          >
+          <generic-look-up
+            dwidth="100"
+            widthtype="%"
+            durl="invoice/findAllPlanOpenOrClose"
+            name="start_stop"
+            @customFunction="getLookUpValue"
+          />
+        </span>
+
+        <span class="flex items-center">
+          <generic-check-box
+            text="Keep Window"
+            name="keep"
+            @customFunction="getInputValue"
+          />
+        </span>
+
+        <generic-button
+          name="Get"
+          type="info"
+          @click="getResponseData('less')"
+        />
+      </div>
+
+      <div v-else class="flex items-center justify-between gap-2">
+        <div class="flex flex-col items-start gap-1 h-[150px]">
           <span class="flex flex-col items-start">
             <label class="text-[13px] font-medium whitespace-nowrap pl-1"
-              >Planing Type</label
+              >Product</label
             >
             <generic-look-up
               dwidth="100"
               widthtype="%"
-              dlist="100"
-              durl="findAllPlanningType"
-              name="planing_type"
+              durl="invoiceBase/findAllStockProductListUrl"
+              name="product"
+              :dparam="allParams"
               @customFunction="getLookUpValue"
             />
           </span>
-
-          <span class="flex flex-col items-start">
-            <label class="text-[13px] font-medium whitespace-nowrap pl-1"
-              >Client Order</label
-            >
-            <generic-input
-              pl="8"
-              pr="8"
-              pt="2"
-              pb="2"
-              textsize="13"
-              type="text"
-              width="100"
-              widthtype="%"
-              name="client_order"
-              @customFunction="getInputValue"
-            />
-          </span>
-
-          <span class="flex flex-col items-start">
-            <label class="text-[13px] font-medium whitespace-nowrap pl-1"
-              >Order</label
-            >
-            <generic-input
-              pl="8"
-              pr="8"
-              pt="2"
-              pb="2"
-              textsize="13"
-              type="text"
-              width="100"
-              widthtype="%"
-              name="order"
-              @customFunction="getInputValue"
-            />
-          </span>
-
           <span class="flex flex-col items-start">
             <label class="text-[13px] font-medium whitespace-nowrap pl-1"
               >Client Company</label
@@ -143,44 +196,305 @@
             <generic-look-up
               dwidth="100"
               widthtype="%"
-              dlist="100"
-              durl="invoice/findAllCompanyForInvoice"
-              name="client_company"
+              durl="invoiceBase/findAllCompanyForInvoice"
+              name="clientCompany"
               @customFunction="getLookUpValue"
             />
           </span>
-
           <span class="flex flex-col items-start">
             <label class="text-[13px] font-medium whitespace-nowrap pl-1"
-              >Department</label
+              >Pr Order</label
             >
             <generic-look-up
               dwidth="100"
               widthtype="%"
-              dlist="100"
-              durl="invoice/findAllDepartment"
-              name="department"
+              durl="invoiceBase/findAllPrOrder"
+              name="order"
               @customFunction="getLookUpValue"
             />
           </span>
+        </div>
 
+        <div class="flex flex-col items-start gap-1 h-[150px]">
           <span class="flex flex-col items-start">
             <label class="text-[13px] font-medium whitespace-nowrap pl-1"
-              >Start/Stop</label
+              >Qty
+              <span v-if="bodyData.length" class="text-[maroon]"
+                >max = {{ qtyMaxValue }}</span
+              ></label
             >
-            <generic-look-up
-              dwidth="100"
-              widthtype="%"
-              dlist="100"
-              durl="invoice/findAllPlanOpenOrClose"
-              name="start_stop"
-              @customFunction="getLookUpValue"
-            />
-          </span>
-
-          <span class="flex items-center">
             <generic-input
-              type="checkbox"
+              type="number"
+              width="100"
+              widthtype="%"
+              name="top_qty"
+              :max-value="qtyMaxValue"
+              @customFunction="getInputValue"
+              @setMAXvalue="setMAXvalue"
+            />
+          </span>
+          <span class="flex flex-col items-start">
+            <label class="text-[13px] font-medium whitespace-nowrap pl-1"
+              >Batch</label
+            >
+            <generic-input
+              width="100"
+              widthtype="%"
+              name="batch"
+              @customFunction="getInputValue"
+            />
+          </span>
+          <span class="flex flex-col items-start">
+            <label class="text-[13px] font-medium whitespace-nowrap pl-1"
+              >Packing Type</label
+            >
+            <generic-look-up
+              dwidth="100"
+              widthtype="%"
+              durl="invoice/findAllSewModelPackingType"
+              name="packingType"
+              @customFunction="getLookUpValue"
+            />
+          </span>
+        </div>
+
+        <div class="flex flex-col items-start gap-1 h-[150px]">
+          <span class="flex flex-col items-start">
+            <label class="text-[13px] font-medium whitespace-nowrap pl-1"
+              >pack qty
+              <span v-if="bodyData.length" class="text-[maroon]"
+                >max = {{ packQtyMaxValue }}</span
+              ></label
+            >
+            <generic-input
+              type="number"
+              width="100"
+              widthtype="%"
+              name="packQty"
+              :max-value="packQtyMaxValue"
+              @customFunction="getInputValue"
+              @setMAXvalue="setMAXvalue"
+            />
+          </span>
+          <span class="flex flex-col items-start">
+            <label class="text-[13px] font-medium whitespace-nowrap pl-1"
+              >Lot</label
+            >
+            <generic-input
+              width="100"
+              widthtype="%"
+              name="lot"
+              @customFunction="getInputValue"
+            />
+          </span>
+          <span class="flex flex-col items-start">
+            <label class="text-[13px] font-medium whitespace-nowrap pl-1"
+              >Color</label
+            >
+            <generic-look-up
+              dwidth="100"
+              widthtype="%"
+              durl="invoice/findAllColor"
+              name="color"
+              @customFunction="getLookUpValue"
+            />
+          </span>
+        </div>
+
+        <div class="flex flex-col items-start gap-1 h-[150px]">
+          <span class="flex flex-col items-start">
+            <label class="text-[13px] font-medium whitespace-nowrap pl-1"
+              >Item Barcode</label
+            >
+            <generic-input
+              type="number"
+              width="100"
+              widthtype="%"
+              name="itemBarcode"
+              @customFunction="getInputValue"
+            />
+          </span>
+          <span class="flex flex-col items-start">
+            <label class="text-[13px] font-medium whitespace-nowrap pl-1"
+              >Pus</label
+            >
+            <generic-input
+              type="number"
+              width="100"
+              widthtype="%"
+              name="pus"
+              @customFunction="getInputValue"
+            />
+          </span>
+          <span class="flex flex-col items-start">
+            <label class="text-[13px] font-medium whitespace-nowrap pl-1"
+              >Color Variant</label
+            >
+            <generic-look-up
+              dwidth="100"
+              widthtype="%"
+              durl="invoice/findAllColorVariant"
+              name="colorVariant"
+              @customFunction="getLookUpValue"
+            />
+          </span>
+        </div>
+
+        <div class="flex flex-col items-start gap-1 h-[150px]">
+          <span class="flex flex-col items-start">
+            <label class="text-[13px] font-medium whitespace-nowrap pl-1"
+              >Product Barcode</label
+            >
+            <generic-input
+              width="100"
+              widthtype="%"
+              name="productBarcode"
+              @customFunction="getInputValue"
+            />
+          </span>
+          <span class="flex flex-col items-start">
+            <label class="text-[13px] font-medium whitespace-nowrap pl-1"
+              >Feine</label
+            >
+            <generic-input
+              type="number"
+              width="100"
+              widthtype="%"
+              name="feine"
+              @customFunction="getInputValue"
+            />
+          </span>
+          <span class="flex flex-col items-start">
+            <label class="text-[13px] font-medium whitespace-nowrap pl-1"
+              >Design</label
+            >
+            <generic-look-up
+              dwidth="100"
+              widthtype="%"
+              durl="invoice/findAllDesign"
+              name="design"
+              @customFunction="getLookUpValue"
+            />
+          </span>
+        </div>
+
+        <div class="flex flex-col items-start gap-1 h-[150px]">
+          <span class="flex flex-col items-start">
+            <label class="text-[13px] font-medium whitespace-nowrap pl-1"
+              >Common Barcode</label
+            >
+            <generic-input
+              width="100"
+              widthtype="%"
+              name="commonBarcode"
+              @customFunction="getInputValue"
+            />
+          </span>
+          <span class="flex flex-col items-start">
+            <label class="text-[13px] font-medium whitespace-nowrap pl-1"
+              >Gramm</label
+            >
+            <generic-input
+              type="number"
+              width="100"
+              widthtype="%"
+              name="gramm"
+              @customFunction="getInputValue"
+            />
+          </span>
+          <span class="flex flex-col items-start">
+            <label class="text-[13px] font-medium whitespace-nowrap pl-1"
+              >Design Variant</label
+            >
+            <generic-look-up
+              dwidth="100"
+              widthtype="%"
+              durl="invoice/findAllDesignVariant"
+              name="designVariant"
+              @customFunction="getLookUpValue"
+            />
+          </span>
+        </div>
+
+        <div class="flex flex-col items-start gap-1 h-[150px]">
+          <span class="flex flex-col items-start">
+            <label class="text-[13px] font-medium whitespace-nowrap pl-1"
+              >External Barcode</label
+            >
+            <generic-input
+              width="100"
+              widthtype="%"
+              name="externalBarcode"
+              @customFunction="getInputValue"
+            />
+          </span>
+          <span class="flex flex-col items-start">
+            <label class="text-[13px] font-medium whitespace-nowrap pl-1"
+              >fiberClass</label
+            >
+            <generic-look-up
+              dwidth="100"
+              widthtype="%"
+              durl="invoice/findAllQualityFiberClass"
+              name="fiberClass"
+              @customFunction="getLookUpValue"
+            />
+          </span>
+          <span class="flex flex-col items-start">
+            <label class="text-[13px] font-medium whitespace-nowrap pl-1"
+              >Client Order</label
+            >
+            <generic-input
+              width="100"
+              widthtype="%"
+              name="clientOrder"
+              @customFunction="getInputValue"
+            />
+          </span>
+        </div>
+
+        <div class="flex flex-col items-start gap-1 h-[150px]">
+          <span class="flex flex-col items-start">
+            <label class="text-[13px] font-medium whitespace-nowrap pl-1"
+              >Equipments</label
+            >
+            <generic-look-up
+              dwidth="100"
+              widthtype="%"
+              durl="invoice/findAllEquipments"
+              name="equipments"
+              @customFunction="getLookUpValue"
+            />
+          </span>
+          <span class="flex flex-col items-start">
+            <label class="text-[13px] font-medium whitespace-nowrap pl-1"
+              >Size</label
+            >
+            <generic-look-up
+              dwidth="100"
+              widthtype="%"
+              durl="invoice/findAllSewModelVariantSize"
+              name="size"
+              @customFunction="getLookUpValue"
+            />
+          </span>
+          <span class="flex flex-col items-start">
+            <label class="text-[13px] font-medium whitespace-nowrap pl-1"
+              >Packing Number</label
+            >
+            <generic-input
+              width="100"
+              widthtype="%"
+              name="packingNumber"
+              @customFunction="getInputValue"
+            />
+          </span>
+        </div>
+
+        <div class="flex flex-col items-start justify-between h-[150px] gap-1">
+          <span class="flex items-center">
+            <generic-check-box
+              class="cursor-pointer"
               name="keep"
               @customFunction="getInputValue"
             />
@@ -188,639 +502,184 @@
               >Keep Window</label
             >
           </span>
-
-          <generic-button
-            name="Get"
-            pl="10"
-            pt="3"
-            pr="10"
-            pb="3"
-            bg="rgba(54, 155, 215, 0.8)"
-            textsize="13"
-            @click="getResponseData('less')"
-          />
-        </div>
-
-        <div v-else class="flex items-center justify-between gap-2">
-          <div class="flex flex-col items-start gap-1 h-[150px]">
-            <span class="flex flex-col items-start">
-              <label class="text-[13px] font-medium whitespace-nowrap pl-1"
-                >Product</label
-              >
-              <generic-look-up
-                dwidth="100"
-                widthtype="%"
-                dlist="100"
-                durl="invoiceBase/findAllStockProductListUrl"
-                name="product"
-                :dparam="allParams"
-                @customFunction="getLookUpValue"
-              />
-            </span>
-            <span class="flex flex-col items-start">
-              <label class="text-[13px] font-medium whitespace-nowrap pl-1"
-                >Client Company</label
-              >
-              <generic-look-up
-                dwidth="100"
-                widthtype="%"
-                dlist="100"
-                durl="invoiceBase/findAllCompanyForInvoice"
-                name="clientCompany"
-                @customFunction="getLookUpValue"
-              />
-            </span>
-            <span class="flex flex-col items-start">
-              <label class="text-[13px] font-medium whitespace-nowrap pl-1"
-                >Pr Order</label
-              >
-              <generic-look-up
-                dwidth="100"
-                widthtype="%"
-                dlist="100"
-                durl="invoiceBase/findAllPrOrder"
-                name="order"
-                @customFunction="getLookUpValue"
-              />
-            </span>
-          </div>
-
-          <div class="flex flex-col items-start gap-1 h-[150px]">
-            <span class="flex flex-col items-start">
-              <label class="text-[13px] font-medium whitespace-nowrap pl-1"
-                >Qty
-                <span v-if="bodyData.length" class="text-[maroon]"
-                  >max = {{ qtyMaxValue }}</span
-                ></label
-              >
-              <generic-input
-                pl="8"
-                pr="8"
-                pt="2"
-                pb="2"
-                textsize="13"
-                type="number"
-                width="100"
-                widthtype="%"
-                name="top_qty"
-                :max-value="qtyMaxValue"
-                @customFunction="getInputValue"
-                @setMAXvalue="setMAXvalue"
-              />
-            </span>
-            <span class="flex flex-col items-start">
-              <label class="text-[13px] font-medium whitespace-nowrap pl-1"
-                >Batch</label
-              >
-              <generic-input
-                pl="8"
-                pr="8"
-                pt="2"
-                pb="2"
-                textsize="13"
-                type="text"
-                width="100"
-                widthtype="%"
-                name="batch"
-                @customFunction="getInputValue"
-              />
-            </span>
-            <span class="flex flex-col items-start">
-              <label class="text-[13px] font-medium whitespace-nowrap pl-1"
-                >Packing Type</label
-              >
-              <generic-look-up
-                dwidth="100"
-                widthtype="%"
-                dlist="100"
-                durl="invoice/findAllSewModelPackingType"
-                name="packingType"
-                @customFunction="getLookUpValue"
-              />
-            </span>
-          </div>
-
-          <div class="flex flex-col items-start gap-1 h-[150px]">
-            <span class="flex flex-col items-start">
-              <label class="text-[13px] font-medium whitespace-nowrap pl-1"
-                >pack qty
-                <span v-if="bodyData.length" class="text-[maroon]"
-                  >max = {{ packQtyMaxValue }}</span
-                ></label
-              >
-              <generic-input
-                pl="8"
-                pr="8"
-                pt="2"
-                pb="2"
-                textsize="13"
-                type="number"
-                width="100"
-                widthtype="%"
-                name="packQty"
-                :max-value="packQtyMaxValue"
-                @customFunction="getInputValue"
-                @setMAXvalue="setMAXvalue"
-              />
-            </span>
-            <span class="flex flex-col items-start">
-              <label class="text-[13px] font-medium whitespace-nowrap pl-1"
-                >Lot</label
-              >
-              <generic-input
-                pl="8"
-                pr="8"
-                pt="2"
-                pb="2"
-                textsize="13"
-                type="text"
-                width="100"
-                widthtype="%"
-                name="lot"
-                @customFunction="getInputValue"
-              />
-            </span>
-            <span class="flex flex-col items-start">
-              <label class="text-[13px] font-medium whitespace-nowrap pl-1"
-                >Color</label
-              >
-              <generic-look-up
-                dwidth="100"
-                widthtype="%"
-                dlist="100"
-                durl="invoice/findAllColor"
-                name="color"
-                @customFunction="getLookUpValue"
-              />
-            </span>
-          </div>
-
-          <div class="flex flex-col items-start gap-1 h-[150px]">
-            <span class="flex flex-col items-start">
-              <label class="text-[13px] font-medium whitespace-nowrap pl-1"
-                >Item Barcode</label
-              >
-              <generic-input
-                pl="8"
-                pr="8"
-                pt="2"
-                pb="2"
-                textsize="13"
-                type="number"
-                width="100"
-                widthtype="%"
-                name="itemBarcode"
-                @customFunction="getInputValue"
-              />
-            </span>
-            <span class="flex flex-col items-start">
-              <label class="text-[13px] font-medium whitespace-nowrap pl-1"
-                >Pus</label
-              >
-              <generic-input
-                pl="8"
-                pr="8"
-                pt="2"
-                pb="2"
-                textsize="13"
-                type="number"
-                width="100"
-                widthtype="%"
-                name="pus"
-                @customFunction="getInputValue"
-              />
-            </span>
-            <span class="flex flex-col items-start">
-              <label class="text-[13px] font-medium whitespace-nowrap pl-1"
-                >Color Variant</label
-              >
-              <generic-look-up
-                dwidth="100"
-                widthtype="%"
-                dlist="100"
-                durl="invoice/findAllColorVariant"
-                name="colorVariant"
-                @customFunction="getLookUpValue"
-              />
-            </span>
-          </div>
-
-          <div class="flex flex-col items-start gap-1 h-[150px]">
-            <span class="flex flex-col items-start">
-              <label class="text-[13px] font-medium whitespace-nowrap pl-1"
-                >Product Barcode</label
-              >
-              <generic-input
-                pl="8"
-                pr="8"
-                pt="2"
-                pb="2"
-                textsize="13"
-                type="text"
-                width="100"
-                widthtype="%"
-                name="productBarcode"
-                @customFunction="getInputValue"
-              />
-            </span>
-            <span class="flex flex-col items-start">
-              <label class="text-[13px] font-medium whitespace-nowrap pl-1"
-                >Feine</label
-              >
-              <generic-input
-                pl="8"
-                pr="8"
-                pt="2"
-                pb="2"
-                textsize="13"
-                type="number"
-                width="100"
-                widthtype="%"
-                name="feine"
-                @customFunction="getInputValue"
-              />
-            </span>
-            <span class="flex flex-col items-start">
-              <label class="text-[13px] font-medium whitespace-nowrap pl-1"
-                >Design</label
-              >
-              <generic-look-up
-                dwidth="100"
-                widthtype="%"
-                dlist="100"
-                durl="invoice/findAllDesign"
-                name="design"
-                @customFunction="getLookUpValue"
-              />
-            </span>
-          </div>
-
-          <div class="flex flex-col items-start gap-1 h-[150px]">
-            <span class="flex flex-col items-start">
-              <label class="text-[13px] font-medium whitespace-nowrap pl-1"
-                >Common Barcode</label
-              >
-              <generic-input
-                pl="8"
-                pr="8"
-                pt="2"
-                pb="2"
-                textsize="13"
-                type="text"
-                width="100"
-                widthtype="%"
-                name="commonBarcode"
-                @customFunction="getInputValue"
-              />
-            </span>
-            <span class="flex flex-col items-start">
-              <label class="text-[13px] font-medium whitespace-nowrap pl-1"
-                >Gramm</label
-              >
-              <generic-input
-                pl="8"
-                pr="8"
-                pt="2"
-                pb="2"
-                textsize="13"
-                type="number"
-                width="100"
-                widthtype="%"
-                name="gramm"
-                @customFunction="getInputValue"
-              />
-            </span>
-            <span class="flex flex-col items-start">
-              <label class="text-[13px] font-medium whitespace-nowrap pl-1"
-                >Design Variant</label
-              >
-              <generic-look-up
-                dwidth="100"
-                widthtype="%"
-                dlist="100"
-                durl="invoice/findAllDesignVariant"
-                name="designVariant"
-                @customFunction="getLookUpValue"
-              />
-            </span>
-          </div>
-
-          <div class="flex flex-col items-start gap-1 h-[150px]">
-            <span class="flex flex-col items-start">
-              <label class="text-[13px] font-medium whitespace-nowrap pl-1"
-                >External Barcode</label
-              >
-              <generic-input
-                pl="8"
-                pr="8"
-                pt="2"
-                pb="2"
-                textsize="13"
-                type="text"
-                width="100"
-                widthtype="%"
-                name="externalBarcode"
-                @customFunction="getInputValue"
-              />
-            </span>
-            <span class="flex flex-col items-start">
-              <label class="text-[13px] font-medium whitespace-nowrap pl-1"
-                >fiberClass</label
-              >
-              <generic-look-up
-                dwidth="100"
-                widthtype="%"
-                dlist="100"
-                durl="invoice/findAllQualityFiberClass"
-                name="fiberClass"
-                @customFunction="getLookUpValue"
-              />
-            </span>
-            <span class="flex flex-col items-start">
-              <label class="text-[13px] font-medium whitespace-nowrap pl-1"
-                >Client Order</label
-              >
-              <generic-input
-                pl="8"
-                pr="8"
-                pt="2"
-                pb="2"
-                textsize="13"
-                type="text"
-                width="100"
-                widthtype="%"
-                name="clientOrder"
-                @customFunction="getInputValue"
-              />
-            </span>
-          </div>
-
-          <div class="flex flex-col items-start gap-1 h-[150px]">
-            <span class="flex flex-col items-start">
-              <label class="text-[13px] font-medium whitespace-nowrap pl-1"
-                >Equipments</label
-              >
-              <generic-look-up
-                dwidth="100"
-                widthtype="%"
-                dlist="100"
-                durl="invoice/findAllEquipments"
-                name="equipments"
-                @customFunction="getLookUpValue"
-              />
-            </span>
-            <span class="flex flex-col items-start">
-              <label class="text-[13px] font-medium whitespace-nowrap pl-1"
-                >Size</label
-              >
-              <generic-look-up
-                dwidth="100"
-                widthtype="%"
-                dlist="100"
-                durl="invoice/findAllSewModelVariantSize"
-                name="size"
-                @customFunction="getLookUpValue"
-              />
-            </span>
-            <span class="flex flex-col items-start">
-              <label class="text-[13px] font-medium whitespace-nowrap pl-1"
-                >Packing Number</label
-              >
-              <generic-input
-                pl="8"
-                pr="8"
-                pt="2"
-                pb="2"
-                textsize="13"
-                type="text"
-                width="100"
-                widthtype="%"
-                name="packingNumber"
-                @customFunction="getInputValue"
-              />
-            </span>
-          </div>
-
-          <div
-            class="flex flex-col items-start justify-between h-[150px] gap-1"
-          >
-            <span class="flex items-center">
-              <generic-check-box
-                class="cursor-pointer"
-                name="keep"
-                @customFunction="getInputValue"
-              />
-              <label class="text-[12px] whitespace-nowrap pl-1"
-                >Keep Window</label
-              >
-            </span>
-            <span class="flex items-center">
-              <generic-check-box
-                class="cursor-pointer"
-                name="all"
-                @customFunction="getInputValue"
-              />
-              <label class="text-[12px] whitespace-nowrap pl-1"
-                >All Componies</label
-              >
-            </span>
-            <span class="flex items-center">
-              <generic-check-box
-                class="cursor-pointer"
-                name="defect"
-                @customFunction="getInputValue"
-              />
-              <label class="text-[12px] whitespace-nowrap pl-1">Defect</label>
-            </span>
-            <span class="flex flex-col items-start">
-              <label class="text-[13px] font-medium whitespace-nowrap pl-1"
-                >Grade</label
-              >
-              <generic-look-up
-                dwidth="100"
-                widthtype="%"
-                dlist="100"
-                durl="invoice/findAllGradeWithNullValue"
-                name="grade"
-                @customFunction="getLookUpValue"
-              />
-            </span>
-          </div>
-        </div>
-
-        <div class="w-full h-[550px] overflow-scroll mt-2">
-          <table class="w-full">
-            <thead
-              class="bg-[rgb(229,235,245)] sticky z-[998] top-[1px] shadow-md text-center"
+          <span class="flex items-center">
+            <generic-check-box
+              class="cursor-pointer"
+              name="all"
+              @customFunction="getInputValue"
+            />
+            <label class="text-[12px] whitespace-nowrap pl-1"
+              >All Componies</label
             >
-              <tr>
-                <th
-                  class="text-[13px] font-semibold border-[1px] border-solid border-[rgb(169,184,199)] p-4"
-                >
-                  №
-                </th>
-                <th
-                  v-for="(headName, key) in headData"
-                  :key="key"
-                  class="text-[13px] font-semibold border-[1px] border-solid border-[rgb(169,184,199)] p-4 whitespace-nowrap"
-                  :class="
-                    headName.width
-                      ? `w-[${headName.width}px]`
-                      : `w-[${headName.dwidth}px]`
-                  "
-                >
-                  {{ headName.headerText }}
-                  <span
-                    v-if="headName.name === 'qty'"
-                    class="block min-h-[22px] h-[100%] bg-[rgb(83,201,107)] p-[2px_15px] text-[12px] font-normal text-white"
-                    >{{ totalQty }}</span
-                  >
-                </th>
-              </tr>
-              <tr>
-                <td
-                  class="text-[12px] border-[1px] border-solid border-[rgb(169,184,199)] p-2"
-                >
-                  <GenericInput
-                    width="50"
-                    height="20"
-                    pl="8"
-                    pr="8"
-                    pt="1"
-                    pb="1"
-                    textsize="11"
-                    type="text"
-                  />
-                </td>
-                <td
-                  v-for="(item, inx) in headData"
-                  :key="inx"
-                  class="text-[12px] border-[1px] border-solid border-[rgb(169,184,199)] p-2"
-                >
-                  <GenericInput
-                    width="150"
-                    height="20"
-                    pl="8"
-                    pr="8"
-                    pt="1"
-                    pb="1"
-                    textsize="11"
-                    type="text"
-                  />
-                </td>
-              </tr>
-            </thead>
-
-            <tbody class="bg-white">
-              <tr
-                v-for="(row, indexOne) in bodyData.length
-                  ? bodyData
-                  : oldBodyData"
-                :key="indexOne"
-                class="bg-gradient-to-b from-transparent via-transparent to-[#F4F4F4] text-center"
-              >
-                <td
-                  class="border-[1px] border-solid border-[rgb(169,184,199)] text-[12px] p-2 text-center"
-                >
-                  {{ indexOne + 1 }}
-                </td>
-                <td
-                  v-for="(item, indexToo) in headData"
-                  :key="indexToo"
-                  class="border-[1px] border-solid border-[rgb(169,184,199)] text-[12px] p-2"
-                >
-                  <generic-look-up
-                    v-if="
-                      item?.editableElement !== false && item.type == 'list'
-                    "
-                    :order="indexOne"
-                    :name="item.name"
-                    :result-type="item.resultType"
-                    :durl="`${
-                      item?.durl === 'findAllEquipments'
-                        ? 'productionReports'
-                        : 'invoiceBase'
-                    }/${item.durl}`"
-                    :dwidth="`${item.dwidth}`"
-                    @customFunction="getBodyLookUpValue"
-                  />
-                  <generic-check-box
-                    v-else-if="
-                      item?.editableElement !== false &&
-                      item?.type == 'checkbox'
-                    "
-                    :order="indexOne"
-                    :name="item.name"
-                    @customFunction="getBodyInputValue"
-                  />
-                  <generic-input
-                    v-else-if="item?.editableElement !== false"
-                    :value="
-                      item.name === 'qty'
-                        ? bodyAllInputLookUpValues?.[indexOne]?.[item.name]
-                        : row[item.name]
-                    "
-                    :order="indexOne"
-                    :name="item.name"
-                    width="150"
-                    height="20"
-                    pl="8"
-                    pr="8"
-                    pt="5"
-                    pb="5"
-                    textsize="11"
-                    :type="
-                      item?.type === 'float' || item?.type === 'hidden'
-                        ? 'number'
-                        : 'text'
-                    "
-                    :limited-value="oldBodyData"
-                    :is-it-limited-value="isItLimitedValue"
-                    @customFunction="getBodyInputValue"
-                    @setMAXvalue="setMAXvalue"
-                  />
-
-                  <span
-                    v-else-if="
-                      row[item.name] && typeof row[item.name] === 'object'
-                    "
-                    >{{ row[item.name]['text'] }}</span
-                  >
-                  <span v-else-if="row[item.name] && item.type === 'date'">{{
-                    new Date(row[item.name])
-                      .toLocaleString('en-GB')
-                      .split(',')
-                      .join('')
-                  }}</span>
-                  <img
-                    v-else-if="item.type === 'file_image'"
-                    src="../../assets/images/no-image.png"
-                    class="w-[60px]"
-                  />
-                  <span
-                    v-else-if="
-                      item.name === 'realCount' && clickedRalCount[indexOne]
-                    "
-                    class="text-red-700 font-semibold cursor-pointer"
-                    @click="
-                      setValueQtyAction(item.name, row[item.name], indexOne)
-                    "
-                    >{{ row[item.name] }}</span
-                  >
-                  <span
-                    v-else-if="item.name === 'realCount'"
-                    class="text-red-700 font-semibold cursor-pointer"
-                    @click="
-                      setValueQtyAction(item.name, row[item.name], indexOne)
-                    "
-                    >{{ row[item.name] }}</span
-                  >
-                  <span v-else>{{ row[item.name] }}</span>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+          </span>
+          <span class="flex items-center">
+            <generic-check-box
+              class="cursor-pointer"
+              name="defect"
+              @customFunction="getInputValue"
+            />
+            <label class="text-[12px] whitespace-nowrap pl-1">Defect</label>
+          </span>
+          <span class="flex flex-col items-start">
+            <label class="text-[13px] font-medium whitespace-nowrap pl-1"
+              >Grade</label
+            >
+            <generic-look-up
+              dwidth="100"
+              widthtype="%"
+              durl="invoice/findAllGradeWithNullValue"
+              name="grade"
+              @customFunction="getLookUpValue"
+            />
+          </span>
         </div>
+      </div>
+
+      <div class="w-full h-[550px] overflow-scroll mt-2">
+        <table class="w-full">
+          <thead
+            class="bg-[rgb(229,235,245)] sticky z-[998] top-[1px] shadow-md text-center"
+          >
+            <tr>
+              <th
+                class="text-[13px] font-semibold border-[1px] border-solid border-[rgb(169,184,199)] p-4"
+              >
+                №
+              </th>
+              <th
+                v-for="(headName, key) in headData"
+                :key="key"
+                class="text-[13px] font-semibold border-[1px] border-solid border-[rgb(169,184,199)] p-4 whitespace-nowrap"
+                :class="
+                  headName.width
+                    ? `w-[${headName.width}px]`
+                    : `w-[${headName.dwidth}px]`
+                "
+              >
+                {{ headName.headerText }}
+                <span
+                  v-if="headName.name === 'qty'"
+                  class="block min-h-[22px] h-[100%] bg-[rgb(83,201,107)] p-[2px_15px] text-[12px] font-normal text-white"
+                  >{{ totalQty }}</span
+                >
+              </th>
+            </tr>
+            <tr>
+              <td
+                class="text-[12px] border-[1px] border-solid border-[rgb(169,184,199)] p-2"
+              >
+                <GenericInput width="80" />
+              </td>
+              <td
+                v-for="(item, inx) in headData"
+                :key="inx"
+                class="text-[12px] border-[1px] border-solid border-[rgb(169,184,199)] p-2"
+              >
+                <GenericInput width="150" />
+              </td>
+            </tr>
+          </thead>
+
+          <tbody class="bg-white">
+            <tr
+              v-for="(row, indexOne) in bodyData.length
+                ? bodyData
+                : oldBodyData"
+              :key="indexOne"
+              class="bg-gradient-to-b from-transparent via-transparent to-[#F4F4F4] text-center"
+            >
+              <td
+                class="border-[1px] border-solid border-[rgb(169,184,199)] text-[12px] p-2 text-center"
+              >
+                {{ indexOne + 1 }}
+              </td>
+              <td
+                v-for="(item, indexToo) in headData"
+                :key="indexToo"
+                class="border-[1px] border-solid border-[rgb(169,184,199)] text-[12px] p-2"
+              >
+                <generic-look-up
+                  v-if="item?.editableElement !== false && item.type == 'list'"
+                  :order="indexOne"
+                  :name="item.name"
+                  :result-type="item.resultType"
+                  :durl="`${
+                    item?.durl === 'findAllEquipments'
+                      ? 'productionReports'
+                      : 'invoiceBase'
+                  }/${item.durl}`"
+                  :dwidth="`${item.dwidth}`"
+                  @customFunction="getBodyLookUpValue"
+                />
+                <generic-check-box
+                  v-else-if="
+                    item?.editableElement !== false && item?.type == 'checkbox'
+                  "
+                  :order="indexOne"
+                  :name="item.name"
+                  @customFunction="getBodyInputValue"
+                />
+                <generic-input
+                  v-else-if="item?.editableElement !== false"
+                  :value="
+                    item.name === 'qty'
+                      ? bodyAllInputLookUpValues?.[indexOne]?.[item.name]
+                      : row[item.name]
+                  "
+                  :order="indexOne"
+                  :name="item.name"
+                  width="150"
+                  :type="
+                    item?.type === 'float' || item?.type === 'hidden'
+                      ? 'number'
+                      : 'text'
+                  "
+                  :limited-value="oldBodyData"
+                  :is-it-limited-value="isItLimitedValue"
+                  @customFunction="getBodyInputValue"
+                  @setMAXvalue="setMAXvalue"
+                />
+
+                <span
+                  v-else-if="
+                    row[item.name] && typeof row[item.name] === 'object'
+                  "
+                  >{{ row[item.name]['text'] }}</span
+                >
+                <span v-else-if="row[item.name] && item.type === 'date'">{{
+                  new Date(row[item.name])
+                    .toLocaleString('en-GB')
+                    .split(',')
+                    .join('')
+                }}</span>
+                <img
+                  v-else-if="item.type === 'file_image'"
+                  src="@assets/images/no-image.png"
+                  class="w-[60px]"
+                />
+                <span
+                  v-else-if="
+                    item.name === 'realCount' && clickedRalCount[indexOne]
+                  "
+                  class="text-red-700 font-semibold cursor-pointer"
+                  @click="
+                    setValueQtyAction(item.name, row[item.name], indexOne)
+                  "
+                  >{{ row[item.name] }}</span
+                >
+                <span
+                  v-else-if="item.name === 'realCount'"
+                  class="text-red-700 font-semibold cursor-pointer"
+                  @click="
+                    setValueQtyAction(item.name, row[item.name], indexOne)
+                  "
+                  >{{ row[item.name] }}</span
+                >
+                <span v-else>{{ row[item.name] }}</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>

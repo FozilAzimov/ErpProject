@@ -29,7 +29,7 @@
             @click="$router.push('/batches.htm')"
           />
           <h1 class="font-bold text-[rgb(49,126,172)] text-[14px] uppercase">
-            {{ isNaN(pageID) ? 'Add' : 'Edit' }} Batch
+            {{ pageID ? 'Add' : 'Edit' }} Batch
           </h1>
         </div>
         <div>
@@ -87,16 +87,16 @@
       >
         <div class="m-2 flex items-center gap-2">
           <generic-input
-            :value="defaultValues?.years"
+            :value="editData?.years"
             type="number"
-            name="goToBatch"
+            name="batchYear"
             placeholder="Go To Batch"
             @customFunction="getInputAndLookUpValueAction"
           />
           <generic-input
             value=""
             type="number"
-            name="batchNum"
+            name="batchNumber"
             placeholder="Batch number"
             @enter="topBatchNumberEnterAction"
             @customFunction="getInputAndLookUpValueAction"
@@ -111,7 +111,7 @@
                 class="bg-[rgba(239,243,249,0.7)] hover:bg-gradient-to-b hover:from-transparent hover:via-transparent hover:to-[rgba(220,229,243,0.7)]"
               >
                 <td
-                  class="w-[150px] border-[1px] border-solid border-[#778899] pl-[10px]"
+                  class="w-[150px] border-[1px] border-solid border-[#778899] pl-[10px] font-medium"
                 >
                   {{ element?.name }}
                 </td>
@@ -142,8 +142,8 @@
                       <generic-input
                         :width="element?.width"
                         :value="
-                          defaultValues?.[element?.subName]
-                            ? `${defaultValues?.[element?.subName]}`
+                          editData?.[element?.subName]
+                            ? `${editData?.[element?.subName]}`
                             : ''
                         "
                         :type="element.type"
@@ -161,9 +161,7 @@
                       @customFunction="getInputAndLookUpValueAction"
                     />
                   </template>
-                  <template v-else>{{
-                    defaultValues[element?.subName]
-                  }}</template>
+                  <template v-else>{{ editData[element?.subName] }}</template>
                 </td>
 
                 <td
@@ -188,19 +186,19 @@
                       v-if="saveEditBtnShowHide"
                       type="primary"
                       name="Save"
-                      @click="saveAction()"
+                      @click="saveAction"
                     />
                     <generic-button
                       v-else
                       type="success"
                       name="Edit"
                       icon-name-attribute="edit"
-                      @click="editAction()"
+                      @click="editAction"
                     />
                     <generic-button
                       v-if="pageID && saveEditBtnShowHide"
                       name="Cancel"
-                      @click="cancelAction()"
+                      @click="cancelAction"
                     />
                     <span v-for="(elem, inx) in allBtnName" :key="inx">
                       <span v-if="elem?.type === 'checkbox'" class="ml-5">
@@ -258,7 +256,7 @@
             :tableheadlength="batchDetailHead.length"
             :response-data="batchDetailBody"
             :ui-show-hide="true"
-            :isedit="true"
+            :is-edit="isEditBatchDetail"
             :height="450"
             class="bg-[rgba(255,255,255,0.5)] mt-1"
           />
@@ -304,7 +302,7 @@
             :tableheadlength="batchStagesHead.length"
             :response-data="batchStagesBody"
             :ui-show-hide="uiShowHide"
-            :isedit="true"
+            :is-edit="true"
             :height="450"
             delete-url-row="sewModel/prepareCreateEditSewModelOperation"
             class="bg-[rgba(255,255,255,0.5)] mt-1"
@@ -347,7 +345,7 @@ export default {
       isOpenTable: true,
       isCloseTable: true,
       pageID: null,
-      defaultValues: {},
+      editData: {},
       allInputAndLookUpValue: {},
       elementData: [],
       allBtnName: [],
@@ -363,6 +361,7 @@ export default {
       leftMapDetails: {},
       rightDataDetails: {},
       leftDataDetails: {},
+      isEditBatchDetail: null,
       // end batchDetail table uchun
 
       // end batchStages table uchun
@@ -370,8 +369,8 @@ export default {
       batchStagesBody: [],
       showHideTable: false,
       uiShowHide: false,
-      isEdit: false,
-      hideButton: false,
+      isEdit: null,
+      hideButton: null,
       batchStageList: [],
       tableDataStages: [],
       tableDataStages2: [],
@@ -388,10 +387,10 @@ export default {
   // CREATED
   created() {
     this.pageID = this.$route.params?.id
-    if (this.pageID) {
-      this.isEdit = true
-      this.hideButton = false
-    }
+    this.isEditBatchDetail = !!this.pageID
+    this.isEdit = !!this.pageID
+    this.hideButton = !this.pageID
+    this.uiShowHide = !!this.pageID
     // function
     this.dataCreatedAction()
     // function
@@ -476,7 +475,7 @@ export default {
           name: 'Print Preview',
           type: 'success',
           clickType: 'printPreview',
-          showIcon: 'printer',
+          iconName: 'printer',
         },
         {
           name: 'byPackCount',
@@ -689,8 +688,8 @@ export default {
               },
             }) => {
               this.isLoading = !this.isLoading
-              this.$set(this.defaultValues, 'batchNumber', batchNumber)
-              this.$set(this.defaultValues, 'years', years)
+              this.$set(this.editData, 'batchNumber', batchNumber)
+              this.$set(this.editData, 'years', years)
             }
           )
           .catch((error) => {
@@ -713,14 +712,14 @@ export default {
           id: this.pageID || null,
           batchNumber:
             this.allInputAndLookUpValue?.batchNumber ||
-            this.defaultValues?.batchNumber ||
+            this.editData?.batchNumber ||
             '',
-          colorVariant: { id: this.allInputAndLookUpValue?.colorVariant || '' },
+          colorVariant: { id: this.allInputAndLookUpValue?.colorVariant ?? '' },
           designVariant: {
-            id: this.allInputAndLookUpValue?.designVariant || '',
+            id: this.allInputAndLookUpValue?.designVariant ?? '',
           },
-          equipment: { id: this.allInputAndLookUpValue?.equipment || '' },
-          notes: { id: this.allInputAndLookUpValue?.notes || '' },
+          equipment: { id: this.allInputAndLookUpValue?.equipment ?? '' },
+          notes: { id: this.allInputAndLookUpValue?.notes ?? '' },
         },
       }
       this.isLoading = !this.isLoading

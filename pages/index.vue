@@ -1,14 +1,12 @@
 <template>
-  <div class="w-full flex flex-col items-center gap-5">
-    <h1>{{ GET_TRANSLATE_VALUE }}</h1>
+  <div class="mt-10">
     <generic-look-up
       dwidth="200"
       placeholder="Selected"
       :options-data="optionData"
       @customFunction="selectedAction"
     />
-
-    <generic-date />
+    <pre>{{ getText }}</pre>
   </div>
 </template>
 
@@ -23,23 +21,33 @@ export default {
   data() {
     return {
       optionData: [
-        { id: 1, name: 'English' },
-        { id: 2, name: 'Russian' },
-        { id: 3, name: 'O`zbekistan' },
-        { id: 4, name: 'Turkiya' },
+        { name: 'English', id: 'en' },
+        { name: 'Russian', id: 'ru' },
+        { name: 'O`zbekistan', id: 'uz' },
+        { name: 'Turkiya', id: 'tr' },
       ],
     }
   },
 
   computed: {
-    ...mapGetters('translate', ['GET_TRANSLATE_VALUE']),
+    // Store getters
+    ...mapGetters('translate', ['GET_CORE_STRING']),
+    getText() {
+      // function
+      this.customFunc()
+      return this.GET_CORE_STRING
+    },
   },
 
   methods: {
-    ...mapActions('translate', ['CHANGE_TRANSLATE']),
+    ...mapActions('translate', ['FETCH_TRANSLATE']),
 
     selectedAction(name, value) {
-      this.CHANGE_TRANSLATE(value)
+      this.FETCH_TRANSLATE(value)
+    },
+
+    customFunc() {
+      console.log('Page Request')
     },
   },
 }

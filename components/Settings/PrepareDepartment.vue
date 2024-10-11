@@ -88,33 +88,22 @@
                 v-if="element.type === 'text'"
                 class="flex flex-col items-start mb-1"
               >
-                <span class="text-[13px]">{{ element.name }}</span>
+                <span class="text-[13px]"
+                  >{{ element.name }}
+                  <span
+                    v-if="element?.required"
+                    class="text-red-500 text-[16px]"
+                    >*</span
+                  >
+                </span>
                 <generic-input
                   :value="
-                    editData?.[element.subName]
-                      ? editData?.[element.subName]
+                    viewEditData?.[element.subName]
+                      ? viewEditData?.[element.subName]
                       : ''
                   "
                   width="300"
                   type="text"
-                  :name="element.subName"
-                  :disabled="element.disabled"
-                  @customFunction="getInputAndLookUpValueAction"
-                />
-              </span>
-              <span
-                v-else-if="element.type === 'number'"
-                class="flex flex-col items-start mb-1"
-              >
-                <span class="text-[13px]">{{ element.name }}</span>
-                <generic-input
-                  :value="`${
-                    editData?.[element.subName]
-                      ? editData?.[element.subName]
-                      : ''
-                  }`"
-                  width="300"
-                  type="number"
                   :name="element.subName"
                   :disabled="element.disabled"
                   @customFunction="getInputAndLookUpValueAction"
@@ -128,25 +117,9 @@
                 <generic-look-up
                   dwidth="300"
                   :name="element.subName"
-                  defvalue="USA Dollor"
+                  :defvalue="''"
                   :options-data="currencyData"
                   :disabled="element.disabled"
-                  @customFunction="getInputAndLookUpValueAction"
-                />
-              </span>
-              <span
-                v-else-if="element.type === 'checkbox'"
-                class="flex flex-col items-start mb-1"
-              >
-                <generic-check-box
-                  :text="element?.name"
-                  :name="element?.subName"
-                  :disabled="element.disabled"
-                  :default-value="
-                    editData?.[element.subName]
-                      ? editData?.[element.subName]
-                      : false
-                  "
                   @customFunction="getInputAndLookUpValueAction"
                 />
               </span>
@@ -189,14 +162,12 @@ import GenericButton from '@generics/GenericButton.vue'
 import GenericInput from '@generics/GenericInput.vue'
 import LoadingPage from '@components/Loading/LoadingPage.vue'
 import GenericLookUp from '@generics/GenericLookUp.vue'
-import GenericCheckBox from '@generics/GenericCheckBox.vue'
 export default {
   components: {
     LoadingPage,
     GenericButton,
     GenericInput,
     GenericLookUp,
-    GenericCheckBox,
   },
 
   // DATA
@@ -209,9 +180,9 @@ export default {
       isCloseTable: true,
       pageType: null,
       pageID: null,
-      editData: {},
-      allInputAndLookUpValue: {},
       elementData: [],
+      viewEditData: {},
+      allInputAndLookUpValue: {},
       radio: null,
       currencyData: [],
     }
@@ -220,8 +191,8 @@ export default {
   // WATCH
   watch: {
     radio(newVal) {
-      if (newVal === 'enabled') this.allInputAndLookUpValue.active = true
-      else if (newVal === 'disabled') this.allInputAndLookUpValue.active = false
+      if (newVal === 'Enabled') this.allInputAndLookUpValue.active = true
+      else if (newVal === 'Disabled') this.allInputAndLookUpValue.active = false
       else this.allInputAndLookUpValue.active = false
     },
   },
@@ -258,75 +229,19 @@ export default {
       this.isCloseTable = !this.isCloseTable
     },
 
-    // Data created
-    dataCreatedAction() {
-      const data = [
-        {
-          name: 'Batch Process Name',
-          subName: 'name',
-          type: 'text',
-          show: true,
-          disabled: this.pageType === 'view',
-        },
-        {
-          name: 'Code',
-          subName: 'code',
-          type: 'text',
-          show: true,
-          disabled: this.pageType === 'view',
-        },
-        {
-          name: 'Currency',
-          subName: 'currency',
-          type: 'select',
-          show: this.pageType === 'edit',
-          disabled: this.pageType === 'view',
-        },
-        {
-          name: 'Price',
-          subName: 'price',
-          type: 'number',
-          show: this.pageType === 'edit',
-          disabled: this.pageType === 'view',
-        },
-        {
-          name: 'Save name',
-          subName: 'savename',
-          type: 'checkbox',
-          show: true,
-          disabled: this.pageType === 'view',
-        },
-        {
-          name: 'Status',
-          subName: 'enabled',
-          type: 'radio',
-          show: true,
-          disabled: this.pageType === 'view',
-        },
-        {
-          name: 'Status',
-          subName: 'disabled',
-          type: 'radio',
-          show: true,
-          disabled: this.pageType === 'view',
-        },
-      ]
-      this.elementData = data
-    },
-
     // Page request
     getTableRequest() {
       if (this.pageType === 'view') {
         this.isLoading = !this.isLoading
         this.$axios
-          .post(`/batchProcess/prepareBatchProcessViewAjaxLoad`, {
+          .post(`/department/prepareDepartmentView`, {
             id: this.pageID,
             page_current: 1,
             page_size: 25,
           })
           .then(({ data: { design } }) => {
             this.isLoading = !this.isLoading
-            this.editData = design
+            this.viewEditData = design
           })
           .catch((error) => {
             this.isLoading = !this.isLoading
@@ -336,18 +251,39 @@ export default {
       } else if (this.pageType === 'edit') {
         this.isLoading = !this.isLoading
         this.$axios
-          .post(`/batchProcess/prepareBatchProcessAjaxLoad`, {
+          .post(`/department/prepareDepartment`, {
             id: this.pageID,
             page_current: 1,
             page_size: 25,
           })
           .then(({ data: { batchProcess, currencyList } }) => {
             this.isLoading = !this.isLoading
-            this.editData = batchProcess
+            this.viewEditData = batchProcess
             this.currencyData = currencyList
             batchProcess.active
-              ? (this.radio = 'enabled')
-              : (this.radio = 'disabled')
+              ? (this.radio = 'Enabled')
+              : (this.radio = 'Disabled')
+          })
+          .catch((error) => {
+            this.isLoading = !this.isLoading
+            // eslint-disable-next-line no-console
+            console.log(error)
+          })
+      } else {
+        this.isLoading = !this.isLoading
+        this.$axios
+          .post(`/department/prepareDepartment`, {
+            id: this.pageID,
+            page_current: 1,
+            page_size: 25,
+          })
+          .then(({ data: { batchProcess, currencyList } }) => {
+            this.isLoading = !this.isLoading
+            this.viewEditData = batchProcess
+            this.currencyData = currencyList
+            batchProcess.active
+              ? (this.radio = 'Enabled')
+              : (this.radio = 'Disabled')
           })
           .catch((error) => {
             this.isLoading = !this.isLoading
@@ -369,14 +305,18 @@ export default {
       if (this.pageID && this.pageType === 'edit') {
         batchProcess = {
           id: this.pageID,
-          name: this.allInputAndLookUpValue?.name || this.editData.name || '',
+          name:
+            this.allInputAndLookUpValue?.name || this.viewEditData.name || '',
           savename:
             this.allInputAndLookUpValue?.savename ||
-            this.editData.savename ||
+            this.viewEditData.savename ||
             '',
-          code: this.allInputAndLookUpValue?.code || this.editData.code || '',
+          code:
+            this.allInputAndLookUpValue?.code || this.viewEditData.code || '',
           active:
-            this.allInputAndLookUpValue?.active || this.editData.active || '',
+            this.allInputAndLookUpValue?.active ||
+            this.viewEditData.active ||
+            '',
           currency: {
             id: this.allInputAndLookUpValue?.currency || '',
           },
@@ -400,18 +340,83 @@ export default {
       this.isLoading = !this.isLoading
       const method = this.pageID ? 'put' : 'post'
       this.$axios[method](
-        `/batchProcess/${this.pageID ? 'editBatchProcess' : 'addBatchProcess'}`,
+        `/department/${this.pageID ? 'editDepartment' : 'addDepartment'}`,
         body
       )
         .then(() => {
           this.isLoading = !this.isLoading
-          this.$router.push('/batchProcess.htm')
+          this.$router.push('/departments.htm')
         })
         .catch((error) => {
           this.isLoading = !this.isLoading
           // eslint-disable-next-line no-console
           console.log(error)
         })
+    },
+
+    // Data created
+    dataCreatedAction() {
+      const data = [
+        {
+          name: 'Company Name',
+          subName: 'companyName',
+          type: 'select',
+          show: true,
+          disabled: this.pageType === 'view',
+        },
+        {
+          name: 'Department Name',
+          subName: 'departmentName',
+          type: 'text',
+          show: true,
+          required: true,
+          disabled: this.pageType === 'view',
+        },
+        {
+          name: 'Department Telegram Name',
+          subName: 'department.telegramName',
+          type: 'text',
+          required: true,
+          show: this.pageType !== 'view',
+          disabled: this.pageType === 'view',
+        },
+        {
+          name: 'Department Telegram BotChatId',
+          subName: 'department.telegramBotChatId',
+          type: 'text',
+          required: true,
+          show: this.pageType !== 'view',
+          disabled: this.pageType === 'view',
+        },
+        {
+          name: 'Department Telegram ReportType',
+          subName: 'department.telegramReportType',
+          type: 'text',
+          required: true,
+          show: this.pageType !== 'view',
+          disabled: this.pageType === 'view',
+        },
+        {
+          name: 'Department type',
+          subName: 'department.type',
+          type: 'text',
+          show: this.pageType !== 'view',
+          disabled: this.pageType === 'view',
+        },
+        {
+          subName: 'Enabled',
+          type: 'radio',
+          show: true,
+          disabled: this.pageType === 'view',
+        },
+        {
+          subName: 'Disabled',
+          type: 'radio',
+          show: true,
+          disabled: this.pageType === 'view',
+        },
+      ]
+      this.elementData = data
     },
   },
 }

@@ -93,7 +93,7 @@
               <select
                 v-model="pageSize_value"
                 class="border-[1px] border-solid border-[rgba(171,177,187,0.7)] w-[60px] px-[5px] py-[3px] cursor-pointer rounded-[2px] text-[14px] outline-none"
-                @change="getTableRequest()"
+                @change="getTableRequest"
               >
                 <option value="10">10</option>
                 <option value="25">25</option>
@@ -106,8 +106,6 @@
             <div class="flex items-center gap-2">
               <GenericInput
                 v-model="keywordValue"
-                width="200"
-                type="text"
                 placeholder="Search..."
                 @enter="getTableRequest"
                 @input="getInputValue"
@@ -127,7 +125,7 @@
             :istherebody="isThereBody"
             open-url="preparePlateNumber"
             :productions-action-buttons="true"
-            delete-row-url="batchProcess/prepareBatchProcessDelete"
+            delete-row-url="plateNumber/preparePlateNumberDelete"
             height="600"
             @pageEmitAction="getTableRequest"
           />
@@ -161,12 +159,12 @@ export default {
       tableHead: {
         id: { name: 'Id', code: 'id' },
         name: {
-          name: 'Batch Process Name',
+          name: 'Plate Number Name',
           code: 'name',
         },
-        status: {
-          name: 'Status',
-          code: 'status',
+        carName: {
+          name: 'Cars Name',
+          code: 'carName',
         },
       },
       tableBody: [],
@@ -198,7 +196,7 @@ export default {
     getTableRequest() {
       this.isLoading = !this.isLoading
       this.$axios
-        .post(`/batchProcess/batchProcessAjaxLoad`, {
+        .post(`/plateNumber/plateNumberList`, {
           searchForm: {
             keyword: this.keywordValue,
           },
@@ -209,9 +207,9 @@ export default {
             total: 328,
           },
         })
-        .then(({ data: { batchProcessList } }) => {
+        .then(({ data: { plateNumberList } }) => {
           this.isLoading = !this.isLoading
-          this.tableBody = batchProcessList
+          this.tableBody = plateNumberList
 
           this.tableBody.length
             ? (this.isThereBody = true)

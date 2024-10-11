@@ -14,13 +14,13 @@
               class="text-[13px] font-semibold border-[1px] border-solid border-[rgba(119,136,153,0.3)] p-4 cursor-pointer whitespace-nowrap"
               :class="`w-[${headName?.width}px]`"
             >
-              {{ headName.name }}
+              {{ GET_CORE_STRING?.[headName.name] || headName.name }}
             </th>
             <th
               v-if="showHideActionCol"
               class="w-[100px] text-[13px] font-semibold border-[1px] border-solid border-[rgba(119,136,153,0.2)] p-2 cursor-pointer"
             >
-              Action
+              {{ GET_CORE_STRING?.['common.table.title.action'] }}
             </th>
           </tr>
         </thead>
@@ -64,29 +64,44 @@
                 </span>
                 <span
                   v-else-if="
-                    key?.code === 'saleInfoParam' &&
-                    $route.path.includes('batchProcessStages.htm')
+                    key?.code === 'finalOperation' &&
+                    $route.path.includes('iplikStages.htm')
                   "
                   class="p-[2px_5px] italic text-white font-bold rounded-[5px]"
                 >
                   <span
-                    v-if="JSON.parse(value.saleInfoParam)"
+                    v-if="JSON.parse(value?.[key?.code])"
                     class="bg-[rgb(102,149,51)] px-[5px] rounded-md"
-                    >Enebled</span
-                  >
-                  <span v-else class="bg-[#BD4247] px-[5px] rounded-md"
-                    >Disabled</span
+                    >YES</span
                   >
                 </span>
+
+                <!-- Start Enabled and Disabled -->
                 <span
                   v-else-if="
-                    key?.code === 'autoSave' &&
-                    $route.path.includes('batchProcessStages.htm')
+                    (key?.code === 'saleInfoParam' &&
+                      $route.path.includes('batchProcessStages.htm')) ||
+                    (key?.code === 'autoSave' &&
+                      $route.path.includes('batchProcessStages.htm')) ||
+                    (key?.code === 'onlyOnceInColorVariant' &&
+                      $route.path.includes('batchProcessStages.htm')) ||
+                    (key?.code === 'autoStartStopBefore' &&
+                      $route.path.includes('batchProcessStages.htm')) ||
+                    (key?.code === 'useEquipment' &&
+                      $route.path.includes('batchProcessStages.htm')) ||
+                    (key?.code === 'checkPreviousStageEndStatus' &&
+                      $route.path.includes('batchProcessStages.htm')) ||
+                    (key?.code === 'status' &&
+                      $route.path.includes('departments.htm'))
                   "
                   class="p-[2px_5px] italic text-white font-bold rounded-[5px]"
                 >
                   <span
-                    v-if="JSON.parse(value.autoSave)"
+                    v-if="
+                      typeof value?.[key?.code] === 'boolean'
+                        ? value?.[key?.code]
+                        : JSON.parse(value?.[key?.code])
+                    "
                     class="bg-[rgb(102,149,51)] px-[5px] rounded-md"
                     >Enebled</span
                   >
@@ -94,70 +109,33 @@
                     >Disabled</span
                   >
                 </span>
+                <!-- End Enabled and Disabled -->
+                <!-- Start YES and NO -->
                 <span
                   v-else-if="
-                    key?.code === 'onlyOnceInColorVariant' &&
-                    $route.path.includes('batchProcessStages.htm')
+                    (key?.code === 'system_company' ||
+                      key?.code === 'physical' ||
+                      key?.code === 'companyBranch' ||
+                      key?.code === 'active') &&
+                    $route.path.includes('companies.htm')
                   "
                   class="p-[2px_5px] italic text-white font-bold rounded-[5px]"
                 >
                   <span
-                    v-if="JSON.parse(value.onlyOnceInColorVariant)"
+                    v-if="
+                      typeof value?.[key?.code] === 'boolean'
+                        ? value?.[key?.code]
+                        : JSON.parse(value?.[key?.code])
+                    "
                     class="bg-[rgb(102,149,51)] px-[5px] rounded-md"
-                    >Enebled</span
+                    >Yes</span
                   >
                   <span v-else class="bg-[#BD4247] px-[5px] rounded-md"
-                    >Disabled</span
+                    >No</span
                   >
                 </span>
-                <span
-                  v-else-if="
-                    key?.code === 'autoStartStopBefore' &&
-                    $route.path.includes('batchProcessStages.htm')
-                  "
-                  class="p-[2px_5px] italic text-white font-bold rounded-[5px]"
-                >
-                  <span
-                    v-if="JSON.parse(value.autoStartStopBefore)"
-                    class="bg-[rgb(102,149,51)] px-[5px] rounded-md"
-                    >Enebled</span
-                  >
-                  <span v-else class="bg-[#BD4247] px-[5px] rounded-md"
-                    >Disabled</span
-                  >
-                </span>
-                <span
-                  v-else-if="
-                    key?.code === 'useEquipment' &&
-                    $route.path.includes('batchProcessStages.htm')
-                  "
-                  class="p-[2px_5px] italic text-white font-bold rounded-[5px]"
-                >
-                  <span
-                    v-if="JSON.parse(value.useEquipment)"
-                    class="bg-[rgb(102,149,51)] px-[5px] rounded-md"
-                    >Enebled</span
-                  >
-                  <span v-else class="bg-[#BD4247] px-[5px] rounded-md"
-                    >Disabled</span
-                  >
-                </span>
-                <span
-                  v-else-if="
-                    key?.code === 'checkPreviousStageEndStatus' &&
-                    $route.path.includes('batchProcessStages.htm')
-                  "
-                  class="p-[2px_5px] italic text-white font-bold rounded-[5px]"
-                >
-                  <span
-                    v-if="JSON.parse(value.checkPreviousStageEndStatus)"
-                    class="bg-[rgb(102,149,51)] px-[5px] rounded-md"
-                    >Enebled</span
-                  >
-                  <span v-else class="bg-[#BD4247] px-[5px] rounded-md"
-                    >Disabled</span
-                  >
-                </span>
+                <!-- End YES and NO -->
+
                 <span
                   v-else-if="
                     key?.code === 'processStatusStr' &&
@@ -166,7 +144,7 @@
                   class="p-[2px_5px] italic text-white font-bold rounded-[5px]"
                 >
                   <span class="bg-[rgb(102,149,51)] px-[5px] rounded-md">{{
-                    value[key.code]
+                    value[key?.code]
                   }}</span>
                 </span>
                 <span
@@ -174,35 +152,58 @@
                     key?.code === 'status' ||
                     key?.code === 'invoiceOnWayStatus' ||
                     key?.code === 'type' ||
-                    key?.code === 'orderProductionType'
+                    key?.code === 'orderProductionType' ||
+                    key?.code === 'oder_payment_status'
                   "
                   class="p-[2px_5px] italic text-white font-bold rounded-[5px] bg-[rgb(102,149,51)]"
-                  v-html="value[key.code]"
+                  v-html="value[key?.code]"
                 >
                 </span>
                 <span
                   v-else-if="key.code === 'invoiceConfirmedStatus'"
                   class="p-[2px_5px] italic text-white font-bold rounded-[5px] bg-[rgb(221,86,0)]"
-                  v-html="value[key.code]"
+                  v-html="value[key?.code]"
                 ></span>
 
                 <!-- Bill Status col -->
                 <span
                   v-else-if="
                     key.code === 'invoiceBillStatus' &&
-                    String(value[key.code]).includes('Not')
+                    String(value[key?.code]).includes('Not')
                   "
                   class="p-[2px_5px] italic text-white font-bold rounded-[5px] bg-[rgb(221,86,0)]"
-                  v-html="value[key.code]"
+                  v-html="value[key?.code]"
                 ></span>
                 <span
                   v-else-if="
                     key.code === 'invoiceBillStatus' &&
-                    !String(value[key.code]).includes('Not')
+                    !String(value[key?.code]).includes('Not')
                   "
                   class="p-[2px_5px] italic text-white font-bold rounded-[5px] bg-[rgb(102,149,51)]"
-                  v-html="value[key.code]"
+                  v-html="value[key?.code]"
                 ></span>
+                <span
+                  v-else-if="
+                    (key.code === 'client' &&
+                      $route.path.includes('batchDetailsList.htm')) ||
+                    (key.code === 'unitprice' &&
+                      $route.path.includes('products.htm')) ||
+                    ((key?.code === 'productimg' ||
+                      key?.code === 'sewmodelimg' ||
+                      key?.code === 'sew_barcode_created_qty' ||
+                      key?.code === 'sew_barcode_printed_qty' ||
+                      key?.code === 'sew_barcode_read_qty' ||
+                      key?.code.toLowerCase() === 'planningtypes' ||
+                      key?.code.toLowerCase() === 'ordernumber' ||
+                      key?.code.toLowerCase() === 'clientcode' ||
+                      key?.code.toLowerCase() === 'duedate' ||
+                      key?.code.toLowerCase() === 'orderqty' ||
+                      key?.code.toLowerCase() === 'planningconfirmstatus') &&
+                      $route.path.includes('productionorder.htm'))
+                  "
+                  v-html="value[key?.code.toLowerCase()]"
+                >
+                </span>
                 <span
                   v-else-if="
                     (key.code === 'batchNumber' ||
@@ -220,15 +221,20 @@
                     $route.path.includes('batches.htm')
                   "
                   class="p-[2px_5px] italic text-white font-bold rounded-[5px] bg-[rgb(102,149,51)] text-nowrap"
-                  v-html="value[key.code]"
+                  v-html="value[key?.code]"
                 ></span>
                 <!-- Bill Status col -->
+
                 <img
-                  v-else-if="key.code === 'images'"
+                  v-else-if="
+                    key?.code === 'images' ||
+                    key?.code === 'image' ||
+                    key?.code === 'mainImage'
+                  "
                   :src="
                     value?.[key?.code]
-                      ? value?.[key?.code]
-                      : '@assets/images/no-image.png'
+                      ? `data:image/jpeg;base64,${value?.[key?.code]}`
+                      : require('@images/no-image.png')
                   "
                   :alt="value?.[key?.code]"
                   class="w-[50px]"
@@ -237,16 +243,16 @@
                   v-else-if="
                     $route.path.includes('colors.htm') &&
                     key?.code === 'code' &&
-                    value[key.code]
+                    value[key?.code]
                   "
                   class="flex items-center gap-2"
                 >
                   <span
                     class="w-[15px] h-[15px] block rounded-[50%]"
-                    :style="{ backgroundColor: value[key.code] }"
+                    :style="{ backgroundColor: value[key?.code] }"
                   >
                   </span>
-                  {{ value[key.code] }}
+                  {{ value[key?.code] }}
                 </span>
                 <div
                   v-else-if="
@@ -256,6 +262,7 @@
                   class="align-middle text-center"
                 >
                   <generic-button
+                    v-if="value.colorVariantId"
                     name="recipeDesignItem"
                     type="primary"
                     icon-name-attribute="zoom-in"
@@ -265,9 +272,76 @@
                       )
                     "
                   />
+                  <generic-button
+                    v-else
+                    name="recipeDesignItem"
+                    type="primary"
+                    icon-name-attribute="zoom-in"
+                    :disabled="true"
+                  />
                 </div>
+                <span
+                  v-else-if="
+                    $route.path.includes('colorVariant.htm') &&
+                    key.code === 'color'
+                  "
+                  class="text-[#6E9BD7] hover:underline hover:cursor-pointer"
+                  @click="
+                    openNewTabAction('prepareColor', value?.colorId, 'edit')
+                  "
+                  >{{ value[key?.code] }}</span
+                >
+                <template
+                  v-else-if="
+                    $route.path.includes('batchDetailsList.htm') &&
+                    key.code === 'batch_detail' &&
+                    value[key?.code].length
+                  "
+                >
+                  <span v-for="(obj, i) in value[key?.code]" :key="i">
+                    <span
+                      >{{ obj?.qqty }} -/- {{ obj?.product_barcode }} |
+                      {{ obj?.productname }} =
+                      <span class="text-red-600"
+                        >{{ obj?.lastname }} {{ obj?.nextname }}</span
+                      >
+                    </span>
+                    <br />
+                  </span>
+                </template>
+
+                <!-- All html elements -->
+                <span
+                  v-else-if="
+                    value?.[key?.code] &&
+                    typeof value?.[key?.code] === 'string' &&
+                    value?.[key?.code]?.includes('Enabled')
+                  "
+                  class="bg-[rgb(102,149,51)] p-[2px_5px] italic text-white font-bold rounded-[5px]"
+                  v-html="value?.[key?.code]"
+                ></span>
+                <span
+                  v-else-if="
+                    value?.[key?.code] &&
+                    typeof value?.[key?.code] === 'string' &&
+                    value?.[key?.code]?.includes('Disabled')
+                  "
+                  class="bg-[#BD4247] p-[2px_5px] italic text-white font-bold rounded-[5px]"
+                  v-html="value?.[key?.code]"
+                ></span>
+                <span
+                  v-else-if="
+                    typeof value?.[key?.code] === 'string' &&
+                    value[key?.code]?.includes('<') &&
+                    value[key?.code]?.includes('>')
+                  "
+                  class="p-[2px_5px] italic text-white font-bold rounded-[5px]"
+                  v-html="value[key?.code]"
+                ></span>
+                <!-- All html elements -->
+
                 <span v-else>
-                  {{ value[key.code] }}
+                  {{ value?.[key?.code] }}
                 </span>
               </td>
 
@@ -289,7 +363,8 @@
                     $route.path.includes('tableRowAccessSysUser.htm') ||
                     $route.path.includes('languages.htm') ||
                     $route.path.includes('discounts.htm') ||
-                    $route.path.includes('columnSettings.htm')
+                    $route.path.includes('columnSettings.htm') ||
+                    $route.path.includes('sewModelPackingType.htm')
                   "
                   class="flex items-center justify-center gap-2 p-2"
                 >
@@ -297,11 +372,22 @@
                     name="Open"
                     type="success"
                     icon-name-attribute="edit"
-                    @click="$router.push(`${openUrl}.htm/${value.id}`)"
+                    @click="$router.push(`${openUrl}.htm/${value?.id}`)"
+                  />
+                </span>
+                <span v-else-if="$route.path.includes('batchDetailsList.htm')">
+                  <generic-button
+                    name="Open"
+                    type="success"
+                    icon-name-attribute="edit"
+                    @click="
+                      openNewTabAction('prepareBatchNew', value?.batch_id)
+                    "
                   />
                 </span>
                 <span v-else class="flex items-center justify-center gap-2 p-2">
                   <GenericButton
+                    v-if="!$route.path.includes('products.htm')"
                     name="View"
                     type="primary"
                     icon-name-attribute="zoom-in"
@@ -313,6 +399,30 @@
                     icon-name-attribute="edit"
                     @click="goToNextAction(value?.id, 'edit')"
                   />
+                  <generic-button
+                    v-if="
+                      $route.path.includes('departments.htm') ||
+                      $route.path.includes('companies.htm') ||
+                      $route.path.includes('products.htm')
+                    "
+                    :name="customBtn?.name"
+                    :type="
+                      customBtn?.type
+                        ? customBtn?.type
+                        : value?.blockedStatus
+                        ? 'primary'
+                        : 'danger'
+                    "
+                    :icon-name-attribute="customBtn?.icon"
+                    @click="
+                      customButtonAction(
+                        customBtn?.clickType,
+                        value?.id,
+                        value?.blockedStatus
+                      )
+                    "
+                  />
+                  <!-- @click="$router.push(`${openUrlTwo}.htm/${value.id}`)" -->
                   <GenericButton
                     name="Delete"
                     type="danger"
@@ -345,8 +455,9 @@
                       $route.path.includes('viabranchreceive.htm') ||
                       $route.path.includes('productionorder.htm')
                     "
-                    :name="pageType"
+                    :name="btnName"
                     type="primary"
+                    icon-name-attribute="edit"
                     @click="$router.push(`${openUrlTwo}.htm/${value.id}`)"
                   />
                   <GenericButton
@@ -366,7 +477,8 @@
                       !$route.path.includes('saleServiceInvoice.htm') &&
                       !$route.path.includes('internalInvoice.htm') &&
                       !$route.path.includes('viabranchreceive.htm') &&
-                      !$route.path.includes('productionorder.htm')
+                      !$route.path.includes('productionorder.htm') &&
+                      !$route.path.includes('colorVariant.htm')
                     "
                     name="qrCode"
                     type="success"
@@ -388,7 +500,8 @@
                       !$route.path.includes('saleServiceInvoice.htm') &&
                       !$route.path.includes('internalInvoice.htm') &&
                       !$route.path.includes('viabranchreceive.htm') &&
-                      !$route.path.includes('productionorder.htm')
+                      !$route.path.includes('productionorder.htm') &&
+                      !$route.path.includes('colorVariant.htm')
                     "
                     name="forDevice"
                     type="success"
@@ -410,7 +523,9 @@
                     style="padding: 0"
                   >
                     <template #description>
-                      <p style="font-size: 13px; margin-top: -10px">No Data</p>
+                      <p style="font-size: 13px; margin-top: -10px">
+                        {{ GET_CORE_STRING?.NoDataAvailableInTable }}
+                      </p>
                     </template>
                   </el-empty>
                 </div>
@@ -429,6 +544,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import GenericButton from '@components/Generics/GenericButton.vue'
 import MessageBox from '@components/MessageBox.vue'
 import GenericPagination from '@components/Generics/GenericPagination.vue'
@@ -459,7 +575,7 @@ export default {
     },
     height: {
       type: String,
-      default: '0',
+      default: '',
     },
     openUrl: {
       type: String,
@@ -481,6 +597,15 @@ export default {
       type: String,
       default: '',
     },
+    customBtn: {
+      type: Object,
+      default: () => ({}),
+    },
+  },
+
+  // COMPUTED
+  computed: {
+    ...mapGetters('translate', ['GET_CORE_STRING']),
   },
 
   // METHODS
@@ -490,6 +615,17 @@ export default {
         path: `${this.openUrl}.htm/${rowID}`,
         query: { page_type: pageType },
       })
+    },
+
+    // all new tab action
+    openNewTabAction(api, id, pageType) {
+      const queryParams = new URLSearchParams({
+        page_type: pageType,
+      }).toString()
+      window.open(
+        `/${api}.htm/${id}${pageType ? `?${queryParams}` : ''}`,
+        '_blank'
+      )
     },
 
     // row delete action
@@ -515,6 +651,26 @@ export default {
           .then(({ status }) => {
             if (status < 300) this.$emit('pageEmitAction', true)
           })
+      }
+    },
+
+    // all custom btn action
+    customButtonAction(type, id, status) {
+      if (type === 'block') {
+        this.$axios
+          .post(`/editBlockedStatus`, {
+            id,
+            status: !status,
+            pagingForm: {
+              pageSize: 25,
+              currentPage: 1,
+            },
+          })
+          .then(({ status }) => {
+            if (status < 300) this.$emit('pageEmitAction', true)
+          })
+      } else if (type === 'sticker') {
+        console.log(type)
       }
     },
   },

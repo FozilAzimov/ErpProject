@@ -5,29 +5,52 @@ Vue.use(Vuex)
 
 // STATE
 export const state = () => ({
-  translate: 'Hello World',
+  isLoading: false,
+  coreStringObj: {},
 })
 
 // MUTATIONS
 export const mutations = {
-  SET_TRANSLATE_DATA(state, res) {
-    state.translate = res
+  SET_LOADING(state, value) {
+    state.isLoading = value
+  },
+  SET_CORE_STRING_OBJECT(state, res) {
+    state.coreStringObj = res
   },
 }
 
 // GETTERS
 export const getters = {
-  GET_TRANSLATE_VALUE: ({ translate }) => translate,
+  GET_LOADING: (state) => state.isLoading,
+  GET_CORE_STRING: ({ coreStringObj }) => coreStringObj,
 }
 
 // ACTIONS
 export const actions = {
-  CHANGE_TRANSLATE({ commit }, value) {
-    let res = null
-    if (value === 1) res = 'Hello World'
-    else if (value === 2) res = 'Привет, мир'
-    else if (value === 3) res = 'Salom Dunyo'
-    else if (value === 4) res = 'Selam Dünya'
-    commit('SET_TRANSLATE_DATA', res)
+  async FETCH_TRANSLATE({ commit }, lang) {
+    let language = null
+    const cookieLang = document.cookie
+      ?.split(' ')
+      .find((val) => val.includes('lang'))
+      ?.split('=')[1]
+
+    if (lang) {
+      language = lang
+      document.cookie = `lang=${lang}`
+    } else if (cookieLang) {
+      language = cookieLang
+    }
+    commit('SET_LOADING', true)
+    try {
+      const { data } = await this.$axios.post(
+        `/base/getLanguage?language=${language || 'en'}`
+      )
+      commit('SET_CORE_STRING_OBJECT', data)
+      commit('SET_LOADING', false)
+    } catch (error) {
+      commit('SET_LOADING', false)
+      // eslint-disable-next-line no-console
+      console.error('Failed to axios systemMenu:', error)
+    }
   },
 }

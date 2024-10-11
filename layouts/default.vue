@@ -6,7 +6,7 @@
     />
     <div
       v-if="!isLoginPage && !isBranchessPage"
-      class="w-full h-[50px] bg-[rgba(32,111,162,0.7)] flex justify-between items-center px-3"
+      class="w-full h-[50px] bg-[rgba(32,111,162,0.7)] flex justify-between items-center px-1"
     >
       <nuxt-link
         to="/dashboard.htm"
@@ -113,7 +113,7 @@
               alt="user"
               class="w-[14px]"
             />
-            {{ language ? language : 'English' }}
+            {{ 'English' }}
             <img
               src="@assets/icons/arrow-bottom.png"
               alt="user"
@@ -131,21 +131,20 @@
             }"
           >
             <li
-              v-for="locale in availableLocales"
+              v-for="locale in optionData"
               :key="locale.code"
-              @click="getLanguage(locale.code, locale.title)"
+              @click="getLanguage(locale.code)"
             >
-              <nuxt-link
-                :to="switchLocalePath(locale.code)"
+              <span
                 class="p-[7px_15px] hover:bg-[rgba(54,155,215,0.3)] duration-[0.2s] flex items-center gap-2 cursor-pointer"
               >
                 <img
                   class="w-[11px]"
-                  :src="require(`@assets/icons/${locale.url}`)"
-                  :alt="locale.alt"
+                  :src="require(`@icons/${locale.code}.png`)"
+                  :alt="locale.code"
                 />
-                {{ locale.title }}
-              </nuxt-link>
+                {{ locale.name }}
+              </span>
             </li>
           </ul>
         </div>
@@ -253,18 +252,21 @@ export default {
       logoutMessage: false,
       dropToggle: false,
       langToggle: false,
-      language: localStorage.getItem('langValue'),
+      language: '',
+      optionData: [
+        { name: 'English', code: 'en' },
+        { name: 'Russian', code: 'ru' },
+        { name: 'O`zbekistan', code: 'uz' },
+        { name: 'Turkiya', code: 'tr' },
+      ],
     }
   },
 
   // COMPUTED
   computed: {
-    availableLocales() {
-      return this.$i18n.locales
-    },
-
     // Store getters
     ...mapGetters('systemMenu', ['GET_LOADING', 'GET_SYSTEM_MENU_LIST']),
+    ...mapGetters('translate', ['GET_CORE_STRING']),
   },
 
   // WATCH
@@ -298,8 +300,10 @@ export default {
 
   // MOUNTED
   mounted() {
+    // Translate
+    this.FETCH_TRANSLATE()
     // System Menu
-    this.FETCH_SYSTEM_MENU()
+    !this.isLoginPage && this.FETCH_SYSTEM_MENU()
     // Drop Toggle
     window.addEventListener('click', this.handleWindowClick)
     window.addEventListener('click', this.handleWindowClickTranslate)
@@ -314,6 +318,7 @@ export default {
   // METHODS
   methods: {
     // Store actions
+    ...mapActions('translate', ['FETCH_TRANSLATE']),
     ...mapActions('systemMenu', ['FETCH_SYSTEM_MENU']),
 
     isCollapse() {
@@ -329,11 +334,9 @@ export default {
           if (res.status < 300) {
             localStorage.removeItem('token')
             this.logoutMessage = false
-            this.$router.push('login.htm')
-            this.$message({
-              message: 'Siz Proyekt dan muvaffaqqiyatli chiqdingiz!',
-              type: 'success',
-            })
+            this.$router.push('/login.htm')
+            this.$notification(`Proyekt'dan chiqdingiz.`, 'Success', 'success')
+            document.cookie = 'lang='
             this.isLoading = !this.isLoading
           }
         })
@@ -341,9 +344,7 @@ export default {
           this.isLoading = !this.isLoading
           // eslint-disable-next-line no-console
           console.error('Login request failed', error)
-          this.$message.error(
-            'Siz Proyekt dan chiqishda xotolikka uchradingiz.'
-          )
+          this.$notification(`Error`, 'Error', 'error')
           this.logoutMessage = false
         })
     },
@@ -379,31 +380,11 @@ export default {
     },
 
     // Language Request
-    getLanguage(lang, value) {
-      this.isLoading = !this.isLoading
-      this.$axios
-        .get(`/lang?lang=${lang}`)
-        .then((res) => {
-          if (res.status === 200) {
-            localStorage.setItem('langValue', value)
-            localStorage.setItem('lang', lang)
-            this.logoutMessage = false
-            this.$message({
-              message: `Proyekt tili ${value}ga muvaffaqqiyatli o'zgartirildi!`,
-              type: 'success',
-            })
-            window.location.reload()
-            this.isLoading = !this.isLoading
-          }
-        })
-        .catch((error) => {
-          this.isLoading = !this.isLoading
-          // eslint-disable-next-line no-console
-          console.error('Login request failed', error)
-          this.$message.error(
-            `Proyekt tili ${value}ga o'zgartirilishida xatolik bo'ldi!`
-          )
-        })
+    getLanguage(lang) {
+      // Translate
+      this.FETCH_TRANSLATE(lang)
+      // System Menu
+      !this.isLoginPage && this.FETCH_SYSTEM_MENU()
     },
 
     // go to Menu Setting

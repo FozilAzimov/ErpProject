@@ -1,11 +1,11 @@
 <template>
   <div>
     <el-transfer
-      v-model="right_ID_data"
+      v-model="rightValue"
       filterable
       :filter-method="filterMethod"
       filter-placeholder="Search..."
-      :data="data"
+      :data="transferData"
       :titles="['Source', 'Target']"
     >
     </el-transfer>
@@ -29,7 +29,7 @@ export default {
   // DATA
   data() {
     return {
-      data: [],
+      transferData: [],
       right_ID_data: [],
       filterMethod(query, item) {
         return item?.initial?.name
@@ -37,6 +37,12 @@ export default {
           ?.includes(query?.toLowerCase())
       },
     }
+  },
+
+  computed: {
+    rightValue() {
+      return this.right_ID_data
+    },
   },
 
   // WATCH
@@ -57,9 +63,10 @@ export default {
 
   // METHODS
   methods: {
+    // Left data action
     generateData(propData) {
       propData.forEach(({ id, name }, index) => {
-        this.data.push({
+        this.transferData.push({
           label: name,
           key: id,
           initial: propData[index],
@@ -67,17 +74,18 @@ export default {
       })
     },
 
-    // Ref function
-    refTransferAction() {
-      this.$emit('customFunction', this.leftData, this.right_ID_data)
-    },
-
+    // Right data action
     filteredAction(propData) {
       const rightID = []
       propData.forEach(({ id }) => {
         rightID.push(id)
       })
       this.right_ID_data = rightID
+    },
+
+    // Ref function
+    refTransferAction() {
+      this.$emit('customFunction', this.leftData, this.right_ID_data)
     },
   },
 }

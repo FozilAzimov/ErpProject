@@ -25,11 +25,7 @@ export default {
   css: ['@assets/scss/main.scss', '@assets/css/main.css'],
 
   styleResources: {
-    scss: [
-      // Makes scss variables and mixins available in every component
-      // Do not import here actual styles!
-      'assets/scss/_variables.scss',
-    ],
+    scss: ['assets/scss/_variables.scss'],
   },
 
   alias: {
@@ -41,6 +37,7 @@ export default {
     '@layouts': '@/layouts',
     '@pages': '@/pages',
     '@store': '@/store',
+    '@middleware': '@/middleware',
   },
 
   ssr: false,
@@ -48,10 +45,11 @@ export default {
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
     '@/plugins/vee-validate.js',
-    // Custom plugin for getting information about the user's device
     '@/plugins/element-ui.js',
-    '@/plugins/drugguble.js',
+    '@/plugins/draggable.js',
     '@/plugins/axios.js',
+    '@/plugins/notification.js',
+    '@/plugins/format-date.js',
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -60,71 +58,13 @@ export default {
   ],
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
-  buildModules: [
-    // https://go.nuxtjs.dev/eslint
-    '@nuxtjs/eslint-module',
-  ],
+  buildModules: ['@nuxtjs/eslint-module'],
 
   // Modules: https://go.nuxtjs.dev/config-modules
-  modules: [
-    // https://go.nuxtjs.dev/axios
-    '@nuxtjs/axios',
-    // '@element-plus/nuxt',
-    // https://go.nuxtjs.dev/pwa
-    '@nuxtjs/pwa',
-    '@nuxtjs/eslint-module',
-    '@nuxtjs/i18n',
-  ],
+  modules: ['@nuxtjs/axios', '@nuxtjs/pwa', '@nuxtjs/eslint-module'],
 
   generate: {
     fallback: true,
-  },
-
-  i18n: {
-    locales: [
-      {
-        code: 'ru',
-        iso: 'ru-RU',
-        file: 'ru.js',
-        title: 'Русский',
-        url: 'russia.png',
-        alt: 'rus.png',
-      },
-      {
-        code: 'en',
-        iso: 'en_cy-US_CY',
-        file: 'en.js',
-        title: 'English',
-        url: 'usa.png',
-        alt: 'usa.png',
-      },
-      {
-        code: 'tr',
-        iso: 'tr-TR',
-        file: 'tr.js',
-        title: 'Türkçe',
-        url: 'turkey.png',
-        alt: 'turkey.png',
-      },
-      {
-        code: 'uz',
-        iso: 'uz-UZ',
-        file: 'uz.js',
-        title: 'O’zbekcha',
-        url: 'uzbekistan.png',
-        alt: 'uzb.png',
-      },
-    ],
-    defaultLocale: 'ru',
-    sortRoutes: true, // set false if adding custom routes https://i18n.nuxtjs.org/options-reference#sortroutes
-    langDir: '~/locales/',
-    detectBrowserLanguage: {
-      alwaysRedirect: false,
-      useCookie: true,
-      cookieKey: 'lang',
-      useLocalStorage: true,
-    },
-    strategy: 'no_prefix',
   },
 
   server: {
@@ -136,8 +76,6 @@ export default {
     host: '0.0.0.0',
   },
 
-  env: {},
-
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
     // baseURL: 'https://localhost:8443/api',
@@ -147,7 +85,8 @@ export default {
     // baseURL: 'https://192.168.1.64:8443/api',
     // baseURL: 'https://192.168.1.170:443/api',
     // baseURL: 'https://192.168.1.150:8443/api',
-    baseURL: 'https://192.168.1.150:443/api',
+    // baseURL: 'https://192.168.1.150:443/api',
+    baseURL: 'https://192.168.1.76:443/api',
   },
 
   // PWA module configuration: https://go.nuxtjs.dev/pwa
@@ -165,5 +104,9 @@ export default {
         autoprefixer: {},
       },
     },
+  },
+
+  router: {
+    middleware: 'auth',
   },
 }

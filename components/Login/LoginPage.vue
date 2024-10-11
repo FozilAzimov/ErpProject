@@ -6,9 +6,9 @@
     >
       <LoadingPage v-if="isLoading" class="absolute top-[30px]" />
       <img class="w-[200px]" src="@/assets/icons/logo.png" />
-      <h1 class="text-[24px] text-[#317eac] leading-[36px] font-bold py-[30px]">
-        {{ $t('pages.login.title') }}
-      </h1>
+      <h1
+        class="text-[24px] text-[#317eac] leading-[36px] font-bold py-[30px]"
+      ></h1>
       <ValidationObserver ref="formValidation">
         <form
           class="w-[350px] bg-[rgba(0,0,0,0.2)] flex flex-col items-center gap-[15px] p-[30px_25px] rounded-[5px]"
@@ -33,7 +33,7 @@
                   'border-red-200 shadow-[0_0_4px_#ef4444]': errors[0],
                 }"
                 type="text"
-                :placeholder="$t('pages.login.user')"
+                :placeholder="''"
                 class="w-[220px] p-[4px_10px] bg-[rgba(255,255,255,.8)] rounded-[2px] outline-none text-[13px] border-[1px] border-solid border-[#fff] focus:border-[1px] focus:border-solid focus:border-[#52a8eccc] duration-[0.4s] focus:shadow-[0_0_5px_#52a8ec99]"
               />
             </ValidationProvider>
@@ -57,7 +57,7 @@
                   'border-red-200 shadow-[0_0_4px_#ef4444]': errors[0],
                 }"
                 :type="typeIcon ? 'text' : 'password'"
-                :placeholder="$t('pages.login.password')"
+                :placeholder="''"
                 class="w-[220px] p-[4px_10px] rounded-[2px] bg-[rgba(255,255,255,.8)] outline-none text-[13px] border-[1px] border-solid border-[#fff] focus:border-[1px] focus:border-solid focus:border-[#52a8eccc] duration-[0.4s] focus:shadow-[0_0_5px_#52a8ec99]"
                 @keyup.enter="getResponse"
               />
@@ -77,11 +77,11 @@
           </div>
           <input
             type="button"
-            :value="$t('pages.login.btnValue')"
+            :value="''"
             class="w-[250px] p-[5px_10px] mt-[10px] rounded-[3px] text-[13px] bg-[#5dc2f4] text-white cursor-pointer hover:bg-[#40b2e9] active:bg-[#249fdb] duration-[0.4s] outline-none"
             @click="getResponse"
           />
-          <p class="text-[13px]">{{ $t('pages.login.loginSubText') }}</p>
+          <p class="text-[13px]">{{ '' }}</p>
         </form>
       </ValidationObserver>
     </div>
@@ -92,14 +92,17 @@
 </template>
 
 <script>
-import LoadingPage from '../Loading/LoadingPage.vue'
+import { mapGetters } from 'vuex'
+import LoadingPage from '@components/Loading/LoadingPage.vue'
 import LanguageSelector from '@/components/main/LanguageSelector'
-
 export default {
+  // COMPONENTS
   components: {
     LanguageSelector,
     LoadingPage,
   },
+
+  // DATA
   data() {
     return {
       typeIcon: false,
@@ -111,10 +114,18 @@ export default {
     }
   },
 
+  // COMPUTED
+  computed: {
+    ...mapGetters('translate', ['GET_CORE_STRING']),
+  },
+
+  // MOUNTED
   mounted() {
+    // default focus
     this.$refs.usernameInput.focus()
   },
 
+  // METHODS
   methods: {
     getTypePassword() {
       this.typeIcon ? (this.typeIcon = false) : (this.typeIcon = true)
@@ -126,44 +137,29 @@ export default {
           this.isLoading = !this.isLoading
           this.$axios
             .post(`/security/logIn`, {
-              // username: this.form.username,
-              // password: this.form.password,
               user: {
                 username: this.form.username,
                 password: this.form.password,
               },
             })
             .then((res) => {
-              localStorage.setItem('authToken', res.headers['x-auth-token'])
               localStorage.setItem('token', res.data.token)
-
-              document.cookie = `x-auth-token=${res.headers['x-auth-token']}; domain=localhost; secure; SameSite=None;`
-
-              this.$router.push('/branchess.htm')
               this.isLoading = !this.isLoading
-              this.$message({
-                message: "Siz LogIn dan muvaffaqqiyatli o'tdingiz!",
-                type: 'success',
-              })
-              this.getLanguage()
+              this.$notification(
+                `Muvaffaqqiyatli o'tdingiz!`,
+                'Success',
+                'success',
+                5
+              )
+              this.$router.push('/branchess.htm')
             })
             .catch((error) => {
               this.isLoading = !this.isLoading
               // eslint-disable-next-line no-console
               console.error('Login request failed', error)
-              this.$message.error("Siz LogIn dan o'ta olmadingiz.")
+              this.$notification(`LogIn'dan o'ta olmadingiz`)
             })
         }
-      })
-    },
-
-    // Language Request
-    getLanguage() {
-      this.$axios.get(`/lang?lang=${localStorage.getItem('lang')}`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-          'x-auth-token': localStorage.getItem('authToken'),
-        },
       })
     },
   },

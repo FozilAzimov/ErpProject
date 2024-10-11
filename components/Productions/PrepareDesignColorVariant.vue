@@ -9,7 +9,7 @@
         v-show="checkModal"
         :right="rightData"
         :left="leftData"
-        url="prepareDesignColorVariant"
+        :url="actionUrl"
         :create-edit="true"
         api="saveColumnConfig"
         class="z-[10000]"
@@ -100,7 +100,7 @@
                 :style="{ width: `${col?.width}px !important` }"
               >
                 <template v-if="col?.name">
-                  <span class="font-semibold">{{ col?.name }}</span>
+                  <span class="font-medium">{{ col?.name }}</span>
                 </template>
                 <template v-else>
                   {{ editData?.[col?.valueName] }}
@@ -139,6 +139,12 @@
               type="success"
               icon-name-attribute="edit"
               @click="editSewModalOperationAction"
+            />
+            <GenericButton
+              name="Delete"
+              type="danger"
+              icon-name-attribute="delete"
+              @click="deleteAction"
             />
           </div>
           <GenericPrepareTablePage
@@ -187,8 +193,6 @@ export default {
       isCloseTable: true,
       pageID: null,
       // column config uchun
-      tableData: [],
-      tableData2: [],
       rightMap: {},
       leftMap: {},
       rightData: {},
@@ -201,7 +205,7 @@ export default {
       uiShowHide: false,
       isEdit: false,
       hideButton: false,
-      responseData: [],
+      actionUrl: null,
     }
   },
 
@@ -228,7 +232,22 @@ export default {
       this.checkModal = checkModal
     },
     openColumnConfig() {
-      this.checkModal = true
+      this.isLoading = !this.isLoading
+      this.$axios
+        .post(`/base/columnsConfigU`, {
+          actionUrl: this.actionUrl,
+        })
+        .then(({ data: { leftColumns, rightColumns } }) => {
+          // function
+          this.getFilterData(leftColumns, rightColumns)
+          this.checkModal = true
+          this.isLoading = !this.isLoading
+        })
+        .catch((error) => {
+          this.isLoading = !this.isLoading
+          // eslint-disable-next-line no-console
+          console.log(error)
+        })
     },
 
     // Table page ni ochish va yopish uchun
@@ -249,13 +268,10 @@ export default {
           page_size: 25,
         })
         .then(({ data: { colorVariant, linkedHashMaps } }) => {
+          this.actionUrl = 'designColorVariantItemTable'
           this.editData = colorVariant
           this.headData = linkedHashMaps
           this.bodyData = colorVariant?.colorVariantRecipeList
-          // // function
-          // this.responseDataFilterOperation(linkedHashMaps)
-          // // function
-          // this.getFilterData()
           this.isLoading = !this.isLoading
         })
         .catch((error) => {
@@ -283,30 +299,51 @@ export default {
       this.uiShowHide = true
     },
 
-    // Filter Action
-    responseDataFilterOperation(headData) {
-      this.headData = headData.filter((obj) => {
-        return obj.showUI && obj
+    // object value filtered action
+    responseArrayFilteredAction(resArray) {
+      // bu loop ichidagi shart custom table to'g'rilansa olib tashlanadi
+      this.bodyData = resArray.map((obj) => {
+        for (const key in obj) {
+          if (!obj[key]) delete obj[key]
+        }
+        if (obj?.colorVariant && typeof obj?.colorVariant !== 'object')
+          obj.colorVariant = { id: obj.colorVariant }
+        if (typeof obj?.dyingReciepeCalculationType === 'object')
+          obj.dyingReciepeCalculationType = obj.dyingReciepeCalculationType?.id
+        return obj
       })
-
-      // Column config Operation uchun
-      this.tableData = this.headData
-      this.tableData2 = headData.filter((obj) => {
-        return !obj.showUI && obj
-      })
+      // bu loop ichidagi shart custom table to'g'rilansa olib tashlanadi
     },
 
     // EMIT action
     getRowElements(arr, hideBtn) {
-      this.responseData = arr
-      this.responseData = this.responseData.map((obj) => {
-        if (obj.sewModel) {
-          obj.sewModel = { id: obj.sewModel }
-        }
-        delete obj.objectId
-        return obj
-      })
+      // function
+      this.responseArrayFilteredAction(arr)
       this.hideButton = !hideBtn
+
+      const colorVariant = {}
+      colorVariant.id = this.pageID
+      colorVariant.pressing = null
+      colorVariant.speed = null
+      colorVariant.volume = null
+      colorVariant.colorVariantRecipeList = this.bodyData
+
+      this.isLoading = !this.isLoading
+      this.$axios
+        .post(`/colorVariant/prepareCreateEditColorVariant`, {
+          colorVariant,
+        })
+        .then(({ data: { colorVariantJson } }) => {
+          this.editData = colorVariantJson
+          this.bodyData = colorVariantJson?.colorVariantRecipeList
+          this.uiShowHide = true
+          this.isLoading = !this.isLoading
+        })
+        .catch((error) => {
+          this.isLoading = !this.isLoading
+          // eslint-disable-next-line no-console
+          console.log(error)
+        })
     },
 
     // Data created
@@ -353,11 +390,11 @@ export default {
     },
 
     // Filter Action
-    getFilterData() {
-      this.tableData.forEach((obj) => {
+    getFilterData(leftColumns, rightColumns) {
+      rightColumns.forEach((obj) => {
         this.rightMap[obj.name] = obj
       })
-      this.tableData2.forEach((obj) => {
+      leftColumns.forEach((obj) => {
         this.leftMap[obj.name] = obj
       })
 
@@ -425,20 +462,18 @@ export default {
     saveAction() {
       // GenericTablePage da ishlab beruvchi function
       this.$refs.customTableRef.getSaveRowAction()
+    },
 
-      const body = {}
-      body.id = this.pageID
-      body.responseData = this.responseData
-
+    // Delete action
+    deleteAction() {
       this.isLoading = !this.isLoading
       this.$axios
-        .post(`/colorVariant/prepareCreateEditColorVariant`, body)
-        .then(({ data: { sewModelOperationListJson } }) => {
-          this.headData = []
-          this.bodyData = sewModelOperationListJson
-          this.uiShowHide = true
-          this.$router.push('/designVariants.htm')
+        .post(`/colorVariant/prepareDeleteColorVariantUrl`, {
+          id: this.pageID,
+        })
+        .then(() => {
           this.isLoading = !this.isLoading
+          this.$router.push('/colorVariant.htm')
         })
         .catch((error) => {
           this.isLoading = !this.isLoading

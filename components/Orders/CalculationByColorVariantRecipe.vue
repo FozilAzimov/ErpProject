@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full p-[0px_12px_0px_10px]">
+  <div class="w-full px-1">
     <LoadingPage
       v-if="isLoading"
       class="absolute left-[50%] top-[8px] translate-x-[-50%]"
@@ -79,72 +79,67 @@
           <div
             class="flex flex-col items-start gap-5 p-4 shadow-lg rounded-lg border-[1px] border-solid border-[#E5E5E5] mb-4"
           >
-            <div class="flex flex-wrap gap-4">
-              <span
-                v-for="(element, index) in topFilterData"
-                :key="index"
-                class="flex items-end"
-              >
+            <div
+              v-for="(arr, index) in topFilterData"
+              :key="index"
+              class="flex gap-5"
+            >
+              <template v-for="(obj, subIndex) in arr">
                 <span
-                  v-if="element.type === 'date'"
-                  class="flex flex-col items-start"
-                >
-                  <span class="text-[13px]">{{ element.name }}</span>
-                  <generic-input-date-page
-                    :value="''"
-                    width="165"
-                    pl="10"
-                    pr="10"
-                    pt="1"
-                    pb="1"
-                    textsize="13"
-                    type="datetime-local"
-                    valuecolor="rgba(0,0,0,0.7)"
-                    :name="element.subName"
-                    @customFunction="getInputAndLookUpValueAction"
-                  />
+                  v-if="obj?.type === 'text'"
+                  :key="subIndex"
+                  class="flex flex-col justify-start font-semibold text-[16px]"
+                  :style="{ color: obj?.color, width: `${obj?.width}px` }"
+                  >{{ obj?.name }} {{ resultData?.[obj?.subName] }}
+                  <span class="text-[#317eac]">{{
+                    resultData?.[obj?.subNameTwo]
+                  }}</span>
                 </span>
                 <span
-                  v-else-if="element.type === 'select'"
+                  v-else-if="obj.type === 'select'"
+                  :key="`${subIndex}-0`"
                   class="flex flex-col items-start"
                 >
-                  <span class="text-[13px]">{{ element.name }}</span>
+                  <span class="text-[13px]">{{ obj.name }}</span>
                   <generic-look-up
-                    dwidth="200"
-                    :name="element.subName"
-                    :defvalue="''"
-                    :options-data="[]"
+                    dwidth="250"
+                    :durl="obj?.api"
+                    :name="obj?.defName"
+                    :required="
+                      !obj?.required || allInputAndSelectValue?.[obj?.defName]
+                        ? true
+                        : false
+                    "
                     @customFunction="getInputAndLookUpValueAction"
                   />
                 </span>
-                <span v-else-if="element.type === 'checkbox'">
-                  <generic-check-box
-                    :text="element.name"
-                    :name="element.subName"
-                    :border="true"
+                <span
+                  v-else-if="obj.type === 'number'"
+                  :key="`${subIndex}-1`"
+                  class="flex flex-col items-start"
+                >
+                  <span class="text-[13px]">{{ obj.name }}</span>
+                  <generic-input
+                    type="number"
+                    width="250"
+                    :name="obj?.defName"
+                    :required="
+                      !obj?.required || allInputAndSelectValue?.[obj?.defName]
+                        ? true
+                        : false
+                    "
+                    @customFunction="getInputAndLookUpValueAction"
                   />
                 </span>
-              </span>
+              </template>
             </div>
 
             <generic-button
               name="Accept"
               type="primary"
-              @click="getTableAction"
+              @click="acceptAction"
             />
           </div>
-
-          <GenericTablePage
-            v-if="isShowHideTable"
-            :tablehead="tableHead"
-            :tablebody="tableBody"
-            :tableheadlength="tableHeadLength"
-            :istherebody="isThereBody"
-            :productions-action-buttons="true"
-            :show-hide-action-col="false"
-            height="600"
-            @pageEmitAction="getTableRequest"
-          />
         </div>
       </div>
     </template>
@@ -154,18 +149,16 @@
 <script>
 import LoadingPage from '@components/Loading/LoadingPage.vue'
 import ColumnConfigPage from '@components/ColumnConfig/ColumnConfigPage.vue'
-import GenericInputDatePage from '@components/InputDate/GenericInputDatePage.vue'
 import GenericLookUp from '@generics/GenericLookUp.vue'
-import GenericCheckBox from '@generics/GenericCheckBox.vue'
 import GenericButton from '@generics/GenericButton.vue'
+import GenericInput from '@generics/GenericInput.vue'
 export default {
   components: {
     LoadingPage,
     ColumnConfigPage,
-    GenericInputDatePage,
     GenericLookUp,
-    GenericCheckBox,
     GenericButton,
+    GenericInput,
   },
 
   // DATA
@@ -173,50 +166,17 @@ export default {
     return {
       isLoading: false,
       pageSize_value: 25,
-      topFilterData: [],
-      btnType: '',
-      pageID: null,
-      keywordValue: '',
-      tableHead: {
-        id: { name: 'Id', code: 'id' },
-        name: {
-          name: 'Batch Process Name',
-          code: 'name',
-        },
-        status: {
-          name: 'Status',
-          code: 'status',
-        },
-      },
-      tableBody: [],
-      tableHeadLength: null,
-      isThereBody: false,
       checkModal: false,
       isOpenTable: true,
       isCloseTable: true,
-      isShowHideTable: false,
+      topFilterData: [],
+      allInputAndSelectValue: {},
+      resultData: {},
     }
-  },
-
-  // WATCH
-  watch: {
-    pageID(newVal) {
-      this.btnTypeSpecifyingAction()
-    },
-  },
-
-  // CREATED
-  created() {
-    this.btnType = JSON.parse(localStorage.getItem('allTrueAndFalseData'))?.type
-    // page ID sini olish
-    this.pageID = this.$route.params?.id
   },
 
   // MOUNTED
   mounted() {
-    this.tableHeadLength = Object.keys(this.tableHead).length + 1
-    // Table function
-    this.getTableRequest()
     // function
     this.createDataFiltering()
   },
@@ -229,48 +189,6 @@ export default {
     openColumnConfig() {
       this.checkModal = true
     },
-
-    getTableRequest() {
-      this.isLoading = !this.isLoading
-      this.$axios
-        .post(`/batchProcess/batchProcessAjaxLoad`, {
-          searchForm: {
-            keyword: this.keywordValue,
-          },
-          pagingForm: {
-            pageSize: this.pageSize_value,
-            currentPage: 1,
-            pageCount: 14,
-            total: 328,
-          },
-        })
-        .then(({ data: { batchProcessList } }) => {
-          this.isLoading = !this.isLoading
-          this.tableBody = batchProcessList
-
-          this.tableBody.length
-            ? (this.isThereBody = true)
-            : (this.isThereBody = false)
-        })
-        .catch((error) => {
-          this.isLoading = !this.isLoading
-          // eslint-disable-next-line no-console
-          console.log(error)
-        })
-    },
-
-    // Specifying the buttun type action
-    btnTypeSpecifyingAction() {
-      if (!this.pageID) {
-        localStorage.removeItem('allTrueAndFalseData')
-      }
-    },
-
-    // Generic_Input value
-    getInputValue(inputVal) {
-      this.keywordValue = inputVal
-    },
-
     // Table page ni ochish va yopish uchun
     isOpen() {
       this.isOpenTable = !this.isOpenTable
@@ -279,79 +197,204 @@ export default {
       this.isCloseTable = !this.isCloseTable
     },
 
-    getTableAction() {
-      this.isShowHideTable = true
-      console.log('hay')
+    // GET SELECT AND INPUT VALUES
+    getInputAndLookUpValueAction(name, value) {
+      this.$set(this.allInputAndSelectValue, name, value)
+      // function
+      name === 'productId' && this.productPriceAction(value)
+    },
+
+    // ACCEPT Action
+    acceptAction() {
+      if (
+        this.allInputAndSelectValue?.colorVariantId &&
+        this.allInputAndSelectValue?.productId &&
+        this.allInputAndSelectValue?.meters &&
+        this.allInputAndSelectValue?.ratio
+      ) {
+        this.isLoading = !this.isLoading
+        this.$axios
+          .post(
+            `calculationByColorVariantRecipe/calculationList`,
+            this.allInputAndSelectValue
+          )
+          .then(
+            ({
+              data: {
+                resultData: [obj],
+              },
+            }) => {
+              this.resultData = obj
+              this.allInputAndSelectValue.mediumPrice = obj?.price_medium
+              this.allInputAndSelectValue.lastPrice = obj?.last_price
+              this.allInputAndSelectValue.unitPrice = obj?.unitprice
+              this.allInputAndSelectValue.price4 = obj?.price4
+              this.isLoading = !this.isLoading
+            }
+          )
+          .catch((error) => {
+            this.isLoading = !this.isLoading
+            // eslint-disable-next-line no-console
+            console.log(error)
+          })
+      } else {
+        this.$notification(`Ma'lumotni to'liq to'ldiring`)
+      }
+    },
+
+    // Product Select Action
+    productPriceAction(productId) {
+      if (productId) {
+        this.isLoading = !this.isLoading
+        this.$axios
+          .post(`calculationByColorVariantRecipe/productPrices`, { productId })
+          .then(
+            ({
+              data: {
+                resultData: [obj],
+              },
+            }) => {
+              this.resultData = obj
+              this.allInputAndSelectValue.mediumPrice = obj?.price_medium
+              this.allInputAndSelectValue.lastPrice = obj?.last_price
+              this.allInputAndSelectValue.unitPrice = obj?.unitprice
+              this.allInputAndSelectValue.price4 = obj?.price4
+              this.isLoading = !this.isLoading
+            }
+          )
+          .catch((error) => {
+            this.isLoading = !this.isLoading
+            // eslint-disable-next-line no-console
+            console.log(error)
+          })
+      } else {
+        this.allInputAndSelectValue.mediumPrice = ''
+        this.allInputAndSelectValue.lastPrice = ''
+        this.allInputAndSelectValue.unitPrice = ''
+        this.allInputAndSelectValue.price4 = ''
+      }
     },
 
     // page yuqorisidagi filterlar uchun data yaratish
     createDataFiltering() {
       const createDate = [
-        {
-          name: 'Date From',
-          subName: 'dateFrom',
-          type: 'date',
-        },
-        {
-          name: 'Date To',
-          subName: 'dateTo',
-          type: 'date',
-        },
-        {
-          name: 'Country',
-          subName: 'countryId',
-          type: 'select',
-        },
-        {
-          name: 'Active',
-          subName: 'activeId',
-          type: 'select',
-        },
-        {
-          name: 'Calculation Type',
-          subName: 'calculationTypeId',
-          type: 'select',
-        },
-        {
-          name: 'Master',
-          subName: 'masterId',
-          type: 'text',
-        },
-        {
-          name: 'Company Branch',
-          subName: 'companyBranchId',
-          type: 'select',
-        },
-        {
-          name: 'Departments',
-          subName: 'departmentsId',
-          type: 'select',
-        },
-        {
-          name: 'Sub Departments',
-          subName: 'subDepartmentsId',
-          type: 'select',
-        },
-        {
-          name: 'Positions',
-          subName: 'positionsId',
-          type: 'select',
-        },
-        {
-          name: 'Person',
-          subName: 'personId',
-          type: 'select',
-        },
-        {
-          name: 'Details ',
-          subName: 'details',
-          type: 'checkbox',
-        },
-        {
-          name: 'All',
-          subName: 'all',
-          type: 'checkbox',
-        },
+        [
+          {
+            name: 'Batch Process',
+            defName: 'batchProcessId',
+            api: 'findAllBatchProcess',
+            type: 'select',
+            required: false,
+          },
+          {
+            width: '250',
+            name: 'Price ( Product ) :',
+            defName: 'mediumPrice',
+            subName: 'price_medium',
+            subNameTwo: 'product_currency',
+            type: 'text',
+            color: 'red',
+          },
+          {
+            width: '300',
+            name: 'costPrice ( Measurement ) :',
+            defName: 'lastPrice',
+            subName: 'last_price',
+            subNameTwo: 'product_currency',
+            type: 'text',
+            color: 'red',
+          },
+        ],
+        [
+          {
+            name: 'Currency',
+            defName: 'currencyId',
+            subName: 'currencyId',
+            api: 'findAllCurrency',
+            type: 'select',
+            required: false,
+          },
+          {
+            name: 'Qty',
+            defName: 'meters',
+            subName: 'qty',
+            type: 'number',
+            required: true,
+          },
+          {
+            name: 'Ration',
+            defName: 'ratio',
+            subName: 'ration',
+            type: 'number',
+            required: true,
+          },
+          {
+            width: '200',
+            name: 'Unit Price :',
+            defName: 'unitPrice',
+            subName: 'unitprice',
+            subNameTwo: 'product_currency',
+            type: 'text',
+            color: '#317eac',
+          },
+        ],
+        [
+          {
+            name: 'Color Variant',
+            defName: 'colorVariantId',
+            subName: 'colorVariantId',
+            api: 'findAllColorVariant',
+            type: 'select',
+            required: true,
+          },
+          {
+            name: 'Gramm',
+            defName: 'gramm',
+            subName: 'gramm',
+            type: 'number',
+            required: false,
+          },
+          {
+            name: 'Pressing',
+            defName: 'pressing',
+            subName: 'pressing',
+            type: 'number',
+            required: false,
+          },
+          {
+            width: '200',
+            name: 'Price4 :',
+            defName: 'price4',
+            subName: 'price4',
+            subNameTwo: 'product_currency',
+            type: 'text',
+            color: '#317eac',
+          },
+        ],
+        [
+          {
+            name: 'Products',
+            defName: 'productId',
+            subName: 'productId',
+            api: 'searchProductList',
+            type: 'select',
+            required: true,
+          },
+          {
+            name: 'Width',
+            defName: 'width',
+            subName: 'width',
+            type: 'number',
+            required: false,
+          },
+          {
+            name: 'Volume ',
+            defName: 'volume',
+            subName: 'volume',
+            type: 'number',
+            required: false,
+          },
+        ],
       ]
       this.topFilterData = createDate
     },

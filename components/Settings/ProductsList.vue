@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full p-[0px_12px_0px_10px]">
+  <div class="w-full p-1">
     <LoadingPage
       v-if="isLoading"
       class="absolute left-[50%] top-[8px] translate-x-[-50%]"
@@ -7,6 +7,9 @@
     <transition name="fade">
       <ColumnConfigPage
         v-show="checkModal"
+        :right="tableHead"
+        :left="leftMap"
+        :url="actionUrl"
         api="saveColumnConfig"
         class="z-[10000]"
         @checkModal="handleValue"
@@ -19,8 +22,7 @@
           <generic-look-up
             dwidth="200"
             :name="element.subName"
-            :defvalue="''"
-            :options-data="[]"
+            :options-data="productCategory"
             @customFunction="getInputAndLookUpValueAction"
           />
         </span>
@@ -28,7 +30,7 @@
     </form>
     <template v-if="isCloseTable">
       <div
-        class="border-[1px] border-solid border-[rgba(0,0,0,0.05)] p-[12px] bg-gradient-to-b from-transparent via-transparent to-gray-200 shadow-md flex items-center justify-between mt-1"
+        class="border-[1px] border-solid border-[rgba(0,0,0,0.05)] p-[12px] bg-gradient-to-b from-transparent via-transparent to-gray-200 shadow-md flex items-center justify-between"
       >
         <div class="flex items-center gap-[10px]">
           <img src="@assets/icons/user-black.png" alt="user" class="w-[14px]" />
@@ -90,8 +92,16 @@
         "
       >
         <div class="flex items-center gap-2 m-2">
-          <generic-button name="Grid" type="primary" />
-          <generic-button name="List" type="primary" />
+          <generic-button
+            name="Grid"
+            type="primary"
+            @click="gridListAction('grid')"
+          />
+          <generic-button
+            name="List"
+            type="primary"
+            @click="gridListAction('list')"
+          />
           <generic-button
             name="Add New"
             type="primary"
@@ -104,13 +114,14 @@
             "
           />
         </div>
-        <div class="p-2">
+        <!-- Start LIST template -->
+        <div v-if="isGridAndList" class="p-2">
           <div class="flex items-center justify-between mb-1">
             <div class="text-[14px]">
               <select
                 v-model="pageSize_value"
                 class="border-[1px] border-solid border-[rgba(171,177,187,0.7)] w-[60px] px-[5px] py-[3px] cursor-pointer rounded-[2px] text-[14px] outline-none"
-                @change="getTableRequest()"
+                @change="getTableRequest"
               >
                 <option value="10">10</option>
                 <option value="25">25</option>
@@ -122,18 +133,21 @@
             </div>
             <div class="flex items-center gap-2">
               <GenericInput
-                v-model="keywordValue"
-                width="200"
-                type="text"
+                name="keyword"
                 placeholder="Search..."
                 @enter="getTableRequest"
-                @input="getInputValue"
+                @customFunction="getInputAndLookUpValueAction"
               />
               <GenericButton
                 name="Search"
                 type="primary"
                 icon-name-attribute="search"
                 @click="getTableRequest"
+              />
+              <GenericButton
+                name="Print Preview"
+                type="success"
+                icon-name-attribute="printer"
               />
             </div>
           </div>
@@ -142,6 +156,12 @@
             :tablebody="tableBody"
             :tableheadlength="tableHeadLength"
             :istherebody="isThereBody"
+            :custom-btn="{
+              name: 'Sticker',
+              type: 'success',
+              icon: 'printer',
+              clickType: 'sticker',
+            }"
             open-url="prepareProducts"
             :productions-action-buttons="true"
             delete-row-url="batchProcess/prepareBatchProcessDelete"
@@ -149,6 +169,48 @@
             @pageEmitAction="getTableRequest"
           />
         </div>
+        <!-- End LIST template -->
+
+        <!-- Start GRID template -->
+        <div v-else class="overflow-y-auto w-full h-screen">
+          <div
+            class="p-4 w-full h-fit mt-4 grid grid-flow-row grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-5"
+            :style="{
+              gridTemplateColumns: `repeat(auto-fit, minmax(250px, 1fr))`,
+            }"
+          >
+            <div
+              v-for="(box, index) in tableBody"
+              :key="index"
+              class="rounded-lg cursor-pointer w-[250px] h-[250px] flex flex-col items-center justify-evenly"
+              :style="{
+                boxShadow: '0 0 15px rgba(0, 0, 0, 0.15)',
+              }"
+              @click="
+                $router.push({
+                  path: '/prepareProducts.htm',
+                  query: { page_type: 'create' },
+                })
+              "
+            >
+              <span class="flex flex-col items-center gap-2">
+                <img
+                  :src="
+                    box?.[image]
+                      ? box?.[image]
+                      : require('@images/no-image.png')
+                  "
+                  width="80"
+                  :alt="box?.[image]"
+                />
+              </span>
+              <p class="text-[14px] p-2 font-medium whitespace-normal">
+                {{ box?.name }}
+              </p>
+            </div>
+          </div>
+        </div>
+        <!-- End GRID template -->
       </div>
     </template>
   </div>
@@ -176,25 +238,19 @@ export default {
     return {
       isLoading: false,
       pageSize_value: 25,
+      isGridAndList: true,
       topFilterData: [],
-      keywordValue: '',
-      tableHead: {
-        id: { name: 'Id', code: 'id' },
-        name: {
-          name: 'Batch Process Name',
-          code: 'name',
-        },
-        status: {
-          name: 'Status',
-          code: 'status',
-        },
-      },
+      actionUrl: '',
+      leftMap: {},
+      tableHead: {},
       tableBody: [],
+      allSelectAndInputValue: {},
       tableHeadLength: null,
       isThereBody: false,
       checkModal: false,
       isOpenTable: true,
       isCloseTable: true,
+      productCategory: [],
     }
   },
 
@@ -204,7 +260,7 @@ export default {
     // Table function
     this.getTableRequest()
     // function
-    this.createDataFiltering()
+    this.createData()
   },
 
   // Methods
@@ -216,12 +272,13 @@ export default {
       this.checkModal = true
     },
 
+    // PAGE Request
     getTableRequest() {
       this.isLoading = !this.isLoading
       this.$axios
-        .post(`/batchProcess/batchProcessAjaxLoad`, {
+        .post(`/products/productsList`, {
           searchForm: {
-            keyword: this.keywordValue,
+            keyword: this.allSelectAndInputValue?.keyword ?? '',
           },
           pagingForm: {
             pageSize: this.pageSize_value,
@@ -229,15 +286,31 @@ export default {
             pageCount: 14,
             total: 328,
           },
+          productCategoryId:
+            this.allSelectAndInputValue?.productCategoryId ?? null,
         })
-        .then(({ data: { batchProcessList } }) => {
-          this.isLoading = !this.isLoading
-          this.tableBody = batchProcessList
+        .then(
+          ({
+            data: {
+              actionUrl,
+              productListMap,
+              rightMap,
+              leftMap,
+              productCategory,
+            },
+          }) => {
+            this.actionUrl = actionUrl
+            this.tableBody = productListMap
+            this.leftMap = leftMap
+            this.tableHead = rightMap
+            this.productCategory = productCategory
 
-          this.tableBody.length
-            ? (this.isThereBody = true)
-            : (this.isThereBody = false)
-        })
+            this.tableBody.length
+              ? (this.isThereBody = true)
+              : (this.isThereBody = false)
+            this.isLoading = !this.isLoading
+          }
+        )
         .catch((error) => {
           this.isLoading = !this.isLoading
           // eslint-disable-next-line no-console
@@ -246,8 +319,8 @@ export default {
     },
 
     // Generic_Input value
-    getInputValue(inputVal) {
-      this.keywordValue = inputVal
+    getInputAndLookUpValueAction(name, value) {
+      this.$set(this.allSelectAndInputValue, name, value)
     },
 
     // Table page ni ochish va yopish uchun
@@ -258,16 +331,21 @@ export default {
       this.isCloseTable = !this.isCloseTable
     },
 
+    gridListAction(btnClickType) {
+      btnClickType === 'list'
+        ? (this.isGridAndList = true)
+        : (this.isGridAndList = false)
+    },
+
     // page yuqorisidagi filterlar uchun data yaratish
-    createDataFiltering() {
+    createData() {
       const createDate = [
         {
           name: 'Product Categories',
-          subName: 'productCategoriesId',
+          subName: 'productCategoryId',
           type: 'select',
         },
       ]
-
       this.topFilterData = createDate
     },
   },

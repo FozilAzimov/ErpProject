@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full p-[0px_12px_0px_10px]">
+  <div class="w-full px-1">
     <LoadingPage
       v-if="isLoading"
       class="absolute left-[50%] top-[8px] translate-x-[-50%]"
@@ -15,13 +15,17 @@
         @checkModal="handleValue"
       />
     </transition>
-    <form class="flex flex-wrap items-center gap-3 py-4">
-      <span v-for="(element, index) in topFilterData" :key="index">
-        <span v-if="element.type === 'date'" class="flex items-center gap-1">
+    <form class="flex flex-wrap items-center gap-3 py-3">
+      <template v-for="(element, index) in topFilterData">
+        <span
+          v-if="element.type === 'date'"
+          :key="index"
+          class="flex items-center gap-1"
+        >
           <span class="text-[13px]">{{ element.name }}</span>
           <generic-input-date-page
-            :value="''"
-            width="165"
+            :value="allSelectAndInputValues?.[element?.subName]"
+            width="184"
             pl="10"
             pr="10"
             pt="1"
@@ -35,6 +39,7 @@
         </span>
         <span
           v-else-if="element.type === 'select'"
+          :key="`unique-${index}`"
           class="flex items-center gap-1"
         >
           <span class="text-[13px]">{{ element.name }}</span>
@@ -42,11 +47,12 @@
             dwidth="200"
             :name="element.subName"
             :defvalue="''"
-            :options-data="[]"
+            :options-data="selectData?.[element.subName]"
+            placeholder="Please Select"
             @customFunction="getInputAndLookUpValueAction"
           />
         </span>
-      </span>
+      </template>
     </form>
     <template v-if="isCloseTable">
       <div
@@ -55,7 +61,7 @@
         <div class="flex items-center gap-[10px]">
           <img src="@assets/icons/user-black.png" alt="user" class="w-[14px]" />
           <h1 class="font-bold text-[rgb(49,126,172)] text-[14px] uppercase">
-            SALES ORDER LIST
+            {{ GET_CORE_STRING?.['salesOrder.list'] }}
           </h1>
         </div>
         <div>
@@ -112,7 +118,7 @@
         "
       >
         <generic-button
-          name="Add New"
+          :name="GET_CORE_STRING?.allAddNew"
           type="primary"
           :margin="true"
           icon-name-attribute="circle-plus-outline"
@@ -124,7 +130,7 @@
               <select
                 v-model="pageSize_value"
                 class="border-[1px] border-solid border-[rgba(171,177,187,0.7)] w-[60px] px-[5px] py-[3px] cursor-pointer rounded-[2px] text-[14px] outline-none"
-                @change="getTableRequest()"
+                @change="pageRequestAction"
               >
                 <option value="10">10</option>
                 <option value="25">25</option>
@@ -132,25 +138,25 @@
                 <option value="100">100</option>
                 <option value="500">500</option>
               </select>
-              Records
+              {{ GET_CORE_STRING?.records }}
             </div>
             <div class="flex items-center gap-2">
               <GenericInput
                 width="200"
                 type="text"
                 name="searchInput"
-                placeholder="Search..."
-                @enter="getTableRequest"
+                :placeholder="`${GET_CORE_STRING?.search}...`"
+                @enter="pageRequestAction"
                 @customFunction="getInputAndLookUpValueAction"
               />
               <GenericButton
-                name="Search"
+                :name="GET_CORE_STRING?.search"
                 type="primary"
                 icon-name-attribute="search"
-                @click="getTableRequest"
+                @click="pageRequestAction"
               />
               <GenericButton
-                name="Print Preview"
+                :name="GET_CORE_STRING?.printPreview"
                 type="success"
                 icon-name-attribute="printer"
               />
@@ -172,6 +178,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import LoadingPage from '@components/Loading/LoadingPage.vue'
 import GenericButton from '@components/Generics/GenericButton.vue'
 import GenericInput from '@generics/GenericInput.vue'
@@ -202,19 +209,46 @@ export default {
       isThereBody: false,
       allSelectAndInputValues: {},
       checkModal: false,
-      actionUrl: '',
+      actionUrl: null,
       leftMap: {},
+      selectData: {},
       isOpenTable: true,
       isCloseTable: true,
     }
   },
 
+  computed: {
+    // Store getters
+    ...mapGetters('translate', ['GET_CORE_STRING']),
+  },
+
+  // WATCH
+  watch: {
+    // start CoreString action
+    GET_CORE_STRING: {
+      handler(newVal) {
+        // function
+        this.createDataFiltering(newVal)
+      },
+      deep: true,
+    },
+    // end CoreString action
+  },
+
+  // CREATED
+  created() {
+    this.allSelectAndInputValues.dateFrom = new Date(
+      new Date().setMonth(new Date().getMonth() - 1)
+    )
+      .toISOString()
+      .split('.')[0]
+    this.allSelectAndInputValues.dateTo = new Date().toISOString().split('.')[0]
+  },
+
   // MOUNTED
   mounted() {
-    // Table function
-    this.getTableRequest()
     // function
-    this.createDataFiltering()
+    this.pageRequestAction()
   },
 
   // METHODS
@@ -243,7 +277,9 @@ export default {
     // get Input, date, select datasini olish
 
     // page request action
-    getTableRequest() {
+    pageRequestAction() {
+      this.tableBody = []
+      // request body
       const body = {
         current_page: 1,
         page_size: this.pageSize_value,
@@ -262,23 +298,35 @@ export default {
               .split(',')
               .join('')
           : '',
-        companyBranchId: this.allSelectAndInputValues?.companyBranchId || '',
-        statusId: this.allSelectAndInputValues?.statusId || '',
+        branchCompanyId: this.allSelectAndInputValues?.branchCompanyId ?? '',
+        statusId: this.allSelectAndInputValues?.statusId ?? '',
       }
-
+      // request body
       this.isLoading = !this.isLoading
       this.$axios
-        .post(`/invoices/expenseInvoice`, body)
-        .then(({ data: { build } }) => {
-          this.tableBody = []
-          this.isLoading = !this.isLoading
-          this.tableHead = build?.rightMap
-          this.leftMap = build?.leftMap
-          this.actionUrl = build?.actionUrl
-          this.tableData = build?.invoiceList
-          this.selectData = build?.invoiceSearchDTO
-          this.getTableBody()
-        })
+        .post(`/saleOrder/salesorderAjaxLoad`, body)
+        .then(
+          ({
+            data: {
+              actionUrl,
+              orderList,
+              rightMap,
+              leftMap,
+              companyList,
+              deliveryStatusList,
+            },
+          }) => {
+            this.tableHead = rightMap
+            this.leftMap = leftMap
+            this.actionUrl = actionUrl
+            this.tableData = orderList
+            this.selectData.branchCompanyId = companyList
+            this.selectData.statusId = deliveryStatusList
+            // function
+            this.getTableBody()
+            this.isLoading = !this.isLoading
+          }
+        )
         .catch((error) => {
           this.isLoading = !this.isLoading
           // eslint-disable-next-line no-console
@@ -288,23 +336,19 @@ export default {
 
     // Generic Table action Start
     getTableBody() {
-      const arr = new Set()
       for (const obj of this.tableData) {
-        arr.add(obj.id)
-        const data = new Map()
+        const newObj = {}
         for (const key in this.tableHead) {
-          const value = this.tableHead[key].code
-          if (this.tableHead[key].code in obj) {
-            if (obj[value]) {
-              if (typeof obj[value] === 'object')
-                data.set(value, obj[value].value)
-              else data.set(value, obj[value])
-            } else data.set(value, obj[value])
-          } else data.set(value, false)
+          const keyCode = this.tableHead[key]?.code
+          if (keyCode in obj) {
+            if (typeof obj[keyCode] === 'object')
+              newObj[keyCode] = obj[keyCode]?.value
+            else newObj[keyCode] = obj[keyCode]
+          }
         }
-        this.tableBody.push(Object.fromEntries(data))
+        this.tableBody.push(newObj)
       }
-      this.tableHeadLength = Object.entries(this.tableHead).length
+      this.tableHeadLength = Object.keys(this.tableHead).length + 1
       this.tableBody.length > 0
         ? (this.isThereBody = true)
         : (this.isThereBody = false)
@@ -312,25 +356,25 @@ export default {
     // Generic Table action End
 
     // page yuqorisidagi filterlar uchun data yaratish
-    createDataFiltering() {
+    createDataFiltering(getText) {
       const createDate = [
         {
-          name: 'Date From',
+          name: getText?.['common.search.dateFrom'],
           subName: 'dateFrom',
           type: 'date',
         },
         {
-          name: 'Date To',
+          name: getText?.['common.search.dateTo'],
           subName: 'dateTo',
           type: 'date',
         },
         {
-          name: 'Company Branch',
-          subName: 'companyBranchId',
+          name: getText?.companyBranch,
+          subName: 'branchCompanyId',
           type: 'select',
         },
         {
-          name: 'Status',
+          name: getText?.status,
           subName: 'statusId',
           type: 'select',
         },

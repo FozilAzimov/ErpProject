@@ -12,7 +12,7 @@
           class="toggle-button p-[4px_15px] text-[15px] uppercase flex items-center justify-between gap-8 border-[1px] border-[solid] border-[#ddd] bg-[#fff] rounded-[3px] relative hover:bg-gradient-to-b hover:from-transparent hover:via-transparent hover:to-gray-200"
           @click="dropdownToggle"
         >
-          {{ $t('pages.branches.branchLookUpName') }}
+          {{ '' }}
           <img
             src="@assets/icons/arrow-bottom.png"
             alt="user"

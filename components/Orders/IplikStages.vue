@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full p-[0px_12px_0px_10px]">
+  <div class="w-full px-1">
     <LoadingPage
       v-if="isLoading"
       class="absolute left-[50%] top-[8px] translate-x-[-50%]"
@@ -161,13 +161,17 @@ export default {
   data() {
     return {
       isLoading: false,
-      pageSize_value: 10,
+      pageSize_value: 25,
       keywordValue: '',
       tableHead: {
         id: { name: 'Id', code: 'id' },
-        modelVariant: {
-          name: 'Sew model variant size name',
+        name: {
+          name: 'Iplik Stage name',
           code: 'name',
+        },
+        finalOperation: {
+          name: 'Final Operation',
+          code: 'finalOperation',
         },
       },
       tableBody: [],
@@ -198,7 +202,7 @@ export default {
     getTableRequest() {
       this.isLoading = !this.isLoading
       this.$axios
-        .post(`/sewModelVariantSize/sewModelVariantsSize`, {
+        .post(`/iplikStage/iplikStagesAjaxLoad`, {
           searchForm: {
             keyword: this.keywordValue,
           },
@@ -209,9 +213,9 @@ export default {
             total: 328,
           },
         })
-        .then(({ data: { modelVariantsSizeList } }) => {
+        .then(({ data: { iplikStageList } }) => {
           this.isLoading = !this.isLoading
-          this.tableBody = modelVariantsSizeList
+          this.tableBody = iplikStageList
           this.tableBody.length
             ? (this.isThereBody = true)
             : (this.isThereBody = false)

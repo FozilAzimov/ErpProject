@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full p-[0px_12px_0px_10px]">
+  <div class="w-full px-1">
     <LoadingPage
       v-if="isLoading"
       class="absolute left-[50%] top-[8px] translate-x-[-50%]"
@@ -15,13 +15,17 @@
         @checkModal="handleValue"
       />
     </transition>
-    <form class="flex flex-wrap items-center gap-3 py-4">
-      <span v-for="(element, index) in topFilterData" :key="index">
-        <span v-if="element.type === 'date'" class="flex items-center gap-1">
-          <span class="text-[13px]">{{ element.name }}</span>
+    <form class="flex flex-wrap items-center gap-1 py-3">
+      <template v-for="(element, index) in topFilterData">
+        <span
+          v-if="element.type === 'date'"
+          :key="index"
+          class="flex items-center gap-1"
+        >
+          <span class="text-[12px] font-light">{{ element.name }}</span>
           <generic-input-date-page
-            :value="''"
-            width="165"
+            :value="allSelectAndInputValues?.[element?.subName]"
+            width="185"
             pl="10"
             pr="10"
             pt="1"
@@ -29,24 +33,25 @@
             textsize="13"
             type="datetime-local"
             valuecolor="rgba(0,0,0,0.7)"
-            :name="element.subName"
+            :name="element?.subName"
             @customFunction="getInputAndLookUpValueAction"
           />
         </span>
         <span
           v-else-if="element.type === 'select'"
+          :key="`unique-${index}`"
           class="flex items-center gap-1"
         >
           <generic-look-up
             dwidth="200"
-            :name="element.subName"
+            :name="element?.subName"
             :defvalue="''"
-            :options-data="[]"
-            :placeholder="element.name"
+            :options-data="selectData?.[element.subName]"
+            :placeholder="element?.name"
             @customFunction="getInputAndLookUpValueAction"
           />
         </span>
-      </span>
+      </template>
     </form>
     <template v-if="isCloseTable">
       <div
@@ -111,21 +116,19 @@
             : 'duration-[1s] h-0 overflow-hidden'
         "
       >
-        <div class="flex items-center">
+        <div class="flex items-center m-2 gap-1">
           <generic-button
             name="Add New"
             type="primary"
-            :margin="true"
             icon-name-attribute="circle-plus-outline"
             @click="$router.push('/prepareProductionOrderItem.htm')"
           />
           <generic-button
             name="Create Order"
             type="success"
-            :margin="true"
             @click="$router.push('/prepareSewProductionOrderItem.htm')"
           />
-          <generic-button name="Calculation" type="primary" :margin="true" />
+          <generic-button name="Calculation" type="primary" />
         </div>
         <div class="p-2">
           <div class="flex items-center justify-between mb-1">
@@ -133,7 +136,7 @@
               <select
                 v-model="pageSize_value"
                 class="border-[1px] border-solid border-[rgba(171,177,187,0.7)] w-[60px] px-[5px] py-[3px] cursor-pointer rounded-[2px] text-[14px] outline-none"
-                @change="getTableRequest()"
+                @change="getTableRequest"
               >
                 <option value="10">10</option>
                 <option value="25">25</option>
@@ -170,9 +173,9 @@
             :tablebody="tableBody"
             :tableheadlength="tableHeadLength"
             :istherebody="isThereBody"
-            btn-name="OpenPlanning"
             open-url="prepareProductionOrderItem"
-            open-url-two="planningsByProductionOrder"
+            open-url-two="prepareSewProductionOrderItem"
+            btn-name="Open Sew"
             height="600"
           />
         </div>
@@ -204,6 +207,8 @@ export default {
     return {
       isLoading: false,
       pageSize_value: 25,
+      isOpenTable: true,
+      isCloseTable: true,
       topFilterData: [],
       tableData: [],
       tableHead: {},
@@ -212,11 +217,21 @@ export default {
       isThereBody: false,
       allSelectAndInputValues: {},
       checkModal: false,
-      actionUrl: '',
+      actionUrl: null,
       leftMap: {},
-      isOpenTable: true,
-      isCloseTable: true,
+      selectData: {},
+      productionOrderStatus: null,
     }
+  },
+
+  // CREATED
+  created() {
+    this.allSelectAndInputValues.dateFrom = new Date(
+      new Date().setMonth(new Date().getMonth() - 1)
+    )
+      .toISOString()
+      .split('.')[0]
+    this.allSelectAndInputValues.dateTo = new Date().toISOString().split('.')[0]
   },
 
   // MOUNTED
@@ -254,6 +269,7 @@ export default {
 
     // page request action
     getTableRequest() {
+      // request body
       const body = {
         current_page: 1,
         page_size: this.pageSize_value,
@@ -272,23 +288,44 @@ export default {
               .split(',')
               .join('')
           : '',
-        companyBranchId: this.allSelectAndInputValues?.companyBranchId || '',
-        statusId: this.allSelectAndInputValues?.statusId || '',
+        branchCompanyId: this.allSelectAndInputValues?.branchCompanyId ?? '',
+        statusId: this.allSelectAndInputValues?.statusId ?? '',
       }
-
+      // request body
       this.isLoading = !this.isLoading
       this.$axios
-        .post(`/invoices/expenseInvoice`, body)
-        .then(({ data: { build } }) => {
-          this.tableBody = []
-          this.isLoading = !this.isLoading
-          this.tableHead = build?.rightMap
-          this.leftMap = build?.leftMap
-          this.actionUrl = build?.actionUrl
-          this.tableData = build?.invoiceList
-          this.selectData = build?.invoiceSearchDTO
-          this.getTableBody()
-        })
+        .post(`/productionOrder/productionorder`, body)
+        .then(
+          ({
+            data: {
+              actionUrl,
+              productionListMap,
+              rightMap,
+              leftMap,
+              userList,
+              reportItems,
+              confirmItem,
+              colorVariantList,
+              clientList,
+              objectDataListType,
+            },
+          }) => {
+            this.tableBody = []
+            this.tableHead = rightMap
+            this.leftMap = leftMap
+            this.actionUrl = actionUrl
+            this.tableData = productionListMap
+            this.selectData.userId = userList
+            this.selectData.reportId = reportItems
+            this.selectData.confirmId = confirmItem
+            this.selectData.colorVariantId = colorVariantList
+            this.selectData.clientId = clientList
+            this.selectData.objectDataListTypeId = objectDataListType
+            // function
+            this.getTableBody()
+            this.isLoading = !this.isLoading
+          }
+        )
         .catch((error) => {
           this.isLoading = !this.isLoading
           // eslint-disable-next-line no-console
@@ -298,23 +335,19 @@ export default {
 
     // Generic Table action Start
     getTableBody() {
-      const arr = new Set()
       for (const obj of this.tableData) {
-        arr.add(obj.id)
-        const data = new Map()
+        const newObj = {}
         for (const key in this.tableHead) {
-          const value = this.tableHead[key].code
-          if (this.tableHead[key].code in obj) {
-            if (obj[value]) {
-              if (typeof obj[value] === 'object')
-                data.set(value, obj[value].value)
-              else data.set(value, obj[value])
-            } else data.set(value, obj[value])
-          } else data.set(value, false)
+          const keyCode = this.tableHead[key]?.code.toLowerCase()
+          if (keyCode in obj) {
+            if (typeof obj[keyCode] === 'object')
+              newObj[keyCode] = obj[keyCode]?.value
+            else newObj[keyCode] = obj[keyCode]
+          }
         }
-        this.tableBody.push(Object.fromEntries(data))
+        this.tableBody.push(newObj)
       }
-      this.tableHeadLength = Object.entries(this.tableHead).length
+      this.tableHeadLength = Object.keys(this.tableHead).length
       this.tableBody.length > 0
         ? (this.isThereBody = true)
         : (this.isThereBody = false)
@@ -335,37 +368,36 @@ export default {
           type: 'date',
         },
         {
-          name: 'Confirm',
-          subName: 'confirm',
+          name: 'Order status confirmed',
+          subName: 'confirmId',
           type: 'select',
         },
         {
-          name: 'Client Conpany',
-          subName: 'clientCompany',
+          name: 'Select an Option',
+          subName: 'clientId',
           type: 'select',
         },
         {
           name: 'Color Variant',
-          subName: 'colorVariant',
+          subName: 'colorVariantId',
           type: 'select',
         },
         {
           name: 'Order Creator',
-          subName: 'orderCreator',
+          subName: 'userId',
           type: 'select',
         },
         {
-          name: 'Status',
-          subName: 'status',
+          name: 'All',
+          subName: 'reportId',
           type: 'select',
         },
         {
           name: 'Type',
-          subName: 'type',
+          subName: 'objectDataListTypeId',
           type: 'select',
         },
       ]
-
       this.topFilterData = createDate
     },
   },

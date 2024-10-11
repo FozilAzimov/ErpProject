@@ -81,54 +81,62 @@
             : 'duration-[1s] h-0 overflow-hidden'
         "
       >
-        <div class="w-fit flex flex-col items-start m-2 gap-1">
-          <div v-for="(element, index) in elementData" :key="index">
-            <span
-              v-if="element.type === 'select'"
-              class="flex flex-col items-start mb-1"
-            >
-              <span class="text-[13px]"
-                >{{ element.name }}
-                <span v-if="element.required" class="text-[18px] text-red-600"
-                  >*</span
-                ></span
+        <div class="flex items-start m-2 gap-2">
+          <div class="w-fit flex flex-col items-start gap-1">
+            <div v-for="(element, index) in elementData" :key="index">
+              <span
+                v-if="element.type === 'select'"
+                class="flex flex-col items-start mb-1"
               >
-              <generic-look-up
-                dwidth="300"
-                :name="element.subName"
-                :defvalue="
-                  vuewEditData?.[element.defValName]?.text
-                    ? vuewEditData?.[element.defValName]?.text
-                    : ''
-                "
-                :options-data="selectData"
-                :disabled="element.disabled"
-                @customFunction="getInputAndLookUpValueAction"
-              />
-            </span>
-            <span
-              v-else-if="element.type === 'text'"
-              class="flex flex-col items-start mb-1"
-            >
-              <span class="text-[13px]"
-                >{{ element.name }}
-                <span v-if="element.required" class="text-[18px] text-red-600"
-                  >*</span
+                <span class="text-[13px]"
+                  >{{ element.name }}
+                  <span v-if="element.required" class="text-[18px] text-red-600"
+                    >*</span
+                  ></span
                 >
+                <generic-look-up
+                  dwidth="300"
+                  :name="element.subName"
+                  :defvalue="
+                    vuewEditData?.[element.defValName]?.text
+                      ? vuewEditData?.[element.defValName]?.text
+                      : ''
+                  "
+                  :options-data="selectData"
+                  :disabled="element.disabled"
+                  @customFunction="getInputAndLookUpValueAction"
+                />
               </span>
-              <generic-input
-                :value="
-                  vuewEditData?.[element.defValName]
-                    ? vuewEditData?.[element.defValName]
-                    : ''
-                "
-                width="300"
-                :type="element.type"
-                :name="element.subName"
-                :disabled="element.disabled"
-                @customFunction="getInputAndLookUpValueAction"
-              />
-            </span>
+              <span
+                v-else-if="element.type === 'text'"
+                class="flex flex-col items-start mb-1"
+              >
+                <span class="text-[13px]"
+                  >{{ element.name }}
+                  <span v-if="element.required" class="text-[18px] text-red-600"
+                    >*</span
+                  >
+                </span>
+                <generic-input
+                  :value="
+                    vuewEditData?.[element.defValName]
+                      ? vuewEditData?.[element.defValName]
+                      : ''
+                  "
+                  width="300"
+                  :type="element.type"
+                  :name="element.subName"
+                  :disabled="element.disabled"
+                  @customFunction="getInputAndLookUpValueAction"
+                />
+              </span>
+            </div>
+          </div>
+          <div>
+            <span class="font-bold text-[rgb(49,126,172)] text-[18px]"
+              >Upload and Save</span
+            >
+            <generic-image-upload />
           </div>
         </div>
 
@@ -170,6 +178,7 @@ import GenericInput from '@generics/GenericInput.vue'
 import LoadingPage from '@components/Loading/LoadingPage.vue'
 import GenericLookUp from '@generics/GenericLookUp.vue'
 import ProductionAdditionTable from '@components/Productions/ProductionAdditionTable.vue'
+import GenericImageUpload from '@generics/GenericImageUpload.vue'
 export default {
   components: {
     LoadingPage,
@@ -177,6 +186,7 @@ export default {
     GenericInput,
     GenericLookUp,
     ProductionAdditionTable,
+    GenericImageUpload,
   },
 
   // DATA

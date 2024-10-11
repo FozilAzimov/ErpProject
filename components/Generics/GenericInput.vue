@@ -1,19 +1,21 @@
 <template>
   <el-input
-    ref="enterInputREF"
     v-model="input"
     :type="type"
     :placeholder="placeholder"
     :disabled="disabled"
     :size="size"
+    :clearable="clearable"
+    :prefix-icon="prefixIcon && `el-icon-${prefixIcon}`"
+    :suffix-icon="suffixIcon && `el-icon-${suffixIcon}`"
     :style="{
       width: widthtype === '%' ? `${width}%` : `${width}px`,
       border: required ? 'none' : '1px solid red',
       borderRadius: '5px',
       color: valuecolor,
     }"
-    @input="getInputValue"
-    @change="getTableRequest"
+    @input="getInputValue(name, input, order)"
+    @change="getTableRequest(name, input, order)"
   >
   </el-input>
 </template>
@@ -70,9 +72,21 @@ export default {
       type: Boolean,
       default: false,
     },
+    clearable: {
+      type: Boolean,
+      default: true,
+    },
     maxValue: {
       type: Number,
       default: 0,
+    },
+    prefixIcon: {
+      type: String,
+      default: '',
+    },
+    suffixIcon: {
+      type: String,
+      default: '',
     },
   },
 
@@ -93,14 +107,26 @@ export default {
   },
 
   methods: {
-    getTableRequest() {
-      this.$emit('enter', this.input)
-      this.$emit('customFunction', this.name, this.input, this.order)
+    getTableRequest(name, value, index) {
+      this.$emit('enter', value)
+      this.$emit('customFunction', name, value, index)
     },
 
-    getInputValue() {
-      this.$emit('input', this.input)
-      this.$emit('customFunction', this.name, this.input, this.order)
+    getInputValue(name, value, index) {
+      this.$emit('input', value)
+      this.$emit('customFunction', name, value, index)
+
+      // function
+      this.regexAction(name, value, index)
+    },
+
+    // RegeEx action
+    regexAction(name, value, index) {
+      const regex = /[-+]/g
+      if (regex.test(value)) {
+        this.input = value.replace(/[-+]/g, '')
+      }
+      this.$emit('customFunctionRegEx', name, this.input, index)
     },
 
     // Filtering modaldagi qty va realCount uchun ishlaydi

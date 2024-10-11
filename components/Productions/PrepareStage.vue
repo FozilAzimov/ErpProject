@@ -108,11 +108,11 @@
                   ></span
                 >
                 <generic-input
-                  :value="
+                  :value="`${
                     viewEditData?.[element?.subName]
                       ? viewEditData?.[element?.subName]
                       : ''
-                  "
+                  }`"
                   width="300"
                   type="text"
                   :name="element.subName"
@@ -126,11 +126,11 @@
               >
                 <span class="text-[13px]">{{ element.name }}</span>
                 <generic-input
-                  :value="
+                  :value="`${
                     viewEditData?.[element?.subName]
                       ? viewEditData?.[element?.subName]
                       : ''
-                  "
+                  }`"
                   width="300"
                   type="textarea"
                   :name="element.subName"

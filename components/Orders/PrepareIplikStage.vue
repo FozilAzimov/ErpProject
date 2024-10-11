@@ -21,10 +21,10 @@
           <h1 class="font-bold text-[rgb(49,126,172)] text-[14px] uppercase">
             {{
               pageType === 'view'
-                ? 'VIEW CHARACTERISTIC'
+                ? 'View Iplik Stage'
                 : pageType === 'edit'
-                ? 'Editing of sew model variant size'
-                : 'Addition of sew model variant size'
+                ? 'Edit Iplik Stage'
+                : 'Create Iplik Stage'
             }}
           </h1>
         </div>
@@ -82,21 +82,42 @@
         "
       >
         <div class="w-fit flex flex-col items-start m-2 gap-1">
-          <span class="text-[14px]">Sew model variant size name</span>
-          <generic-input
-            :value="
-              pageType === 'view'
-                ? viewData?.name
-                : pageType === 'edit'
-                ? editData?.name
-                : ''
-            "
-            width="300"
-            type="text"
-            name="sequenceNumber"
-            :disabled="pageType === 'view' ? true : false"
-            @customFunction="getInputValueAction"
-          />
+          <div v-for="(element, index) in elementData" :key="index">
+            <template v-if="element.show">
+              <span
+                v-if="element.type === 'text'"
+                class="flex flex-col items-start mb-1"
+              >
+                <span class="text-[13px]"
+                  >{{ element.name }}
+                  <span v-if="element.required" class="text-[18px] text-red-600"
+                    >*</span
+                  >
+                </span>
+                <generic-input
+                  :value="viewEditData?.[element?.subName]"
+                  width="300"
+                  type="text"
+                  :name="element.subName"
+                  :disabled="element.disabled"
+                  @customFunction="getInputAndLookUpValueAction"
+                />
+              </span>
+              <span
+                v-else-if="element.type === 'checkbox'"
+                class="flex flex-col items-start mb-1"
+              >
+                <generic-check-box
+                  :text="element.name"
+                  :name="element.subName"
+                  :default-value="viewEditData?.[element?.subName]"
+                  :border="true"
+                  :disabled="element.disabled"
+                  @customFunction="getInputAndLookUpValueAction"
+                />
+              </span>
+            </template>
+          </div>
           <div class="flex items-center gap-3 mt-3">
             <generic-button
               name="Go Back"
@@ -108,7 +129,7 @@
               v-if="pageType !== 'view'"
               :name="pageType === 'edit' ? 'Save changes' : 'Save'"
               :type="pageType === 'edit' ? 'success' : 'primary'"
-              :icon-name-attribute="pageType && 'edit'"
+              :icon-name-attribute="pageID && 'edit'"
               @click="saveAction"
             />
           </div>
@@ -128,18 +149,20 @@ export default {
     GenericButton,
     GenericInput,
   },
+
+  // DATA
   data() {
     return {
       isLoading: false,
-      pageSize_value: 10,
+      pageSize_value: 25,
       checkModal: false,
       isOpenTable: true,
       isCloseTable: true,
       pageType: null,
       pageID: null,
-      viewData: {},
-      editData: {},
-      inputValue: '',
+      viewEditData: {},
+      allInputAndLookUpValue: {},
+      elementData: [],
     }
   },
 
@@ -153,8 +176,10 @@ export default {
 
   // MOUNTED
   mounted() {
+    // function
+    this.dataCreatedAction()
     // Table function
-    this.getTableRequest()
+    this.getTableRequest(this.pageID)
   },
 
   // Methods
@@ -173,19 +198,48 @@ export default {
       this.isCloseTable = !this.isCloseTable
     },
 
+    // Data created
+    dataCreatedAction() {
+      const data = [
+        {
+          name: 'Iplik Stage name',
+          subName: 'name',
+          type: 'text',
+          required: true,
+          show: true,
+          disabled: this.pageType === 'view',
+        },
+        {
+          name: 'Final Operation',
+          subName: 'finalOperation',
+          type: 'checkbox',
+          required: false,
+          show: this.pageType !== 'view',
+        },
+        {
+          name: 'WithRealCount',
+          subName: 'withRealcount',
+          type: 'checkbox',
+          required: false,
+          show: this.pageType !== 'view',
+        },
+      ]
+      this.elementData = data
+    },
+
     // Page request
-    getTableRequest() {
-      if (this.pageType === 'view') {
+    getTableRequest(id) {
+      if (this.pageID && this.pageType === 'view') {
         this.isLoading = !this.isLoading
         this.$axios
-          .post(`/sewModelVariantSize/prepareSewModelVariantsSizeView`, {
-            id: this.pageID,
+          .post(`/iplikStage/prepareIplikStageViewAjaxLoad`, {
+            id,
             page_current: 1,
             page_size: 25,
           })
-          .then(({ data }) => {
+          .then(({ data: { iplikStage } }) => {
+            this.viewEditData = iplikStage
             this.isLoading = !this.isLoading
-            this.viewData = data
           })
           .catch((error) => {
             this.isLoading = !this.isLoading
@@ -195,16 +249,14 @@ export default {
       } else if (this.pageType === 'edit') {
         this.isLoading = !this.isLoading
         this.$axios
-          .post(`/sewModelVariantSize/prepareSewModelVariantsSize`, {
+          .post(`/iplikStage/prepareIplikStageAjaxLoad`, {
             id: this.pageID,
             page_current: 1,
             page_size: 25,
           })
-          .then(({ data }) => {
+          .then(({ data: { iplikStage } }) => {
+            this.viewEditData = iplikStage
             this.isLoading = !this.isLoading
-            this.editData = data
-            this.inputValue = data?.name
-            this.pageID = data?.id
           })
           .catch((error) => {
             this.isLoading = !this.isLoading
@@ -215,35 +267,44 @@ export default {
     },
 
     // Input value action
-    getInputValueAction(name, value, order) {
-      this.inputValue = value
+    getInputAndLookUpValueAction(name, value) {
+      this.$set(this.allInputAndLookUpValue, name, value)
     },
 
     // Save Changes action
     saveAction() {
-      if (this.inputValue) {
-        const sewModelVariantsSize = {}
-        if (this.pageType === 'edit') {
-          sewModelVariantsSize.id = this.pageID
-          sewModelVariantsSize.name = this.inputValue
+      if (this.allInputAndLookUpValue.name || this.viewEditData.name) {
+        const iplikStage = {}
+        if (this.pageID) {
+          iplikStage.id = this.pageID ?? ''
+          iplikStage.name =
+            this.allInputAndLookUpValue?.name ?? this.viewEditData?.name ?? ''
+          iplikStage.finalOperation =
+            this.allInputAndLookUpValue?.finalOperation ??
+            this.viewEditData?.finalOperation ??
+            false
+          iplikStage.withRealcount =
+            this.allInputAndLookUpValue?.withRealcount ??
+            this.viewEditData?.withRealcount ??
+            false
         } else {
-          sewModelVariantsSize.name = this.inputValue
+          iplikStage.name = this.allInputAndLookUpValue?.name ?? ''
+          iplikStage.finalOperation =
+            this.allInputAndLookUpValue?.finalOperation ?? false
+          iplikStage.withRealcount =
+            this.allInputAndLookUpValue?.withRealcount ?? false
         }
         this.isLoading = !this.isLoading
         this.$axios
           .post(
-            `/sewModelVariantSize/${
-              this.pageType === 'edit'
-                ? 'editSewModelVariantsSize'
-                : 'addSewModelVariantsSize'
-            }`,
+            `/iplikStage/${this.pageID ? 'editIplikStage' : 'addIplikStage'}`,
             {
-              sewModelVariantsSize,
+              iplikStage,
             }
           )
-          .then(({ status }) => {
+          .then(() => {
             this.isLoading = !this.isLoading
-            if (status === 200) this.$router.push('/sewModelVariantsSize.htm')
+            this.$router.push('/iplikStages.htm')
           })
           .catch((error) => {
             this.isLoading = !this.isLoading

@@ -168,6 +168,7 @@ export default {
         this.editOpen1 = this.editopen
         this.openPopup1 = this.openpopup
         this.autoHeight1 = this.autoheight
+        this.rightItems = []
         for (const item in newRight) {
           newRight[item].postKey = item
           this.rightItems.push(newRight[item])
@@ -177,6 +178,7 @@ export default {
     },
     left: {
       handler(newLeft) {
+        this.leftItems = []
         for (const item in newLeft) {
           newLeft[item].postKey = item
           this.leftItems.push(newLeft[item])
@@ -273,6 +275,8 @@ export default {
         })
     },
     closePopup() {
+      this.rightItems = []
+      this.leftItems = []
       this.checkModal = false
       this.$emit('checkModal', this.checkModal)
     },

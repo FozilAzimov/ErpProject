@@ -83,84 +83,60 @@
       >
         <div class="w-fit flex flex-col items-start m-2 gap-1">
           <div v-for="(element, index) in elementData" :key="index">
-            <template v-if="element.show">
-              <span
+            <div v-if="element.show" class="flex flex-col items-start mb-1">
+              <span class="text-[13px]"
+                >{{ element.name }}
+                <span v-if="element.required" class="text-[18px] text-red-600"
+                  >*</span
+                ></span
+              >
+              <generic-input
                 v-if="element.type === 'text'"
-                class="flex flex-col items-start mb-1"
-              >
-                <span class="text-[13px]">{{ element.name }}</span>
-                <generic-input
-                  :value="
-                    editData?.[element.subName]
-                      ? editData?.[element.subName]
-                      : ''
-                  "
-                  width="300"
-                  type="text"
-                  :name="element.subName"
-                  :disabled="element.disabled"
-                  @customFunction="getInputAndLookUpValueAction"
-                />
-              </span>
-              <span
-                v-else-if="element.type === 'number'"
-                class="flex flex-col items-start mb-1"
-              >
-                <span class="text-[13px]">{{ element.name }}</span>
-                <generic-input
-                  :value="`${
-                    editData?.[element.subName]
-                      ? editData?.[element.subName]
-                      : ''
-                  }`"
-                  width="300"
-                  type="number"
-                  :name="element.subName"
-                  :disabled="element.disabled"
-                  @customFunction="getInputAndLookUpValueAction"
-                />
-              </span>
-              <span
+                :value="
+                  viewEditData?.[element.subName]
+                    ? viewEditData?.[element.subName]
+                    : ''
+                "
+                width="300"
+                type="text"
+                :name="element.subName"
+                :disabled="element.disabled"
+                @customFunction="getInputAndLookUpValueAction"
+              />
+              <generic-input-date-page
+                v-else-if="element.type === 'date'"
+                width="300"
+                height="28"
+                pl="10"
+                pr="10"
+                pt="1"
+                pb="1"
+                textsize="13"
+                type="datetime-local"
+                :value="
+                  viewEditData?.[element.subName]
+                    ? new Date(viewEditData?.[element.subName])
+                        .toISOString()
+                        .split('.')[0]
+                    : ''
+                "
+                valuecolor="rgba(0,0,0,0.7)"
+                :name="element.name"
+                @customFunction="getInputAndLookUpValueAction"
+              />
+              <generic-look-up
                 v-else-if="element.type === 'select'"
-                class="flex flex-col items-start mb-1"
-              >
-                <span class="text-[13px]">{{ element.name }}</span>
-                <generic-look-up
-                  dwidth="300"
-                  :name="element.subName"
-                  defvalue="USA Dollor"
-                  :options-data="currencyData"
-                  :disabled="element.disabled"
-                  @customFunction="getInputAndLookUpValueAction"
-                />
-              </span>
-              <span
-                v-else-if="element.type === 'checkbox'"
-                class="flex flex-col items-start mb-1"
-              >
-                <generic-check-box
-                  :text="element?.name"
-                  :name="element?.subName"
-                  :disabled="element.disabled"
-                  :default-value="
-                    editData?.[element.subName]
-                      ? editData?.[element.subName]
-                      : false
-                  "
-                  @customFunction="getInputAndLookUpValueAction"
-                />
-              </span>
-              <span
-                v-else-if="element.type === 'radio'"
-                class="flex flex-col items-start mb-1"
-              >
-                <el-radio
-                  v-model="radio"
-                  :disabled="element.disabled"
-                  :label="element.subName"
-                ></el-radio>
-              </span>
-            </template>
+                dwidth="300"
+                :name="element.subName"
+                :defvalue="
+                  viewEditData?.[element.subName]
+                    ? viewEditData?.[element.subName]
+                    : ''
+                "
+                :options-data="selectData?.[element?.subName]"
+                @customFunction="getInputAndLookUpValueAction"
+              />
+            </div>
           </div>
 
           <div class="flex items-center gap-3 mt-3">
@@ -189,14 +165,14 @@ import GenericButton from '@generics/GenericButton.vue'
 import GenericInput from '@generics/GenericInput.vue'
 import LoadingPage from '@components/Loading/LoadingPage.vue'
 import GenericLookUp from '@generics/GenericLookUp.vue'
-import GenericCheckBox from '@generics/GenericCheckBox.vue'
+import GenericInputDatePage from '@components/InputDate/GenericInputDatePage.vue'
 export default {
   components: {
     LoadingPage,
     GenericButton,
     GenericInput,
     GenericLookUp,
-    GenericCheckBox,
+    GenericInputDatePage,
   },
 
   // DATA
@@ -209,21 +185,13 @@ export default {
       isCloseTable: true,
       pageType: null,
       pageID: null,
-      editData: {},
+      viewEditData: {},
       allInputAndLookUpValue: {},
       elementData: [],
+      selectData: {},
       radio: null,
       currencyData: [],
     }
-  },
-
-  // WATCH
-  watch: {
-    radio(newVal) {
-      if (newVal === 'enabled') this.allInputAndLookUpValue.active = true
-      else if (newVal === 'disabled') this.allInputAndLookUpValue.active = false
-      else this.allInputAndLookUpValue.active = false
-    },
   },
 
   // CREATED
@@ -258,75 +226,19 @@ export default {
       this.isCloseTable = !this.isCloseTable
     },
 
-    // Data created
-    dataCreatedAction() {
-      const data = [
-        {
-          name: 'Batch Process Name',
-          subName: 'name',
-          type: 'text',
-          show: true,
-          disabled: this.pageType === 'view',
-        },
-        {
-          name: 'Code',
-          subName: 'code',
-          type: 'text',
-          show: true,
-          disabled: this.pageType === 'view',
-        },
-        {
-          name: 'Currency',
-          subName: 'currency',
-          type: 'select',
-          show: this.pageType === 'edit',
-          disabled: this.pageType === 'view',
-        },
-        {
-          name: 'Price',
-          subName: 'price',
-          type: 'number',
-          show: this.pageType === 'edit',
-          disabled: this.pageType === 'view',
-        },
-        {
-          name: 'Save name',
-          subName: 'savename',
-          type: 'checkbox',
-          show: true,
-          disabled: this.pageType === 'view',
-        },
-        {
-          name: 'Status',
-          subName: 'enabled',
-          type: 'radio',
-          show: true,
-          disabled: this.pageType === 'view',
-        },
-        {
-          name: 'Status',
-          subName: 'disabled',
-          type: 'radio',
-          show: true,
-          disabled: this.pageType === 'view',
-        },
-      ]
-      this.elementData = data
-    },
-
     // Page request
     getTableRequest() {
       if (this.pageType === 'view') {
         this.isLoading = !this.isLoading
         this.$axios
-          .post(`/batchProcess/prepareBatchProcessViewAjaxLoad`, {
+          .post(`/car/prepareCarViewAjaxLoad`, {
             id: this.pageID,
             page_current: 1,
             page_size: 25,
           })
-          .then(({ data: { design } }) => {
+          .then(({ data: { car } }) => {
             this.isLoading = !this.isLoading
-            this.editData = design
+            this.viewEditData = car
           })
           .catch((error) => {
             this.isLoading = !this.isLoading
@@ -336,18 +248,50 @@ export default {
       } else if (this.pageType === 'edit') {
         this.isLoading = !this.isLoading
         this.$axios
-          .post(`/batchProcess/prepareBatchProcessAjaxLoad`, {
+          .post(`/car/prepareCarAjaxLoad`, {
             id: this.pageID,
             page_current: 1,
             page_size: 25,
           })
-          .then(({ data: { batchProcess, currencyList } }) => {
+          .then(({ data }) => {
             this.isLoading = !this.isLoading
-            this.editData = batchProcess
-            this.currencyData = currencyList
-            batchProcess.active
-              ? (this.radio = 'enabled')
-              : (this.radio = 'disabled')
+            this.viewEditData = data?.car
+            this.selectData = {
+              carBodyName: data?.carBodyList,
+              carChassisName: data?.carChassisList,
+              carTypeName: data?.carTypeList,
+              garageName: data?.contourList,
+              departmentName: data?.departmentList,
+              fuelTypeName: data?.fuelTypeList,
+              userName: data?.personList,
+              plateNumberName: data?.plateNumberList,
+            }
+          })
+          .catch((error) => {
+            this.isLoading = !this.isLoading
+            // eslint-disable-next-line no-console
+            console.log(error)
+          })
+      } else {
+        this.isLoading = !this.isLoading
+        this.$axios
+          .post(`/car/prepareCarAjaxLoad`, {
+            id: this.pageID,
+            page_current: 1,
+            page_size: 25,
+          })
+          .then(({ data }) => {
+            this.isLoading = !this.isLoading
+            this.selectData = {
+              carBodyName: data?.carBodyList,
+              carChassisName: data?.carChassisList,
+              carTypeName: data?.carTypeList,
+              garageName: data?.contourList,
+              departmentName: data?.departmentList,
+              fuelTypeName: data?.fuelTypeList,
+              userName: data?.personList,
+              plateNumberName: data?.plateNumberList,
+            }
           })
           .catch((error) => {
             this.isLoading = !this.isLoading
@@ -365,53 +309,176 @@ export default {
     // Save Changes action
     saveAction() {
       let body = {}
-      let batchProcess = {}
+      let car = {}
       if (this.pageID && this.pageType === 'edit') {
-        batchProcess = {
+        car = {
           id: this.pageID,
-          name: this.allInputAndLookUpValue?.name || this.editData.name || '',
-          savename:
-            this.allInputAndLookUpValue?.savename ||
-            this.editData.savename ||
+          name:
+            this.allInputAndLookUpValue?.name ?? this.viewEditData.name ?? '',
+          engineNumber:
+            this.allInputAndLookUpValue?.engineNumber ??
+            this.viewEditData.engineNumber ??
             '',
-          code: this.allInputAndLookUpValue?.code || this.editData.code || '',
-          active:
-            this.allInputAndLookUpValue?.active || this.editData.active || '',
-          currency: {
-            id: this.allInputAndLookUpValue?.currency || '',
+          garageContour: {
+            id:
+              this.allInputAndLookUpValue?.garageName ??
+              this.viewEditData?.garageId ??
+              '',
           },
-          price: this.allInputAndLookUpValue?.price || '',
         }
       } else {
-        batchProcess = {
-          name: this.allInputAndLookUpValue?.name,
-          savename: this.allInputAndLookUpValue?.savename,
-          code: this.allInputAndLookUpValue?.code,
-          active: this.allInputAndLookUpValue?.active,
+        car = {
+          name: this.allInputAndLookUpValue?.name ?? '',
+          engineNumber: this.allInputAndLookUpValue?.engineNumber ?? '',
+          garageContour: { id: this.allInputAndLookUpValue?.garageName ?? '' },
         }
       }
       body = {
         page_size: this.pageSize_value,
         page_current: 1,
-        rightData: '',
-        batchProcess,
+        producedDate: this.allInputAndLookUpValue?.producedDate
+          ? this.$formatDate(this.allInputAndLookUpValue?.producedDate)
+          : this.viewEditData?.producedDate
+          ? this.$formatDate(this.viewEditData?.producedDate)
+          : '',
+        personId:
+          this.allInputAndLookUpValue?.userName ??
+          this.viewEditData?.userId ??
+          '',
+        department_id:
+          this.allInputAndLookUpValue?.departmentName ??
+          this.viewEditData?.departmentId ??
+          '',
+        plateNumberId:
+          this.allInputAndLookUpValue?.plateNumberName ??
+          this.viewEditData?.plateNumberId ??
+          '',
+        carBodyId:
+          this.allInputAndLookUpValue?.carBodyName ??
+          this.viewEditData?.carBodyId ??
+          '',
+        carTypeId:
+          this.allInputAndLookUpValue?.carTypeName ??
+          this.viewEditData?.carTypeId ??
+          '',
+        carChassisId:
+          this.allInputAndLookUpValue?.carChassisName ??
+          this.viewEditData?.carChassisId ??
+          '',
+        fuelTypeId:
+          this.allInputAndLookUpValue?.fuelTypeName ??
+          this.viewEditData?.fuelTypeId ??
+          '',
+        car,
       }
 
       this.isLoading = !this.isLoading
       const method = this.pageID ? 'put' : 'post'
-      this.$axios[method](
-        `/batchProcess/${this.pageID ? 'editBatchProcess' : 'addBatchProcess'}`,
-        body
-      )
+      this.$axios[method](`/car/${this.pageID ? 'editCar' : 'addCar'}`, body)
         .then(() => {
           this.isLoading = !this.isLoading
-          this.$router.push('/batchProcess.htm')
+          this.$router.push('/car.htm')
         })
         .catch((error) => {
           this.isLoading = !this.isLoading
           // eslint-disable-next-line no-console
           console.log(error)
         })
+    },
+
+    // Data created
+    dataCreatedAction() {
+      const data = [
+        {
+          name: 'Cars Name',
+          subName: 'name',
+          type: 'text',
+          show: true,
+          required: true,
+          disabled: this.pageType === 'view',
+        },
+        {
+          name: 'engineNumber',
+          subName: 'engineNumber',
+          type: 'text',
+          show: this.pageType !== 'view',
+          required: true,
+          disabled: this.pageType === 'view',
+        },
+        {
+          name: 'producedDate',
+          subName: 'producedDate',
+          type: 'date',
+          show: this.pageType !== 'view',
+          required: true,
+          disabled: this.pageType === 'view',
+        },
+        {
+          name: 'User Name',
+          subName: 'userName',
+          type: 'select',
+          show: this.pageType !== 'view',
+          required: false,
+          disabled: this.pageType === 'view',
+        },
+        {
+          name: 'Department Name',
+          subName: 'departmentName',
+          type: 'select',
+          show: this.pageType !== 'view',
+          required: false,
+          disabled: this.pageType === 'view',
+        },
+        {
+          name: 'Plate Number',
+          subName: 'plateNumberName',
+          type: 'select',
+          show: this.pageType !== 'view',
+          required: true,
+          disabled: this.pageType === 'view',
+        },
+        {
+          name: 'garage',
+          subName: 'garageName',
+          type: 'select',
+          show: this.pageType !== 'view',
+          required: true,
+          disabled: this.pageType === 'view',
+        },
+        {
+          name: 'carBody',
+          subName: 'carBodyName',
+          type: 'select',
+          show: this.pageType !== 'view',
+          required: true,
+          disabled: this.pageType === 'view',
+        },
+        {
+          name: 'carType',
+          subName: 'carTypeName',
+          type: 'select',
+          show: this.pageType !== 'view',
+          required: true,
+          disabled: this.pageType === 'view',
+        },
+        {
+          name: 'carChassis',
+          subName: 'carChassisName',
+          type: 'select',
+          show: this.pageType !== 'view',
+          required: true,
+          disabled: this.pageType === 'view',
+        },
+        {
+          name: 'Fuel Type',
+          subName: 'fuelTypeName',
+          type: 'select',
+          show: this.pageType !== 'view',
+          required: true,
+          disabled: this.pageType === 'view',
+        },
+      ]
+      this.elementData = data
     },
   },
 }

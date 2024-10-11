@@ -2,6 +2,12 @@
   "MessageBox": {
     "description": "Auto imported from components/MessageBox.vue"
   },
+  "ActualitySystem": {
+    "description": "Auto imported from components/ActualitySystemPage/ActualitySystem.vue"
+  },
+  "BranchesPage": {
+    "description": "Auto imported from components/Branches/BranchesPage.vue"
+  },
   "AccountsList": {
     "description": "Auto imported from components/Banks/AccountsList.vue"
   },
@@ -23,20 +29,11 @@
   "PrepareBranche": {
     "description": "Auto imported from components/Banks/PrepareBranche.vue"
   },
-  "ActualitySystem": {
-    "description": "Auto imported from components/ActualitySystemPage/ActualitySystem.vue"
-  },
-  "BranchesPage": {
-    "description": "Auto imported from components/Branches/BranchesPage.vue"
-  },
   "BtnGen": {
     "description": "Auto imported from components/Button/BtnGen.vue"
   },
   "GenericButton": {
     "description": "Auto imported from components/Button/GenericButton.vue"
-  },
-  "ColumnConfigPage": {
-    "description": "Auto imported from components/ColumnConfig/ColumnConfigPage.vue"
   },
   "CashboxsList": {
     "description": "Auto imported from components/Cashboxs/CashboxsList.vue"
@@ -55,30 +52,6 @@
   },
   "TransactionCharacters": {
     "description": "Auto imported from components/Cashboxs/TransactionCharacters.vue"
-  },
-  "DashboardPage": {
-    "description": "Auto imported from components/Dashboard/DashboardPage.vue"
-  },
-  "EquipmentExpenses": {
-    "description": "Auto imported from components/EquipmentReports/EquipmentExpenses.vue"
-  },
-  "EquipmentReports": {
-    "description": "Auto imported from components/EquipmentReports/EquipmentReports.vue"
-  },
-  "EquipmentsOnlineStatus": {
-    "description": "Auto imported from components/EquipmentReports/EquipmentsOnlineStatus.vue"
-  },
-  "EquipmentsOrderReports": {
-    "description": "Auto imported from components/EquipmentReports/EquipmentsOrderReports.vue"
-  },
-  "EquipmentsPersonOnlineStatus": {
-    "description": "Auto imported from components/EquipmentReports/EquipmentsPersonOnlineStatus.vue"
-  },
-  "EquipmentsPersonReports": {
-    "description": "Auto imported from components/EquipmentReports/EquipmentsPersonReports.vue"
-  },
-  "PrepareEquipmentExpenses": {
-    "description": "Auto imported from components/EquipmentReports/PrepareEquipmentExpenses.vue"
   },
   "ClusterCamera": {
     "description": "Auto imported from components/Cluster/ClusterCamera.vue"
@@ -110,6 +83,33 @@
   "PrepareDistanceToTerminal": {
     "description": "Auto imported from components/Cluster/PrepareDistanceToTerminal.vue"
   },
+  "ColumnConfigPage": {
+    "description": "Auto imported from components/ColumnConfig/ColumnConfigPage.vue"
+  },
+  "DashboardPage": {
+    "description": "Auto imported from components/Dashboard/DashboardPage.vue"
+  },
+  "EquipmentExpenses": {
+    "description": "Auto imported from components/EquipmentReports/EquipmentExpenses.vue"
+  },
+  "EquipmentReports": {
+    "description": "Auto imported from components/EquipmentReports/EquipmentReports.vue"
+  },
+  "EquipmentsOnlineStatus": {
+    "description": "Auto imported from components/EquipmentReports/EquipmentsOnlineStatus.vue"
+  },
+  "EquipmentsOrderReports": {
+    "description": "Auto imported from components/EquipmentReports/EquipmentsOrderReports.vue"
+  },
+  "EquipmentsPersonOnlineStatus": {
+    "description": "Auto imported from components/EquipmentReports/EquipmentsPersonOnlineStatus.vue"
+  },
+  "EquipmentsPersonReports": {
+    "description": "Auto imported from components/EquipmentReports/EquipmentsPersonReports.vue"
+  },
+  "PrepareEquipmentExpenses": {
+    "description": "Auto imported from components/EquipmentReports/PrepareEquipmentExpenses.vue"
+  },
   "GenericInvoiceFilteringModalPage": {
     "description": "Auto imported from components/GenericInvoiceFilteringModal/GenericInvoiceFilteringModalPage.vue"
   },
@@ -137,17 +137,23 @@
   "GenericPagination": {
     "description": "Auto imported from components/Generics/GenericPagination.vue"
   },
+  "GenericPopupPrepareTable": {
+    "description": "Auto imported from components/Generics/GenericPopupPrepareTable.vue"
+  },
+  "GenericPrepareFilteringPopup": {
+    "description": "Auto imported from components/Generics/GenericPrepareFilteringPopup.vue"
+  },
   "GenericScalesBox": {
     "description": "Auto imported from components/Generics/GenericScalesBox.vue"
   },
   "GenericTransfer": {
     "description": "Auto imported from components/Generics/GenericTransfer.vue"
   },
-  "GenericTranslatePage": {
-    "description": "Auto imported from components/GenericTranslate/GenericTranslatePage.vue"
-  },
   "GenericTablePage": {
     "description": "Auto imported from components/GenericTable/GenericTablePage.vue"
+  },
+  "GenericTranslatePage": {
+    "description": "Auto imported from components/GenericTranslate/GenericTranslatePage.vue"
   },
   "AttendanceSchedule": {
     "description": "Auto imported from components/HRMS/AttendanceSchedule.vue"
@@ -244,6 +250,9 @@
   },
   "PrepareReceiveInvoiceNew": {
     "description": "Auto imported from components/InternalInvoices/PrepareReceiveInvoiceNew.vue"
+  },
+  "LoadingPage": {
+    "description": "Auto imported from components/Loading/LoadingPage.vue"
   },
   "BatchProductionInvoiceUi": {
     "description": "Auto imported from components/Invoices/BatchProductionInvoiceUi.vue"
@@ -377,6 +386,9 @@
   "ProductionInvoicePage": {
     "description": "Auto imported from components/Invoices/ProductionInvoicePage.vue"
   },
+  "ProductionOrderMovement": {
+    "description": "Auto imported from components/Invoices/ProductionOrderMovement.vue"
+  },
   "ProductLoading": {
     "description": "Auto imported from components/Invoices/ProductLoading.vue"
   },
@@ -413,11 +425,20 @@
   "SimpleProductionInvoicePage": {
     "description": "Auto imported from components/Invoices/SimpleProductionInvoicePage.vue"
   },
-  "LoadingPage": {
-    "description": "Auto imported from components/Loading/LoadingPage.vue"
-  },
   "LoginPage": {
     "description": "Auto imported from components/Login/LoginPage.vue"
+  },
+  "ItemSearchList": {
+    "description": "Auto imported from components/main/ItemSearchList.vue"
+  },
+  "LanguageSelector": {
+    "description": "Auto imported from components/main/LanguageSelector.vue"
+  },
+  "MainHeader": {
+    "description": "Auto imported from components/main/MainHeader.vue"
+  },
+  "SearchBar": {
+    "description": "Auto imported from components/main/SearchBar.vue"
   },
   "CalculationByColorVariantRecipe": {
     "description": "Auto imported from components/Orders/CalculationByColorVariantRecipe.vue"
@@ -463,18 +484,6 @@
   },
   "SalesOrder": {
     "description": "Auto imported from components/Orders/SalesOrder.vue"
-  },
-  "ItemSearchList": {
-    "description": "Auto imported from components/main/ItemSearchList.vue"
-  },
-  "LanguageSelector": {
-    "description": "Auto imported from components/main/LanguageSelector.vue"
-  },
-  "MainHeader": {
-    "description": "Auto imported from components/main/MainHeader.vue"
-  },
-  "SearchBar": {
-    "description": "Auto imported from components/main/SearchBar.vue"
   },
   "BatchColorDepthTariffs": {
     "description": "Auto imported from components/Productions/BatchColorDepthTariffs.vue"
@@ -656,6 +665,9 @@
   "PrepareSewModelOperationName": {
     "description": "Auto imported from components/Productions/PrepareSewModelOperationName.vue"
   },
+  "PrepareSewModelPackingType": {
+    "description": "Auto imported from components/Productions/PrepareSewModelPackingType.vue"
+  },
   "PrepareSewModelSizeColorBarcode": {
     "description": "Auto imported from components/Productions/PrepareSewModelSizeColorBarcode.vue"
   },
@@ -691,6 +703,9 @@
   },
   "SewModelOperationName": {
     "description": "Auto imported from components/Productions/SewModelOperationName.vue"
+  },
+  "SewModelPackingType": {
+    "description": "Auto imported from components/Productions/SewModelPackingType.vue"
   },
   "SewModelSizeColorBarcode": {
     "description": "Auto imported from components/Productions/SewModelSizeColorBarcode.vue"

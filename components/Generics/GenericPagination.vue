@@ -2,10 +2,12 @@
   <div class="w-full flex items-center justify-center gap-3">
     <div class="flex items-center gap-2">
       <span class="text-[13px] flex items-center gap-1 text-nowrap"
-        >Page: <span class="font-semibold">{{ pageCurrent }}</span></span
+        >{{ GET_CORE_STRING?.page }}:
+        <span class="font-semibold">{{ pageCurrent }}</span></span
       >
       <span class="text-[13px] flex items-center gap-1 text-nowrap"
-        >Total: <span class="font-semibold">{{ total }}</span></span
+        >{{ GET_CORE_STRING?.total }}:
+        <span class="font-semibold">{{ total }}</span></span
       >
     </div>
     <el-pagination
@@ -29,6 +31,7 @@
   </div>
 </template>
 <script>
+import { mapGetters } from 'vuex'
 import GenericInput from '@generics/GenericInput.vue'
 export default {
   // COMPONENTS
@@ -47,6 +50,11 @@ export default {
     return {
       pageCurrent: 1,
     }
+  },
+
+  // COMPUTED
+  computed: {
+    ...mapGetters('translate', ['GET_CORE_STRING']),
   },
 
   // METHODS

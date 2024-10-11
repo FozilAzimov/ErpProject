@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full p-[0px_12px_0px_10px] mt-1">
+  <div class="w-full px-1">
     <LoadingPage
       v-if="isLoading"
       class="absolute left-[50%] top-[8px] translate-x-[-50%]"
@@ -7,9 +7,6 @@
     <transition name="fade">
       <ColumnConfigPage
         v-show="checkModal"
-        :right="tableHead"
-        :left="leftMap"
-        :url="actionUrl"
         api="saveColumnConfig"
         class="z-[10000]"
         @checkModal="handleValue"
@@ -17,7 +14,7 @@
     </transition>
     <template v-if="isCloseTable">
       <div
-        class="border-[1px] border-solid border-[rgba(0,0,0,0.05)] p-[12px] bg-gradient-to-b from-transparent via-transparent to-gray-200 shadow-md flex items-center justify-between"
+        class="border-[1px] border-solid border-[rgba(0,0,0,0.05)] p-[12px] bg-gradient-to-b from-transparent via-transparent to-gray-200 shadow-md flex items-center justify-between mt-1"
       >
         <div class="flex items-center gap-[10px]">
           <img src="@assets/icons/user-black.png" alt="user" class="w-[14px]" />
@@ -70,6 +67,7 @@
           </ul>
         </div>
       </div>
+
       <div
         class="border-[1px] border-solid border-[rgba(0,0,0,0.1)]"
         :class="
@@ -91,7 +89,7 @@
               <select
                 v-model="pageSize_value"
                 class="border-[1px] border-solid border-[rgba(171,177,187,0.7)] w-[60px] px-[5px] py-[3px] cursor-pointer rounded-[2px] text-[14px] outline-none"
-                @change="getTableRequest()"
+                @change="getTableRequest"
               >
                 <option value="10">10</option>
                 <option value="25">25</option>
@@ -103,23 +101,16 @@
             </div>
             <div class="flex items-center gap-2">
               <GenericInput
-                width="200"
-                type="text"
-                name="searchInput"
+                v-model="keywordValue"
+                prefix-icon="search"
                 placeholder="Search..."
                 @enter="getTableRequest"
-                @customFunction="getInputAndLookUpValueAction"
               />
-              <GenericButton
+              <generic-button
                 name="Search"
                 type="primary"
                 icon-name-attribute="search"
                 @click="getTableRequest"
-              />
-              <GenericButton
-                name="Print Preview"
-                type="success"
-                icon-name-attribute="printer"
               />
             </div>
           </div>
@@ -128,9 +119,11 @@
             :tablebody="tableBody"
             :tableheadlength="tableHeadLength"
             :istherebody="isThereBody"
-            :productions-action-buttons="true"
             open-url="prepareIplikLotStavka"
+            :productions-action-buttons="true"
+            delete-row-url="sewModelVariantSize/prepareSewModelVariantsSizeDelete"
             height="600"
+            @pageEmitAction="getTableRequest"
           />
         </div>
       </div>
@@ -140,12 +133,11 @@
 
 <script>
 import LoadingPage from '@components/Loading/LoadingPage.vue'
-import GenericButton from '@components/Generics/GenericButton.vue'
+import GenericButton from '@generics/GenericButton.vue'
 import GenericInput from '@generics/GenericInput.vue'
 import ColumnConfigPage from '@components/ColumnConfig/ColumnConfigPage.vue'
 import GenericTablePage from '@components/GenericTable/GenericTablePage.vue'
 export default {
-  // COMPONENTS
   components: {
     LoadingPage,
     GenericButton,
@@ -159,15 +151,54 @@ export default {
     return {
       isLoading: false,
       pageSize_value: 25,
-      tableData: [],
-      tableHead: {},
+      keywordValue: '',
+      tableHead: {
+        id: { name: 'Id', code: 'id' },
+        branch: {
+          name: 'Branch',
+          code: 'branch',
+        },
+        department: {
+          name: 'Department',
+          code: 'department',
+        },
+        note: {
+          name: 'Note',
+          code: 'note',
+        },
+        name: {
+          name: 'Iplik Lot Stavka Name',
+          code: 'name',
+        },
+        date: {
+          name: 'Date',
+          code: 'name',
+        },
+        status: {
+          name: 'Status',
+          code: 'openclosed',
+        },
+        reserve: {
+          name: 'Reserve Qty',
+          code: 'reserve_qty',
+        },
+        planning: {
+          name: 'Planning Qty',
+          code: 'planned_qty',
+        },
+        producted: {
+          name: 'Producted',
+          code: 'producted',
+        },
+        different: {
+          name: 'Different qty',
+          code: 'different_qty',
+        },
+      },
       tableBody: [],
       tableHeadLength: null,
       isThereBody: false,
-      allSelectAndInputValues: {},
       checkModal: false,
-      actionUrl: '',
-      leftMap: {},
       isOpenTable: true,
       isCloseTable: true,
     }
@@ -175,71 +206,40 @@ export default {
 
   // MOUNTED
   mounted() {
+    this.tableHeadLength = Object.keys(this.tableHead).length + 1
     // Table function
     this.getTableRequest()
   },
 
-  // METHODS
+  // Methods
   methods: {
-    // Column config uchun ishlaydi
     handleValue(checkModal) {
       this.checkModal = checkModal
     },
     openColumnConfig() {
       this.checkModal = true
     },
-    // Column config uchun ishlaydi
-    // Table page ni ochish va yopish uchun
-    isOpen() {
-      this.isOpenTable = !this.isOpenTable
-    },
-    isClose() {
-      this.isCloseTable = !this.isCloseTable
-    },
-    // Table page ni ochish va yopish uchun
 
-    // get Input, date, select datasini olish
-    getInputAndLookUpValueAction(name, value) {
-      this.$set(this.allSelectAndInputValues, name, value)
-    },
-    // get Input, date, select datasini olish
-
-    // page request action
     getTableRequest() {
-      const body = {
-        current_page: 1,
-        page_size: this.pageSize_value,
-        searchForm: {
-          keyword: this.allSelectAndInputValues?.searchInput || '',
-        },
-        dateFrom: this.allSelectAndInputValues?.dateFrom
-          ? new Date(this.allSelectAndInputValues?.dateFrom)
-              .toLocaleString('en-GB')
-              .split(',')
-              .join('')
-          : '',
-        dateTo: this.allSelectAndInputValues?.dateTo
-          ? new Date(this.allSelectAndInputValues?.dateTo)
-              .toLocaleString('en-GB')
-              .split(',')
-              .join('')
-          : '',
-        companyBranchId: this.allSelectAndInputValues?.companyBranchId || '',
-        statusId: this.allSelectAndInputValues?.statusId || '',
-      }
-
       this.isLoading = !this.isLoading
       this.$axios
-        .post(`/invoices/expenseInvoice`, body)
-        .then(({ data: { build } }) => {
-          this.tableBody = []
+        .post(`/iplikLotStavka/iplikLotStavkaAjaxLoad`, {
+          searchForm: {
+            keyword: this.keywordValue,
+          },
+          pagingForm: {
+            pageSize: this.pageSize_value,
+            currentPage: 1,
+            pageCount: 14,
+            total: 328,
+          },
+        })
+        .then(({ data: { dataResult } }) => {
           this.isLoading = !this.isLoading
-          this.tableHead = build?.rightMap
-          this.leftMap = build?.leftMap
-          this.actionUrl = build?.actionUrl
-          this.tableData = build?.invoiceList
-          this.selectData = build?.invoiceSearchDTO
-          this.getTableBody()
+          this.tableBody = dataResult
+          this.tableBody.length
+            ? (this.isThereBody = true)
+            : (this.isThereBody = false)
         })
         .catch((error) => {
           this.isLoading = !this.isLoading
@@ -248,30 +248,13 @@ export default {
         })
     },
 
-    // Generic Table action Start
-    getTableBody() {
-      const arr = new Set()
-      for (const obj of this.tableData) {
-        arr.add(obj.id)
-        const data = new Map()
-        for (const key in this.tableHead) {
-          const value = this.tableHead[key].code
-          if (this.tableHead[key].code in obj) {
-            if (obj[value]) {
-              if (typeof obj[value] === 'object')
-                data.set(value, obj[value].value)
-              else data.set(value, obj[value])
-            } else data.set(value, obj[value])
-          } else data.set(value, false)
-        }
-        this.tableBody.push(Object.fromEntries(data))
-      }
-      this.tableHeadLength = Object.entries(this.tableHead).length
-      this.tableBody.length > 0
-        ? (this.isThereBody = true)
-        : (this.isThereBody = false)
+    // Table page ni ochish va yopish uchun
+    isOpen() {
+      this.isOpenTable = !this.isOpenTable
     },
-    // Generic Table action End
+    isClose() {
+      this.isCloseTable = !this.isCloseTable
+    },
   },
 }
 </script>

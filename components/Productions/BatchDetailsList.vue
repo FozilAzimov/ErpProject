@@ -18,7 +18,7 @@
           <span class="text-[13px]">{{ element.name }}</span>
           <generic-input-date-page
             :value="element?.defValue"
-            width="165"
+            width="190"
             pl="10"
             pr="10"
             pt="1"
@@ -101,7 +101,7 @@
               <select
                 v-model="pageSize_value"
                 class="border-[1px] border-solid border-[rgba(171,177,187,0.7)] w-[60px] px-[5px] py-[3px] cursor-pointer rounded-[2px] text-[14px] outline-none"
-                @change="getTableRequest()"
+                @change="getTableRequest"
               >
                 <option value="10">10</option>
                 <option value="25">25</option>
@@ -134,8 +134,7 @@
             :tableheadlength="tableHeadLength"
             :istherebody="isThereBody"
             :productions-action-buttons="true"
-            :show-hide-action-col="false"
-            height="600"
+            height="650"
             @pageEmitAction="getTableRequest"
           />
         </div>
@@ -166,17 +165,7 @@ export default {
       pageSize_value: 25,
       topFilterData: [],
       pageID: null,
-      tableHead: {
-        id: { name: 'Id', code: 'id' },
-        name: {
-          name: 'Batch Process Name',
-          code: 'name',
-        },
-        status: {
-          name: 'Status',
-          code: 'status',
-        },
-      },
+      tableHead: {},
       tableBody: [],
       tableHeadLength: null,
       isThereBody: false,
@@ -189,11 +178,11 @@ export default {
 
   // MOUNTED
   mounted() {
-    this.tableHeadLength = Object.keys(this.tableHead).length + 1
-    // Table function
-    this.getTableRequest()
     // function
     this.createDataFiltering()
+    // function
+    this.getTableRequest()
+    this.tableHeadLength = Object.keys(this.tableHead).length + 1
   },
 
   // Methods
@@ -212,6 +201,15 @@ export default {
     // get Input, date, select datasini olish
 
     getTableRequest() {
+      const [year, month, day] = this.allSelectAndInputValues?.dateFrom
+        ? this.allSelectAndInputValues?.dateFrom.split('T')[0].split('-')
+        : new Date().toISOString().split('T')[0].split('-')
+      const dateFrom1 = `${day}/${month}/${year}`
+      const [year2, month2, day2] = this.allSelectAndInputValues?.dateTo
+        ? this.allSelectAndInputValues?.dateTo.split('T')[0].split('-')
+        : new Date().toISOString().split('T')[0].split('-')
+      const dateTo1 = `${day2}/${month2}/${year2}`
+
       this.isLoading = !this.isLoading
       this.$axios
         .post(`/batch/batchDetailsList`, {
@@ -224,14 +222,15 @@ export default {
             pageCount: 14,
             total: 328,
           },
+          dateFrom1,
+          dateTo1,
         })
-        .then(({ data: { batchProcessList } }) => {
-          this.isLoading = !this.isLoading
-          this.tableBody = batchProcessList
-
+        .then(({ data: { batchListMap } }) => {
+          this.tableBody = batchListMap
           this.tableBody.length
             ? (this.isThereBody = true)
             : (this.isThereBody = false)
+          this.isLoading = !this.isLoading
         })
         .catch((error) => {
           this.isLoading = !this.isLoading
@@ -265,6 +264,39 @@ export default {
         },
       ]
       this.topFilterData = createDate
+
+      const data = {
+        id: { name: 'Id', code: 'batch_id' },
+        years: {
+          name: 'Year',
+          code: 'years',
+        },
+        batch_no: {
+          name: 'Batch',
+          code: 'batch_no',
+        },
+        batch_color: {
+          name: 'Color',
+          code: 'batch_color',
+        },
+        batch_color_variant: {
+          name: 'Color Variant',
+          code: 'batch_color_variant',
+        },
+        client: {
+          name: 'Client',
+          code: 'client',
+        },
+        ddate: {
+          name: 'Create Date',
+          code: 'ddate',
+        },
+        batch_detail: {
+          name: 'Batch Details',
+          code: 'batch_detail',
+        },
+      }
+      this.tableHead = data
     },
   },
 }

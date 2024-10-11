@@ -5,7 +5,7 @@
 <script>
 export default {
   methods: {
-    open(id, index) {
+    open(id, index, actionName) {
       this.$confirm('Are you sure you want to delete?', {
         confirmButtonText: 'OK',
         cancelButtonText: 'Cancel',
@@ -13,18 +13,10 @@ export default {
         center: true,
       })
         .then((res) => {
-          this.$emit('emitProp', res, id, index)
-          this.$message({
-            type: 'success',
-            message: 'Delete completed',
-          })
+          this.$emit('emitProp', res, id, index, actionName)
         })
         .catch((res) => {
-          this.$emit('emitProp', res, id, index)
-          this.$message({
-            type: 'info',
-            message: 'Delete canceled',
-          })
+          this.$emit('emitProp', res, id, index, actionName)
         })
     },
   },

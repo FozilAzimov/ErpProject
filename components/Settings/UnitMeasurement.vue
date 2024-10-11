@@ -161,12 +161,24 @@ export default {
       tableHead: {
         id: { name: 'Id', code: 'id' },
         name: {
-          name: 'Batch Process Name',
+          name: 'Name',
           code: 'name',
         },
-        status: {
-          name: 'Status',
-          code: 'status',
+        description: {
+          name: 'Description',
+          code: 'description',
+        },
+        ratio: {
+          name: 'Ratio',
+          code: 'ratio',
+        },
+        groupId: {
+          name: 'Group Id',
+          code: 'groupId',
+        },
+        dyeingRecipeRatio: {
+          name: 'Dyeing Recipe Ratio',
+          code: 'dyeingRecipeRatio',
         },
       },
       tableBody: [],
@@ -197,7 +209,7 @@ export default {
     getTableRequest() {
       this.isLoading = !this.isLoading
       this.$axios
-        .post(`/batchProcess/batchProcessAjaxLoad`, {
+        .post(`/batchProcess/unitmeasurement`, {
           searchForm: {
             keyword: this.keywordValue,
           },

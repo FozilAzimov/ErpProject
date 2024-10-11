@@ -127,7 +127,7 @@
         <div
           class="w-full h-fit mt-4 grid grid-flow-row grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-5"
           :style="{
-            gridTemplateColumns: `repeat(auto-fit, minmax(${width}px, ${1}fr))`,
+            gridTemplateColumns: `repeat(auto-fit, minmax(${width}px, 1fr))`,
           }"
         >
           <div

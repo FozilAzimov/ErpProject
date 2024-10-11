@@ -17,6 +17,7 @@ let store = {};
   // Enforce store modules
   store.modules = store.modules || {}
 
+  resolveStoreModules(require('..\\store\\columnConfig.js'), 'columnConfig.js')
   resolveStoreModules(require('..\\store\\systemMenu.js'), 'systemMenu.js')
   resolveStoreModules(require('..\\store\\translate.js'), 'translate.js')
 
@@ -25,6 +26,7 @@ let store = {};
   if (process.client && module.hot) {
     // Whenever any Vuex module is updated...
     module.hot.accept([
+      '..\\store\\columnConfig.js',
       '..\\store\\systemMenu.js',
       '..\\store\\translate.js',
     ], () => {

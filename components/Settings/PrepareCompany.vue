@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full p-[0px_12px_0px_10px]">
+  <div class="w-full p-1">
     <LoadingPage
       v-if="isLoading"
       class="absolute left-[50%] top-[8px] translate-x-[-50%]"
@@ -14,7 +14,7 @@
     </transition>
     <template v-if="isCloseTable">
       <div
-        class="border-[1px] border-solid border-[rgba(0,0,0,0.05)] p-[12px] bg-gradient-to-b from-transparent via-transparent to-gray-200 shadow-md flex items-center justify-between mt-1"
+        class="border-[1px] border-solid border-[rgba(0,0,0,0.05)] p-[12px] bg-gradient-to-b from-transparent via-transparent to-gray-200 shadow-md flex items-center justify-between"
       >
         <div class="flex items-center gap-[10px]">
           <img src="@assets/icons/user-black.png" alt="user" class="w-[14px]" />
@@ -82,85 +82,131 @@
         "
       >
         <div class="w-fit flex flex-col items-start m-2 gap-1">
-          <div v-for="(element, index) in elementData" :key="index">
-            <template v-if="element.show">
+          <div class="flex items-center gap-1">
+            <generic-button
+              v-for="(obj, index) in allBtnElements"
+              :key="index"
+              :name="obj?.name"
+              type="primary"
+              @click="allBtnAction(obj?.clickType)"
+            />
+          </div>
+
+          <div v-for="(parentRow, inx) in commonData" :key="inx">
+            <div
+              v-for="(row, index) in parentRow"
+              :key="index"
+              class="flex items-end gap-x-3 my-3"
+            >
               <span
-                v-if="element.type === 'text'"
-                class="flex flex-col items-start mb-1"
+                v-for="(element, innerIndex) in row"
+                :key="innerIndex"
+                class="flex items-center gap-1"
               >
-                <span class="text-[13px]">{{ element.name }}</span>
-                <generic-input
-                  :value="
-                    editData?.[element.subName]
-                      ? editData?.[element.subName]
-                      : ''
-                  "
-                  width="300"
-                  type="text"
-                  :name="element.subName"
-                  :disabled="element.disabled"
-                  @customFunction="getInputAndLookUpValueAction"
-                />
+                <template v-if="Array.isArray(element)">
+                  <span
+                    v-for="(obj, nestedIndex) in element"
+                    :key="nestedIndex"
+                  >
+                    <template v-if="obj.show">
+                      <generic-check-box
+                        :text="obj?.name"
+                        :name="obj?.subName"
+                        :disabled="obj.disabled"
+                        :border="true"
+                        :default-value="
+                          viewEditData?.[obj.subName]
+                            ? viewEditData?.[obj.subName]
+                            : false
+                        "
+                        @customFunction="getInputAndLookUpValueAction"
+                      />
+                    </template>
+                  </span>
+                </template>
+
+                <template v-else>
+                  <template v-if="element.show">
+                    <span
+                      v-if="
+                        element.type === 'text' ||
+                        element.type === 'number' ||
+                        element.type === 'password'
+                      "
+                      class="flex flex-col items-start"
+                    >
+                      <span class="text-[13px]">{{ element.name }}</span>
+                      <generic-input
+                        :value="
+                          viewEditData?.[element.subName]
+                            ? viewEditData?.[element.subName]
+                            : ''
+                        "
+                        width="300"
+                        :type="element.type"
+                        :name="element.subName"
+                        :disabled="element.disabled"
+                        @customFunction="getInputAndLookUpValueAction"
+                      />
+                    </span>
+                    <span
+                      v-else-if="element.type === 'select'"
+                      class="flex flex-col items-start"
+                    >
+                      <span class="text-[13px]">{{ element.name }}</span>
+                      <generic-look-up
+                        dwidth="300"
+                        :durl="element?.api ? element?.api : ''"
+                        :name="element.subName"
+                        :defvalue="''"
+                        :multiple="element?.multiple"
+                        :options-data="currencyData"
+                        :disabled="element.disabled"
+                        @customFunction="getInputAndLookUpValueAction"
+                      />
+                    </span>
+                    <span
+                      v-else-if="element.type === 'checkbox'"
+                      class="flex flex-col items-start"
+                    >
+                      <generic-check-box
+                        :text="element?.name"
+                        :name="element?.subName"
+                        :disabled="element.disabled"
+                        :border="true"
+                        :default-value="
+                          viewEditData?.[element.subName]
+                            ? viewEditData?.[element.subName]
+                            : false
+                        "
+                        @customFunction="getInputAndLookUpValueAction"
+                      />
+                    </span>
+                    <span
+                      v-else-if="element.type === 'radio'"
+                      class="flex flex-col items-start"
+                    >
+                      <span class="text-[13px]">{{ element.name }}</span>
+                      <el-radio
+                        v-model="radio"
+                        :disabled="element.disabled"
+                        :label="element.subName"
+                      ></el-radio>
+                    </span>
+                    <span
+                      v-else-if="element.type === 'radio2'"
+                      class="flex flex-col items-start"
+                    >
+                      <el-radio
+                        v-model="radio2"
+                        :disabled="element.disabled"
+                        :label="element.subName"
+                      ></el-radio>
+                    </span>
+                  </template>
+                </template>
               </span>
-              <span
-                v-else-if="element.type === 'number'"
-                class="flex flex-col items-start mb-1"
-              >
-                <span class="text-[13px]">{{ element.name }}</span>
-                <generic-input
-                  :value="`${
-                    editData?.[element.subName]
-                      ? editData?.[element.subName]
-                      : ''
-                  }`"
-                  width="300"
-                  type="number"
-                  :name="element.subName"
-                  :disabled="element.disabled"
-                  @customFunction="getInputAndLookUpValueAction"
-                />
-              </span>
-              <span
-                v-else-if="element.type === 'select'"
-                class="flex flex-col items-start mb-1"
-              >
-                <span class="text-[13px]">{{ element.name }}</span>
-                <generic-look-up
-                  dwidth="300"
-                  :name="element.subName"
-                  defvalue="USA Dollor"
-                  :options-data="currencyData"
-                  :disabled="element.disabled"
-                  @customFunction="getInputAndLookUpValueAction"
-                />
-              </span>
-              <span
-                v-else-if="element.type === 'checkbox'"
-                class="flex flex-col items-start mb-1"
-              >
-                <generic-check-box
-                  :text="element?.name"
-                  :name="element?.subName"
-                  :disabled="element.disabled"
-                  :default-value="
-                    editData?.[element.subName]
-                      ? editData?.[element.subName]
-                      : false
-                  "
-                  @customFunction="getInputAndLookUpValueAction"
-                />
-              </span>
-              <span
-                v-else-if="element.type === 'radio'"
-                class="flex flex-col items-start mb-1"
-              >
-                <el-radio
-                  v-model="radio"
-                  :disabled="element.disabled"
-                  :label="element.subName"
-                ></el-radio>
-              </span>
-            </template>
+            </div>
           </div>
 
           <div class="flex items-center gap-3 mt-3">
@@ -203,17 +249,23 @@ export default {
   data() {
     return {
       isLoading: false,
-      pageSize_value: 25,
       checkModal: false,
       isOpenTable: true,
       isCloseTable: true,
       pageType: null,
       pageID: null,
-      editData: {},
+      allBtnElements: [],
+      viewEditData: {},
       allInputAndLookUpValue: {},
-      elementData: [],
       radio: null,
+      radio2: null,
       currencyData: [],
+      // element data
+      commonData: [],
+      defaultElementData: [],
+      additionElementData: [],
+      specialElementData: [],
+      // element data
     }
   },
 
@@ -223,6 +275,12 @@ export default {
       if (newVal === 'enabled') this.allInputAndLookUpValue.active = true
       else if (newVal === 'disabled') this.allInputAndLookUpValue.active = false
       else this.allInputAndLookUpValue.active = false
+    },
+    radio2(newVal) {
+      if (newVal === 'physical') this.allInputAndLookUpValue.active2 = true
+      else if (newVal === 'notPhysical')
+        this.allInputAndLookUpValue.active2 = false
+      else this.allInputAndLookUpValue.active2 = false
     },
   },
 
@@ -258,75 +316,19 @@ export default {
       this.isCloseTable = !this.isCloseTable
     },
 
-    // Data created
-    dataCreatedAction() {
-      const data = [
-        {
-          name: 'Batch Process Name',
-          subName: 'name',
-          type: 'text',
-          show: true,
-          disabled: this.pageType === 'view',
-        },
-        {
-          name: 'Code',
-          subName: 'code',
-          type: 'text',
-          show: true,
-          disabled: this.pageType === 'view',
-        },
-        {
-          name: 'Currency',
-          subName: 'currency',
-          type: 'select',
-          show: this.pageType === 'edit',
-          disabled: this.pageType === 'view',
-        },
-        {
-          name: 'Price',
-          subName: 'price',
-          type: 'number',
-          show: this.pageType === 'edit',
-          disabled: this.pageType === 'view',
-        },
-        {
-          name: 'Save name',
-          subName: 'savename',
-          type: 'checkbox',
-          show: true,
-          disabled: this.pageType === 'view',
-        },
-        {
-          name: 'Status',
-          subName: 'enabled',
-          type: 'radio',
-          show: true,
-          disabled: this.pageType === 'view',
-        },
-        {
-          name: 'Status',
-          subName: 'disabled',
-          type: 'radio',
-          show: true,
-          disabled: this.pageType === 'view',
-        },
-      ]
-      this.elementData = data
-    },
-
     // Page request
     getTableRequest() {
       if (this.pageType === 'view') {
         this.isLoading = !this.isLoading
         this.$axios
-          .post(`/batchProcess/prepareBatchProcessViewAjaxLoad`, {
+          .post(`/company/prepareCompanyView`, {
             id: this.pageID,
             page_current: 1,
             page_size: 25,
           })
           .then(({ data: { design } }) => {
             this.isLoading = !this.isLoading
-            this.editData = design
+            this.viewEditData = design
           })
           .catch((error) => {
             this.isLoading = !this.isLoading
@@ -336,14 +338,34 @@ export default {
       } else if (this.pageType === 'edit') {
         this.isLoading = !this.isLoading
         this.$axios
-          .post(`/batchProcess/prepareBatchProcessAjaxLoad`, {
+          .post(`/company/prepareCompany`, {
             id: this.pageID,
             page_current: 1,
             page_size: 25,
           })
           .then(({ data: { batchProcess, currencyList } }) => {
             this.isLoading = !this.isLoading
-            this.editData = batchProcess
+            this.viewEditData = batchProcess
+            this.currencyData = currencyList
+            batchProcess.active
+              ? (this.radio = 'enabled')
+              : (this.radio = 'disabled')
+          })
+          .catch((error) => {
+            this.isLoading = !this.isLoading
+            // eslint-disable-next-line no-console
+            console.log(error)
+          })
+      } else {
+        this.isLoading = !this.isLoading
+        this.$axios
+          .post(`/company/addCompany`, {
+            page_current: 1,
+            page_size: 25,
+          })
+          .then(({ data: { batchProcess, currencyList } }) => {
+            this.isLoading = !this.isLoading
+            this.viewEditData = batchProcess
             this.currencyData = currencyList
             batchProcess.active
               ? (this.radio = 'enabled')
@@ -362,6 +384,22 @@ export default {
       this.$set(this.allInputAndLookUpValue, name, value)
     },
 
+    allBtnAction(btnType) {
+      if (btnType === 'main') {
+        this.commonData[0]?.length
+          ? this.$set(this.commonData, 0, [])
+          : this.$set(this.commonData, 0, this.defaultElementData)
+      } else if (btnType === 'addition') {
+        this.commonData[1]?.length
+          ? this.$set(this.commonData, 1, [])
+          : this.$set(this.commonData, 1, this.additionElementData)
+      } else if (btnType === 'spacial') {
+        this.commonData[2]?.length
+          ? this.$set(this.commonData, 2, [])
+          : this.$set(this.commonData, 2, this.specialElementData)
+      }
+    },
+
     // Save Changes action
     saveAction() {
       let body = {}
@@ -369,14 +407,18 @@ export default {
       if (this.pageID && this.pageType === 'edit') {
         batchProcess = {
           id: this.pageID,
-          name: this.allInputAndLookUpValue?.name || this.editData.name || '',
+          name:
+            this.allInputAndLookUpValue?.name || this.viewEditData.name || '',
           savename:
             this.allInputAndLookUpValue?.savename ||
-            this.editData.savename ||
+            this.viewEditData.savename ||
             '',
-          code: this.allInputAndLookUpValue?.code || this.editData.code || '',
+          code:
+            this.allInputAndLookUpValue?.code || this.viewEditData.code || '',
           active:
-            this.allInputAndLookUpValue?.active || this.editData.active || '',
+            this.allInputAndLookUpValue?.active ||
+            this.viewEditData.active ||
+            '',
           currency: {
             id: this.allInputAndLookUpValue?.currency || '',
           },
@@ -391,7 +433,6 @@ export default {
         }
       }
       body = {
-        page_size: this.pageSize_value,
         page_current: 1,
         rightData: '',
         batchProcess,
@@ -400,7 +441,7 @@ export default {
       this.isLoading = !this.isLoading
       const method = this.pageID ? 'put' : 'post'
       this.$axios[method](
-        `/batchProcess/${this.pageID ? 'editBatchProcess' : 'addBatchProcess'}`,
+        `/companies/${this.pageID ? 'editCompany' : 'prepareCompany'}`,
         body
       )
         .then(() => {
@@ -412,6 +453,471 @@ export default {
           // eslint-disable-next-line no-console
           console.log(error)
         })
+    },
+
+    // Data created
+    dataCreatedAction() {
+      // ALL BTN DATA
+      const btnData = [
+        { name: 'Main information', showHide: true, clickType: 'main' },
+        { name: 'Addition information', showHide: true, clickType: 'addition' },
+        { name: 'Spacial information', showHide: true, clickType: 'spacial' },
+      ]
+      this.allBtnElements = btnData
+
+      // DEFAULT DATA
+      const data = [
+        [
+          {
+            name: 'Code',
+            subName: 'code',
+            type: 'text',
+            show: true,
+            disabled: this.pageType === 'view',
+          },
+          {
+            name: 'Company Group',
+            subName: 'companyGroupId',
+            type: 'select',
+            show: true,
+            disabled: this.pageType === 'view',
+          },
+          {
+            name: 'Type',
+            subName: 'typeId',
+            type: 'select',
+            show: true,
+            multiple: true,
+            disabled: this.pageType === 'view',
+          },
+          {
+            name: 'Status',
+            subName: 'enabled',
+            type: 'radio',
+            show: true,
+            disabled: this.pageType === 'view',
+          },
+          {
+            subName: 'disabled',
+            type: 'radio',
+            show: true,
+            disabled: this.pageType === 'view',
+          },
+        ],
+        [
+          {
+            name: 'Name',
+            subName: 'name',
+            type: 'text',
+            show: true,
+            disabled: this.pageType === 'view',
+          },
+          {
+            name: 'companyCategory',
+            subName: 'companyCategoryId',
+            type: 'select',
+            show: true,
+            disabled: this.pageType === 'view',
+          },
+          {
+            name: 'Currency',
+            subName: 'currencyId',
+            type: 'select',
+            show: true,
+            disabled: this.pageType === 'view',
+          },
+          {
+            subName: 'physical',
+            type: 'radio2',
+            show: true,
+            disabled: this.pageType === 'view',
+          },
+          {
+            subName: 'notPhysical',
+            type: 'radio2',
+            show: true,
+            disabled: this.pageType === 'view',
+          },
+        ],
+        [
+          {
+            name: 'Name 2',
+            subName: 'name2',
+            type: 'text',
+            show: true,
+            disabled: this.pageType === 'view',
+          },
+          {
+            name: 'Assigned company',
+            subName: 'assignedCompanyId',
+            type: 'select',
+            show: true,
+            disabled: this.pageType === 'view',
+          },
+          {
+            name: 'Report Company',
+            subName: 'reportCompany',
+            type: 'checkbox',
+            show: true,
+            disabled: this.pageType === 'view',
+          },
+          {
+            name: 'System Company',
+            subName: 'systemCompany',
+            type: 'checkbox',
+            show: true,
+            disabled: this.pageType === 'view',
+          },
+          {
+            name: 'Credit Market Sale Auto Extra Debit',
+            subName: 'creditMarketSaleAutoExtraDebit',
+            type: 'checkbox',
+            show: this.pageType === 'edit',
+          },
+        ],
+        [
+          {
+            name: 'Company Access',
+            subName: 'companyAccess',
+            type: 'select',
+            multiple: true,
+            show: this.pageType === 'edit',
+          },
+          {
+            name: 'To Company Access',
+            subName: 'toCompanyAccess',
+            type: 'select',
+            multiple: true,
+            show: this.pageType === 'edit',
+          },
+        ],
+      ]
+      this.defaultElementData = data
+      this.commonData[0] = this.defaultElementData
+
+      // DEFAULT DATA
+      const data2 = [
+        [
+          {
+            name: 'company.chief',
+            subName: 'company.chief',
+            type: 'text',
+            show: true,
+            disabled: this.pageType === 'view',
+          },
+          {
+            name: 'Address',
+            subName: 'address',
+            type: 'text',
+            show: true,
+            disabled: this.pageType === 'view',
+          },
+          {
+            name: 'Web Address',
+            subName: 'webAddress',
+            type: 'text',
+            show: true,
+            disabled: this.pageType === 'view',
+          },
+          {
+            name: 'MFO',
+            subName: 'mfo',
+            type: 'text',
+            show: true,
+            disabled: this.pageType === 'view',
+          },
+        ],
+        [
+          {
+            name: 'Town',
+            subName: 'town',
+            type: 'text',
+            show: true,
+            disabled: this.pageType === 'view',
+          },
+          {
+            name: 'Company phone number',
+            subName: 'companyPhoneNumber',
+            type: 'text',
+            show: true,
+            disabled: this.pageType === 'view',
+          },
+          {
+            name: 'Tax Organization Name',
+            subName: 'taxOrganizationName',
+            type: 'text',
+            show: true,
+            disabled: this.pageType === 'view',
+          },
+          {
+            name: 'company.notes',
+            subName: 'company.notes',
+            type: 'text',
+            show: true,
+            disabled: this.pageType === 'view',
+          },
+        ],
+        [
+          {
+            name: 'Country',
+            subName: 'country',
+            type: 'text',
+            show: true,
+            disabled: this.pageType === 'view',
+          },
+          {
+            name: 'Phone',
+            subName: 'phone',
+            type: 'text',
+            show: true,
+            disabled: this.pageType === 'view',
+          },
+          {
+            name: 'Banks',
+            subName: 'banks',
+            type: 'select',
+            show: true,
+            disabled: this.pageType === 'view',
+          },
+        ],
+        [
+          {
+            name: 'City',
+            subName: 'city',
+            type: 'text',
+            show: true,
+            disabled: this.pageType === 'view',
+          },
+          {
+            name: 'Email',
+            subName: 'email',
+            type: 'text',
+            show: true,
+            disabled: this.pageType === 'view',
+          },
+          {
+            name: 'Account number',
+            subName: 'accountNumber',
+            type: 'text',
+            show: true,
+            disabled: this.pageType === 'view',
+          },
+        ],
+        [
+          {
+            name: 'District',
+            subName: 'district',
+            type: 'select',
+            show: true,
+            disabled: this.pageType === 'view',
+          },
+          {
+            name: 'Fax number',
+            subName: 'faxNumber',
+            type: 'text',
+            show: true,
+            disabled: this.pageType === 'view',
+          },
+          {
+            name: 'Tax number',
+            subName: 'taxNumber',
+            type: 'text',
+            show: true,
+            disabled: this.pageType === 'view',
+          },
+        ],
+      ]
+      this.additionElementData = data2
+
+      // DEFAULT DATA
+      const data3 = [
+        [
+          {
+            name: 'Post Types',
+            subName: 'postTypes',
+            type: 'select',
+            show: true,
+            disabled: this.pageType === 'view',
+          },
+          {
+            name: 'Company report order sequence',
+            subName: 'companyReportOrderSequence',
+            type: 'text',
+            show: true,
+            disabled: this.pageType === 'view',
+          },
+          {
+            name: 'Password',
+            subName: 'password',
+            type: 'password',
+            show: true,
+            disabled: this.pageType === 'view',
+          },
+          {
+            name: 'Special Day',
+            subName: 'specialDay',
+            type: 'text',
+            show: true,
+            disabled: this.pageType === 'view',
+          },
+        ],
+        [
+          {
+            name: 'Post Type International',
+            subName: 'postTypeInternational',
+            type: 'select',
+            api: 'findAllPostType',
+            param: {
+              postTypeId: this.allInputAndLookUpValue?.postTypeId ?? 3,
+            },
+            show: true,
+            disabled: this.pageType === 'view',
+          },
+          {
+            name: 'Discount Rate',
+            subName: 'discountRate',
+            type: 'text',
+            show: true,
+            disabled: this.pageType === 'view',
+          },
+          {
+            name: 'Access for web',
+            subName: 'accessForWeb',
+            type: 'checkbox',
+            show: true,
+            disabled: this.pageType === 'view',
+          },
+          [
+            {
+              name: 'Monday',
+              subName: 'monday',
+              type: 'checkbox',
+              show: true,
+              disabled: this.pageType === 'view',
+            },
+            {
+              name: 'Tuesday',
+              subName: 'tuesday',
+              type: 'checkbox',
+              show: true,
+              disabled: this.pageType === 'view',
+            },
+            {
+              name: 'Wednesday',
+              subName: 'wednesday',
+              type: 'checkbox',
+              show: true,
+              disabled: this.pageType === 'view',
+            },
+            {
+              name: 'Thursday',
+              subName: 'thursday',
+              type: 'checkbox',
+              show: true,
+              disabled: this.pageType === 'view',
+            },
+            {
+              name: 'Friday',
+              subName: 'friday',
+              type: 'checkbox',
+              show: true,
+              disabled: this.pageType === 'view',
+            },
+            {
+              name: 'Saturday',
+              subName: 'saturday',
+              type: 'checkbox',
+              show: true,
+              disabled: this.pageType === 'view',
+            },
+          ],
+        ],
+        [
+          {
+            name: 'Post Type Region',
+            subName: 'postTypeRegion',
+            type: 'select',
+            api: 'findAllPostType',
+            param: {
+              postTypeId: this.allInputAndLookUpValue?.postTypeId ?? 1,
+            },
+            show: true,
+            disabled: this.pageType === 'view',
+          },
+          {
+            name: 'Vat amount',
+            subName: 'vatAmount',
+            type: 'number',
+            show: true,
+            disabled: this.pageType === 'view',
+          },
+          {
+            name: 'vatIncludedExcluded',
+            subName: 'vatIncludedExcluded',
+            type: 'checkbox',
+            show: true,
+            disabled: this.pageType === 'view',
+          },
+          [
+            {
+              name: 'Week',
+              subName: 'week',
+              type: 'checkbox',
+              show: true,
+              disabled: this.pageType === 'view',
+            },
+            {
+              name: 'Week 2',
+              subName: 'week2',
+              type: 'checkbox',
+              show: true,
+              disabled: this.pageType === 'view',
+            },
+            {
+              name: 'Week 3',
+              subName: 'week3',
+              type: 'checkbox',
+              show: true,
+              disabled: this.pageType === 'view',
+            },
+            {
+              name: 'Week 4',
+              subName: 'week4',
+              type: 'checkbox',
+              show: true,
+              disabled: this.pageType === 'view',
+            },
+          ],
+        ],
+        [
+          {
+            name: 'Post Type City',
+            subName: 'postTypeCity',
+            type: 'select',
+            api: 'findAllPostType',
+            param: {
+              postTypeId: this.allInputAndLookUpValue?.postTypeId ?? 2,
+            },
+            show: true,
+            disabled: this.pageType === 'view',
+          },
+          {
+            name: 'Default Language',
+            subName: 'defaultLanguage',
+            type: 'select',
+            show: true,
+            disabled: this.pageType === 'view',
+          },
+          {
+            name: 'creditMarketSaleAutoExtraDebit',
+            subName: 'creditMarketSaleAutoExtraDebit',
+            type: 'checkbox',
+            show: true,
+            disabled: this.pageType === 'view',
+          },
+        ],
+      ]
+      this.specialElementData = data3
     },
   },
 }

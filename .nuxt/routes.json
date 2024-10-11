@@ -1022,6 +1022,13 @@
     "_name": "_2cc4e645"
   },
   {
+    "name": "productionOrderMovement.htm",
+    "path": "/productionOrderMovement.htm",
+    "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\productionOrderMovement.htm\\\\index.vue",
+    "chunkName": "pages/productionOrderMovement.htm/index",
+    "_name": "_b1a32094"
+  },
+  {
     "name": "productionorderplannings.htm",
     "path": "/productionorderplannings.htm",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\productionorderplannings.htm\\\\index.vue",
@@ -1202,6 +1209,13 @@
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\sewModelOperationName.htm\\\\index.vue",
     "chunkName": "pages/sewModelOperationName.htm/index",
     "_name": "_9471b028"
+  },
+  {
+    "name": "sewModelPackingType.htm",
+    "path": "/sewModelPackingType.htm",
+    "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\sewModelPackingType.htm\\\\index.vue",
+    "chunkName": "pages/sewModelPackingType.htm/index",
+    "_name": "_834457ca"
   },
   {
     "name": "sewModelReport.htm",
@@ -2161,6 +2175,13 @@
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\prepareSewModelOperationName.htm\\\\_id.vue",
     "chunkName": "pages/prepareSewModelOperationName.htm/_id",
     "_name": "_6699ba55"
+  },
+  {
+    "name": "prepareSewModelPackingType.htm-id",
+    "path": "/prepareSewModelPackingType.htm/:id?",
+    "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\prepareSewModelPackingType.htm\\\\_id.vue",
+    "chunkName": "pages/prepareSewModelPackingType.htm/_id",
+    "_name": "_5d2a1af8"
   },
   {
     "name": "prepareSewModelSizeColorBarcode.htm-id",

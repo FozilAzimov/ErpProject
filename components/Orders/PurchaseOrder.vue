@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full p-[0px_12px_0px_10px]">
+  <div class="w-full px-1">
     <LoadingPage
       v-if="isLoading"
       class="absolute left-[50%] top-[8px] translate-x-[-50%]"
@@ -15,13 +15,17 @@
         @checkModal="handleValue"
       />
     </transition>
-    <form class="flex flex-wrap items-center gap-3 py-4">
-      <span v-for="(element, index) in topFilterData" :key="index">
-        <span v-if="element.type === 'date'" class="flex items-center gap-1">
+    <form class="flex flex-wrap items-center gap-3 py-3">
+      <template v-for="(element, index) in topFilterData">
+        <span
+          v-if="element.type === 'date'"
+          :key="index"
+          class="flex items-center gap-1"
+        >
           <span class="text-[13px]">{{ element.name }}</span>
           <generic-input-date-page
-            :value="''"
-            width="165"
+            :value="allSelectAndInputValues?.[element?.subName]"
+            width="185"
             pl="10"
             pr="10"
             pt="1"
@@ -35,6 +39,7 @@
         </span>
         <span
           v-else-if="element.type === 'select'"
+          :key="`unique-${index}`"
           class="flex items-center gap-1"
         >
           <span class="text-[13px]">{{ element.name }}</span>
@@ -42,11 +47,12 @@
             dwidth="200"
             :name="element.subName"
             :defvalue="''"
-            :options-data="[]"
+            :options-data="selectData?.[element.subName]"
+            placeholder="Please Select"
             @customFunction="getInputAndLookUpValueAction"
           />
         </span>
-      </span>
+      </template>
     </form>
     <template v-if="isCloseTable">
       <div
@@ -124,7 +130,7 @@
               <select
                 v-model="pageSize_value"
                 class="border-[1px] border-solid border-[rgba(171,177,187,0.7)] w-[60px] px-[5px] py-[3px] cursor-pointer rounded-[2px] text-[14px] outline-none"
-                @change="getTableRequest()"
+                @change="getTableRequest"
               >
                 <option value="10">10</option>
                 <option value="25">25</option>
@@ -202,11 +208,22 @@ export default {
       isThereBody: false,
       allSelectAndInputValues: {},
       checkModal: false,
-      actionUrl: '',
+      actionUrl: null,
       leftMap: {},
+      selectData: {},
       isOpenTable: true,
       isCloseTable: true,
     }
+  },
+
+  // CREATED
+  created() {
+    this.allSelectAndInputValues.dateFrom = new Date(
+      new Date().setMonth(new Date().getMonth() - 1)
+    )
+      .toISOString()
+      .split('.')[0]
+    this.allSelectAndInputValues.dateTo = new Date().toISOString().split('.')[0]
   },
 
   // MOUNTED
@@ -244,6 +261,8 @@ export default {
 
     // page request action
     getTableRequest() {
+      this.tableBody = []
+      // request body
       const body = {
         current_page: 1,
         page_size: this.pageSize_value,
@@ -262,23 +281,35 @@ export default {
               .split(',')
               .join('')
           : '',
-        companyBranchId: this.allSelectAndInputValues?.companyBranchId || '',
-        statusId: this.allSelectAndInputValues?.statusId || '',
+        branchCompanyId: this.allSelectAndInputValues?.branchCompanyId ?? '',
+        departmentId: this.allSelectAndInputValues?.departmentId ?? '',
       }
-
+      // request body
       this.isLoading = !this.isLoading
       this.$axios
-        .post(`/invoices/expenseInvoice`, body)
-        .then(({ data: { build } }) => {
-          this.tableBody = []
-          this.isLoading = !this.isLoading
-          this.tableHead = build?.rightMap
-          this.leftMap = build?.leftMap
-          this.actionUrl = build?.actionUrl
-          this.tableData = build?.invoiceList
-          this.selectData = build?.invoiceSearchDTO
-          this.getTableBody()
-        })
+        .post(`/order/purchaseorder`, body)
+        .then(
+          ({
+            data: {
+              actionUrl,
+              orderList,
+              rightMap,
+              leftMap,
+              companyList,
+              departmentList,
+            },
+          }) => {
+            this.tableHead = rightMap
+            this.leftMap = leftMap
+            this.actionUrl = actionUrl
+            this.tableData = orderList
+            this.selectData.branchCompanyId = companyList
+            this.selectData.departmentId = departmentList
+            // function
+            this.getTableBody()
+            this.isLoading = !this.isLoading
+          }
+        )
         .catch((error) => {
           this.isLoading = !this.isLoading
           // eslint-disable-next-line no-console
@@ -288,23 +319,19 @@ export default {
 
     // Generic Table action Start
     getTableBody() {
-      const arr = new Set()
       for (const obj of this.tableData) {
-        arr.add(obj.id)
-        const data = new Map()
+        const newObj = {}
         for (const key in this.tableHead) {
-          const value = this.tableHead[key].code
-          if (this.tableHead[key].code in obj) {
-            if (obj[value]) {
-              if (typeof obj[value] === 'object')
-                data.set(value, obj[value].value)
-              else data.set(value, obj[value])
-            } else data.set(value, obj[value])
-          } else data.set(value, false)
+          const keyCode = this.tableHead[key]?.code
+          if (keyCode in obj) {
+            if (typeof obj[keyCode] === 'object')
+              newObj[keyCode] = obj[keyCode]?.value
+            else newObj[keyCode] = obj[keyCode]
+          }
         }
-        this.tableBody.push(Object.fromEntries(data))
+        this.tableBody.push(newObj)
       }
-      this.tableHeadLength = Object.entries(this.tableHead).length
+      this.tableHeadLength = Object.keys(this.tableHead).length
       this.tableBody.length > 0
         ? (this.isThereBody = true)
         : (this.isThereBody = false)
@@ -326,7 +353,7 @@ export default {
         },
         {
           name: 'Company Name',
-          subName: 'companyId',
+          subName: 'branchCompanyId',
           type: 'select',
         },
         {
@@ -335,7 +362,6 @@ export default {
           type: 'select',
         },
       ]
-
       this.topFilterData = createDate
     },
   },

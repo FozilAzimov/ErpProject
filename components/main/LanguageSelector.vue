@@ -5,7 +5,7 @@
       @click="translateToggle"
     >
       <img src="../../assets/icons/translate.png" alt="user" class="w-[14px]" />
-      {{ language ? language : 'English' }}
+      {{ 'English' }}
       <img
         src="../../assets/icons/arrow-bottom.png"
         alt="user"
@@ -33,7 +33,7 @@
         >
           <img
             class="w-[11px]"
-            :src="require(`../../assets/icons/${locale.url}`)"
+            :src="require(`@assets/icons/${locale.url}`)"
             :alt="locale.alt"
           />
           {{ locale.title }}
@@ -45,26 +45,25 @@
 
 <script>
 export default {
+  // DATA
   data() {
     return {
-      selectedLanguage: this.$i18n.locale,
+      selectedLanguage: '',
       langToggle: false,
       dropToggle: false,
-      language: localStorage.getItem('langValue'),
+      language: '',
     }
   },
 
   // COMPUTED
   computed: {
     availableLocales() {
-      return this.$i18n.locales
+      return ''
     },
   },
 
   // Mounted
   mounted() {
-    // language
-    this.$i18n.locale = localStorage.getItem('lang') || 'en'
     // toggle language
     window.addEventListener('click', this.handleWindowClickTranslate)
   },
@@ -76,9 +75,7 @@ export default {
 
   // Method
   methods: {
-    changeLanguage() {
-      this.$i18n.locale = this.selectedLanguage
-    },
+    changeLanguage() {},
 
     // Translate toggle
     translateToggle() {
@@ -96,9 +93,6 @@ export default {
     // Language
     getLanguage(lang, value) {
       if (lang && value) {
-        localStorage.setItem('langValue', value)
-        localStorage.setItem('lang', lang)
-        this.$i18n.locale = lang
         this.language = value
         this.$message({
           message: `Proyekt tili ${value}ga muvaffaqqiyatli o'zgartirildi!`,

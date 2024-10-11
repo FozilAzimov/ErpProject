@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full p-[0px_12px_0px_10px]">
+  <div class="w-full p-1">
     <LoadingPage
       v-if="isLoading"
       class="absolute left-[50%] top-[8px] translate-x-[-50%]"
@@ -7,6 +7,9 @@
     <transition name="fade">
       <ColumnConfigPage
         v-show="checkModal"
+        :right="tableHead"
+        :left="leftMap"
+        :url="actionUrl"
         api="saveColumnConfig"
         class="z-[10000]"
         @checkModal="handleValue"
@@ -19,8 +22,7 @@
           <generic-look-up
             dwidth="200"
             :name="element.subName"
-            :defvalue="''"
-            :options-data="[]"
+            :options-data="topFilterSelect"
             @customFunction="getInputAndLookUpValueAction"
           />
         </span>
@@ -28,7 +30,7 @@
     </form>
     <template v-if="isCloseTable">
       <div
-        class="border-[1px] border-solid border-[rgba(0,0,0,0.05)] p-[12px] bg-gradient-to-b from-transparent via-transparent to-gray-200 shadow-md flex items-center justify-between mt-1"
+        class="border-[1px] border-solid border-[rgba(0,0,0,0.05)] p-[12px] bg-gradient-to-b from-transparent via-transparent to-gray-200 shadow-md flex items-center justify-between"
       >
         <div class="flex items-center gap-[10px]">
           <img src="@assets/icons/user-black.png" alt="user" class="w-[14px]" />
@@ -89,17 +91,12 @@
             : 'duration-[1s] h-0 overflow-hidden'
         "
       >
-        <generic-button
+        <GenericButton
           name="Add New"
           type="primary"
           :margin="true"
           icon-name-attribute="circle-plus-outline"
-          @click="
-            $router.push({
-              path: '/prepareCompany.htm',
-              query: { page_type: 'create' },
-            })
-          "
+          @click="$router.push('/prepareCompany.htm')"
         />
         <div class="p-2">
           <div class="flex items-center justify-between mb-1">
@@ -119,18 +116,21 @@
             </div>
             <div class="flex items-center gap-2">
               <GenericInput
-                v-model="keywordValue"
-                width="200"
-                type="text"
+                name="searchInput"
                 placeholder="Search..."
                 @enter="getTableRequest"
-                @input="getInputValue"
+                @customFunction="getInputAndLookUpValueAction"
               />
               <GenericButton
                 name="Search"
                 type="primary"
                 icon-name-attribute="search"
                 @click="getTableRequest"
+              />
+              <GenericButton
+                name="Print Preview"
+                type="success"
+                icon-name-attribute="printer"
               />
             </div>
           </div>
@@ -139,8 +139,9 @@
             :tablebody="tableBody"
             :tableheadlength="tableHeadLength"
             :istherebody="isThereBody"
-            open-url="prepareCompany"
             :productions-action-buttons="true"
+            open-url="prepareCompany"
+            :custom-btn="{ name: 'Block', type: 'danger', clickType: 'block' }"
             delete-row-url="batchProcess/prepareBatchProcessDelete"
             height="600"
             @pageEmitAction="getTableRequest"
@@ -152,16 +153,17 @@
 </template>
 
 <script>
-import LoadingPage from '@components/Loading/LoadingPage.vue'
 import GenericButton from '@generics/GenericButton.vue'
+import LoadingPage from '@components/Loading/LoadingPage.vue'
 import GenericInput from '@generics/GenericInput.vue'
 import ColumnConfigPage from '@components/ColumnConfig/ColumnConfigPage.vue'
 import GenericTablePage from '@components/GenericTable/GenericTablePage.vue'
 import GenericLookUp from '@generics/GenericLookUp.vue'
 export default {
+  // COMPONENTS
   components: {
-    LoadingPage,
     GenericButton,
+    LoadingPage,
     GenericInput,
     ColumnConfigPage,
     GenericTablePage,
@@ -174,22 +176,15 @@ export default {
       isLoading: false,
       pageSize_value: 25,
       topFilterData: [],
-      keywordValue: '',
-      tableHead: {
-        id: { name: 'Id', code: 'id' },
-        name: {
-          name: 'Batch Process Name',
-          code: 'name',
-        },
-        status: {
-          name: 'Status',
-          code: 'status',
-        },
-      },
+      topFilterSelect: [],
+      allSelectAndInputValues: {},
+      leftMap: {},
+      tableHead: {},
       tableBody: [],
       tableHeadLength: null,
       isThereBody: false,
       checkModal: false,
+      actionUrl: null,
       isOpenTable: true,
       isCloseTable: true,
     }
@@ -197,7 +192,6 @@ export default {
 
   // MOUNTED
   mounted() {
-    this.tableHeadLength = Object.keys(this.tableHead).length + 1
     // Table function
     this.getTableRequest()
     // function
@@ -206,47 +200,14 @@ export default {
 
   // Methods
   methods: {
+    // Column config uchun ishlaydi
     handleValue(checkModal) {
       this.checkModal = checkModal
     },
     openColumnConfig() {
       this.checkModal = true
     },
-
-    getTableRequest() {
-      this.isLoading = !this.isLoading
-      this.$axios
-        .post(`/batchProcess/batchProcessAjaxLoad`, {
-          searchForm: {
-            keyword: this.keywordValue,
-          },
-          pagingForm: {
-            pageSize: this.pageSize_value,
-            currentPage: 1,
-            pageCount: 14,
-            total: 328,
-          },
-        })
-        .then(({ data: { batchProcessList } }) => {
-          this.isLoading = !this.isLoading
-          this.tableBody = batchProcessList
-
-          this.tableBody.length
-            ? (this.isThereBody = true)
-            : (this.isThereBody = false)
-        })
-        .catch((error) => {
-          this.isLoading = !this.isLoading
-          // eslint-disable-next-line no-console
-          console.log(error)
-        })
-    },
-
-    // Generic_Input value
-    getInputValue(inputVal) {
-      this.keywordValue = inputVal
-    },
-
+    // Column config uchun ishlaydi
     // Table page ni ochish va yopish uchun
     isOpen() {
       this.isOpenTable = !this.isOpenTable
@@ -254,17 +215,59 @@ export default {
     isClose() {
       this.isCloseTable = !this.isCloseTable
     },
+    // Table page ni ochish va yopish uchun
+
+    // get Input, date, select datasini olish
+    getInputAndLookUpValueAction(name, value) {
+      this.$set(this.allSelectAndInputValues, name, value)
+    },
+
+    // PAGE request action
+    getTableRequest() {
+      const body = {
+        current_page: 1,
+        page_size: this.pageSize_value,
+        searchForm: {
+          keyword: this.allSelectAndInputValues?.searchInput ?? '',
+        },
+        companyCategoryId: this.allSelectAndInputValues?.companies ?? '',
+      }
+
+      this.isLoading = !this.isLoading
+      this.$axios
+        .post(`/company/companiesAjaxLoad`, body)
+        .then(
+          ({
+            data: { actionUrl, companies, leftMap, rightMap, companyCategory },
+          }) => {
+            this.actionUrl = actionUrl
+            this.tableHead = rightMap
+            this.leftMap = leftMap
+            this.tableBody = companies
+            this.topFilterSelect = companyCategory
+
+            this.tableBody.length
+              ? (this.isThereBody = true)
+              : (this.isThereBody = false)
+            this.isLoading = !this.isLoading
+          }
+        )
+        .catch((error) => {
+          this.isLoading = !this.isLoading
+          // eslint-disable-next-line no-console
+          console.log(error)
+        })
+    },
 
     // page yuqorisidagi filterlar uchun data yaratish
     createDataFiltering() {
       const createDate = [
         {
           name: 'Company Category',
-          subName: 'companyCategoryId',
+          subName: 'companies',
           type: 'select',
         },
       ]
-
       this.topFilterData = createDate
     },
   },

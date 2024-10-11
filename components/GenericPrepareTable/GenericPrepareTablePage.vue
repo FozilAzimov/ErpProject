@@ -8,8 +8,9 @@
       v-if="!tableShowHide && helperShowHideRow"
       class="fixed left-[50%] top-[8px] translate-x-[-50%]"
     />
-
     <message-box ref="messageBoxRef" @emitProp="getEmitProp" />
+
+    <!-- Start Popups ================================================== -->
     <div
       v-if="isOpenModal"
       class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-[10000]"
@@ -36,82 +37,98 @@
         @customCloseAction="closeAction"
         @modalDataAction="tableBodyAllDataAction"
       />
+      <generic-prepare-filtering-popup
+        v-else-if="
+          $route.path.includes('prepareIplikLotStavka.htm') &&
+          departmentName !== 'orders'
+        "
+        :tab-name="tabName"
+        :head-data="filteredTablehead"
+        :filter-type="filterType"
+        @customCloseFunction="closeAction"
+        @popupEmitAction="popupSelectedTableDataGetAction"
+      />
       <GenericInvoiceItemModalPage
         v-else
-        :tabledata="tablehead"
-        :which-table-name="whichTableName"
+        :tabledata="filteredTablehead"
         @customCloseAction="closeAction"
         @customInputValueObj="modalAcceptAction"
       />
     </div>
+    <!-- End Popups ================================================== -->
+
     <div
-      class="flex items-start overflow-scroll relative z-0 mb-5 bg-white border-[1px] border-solid border-[rgba(119,136,153,0.3)]"
+      class="flex items-start overflow-scroll relative z-0 bg-white border-[1px] border-solid border-[rgba(119,136,153,0.3)]"
       :style="`max-height:${height}px`"
       style="min-height: 165px"
     >
       <table class="w-full border-[1px] border-solid border-[#F0F0F0]">
-        <thead class="bg-[rgb(229,235,245)]">
-          <tr>
+        <thead class="sticky top-[-1px] z-[1000]">
+          <tr class="bg-[rgb(229,235,245)]">
             <th
-              class="text-[13px] font-semibold border-[1px] border-solid border-[rgba(119,136,153,0.2)] p-2"
+              class="text-[13px] font-semibold border-[1px] border-solid border-[rgba(119,136,153,0.3)] p-4 cursor-pointer whitespace-nowrap"
             >
               №
             </th>
-
             <th
               v-for="(headName, key) in filteredTablehead"
               :key="key"
-              class="text-[13px] font-semibold border-[1px] border-solid border-[rgba(119,136,153,0.2)] p-2 whitespace-nowrap"
+              class="text-[13px] font-semibold border-[1px] border-solid border-[rgba(119,136,153,0.3)] p-4 cursor-pointer whitespace-nowrap"
               :class="headName.width ? `w-[${headName.width}px]` : ''"
             >
               {{ headName.headerText }}
+              <pre>{{ headName }}</pre>
             </th>
             <th
               v-if="!showHideRow && !isCanAdd"
-              class="text-[13px] font-semibold border-[1px] border-solid border-[rgba(119,136,153,0.2)] p-2"
+              class="text-[13px] font-semibold border-[1px] border-solid border-[rgba(119,136,153,0.3)] p-4 cursor-pointer whitespace-nowrap"
             >
               Delete
             </th>
           </tr>
+          <!-- Filter -->
+          <tr class="bg-[#fff]">
+            <th
+              class="border-[1px] text-[12px] p-[1px_3px] text-center font-normal"
+            >
+              <GenericInput
+                width="50"
+                height="20"
+                pl="8"
+                pr="8"
+                pt="1"
+                pb="1"
+                textsize="11"
+                type="text"
+                name="index"
+                @customFunction="filterAction"
+              />
+            </th>
+            <th
+              v-for="(key, inx) in filteredTablehead"
+              :key="inx"
+              class="border-[1px] text-[12px] p-[1px_3px] text-center font-normal"
+            >
+              <GenericInput
+                width="150"
+                height="20"
+                pl="8"
+                pr="8"
+                pt="1"
+                pb="1"
+                textsize="11"
+                type="text"
+                :name="key.name"
+                @customFunction="filterAction"
+              />
+            </th>
+          </tr>
+          <!-- Filter -->
         </thead>
 
         <tbody>
           <!-- Save button click qilingandan keyin ko'rinadi -->
           <template v-if="showHideRow || isCanAdd">
-            <tr>
-              <td class="border-[1px] text-[12px] p-2 text-center">
-                <GenericInput
-                  width="50"
-                  height="20"
-                  pl="8"
-                  pr="8"
-                  pt="1"
-                  pb="1"
-                  textsize="11"
-                  type="text"
-                  name="index"
-                  @customFunction="filterAction"
-                />
-              </td>
-              <td
-                v-for="(item, inx) in filteredTablehead"
-                :key="inx"
-                class="border-[1px] text-[12px] p-2 text-center"
-              >
-                <GenericInput
-                  width="150"
-                  height="20"
-                  pl="8"
-                  pr="8"
-                  pt="1"
-                  pb="1"
-                  textsize="11"
-                  type="text"
-                  :name="item.name"
-                  @customFunction="filterAction"
-                />
-              </td>
-            </tr>
             <template v-if="rowDataShowHide">
               <tr
                 v-for="(row, indexOne) in twoResData"
@@ -122,30 +139,29 @@
                   {{ indexOne + 1 }}
                 </td>
                 <td
-                  v-for="(item, indexToo) in filteredTablehead"
+                  v-for="(obj, indexToo) in filteredTablehead"
                   :key="indexToo"
                   class="border-[1px] text-[12px] p-2"
                 >
-                  <!-- <pre>{{ row }}</pre> -->
-                  <generic-check-box v-if="item.type === 'checkbox'" />
-                  <span v-else-if="item.type === 'date'">{{
-                    new Date(row?.[item.name])
+                  <generic-check-box v-if="obj.type === 'checkbox'" />
+                  <span v-else-if="obj.type === 'date'">{{
+                    new Date(row?.[obj.name])
                       .toLocaleString('en-GB')
                       .split(',')
                       .join('')
                   }}</span>
                   <img
-                    v-else-if="item.type === 'file_image'"
+                    v-else-if="obj.type === 'file_image'"
                     src="@assets/images/no-image.png"
                     class="w-[60px]"
                   />
                   <GenericButton
-                    v-else-if="item.type === 'button'"
-                    :name="item.headerText"
-                    :type="`${item?.param?.split('-')?.at(-1)}`"
+                    v-else-if="obj.type === 'button'"
+                    :name="obj.headerText"
+                    :type="`${obj?.param?.split('-')?.at(-1)}`"
                     :order="indexOne"
                   />
-                  <span v-else-if="row?.[item.name] && item.name === 'ammount'">
+                  <span v-else-if="row?.[obj.name] && obj.name === 'ammount'">
                     {{
                       combinationThreeInputValues.length &&
                       Boolean(
@@ -178,13 +194,11 @@
                           (combinationThreeInputValues[indexOne]?.unitPrice ??
                             0)
                         : isCanAdd
-                        ? row[item.name]
+                        ? row[obj.name]
                         : 0
                     }}
                   </span>
-                  <span
-                    v-else-if="row[item.name] && item.name === 'ammountwvat'"
-                  >
+                  <span v-else-if="row[obj.name] && obj.name === 'ammountwvat'">
                     {{
                       combinationThreeInputValues.length &&
                       Boolean(
@@ -196,11 +210,11 @@
                           (combinationThreeInputValues[indexOne]?.unitPrice ??
                             0)
                         : isCanAdd
-                        ? row[item.name]
+                        ? row[obj.name]
                         : 0
                     }}
                   </span>
-                  <span v-else-if="row[item.name] && item.name === 'vatAmount'">
+                  <span v-else-if="row[obj.name] && obj.name === 'vatAmount'">
                     {{
                       combinationThreeInputValues.length &&
                       Boolean(
@@ -215,14 +229,21 @@
                             (combinationThreeInputValues[indexOne]?.vat ?? 0)) /
                           100
                         : isCanAdd
-                        ? row[item.name]
+                        ? row[obj.name]
                         : 0
                     }}
                   </span>
-                  <span v-else-if="typeof row?.[item?.name] === 'object'">{{
-                    row?.[item.name]?.['text']
+                  <span v-else-if="typeof row?.[obj?.name] === 'object'">{{
+                    row?.[obj.name]?.['text']
                   }}</span>
-                  <span v-else>{{ row[item.name] }}</span>
+                  <span
+                    v-else-if="
+                      typeof row[obj?.name] === 'string' &&
+                      row[obj?.name]?.includes('style')
+                    "
+                    v-html="row[obj?.name]"
+                  ></span>
+                  <span v-else>{{ row[obj.name] }}</span>
                 </td>
               </tr>
             </template>
@@ -251,11 +272,11 @@
                 Total
               </td>
               <td
-                v-for="(item, indexToo) in filteredTablehead"
+                v-for="(obj, indexToo) in filteredTablehead"
                 :key="indexToo"
                 class="border-1px text-[12px] p-2 text-[rgb(29,119,255)] border-[1px] border-solid border-[rgba(119,136,153,0.2)]"
               >
-                {{ item.sumColumn && totalObjMap.get(item.name)?.toFixed(4) }}
+                {{ obj.sumColumn && totalObjMap?.[obj.name]?.toFixed(4) }}
               </td>
             </tr>
           </template>
@@ -263,7 +284,7 @@
           <!-- Save button click qilinishidan oldin ko'rinadi -->
           <template v-else>
             <tr
-              v-for="(item, indexOne) in tableBody"
+              v-for="(innerArr, indexOne) in tableBody"
               :key="indexOne"
               class="bg-gradient-to-b from-transparent via-transparent to-[#F3F3F3]"
             >
@@ -271,72 +292,59 @@
                 {{ indexOne + 1 }}
               </td>
               <td
-                v-for="(value, indexToo) in item"
+                v-for="(obj, indexToo) in innerArr"
                 :key="indexToo"
                 class="border-[1px] text-[12px] p-2"
-                :class="`w-[${value.dwidth}px]`"
+                :class="`w-[${obj.dwidth}px]`"
               >
                 <generic-look-up
-                  v-if="value.type === 'list'"
+                  v-if="obj.type === 'list'"
                   :defvalue="
                     newEditObjData.length &&
-                    newEditObjData?.[indexOne]?.[value.name]
-                      ? newEditObjData?.[indexOne]?.[value.name]?.text
+                    newEditObjData?.[indexOne]?.[obj.name]
+                      ? newEditObjData?.[indexOne]?.[obj.name]?.text
                       : ''
                   "
-                  :durl="value.durl"
+                  :durl="obj.durl"
                   dwidth="200"
                   :order="indexOne"
-                  :name="value.name"
-                  :result-type="value.resultType"
-                  :required="requiredData?.[indexOne]?.[value.name]"
+                  :name="obj.name"
+                  :result-type="obj.resultType"
+                  :required="requiredData?.[indexOne]?.[obj.name]"
                   :popper-append-to-body="true"
                   @customFunction="getLookUpValue"
                 />
                 <generic-input
-                  v-else-if="value.type === 'float' || value.type === 'integer'"
+                  v-else-if="obj.type === 'float' || obj.type === 'integer'"
                   :value="`${
                     newEditObjData.length &&
-                    newEditObjData?.[indexOne]?.[value.name]
-                      ? newEditObjData?.[indexOne]?.[value.name]
+                    newEditObjData?.[indexOne]?.[obj.name]
+                      ? newEditObjData?.[indexOne]?.[obj.name]
                       : ''
                   }`"
                   width="150"
-                  height="23"
-                  pl="10"
-                  pr="10"
-                  pt="2"
-                  pb="2"
                   :order="indexOne"
-                  textsize="13"
                   type="number"
-                  :required="requiredData?.[indexOne]?.[value.name]"
-                  :name="value.name"
+                  :required="requiredData?.[indexOne]?.[obj.name]"
+                  :name="obj.name"
                   @customFunction="getInputValue"
                 />
                 <generic-input
-                  v-else-if="value.type === 'string'"
+                  v-else-if="obj.type === 'string'"
                   :value="`${
                     newEditObjData.length &&
-                    newEditObjData?.[indexOne]?.[value.name]
-                      ? newEditObjData?.[indexOne]?.[value.name]
+                    newEditObjData?.[indexOne]?.[obj.name]
+                      ? newEditObjData?.[indexOne]?.[obj.name]
                       : ''
                   }`"
                   width="150"
-                  height="23"
-                  pl="10"
-                  pr="10"
-                  pt="2"
-                  pb="2"
                   :order="indexOne"
-                  textsize="13"
-                  type="text"
-                  :name="value.name"
-                  :required="requiredData?.[indexOne]?.[value.name]"
+                  :name="obj.name"
+                  :required="requiredData?.[indexOne]?.[obj.name]"
                   @customFunction="getInputValue"
                 />
                 <GenericInputDatePage
-                  v-else-if="value.type === 'date'"
+                  v-else-if="obj.type === 'date'"
                   width="200"
                   height="23"
                   pl="10"
@@ -353,30 +361,30 @@
                       .split('.')[0]
                   "
                   valuecolor="rgba(0,0,0,0.7)"
-                  :name="value.name"
-                  :required="requiredData?.[indexOne]?.[value.name]"
+                  :name="obj.name"
+                  :required="requiredData?.[indexOne]?.[obj.name]"
                   @customFunction="getInputValue"
                 />
                 <generic-check-box
-                  v-else-if="value.type === 'checkbox'"
+                  v-else-if="obj.type === 'checkbox'"
                   :order="indexOne"
-                  :name="value.name"
+                  :name="obj.name"
                   :value="
                     newEditObjData.length &&
-                    newEditObjData?.[indexOne]?.[value.name]
-                      ? newEditObjData?.[indexOne]?.[value.name]
+                    newEditObjData?.[indexOne]?.[obj.name]
+                      ? newEditObjData?.[indexOne]?.[obj.name]
                       : ''
                   "
                   @customFunction="getInputValue"
                 />
                 <GenericButton
-                  v-else-if="value.type === 'button'"
-                  :name="value.headerText"
+                  v-else-if="obj.type === 'button'"
+                  :name="obj.headerText"
                   type="primary"
                   :order="indexOne"
                 />
-                <span
-                  v-else-if="value.type === 'label' && value.name === 'ammount'"
+                <template
+                  v-else-if="obj.type === 'label' && obj.name === 'ammount'"
                 >
                   {{
                     combinationThreeInputValues.length &&
@@ -410,11 +418,9 @@
                         (combinationThreeInputValues[indexOne]?.unitPrice ?? 0)
                       : 0
                   }}
-                </span>
-                <span
-                  v-else-if="
-                    value.type === 'label' && value.name === 'ammountwvat'
-                  "
+                </template>
+                <template
+                  v-else-if="obj.type === 'label' && obj.name === 'ammountwvat'"
                 >
                   {{
                     combinationThreeInputValues.length &&
@@ -426,11 +432,9 @@
                         (combinationThreeInputValues[indexOne]?.unitPrice ?? 0)
                       : 0
                   }}
-                </span>
-                <span
-                  v-else-if="
-                    value.type === 'label' && value.name === 'vatAmount'
-                  "
+                </template>
+                <template
+                  v-else-if="obj.type === 'label' && obj.name === 'vatAmount'"
                 >
                   {{
                     combinationThreeInputValues.length &&
@@ -447,32 +451,43 @@
                         100
                       : 0
                   }}
-                </span>
-                <span
+                </template>
+                <template
                   v-else-if="
-                    value.type === 'label' &&
+                    obj.type === 'label' &&
                     newEditObjData.length &&
-                    newEditObjData?.[indexOne]?.[value.name] &&
-                    typeof newEditObjData?.[indexOne]?.[value.name] === 'object'
+                    newEditObjData?.[indexOne]?.[obj.name] &&
+                    typeof newEditObjData?.[indexOne]?.[obj.name] === 'object'
                   "
-                  >{{ newEditObjData?.[indexOne]?.[value.name]?.text }}</span
+                  >{{ newEditObjData?.[indexOne]?.[obj.name]?.text }}</template
                 >
-                <span
+                <template
                   v-else-if="
-                    value?.type === 'label' &&
+                    obj?.type === 'label' &&
                     newEditObjData.length &&
-                    newEditObjData?.[indexOne]?.[value.name] &&
-                    typeof newEditObjData?.[indexOne]?.[value.name] !== 'object'
+                    newEditObjData?.[indexOne]?.[obj.name] &&
+                    typeof newEditObjData?.[indexOne]?.[obj.name] !== 'object'
                   "
-                  >{{ newEditObjData?.[indexOne]?.[value.name] }}</span
                 >
+                  <span
+                    v-if="
+                      typeof newEditObjData?.[indexOne]?.[obj?.name] ===
+                        'string' &&
+                      newEditObjData?.[indexOne]?.[obj?.name]?.includes('style')
+                    "
+                    v-html="newEditObjData?.[indexOne]?.[obj?.name]"
+                  ></span>
+                  <template v-else>
+                    {{ newEditObjData?.[indexOne]?.[obj?.name] }}
+                  </template>
+                </template>
               </td>
               <td class="border-[1px] text-[12px] p-2 text-center">
                 <generic-button
                   type="danger"
                   :circle="true"
                   icon-name-attribute="delete"
-                  @click="rowDelAction(indexOne, newEditObjData[indexOne]?.id)"
+                  @click="rowDelAction(newEditObjData[indexOne]?.id, indexOne)"
                 />
               </td>
             </tr>
@@ -512,6 +527,7 @@ import LoadingPage from '@components/Loading/LoadingPage.vue'
 import GenericInvoiceFilteringModalPage from '@components/GenericInvoiceFilteringModal/GenericInvoiceFilteringModalPage.vue'
 import MessageBox from '@components/MessageBox.vue'
 import GenericCheckBox from '@generics/GenericCheckBox.vue'
+import GenericPrepareFilteringPopup from '@generics/GenericPrepareFilteringPopup.vue'
 
 export default {
   // COMPONENTS
@@ -525,6 +541,7 @@ export default {
     GenericInvoiceFilteringModalPage,
     MessageBox,
     GenericCheckBox,
+    GenericPrepareFilteringPopup,
   },
 
   // PROPS
@@ -573,6 +590,14 @@ export default {
       type: String,
       default: '',
     },
+    tabName: {
+      type: String,
+      default: '',
+    },
+    filterType: {
+      type: String,
+      default: '',
+    },
   },
 
   // DATA
@@ -581,9 +606,9 @@ export default {
       isLoading: false,
       isOpenModal: false,
       tableBody: [],
-      inputValuesObj: new Map(),
+      inputValuesObj: {},
       totalArray: [],
-      totalObjMap: new Map(),
+      totalObjMap: {},
       sumColumnArr: [],
       total: 0,
       showHideRow: false,
@@ -617,7 +642,7 @@ export default {
     },
     uiShowHide(value) {
       this.tableShowHide = value
-      this.showHideRow = this.tableShowHide
+      this.showHideRow = value
     },
     defaultValues(newVal) {
       this.ResData = newVal
@@ -639,17 +664,6 @@ export default {
     },
   },
 
-  // MOUNTED
-  mounted() {
-    // Close modal when clicking outside of it
-    window.addEventListener('click', this.closeModalOutside)
-  },
-
-  // BeforeDestroy
-  beforeDestroy() {
-    window.removeEventListener('click', this.closeModalOutside)
-  },
-
   // METHODS
   methods: {
     // GenericInvoiceFilteringModal show hide action
@@ -668,7 +682,10 @@ export default {
 
     // Arrayni bo'sh object dan tozalash
     arrayFiltered() {
-      if (this.departmentName === 'production') {
+      if (
+        this.departmentName === 'production' ||
+        this.departmentName === 'orders'
+      ) {
         this.ResData = this.ResData.filter((obj) => Object.keys(obj).length > 1)
       } else {
         this.ResData = this.ResData.filter((obj) => Object.keys(obj).length > 8)
@@ -709,24 +726,24 @@ export default {
 
     // static filter
     ResDataFiltered() {
-      this.ResData = this.ResData.filter((obj) => {
-        if (
-          'createdDate' in obj ||
-          'invoiceDate' in obj ||
-          'updatedDate' in obj
-        ) {
-          obj.createdDate = new Date(obj.createdDate)
-            .toISOString()
-            .split('.')[0]
-          obj.invoiceDate = new Date(obj.invoiceDate)
-            .toISOString()
-            .split('.')[0]
-          obj.updatedDate = new Date(obj.updatedDate)
-            .toISOString()
-            .split('.')[0]
-        }
-        return obj
-      })
+      // this.ResData = this.ResData.filter((obj) => {
+      //   if (
+      //     'createdDate' in obj ||
+      //     'invoiceDate' in obj ||
+      //     'updatedDate' in obj
+      //   ) {
+      //     obj.createdDate = new Date(obj.createdDate)
+      //       .toISOString()
+      //       .split('.')[0]
+      //     obj.invoiceDate = new Date(obj.invoiceDate)
+      //       .toISOString()
+      //       .split('.')[0]
+      //     obj.updatedDate = new Date(obj.updatedDate)
+      //       .toISOString()
+      //       .split('.')[0]
+      //   }
+      //   return obj
+      // })
       if (this.ResData.length) {
         this.ResData.forEach((obj) => {
           for (const key in obj) {
@@ -761,11 +778,11 @@ export default {
           if (typeof obj[name] === 'number') {
             if (String(obj[name]).includes(String(value))) return obj
           } else if (String(obj[name].text).includes(String(value))) return obj
-        } else if (obj[name] && value.length) {
+        } else if (obj[name] && value?.length) {
           this.rowDataShowHide = false
           this.noDataRow = true
           return obj
-        } else if (!value.length) {
+        } else if (!value?.length) {
           this.rowDataShowHide = true
           this.noDataRow = false
           return obj
@@ -786,8 +803,8 @@ export default {
       } else if (this.ResData[order] && this.newEditObjData.length) {
         this.ResData[order][key] = value
       } else {
-        this.inputValuesObj.set(key, value)
-        this.ResData.push(Object.fromEntries(this.inputValuesObj))
+        this.$set(this.inputValuesObj, key, value)
+        this.ResData.push(this.inputValuesObj)
       }
       // function
       this.requiredLookUpAndInputCheckerAction(this.ResData, order)
@@ -819,8 +836,8 @@ export default {
       } else if (this.ResData[order] && this.newEditObjData.length) {
         this.ResData[order][name] = this.lookUpVal(resultType, value)
       } else {
-        this.inputValuesObj.set(name, this.lookUpVal(resultType, value))
-        this.ResData.push(Object.fromEntries(this.inputValuesObj))
+        this.$set(this.inputValuesObj, name, this.lookUpVal(resultType, value))
+        this.ResData.push(this.inputValuesObj)
       }
       // function
       this.requiredLookUpAndInputCheckerAction(this.ResData, order)
@@ -830,13 +847,13 @@ export default {
     // default set values
     setDefaultValues(order) {
       if (this.departmentName === 'invoice') {
-        this.inputValuesObj.set('erepairStatus', 'false')
-        this.inputValuesObj.set('marriage', 'false')
-        this.inputValuesObj.set('mark', 'false')
-        this.inputValuesObj.set('waste', 'false')
-        this.inputValuesObj.set('qtyOfOne', '0')
-        this.inputValuesObj.set('price4', '0')
-        // this.inputValuesObj.set('packNumber', order + 1)
+        this.$set(this.inputValuesObj, 'erepairStatus', 'false')
+        this.$set(this.inputValuesObj, 'marriage', 'false')
+        this.$set(this.inputValuesObj, 'mark', 'false')
+        this.$set(this.inputValuesObj, 'waste', 'false')
+        this.$set(this.inputValuesObj, 'qtyOfOne', '0')
+        this.$set(this.inputValuesObj, 'price4', '0')
+        // this.$set(this.inputValuesObj, 'packNumber', order + 1)
         return this.inputValuesObj
       }
     },
@@ -868,9 +885,8 @@ export default {
         } else {
           this.tableBody.push(this.filteredTablehead)
           this.setDefaultValues()
-          const requestObj = Object.fromEntries(this.inputValuesObj)
-          this.ResData.push(requestObj)
-          this.inputValuesObj.clear()
+          this.ResData.push(this.inputValuesObj)
+          this.inputValuesObj = {}
         }
         this.showHideRow = false
         this.setIndex()
@@ -879,40 +895,73 @@ export default {
     // Add an Item
 
     // Row delete Request
-    requestAction(id) {
+    requestAction(id, index) {
       this.$axios
-        .post(`/${this.deleteUrlRow}`, { deleteItemId: id })
-        .then((res) => {})
+        .delete(`/${this.deleteUrlRow}`, { data: { deleteItemId: id } })
+        .then((res) => {
+          this.$notification('Successfully Deleted', 'Deleted', 'success')
+          this.tableBody = this.tableBody.filter((row, inx) => inx !== index)
+          this.combinationThreeInputValues =
+            this.combinationThreeInputValues.filter((obj, inx) => inx !== index)
+          this.ResData = this.ResData.filter((row) => row?.id !== id)
+          this.newEditObjData = this.ResData
+          this.twoResData = this.ResData
+          this.inputValuesObj = {}
+        })
         .catch((error) => {
+          this.$notification('Error Deleted', 'Not Deleted', 'error')
           // eslint-disable-next-line no-console
           console.log(error)
         })
     },
 
+    // Message Emit action
     getEmitProp(propMessage, id, index) {
-      if (propMessage === 'confirm') {
+      if (propMessage === 'confirm' && id) {
+        this.requestAction(id, index)
+      } else if (propMessage === 'confirm') {
         this.tableBody = this.tableBody.filter((row, inx) => inx !== index)
         this.combinationThreeInputValues =
           this.combinationThreeInputValues.filter((obj, inx) => inx !== index)
-        id
-          ? (this.ResData = this.ResData.filter((row) => row?.id !== id))
-          : (this.ResData = this.ResData.filter(
-              (row) => row.index !== index + 1
-            ))
-        id && this.requestAction(id)
+        this.ResData = this.ResData.filter((row) => row.index !== index + 1)
         this.newEditObjData = this.ResData
         this.twoResData = this.ResData
-        this.inputValuesObj.clear()
+        this.inputValuesObj = {}
       }
     },
 
     // row delete action
-    rowDelAction(index, id) {
+    rowDelAction(id, index) {
       this.$refs.messageBoxRef.open(id, index)
     },
 
     // Modal Closeobject
     closeAction(isClose) {
+      this.isOpenModal = isClose
+    },
+
+    // get popUp data
+    popupSelectedTableDataGetAction(data, isClose) {
+      this.showHideRow = false
+      data.forEach((obj) => {
+        this.tableBody.push(this.filteredTablehead)
+      })
+      // set data
+      this.ResData = [...this.ResData, ...data]
+      this.newEditObjData = this.ResData
+      // set data
+      // function
+      this.requiredLookUpAndInputCheckerAction(this.ResData)
+      // total action
+      this.ResData.forEach((obj, index) => {
+        this.combinationThreeInputValues[index] = {
+          qty: parseFloat(obj?.qty),
+          unitPrice: parseFloat(obj?.unitPrice),
+          cashPrice: parseFloat(obj?.cashPrice),
+          vat: parseFloat(obj?.vat),
+        }
+      })
+      // close action clone
       this.isOpenModal = isClose
     },
 
@@ -931,9 +980,8 @@ export default {
     // Save button click qilganda ishlaydi
     getSaveRowAction() {
       if (!this.addmodalorrow) {
-        const requestObj = Object.fromEntries(this.inputValuesObj)
-        this.ResData.push(requestObj)
-        this.inputValuesObj.clear()
+        this.ResData.push(this.inputValuesObj)
+        this.inputValuesObj = {}
       }
       this.showHideRow = this.tableShowHide
       this.helperShowHideRow = true
@@ -996,7 +1044,7 @@ export default {
         this.twoResData.forEach((obj) => {
           if (name in obj) {
             this.total += Number(obj[name])
-            this.totalObjMap.set(name, this.total)
+            this.$set(this.totalObjMap, name, this.total)
           }
         })
         this.total = 0

@@ -23,9 +23,9 @@
     <el-option
       v-for="(item, index) in options"
       :key="index"
-      :label="item.name"
-      :text="item.name"
-      :value="item.id"
+      :label="item.name ? item.name : item.moduleName"
+      :text="item.name ? item.name : item.moduleName"
+      :value="item.id ? item.id : item.moduleId"
     >
     </el-option>
   </el-select>

@@ -150,6 +150,7 @@ const _ae0dc4b8 = () => interopDefault(import('..\\pages\\productionByPackage.ht
 const _b820f084 = () => interopDefault(import('..\\pages\\productionForQrCodeList.htm\\index.vue' /* webpackChunkName: "pages/productionForQrCodeList.htm/index" */))
 const _1c0ff186 = () => interopDefault(import('..\\pages\\productioninvoice.htm\\index.vue' /* webpackChunkName: "pages/productioninvoice.htm/index" */))
 const _2cc4e645 = () => interopDefault(import('..\\pages\\productionorder.htm\\index.vue' /* webpackChunkName: "pages/productionorder.htm/index" */))
+const _b1a32094 = () => interopDefault(import('..\\pages\\productionOrderMovement.htm\\index.vue' /* webpackChunkName: "pages/productionOrderMovement.htm/index" */))
 const _817b679a = () => interopDefault(import('..\\pages\\productionorderplannings.htm\\index.vue' /* webpackChunkName: "pages/productionorderplannings.htm/index" */))
 const _c888496e = () => interopDefault(import('..\\pages\\productLoadingList.htm\\index.vue' /* webpackChunkName: "pages/productLoadingList.htm/index" */))
 const _7201d503 = () => interopDefault(import('..\\pages\\productproductiontypes.htm\\index.vue' /* webpackChunkName: "pages/productproductiontypes.htm/index" */))
@@ -176,6 +177,7 @@ const _1a3530bd = () => interopDefault(import('..\\pages\\sewModelBarcodeReaderQ
 const _02de07f6 = () => interopDefault(import('..\\pages\\sewModelBarcodeReaderSticker.htm\\index.vue' /* webpackChunkName: "pages/sewModelBarcodeReaderSticker.htm/index" */))
 const _177356be = () => interopDefault(import('..\\pages\\sewModelManualBarcodeReader.htm\\index.vue' /* webpackChunkName: "pages/sewModelManualBarcodeReader.htm/index" */))
 const _9471b028 = () => interopDefault(import('..\\pages\\sewModelOperationName.htm\\index.vue' /* webpackChunkName: "pages/sewModelOperationName.htm/index" */))
+const _834457ca = () => interopDefault(import('..\\pages\\sewModelPackingType.htm\\index.vue' /* webpackChunkName: "pages/sewModelPackingType.htm/index" */))
 const _074c499c = () => interopDefault(import('..\\pages\\sewModelReport.htm\\index.vue' /* webpackChunkName: "pages/sewModelReport.htm/index" */))
 const _52d57012 = () => interopDefault(import('..\\pages\\sewModelSizeColorBarcode.htm\\index.vue' /* webpackChunkName: "pages/sewModelSizeColorBarcode.htm/index" */))
 const _3e838d01 = () => interopDefault(import('..\\pages\\sewModelVariantsSize.htm\\index.vue' /* webpackChunkName: "pages/sewModelVariantsSize.htm/index" */))
@@ -313,6 +315,7 @@ const _65e7ea17 = () => interopDefault(import('..\\pages\\prepareSalesReturnNew.
 const _465b8d47 = () => interopDefault(import('..\\pages\\prepareSewBandEquipment.htm\\_id.vue' /* webpackChunkName: "pages/prepareSewBandEquipment.htm/_id" */))
 const _7a208ff7 = () => interopDefault(import('..\\pages\\prepareSewModel.htm\\_id.vue' /* webpackChunkName: "pages/prepareSewModel.htm/_id" */))
 const _6699ba55 = () => interopDefault(import('..\\pages\\prepareSewModelOperationName.htm\\_id.vue' /* webpackChunkName: "pages/prepareSewModelOperationName.htm/_id" */))
+const _5d2a1af8 = () => interopDefault(import('..\\pages\\prepareSewModelPackingType.htm\\_id.vue' /* webpackChunkName: "pages/prepareSewModelPackingType.htm/_id" */))
 const _48571e59 = () => interopDefault(import('..\\pages\\prepareSewModelSizeColorBarcode.htm\\_id.vue' /* webpackChunkName: "pages/prepareSewModelSizeColorBarcode.htm/_id" */))
 const _04ca3288 = () => interopDefault(import('..\\pages\\prepareSewModelVariantsSize.htm\\_id.vue' /* webpackChunkName: "pages/prepareSewModelVariantsSize.htm/_id" */))
 const _3da7ff81 = () => interopDefault(import('..\\pages\\prepareShift.htm\\_id.vue' /* webpackChunkName: "pages/prepareShift.htm/_id" */))
@@ -928,6 +931,10 @@ export const routerOptions = {
     component: _2cc4e645,
     name: "productionorder.htm"
   }, {
+    path: "/productionOrderMovement.htm",
+    component: _b1a32094,
+    name: "productionOrderMovement.htm"
+  }, {
     path: "/productionorderplannings.htm",
     component: _817b679a,
     name: "productionorderplannings.htm"
@@ -1031,6 +1038,10 @@ export const routerOptions = {
     path: "/sewModelOperationName.htm",
     component: _9471b028,
     name: "sewModelOperationName.htm"
+  }, {
+    path: "/sewModelPackingType.htm",
+    component: _834457ca,
+    name: "sewModelPackingType.htm"
   }, {
     path: "/sewModelReport.htm",
     component: _074c499c,
@@ -1579,6 +1590,10 @@ export const routerOptions = {
     path: "/prepareSewModelOperationName.htm/:id?",
     component: _6699ba55,
     name: "prepareSewModelOperationName.htm-id"
+  }, {
+    path: "/prepareSewModelPackingType.htm/:id?",
+    component: _5d2a1af8,
+    name: "prepareSewModelPackingType.htm-id"
   }, {
     path: "/prepareSewModelSizeColorBarcode.htm/:id?",
     component: _48571e59,

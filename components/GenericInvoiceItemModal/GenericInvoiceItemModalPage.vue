@@ -9,11 +9,7 @@
         <h2 class="font-bold text-[rgb(49,126,172)]">Invoice Item</h2>
         <div class="flex items-center justify-between gap-2">
           <generic-button name="Accept" type="primary" @click="acceptAction" />
-          <generic-button
-            name="Close"
-            icon-name-attribute="document-copy"
-            @click="closeAction"
-          />
+          <generic-button name="Close" @click="closeAction" />
         </div>
       </div>
       <div class="flex justify-between items-start gap-52 pb-3">
@@ -85,6 +81,12 @@
               />
               <generic-check-box
                 v-else-if="itemRight.type === 'checkbox'"
+                :name="itemRight.name"
+                @customFunction="getInputValue"
+              />
+              <GenericInput
+                v-else-if="itemRight.type === 'file'"
+                type="file"
                 :name="itemRight.name"
                 @customFunction="getInputValue"
               />
@@ -264,14 +266,26 @@ export default {
         )
           return value
       })
-      this.rightData = this.modalData.slice(
-        0,
-        Number.parseInt(this.modalData.length / 2) + 1
-      )
-      this.leftData = this.modalData.slice(
-        Number.parseInt(this.modalData.length / 2) + 1,
-        this.modalData.length
-      )
+
+      if (this.modalData.length % 2) {
+        this.rightData = this.modalData.slice(
+          0,
+          Number.parseInt(this.modalData.length / 2) + 1
+        )
+        this.leftData = this.modalData.slice(
+          Number.parseInt(this.modalData.length / 2) + 1,
+          this.modalData.length
+        )
+      } else {
+        this.rightData = this.modalData.slice(
+          0,
+          Number.parseInt(this.modalData.length / 2)
+        )
+        this.leftData = this.modalData.slice(
+          Number.parseInt(this.modalData.length / 2),
+          this.modalData.length
+        )
+      }
     },
 
     // Cashbox and Banks value'larini o'chirish
