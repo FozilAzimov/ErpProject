@@ -54,6 +54,7 @@ export default {
 
   // WATCH
   watch: {
+    // Bunda Menu data sini coreStringdan o'tkazmay jo'natishi kk backend,  shunda buni olib tashlanadi.
     // start CoreString action
     GET_CORE_STRING: {
       handler(newVal, oldVal) {

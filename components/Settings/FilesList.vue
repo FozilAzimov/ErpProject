@@ -202,7 +202,7 @@ export default {
     getTableRequest() {
       this.isLoading = !this.isLoading
       this.$axios
-        .post(`/batchProcess/batchProcessAjaxLoad`, {
+        .post(`/file/files`, {
           searchForm: {
             keyword: this.keywordValue,
           },

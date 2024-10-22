@@ -1,14 +1,14 @@
 <template>
   <div class="w-full h-screen">
-    <LanguageSelector class="absolute right-[10px] top-[7px]" />
+    <LanguageList class="absolute right-[10px] top-[7px]" />
     <div
       class="w-full h-[80vh] bg-[url('@/assets/images/fon.png')] bg-no-repeat bg-cover flex flex-col items-center justify-center"
     >
       <LoadingPage v-if="isLoading" class="absolute top-[30px]" />
       <img class="w-[200px]" src="@/assets/icons/logo.png" />
-      <h1
-        class="text-[24px] text-[#317eac] leading-[36px] font-bold py-[30px]"
-      ></h1>
+      <h1 class="text-[24px] text-[#317eac] leading-[36px] font-bold py-[30px]">
+        {{ GET_CORE_STRING?.['welcomeErp'] }}
+      </h1>
       <ValidationObserver ref="formValidation">
         <form
           class="w-[350px] bg-[rgba(0,0,0,0.2)] flex flex-col items-center gap-[15px] p-[30px_25px] rounded-[5px]"
@@ -33,7 +33,7 @@
                   'border-red-200 shadow-[0_0_4px_#ef4444]': errors[0],
                 }"
                 type="text"
-                :placeholder="''"
+                :placeholder="GET_CORE_STRING?.['login.login']"
                 class="w-[220px] p-[4px_10px] bg-[rgba(255,255,255,.8)] rounded-[2px] outline-none text-[13px] border-[1px] border-solid border-[#fff] focus:border-[1px] focus:border-solid focus:border-[#52a8eccc] duration-[0.4s] focus:shadow-[0_0_5px_#52a8ec99]"
               />
             </ValidationProvider>
@@ -57,7 +57,7 @@
                   'border-red-200 shadow-[0_0_4px_#ef4444]': errors[0],
                 }"
                 :type="typeIcon ? 'text' : 'password'"
-                :placeholder="''"
+                :placeholder="GET_CORE_STRING?.['login.password']"
                 class="w-[220px] p-[4px_10px] rounded-[2px] bg-[rgba(255,255,255,.8)] outline-none text-[13px] border-[1px] border-solid border-[#fff] focus:border-[1px] focus:border-solid focus:border-[#52a8eccc] duration-[0.4s] focus:shadow-[0_0_5px_#52a8ec99]"
                 @keyup.enter="getResponse"
               />
@@ -77,7 +77,7 @@
           </div>
           <input
             type="button"
-            :value="''"
+            :value="GET_CORE_STRING?.['login.submit']"
             class="w-[250px] p-[5px_10px] mt-[10px] rounded-[3px] text-[13px] bg-[#5dc2f4] text-white cursor-pointer hover:bg-[#40b2e9] active:bg-[#249fdb] duration-[0.4s] outline-none"
             @click="getResponse"
           />
@@ -94,12 +94,12 @@
 <script>
 import { mapGetters } from 'vuex'
 import LoadingPage from '@components/Loading/LoadingPage.vue'
-import LanguageSelector from '@/components/main/LanguageSelector'
+import LanguageList from '@generics/LanguageList.vue'
 export default {
   // COMPONENTS
   components: {
-    LanguageSelector,
     LoadingPage,
+    LanguageList,
   },
 
   // DATA

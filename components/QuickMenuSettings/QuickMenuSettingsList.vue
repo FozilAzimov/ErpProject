@@ -1,5 +1,5 @@
 <template>
-  <div class="demo-collapse m-10">
+  <div class="demo-collapse m-10 border-[1px] border-solid border-red-500">
     <h2 class="mb-4">Menu settings</h2>
     <div class="flex items-center gap-2 m-2">
       <generic-button name="Save" type="success" @click="handleClick" />
@@ -151,10 +151,8 @@ export default {
       activeMenuList: [],
       dragType: 'div',
       showModal: false,
-      modalInput: '',
       actions: [],
       parentItem: {},
-      allAccess: null,
     }
   },
 

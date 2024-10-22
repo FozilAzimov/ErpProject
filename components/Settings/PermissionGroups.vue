@@ -161,12 +161,8 @@ export default {
       tableHead: {
         id: { name: 'Id', code: 'id' },
         name: {
-          name: 'Batch Process Name',
+          name: 'Name',
           code: 'name',
-        },
-        status: {
-          name: 'Status',
-          code: 'status',
         },
       },
       tableBody: [],
@@ -197,7 +193,7 @@ export default {
     getTableRequest() {
       this.isLoading = !this.isLoading
       this.$axios
-        .post(`/batchProcess/batchProcessAjaxLoad`, {
+        .post(`/permissionGroup/permissionGroupsAjaxLoad`, {
           searchForm: {
             keyword: this.keywordValue,
           },
@@ -208,9 +204,9 @@ export default {
             total: 328,
           },
         })
-        .then(({ data: { batchProcessList } }) => {
+        .then(({ data: { listPermissionGroups } }) => {
           this.isLoading = !this.isLoading
-          this.tableBody = batchProcessList
+          this.tableBody = listPermissionGroups
 
           this.tableBody.length
             ? (this.isThereBody = true)

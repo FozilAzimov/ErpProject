@@ -4,14 +4,6 @@
       v-if="isLoading"
       class="absolute left-[50%] top-[8px] translate-x-[-50%]"
     />
-    <transition name="fade">
-      <ColumnConfigPage
-        v-show="checkModal"
-        api="saveColumnConfig"
-        class="z-[10000]"
-        @checkModal="handleValue"
-      />
-    </transition>
     <template v-if="isCloseTable">
       <div
         class="border-[1px] border-solid border-[rgba(0,0,0,0.05)] p-[12px] bg-gradient-to-b from-transparent via-transparent to-gray-200 shadow-md flex items-center justify-between mt-1"
@@ -35,7 +27,6 @@
               :style="{
                 background: 'radial-gradient(#fff, rgba(32,111,162,0.2))',
               }"
-              @click="openColumnConfig"
             >
               <img class="w-[11px]" src="@assets/icons/gear.png" alt="gear" />
             </li>
@@ -82,85 +73,136 @@
         "
       >
         <div class="w-fit flex flex-col items-start m-2 gap-1">
-          <div v-for="(element, index) in elementData" :key="index">
-            <template v-if="element.show">
-              <span
-                v-if="element.type === 'text'"
-                class="flex flex-col items-start mb-1"
-              >
-                <span class="text-[13px]">{{ element.name }}</span>
-                <generic-input
-                  :value="
-                    editData?.[element.subName]
-                      ? editData?.[element.subName]
-                      : ''
-                  "
-                  width="300"
-                  type="text"
-                  :name="element.subName"
-                  :disabled="element.disabled"
-                  @customFunction="getInputAndLookUpValueAction"
-                />
-              </span>
-              <span
-                v-else-if="element.type === 'number'"
-                class="flex flex-col items-start mb-1"
-              >
-                <span class="text-[13px]">{{ element.name }}</span>
-                <generic-input
-                  :value="`${
-                    editData?.[element.subName]
-                      ? editData?.[element.subName]
-                      : ''
-                  }`"
-                  width="300"
-                  type="number"
-                  :name="element.subName"
-                  :disabled="element.disabled"
-                  @customFunction="getInputAndLookUpValueAction"
-                />
-              </span>
-              <span
-                v-else-if="element.type === 'select'"
-                class="flex flex-col items-start mb-1"
-              >
-                <span class="text-[13px]">{{ element.name }}</span>
-                <generic-look-up
-                  dwidth="300"
-                  :name="element.subName"
-                  defvalue="USA Dollor"
-                  :options-data="currencyData"
-                  :disabled="element.disabled"
-                  @customFunction="getInputAndLookUpValueAction"
-                />
-              </span>
-              <span
-                v-else-if="element.type === 'checkbox'"
-                class="flex flex-col items-start mb-1"
-              >
+          <generic-input
+            name="name"
+            width="250"
+            :value="allInputAndLookUpValue?.name"
+            @customFunction="getInputAndLookUpValueAction"
+          />
+          <div
+            class="demo-collapse m-10 border-[1px] border-solid border-red-500"
+          >
+            <div>
+              <div>
                 <generic-check-box
-                  :text="element?.name"
-                  :name="element?.subName"
-                  :disabled="element.disabled"
-                  :default-value="
-                    editData?.[element.subName]
-                      ? editData?.[element.subName]
-                      : false
-                  "
-                  @customFunction="getInputAndLookUpValueAction"
+                  :default-value="menuObject.checkedStatus"
+                  :text="menuObject?.name"
+                  @customFunction="updateCheckedStatus(menuObject)"
                 />
-              </span>
-              <span
-                v-else-if="element.type === 'radio'"
-                class="flex flex-col items-start mb-1"
+              </div>
+              <draggable
+                v-if="activeMenuList.length"
+                v-model="activeMenuList"
+                class="columns-box w-fit"
+                group="items"
+                :tag="dragType"
+                @end="handleDragEnd"
               >
-                <el-radio
-                  v-model="radio"
-                  :disabled="element.disabled"
-                  :label="element.subName"
-                ></el-radio>
-              </span>
-            </template>
+                <div
+                  v-for="(item, index) in activeMenuList"
+                  :key="item?.id"
+                  class="drag-me border"
+                >
+                  <div
+                    class="flex items-center gap-2 justify-between cursor-pointer p-[5px]"
+                    @contextmenu="
+                      handleContextMenu(item, $event, index, 'parent')
+                    "
+                  >
+                    <div class="flex gap-2 items-center">
+                      <generic-check-box
+                        :order="index"
+                        :default-value="item?.checkedStatus"
+                        :name="item?.name"
+                        :text="item?.name"
+                        @customFunction="updateCheckedStatus(item)"
+                      />
+                    </div>
+                    <img
+                      :class="{ 'rotate-0': item?.isOpen }"
+                      src="@assets/icons/arrow.png"
+                      alt="arrow"
+                      class="w-[12px] -rotate-90"
+                      @click="toggleList(item)"
+                    />
+                  </div>
+                  <ul
+                    v-if="item?.isOpen"
+                    class="w-[200%] ml-[20px]"
+                    style="transition: max-height"
+                  >
+                    <draggable
+                      v-model="item.children"
+                      class="columns-box cursor-pointer"
+                      group="items"
+                      @end="handleDragEnd"
+                    >
+                      <li
+                        v-for="(value, index2) in item?.children"
+                        :key="index2"
+                        class="flex gap-2 cursor-pointer"
+                        @contextmenu="
+                          handleContextMenu(
+                            value,
+                            $event,
+                            index2,
+                            'children',
+                            index
+                          )
+                        "
+                      >
+                        <generic-check-box
+                          :order="index2"
+                          :default-value="value?.checkedStatus"
+                          :name="value?.name"
+                          :text="value?.name"
+                          @customFunction="
+                            updateChildCheckedStatus(item, index2)
+                          "
+                        />
+                      </li>
+                    </draggable>
+                  </ul>
+                </div>
+              </draggable>
+              <div v-else>No data</div>
+            </div>
+
+            <!-- Модальное окно -->
+            <div v-if="showModal" ref="modalRef" class="modal">
+              <div class="flex flex-col gap-4 p-2 bg-white" @click.stop="">
+                <h2>Модальное окно</h2>
+                <div class="flex gap-1 items-center">
+                  <div v-for="(action, index) in actions" :key="index">
+                    <generic-check-box
+                      :order="index"
+                      :default-value="action?.status"
+                      :name="action?.name"
+                      :text="action?.name"
+                      :border="true"
+                      @customFunction="changeActionStatus(action.name, index)"
+                    />
+                  </div>
+                </div>
+                <div class="flex items-center justify-between">
+                  <generic-button
+                    name="fullAccess"
+                    type="primary"
+                    @click="changeAccess('full')"
+                  />
+                  <generic-button
+                    name="Don'tAccess"
+                    type="info"
+                    @click="changeAccess('null')"
+                  />
+                  <generic-button
+                    name="Закрыть"
+                    type="danger"
+                    @click="closeModal"
+                  />
+                </div>
+              </div>
+            </div>
           </div>
 
           <div class="flex items-center gap-3 mt-3">
@@ -173,8 +215,8 @@
             <generic-button
               v-if="pageType !== 'view'"
               :name="pageType === 'edit' ? 'Save changes' : 'Save'"
-              :type="pageType === 'edit' ? 'success' : 'primary'"
-              :icon-name-attribute="pageType && 'edit'"
+              type="success"
+              :icon-name-attribute="pageType === 'edit' && 'edit'"
               @click="saveAction"
             />
           </div>
@@ -185,18 +227,16 @@
 </template>
 
 <script>
+import Draggable from 'vuedraggable'
 import GenericButton from '@generics/GenericButton.vue'
-import GenericInput from '@generics/GenericInput.vue'
 import LoadingPage from '@components/Loading/LoadingPage.vue'
-import GenericLookUp from '@generics/GenericLookUp.vue'
 import GenericCheckBox from '@generics/GenericCheckBox.vue'
 export default {
   // COMPONENTS
   components: {
+    Draggable,
     LoadingPage,
     GenericButton,
-    GenericInput,
-    GenericLookUp,
     GenericCheckBox,
   },
 
@@ -205,26 +245,20 @@ export default {
     return {
       isLoading: false,
       pageSize_value: 25,
-      checkModal: false,
       isOpenTable: true,
       isCloseTable: true,
       pageType: null,
       pageID: null,
-      editData: {},
       allInputAndLookUpValue: {},
-      elementData: [],
-      radio: null,
-      currencyData: [],
+      // permission
+      menuObject: {},
+      activeMenuList: [],
+      dragType: 'div',
+      showModal: false,
+      actions: [],
+      parentItem: {},
+      // permission
     }
-  },
-
-  // WATCH
-  watch: {
-    radio(newVal) {
-      if (newVal === 'enabled') this.allInputAndLookUpValue.active = true
-      else if (newVal === 'disabled') this.allInputAndLookUpValue.active = false
-      else this.allInputAndLookUpValue.active = false
-    },
   },
 
   // CREATED
@@ -237,20 +271,12 @@ export default {
 
   // MOUNTED
   mounted() {
-    // function
-    this.dataCreatedAction()
     // Table function
     this.getTableRequest()
   },
 
   // Methods
   methods: {
-    handleValue(checkModal) {
-      this.checkModal = checkModal
-    },
-    openColumnConfig() {
-      this.checkModal = true
-    },
     // Table page ni ochish va yopish uchun
     isOpen() {
       this.isOpenTable = !this.isOpenTable
@@ -259,96 +285,44 @@ export default {
       this.isCloseTable = !this.isCloseTable
     },
 
-    // Data created
-    dataCreatedAction() {
-      const data = [
-        {
-          name: 'Batch Process Name',
-          subName: 'name',
-          type: 'text',
-          show: true,
-          disabled: this.pageType === 'view',
-        },
-        {
-          name: 'Code',
-          subName: 'code',
-          type: 'text',
-          show: true,
-          disabled: this.pageType === 'view',
-        },
-        {
-          name: 'Currency',
-          subName: 'currency',
-          type: 'select',
-          show: this.pageType === 'edit',
-          disabled: this.pageType === 'view',
-        },
-        {
-          name: 'Price',
-          subName: 'price',
-          type: 'number',
-          show: this.pageType === 'edit',
-          disabled: this.pageType === 'view',
-        },
-        {
-          name: 'Save name',
-          subName: 'savename',
-          type: 'checkbox',
-          show: true,
-          disabled: this.pageType === 'view',
-        },
-        {
-          name: 'Status',
-          subName: 'enabled',
-          type: 'radio',
-          show: true,
-          disabled: this.pageType === 'view',
-        },
-        {
-          name: 'Status',
-          subName: 'disabled',
-          type: 'radio',
-          show: true,
-          disabled: this.pageType === 'view',
-        },
-      ]
-      this.elementData = data
-    },
-
     // Page request
     getTableRequest() {
-      if (this.pageType === 'view') {
+      if (this.pageType === 'edit') {
         this.isLoading = !this.isLoading
         this.$axios
-          .post(`/batchProcess/prepareBatchProcessViewAjaxLoad`, {
+          .post(`/permissionGroup/preparePermissionGroup`, {
             id: this.pageID,
             page_current: 1,
             page_size: 25,
           })
-          .then(({ data: { design } }) => {
+          .then(({ data: { jsonTree, permissionGroup } }) => {
+            this.menuObject = jsonTree
+            this.activeMenuList = jsonTree.children.map((item) => ({
+              ...item,
+              isOpen: false,
+            }))
+            this.allInputAndLookUpValue = permissionGroup
             this.isLoading = !this.isLoading
-            this.editData = design
           })
           .catch((error) => {
             this.isLoading = !this.isLoading
             // eslint-disable-next-line no-console
             console.log(error)
           })
-      } else if (this.pageType === 'edit') {
+      } else {
         this.isLoading = !this.isLoading
         this.$axios
-          .post(`/batchProcess/prepareBatchProcessAjaxLoad`, {
-            id: this.pageID,
+          .post(`/permissionGroup/preparePermissionGroup`, {
             page_current: 1,
             page_size: 25,
           })
-          .then(({ data: { batchProcess, currencyList } }) => {
+          .then(({ data: { jsonTree } }) => {
+            this.menuObject = jsonTree
+            this.activeMenuList = jsonTree.children.map((item) => ({
+              ...item,
+              isOpen: false,
+            }))
             this.isLoading = !this.isLoading
-            this.editData = batchProcess
-            this.currencyData = currencyList
-            batchProcess.active
-              ? (this.radio = 'enabled')
-              : (this.radio = 'disabled')
           })
           .catch((error) => {
             this.isLoading = !this.isLoading
@@ -363,70 +337,163 @@ export default {
       this.$set(this.allInputAndLookUpValue, name, value)
     },
 
-    // Save Changes action
-    saveAction() {
-      let body = {}
-      let batchProcess = {}
-      if (this.pageID && this.pageType === 'edit') {
-        batchProcess = {
-          id: this.pageID,
-          name: this.allInputAndLookUpValue?.name || this.editData.name || '',
-          savename:
-            this.allInputAndLookUpValue?.savename ||
-            this.editData.savename ||
-            '',
-          code: this.allInputAndLookUpValue?.code || this.editData.code || '',
-          active:
-            this.allInputAndLookUpValue?.active || this.editData.active || '',
-          currency: {
-            id: this.allInputAndLookUpValue?.currency || '',
-          },
-          price: this.allInputAndLookUpValue?.price || '',
+    // ============================================
+    toggleList(item) {
+      this.activeMenuList.forEach((menu) => {
+        if (menu !== item) {
+          menu.isOpen = false
         }
-      } else {
-        batchProcess = {
-          name: this.allInputAndLookUpValue?.name,
-          savename: this.allInputAndLookUpValue?.savename,
-          code: this.allInputAndLookUpValue?.code,
-          active: this.allInputAndLookUpValue?.active,
-        }
-      }
-      body = {
-        page_size: this.pageSize_value,
-        page_current: 1,
-        rightData: '',
-        batchProcess,
-      }
+      })
 
+      item.isOpen = !item.isOpen
+    },
+
+    updateCheckedStatus(item) {
+      item.checkedStatus = !item.checkedStatus
+      if (item.children) {
+        item.children.map(
+          (children, index) =>
+            (children.checkedStatus = !children.checkedStatus)
+        )
+      }
+    },
+
+    updateChildCheckedStatus(item, index) {
+      item.children[index].checkedStatus = !item.children[index].checkedStatus
+    },
+
+    handleDragEnd() {
+      this.activeMenuList.forEach((item, index) => {
+        item.order = index + 1
+      })
+    },
+
+    // Save action
+    saveAction() {
+      const menuObj = { ...this.menuObject, children: this.activeMenuList }
+      const stringifiedData = JSON.stringify(menuObj)
+      const data = {
+        permissionGroup: {
+          id: this.pageID ? this.pageID : null,
+          name: this.allInputAndLookUpValue?.name,
+        },
+        jsonTree: stringifiedData,
+      }
       this.isLoading = !this.isLoading
       const method = this.pageID ? 'put' : 'post'
-      this.$axios[method](
-        `/batchProcess/${this.pageID ? 'editBatchProcess' : 'addBatchProcess'}`,
-        body
+      this.$axios?.[method](
+        `/permissionGroup/${
+          this.pageID ? 'editPermissionGroup' : 'addPermissionGroup'
+        }`,
+        data
       )
         .then(() => {
+          this.$router.push('/permissionGroups.htm')
+          this.$notification('Success', 'Success', 'success')
           this.isLoading = !this.isLoading
-          this.$router.push('/batchProcess.htm')
         })
         .catch((error) => {
           this.isLoading = !this.isLoading
           // eslint-disable-next-line no-console
-          console.log(error)
+          console.error('Xatolik yuz berdi:', error)
+          this.$notification('Error', 'Error', 'error')
         })
     },
+
+    handleContextMenu(item, event, index, type, parentIndex) {
+      event.preventDefault()
+      this.showModal = true
+      if (item.actions === null) {
+        this.actions = item.children[0].actions
+        this.parentItem = { item, index, type, parentIndex }
+      } else {
+        this.actions = item.actions
+        this.parentItem = { item, index, type, parentIndex }
+      }
+    },
+
+    closeModal() {
+      this.showModal = false
+    },
+
+    handleClickOutside(event) {
+      if (
+        this.$refs.modalRef &&
+        !this.$refs.modalRef.contains(event.target) &&
+        !event.target.classList.contains('drag-me')
+      ) {
+        this.closeModal()
+      }
+    },
+
+    changeActionStatus(name, index, parentType) {
+      if (this.parentItem.type === 'children') {
+        if (parentType) {
+          if (parentType === 'full') {
+            this.actions[index].status = true
+          } else if (parentType === 'null') {
+            this.actions[index].status = false
+          }
+        } else {
+          this.actions[index].status = !this.actions[index].status
+        }
+
+        const selectedActions = this.actions
+        this.activeMenuList[this.parentItem.parentIndex].children[
+          this.parentItem.index
+        ].actions = selectedActions
+      } else if (this.parentItem.type === 'parent') {
+        this.activeMenuList[this.parentItem.index].children.map((item) => {
+          return item.actions.map((access) => {
+            if (access.name === name) {
+              if (parentType) {
+                if (parentType === 'full') {
+                  access.status = true
+                } else if (parentType === 'null') {
+                  access.status = false
+                }
+              } else {
+                access.status = !access.status
+              }
+            }
+            return ''
+          })
+        })
+      }
+    },
+
+    changeAccess(type) {
+      if (type === 'full') {
+        this.actions.map((item, index) =>
+          this.changeActionStatus(item.name, index, type)
+        )
+      } else if (type === 'null') {
+        this.actions.map((item, index) =>
+          this.changeActionStatus(item.name, index, type)
+        )
+      }
+    },
+    // ============================================
   },
 }
 </script>
 
-<style>
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.5s;
+<style scoped>
+.drag-me {
+  cursor: pointer;
 }
-
-.fade-enter,
-.fade-leave-to {
-  opacity: 0;
-  transform: translateY(-20px);
+.rotate-90 {
+  transform: rotate(0deg);
+}
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 </style>

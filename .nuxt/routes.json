@@ -1757,6 +1757,13 @@
     "_name": "_3bf75acc"
   },
   {
+    "name": "prepareEquipmentExternal.htm-id",
+    "path": "/prepareEquipmentExternal.htm/:id?",
+    "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\prepareEquipmentExternal.htm\\\\_id.vue",
+    "chunkName": "pages/prepareEquipmentExternal.htm/_id",
+    "_name": "_5efdcfea"
+  },
+  {
     "name": "prepareExpenseInvoice.htm-id",
     "path": "/prepareExpenseInvoice.htm/:id?",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\prepareExpenseInvoice.htm\\\\_id.vue",

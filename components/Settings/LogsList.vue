@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full p-[0px_12px_0px_10px]">
+  <div class="w-full p-1">
     <LoadingPage
       v-if="isLoading"
       class="absolute left-[50%] top-[8px] translate-x-[-50%]"
@@ -17,7 +17,7 @@
         <span v-if="element.type === 'date'" class="flex items-center gap-1">
           <span class="text-[13px]">{{ element.name }}</span>
           <generic-input-date-page
-            :value="''"
+            :value="allSelectAndInputValue?.[element?.subName]"
             width="165"
             pl="10"
             pr="10"
@@ -39,7 +39,7 @@
             dwidth="200"
             :name="element.subName"
             :defvalue="''"
-            :options-data="[]"
+            :options-data="selectData?.[element?.selectName]"
             @customFunction="getInputAndLookUpValueAction"
           />
         </span>
@@ -47,7 +47,7 @@
     </form>
     <template v-if="isCloseTable">
       <div
-        class="border-[1px] border-solid border-[rgba(0,0,0,0.05)] p-[12px] bg-gradient-to-b from-transparent via-transparent to-gray-200 shadow-md flex items-center justify-between mt-1"
+        class="border-[1px] border-solid border-[rgba(0,0,0,0.05)] p-[12px] bg-gradient-to-b from-transparent via-transparent to-gray-200 shadow-md flex items-center justify-between"
       >
         <div class="flex items-center gap-[10px]">
           <img src="@assets/icons/user-black.png" alt="user" class="w-[14px]" />
@@ -114,7 +114,7 @@
               <select
                 v-model="pageSize_value"
                 class="border-[1px] border-solid border-[rgba(171,177,187,0.7)] w-[60px] px-[5px] py-[3px] cursor-pointer rounded-[2px] text-[14px] outline-none"
-                @change="getTableRequest()"
+                @change="getTableRequest"
               >
                 <option value="10">10</option>
                 <option value="25">25</option>
@@ -126,12 +126,10 @@
             </div>
             <div class="flex items-center gap-2">
               <GenericInput
-                v-model="keywordValue"
-                width="200"
-                type="text"
+                name="keyword"
                 placeholder="Search..."
                 @enter="getTableRequest"
-                @input="getInputValue"
+                @input="getInputAndLookUpValueAction"
               />
               <GenericButton
                 name="Search"
@@ -180,18 +178,27 @@ export default {
       isLoading: false,
       pageSize_value: 25,
       topFilterData: [],
-      btnType: '',
-      pageID: null,
-      keywordValue: '',
       tableHead: {
-        id: { name: 'Id', code: 'id' },
-        name: {
-          name: 'Batch Process Name',
-          code: 'name',
+        check: {
+          name: 'Check',
+          code: 'check',
         },
-        status: {
-          name: 'Status',
-          code: 'status',
+        id: { name: 'Id', code: 'id' },
+        login: {
+          name: 'User',
+          code: 'login',
+        },
+        action: {
+          name: 'Actions',
+          code: 'action',
+        },
+        date: {
+          name: 'Date',
+          code: 'date',
+        },
+        type: {
+          name: 'Type',
+          code: 'type',
         },
       },
       tableBody: [],
@@ -200,21 +207,9 @@ export default {
       checkModal: false,
       isOpenTable: true,
       isCloseTable: true,
+      allSelectAndInputValue: {},
+      selectData: {},
     }
-  },
-
-  // WATCH
-  watch: {
-    pageID(newVal) {
-      this.btnTypeSpecifyingAction()
-    },
-  },
-
-  // CREATED
-  created() {
-    this.btnType = JSON.parse(localStorage.getItem('allTrueAndFalseData'))?.type
-    // page ID sini olish
-    this.pageID = this.$route.params?.id
   },
 
   // MOUNTED
@@ -224,6 +219,13 @@ export default {
     this.getTableRequest()
     // function
     this.createDataFiltering()
+    // date def value
+    this.allSelectAndInputValue.dateFrom = new Date(
+      new Date().setDate(new Date().getDate() - 1)
+    )
+      .toISOString()
+      .split('.')[0]
+    this.allSelectAndInputValue.dateTo = new Date().toISOString().split('.')[0]
   },
 
   // Methods
@@ -238,9 +240,9 @@ export default {
     getTableRequest() {
       this.isLoading = !this.isLoading
       this.$axios
-        .post(`/batchProcess/batchProcessAjaxLoad`, {
+        .post(`/logs/logsAjaxLoad`, {
           searchForm: {
-            keyword: this.keywordValue,
+            keyword: this.allSelectAndInputValue?.keyword || '',
           },
           pagingForm: {
             pageSize: this.pageSize_value,
@@ -248,10 +250,14 @@ export default {
             pageCount: 14,
             total: 328,
           },
+          personId: this.allSelectAndInputValue?.personId ?? '',
+          personStatus: this.allSelectAndInputValue?.personStatus ?? '',
         })
-        .then(({ data: { batchProcessList } }) => {
+        .then(({ data: { logList, personList, personListItems } }) => {
           this.isLoading = !this.isLoading
-          this.tableBody = batchProcessList
+          this.tableBody = logList
+          this.selectData.personList = personList
+          this.selectData.personListItems = personListItems
 
           this.tableBody.length
             ? (this.isThereBody = true)
@@ -272,8 +278,8 @@ export default {
     },
 
     // Generic_Input value
-    getInputValue(inputVal) {
-      this.keywordValue = inputVal
+    getInputAndLookUpValueAction(name, value) {
+      this.$set(this.allSelectAndInputValue, name, value)
     },
 
     // Table page ni ochish va yopish uchun
@@ -300,11 +306,13 @@ export default {
         {
           name: 'Person',
           subName: 'personId',
+          selectName: 'personList',
           type: 'select',
         },
         {
           name: 'Status',
-          subName: 'statusId',
+          subName: 'personStatus',
+          selectName: 'personListItems',
           type: 'select',
         },
       ]

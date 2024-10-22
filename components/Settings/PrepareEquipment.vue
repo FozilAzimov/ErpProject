@@ -1,20 +1,12 @@
 <template>
-  <div class="w-full p-[0px_12px_0px_10px]">
+  <div class="w-full p-1 mb-5">
     <LoadingPage
       v-if="isLoading"
       class="absolute left-[50%] top-[8px] translate-x-[-50%]"
     />
-    <transition name="fade">
-      <ColumnConfigPage
-        v-show="checkModal"
-        api="saveColumnConfig"
-        class="z-[10000]"
-        @checkModal="handleValue"
-      />
-    </transition>
     <template v-if="isCloseTable">
       <div
-        class="border-[1px] border-solid border-[rgba(0,0,0,0.05)] p-[12px] bg-gradient-to-b from-transparent via-transparent to-gray-200 shadow-md flex items-center justify-between mt-1"
+        class="border-[1px] border-solid border-[rgba(0,0,0,0.05)] p-[12px] bg-gradient-to-b from-transparent via-transparent to-gray-200 shadow-md flex items-center justify-between"
       >
         <div class="flex items-center gap-[10px]">
           <img src="@assets/icons/user-black.png" alt="user" class="w-[14px]" />
@@ -35,7 +27,6 @@
               :style="{
                 background: 'radial-gradient(#fff, rgba(32,111,162,0.2))',
               }"
-              @click="openColumnConfig"
             >
               <img class="w-[11px]" src="@assets/icons/gear.png" alt="gear" />
             </li>
@@ -74,10 +65,10 @@
         </div>
       </div>
       <div
-        class="border-[1px] border-solid border-[rgba(0,0,0,0.1)]"
+        class="border-[1px] border-solid border-[rgba(0,0,0,0.1)] flex items-start gap-5"
         :class="
           isOpenTable
-            ? 'duration-[1s] h-[755px] overflow-hidden'
+            ? 'duration-[1s] h-fit overflow-hidden'
             : 'duration-[1s] h-0 overflow-hidden'
         "
       >
@@ -85,36 +76,27 @@
           <div v-for="(element, index) in elementData" :key="index">
             <template v-if="element.show">
               <span
-                v-if="element.type === 'text'"
+                v-if="element.type === 'text' || element.type === 'number'"
                 class="flex flex-col items-start mb-1"
               >
-                <span class="text-[13px]">{{ element.name }}</span>
-                <generic-input
-                  :value="
-                    editData?.[element.subName]
-                      ? editData?.[element.subName]
-                      : ''
-                  "
-                  width="300"
-                  type="text"
-                  :name="element.subName"
-                  :disabled="element.disabled"
-                  @customFunction="getInputAndLookUpValueAction"
-                />
-              </span>
-              <span
-                v-else-if="element.type === 'number'"
-                class="flex flex-col items-start mb-1"
-              >
-                <span class="text-[13px]">{{ element.name }}</span>
+                <span class="text-[13px]"
+                  >{{ element.name }}
+                  <span
+                    v-if="element?.required"
+                    class="text-[16px] text-red-500"
+                    >*</span
+                  >
+                </span>
                 <generic-input
                   :value="`${
-                    editData?.[element.subName]
-                      ? editData?.[element.subName]
+                    viewEditData?.[element.subName]
+                      ? viewEditData?.[element.subName]
+                      : resultJson?.[element.subName]
+                      ? resultJson?.[element.subName]
                       : ''
                   }`"
                   width="300"
-                  type="number"
+                  :type="element.type"
                   :name="element.subName"
                   :disabled="element.disabled"
                   @customFunction="getInputAndLookUpValueAction"
@@ -124,12 +106,23 @@
                 v-else-if="element.type === 'select'"
                 class="flex flex-col items-start mb-1"
               >
-                <span class="text-[13px]">{{ element.name }}</span>
+                <span class="text-[13px]"
+                  >{{ element.name
+                  }}<span
+                    v-if="element?.required"
+                    class="text-[16px] text-red-500"
+                    >*</span
+                  ></span
+                >
                 <generic-look-up
                   dwidth="300"
                   :name="element.subName"
-                  defvalue="USA Dollor"
-                  :options-data="currencyData"
+                  :defvalue="`${
+                    viewEditData?.[element.subName]
+                      ? viewEditData?.[element.subName]
+                      : ''
+                  }`"
+                  :options-data="selectData?.[element?.selectName]"
                   :disabled="element.disabled"
                   @customFunction="getInputAndLookUpValueAction"
                 />
@@ -143,10 +136,11 @@
                   :name="element?.subName"
                   :disabled="element.disabled"
                   :default-value="
-                    editData?.[element.subName]
-                      ? editData?.[element.subName]
+                    viewEditData?.[element.subName]
+                      ? viewEditData?.[element.subName]
                       : false
                   "
+                  :border="true"
                   @customFunction="getInputAndLookUpValueAction"
                 />
               </span>
@@ -155,9 +149,11 @@
                 class="flex flex-col items-start mb-1"
               >
                 <el-radio
+                  v-for="(elem, inx) in element.list"
+                  :key="inx"
                   v-model="radio"
+                  :label="elem.subName"
                   :disabled="element.disabled"
-                  :label="element.subName"
                 ></el-radio>
               </span>
             </template>
@@ -174,10 +170,17 @@
               v-if="pageType !== 'view'"
               :name="pageType === 'edit' ? 'Save changes' : 'Save'"
               :type="pageType === 'edit' ? 'success' : 'primary'"
-              :icon-name-attribute="pageType && 'edit'"
+              :icon-name-attribute="pageType === 'edit' ? 'edit' : ''"
               @click="saveAction"
             />
           </div>
+        </div>
+        <div class="m-2">
+          <generic-carry-draggable
+            :lyaut-one-data="leftColumns"
+            :lyaut-two-data="rightColumns"
+            @customEmitFunction="lyautEmitAction"
+          />
         </div>
       </div>
     </template>
@@ -190,6 +193,7 @@ import GenericInput from '@generics/GenericInput.vue'
 import LoadingPage from '@components/Loading/LoadingPage.vue'
 import GenericLookUp from '@generics/GenericLookUp.vue'
 import GenericCheckBox from '@generics/GenericCheckBox.vue'
+import GenericCarryDraggable from '@generics/GenericCarryDraggable.vue'
 export default {
   components: {
     LoadingPage,
@@ -197,6 +201,7 @@ export default {
     GenericInput,
     GenericLookUp,
     GenericCheckBox,
+    GenericCarryDraggable,
   },
 
   // DATA
@@ -204,24 +209,30 @@ export default {
     return {
       isLoading: false,
       pageSize_value: 25,
-      checkModal: false,
       isOpenTable: true,
       isCloseTable: true,
       pageType: null,
       pageID: null,
-      editData: {},
+      radio: 'Enabled',
+      viewEditData: {},
       allInputAndLookUpValue: {},
       elementData: [],
-      radio: null,
-      currencyData: [],
+      selectData: {},
+      // carry drag
+      leftColumns: [],
+      rightColumns: [],
+      leftData: '',
+      rightData: '',
+      resultJson: {},
+      // carry drag
     }
   },
 
   // WATCH
   watch: {
     radio(newVal) {
-      if (newVal === 'enabled') this.allInputAndLookUpValue.active = true
-      else if (newVal === 'disabled') this.allInputAndLookUpValue.active = false
+      if (newVal === 'Enabled') this.allInputAndLookUpValue.active = true
+      else if (newVal === 'Disabled') this.allInputAndLookUpValue.active = false
       else this.allInputAndLookUpValue.active = false
     },
   },
@@ -232,6 +243,7 @@ export default {
     this.pageID = this.$route.params?.id
     // page TYPE ni aniqlash
     this.pageType = this.$route?.query?.page_type
+    this.allInputAndLookUpValue.active = true
   },
 
   // MOUNTED
@@ -240,16 +252,12 @@ export default {
     this.dataCreatedAction()
     // Table function
     this.getTableRequest()
+    // function
+    this.lyautEmitAction(this.leftColumns, this.rightColumns)
   },
 
   // Methods
   methods: {
-    handleValue(checkModal) {
-      this.checkModal = checkModal
-    },
-    openColumnConfig() {
-      this.checkModal = true
-    },
     // Table page ni ochish va yopish uchun
     isOpen() {
       this.isOpenTable = !this.isOpenTable
@@ -258,96 +266,53 @@ export default {
       this.isCloseTable = !this.isCloseTable
     },
 
-    // Data created
-    dataCreatedAction() {
-      const data = [
-        {
-          name: 'Batch Process Name',
-          subName: 'name',
-          type: 'text',
-          show: true,
-          disabled: this.pageType === 'view',
-        },
-        {
-          name: 'Code',
-          subName: 'code',
-          type: 'text',
-          show: true,
-          disabled: this.pageType === 'view',
-        },
-        {
-          name: 'Currency',
-          subName: 'currency',
-          type: 'select',
-          show: this.pageType === 'edit',
-          disabled: this.pageType === 'view',
-        },
-        {
-          name: 'Price',
-          subName: 'price',
-          type: 'number',
-          show: this.pageType === 'edit',
-          disabled: this.pageType === 'view',
-        },
-        {
-          name: 'Save name',
-          subName: 'savename',
-          type: 'checkbox',
-          show: true,
-          disabled: this.pageType === 'view',
-        },
-        {
-          name: 'Status',
-          subName: 'enabled',
-          type: 'radio',
-          show: true,
-          disabled: this.pageType === 'view',
-        },
-        {
-          name: 'Status',
-          subName: 'disabled',
-          type: 'radio',
-          show: true,
-          disabled: this.pageType === 'view',
-        },
-      ]
-      this.elementData = data
-    },
-
     // Page request
     getTableRequest() {
-      if (this.pageType === 'view') {
-        this.isLoading = !this.isLoading
+      this.isLoading = !this.isLoading
+      if (this.pageType === 'view' || this.pageType === 'edit') {
         this.$axios
-          .post(`/batchProcess/prepareBatchProcessViewAjaxLoad`, {
+          .post(`/equipment/prepareEquipmentSevices`, {
             id: this.pageID,
             page_current: 1,
             page_size: 25,
           })
-          .then(({ data: { design } }) => {
+          .then(({ data }) => {
+            this.selectData = data
+            this.viewEditData = data?.equipment
+            this.resultJson = JSON.parse(
+              JSON.parse(data?.resultJson)?.params
+            )?.param
+            this.$set(this, 'leftColumns', [
+              ...this.leftColumns,
+              ...data?.unSelectedBatchProcessStage,
+            ])
+            this.$set(this, 'rightColumns', [
+              ...this.rightColumns,
+              ...data?.selectedBatchProcessStage,
+            ])
+            data?.equipment?.active
+              ? (this.radio = 'Enabled')
+              : (this.radio = 'Disabled')
             this.isLoading = !this.isLoading
-            this.editData = design
           })
           .catch((error) => {
             this.isLoading = !this.isLoading
             // eslint-disable-next-line no-console
             console.log(error)
           })
-      } else if (this.pageType === 'edit') {
-        this.isLoading = !this.isLoading
+      } else {
         this.$axios
-          .post(`/batchProcess/prepareBatchProcessAjaxLoad`, {
-            id: this.pageID,
+          .post(`/equipment/prepareEquipmentSevices`, {
             page_current: 1,
             page_size: 25,
           })
-          .then(({ data: { batchProcess, currencyList } }) => {
+          .then(({ data }) => {
+            this.selectData = data
+            this.$set(this, 'leftColumns', [
+              ...this.leftColumns,
+              ...data?.unSelectedBatchProcessStage,
+            ])
             this.isLoading = !this.isLoading
-            this.editData = batchProcess
-            this.currencyData = currencyList
-            batchProcess.active
-              ? (this.radio = 'enabled')
-              : (this.radio = 'disabled')
           })
           .catch((error) => {
             this.isLoading = !this.isLoading
@@ -365,47 +330,120 @@ export default {
     // Save Changes action
     saveAction() {
       let body = {}
-      let batchProcess = {}
+      let equipment = {}
       if (this.pageID && this.pageType === 'edit') {
-        batchProcess = {
+        equipment = {
           id: this.pageID,
-          name: this.allInputAndLookUpValue?.name || this.editData.name || '',
-          savename:
-            this.allInputAndLookUpValue?.savename ||
-            this.editData.savename ||
+          code:
+            this.allInputAndLookUpValue?.code ?? this.viewEditData?.code ?? '',
+          name:
+            this.allInputAndLookUpValue?.name ?? this.viewEditData?.name ?? '',
+          ecode:
+            this.allInputAndLookUpValue?.ecode ??
+            this.viewEditData?.ecode ??
             '',
-          code: this.allInputAndLookUpValue?.code || this.editData.code || '',
-          active:
-            this.allInputAndLookUpValue?.active || this.editData.active || '',
-          currency: {
-            id: this.allInputAndLookUpValue?.currency || '',
+          department: {
+            id:
+              this.allInputAndLookUpValue?.departmentName ??
+              this.viewEditData?.departmentId ??
+              '',
           },
-          price: this.allInputAndLookUpValue?.price || '',
+          equipmentGroupId:
+            this.allInputAndLookUpValue?.equipmentGroupName ??
+            this.viewEditData?.equipmentGroupName ??
+            '',
+          ipAddress:
+            this.allInputAndLookUpValue?.ipAddress ??
+            this.viewEditData?.ipAddress ??
+            '',
+          type:
+            this.allInputAndLookUpValue?.type ?? this.viewEditData?.type ?? '',
+          comb_no:
+            this.allInputAndLookUpValue?.comb_no ??
+            this.viewEditData?.comb_no ??
+            '',
+          onlyOneStart:
+            this.allInputAndLookUpValue?.onlyOneStart ??
+            this.viewEditData?.onlyOneStart ??
+            false,
+          volume:
+            this.allInputAndLookUpValue?.volume ??
+            this.viewEditData?.volume ??
+            '',
+          minLoad:
+            this.allInputAndLookUpValue?.minLoad ??
+            this.viewEditData?.minLoad ??
+            '',
+          maxLoad:
+            this.allInputAndLookUpValue?.maxLoad ??
+            this.viewEditData?.maxLoad ??
+            '',
+          ratio:
+            this.allInputAndLookUpValue?.ratio ??
+            this.viewEditData?.ratio ??
+            '',
+          reportOrder:
+            this.allInputAndLookUpValue?.reportOrder ??
+            this.viewEditData?.reportOrder ??
+            '',
+          active:
+            this.allInputAndLookUpValue?.active ??
+            this.viewEditData?.active ??
+            false,
+          equipmentParams: JSON.stringify({
+            param: {
+              pus:
+                this.allInputAndLookUpValue?.pus ??
+                this.viewEditData?.pus ??
+                '',
+              fein:
+                this.allInputAndLookUpValue?.fein ??
+                this.viewEditData?.fein ??
+                '',
+              system:
+                this.allInputAndLookUpValue?.system ??
+                this.viewEditData?.system ??
+                '',
+            },
+          }),
         }
       } else {
-        batchProcess = {
+        equipment = {
+          code: this.allInputAndLookUpValue?.code ?? '',
           name: this.allInputAndLookUpValue?.name,
-          savename: this.allInputAndLookUpValue?.savename,
-          code: this.allInputAndLookUpValue?.code,
-          active: this.allInputAndLookUpValue?.active,
+          ecode: this.allInputAndLookUpValue?.ecode ?? '',
+          department: { id: this.allInputAndLookUpValue?.departmentName ?? '' },
+          equipmentGroupId:
+            this.allInputAndLookUpValue?.equipmentGroupName ?? '',
+          ipAddress: this.allInputAndLookUpValue?.ipAddress ?? '',
+          type: this.allInputAndLookUpValue?.type ?? '',
+          comb_no: this.allInputAndLookUpValue?.comb_no ?? '',
+          onlyOneStart: this.allInputAndLookUpValue?.onlyOneStart ?? false,
+          volume: this.allInputAndLookUpValue?.volume ?? '',
+          minLoad: this.allInputAndLookUpValue?.minLoad ?? '',
+          maxLoad: this.allInputAndLookUpValue?.maxLoad ?? '',
+          ratio: this.allInputAndLookUpValue?.ratio ?? '',
+          reportOrder: this.allInputAndLookUpValue?.reportOrder ?? '',
+          active: this.allInputAndLookUpValue?.active ?? false,
         }
       }
       body = {
         page_size: this.pageSize_value,
         page_current: 1,
-        rightData: '',
-        batchProcess,
+        companyId: this.allInputAndLookUpValue?.companyName ?? '',
+        rightData: this.rightData,
+        equipment,
       }
 
       this.isLoading = !this.isLoading
       const method = this.pageID ? 'put' : 'post'
       this.$axios[method](
-        `/batchProcess/${this.pageID ? 'editBatchProcess' : 'addBatchProcess'}`,
+        `/equipment/${this.pageID ? 'editEquipment' : 'addEquipmentSevices'}`,
         body
       )
         .then(() => {
           this.isLoading = !this.isLoading
-          this.$router.push('/batchProcess.htm')
+          this.$router.push('/equipments.htm')
         })
         .catch((error) => {
           this.isLoading = !this.isLoading
@@ -413,19 +451,154 @@ export default {
           console.log(error)
         })
     },
+
+    // lyauts Emit action
+    lyautEmitAction(leftData, rightData) {
+      this.leftData = this.filteredAction(leftData)
+      this.rightData = this.filteredAction(rightData)
+    },
+
+    // Filter action
+    filteredAction(list) {
+      let str = ''
+      list.forEach(({ id }) => {
+        str += `${id},`
+      })
+      return str.slice(0, -1)
+    },
+
+    // Data created
+    dataCreatedAction() {
+      const data = [
+        {
+          name: 'Code Equipment',
+          subName: 'code',
+          type: 'number',
+          show: true,
+          required: true,
+          disabled: this.pageType === 'view',
+        },
+        {
+          name: 'Equipment Name',
+          subName: 'name',
+          type: 'text',
+          show: true,
+          required: true,
+          disabled: this.pageType === 'view',
+        },
+        {
+          name: 'equipment.ecode',
+          subName: 'ecode',
+          type: 'text',
+          show: this.pageType !== 'view',
+        },
+        {
+          name: 'Pus',
+          subName: 'pus',
+          type: 'number',
+          show: this.pageType === 'edit',
+        },
+        {
+          name: 'fein',
+          subName: 'fein',
+          type: 'number',
+          show: this.pageType === 'edit',
+        },
+        {
+          name: 'Knitting system',
+          subName: 'system',
+          type: 'number',
+          show: this.pageType === 'edit',
+        },
+        {
+          name: 'Department',
+          subName: 'departmentName',
+          selectName: 'departmentList',
+          type: 'select',
+          show: true,
+          disabled: this.pageType === 'view',
+        },
+        {
+          name: 'Group Name',
+          subName: 'equipmentGroupName',
+          selectName: 'equipmentGroupList',
+          type: 'select',
+          show: true,
+          disabled: this.pageType === 'view',
+        },
+        {
+          name: 'Automatic System',
+          subName: 'companyName',
+          selectName: 'automaticSystemsList',
+          type: 'select',
+          show: this.pageType !== 'view',
+        },
+        {
+          name: 'Ip Address',
+          subName: 'ipAddress',
+          type: 'text',
+          show: this.pageType !== 'view',
+        },
+        {
+          name: 'Type',
+          subName: 'type',
+          type: 'text',
+          show: this.pageType !== 'view',
+        },
+        {
+          name: 'Бердо №',
+          subName: 'comb_no',
+          type: 'text',
+          show: this.pageType !== 'view',
+        },
+        {
+          name: 'Only One Start',
+          subName: 'onlyOneStart',
+          type: 'checkbox',
+          show: true,
+          disabled: this.pageType === 'view',
+        },
+        {
+          name: 'Volume',
+          subName: 'volume',
+          type: 'number',
+          show: true,
+          disabled: this.pageType === 'view',
+        },
+        {
+          name: 'min load',
+          subName: 'minLoad',
+          type: 'number',
+          show: this.pageType !== 'view',
+        },
+        {
+          name: 'max load',
+          subName: 'maxLoad',
+          type: 'number',
+          show: this.pageType !== 'view',
+        },
+        {
+          name: 'Ratio',
+          subName: 'ratio',
+          type: 'number',
+          show: this.pageType !== 'view',
+        },
+        {
+          name: 'Report Order',
+          subName: 'reportOrder',
+          type: 'number',
+          show: this.pageType !== 'view',
+        },
+        {
+          name: 'Status',
+          type: 'radio',
+          show: true,
+          disabled: this.pageType === 'view',
+          list: [{ subName: 'Enabled' }, { subName: 'Disabled' }],
+        },
+      ]
+      this.elementData = data
+    },
   },
 }
 </script>
-
-<style>
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.5s;
-}
-
-.fade-enter,
-.fade-leave-to {
-  opacity: 0;
-  transform: translateY(-20px);
-}
-</style>

@@ -2,11 +2,11 @@
   <div class="w-full flex items-center justify-center gap-3">
     <div class="flex items-center gap-2">
       <span class="text-[13px] flex items-center gap-1 text-nowrap"
-        >{{ GET_CORE_STRING?.page }}:
+        >{{ GET_CORE_STRING?.page || 'Page' }}:
         <span class="font-semibold">{{ pageCurrent }}</span></span
       >
       <span class="text-[13px] flex items-center gap-1 text-nowrap"
-        >{{ GET_CORE_STRING?.total }}:
+        >{{ GET_CORE_STRING?.total || 'Total' }}:
         <span class="font-semibold">{{ total }}</span></span
       >
     </div>

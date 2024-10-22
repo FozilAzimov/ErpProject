@@ -181,7 +181,7 @@ export default {
 
       this.isLoading = !this.isLoading
       this.$axios
-        .post(`/sew/sewOrderOnlineStatusContent`, body)
+        .post(`/menuSetting/menuSettings`, body)
         .then(({ data }) => {
           this.isLoading = !this.isLoading
         })

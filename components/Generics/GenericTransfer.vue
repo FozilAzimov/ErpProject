@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-transfer
-      v-model="rightValue"
+      v-model="right_ID_data"
       filterable
       :filter-method="filterMethod"
       filter-placeholder="Search..."
@@ -37,12 +37,6 @@ export default {
           ?.includes(query?.toLowerCase())
       },
     }
-  },
-
-  computed: {
-    rightValue() {
-      return this.right_ID_data
-    },
   },
 
   // WATCH

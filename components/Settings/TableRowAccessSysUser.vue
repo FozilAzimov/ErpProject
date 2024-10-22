@@ -88,7 +88,7 @@
               <select
                 v-model="pageSize_value"
                 class="border-[1px] border-solid border-[rgba(171,177,187,0.7)] w-[60px] px-[5px] py-[3px] cursor-pointer rounded-[2px] text-[14px] outline-none"
-                @change="getTableRequest()"
+                @change="getTableRequest"
               >
                 <option value="10">10</option>
                 <option value="25">25</option>
@@ -96,22 +96,25 @@
                 <option value="100">100</option>
                 <option value="500">500</option>
               </select>
-              Records
+              {{ GET_CORE_STRING?.records || 'Records' }}
             </div>
             <div class="flex items-center gap-2">
               <GenericInput
                 v-model="keywordValue"
-                width="200"
-                type="text"
-                placeholder="Search..."
+                :placeholder="`${GET_CORE_STRING?.search}...`"
                 @enter="getTableRequest"
                 @input="getInputValue"
               />
               <GenericButton
-                name="Search"
+                :name="GET_CORE_STRING?.search"
                 type="primary"
                 icon-name-attribute="search"
                 @click="getTableRequest"
+              />
+              <GenericButton
+                :name="GET_CORE_STRING?.printPreview"
+                type="success"
+                icon-name-attribute="printer"
               />
             </div>
           </div>
@@ -124,7 +127,6 @@
             :productions-action-buttons="true"
             delete-row-url="batchProcess/prepareBatchProcessDelete"
             height="600"
-            @pageEmitAction="getTableRequest"
           />
         </div>
       </div>
@@ -133,6 +135,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import LoadingPage from '@components/Loading/LoadingPage.vue'
 import GenericButton from '@generics/GenericButton.vue'
 import GenericInput from '@generics/GenericInput.vue'
@@ -152,18 +155,24 @@ export default {
     return {
       isLoading: false,
       pageSize_value: 25,
-      btnType: '',
-      pageID: null,
       keywordValue: '',
       tableHead: {
         id: { name: 'Id', code: 'id' },
-        name: {
-          name: 'Batch Process Name',
-          code: 'name',
+        lname: {
+          name: 'Person',
+          code: 'person',
+          code1: 'lname',
+          code2: 'fname',
+          code3: 'employee_number',
+          code4: 'login',
         },
-        status: {
-          name: 'Status',
-          code: 'status',
+        createDate: {
+          name: 'Date Created',
+          code: 'createDate',
+        },
+        writeDate: {
+          name: 'Date Updated',
+          code: 'writeDate',
         },
       },
       tableBody: [],
@@ -175,18 +184,10 @@ export default {
     }
   },
 
-  // WATCH
-  watch: {
-    pageID(newVal) {
-      this.btnTypeSpecifyingAction()
-    },
-  },
-
-  // CREATED
-  created() {
-    this.btnType = JSON.parse(localStorage.getItem('allTrueAndFalseData'))?.type
-    // page ID sini olish
-    this.pageID = this.$route.params?.id
+  // COMPUTED
+  computed: {
+    // Store getters
+    ...mapGetters('translate', ['GET_CORE_STRING']),
   },
 
   // MOUNTED
@@ -208,7 +209,7 @@ export default {
     getTableRequest() {
       this.isLoading = !this.isLoading
       this.$axios
-        .post(`/batchProcess/batchProcessAjaxLoad`, {
+        .post(`/tableRowAccessSysUser/tableRowAccessSysUserAjaxLoad`, {
           searchForm: {
             keyword: this.keywordValue,
           },
@@ -219,9 +220,9 @@ export default {
             total: 328,
           },
         })
-        .then(({ data: { batchProcessList } }) => {
+        .then(({ data: { tableRowAccessSysUserList } }) => {
           this.isLoading = !this.isLoading
-          this.tableBody = batchProcessList
+          this.tableBody = tableRowAccessSysUserList
 
           this.tableBody.length
             ? (this.isThereBody = true)
@@ -232,13 +233,6 @@ export default {
           // eslint-disable-next-line no-console
           console.log(error)
         })
-    },
-
-    // Specifying the buttun type action
-    btnTypeSpecifyingAction() {
-      if (!this.pageID) {
-        localStorage.removeItem('allTrueAndFalseData')
-      }
     },
 
     // Generic_Input value

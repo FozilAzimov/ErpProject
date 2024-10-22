@@ -1,20 +1,12 @@
 <template>
-  <div class="w-full p-[0px_12px_0px_10px]">
+  <div class="w-full p-1">
     <LoadingPage
       v-if="isLoading"
       class="absolute left-[50%] top-[8px] translate-x-[-50%]"
     />
-    <transition name="fade">
-      <ColumnConfigPage
-        v-show="checkModal"
-        api="saveColumnConfig"
-        class="z-[10000]"
-        @checkModal="handleValue"
-      />
-    </transition>
     <template v-if="isCloseTable">
       <div
-        class="border-[1px] border-solid border-[rgba(0,0,0,0.05)] p-[12px] bg-gradient-to-b from-transparent via-transparent to-gray-200 shadow-md flex items-center justify-between mt-1"
+        class="border-[1px] border-solid border-[rgba(0,0,0,0.05)] p-[12px] bg-gradient-to-b from-transparent via-transparent to-gray-200 shadow-md flex items-center justify-between"
       >
         <div class="flex items-center gap-[10px]">
           <img src="@assets/icons/user-black.png" alt="user" class="w-[14px]" />
@@ -29,7 +21,6 @@
               :style="{
                 background: 'radial-gradient(#fff, rgba(32,111,162,0.2))',
               }"
-              @click="openColumnConfig"
             >
               <img class="w-[11px]" src="@assets/icons/gear.png" alt="gear" />
             </li>
@@ -76,19 +67,33 @@
         "
       >
         <div class="flex items-center gap-2 m-2">
-          <generic-look-up dwidth="150" />
+          <generic-look-up
+            dwidth="150"
+            name="addSelect"
+            placeholder="select a language"
+            :options-data="selectData?.passiveLanguages"
+            @customFunction="allSelectAndInputAction"
+          />
           <generic-button
             name="Add New"
             type="primary"
             icon-name-attribute="circle-plus-outline"
+            @click="addAndDeleteLanguageAction('add')"
           />
         </div>
         <div class="flex items-center gap-2 m-2">
-          <generic-look-up dwidth="150" />
+          <generic-look-up
+            dwidth="150"
+            name="deleteSelect"
+            placeholder="delete a language"
+            :options-data="selectData?.activeLanguages"
+            @customFunction="allSelectAndInputAction"
+          />
           <generic-button
             name="Delete"
             type="danger"
             icon-name-attribute="delete"
+            @click="addAndDeleteLanguageAction('del')"
           />
         </div>
         <div class="p-2">
@@ -97,7 +102,7 @@
               <select
                 v-model="pageSize_value"
                 class="border-[1px] border-solid border-[rgba(171,177,187,0.7)] w-[60px] px-[5px] py-[3px] cursor-pointer rounded-[2px] text-[14px] outline-none"
-                @change="getTableRequest()"
+                @change="getTableRequest"
               >
                 <option value="10">10</option>
                 <option value="25">25</option>
@@ -109,12 +114,10 @@
             </div>
             <div class="flex items-center gap-2">
               <GenericInput
-                v-model="keywordValue"
-                width="200"
-                type="text"
+                name="keyword"
                 placeholder="Search..."
                 @enter="getTableRequest"
-                @input="getInputValue"
+                @customFunction="allSelectAndInputAction"
               />
               <GenericButton
                 name="Search"
@@ -124,17 +127,83 @@
               />
             </div>
           </div>
-          <GenericTablePage
-            :tablehead="tableHead"
-            :tablebody="tableBody"
-            :tableheadlength="tableHeadLength"
-            :istherebody="isThereBody"
-            open-url="prepareLanguage"
-            :productions-action-buttons="true"
-            delete-row-url="batchProcess/prepareBatchProcessDelete"
-            height="600"
-            @pageEmitAction="getTableRequest"
-          />
+          <div class="h-[600px] flex flex-col items-start overflow-scroll">
+            <table class="w-full border-[1px] border-solid border-[#F0F0F0]">
+              <thead class="bg-[rgb(229,235,245)] sticky top-[-1px] z-[999]">
+                <tr>
+                  <th
+                    v-for="(obj, index) in selectData?.activeLanguages"
+                    :key="index"
+                    class="text-[13px] font-semibold border-[1px] border-solid border-[rgba(119,136,153,0.3)] p-4 cursor-pointer whitespace-nowrap"
+                  >
+                    {{ obj.name }}
+                  </th>
+                  <th
+                    class="w-[100px] text-[13px] font-semibold border-[1px] border-solid border-[rgba(119,136,153,0.2)] p-2 cursor-pointer"
+                  >
+                    Action
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <template v-if="istherebody">
+                  <tr
+                    v-for="(value, key) in messages"
+                    :key="key"
+                    class="bg-gradient-to-b from-transparent via-transparent to-[#F4F4F4]"
+                  >
+                    <td
+                      v-for="(obj, innerIndex) in selectData?.activeLanguages"
+                      :key="innerIndex"
+                      class="border-[1px] text-[12px] p-2"
+                    >
+                      <span v-if="obj?.systemLanguage" class="text-[12px]"
+                        >[{{ key }}]</span
+                      >
+                      <generic-input
+                        type="textarea"
+                        width="100"
+                        widthtype="%"
+                        :value="obj?.messages?.[key]"
+                      />
+                    </td>
+                    <td class="border-[1px] p-2">
+                      <GenericButton
+                        name="Edit"
+                        type="success"
+                        icon-name-attribute="edit"
+                        @click="
+                          $router.push(`prepareLanguage.htm/messageKey=${key}`)
+                        "
+                      />
+                    </td>
+                  </tr>
+                </template>
+                <template v-else>
+                  <tr>
+                    <td
+                      :colspan="1"
+                      class="border-[1px] border-solid border-[#F0F0F0] text-[12px] p-3"
+                    >
+                      <div class="flex justify-start">
+                        <el-empty
+                          :image-size="60"
+                          description="No Data"
+                          style="padding: 0"
+                        >
+                          <template #description>
+                            <p style="font-size: 13px; margin-top: -10px">
+                              No Data
+                            </p>
+                          </template>
+                        </el-empty>
+                      </div>
+                    </td>
+                  </tr>
+                </template>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </template>
@@ -145,16 +214,12 @@
 import LoadingPage from '@components/Loading/LoadingPage.vue'
 import GenericButton from '@generics/GenericButton.vue'
 import GenericInput from '@generics/GenericInput.vue'
-import ColumnConfigPage from '@components/ColumnConfig/ColumnConfigPage.vue'
-import GenericTablePage from '@components/GenericTable/GenericTablePage.vue'
 import GenericLookUp from '@generics/GenericLookUp.vue'
 export default {
   components: {
     LoadingPage,
     GenericButton,
     GenericInput,
-    ColumnConfigPage,
-    GenericTablePage,
     GenericLookUp,
   },
 
@@ -163,65 +228,41 @@ export default {
     return {
       isLoading: false,
       pageSize_value: 25,
-      btnType: '',
-      pageID: null,
-      keywordValue: '',
-      tableHead: {
-        id: { name: 'Id', code: 'id' },
-        name: {
-          name: 'Batch Process Name',
-          code: 'name',
-        },
-        status: {
-          name: 'Status',
-          code: 'status',
-        },
-      },
-      tableBody: [],
       tableHeadLength: null,
-      isThereBody: false,
-      checkModal: false,
       isOpenTable: true,
       isCloseTable: true,
+      istherebody: false,
+      messages: {},
+      selectData: {},
+      allSelectAndInputValue: {},
+      selectVal: {},
     }
-  },
-
-  // WATCH
-  watch: {
-    pageID(newVal) {
-      this.btnTypeSpecifyingAction()
-    },
-  },
-
-  // CREATED
-  created() {
-    this.btnType = JSON.parse(localStorage.getItem('allTrueAndFalseData'))?.type
-    // page ID sini olish
-    this.pageID = this.$route.params?.id
   },
 
   // MOUNTED
   mounted() {
-    this.tableHeadLength = Object.keys(this.tableHead).length + 1
+    this.tableHeadLength = this.selectData?.activeLanguages?.length + 1
     // Table function
     this.getTableRequest()
   },
 
   // Methods
   methods: {
-    handleValue(checkModal) {
-      this.checkModal = checkModal
+    // Table page ni ochish va yopish uchun
+    isOpen() {
+      this.isOpenTable = !this.isOpenTable
     },
-    openColumnConfig() {
-      this.checkModal = true
+    isClose() {
+      this.isCloseTable = !this.isCloseTable
     },
 
+    // PAGE request
     getTableRequest() {
       this.isLoading = !this.isLoading
       this.$axios
-        .post(`/batchProcess/batchProcessAjaxLoad`, {
+        .post(`/language/languagesAjaxLoad`, {
           searchForm: {
-            keyword: this.keywordValue,
+            keyword: this.allSelectAndInputValue?.keyword ?? '',
           },
           pagingForm: {
             pageSize: this.pageSize_value,
@@ -230,53 +271,80 @@ export default {
             total: 328,
           },
         })
-        .then(({ data: { batchProcessList } }) => {
+        .then(({ data: { passiveLanguages, activeLanguages, messages } }) => {
           this.isLoading = !this.isLoading
-          this.tableBody = batchProcessList
-
-          this.tableBody.length
-            ? (this.isThereBody = true)
-            : (this.isThereBody = false)
+          // this.tableBody = batchProcessList
+          this.selectData.passiveLanguages = passiveLanguages
+          this.selectData.activeLanguages = activeLanguages
+          this.messages = messages
+          this.istherebody = true
         })
         .catch((error) => {
           this.isLoading = !this.isLoading
+          this.istherebody = false
           // eslint-disable-next-line no-console
           console.log(error)
         })
     },
 
-    // Specifying the buttun type action
-    btnTypeSpecifyingAction() {
-      if (!this.pageID) {
-        localStorage.removeItem('allTrueAndFalseData')
-      }
-    },
-
     // Generic_Input value
-    getInputValue(inputVal) {
-      this.keywordValue = inputVal
+    allSelectAndInputAction(name, value) {
+      this.$set(this.allSelectAndInputValue, name, value)
     },
 
-    // Table page ni ochish va yopish uchun
-    isOpen() {
-      this.isOpenTable = !this.isOpenTable
-    },
-    isClose() {
-      this.isCloseTable = !this.isCloseTable
+    // Add and Delete action
+    addAndDeleteLanguageAction(clickType) {
+      const addSelectValue = this.allSelectAndInputValue?.addSelect?.trim()
+      const deleteSelectValue =
+        this.allSelectAndInputValue?.deleteSelect?.trim()
+
+      if (
+        (clickType === 'add' && addSelectValue) ||
+        (clickType === 'del' && deleteSelectValue)
+      ) {
+        let bodyData = {}
+        const add = {
+          language: {
+            code: addSelectValue,
+          },
+        }
+        const del = {
+          data: {
+            language: {
+              code: deleteSelectValue,
+            },
+          },
+        }
+        bodyData = clickType === 'del' ? del : add
+
+        this.isLoading = !this.isLoading
+        const method = clickType === 'del' ? 'delete' : 'post'
+        this.$axios?.[method](
+          `/language/${
+            clickType === 'add' ? 'addLanguage' : 'deleteLanguageAjaxLoad'
+          }`,
+          bodyData
+        )
+          .then(() => {
+            // function
+            this.getTableRequest()
+            this.$notification(
+              clickType === 'add' ? 'Saved' : 'Deleted',
+              'Success',
+              'success'
+            )
+            this.isLoading = !this.isLoading
+          })
+          .catch((error) => {
+            this.isLoading = !this.isLoading
+            // eslint-disable-next-line no-console
+            console.log(error)
+            this.$notification('Error', 'Error', 'error')
+          })
+      } else {
+        this.$notification('Selectni tanlang', 'Warning', 'warning')
+      }
     },
   },
 }
 </script>
-
-<style>
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.5s;
-}
-
-.fade-enter,
-.fade-leave-to {
-  opacity: 0;
-  transform: translateY(-20px);
-}
-</style>

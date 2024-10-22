@@ -77,7 +77,7 @@
               :class="headName.width ? `w-[${headName.width}px]` : ''"
             >
               {{ headName.headerText }}
-              <pre>{{ headName }}</pre>
+              <!-- <pre>{{ headName }}</pre> -->
             </th>
             <th
               v-if="!showHideRow && !isCanAdd"
@@ -755,7 +755,6 @@ export default {
         this.ResData.forEach((obj) => {
           for (const key in obj) {
             if (
-              (key === 'warehouse' && obj[key]) ||
               (key === 'invoice' && obj[key]) ||
               (key === 'entryRef' && obj[key]) ||
               (key === 'returnRef' && obj[key])

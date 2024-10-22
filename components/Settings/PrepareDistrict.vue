@@ -1,20 +1,12 @@
 <template>
-  <div class="w-full p-[0px_12px_0px_10px]">
+  <div class="w-full p-1">
     <LoadingPage
       v-if="isLoading"
       class="absolute left-[50%] top-[8px] translate-x-[-50%]"
     />
-    <transition name="fade">
-      <ColumnConfigPage
-        v-show="checkModal"
-        api="saveColumnConfig"
-        class="z-[10000]"
-        @checkModal="handleValue"
-      />
-    </transition>
     <template v-if="isCloseTable">
       <div
-        class="border-[1px] border-solid border-[rgba(0,0,0,0.05)] p-[12px] bg-gradient-to-b from-transparent via-transparent to-gray-200 shadow-md flex items-center justify-between mt-1"
+        class="border-[1px] border-solid border-[rgba(0,0,0,0.05)] p-[12px] bg-gradient-to-b from-transparent via-transparent to-gray-200 shadow-md flex items-center justify-between"
       >
         <div class="flex items-center gap-[10px]">
           <img src="@assets/icons/user-black.png" alt="user" class="w-[14px]" />
@@ -35,7 +27,6 @@
               :style="{
                 background: 'radial-gradient(#fff, rgba(32,111,162,0.2))',
               }"
-              @click="openColumnConfig"
             >
               <img class="w-[11px]" src="@assets/icons/gear.png" alt="gear" />
             </li>
@@ -88,33 +79,22 @@
                 v-if="element.type === 'text'"
                 class="flex flex-col items-start mb-1"
               >
-                <span class="text-[13px]">{{ element.name }}</span>
-                <generic-input
-                  :value="
-                    editData?.[element.subName]
-                      ? editData?.[element.subName]
-                      : ''
-                  "
-                  width="300"
-                  type="text"
-                  :name="element.subName"
-                  :disabled="element.disabled"
-                  @customFunction="getInputAndLookUpValueAction"
-                />
-              </span>
-              <span
-                v-else-if="element.type === 'number'"
-                class="flex flex-col items-start mb-1"
-              >
-                <span class="text-[13px]">{{ element.name }}</span>
+                <span class="text-[13px]"
+                  >{{ element.name }}
+                  <span
+                    v-if="element?.required"
+                    class="text-[16px] text-red-500"
+                    >*</span
+                  ></span
+                >
                 <generic-input
                   :value="`${
-                    editData?.[element.subName]
-                      ? editData?.[element.subName]
+                    viewEditData?.[element.subName]
+                      ? viewEditData?.[element.subName]
                       : ''
                   }`"
                   width="300"
-                  type="number"
+                  type="text"
                   :name="element.subName"
                   :disabled="element.disabled"
                   @customFunction="getInputAndLookUpValueAction"
@@ -128,37 +108,15 @@
                 <generic-look-up
                   dwidth="300"
                   :name="element.subName"
-                  defvalue="USA Dollor"
-                  :options-data="currencyData"
+                  :defvalue="`${
+                    viewEditData?.[element.subName]
+                      ? viewEditData?.[element.subName]
+                      : ''
+                  }`"
+                  :options-data="selectData?.[element?.selectName]"
                   :disabled="element.disabled"
                   @customFunction="getInputAndLookUpValueAction"
                 />
-              </span>
-              <span
-                v-else-if="element.type === 'checkbox'"
-                class="flex flex-col items-start mb-1"
-              >
-                <generic-check-box
-                  :text="element?.name"
-                  :name="element?.subName"
-                  :disabled="element.disabled"
-                  :default-value="
-                    editData?.[element.subName]
-                      ? editData?.[element.subName]
-                      : false
-                  "
-                  @customFunction="getInputAndLookUpValueAction"
-                />
-              </span>
-              <span
-                v-else-if="element.type === 'radio'"
-                class="flex flex-col items-start mb-1"
-              >
-                <el-radio
-                  v-model="radio"
-                  :disabled="element.disabled"
-                  :label="element.subName"
-                ></el-radio>
               </span>
             </template>
           </div>
@@ -189,14 +147,12 @@ import GenericButton from '@generics/GenericButton.vue'
 import GenericInput from '@generics/GenericInput.vue'
 import LoadingPage from '@components/Loading/LoadingPage.vue'
 import GenericLookUp from '@generics/GenericLookUp.vue'
-import GenericCheckBox from '@generics/GenericCheckBox.vue'
 export default {
   components: {
     LoadingPage,
     GenericButton,
     GenericInput,
     GenericLookUp,
-    GenericCheckBox,
   },
 
   // DATA
@@ -204,26 +160,15 @@ export default {
     return {
       isLoading: false,
       pageSize_value: 25,
-      checkModal: false,
       isOpenTable: true,
       isCloseTable: true,
       pageType: null,
       pageID: null,
-      editData: {},
+      viewEditData: {},
       allInputAndLookUpValue: {},
       elementData: [],
-      radio: null,
-      currencyData: [],
+      selectData: [],
     }
-  },
-
-  // WATCH
-  watch: {
-    radio(newVal) {
-      if (newVal === 'enabled') this.allInputAndLookUpValue.active = true
-      else if (newVal === 'disabled') this.allInputAndLookUpValue.active = false
-      else this.allInputAndLookUpValue.active = false
-    },
   },
 
   // CREATED
@@ -258,75 +203,19 @@ export default {
       this.isCloseTable = !this.isCloseTable
     },
 
-    // Data created
-    dataCreatedAction() {
-      const data = [
-        {
-          name: 'Batch Process Name',
-          subName: 'name',
-          type: 'text',
-          show: true,
-          disabled: this.pageType === 'view',
-        },
-        {
-          name: 'Code',
-          subName: 'code',
-          type: 'text',
-          show: true,
-          disabled: this.pageType === 'view',
-        },
-        {
-          name: 'Currency',
-          subName: 'currency',
-          type: 'select',
-          show: this.pageType === 'edit',
-          disabled: this.pageType === 'view',
-        },
-        {
-          name: 'Price',
-          subName: 'price',
-          type: 'number',
-          show: this.pageType === 'edit',
-          disabled: this.pageType === 'view',
-        },
-        {
-          name: 'Save name',
-          subName: 'savename',
-          type: 'checkbox',
-          show: true,
-          disabled: this.pageType === 'view',
-        },
-        {
-          name: 'Status',
-          subName: 'enabled',
-          type: 'radio',
-          show: true,
-          disabled: this.pageType === 'view',
-        },
-        {
-          name: 'Status',
-          subName: 'disabled',
-          type: 'radio',
-          show: true,
-          disabled: this.pageType === 'view',
-        },
-      ]
-      this.elementData = data
-    },
-
     // Page request
     getTableRequest() {
+      this.isLoading = !this.isLoading
       if (this.pageType === 'view') {
-        this.isLoading = !this.isLoading
         this.$axios
-          .post(`/batchProcess/prepareBatchProcessViewAjaxLoad`, {
+          .post(`/district/districtView`, {
             id: this.pageID,
             page_current: 1,
             page_size: 25,
           })
-          .then(({ data: { design } }) => {
+          .then(({ data: { district } }) => {
+            this.viewEditData = district
             this.isLoading = !this.isLoading
-            this.editData = design
           })
           .catch((error) => {
             this.isLoading = !this.isLoading
@@ -334,20 +223,31 @@ export default {
             console.log(error)
           })
       } else if (this.pageType === 'edit') {
-        this.isLoading = !this.isLoading
         this.$axios
-          .post(`/batchProcess/prepareBatchProcessAjaxLoad`, {
+          .post(`/district/prepareDistrict`, {
             id: this.pageID,
             page_current: 1,
             page_size: 25,
           })
-          .then(({ data: { batchProcess, currencyList } }) => {
+          .then(({ data: { district, city } }) => {
+            this.viewEditData = district
+            this.selectData.city = city
             this.isLoading = !this.isLoading
-            this.editData = batchProcess
-            this.currencyData = currencyList
-            batchProcess.active
-              ? (this.radio = 'enabled')
-              : (this.radio = 'disabled')
+          })
+          .catch((error) => {
+            this.isLoading = !this.isLoading
+            // eslint-disable-next-line no-console
+            console.log(error)
+          })
+      } else {
+        this.$axios
+          .post(`/district/prepareDistrict`, {
+            page_current: 1,
+            page_size: 25,
+          })
+          .then(({ data: { city } }) => {
+            this.selectData.city = city
+            this.isLoading = !this.isLoading
           })
           .catch((error) => {
             this.isLoading = !this.isLoading
@@ -364,68 +264,70 @@ export default {
 
     // Save Changes action
     saveAction() {
-      let body = {}
-      let batchProcess = {}
-      if (this.pageID && this.pageType === 'edit') {
-        batchProcess = {
-          id: this.pageID,
-          name: this.allInputAndLookUpValue?.name || this.editData.name || '',
-          savename:
-            this.allInputAndLookUpValue?.savename ||
-            this.editData.savename ||
+      if (this.allInputAndLookUpValue?.name || this.viewEditData?.name) {
+        let body = {}
+        let district = {}
+        if (this.pageID && this.pageType === 'edit') {
+          district = {
+            id: this.pageID,
+            name:
+              this.allInputAndLookUpValue?.name ?? this.viewEditData.name ?? '',
+          }
+        } else {
+          district = {
+            name: this.allInputAndLookUpValue?.name ?? '',
+          }
+        }
+        body = {
+          page_size: this.pageSize_value,
+          page_current: 1,
+          cityId:
+            this.allInputAndLookUpValue?.cityName ??
+            this.viewEditData?.cityId ??
             '',
-          code: this.allInputAndLookUpValue?.code || this.editData.code || '',
-          active:
-            this.allInputAndLookUpValue?.active || this.editData.active || '',
-          currency: {
-            id: this.allInputAndLookUpValue?.currency || '',
-          },
-          price: this.allInputAndLookUpValue?.price || '',
+          district,
         }
-      } else {
-        batchProcess = {
-          name: this.allInputAndLookUpValue?.name,
-          savename: this.allInputAndLookUpValue?.savename,
-          code: this.allInputAndLookUpValue?.code,
-          active: this.allInputAndLookUpValue?.active,
-        }
-      }
-      body = {
-        page_size: this.pageSize_value,
-        page_current: 1,
-        rightData: '',
-        batchProcess,
-      }
 
-      this.isLoading = !this.isLoading
-      const method = this.pageID ? 'put' : 'post'
-      this.$axios[method](
-        `/batchProcess/${this.pageID ? 'editBatchProcess' : 'addBatchProcess'}`,
-        body
-      )
-        .then(() => {
-          this.isLoading = !this.isLoading
-          this.$router.push('/batchProcess.htm')
-        })
-        .catch((error) => {
-          this.isLoading = !this.isLoading
-          // eslint-disable-next-line no-console
-          console.log(error)
-        })
+        this.isLoading = !this.isLoading
+        const method = this.pageID ? 'put' : 'post'
+        this.$axios[method](
+          `/district/${this.pageID ? 'editDistrict' : 'addDistrict'}`,
+          body
+        )
+          .then(() => {
+            this.isLoading = !this.isLoading
+            this.$router.push('/district.htm')
+          })
+          .catch((error) => {
+            this.isLoading = !this.isLoading
+            // eslint-disable-next-line no-console
+            console.log(error)
+          })
+      }
+    },
+
+    // Data created
+    dataCreatedAction() {
+      const data = [
+        {
+          name: 'District',
+          subName: 'name',
+          type: 'text',
+          show: true,
+          required: true,
+          disabled: this.pageType === 'view',
+        },
+        {
+          name: 'City',
+          subName: 'cityName',
+          selectName: 'city',
+          type: 'select',
+          show: true,
+          disabled: this.pageType === 'view',
+        },
+      ]
+      this.elementData = data
     },
   },
 }
 </script>
-
-<style>
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.5s;
-}
-
-.fade-enter,
-.fade-leave-to {
-  opacity: 0;
-  transform: translateY(-20px);
-}
-</style>

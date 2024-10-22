@@ -85,8 +85,10 @@
           <div class="flex items-center gap-1">
             <generic-button
               v-for="(obj, index) in allBtnElements"
+              v-show="obj?.showHide"
               :key="index"
               :name="obj?.name"
+              :icon-name-attribute="obj?.icon"
               type="primary"
               @click="allBtnAction(obj?.clickType)"
             />
@@ -160,7 +162,7 @@
                         :name="element.subName"
                         :defvalue="''"
                         :multiple="element?.multiple"
-                        :options-data="currencyData"
+                        :options-data="allSelectData?.[element?.selectName]"
                         :disabled="element.disabled"
                         @customFunction="getInputAndLookUpValueAction"
                       />
@@ -227,10 +229,12 @@
         </div>
       </div>
     </template>
+    <pre>{{ allInputAndLookUpValue }}</pre>
   </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import GenericButton from '@generics/GenericButton.vue'
 import GenericInput from '@generics/GenericInput.vue'
 import LoadingPage from '@components/Loading/LoadingPage.vue'
@@ -259,7 +263,7 @@ export default {
       allInputAndLookUpValue: {},
       radio: null,
       radio2: null,
-      currencyData: [],
+      allSelectData: [],
       // element data
       commonData: [],
       defaultElementData: [],
@@ -269,8 +273,22 @@ export default {
     }
   },
 
+  computed: {
+    // Store getters
+    ...mapGetters('translate', ['GET_CORE_STRING']),
+  },
+
   // WATCH
   watch: {
+    // start CoreString action
+    GET_CORE_STRING: {
+      handler(newVal) {
+        // function
+        this.dataCreatedAction(newVal)
+      },
+      deep: true,
+    },
+    // end CoreString action
     radio(newVal) {
       if (newVal === 'enabled') this.allInputAndLookUpValue.active = true
       else if (newVal === 'disabled') this.allInputAndLookUpValue.active = false
@@ -295,7 +313,7 @@ export default {
   // MOUNTED
   mounted() {
     // function
-    this.dataCreatedAction()
+    this.dataCreatedAction(this.GET_CORE_STRING)
     // Table function
     this.getTableRequest()
   },
@@ -318,8 +336,8 @@ export default {
 
     // Page request
     getTableRequest() {
+      this.isLoading = !this.isLoading
       if (this.pageType === 'view') {
-        this.isLoading = !this.isLoading
         this.$axios
           .post(`/company/prepareCompanyView`, {
             id: this.pageID,
@@ -336,7 +354,6 @@ export default {
             console.log(error)
           })
       } else if (this.pageType === 'edit') {
-        this.isLoading = !this.isLoading
         this.$axios
           .post(`/company/prepareCompany`, {
             id: this.pageID,
@@ -357,19 +374,18 @@ export default {
             console.log(error)
           })
       } else {
-        this.isLoading = !this.isLoading
         this.$axios
-          .post(`/company/addCompany`, {
+          .post(`/company/prepareCompanyAdd`, {
             page_current: 1,
             page_size: 25,
           })
-          .then(({ data: { batchProcess, currencyList } }) => {
+          .then(({ data }) => {
             this.isLoading = !this.isLoading
-            this.viewEditData = batchProcess
-            this.currencyData = currencyList
-            batchProcess.active
-              ? (this.radio = 'enabled')
-              : (this.radio = 'disabled')
+            // this.viewEditData = batchProcess
+            this.allSelectData = data
+            // batchProcess.active
+            //   ? (this.radio = 'enabled')
+            //   : (this.radio = 'disabled')
           })
           .catch((error) => {
             this.isLoading = !this.isLoading
@@ -403,45 +419,86 @@ export default {
     // Save Changes action
     saveAction() {
       let body = {}
-      let batchProcess = {}
+      const company = {}
       if (this.pageID && this.pageType === 'edit') {
-        batchProcess = {
-          id: this.pageID,
-          name:
-            this.allInputAndLookUpValue?.name || this.viewEditData.name || '',
-          savename:
-            this.allInputAndLookUpValue?.savename ||
-            this.viewEditData.savename ||
-            '',
-          code:
-            this.allInputAndLookUpValue?.code || this.viewEditData.code || '',
-          active:
-            this.allInputAndLookUpValue?.active ||
-            this.viewEditData.active ||
-            '',
-          currency: {
-            id: this.allInputAndLookUpValue?.currency || '',
-          },
-          price: this.allInputAndLookUpValue?.price || '',
-        }
+        company.id = this.pageID ?? ''
+        company.code = this.allInputAndLookUpValue?.code ?? ''
       } else {
-        batchProcess = {
-          name: this.allInputAndLookUpValue?.name,
-          savename: this.allInputAndLookUpValue?.savename,
-          code: this.allInputAndLookUpValue?.code,
-          active: this.allInputAndLookUpValue?.active,
+        company.code = this.allInputAndLookUpValue?.code ?? ''
+        company.companyGroup = {
+          id: this.allInputAndLookUpValue?.companyGroup ?? '',
         }
+        company.active = this.allInputAndLookUpValue?.active ?? false
+        company.name = this.allInputAndLookUpValue?.name ?? ''
+        company.companyCategory = {
+          id: this.allInputAndLookUpValue?.companyCategory ?? '',
+        }
+        company.currency = {
+          id: this.allInputAndLookUpValue?.currency ?? '',
+        }
+        company.physical = this.allInputAndLookUpValue?.physical ?? false
+        company.reportCompany =
+          this.allInputAndLookUpValue?.reportCompany ?? false
+        company.systemCompany =
+          this.allInputAndLookUpValue?.systemCompany ?? false
+        company.name2 = this.allInputAndLookUpValue?.name2 ?? ''
+        company.assignedBranchId =
+          this.allInputAndLookUpValue?.assignedBranchId ?? ''
+        company.chief = this.allInputAndLookUpValue?.chief ?? ''
+        company.address = this.allInputAndLookUpValue?.address ?? ''
+        company.web_address = this.allInputAndLookUpValue?.web_address ?? ''
+        company.mfo = this.allInputAndLookUpValue?.mfo ?? ''
+        company.town = this.allInputAndLookUpValue?.town ?? ''
+        company.phone_number = this.allInputAndLookUpValue?.phone_number ?? ''
+        company.tax_organization_name =
+          this.allInputAndLookUpValue?.tax_organization_name ?? ''
+        company.notes = this.allInputAndLookUpValue?.notes ?? ''
+        company.country = this.allInputAndLookUpValue?.country ?? ''
+        company.mobile_phone = this.allInputAndLookUpValue?.mobile_phone ?? ''
+        company.bank = {
+          id: this.allInputAndLookUpValue?.bank ?? '',
+        }
+        company.city = this.allInputAndLookUpValue?.city ?? ''
+        company.email = this.allInputAndLookUpValue?.email ?? ''
+        company.accountNumber = this.allInputAndLookUpValue?.accountNumber ?? ''
+        company.fax_number = this.allInputAndLookUpValue?.fax_number ?? ''
+        company.tax_number = this.allInputAndLookUpValue?.tax_number ?? ''
+        company.reportOrderSequence =
+          this.allInputAndLookUpValue?.reportOrderSequence ?? ''
+        company.ecPasswordHashNew =
+          this.allInputAndLookUpValue?.ecPasswordHashNew ?? ''
+        company.special_day = this.allInputAndLookUpValue?.special_day ?? ''
+        company.postTypeInternational =
+          this.allInputAndLookUpValue?.postTypeInternational ?? ''
+        company.discount_rate = this.allInputAndLookUpValue?.discount_rate ?? ''
+        company.webAccess = this.allInputAndLookUpValue?.webAccess ?? false
+        company.monday = this.allInputAndLookUpValue?.monday ?? false
+        company.tuesday = this.allInputAndLookUpValue?.tuesday ?? false
+        company.wednesday = this.allInputAndLookUpValue?.wednesday ?? false
+        company.thursday = this.allInputAndLookUpValue?.thursday ?? false
+        company.friday = this.allInputAndLookUpValue?.friday ?? false
+        company.saturday = this.allInputAndLookUpValue?.saturday ?? false
+        company.vatAmount = this.allInputAndLookUpValue?.vatAmount ?? ''
+        company.vatIncludedExcluded =
+          this.allInputAndLookUpValue?.vatIncludedExcluded ?? false
+        company.week1 = this.allInputAndLookUpValue?.week1 ?? false
+        company.week2 = this.allInputAndLookUpValue?.week2 ?? false
+        company.week3 = this.allInputAndLookUpValue?.week3 ?? false
+        company.week4 = this.allInputAndLookUpValue?.week4 ?? false
+        company.locale = this.allInputAndLookUpValue?.locale ?? ''
+        company.creditMarketSaleAutoExtraDebit =
+          this.allInputAndLookUpValue?.creditMarketSaleAutoExtraDebit ?? false
       }
       body = {
-        page_current: 1,
-        rightData: '',
-        batchProcess,
+        companyTypesIds: this.allInputAndLookUpValue?.typeId ?? [],
+        districtId: this.allInputAndLookUpValue?.districtId ?? '',
+        company,
       }
 
       this.isLoading = !this.isLoading
       const method = this.pageID ? 'put' : 'post'
       this.$axios[method](
-        `/companies/${this.pageID ? 'editCompany' : 'prepareCompany'}`,
+        `/companies/${this.pageID ? 'editCompany' : 'addCompany'}`,
         body
       )
         .then(() => {
@@ -456,12 +513,32 @@ export default {
     },
 
     // Data created
-    dataCreatedAction() {
+    dataCreatedAction(getText) {
       // ALL BTN DATA
       const btnData = [
-        { name: 'Main information', showHide: true, clickType: 'main' },
-        { name: 'Addition information', showHide: true, clickType: 'addition' },
-        { name: 'Spacial information', showHide: true, clickType: 'spacial' },
+        {
+          name: getText?.mainInfo || 'Main information',
+          showHide: true,
+          clickType: 'main',
+        },
+        {
+          name: getText?.additionInfo || 'Addition information',
+          showHide: true,
+          clickType: 'addition',
+        },
+        {
+          name: getText?.specialInfo || 'Spacial information',
+          showHide: true,
+          clickType: 'spacial',
+        },
+        {
+          name:
+            `${getText?.upload} ${getText?.['title.files.sub']}` ||
+            'Upload Files',
+          showHide: this.pageType === 'edit',
+          clickType: 'uploadFile',
+          icon: 'upload2',
+        },
       ]
       this.allBtnElements = btnData
 
@@ -469,30 +546,33 @@ export default {
       const data = [
         [
           {
-            name: 'Code',
+            name: getText?.code || 'Code',
             subName: 'code',
             type: 'text',
             show: true,
             disabled: this.pageType === 'view',
           },
           {
-            name: 'Company Group',
+            name: getText?.companyGroup || 'Company Group',
             subName: 'companyGroupId',
+            selectName: 'companyGroupList',
             type: 'select',
             show: true,
             disabled: this.pageType === 'view',
           },
           {
-            name: 'Type',
+            name: getText?.['common.types'] || 'Type',
             subName: 'typeId',
+            selectName: 'companyTypeList',
             type: 'select',
             show: true,
             multiple: true,
             disabled: this.pageType === 'view',
           },
           {
-            name: 'Status',
+            name: getText?.status || 'Status',
             subName: 'enabled',
+            selectName: 'companyCategoryList',
             type: 'radio',
             show: true,
             disabled: this.pageType === 'view',
@@ -506,22 +586,24 @@ export default {
         ],
         [
           {
-            name: 'Name',
+            name: getText?.['company.name'] || 'Name',
             subName: 'name',
             type: 'text',
             show: true,
             disabled: this.pageType === 'view',
           },
           {
-            name: 'companyCategory',
+            name: getText?.companyCategory || 'companyCategory',
             subName: 'companyCategoryId',
+            selectName: 'companyCategoryList',
             type: 'select',
             show: true,
             disabled: this.pageType === 'view',
           },
           {
-            name: 'Currency',
+            name: getText?.currency || 'Currency',
             subName: 'currencyId',
+            selectName: 'currencyList',
             type: 'select',
             show: true,
             disabled: this.pageType === 'view',
@@ -541,35 +623,38 @@ export default {
         ],
         [
           {
-            name: 'Name 2',
+            name: getText?.['company.name2'] || 'Name 2',
             subName: 'name2',
             type: 'text',
             show: true,
             disabled: this.pageType === 'view',
           },
           {
-            name: 'Assigned company',
+            name: getText?.['assigned company'] || 'Assigned company',
             subName: 'assignedCompanyId',
+            selectName: 'branchCompanyList',
             type: 'select',
             show: true,
             disabled: this.pageType === 'view',
           },
           {
-            name: 'Report Company',
+            name: getText?.reportCompany || 'Report Company',
             subName: 'reportCompany',
             type: 'checkbox',
             show: true,
             disabled: this.pageType === 'view',
           },
           {
-            name: 'System Company',
+            name: getText?.systemCompany || 'System Company',
             subName: 'systemCompany',
             type: 'checkbox',
             show: true,
             disabled: this.pageType === 'view',
           },
           {
-            name: 'Credit Market Sale Auto Extra Debit',
+            name:
+              getText?.creditMarketSaleAutoExtraDebit ||
+              'Credit Market Sale Auto Extra Debit',
             subName: 'creditMarketSaleAutoExtraDebit',
             type: 'checkbox',
             show: this.pageType === 'edit',
@@ -577,15 +662,17 @@ export default {
         ],
         [
           {
-            name: 'Company Access',
+            name: getText?.['Company Access'] || 'Company Access',
             subName: 'companyAccess',
+            selectName: 'personList',
             type: 'select',
             multiple: true,
             show: this.pageType === 'edit',
           },
           {
-            name: 'To Company Access',
+            name: getText?.['To Company Access'] || 'To Company Access',
             subName: 'toCompanyAccess',
+            selectName: 'personList',
             type: 'select',
             multiple: true,
             show: this.pageType === 'edit',
@@ -599,28 +686,35 @@ export default {
       const data2 = [
         [
           {
-            name: 'company.chief',
+            name: getText?.['company.chief'] || 'company.chief',
             subName: 'company.chief',
             type: 'text',
             show: true,
             disabled: this.pageType === 'view',
           },
           {
-            name: 'Address',
+            name: getText?.['company.address'] || 'Address',
             subName: 'address',
             type: 'text',
             show: true,
             disabled: this.pageType === 'view',
           },
           {
-            name: 'Web Address',
+            name: getText?.['common.webaddress'] || 'Web Address',
             subName: 'webAddress',
             type: 'text',
-            show: true,
+            show: !this.pageID,
             disabled: this.pageType === 'view',
           },
           {
-            name: 'MFO',
+            name: getText?.['company.fax_number'] || 'Fax number',
+            subName: 'webAddress',
+            type: 'text',
+            show: this.pageType === 'edit',
+            disabled: this.pageType === 'view',
+          },
+          {
+            name: getText?.['company.mfo'] || 'MFO',
             subName: 'mfo',
             type: 'text',
             show: true,
@@ -629,28 +723,30 @@ export default {
         ],
         [
           {
-            name: 'Town',
+            name: getText?.['common.town'] || 'Town',
             subName: 'town',
             type: 'text',
             show: true,
             disabled: this.pageType === 'view',
           },
           {
-            name: 'Company phone number',
+            name: getText?.['company.phone_number'] || 'Company phone number',
             subName: 'companyPhoneNumber',
             type: 'text',
             show: true,
             disabled: this.pageType === 'view',
           },
           {
-            name: 'Tax Organization Name',
+            name:
+              getText?.['company.tax_organization_name'] ||
+              'Tax Organization Name',
             subName: 'taxOrganizationName',
             type: 'text',
             show: true,
             disabled: this.pageType === 'view',
           },
           {
-            name: 'company.notes',
+            name: getText?.['company.notes'] || 'company.notes',
             subName: 'company.notes',
             type: 'text',
             show: true,
@@ -659,22 +755,23 @@ export default {
         ],
         [
           {
-            name: 'Country',
+            name: getText?.['common.country'] || 'Country',
             subName: 'country',
             type: 'text',
             show: true,
             disabled: this.pageType === 'view',
           },
           {
-            name: 'Phone',
+            name: getText?.['company.mobile_phone'] || 'Phone',
             subName: 'phone',
             type: 'text',
             show: true,
             disabled: this.pageType === 'view',
           },
           {
-            name: 'Banks',
+            name: getText?.banks || 'Banks',
             subName: 'banks',
+            selectName: 'bankList',
             type: 'select',
             show: true,
             disabled: this.pageType === 'view',
@@ -682,21 +779,21 @@ export default {
         ],
         [
           {
-            name: 'City',
+            name: getText?.['common.city'] || 'City',
             subName: 'city',
             type: 'text',
             show: true,
             disabled: this.pageType === 'view',
           },
           {
-            name: 'Email',
+            name: getText?.['common.email'] || 'Email',
             subName: 'email',
             type: 'text',
             show: true,
             disabled: this.pageType === 'view',
           },
           {
-            name: 'Account number',
+            name: getText?.['common.accountnumber'] || 'Account number',
             subName: 'accountNumber',
             type: 'text',
             show: true,
@@ -705,21 +802,22 @@ export default {
         ],
         [
           {
-            name: 'District',
+            name: getText?.district || 'District',
             subName: 'district',
+            selectName: 'districtList',
             type: 'select',
             show: true,
             disabled: this.pageType === 'view',
           },
           {
-            name: 'Fax number',
+            name: getText?.['company.fax_number'] || 'Fax number',
             subName: 'faxNumber',
             type: 'text',
             show: true,
             disabled: this.pageType === 'view',
           },
           {
-            name: 'Tax number',
+            name: getText?.['company.tax_number'] || 'Tax number',
             subName: 'taxNumber',
             type: 'text',
             show: true,
@@ -733,28 +831,31 @@ export default {
       const data3 = [
         [
           {
-            name: 'Post Types',
+            name: getText?.['Post Types'] || 'Post Types',
             subName: 'postTypes',
+            selectName: 'postTypes',
             type: 'select',
             show: true,
             disabled: this.pageType === 'view',
           },
           {
-            name: 'Company report order sequence',
+            name:
+              getText?.['company.report_order_sequence'] ||
+              'Company report order sequence',
             subName: 'companyReportOrderSequence',
             type: 'text',
             show: true,
             disabled: this.pageType === 'view',
           },
           {
-            name: 'Password',
+            name: getText?.['login.password'] || 'Password',
             subName: 'password',
             type: 'password',
             show: true,
             disabled: this.pageType === 'view',
           },
           {
-            name: 'Special Day',
+            name: getText?.['company.special_day'] || 'Special Day',
             subName: 'specialDay',
             type: 'text',
             show: true,
@@ -763,7 +864,8 @@ export default {
         ],
         [
           {
-            name: 'Post Type International',
+            name:
+              getText?.['Post Type International'] || 'Post Type International',
             subName: 'postTypeInternational',
             type: 'select',
             api: 'findAllPostType',
@@ -774,14 +876,14 @@ export default {
             disabled: this.pageType === 'view',
           },
           {
-            name: 'Discount Rate',
+            name: getText?.['company.discount_rate'] || 'Discount Rate',
             subName: 'discountRate',
             type: 'text',
             show: true,
             disabled: this.pageType === 'view',
           },
           {
-            name: 'Access for web',
+            name: getText?.webAccess || 'Access for web',
             subName: 'accessForWeb',
             type: 'checkbox',
             show: true,
@@ -789,42 +891,42 @@ export default {
           },
           [
             {
-              name: 'Monday',
+              name: getText?.['company.monday'] || 'Monday',
               subName: 'monday',
               type: 'checkbox',
               show: true,
               disabled: this.pageType === 'view',
             },
             {
-              name: 'Tuesday',
+              name: getText?.['company.tuesday'] || 'Tuesday',
               subName: 'tuesday',
               type: 'checkbox',
               show: true,
               disabled: this.pageType === 'view',
             },
             {
-              name: 'Wednesday',
+              name: getText?.['company.wednesday'] || 'Wednesday',
               subName: 'wednesday',
               type: 'checkbox',
               show: true,
               disabled: this.pageType === 'view',
             },
             {
-              name: 'Thursday',
+              name: getText?.['company.thursday'] || 'Thursday',
               subName: 'thursday',
               type: 'checkbox',
               show: true,
               disabled: this.pageType === 'view',
             },
             {
-              name: 'Friday',
+              name: getText?.['company.friday'] || 'Friday',
               subName: 'friday',
               type: 'checkbox',
               show: true,
               disabled: this.pageType === 'view',
             },
             {
-              name: 'Saturday',
+              name: getText?.['company.saturday'] || 'Saturday',
               subName: 'saturday',
               type: 'checkbox',
               show: true,
@@ -834,7 +936,7 @@ export default {
         ],
         [
           {
-            name: 'Post Type Region',
+            name: getText?.PostTypeRegion || 'Post Type Region',
             subName: 'postTypeRegion',
             type: 'select',
             api: 'findAllPostType',
@@ -845,14 +947,21 @@ export default {
             disabled: this.pageType === 'view',
           },
           {
-            name: 'Vat amount',
+            name: getText?.vat_amount || 'Vat amount',
             subName: 'vatAmount',
             type: 'number',
             show: true,
             disabled: this.pageType === 'view',
           },
           {
-            name: 'vatIncludedExcluded',
+            name: getText?.webAccess || 'Access for web',
+            subName: 'webAccess',
+            type: 'checkbox',
+            show: true,
+            disabled: this.pageType === 'view',
+          },
+          {
+            name: getText?.vatIncludedExcluded || 'vatIncludedExcluded',
             subName: 'vatIncludedExcluded',
             type: 'checkbox',
             show: true,
@@ -860,28 +969,28 @@ export default {
           },
           [
             {
-              name: 'Week',
+              name: getText?.['company.week1'] || 'Week',
               subName: 'week',
               type: 'checkbox',
               show: true,
               disabled: this.pageType === 'view',
             },
             {
-              name: 'Week 2',
+              name: getText?.['company.week2'] || 'Week 2',
               subName: 'week2',
               type: 'checkbox',
               show: true,
               disabled: this.pageType === 'view',
             },
             {
-              name: 'Week 3',
+              name: getText?.['company.week3'] || 'Week 3',
               subName: 'week3',
               type: 'checkbox',
               show: true,
               disabled: this.pageType === 'view',
             },
             {
-              name: 'Week 4',
+              name: getText?.['company.week4'] || 'Week 4',
               subName: 'week4',
               type: 'checkbox',
               show: true,
@@ -891,7 +1000,7 @@ export default {
         ],
         [
           {
-            name: 'Post Type City',
+            name: getText?.PostTypeCity || 'Post Type City',
             subName: 'postTypeCity',
             type: 'select',
             api: 'findAllPostType',
@@ -902,14 +1011,17 @@ export default {
             disabled: this.pageType === 'view',
           },
           {
-            name: 'Default Language',
+            name:
+              getText?.['menu.settings.default_language'] || 'Default Language',
             subName: 'defaultLanguage',
             type: 'select',
             show: true,
             disabled: this.pageType === 'view',
           },
           {
-            name: 'creditMarketSaleAutoExtraDebit',
+            name:
+              getText?.creditMarketSaleAutoExtraDebit ||
+              'creditMarketSaleAutoExtraDebit',
             subName: 'creditMarketSaleAutoExtraDebit',
             type: 'checkbox',
             show: true,

@@ -102,11 +102,11 @@
               >
                 <span class="text-[13px]">{{ element.name }}</span>
                 <generic-input
-                  :value="
+                  :value="`${
                     editData?.[element.subName]
                       ? editData?.[element.subName]
                       : ''
-                  "
+                  }`"
                   width="300"
                   :type="element.type"
                   :name="element.subName"
@@ -162,6 +162,7 @@
             </template>
           </div>
         </div>
+
         <div
           v-if="!isMoreInfo"
           class="w-fit flex flex-col items-start m-2 gap-1"
@@ -178,11 +179,11 @@
               >
                 <span class="text-[13px]">{{ element.name }}</span>
                 <generic-input
-                  :value="
+                  :value="`${
                     editData?.[element.subName]
                       ? editData?.[element.subName]
                       : ''
-                  "
+                  }`"
                   width="300"
                   :type="element.type"
                   :name="element.subName"
@@ -235,20 +236,29 @@
                     :name="elem?.subName"
                     :type="elem?.type"
                     :width="elem?.width"
+                    :value="`${
+                      editData?.[element.subName]
+                        ? editData?.[element.subName]
+                        : ''
+                    }`"
                   ></generic-input>
                 </div>
               </span>
             </template>
           </div>
         </div>
-        <div>
-          <template v-if="pageType === 'edit' && isCharacteristicLookUp">
-            <div v-for="(obj, index) in resultJson" :key="index">
-              <span class="text-[13px]">{{ obj?.name }}</span>
+
+        <div class="m-2">
+          <template v-if="pageID && pageType === 'edit'">
+            <div
+              v-for="(obj, index) in resultJson"
+              :key="index"
+              class="flex flex-col justify-start mb-2"
+            >
+              <span class="text-[13px] whitespace-nowrap">{{ obj?.name }}</span>
               <generic-look-up
                 dwidth="250"
                 :name="obj?.name"
-                durl="findAllCharacteristicDetails"
                 :options-data="characteristicDetailsMap?.[obj?.name]"
                 @customFunction="getInputAndLookUpValueAction"
               />
@@ -465,7 +475,7 @@ export default {
       const body = {
         detailsId: this.allInputAndLookUpValue?.detailsId ?? '',
         planningTypeRightArr:
-          this.allInputAndLookUpValue?.planningTypeRightArr ?? '',
+          this.allInputAndLookUpValue?.planningTypeRight ?? '',
         categoryId: this.allInputAndLookUpValue?.categoryId ?? null,
         articleId: this.allInputAndLookUpValue?.articleId ?? null,
         manufacturerId: this.allInputAndLookUpValue?.manufacturerId ?? null,

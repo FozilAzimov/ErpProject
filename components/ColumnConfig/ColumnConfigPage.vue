@@ -169,6 +169,7 @@ export default {
         this.openPopup1 = this.openpopup
         this.autoHeight1 = this.autoheight
         this.rightItems = []
+        console.log(newRight)
         for (const item in newRight) {
           newRight[item].postKey = item
           this.rightItems.push(newRight[item])

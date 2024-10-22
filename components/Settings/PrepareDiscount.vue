@@ -1,8 +1,8 @@
 <template>
-  <div class="w-full p-[4px_10px_4px_4px]">
+  <div class="w-full px-1">
     <LoadingPage
       v-if="isLoading"
-      class="fixed left-[50%] top-[8px] translate-x-[-50%]"
+      class="absolute left-[50%] top-[8px] translate-x-[-50%]"
     />
     <transition name="fade">
       <ColumnConfigPage
@@ -10,17 +10,16 @@
         :right="rightData"
         :left="leftData"
         :url="actionUrl"
-        :createedit="true"
-        :autoheight="false"
-        :openpopup="false"
-        :editopen="false"
+        :create-edit="true"
+        :openpopup="openPopup"
         api="saveColumnConfig"
         class="z-[10000]"
         @checkModal="handleValue"
       />
     </transition>
+    <message-box ref="messageBoxRef" @emitProp="getEmitProp" />
     <div
-      class="border-[1px] border-solid border-[rgba(0,0,0,0.05)] p-[12px] bg-gradient-to-b from-transparent via-transparent to-gray-200 shadow-md"
+      class="border-[1px] border-solid border-[rgba(0,0,0,0.05)] p-[12px] bg-gradient-to-b from-transparent via-transparent to-gray-200 shadow-md flex items-center justify-between mt-1"
     >
       <div class="flex items-center gap-[10px]">
         <generic-button
@@ -30,143 +29,184 @@
           @click="$router.push('/discounts.htm')"
         />
         <h1 class="font-bold text-[rgb(49,126,172)] text-[14px] uppercase">
-          Discount
+          Add Production Order
         </h1>
       </div>
     </div>
-
-    <!-- Top static table -->
-    <table class="w-full text-[13px] mt-2">
-      <tbody>
-        <tr
-          v-for="(row, indexOne) in topStaticTableData"
-          :key="indexOne"
-          class="bg-[rgba(239,243,249,0.7)] hover:bg-gradient-to-b hover:from-transparent hover:via-transparent hover:to-[rgba(220,229,243,0.7)]"
-        >
-          <td
-            v-for="(col, indexTwo) in row"
-            :key="indexTwo"
-            class="w-[15%] border-[1px] border-solid border-[#778899] p-[2px]"
+    <div class="border-[1px] border-solid border-[rgba(0,0,0,0.1)]">
+      <!-- Top static table -->
+      <table class="w-full text-[13px] mt-1">
+        <tbody>
+          <tr
+            class="bg-[rgba(239,243,249,0.7)] hover:bg-gradient-to-b hover:from-transparent hover:via-transparent hover:to-[rgba(220,229,243,0.7)]"
           >
-            <template v-if="col?.type === 'label'">
-              <span v-if="col?.required">
-                <span>{{ col?.name }}</span>
-                <span class="text-red-500">*</span>
+            <td
+              v-for="(row, index) in elementData"
+              :key="index"
+              class="border-[1px] border-solid border-[#778899] p-[5px]"
+              :style="{ width: `${row?.width}px !important` }"
+            >
+              <span v-if="row?.name" class="font-semibold"
+                >{{ row?.name }}
+                <span v-if="row?.required" class="text-[16px] text-red-500"
+                  >*</span
+                >
               </span>
-              <span v-else>{{ col?.name }} </span>
-            </template>
-            <template v-else-if="col?.type === 'date'">
-              <generic-input-date-page
-                widthtype="%"
-                width="100"
-                type="datetime-local"
-                :name="col?.subName"
-                :disabled="col?.disabled"
-                @customFunction="getLookUpAndInputsValueAction"
+            </td>
+          </tr>
+          <tr
+            class="bg-[rgba(239,243,249,0.7)] hover:bg-gradient-to-b hover:from-transparent hover:via-transparent hover:to-[rgba(220,229,243,0.7)]"
+          >
+            <td
+              v-for="(row, index) in elementData"
+              :key="index"
+              class="border-[1px] border-solid border-[#778899] p-[2px]"
+              :style="{ width: `${row?.width}px !important` }"
+            >
+              <template v-if="row?.type === 'text'">
+                {{
+                  typeof discountJson?.[row?.subName] === 'object'
+                    ? discountJson?.[row?.subName]?.text
+                    : discountJson?.[row?.subName]
+                    ? discountJson?.[row?.subName]
+                    : ''
+                }}
+              </template>
+              <template
+                v-else-if="
+                  row?.type === 'inputText' ||
+                  row?.type === 'number' ||
+                  row?.type === 'textarea'
+                "
+              >
+                <template v-if="pageID && !hideButton">{{
+                  typeof discountJson?.[row?.subName] === 'object'
+                    ? discountJson?.[row?.subName]?.text
+                    : discountJson?.[row?.subName]
+                }}</template>
+                <generic-input
+                  v-else
+                  :name="row?.subName"
+                  width="100"
+                  widthtype="%"
+                  :value="discountJson?.[row?.subName]"
+                  :type="row?.type"
+                  :required="
+                    !row?.required ||
+                    allSelectAndInputValue?.[row?.subName] ||
+                    discountJson?.[row?.subName]
+                      ? true
+                      : false
+                  "
+                  @customFunction="getSelectAndInputsValueAction"
+                />
+              </template>
+              <template v-else-if="row?.type === 'select'">
+                <template v-if="pageID && !hideButton">{{
+                  typeof discountJson?.[row?.subName] === 'object'
+                    ? discountJson?.[row?.subName]?.text
+                    : discountJson?.[row?.subName]
+                }}</template>
+                <generic-look-up
+                  v-else
+                  :name="row?.subName"
+                  dwidth="100"
+                  widthtype="%"
+                  :defvalue="discountJson?.[row?.subName]?.text"
+                  durl="findAllAccessTypes"
+                  @customFunction="getSelectAndInputsValueAction"
+                />
+              </template>
+              <span
+                v-else-if="row?.type === 'radio'"
+                class="text-green-500 font-medium"
+              >
+                <template v-if="pageID && !hideButton">{{
+                  allSelectAndInputValue?.active ||
+                  Boolean(discountJson?.active)
+                    ? 'Enabled'
+                    : 'Disabled'
+                }}</template>
+                <template v-else>
+                  <el-radio
+                    v-for="(elem, inx) in row?.list"
+                    :key="inx"
+                    v-model="radio"
+                    :label="elem?.subName"
+                  ></el-radio>
+                </template>
+              </span>
+            </td>
+          </tr>
+          <tr
+            v-if="!pageID"
+            class="bg-[rgba(239,243,249,0.7)] hover:bg-gradient-to-b hover:from-transparent hover:via-transparent hover:to-[rgba(220,229,243,0.7)]"
+          >
+            <td colspan="9" class="border-[1px] border-solid border-[#778899]">
+              <generic-button
+                name="Accept"
+                type="primary"
+                @click="acceptAction"
               />
-            </template>
-            <template v-else-if="col?.type === 'select'">
-              <generic-look-up
-                widthtype="%"
-                dwidth="100"
-                :name="col?.subName"
-                :durl="col?.url"
-                :dparam="col?.params"
-                :disabled="col?.disabled"
-                @customFunction="getLookUpAndInputsValueAction"
-              />
-            </template>
-            <template v-else-if="col?.type === 'number'">
-              <generic-input
-                :value="allLookUpAndInputsValue[col?.subName] || ''"
-                widthtype="%"
-                width="100"
-                type="number"
-                :name="col?.subName"
-                :disabled="col?.disabled"
-                @customFunction="getLookUpAndInputsValueAction"
-              />
-            </template>
-            <template v-else-if="col?.type === 'text'">
-              <generic-input
-                :value="allLookUpAndInputsValue[col?.subName] || ''"
-                widthtype="%"
-                width="100"
-                type="text"
-                :name="col?.subName"
-                :disabled="col?.disabled"
-                @customFunction="getLookUpAndInputsValueAction"
-              />
-            </template>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-    <!-- Top static table -->
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <!-- Top static table -->
 
-    <!-- Accept btn -->
-    <generic-button name="Accept" type="primary" :margin="true" />
-    <!-- Accept btn -->
-
-    <div
-      class="w-full bg-[rgba(224,230,238,0.6)] overflow-hidden border-[1px] border-solid border-[#778899]"
-      :class="true ? 'duration-[1s] h-fit' : 'duration-[1s] h-[0px]'"
-    >
-      <!-- --START-- Batch Details Table uchun -->
-      <div v-if="true" class="m-2">
+      <!-- --START-- Custom Table -->
+      <div v-if="isAccept || pageID" class="m-1">
         <span class="text-[14px]"
-          >Sale Order Item
+          >Discount Item.
           <strong v-if="pageID" class="text-[14px] text-[rgb(156,0,78)]"
             >Parent ID = {{ pageID }}</strong
           ></span
         >
         <div class="flex gap-1 flex-wrap">
-          <generic-button
+          <GenericButton
             name="Column Setting"
             type="warning"
             icon-name-attribute="setting"
             @click="openColumnConfig"
           />
-          <generic-button
-            v-if="isSaveEditDiscard"
+          <span v-if="hideButton" class="flex gap-1 flex-wrap">
+            <GenericButton name="Save" type="primary" @click="saveAction" />
+            <GenericButton
+              v-if="pageID"
+              name="Discard"
+              @click="discardSewModalOperationAction"
+            />
+          </span>
+          <GenericButton
+            v-else
             name="Edit"
             type="success"
             icon-name-attribute="edit"
             @click="editAction"
           />
-          <template v-else>
-            <generic-button
-              name="Save"
-              type="primary"
-              :disabled="disabledButton"
-              @click="saveAction"
-              @customInputValueObj="getFilterData"
-            />
-            <generic-button
-              v-if="pageID"
-              name="Discard"
-              @click="discardAction"
-            />
-          </template>
+          <GenericButton
+            v-if="pageID"
+            name="Delete"
+            type="danger"
+            icon-name-attribute="delete"
+            @click="$refs.messageBoxRef.open(pageID, 'index', 'delete')"
+          />
         </div>
-        <generic-prepare-table-page
-          ref="ordersRef"
-          department-name="invoice"
-          :addmodalorrow="false"
-          :tablehead="tableData"
-          :tableheadlength="tableData.length"
-          :response-data="responseData"
+        <GenericPrepareTablePage
+          ref="customTableRef"
+          department-name="production"
+          :addmodalorrow="openPopup"
+          :tablehead="headData"
+          :tableheadlength="headData?.length"
+          :response-data="bodyData"
           :ui-show-hide="uiShowHide"
-          :isedit="isEdit"
+          :is-edit="isEdit"
           :height="450"
-          :default-values="[]"
+          delete-url-row="discount/prepareDeleteDiscountItemUrl"
           class="bg-[rgba(255,255,255,0.5)] mt-1"
           @rowValues="getRowElements"
-          @getNewList="getList"
-          @requiredAction="getDisabledValue"
         />
       </div>
-      <!-- --END-- Batch Details Table uchun -->
     </div>
   </div>
 </template>
@@ -174,273 +214,101 @@
 <script>
 import GenericButton from '@generics/GenericButton.vue'
 import LoadingPage from '@components/Loading/LoadingPage.vue'
+import MessageBox from '@components/MessageBox.vue'
+import GenericPrepareTablePage from '@components/GenericPrepareTable/GenericPrepareTablePage.vue'
 import ColumnConfigPage from '@components/ColumnConfig/ColumnConfigPage.vue'
-import GenericInputDatePage from '@components/InputDate/GenericInputDatePage.vue'
 import GenericLookUp from '@generics/GenericLookUp.vue'
 import GenericInput from '@generics/GenericInput.vue'
-import GenericPrepareTablePage from '@components/GenericPrepareTable/GenericPrepareTablePage.vue'
 export default {
-  // COMPONENTS
   components: {
-    LoadingPage,
     GenericButton,
+    LoadingPage,
+    MessageBox,
+    GenericPrepareTablePage,
     ColumnConfigPage,
-    GenericInputDatePage,
     GenericLookUp,
     GenericInput,
-    GenericPrepareTablePage,
   },
 
   // DATA
   data() {
     return {
       isLoading: false,
-      actionUrl: '',
-      checkModal: false,
+      pageSize_value: 25,
       pageID: null,
-      topStaticTableData: [],
-      allLookUpAndInputsValue: {},
-      rightColumns: [],
-      tableData: [],
-      tableData2: [],
+      elementData: [],
+      headData: [],
+      bodyData: [],
+      discountJson: {},
+      uiShowHide: false,
+      isEdit: null,
+      hideButton: null,
+      allSelectAndInputValue: {},
+      isAccept: false,
+      radio: 'Enabled',
+      // column config uchun
+      checkModal: false,
+      openPopup: null,
+      actionUrl: null,
       rightMap: {},
       leftMap: {},
       rightData: {},
       leftData: {},
-      isSaveEditDiscard: false,
-      uiShowHide: false,
-      isEdit: false,
-      invoiceList: [],
-      id: null,
-      newListData: [],
-      disabledButton: false,
-      objData: {},
-      responseData: [],
+      // column config uchun
     }
   },
 
+  computed: {
+    headDataFiltered() {
+      return this.headData.filter((item) => item.showUI)
+    },
+  },
+
   // WATCH
-  watch: {},
+  watch: {
+    radio(newVal) {
+      if (newVal === 'Enabled') this.allSelectAndInputValue.active = true
+      else if (newVal === 'Disabled') this.allSelectAndInputValue.active = false
+      else this.allSelectAndInputValue.active = false
+    },
+  },
 
   // CREATED
   created() {
     this.pageID = this.$route.params?.id
-
-    if (this.pageID) {
-      this.isEdit = true
-      this.isSaveEditDiscard = true
-    }
+    this.uiShowHide = !!this.pageID
+    this.isEdit = !!this.pageID
+    this.hideButton = !this.pageID
   },
 
   // MOUNTED
   mounted() {
     // function
-    this.getPageRequest()
+    this.pageRequestAction(this.pageID)
     // function
-    this.createdStaticTableDataAction()
+    this.dataCreatedAction()
+    this.allSelectAndInputValue.active = true
   },
 
-  // METHOD
+  // METHODS
   methods: {
     // Column Config function
     handleValue(checkModal) {
       this.checkModal = checkModal
     },
+    // Bu page da Column config ishlatilmagan
     openColumnConfig() {
-      this.checkModal = true
-    },
-    // Column Config function
-
-    // created top static table data
-    createdStaticTableDataAction() {
-      const data = [
-        [
-          { name: 'Date', type: 'label', required: true },
-          {
-            subName: 'dateFrom',
-            type: 'date',
-            disabled: !!this.pageID,
-            widthtype: '%',
-            width: '100',
-          },
-          { name: 'Address', type: 'label' },
-          { subName: 'Address', type: 'label' },
-          { name: 'Order year', type: 'label' },
-          { subName: 'orderYear', type: 'label' },
-        ],
-        [
-          { name: 'Due Date', type: 'label', required: true },
-          {
-            subName: 'dueDate',
-            type: 'date',
-            disabled: !!this.pageID,
-            widthtype: '%',
-            width: '100',
-          },
-          { name: '', type: 'label' },
-          { subName: '', type: 'label' },
-          { name: 'Pay Status', type: 'label' },
-          { subName: 'payStatus', type: 'label' },
-        ],
-        [
-          { name: 'Customer', type: 'label' },
-          {
-            subName: 'customerId',
-            type: 'select',
-            disabled: !!this.pageID,
-            widthtype: '%',
-            width: '100',
-            url: 'findAllCompanyForInvoice',
-            params: {
-              branchcompany: false,
-              companyType: 'client',
-            },
-          },
-          { name: '', type: 'label' },
-          {
-            subName: 'sub_customerId',
-            type: 'number',
-            required: true,
-            disabled: true,
-            widthtype: '%',
-            width: '100',
-          },
-          { name: 'Order Status', type: 'label' },
-          { subName: 'orderStatus', type: 'label' },
-        ],
-        [
-          { name: 'Branch', type: 'label', required: true },
-          {
-            subName: 'branchId',
-            type: 'select',
-            disabled: !!this.pageID,
-            widthtype: '%',
-            width: '100',
-            url: 'findAllCompanyLogic',
-            params: {
-              branchcompany: true,
-            },
-          },
-          { name: '', type: 'label' },
-          {
-            subName: 'sub_branchId',
-            type: 'number',
-            disabled: true,
-            widthtype: '%',
-            width: '100',
-          },
-          { name: 'Order #', type: 'label' },
-          { subName: 'order', type: 'label' },
-        ],
-        [
-          { name: 'Department', type: 'label', required: true },
-          {
-            subName: 'departmentId',
-            type: 'select',
-            disabled: !!this.pageID,
-            widthtype: '%',
-            width: '100',
-            url: 'findAllDepartmentLogic',
-            params: {
-              branchCompanyId: null,
-            },
-          },
-          { name: 'Note', type: 'label' },
-          {
-            subName: 'sub_departmentId',
-            type: 'text',
-            disabled: true,
-            widthtype: '%',
-            width: '100',
-          },
-          { name: '', type: 'label' },
-          { subName: '', type: 'label' },
-        ],
-        [
-          { name: 'Currency', type: 'label', required: true },
-          {
-            subName: 'currencyId',
-            type: 'select',
-            disabled: !!this.pageID,
-            widthtype: '%',
-            width: '100',
-            url: 'findAllCurrency',
-          },
-          { name: '', type: 'label' },
-          {
-            subName: 'sub_currencyId',
-            type: 'number',
-            disabled: true,
-            widthtype: '%',
-            width: '100',
-          },
-          { name: '', type: 'label' },
-          { subName: '', type: 'label' },
-        ],
-      ]
-      this.topStaticTableData = data
-    },
-
-    // set LOOK UP and INPUTS value
-    getLookUpAndInputsValueAction(name, value) {
-      if (name === 'dateFrom' || name === 'dueDate') {
-        const dateVal = new Date(value)
-          .toLocaleString('en-GB')
-          .split(',')
-          .join('')
-        this.$set(this.allLookUpAndInputsValue, name, dateVal)
-      } else if (name === 'departmentId') {
-        this.$set(this.allLookUpAndInputsValue, name, value)
-      } else {
-        this.$set(this.allLookUpAndInputsValue, name, value)
-        value
-          ? this.setInputValueAction(name, value)
-          : this.$set(this.allLookUpAndInputsValue, `sub_${name}`, '')
-      }
-    },
-
-    // look up click action
-    setInputValueAction(name, value) {
-      const body = {
-        settingsRateType: 'SALE',
-        dateFrom: this.allLookUpAndInputsValue?.dateFrom,
-      }
-      name === 'currencyId'
-        ? (body.currencyId = value)
-        : (body.branchCompanyId = value)
-
-      this.$axios
-        .post(`/invoiceBase/getCurrentCurrencyRate`, body)
-        .then(({ data: { paramsObject } }) => {
-          this.$set(
-            this.allLookUpAndInputsValue,
-            `sub_${name}`,
-            paramsObject?.value
-          )
-        })
-        .catch((error) => {
-          // eslint-disable-next-line no-console
-          console.log(error)
-        })
-    },
-
-    // page request action
-    getPageRequest() {
       this.isLoading = !this.isLoading
       this.$axios
-        .post(`/invoices/prepareExpenseInvoiceAjaxLoad`, {
-          id: this.pageID ? this.pageID : null,
-          saleToPerson: false,
+        .post(`/base/columnsConfigU`, {
+          actionUrl: this.actionUrl,
         })
-        .then(({ data }) => {
+        .then(({ data: { leftColumns, rightColumns, openPopup } }) => {
+          // function
+          this.getFilterData(leftColumns, rightColumns)
+          this.checkModal = true
+          this.openPopup = openPopup
           this.isLoading = !this.isLoading
-          this.actionUrl = data?.actionUrl
-          this.rightColumns = data?.rightColumns
-          this.objData = data?.invoiceJson
-          // function
-          this.leftRightDataFilter()
-          // function
-          this.getFilterData()
         })
         .catch((error) => {
           this.isLoading = !this.isLoading
@@ -449,58 +317,181 @@ export default {
         })
     },
 
-    // EDIT Action
+    // get LookUps and Inputs value
+    getSelectAndInputsValueAction(name, value) {
+      // all select and input values
+      this.$set(this.allSelectAndInputValue, name, value)
+    },
+
+    // Accept action
+    acceptAction() {
+      if (this.allSelectAndInputValue.name && this.allSelectAndInputValue.code)
+        this.isAccept = true
+      else {
+        this.$notification(`Ma'lumotni to'liq kiriting!`)
+        this.isAccept = false
+      }
+    },
+
+    // PAGE request
+    pageRequestAction(pageID) {
+      const body = {}
+      body.page_current = 1
+      body.page_size = this.pageSize_value
+      if (pageID) body.id = pageID
+
+      this.isLoading = !this.isLoading
+      this.$axios
+        .post(`/discount/prepareDiscount`, body)
+        .then(({ data: { discountItemColumns, discountJson } }) => {
+          this.actionUrl = 'productionOrderItemTable'
+          this.discountJson = discountJson
+          this.headData = discountItemColumns
+          this.bodyData = discountJson?.productItems
+          if (pageID) {
+            this.radio = discountJson.active ? 'Enabled' : 'Disabled'
+          }
+          this.isLoading = !this.isLoading
+        })
+        .catch((error) => {
+          this.isLoading = !this.isLoading
+          // eslint-disable-next-line no-console
+          console.log(error)
+        })
+    },
+
+    // edit action
     editAction() {
-      this.isSaveEditDiscard = false
+      this.hideButton = !this.hideButton
       // GenericTablePage da ishlab beruvchi function
-      this.$refs.invoiceRef.getEditRowAction(
-        this.parentID ? this.parentID : this.userId
-      )
+      this.$refs.customTableRef.getEditRowAction(this.pageID)
       this.uiShowHide = false
     },
 
-    // DISCARD Action
-    discardAction() {
-      this.isSaveEditDiscard = true
+    // discard action
+    discardSewModalOperationAction() {
+      this.hideButton = !this.hideButton
+      // GenericTablePage da ishlab beruvchi function
+      this.$refs.customTableRef.arrayFiltered()
+      this.uiShowHide = true
     },
 
-    getRowElements(arr, hideBtn, id) {
-      this.id = +id
-      this.invoiceList = arr
-      this.isSaveEditDiscard = !hideBtn
+    // Response dan qaytgan data ni filter qilish
+    // tekshiruv xato bo'lgan. Head data siga qarab filterlanishi kerak
+    responseArrayFilteredAction(resArray) {
+      let newArr = []
+      this.headDataFiltered.forEach((obj) => {
+        if (!obj?.param) {
+          newArr = resArray
+            .map((innerObj) => {
+              if (obj?.name in innerObj) {
+                const newObj = { [obj?.name]: innerObj?.[obj?.name] }
+                return newObj
+              }
+              return null
+            })
+            .filter((item) => item !== null)
+        }
+      })
+      return newArr
     },
+    // Response dan qaytgan data ni filter qilish
 
-    // new List olish
-    getList(arr) {
-      this.newListData = arr
-      console.log(arr)
-    },
-
-    // Save || Pay button'larni disabled qilish
-    getDisabledValue(disabledVal, type) {
-      if (type === 'top') this.disabledButton = disabledVal
-      //   else if (type === 'bottom') this.subDisabledButton = disabledVal
-      //   else if (type === 'subBottom') this.subTwoDisabledButton = disabledVal
-    },
-
-    // Filter Action
-    leftRightDataFilter() {
-      if (this.rightColumns.length) {
-        this.tableData = this.rightColumns.filter((value) => {
-          return value.showUI && value
-        })
-        this.tableData2 = this.rightColumns.filter((value) => {
-          return !value.showUI && value
-        })
+    // EMIT action
+    getRowElements(arr, hideBtn) {
+      // function
+      const newResArr = this.responseArrayFilteredAction(arr)
+      this.hideButton = !hideBtn
+      // Start Request body
+      const discount = {}
+      if (this.pageID) {
+        discount.id = this.pageID
+        discount.active =
+          this.allSelectAndInputValue?.active ??
+          this.discountJson?.active ??
+          false
+        discount.branchCompany = {
+          id:
+            this.allSelectAndInputValue?.branchCompany ??
+            this.discountJson?.branchCompany?.id ??
+            '',
+        }
+        discount.code =
+          this.allSelectAndInputValue?.code ?? this.discountJson?.code ?? ''
+        discount.description =
+          this.allSelectAndInputValue?.description ??
+          this.discountJson?.description ??
+          ''
+        discount.fixedAmount =
+          this.allSelectAndInputValue?.fixedAmount ??
+          this.discountJson?.fixedAmount ??
+          ''
+        discount.maxAmount =
+          this.allSelectAndInputValue?.maxAmount ??
+          this.discountJson?.maxAmount ??
+          ''
+        discount.name =
+          this.allSelectAndInputValue?.name ?? this.discountJson?.name ?? ''
+        discount.percentage =
+          this.allSelectAndInputValue?.percentage ??
+          this.discountJson?.percentage ??
+          ''
+      } else {
+        discount.active = this.allSelectAndInputValue?.active ?? false
+        discount.branchCompany = {
+          id: this.allSelectAndInputValue?.branchCompany ?? '',
+        }
+        discount.code = this.allSelectAndInputValue?.code ?? ''
+        discount.description = this.allSelectAndInputValue?.description ?? ''
+        discount.fixedAmount = this.allSelectAndInputValue?.fixedAmount ?? ''
+        discount.maxAmount = this.allSelectAndInputValue?.maxAmount ?? ''
+        discount.name = this.allSelectAndInputValue?.name ?? ''
+        discount.percentage = this.allSelectAndInputValue?.percentage ?? ''
       }
+      // List set qilish
+      discount.productItems = newResArr
+      // End Request body
+
+      this.isLoading = !this.isLoading
+      this.$axios
+        .post(`/discount/prepareCreateEditDiscount`, {
+          discount,
+        })
+        .then(
+          ({
+            data: {
+              discountItemColumns: { id, productItems },
+            },
+          }) => {
+            this.uiShowHide = true
+            if (!this.pageID) {
+              this.$router.push(`prepareDiscount.htm/${id}`)
+            } else this.pageRequestAction(this.pageID)
+            this.bodyData = productItems
+            this.isLoading = !this.isLoading
+            this.$notification(`Ma'lumot saqlandi!`, 'Success', 'success')
+          }
+        )
+        .catch((error) => {
+          this.isLoading = !this.isLoading
+          // eslint-disable-next-line no-console
+          console.log(error)
+          this.$notification(`Ma'lumot saqlanmadi!`, 'Error', 'error')
+        })
+    },
+
+    // Save btn action
+    saveAction() {
+      // GenericTablePage da ishlab beruvchi function
+      this.$refs.customTableRef.getSaveRowAction()
     },
 
     // Filter Action
-    getFilterData() {
-      this.tableData.forEach((obj) => {
+    getFilterData(leftColumns, rightColumns) {
+      rightColumns.forEach((obj) => {
         this.rightMap[obj.name] = obj
       })
-      this.tableData2.forEach((obj) => {
+      leftColumns.forEach((obj) => {
         this.leftMap[obj.name] = obj
       })
 
@@ -508,196 +499,94 @@ export default {
       this.leftData = this.leftMap
     },
 
-    // SAVE Action
-    saveAction() {
-      if (!this.disabledButton) {
-        // GenericTablePage da ishlab beruvchi function
-        this.$refs.ordersRef.getSaveRowAction()
-
-        // GenericTablePage da subTable uchun
-        this.subListShowHide = true
-        this.subTable = true
-        const inputValues = this.inputValues
-        const lookupValues = this.lookUpValues
-        const objData = this.objData
-
-        let dateBack = null
-        let sellDateBack = null
-
-        if (this.pageID) {
-          const [day, month, year, time] = objData?.date.split(/[\s/]+/)
-          const formattedDateStr = `${year}-${month}-${day}T${time}`
-          dateBack = formattedDateStr
-          sellDateBack = formattedDateStr
-        } else {
-          dateBack = objData?.date
-            ? new Date(objData?.date).toISOString().split('.')[0]
-            : ''
-          sellDateBack = objData?.date
-            ? new Date(objData?.date).toISOString().split('.')[0]
-            : ''
-        }
-
-        // input values
-        const date = inputValues?.date ? inputValues?.date : dateBack
-        const sellDate = inputValues?.sellDate
-          ? inputValues?.sellDate
-          : sellDateBack
-
-        const currencyRate = this.propsValue?.supplare?.value
-          ? this.propsValue?.supplare?.value
-          : objData?.currencyRate?.text
-          ? objData?.currencyRate?.text
-          : objData?.currencyRate
-
-        const driverName = inputValues?.driverName
-          ? this.inputValues?.driverName
-          : ''
-
-        const companyRefCurrencyRate = inputValues?.companyRefCurrencyRate
-          ? this.inputValues?.companyRefCurrencyRate
-          : this.propsValue?.branch?.value
-          ? this.propsValue?.branch?.value
-          : objData?.companyRefCurrencyRate?.text
-          ? objData?.companyRefCurrencyRate?.text
-          : objData?.companyRefCurrencyRate
-
-        const companyCurrencyRate = inputValues?.companyRefCurrencyRate
-          ? this.inputValues?.companyCurrencyRate
-          : this.propsValue?.supplare?.value
-          ? this.propsValue?.supplare?.value
-          : objData?.companyCurrencyRate?.text
-          ? objData?.companyCurrencyRate?.text
-          : objData?.companyCurrencyRate
-
-        const invoiceNominal = this.inputValues?.invoiceNominal
-          ? this.inputValues?.invoiceNominal
-          : objData?.invoiceNominal?.text
-          ? objData?.invoiceNominal?.text
-          : objData?.invoiceNominal
-
-        const systemNumber = inputValues?.systemNumber
-          ? this.inputValues?.systemNumber
-          : ''
-
-        const invoiceStatus = inputValues?.invoiceStatus
-          ? this.inputValues?.invoiceStatus
-          : ''
-
-        const invoiceBillStatus = inputValues?.invoiceBillStatus
-          ? this.inputValues?.invoiceBillStatus
-          : ''
-
-        // lookup values
-        const calcType = lookupValues?.calc_type
-          ? lookupValues?.calc_type
-          : objData?.calc_type?.id
-
-        const order = lookupValues?.order
-          ? lookupValues?.order
-          : objData?.order?.id
-
-        const branch = lookupValues?.branch
-          ? lookupValues?.branch
-          : objData.branch?.id
-
-        const companyGroup = lookupValues?.companyGroup
-          ? lookupValues?.companyGroup
-          : objData?.companyGroup?.id
-
-        const supplier = lookupValues?.supplier
-          ? lookupValues?.supplier
-          : objData?.supplier?.id
-
-        const currency = lookupValues?.currency
-          ? lookupValues?.currency
-          : objData?.currency?.id
-
-        const department = lookupValues?.department
-          ? lookupValues?.department
-          : objData?.department?.id
-
-        const paymentType = lookupValues?.paymentType
-          ? lookupValues?.paymentType
-          : objData?.paymentType?.id
-
-        const orderProductionType = lookupValues?.orderProductionType
-          ? lookupValues?.orderProductionType
-          : objData?.orderProductionType?.id
-
-        const warehouse = lookupValues?.warehouse
-          ? lookupValues?.warehouse
-          : objData?.warehouse?.id
-
-        const requestBody = {
-          invoice: {
-            branch: { id: Number(branch) },
-            calc_type: calcType,
-            company: { id: Number(supplier) },
-            companyCurrencyRate,
-            companyGroup: { id: Number(companyGroup) },
-            companyRefCurrencyRate,
-            currency: { id: Number(currency) },
-            currencyRate,
-            date,
-            department: { id: Number(department) },
-            driverName,
-            id: this.isEdit ? this.id : this.parentID ? this.parentID : null,
-            invoiceBillStatus,
-            invoiceItems: this.invoiceList,
-            invoiceNo: '',
-            invoiceNominal,
-            invoiceNumber: '',
-            invoiceStatus,
-            notes: '',
-            order: { id: order },
-            orderProductionType: { id: Number(orderProductionType) },
-            paymentType: { id: Number(paymentType) },
-            sellDate,
-            sequenceNumber: '',
-            systemNumber,
-            warehouse: { id: Number(warehouse) },
-          },
-        }
-
-        // Open qilib kirilganda jo'natiladigan 'request body'
-        const editRequestBody = {
-          invoice: {
-            calc_type: calcType,
-            companyCurrencyRate,
-            companyRefCurrencyRate,
-            currency: { id: Number(currency) },
-            currencyRate,
-            id: this.isEdit ? this.id : this.parentID ? this.parentID : null,
-            invoiceItems: this.invoiceList,
-            invoiceNominal,
-            order: { id: order },
-          },
-        }
-
-        this.$axios
-          .post(
-            `/invoices/prepareCreateEditSaleInvoice`,
-            this.isEdit ? editRequestBody : requestBody
-          )
-          .then(({ data, status }) => {
-            this.parentID = data?.id
-            this.responseData = data?.invoiceItems
-            this.subListData = data
-            data?.invoiceItems.length && (this.uiShowHide = true)
-            if (!this.isEdit && data?.paymentType?.text)
-              this.makeAndUnBill = true
-            else this.makeAndUnBill = false
-
-            if ((this.userId || this.parentID) && status === 200) {
-              this.$router.push(`/prepareSaleOrder.htm/${this.parentID}`)
-            }
-          })
-          .catch((error) => {
-            // eslint-disable-next-line no-console
-            console.log(error)
-          })
+    // Message box action
+    getEmitProp(propMessage, id, index, actionName) {
+      // Delete Action
+      if (actionName === 'delete') {
+        this.isLoading = !this.isLoading
+        if (propMessage === 'confirm') {
+          this.$axios
+            .delete(`/discount/prepareDeleteDiscountItemUrl`, {
+              data: {
+                deleteItemId: id,
+              },
+            })
+            .then(({ status }) => {
+              this.$notification('Successfully Deleted', 'Deleted', 'success')
+              if (status < 300) this.$router.push('/discounts.htm')
+              this.isLoading = !this.isLoading
+            })
+            .catch((error) => {
+              this.$notification('Error Deleted', 'Not Deleted', 'error')
+              this.isLoading = !this.isLoading
+              // eslint-disable-next-line no-console
+              console.log(error)
+            })
+        } else this.isLoading = !this.isLoading
       }
+    },
+
+    // Data created
+    dataCreatedAction() {
+      const data = [
+        {
+          width: '200',
+          name: 'Name',
+          subName: 'name',
+          required: true,
+          type: 'inputText',
+        },
+        {
+          width: '200',
+          name: 'Code',
+          subName: 'code',
+          required: true,
+          type: 'inputText',
+        },
+        {
+          width: '200',
+          name: 'Company Branch',
+          subName: 'branchCompany',
+          type: 'select',
+        },
+        {
+          width: '200',
+          name: 'Description',
+          subName: 'description',
+          type: 'textarea',
+        },
+        {
+          width: '200',
+          name: 'Status',
+          type: 'radio',
+          list: [{ subName: 'Enabled' }, { subName: 'Disabled' }],
+        },
+        {
+          width: '200',
+          name: 'Date',
+          subName: 'date',
+          type: 'text',
+        },
+        {
+          width: '150',
+          name: 'Percentage',
+          subName: 'percentage',
+          type: 'number',
+        },
+        {
+          width: '150',
+          name: 'Fixed Amount',
+          subName: 'fixedAmount',
+          type: 'number',
+        },
+        {
+          width: '150',
+          name: 'Max Amount',
+          subName: 'maxAmount',
+          type: 'number',
+        },
+      ]
+      this.elementData = data
     },
   },
 }
@@ -708,6 +597,7 @@ export default {
 .fade-leave-active {
   transition: opacity 0.5s;
 }
+
 .fade-enter,
 .fade-leave-to {
   opacity: 0;

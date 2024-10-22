@@ -23,7 +23,7 @@ export const mutations = {
 export const getters = {
   GET_LOADING: (state) => state.isLoading,
   GET_SYSTEM_MENU_LIST: (state) =>
-    state.systemMenuList.map((obj) => obj.active && obj),
+    state.systemMenuList.filter((obj) => obj?.active && obj?.childList?.length),
 }
 
 // ACTIONS

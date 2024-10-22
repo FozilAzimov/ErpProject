@@ -1,5 +1,5 @@
 export default (context, inject) => {
-  // Global function
+  // Global function: example | 17/11/2001 00:00:00
   const formatDate = (date) => {
     const d = new Date(date)
     const day = String(d.getDate()).padStart(2, '0')
@@ -10,6 +10,5 @@ export default (context, inject) => {
     const seconds = String(d.getSeconds()).padStart(2, '0')
     return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`
   }
-
   inject('formatDate', formatDate)
 }

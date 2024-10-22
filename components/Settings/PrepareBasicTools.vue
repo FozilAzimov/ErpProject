@@ -4,14 +4,6 @@
       v-if="isLoading"
       class="absolute left-[50%] top-[8px] translate-x-[-50%]"
     />
-    <transition name="fade">
-      <ColumnConfigPage
-        v-show="checkModal"
-        api="saveColumnConfig"
-        class="z-[10000]"
-        @checkModal="handleValue"
-      />
-    </transition>
     <template v-if="isCloseTable">
       <div
         class="border-[1px] border-solid border-[rgba(0,0,0,0.05)] p-[12px] bg-gradient-to-b from-transparent via-transparent to-gray-200 shadow-md flex items-center justify-between mt-1"
@@ -35,7 +27,6 @@
               :style="{
                 background: 'radial-gradient(#fff, rgba(32,111,162,0.2))',
               }"
-              @click="openColumnConfig"
             >
               <img class="w-[11px]" src="@assets/icons/gear.png" alt="gear" />
             </li>
@@ -204,7 +195,6 @@ export default {
     return {
       isLoading: false,
       pageSize_value: 25,
-      checkModal: false,
       isOpenTable: true,
       isCloseTable: true,
       pageType: null,
@@ -244,12 +234,6 @@ export default {
 
   // Methods
   methods: {
-    handleValue(checkModal) {
-      this.checkModal = checkModal
-    },
-    openColumnConfig() {
-      this.checkModal = true
-    },
     // Table page ni ochish va yopish uchun
     isOpen() {
       this.isOpenTable = !this.isOpenTable
@@ -258,68 +242,12 @@ export default {
       this.isCloseTable = !this.isCloseTable
     },
 
-    // Data created
-    dataCreatedAction() {
-      const data = [
-        {
-          name: 'Batch Process Name',
-          subName: 'name',
-          type: 'text',
-          show: true,
-          disabled: this.pageType === 'view',
-        },
-        {
-          name: 'Code',
-          subName: 'code',
-          type: 'text',
-          show: true,
-          disabled: this.pageType === 'view',
-        },
-        {
-          name: 'Currency',
-          subName: 'currency',
-          type: 'select',
-          show: this.pageType === 'edit',
-          disabled: this.pageType === 'view',
-        },
-        {
-          name: 'Price',
-          subName: 'price',
-          type: 'number',
-          show: this.pageType === 'edit',
-          disabled: this.pageType === 'view',
-        },
-        {
-          name: 'Save name',
-          subName: 'savename',
-          type: 'checkbox',
-          show: true,
-          disabled: this.pageType === 'view',
-        },
-        {
-          name: 'Status',
-          subName: 'enabled',
-          type: 'radio',
-          show: true,
-          disabled: this.pageType === 'view',
-        },
-        {
-          name: 'Status',
-          subName: 'disabled',
-          type: 'radio',
-          show: true,
-          disabled: this.pageType === 'view',
-        },
-      ]
-      this.elementData = data
-    },
-
     // Page request
     getTableRequest() {
+      this.isLoading = !this.isLoading
       if (this.pageType === 'view') {
-        this.isLoading = !this.isLoading
         this.$axios
-          .post(`/batchProcess/prepareBatchProcessViewAjaxLoad`, {
+          .post(`/fixedAssets/prepareBatchProcessViewAjaxLoad`, {
             id: this.pageID,
             page_current: 1,
             page_size: 25,
@@ -334,9 +262,8 @@ export default {
             console.log(error)
           })
       } else if (this.pageType === 'edit') {
-        this.isLoading = !this.isLoading
         this.$axios
-          .post(`/batchProcess/prepareBatchProcessAjaxLoad`, {
+          .post(`/fixedAssets/prepareBatchProcessAjaxLoad`, {
             id: this.pageID,
             page_current: 1,
             page_size: 25,
@@ -348,6 +275,22 @@ export default {
             batchProcess.active
               ? (this.radio = 'enabled')
               : (this.radio = 'disabled')
+          })
+          .catch((error) => {
+            this.isLoading = !this.isLoading
+            // eslint-disable-next-line no-console
+            console.log(error)
+          })
+      } else {
+        this.$axios
+          .post(`/fixedAssets/prepareBasicTools`, {
+            page_current: 1,
+            page_size: 25,
+          })
+          .then(({ data: { batchProcess, currencyList } }) => {
+            this.isLoading = !this.isLoading
+            this.editData = batchProcess
+            this.currencyData = currencyList
           })
           .catch((error) => {
             this.isLoading = !this.isLoading
@@ -370,42 +313,27 @@ export default {
         batchProcess = {
           id: this.pageID,
           name: this.allInputAndLookUpValue?.name || this.editData.name || '',
-          savename:
-            this.allInputAndLookUpValue?.savename ||
-            this.editData.savename ||
-            '',
-          code: this.allInputAndLookUpValue?.code || this.editData.code || '',
-          active:
-            this.allInputAndLookUpValue?.active || this.editData.active || '',
-          currency: {
-            id: this.allInputAndLookUpValue?.currency || '',
-          },
-          price: this.allInputAndLookUpValue?.price || '',
         }
       } else {
         batchProcess = {
           name: this.allInputAndLookUpValue?.name,
-          savename: this.allInputAndLookUpValue?.savename,
-          code: this.allInputAndLookUpValue?.code,
-          active: this.allInputAndLookUpValue?.active,
         }
       }
       body = {
         page_size: this.pageSize_value,
         page_current: 1,
-        rightData: '',
         batchProcess,
       }
 
       this.isLoading = !this.isLoading
       const method = this.pageID ? 'put' : 'post'
       this.$axios[method](
-        `/batchProcess/${this.pageID ? 'editBatchProcess' : 'addBatchProcess'}`,
+        `/fixedAssets/${this.pageID ? 'editFixedAssets' : 'addFixedAssets'}`,
         body
       )
         .then(() => {
           this.isLoading = !this.isLoading
-          this.$router.push('/batchProcess.htm')
+          this.$router.push('/basicTools.htm')
         })
         .catch((error) => {
           this.isLoading = !this.isLoading
@@ -413,19 +341,117 @@ export default {
           console.log(error)
         })
     },
+
+    // Data created
+    dataCreatedAction() {
+      const data = [
+        {
+          name: 'Name',
+          subName: 'name',
+          type: 'text',
+          show: true,
+          required: true,
+          disabled: this.pageType === 'view',
+        },
+        {
+          name: 'Code',
+          subName: 'code',
+          type: 'text',
+          show: true,
+          required: true,
+          disabled: this.pageType === 'view',
+        },
+        {
+          name: 'Inventary number',
+          subName: 'inventaryNumber',
+          type: 'number',
+          show: true,
+          required: true,
+          disabled: this.pageType === 'view',
+        },
+        {
+          name: 'Type',
+          subName: 'type',
+          type: 'text',
+          show: true,
+          required: true,
+          disabled: this.pageType === 'view',
+        },
+        {
+          name: 'Model',
+          subName: 'model',
+          type: 'text',
+          show: true,
+          required: true,
+          disabled: this.pageType === 'view',
+        },
+        {
+          name: 'Technical information',
+          subName: 'technicalInformation',
+          type: 'text',
+          show: true,
+          required: true,
+          disabled: this.pageType === 'view',
+        },
+        {
+          name: 'Feature',
+          subName: 'feature',
+          type: 'text',
+          show: true,
+          required: true,
+          disabled: this.pageType === 'view',
+        },
+        {
+          name: 'Additional component',
+          subName: 'additionalComponent',
+          type: 'text',
+          show: true,
+          required: true,
+          disabled: this.pageType === 'view',
+        },
+        {
+          name: 'Balance value (sum)',
+          subName: 'balanceValue',
+          type: 'text',
+          show: true,
+          required: true,
+          disabled: this.pageType === 'view',
+        },
+        {
+          name: 'Annual depreciation rate (%)',
+          subName: 'AnnualDepreciationRate',
+          type: 'text',
+          show: true,
+          required: true,
+          disabled: this.pageType === 'view',
+        },
+        {
+          name: 'Department',
+          subName: 'departmentName',
+          type: 'select',
+          show: true,
+          required: true,
+          disabled: this.pageType === 'view',
+        },
+        {
+          name: 'Category Company',
+          subName: 'companyName',
+          type: 'select',
+          show: true,
+          required: true,
+          disabled: this.pageType === 'view',
+        },
+        {
+          name: 'Comment',
+          subName: 'comment',
+          type: 'textarea',
+          show: true,
+          required: true,
+          disabled: this.pageType === 'view',
+        },
+      ]
+      this.elementData = data
+    },
   },
 }
 </script>
-
-<style>
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.5s;
-}
-
-.fade-enter,
-.fade-leave-to {
-  opacity: 0;
-  transform: translateY(-20px);
-}
-</style>

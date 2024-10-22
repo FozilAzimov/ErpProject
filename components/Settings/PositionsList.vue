@@ -106,8 +106,6 @@
             <div class="flex items-center gap-2">
               <GenericInput
                 v-model="keywordValue"
-                width="200"
-                type="text"
                 placeholder="Search..."
                 @enter="getTableRequest"
                 @input="getInputValue"
@@ -127,7 +125,7 @@
             :istherebody="isThereBody"
             open-url="preparePosition"
             :productions-action-buttons="true"
-            delete-row-url="batchProcess/prepareBatchProcessDelete"
+            delete-row-url="positions/deletePosition"
             height="600"
             @pageEmitAction="getTableRequest"
           />
@@ -161,12 +159,16 @@ export default {
       tableHead: {
         id: { name: 'Id', code: 'id' },
         name: {
-          name: 'Batch Process Name',
+          name: 'Position Name',
           code: 'name',
         },
-        status: {
+        processStatusStr: {
           name: 'Status',
-          code: 'status',
+          code: 'processStatusStr',
+        },
+        active: {
+          name: 'Status',
+          code: 'active',
         },
       },
       tableBody: [],
@@ -197,7 +199,7 @@ export default {
     getTableRequest() {
       this.isLoading = !this.isLoading
       this.$axios
-        .post(`/batchProcess/batchProcessAjaxLoad`, {
+        .post(`/positions/positionsAjaxLoad`, {
           searchForm: {
             keyword: this.keywordValue,
           },
@@ -208,10 +210,9 @@ export default {
             total: 328,
           },
         })
-        .then(({ data: { batchProcessList } }) => {
+        .then(({ data: { positionList } }) => {
           this.isLoading = !this.isLoading
-          this.tableBody = batchProcessList
-
+          this.tableBody = positionList
           this.tableBody.length
             ? (this.isThereBody = true)
             : (this.isThereBody = false)

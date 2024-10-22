@@ -284,7 +284,6 @@ export default {
 
     getTableAction() {
       this.isShowHideTable = true
-      console.log('hay')
     },
 
     // page yuqorisidagi filterlar uchun data yaratish

@@ -4,17 +4,6 @@
       v-if="isLoading"
       class="absolute left-[50%] top-[8px] translate-x-[-50%]"
     />
-    <transition name="fade">
-      <ColumnConfigPage
-        v-show="checkModal"
-        :right="{}"
-        :left="{}"
-        :url="actionUrl"
-        api="saveColumnConfig"
-        class="z-[10000]"
-        @checkModal="handleValue"
-      />
-    </transition>
     <template v-if="isCloseTable">
       <div
         class="border-[1px] border-solid border-[rgba(0,0,0,0.05)] p-[12px] bg-gradient-to-b from-transparent via-transparent to-gray-200 shadow-md flex items-center justify-between"
@@ -32,7 +21,6 @@
               :style="{
                 background: 'radial-gradient(#fff, rgba(32,111,162,0.2))',
               }"
-              @click="openColumnConfig"
             >
               <img class="w-[11px]" src="@assets/icons/gear.png" alt="gear" />
             </li>
@@ -91,7 +79,7 @@
               <select
                 v-model="pageSize_value"
                 class="border-[1px] border-solid border-[rgba(171,177,187,0.7)] w-[60px] px-[5px] py-[3px] cursor-pointer rounded-[2px] text-[14px] outline-none"
-                @change="getTableRequest()"
+                @change="getTableRequest"
               >
                 <option value="10">10</option>
                 <option value="25">25</option>
@@ -103,9 +91,7 @@
             </div>
             <div class="flex items-center gap-2">
               <GenericInput
-                width="200"
-                type="text"
-                name="searchInput"
+                name="keyword"
                 placeholder="Search..."
                 @enter="getTableRequest"
                 @customFunction="getInputAndLookUpValueAction"
@@ -142,7 +128,6 @@
 import LoadingPage from '@components/Loading/LoadingPage.vue'
 import GenericButton from '@components/Generics/GenericButton.vue'
 import GenericInput from '@generics/GenericInput.vue'
-import ColumnConfigPage from '@components/ColumnConfig/ColumnConfigPage.vue'
 import GenericTablePage from '@components/GenericTable/GenericTablePage.vue'
 export default {
   // COMPONENTS
@@ -150,7 +135,6 @@ export default {
     LoadingPage,
     GenericButton,
     GenericInput,
-    ColumnConfigPage,
     GenericTablePage,
   },
 
@@ -159,14 +143,33 @@ export default {
     return {
       isLoading: false,
       pageSize_value: 10,
-      tableData: [],
-      tableHead: {},
+      tableHead: {
+        id: { name: 'Id', code: 'id' },
+        name: {
+          name: 'Name',
+          code: 'name',
+        },
+        code: {
+          name: 'Code',
+          code: 'code',
+        },
+        percentage: {
+          name: 'Percentage',
+          code: 'percentage',
+        },
+        fixedAmount: {
+          name: 'Fixed Amount',
+          code: 'fixedAmount',
+        },
+        maxAmount: {
+          name: 'Max Amount',
+          code: 'maxAmount',
+        },
+      },
       tableBody: [],
       tableHeadLength: null,
       isThereBody: false,
       allSelectAndInputValues: {},
-      checkModal: false,
-      actionUrl: '',
       isOpenTable: true,
       isCloseTable: true,
     }
@@ -174,20 +177,13 @@ export default {
 
   // MOUNTED
   mounted() {
+    this.tableHeadLength = Object.keys(this.tableHead).length + 1
     // Table function
     this.getTableRequest()
   },
 
   // METHODS
   methods: {
-    // Column config uchun ishlaydi
-    handleValue(checkModal) {
-      this.checkModal = checkModal
-    },
-    openColumnConfig() {
-      this.checkModal = true
-    },
-    // Column config uchun ishlaydi
     // Table page ni ochish va yopish uchun
     isOpen() {
       this.isOpenTable = !this.isOpenTable
@@ -209,35 +205,19 @@ export default {
         current_page: 1,
         page_size: this.pageSize_value,
         searchForm: {
-          keyword: this.allSelectAndInputValues?.searchInput || '',
+          keyword: this.allSelectAndInputValues?.keyword ?? '',
         },
-        dateFrom: this.allSelectAndInputValues?.dateFrom
-          ? new Date(this.allSelectAndInputValues?.dateFrom)
-              .toLocaleString('en-GB')
-              .split(',')
-              .join('')
-          : '',
-        dateTo: this.allSelectAndInputValues?.dateTo
-          ? new Date(this.allSelectAndInputValues?.dateTo)
-              .toLocaleString('en-GB')
-              .split(',')
-              .join('')
-          : '',
-        companyBranchId: this.allSelectAndInputValues?.companyBranchId || '',
-        statusId: this.allSelectAndInputValues?.statusId || '',
       }
 
       this.isLoading = !this.isLoading
       this.$axios
-        .post(`/invoices/expenseInvoice`, body)
-        .then(({ data: { build } }) => {
-          this.tableBody = []
+        .post(`/discount/discounts`, body)
+        .then(({ data: { discountList } }) => {
+          this.tableBody = discountList
+          this.tableBody.length
+            ? (this.isThereBody = true)
+            : (this.isThereBody = false)
           this.isLoading = !this.isLoading
-          this.tableHead = build?.rightMap
-          this.actionUrl = build?.actionUrl
-          this.tableData = build?.invoiceList
-          this.selectData = build?.invoiceSearchDTO
-          this.getTableBody()
         })
         .catch((error) => {
           this.isLoading = !this.isLoading
@@ -245,44 +225,6 @@ export default {
           console.log(error)
         })
     },
-
-    // Generic Table action Start
-    getTableBody() {
-      const arr = new Set()
-      for (const obj of this.tableData) {
-        arr.add(obj.id)
-        const data = new Map()
-        for (const key in this.tableHead) {
-          const value = this.tableHead[key].code
-          if (this.tableHead[key].code in obj) {
-            if (obj[value]) {
-              if (typeof obj[value] === 'object')
-                data.set(value, obj[value].value)
-              else data.set(value, obj[value])
-            } else data.set(value, obj[value])
-          } else data.set(value, false)
-        }
-        this.tableBody.push(Object.fromEntries(data))
-      }
-      this.tableHeadLength = Object.entries(this.tableHead).length
-      this.tableBody.length > 0
-        ? (this.isThereBody = true)
-        : (this.isThereBody = false)
-    },
-    // Generic Table action End
   },
 }
 </script>
-
-<style>
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.5s;
-}
-
-.fade-enter,
-.fade-leave-to {
-  opacity: 0;
-  transform: translateY(-20px);
-}
-</style>

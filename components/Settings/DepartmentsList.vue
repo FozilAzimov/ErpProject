@@ -128,7 +128,7 @@
             btn-name="Salary Increment"
             open-url="prepareDepartment"
             :productions-action-buttons="true"
-            delete-row-url="batchProcess/prepareBatchProcessDelete"
+            delete-row-url="department/prepareDepartmentDelete"
             height="600"
             @pageEmitAction="getTableRequest"
           />

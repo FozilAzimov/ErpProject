@@ -247,7 +247,7 @@ export default {
 
       this.isLoading = !this.isLoading
       this.$axios
-        .post(`/invoices/expenseInvoice`, body)
+        .post(`/kroy/kroyAjaxLoad`, body)
         .then(({ data: { build } }) => {
           this.tableBody = []
           this.isLoading = !this.isLoading

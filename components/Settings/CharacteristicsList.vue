@@ -161,12 +161,12 @@ export default {
       tableHead: {
         id: { name: 'Id', code: 'id' },
         name: {
-          name: 'Batch Process Name',
+          name: 'Characteristic Name',
           code: 'name',
         },
-        status: {
+        active: {
           name: 'Status',
-          code: 'status',
+          code: 'active',
         },
       },
       tableBody: [],
@@ -197,7 +197,7 @@ export default {
     getTableRequest() {
       this.isLoading = !this.isLoading
       this.$axios
-        .post(`/batchProcess/batchProcessAjaxLoad`, {
+        .post(`/characteristic/characteristicsAjaxLoad`, {
           searchForm: {
             keyword: this.keywordValue,
           },
@@ -208,9 +208,9 @@ export default {
             total: 328,
           },
         })
-        .then(({ data: { batchProcessList } }) => {
+        .then(({ data: { characteristics } }) => {
           this.isLoading = !this.isLoading
-          this.tableBody = batchProcessList
+          this.tableBody = characteristics
 
           this.tableBody.length
             ? (this.isThereBody = true)

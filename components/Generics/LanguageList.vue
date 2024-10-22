@@ -4,10 +4,10 @@
       class="translate-button w-[130px] p-[4px_15px] text-[13px] uppercase flex items-center justify-between bg-[#fff] rounded-[3px] relative z-[1] hover:bg-gradient-to-b hover:from-transparent hover:via-transparent hover:to-gray-200"
       @click="translateToggle"
     >
-      <img src="../../assets/icons/translate.png" alt="user" class="w-[14px]" />
+      <img src="@assets/icons/translate.png" alt="user" class="w-[14px]" />
       {{ 'English' }}
       <img
-        src="../../assets/icons/arrow-bottom.png"
+        src="@assets/icons/arrow-bottom.png"
         alt="user"
         class="w-[8px]"
         :style="{
@@ -16,50 +16,46 @@
       />
     </button>
     <ul
-      class="w-[130px] bg-[#fff] absolute top-[32px] text-[13px] overflow-hidden duration-[0.4s]"
+      class="w-[130px] bg-[#fff] absolute top-[30px] text-[13px] overflow-hidden duration-[0.4s] z-[100]"
       :style="{
         height: langToggle ? '135px' : '0px',
-        border: langToggle ? '1px solid #ddd' : '1px solid #8B98A6',
+        border: langToggle ? '1px solid #ddd' : '1px solid #206fa2b3',
       }"
     >
       <li
-        v-for="locale in availableLocales"
+        v-for="locale in optionData"
         :key="locale.code"
-        @click="getLanguage(locale.code, locale.title)"
+        @click="getLanguage(locale.code)"
       >
-        <nuxt-link
-          :to="switchLocalePath(locale.code)"
-          class="block p-[7px_15px] hover:bg-[rgba(54,155,215,0.3)] duration-[0.2s] flex items-center gap-2 cursor-pointer"
+        <span
+          class="p-[7px_15px] hover:bg-[rgba(54,155,215,0.3)] duration-[0.2s] flex items-center gap-2 cursor-pointer"
         >
           <img
             class="w-[11px]"
-            :src="require(`@assets/icons/${locale.url}`)"
-            :alt="locale.alt"
+            :src="require(`@icons/${locale.code}.png`)"
+            :alt="locale.code"
           />
-          {{ locale.title }}
-        </nuxt-link>
+          {{ locale.name }}
+        </span>
       </li>
     </ul>
   </div>
 </template>
 
 <script>
+import { mapActions } from 'vuex'
 export default {
   // DATA
   data() {
     return {
-      selectedLanguage: '',
       langToggle: false,
-      dropToggle: false,
-      language: '',
+      optionData: [
+        { name: 'English', code: 'en' },
+        { name: 'Russian', code: 'ru' },
+        { name: 'O`zbekistan', code: 'uz' },
+        { name: 'Turkiya', code: 'tr' },
+      ],
     }
-  },
-
-  // COMPUTED
-  computed: {
-    availableLocales() {
-      return ''
-    },
   },
 
   // Mounted
@@ -75,7 +71,8 @@ export default {
 
   // Method
   methods: {
-    changeLanguage() {},
+    // Store getters
+    ...mapActions('translate', ['FETCH_TRANSLATE']),
 
     // Translate toggle
     translateToggle() {
@@ -90,19 +87,10 @@ export default {
       this.langToggle = false
     },
 
-    // Language
-    getLanguage(lang, value) {
-      if (lang && value) {
-        this.language = value
-        this.$message({
-          message: `Proyekt tili ${value}ga muvaffaqqiyatli o'zgartirildi!`,
-          type: 'success',
-        })
-      } else {
-        this.$message.error(
-          `Proyekt tili ${value}ga o'zgartirilishida xatolik bo'ldi!`
-        )
-      }
+    // Language Request
+    getLanguage(lang) {
+      // Translate
+      this.FETCH_TRANSLATE(lang)
     },
   },
 }

@@ -4,14 +4,6 @@
       v-if="isLoading"
       class="absolute left-[50%] top-[8px] translate-x-[-50%]"
     />
-    <transition name="fade">
-      <ColumnConfigPage
-        v-show="checkModal"
-        api="saveColumnConfig"
-        class="z-[10000]"
-        @checkModal="handleValue"
-      />
-    </transition>
     <template v-if="isCloseTable">
       <div
         class="border-[1px] border-solid border-[rgba(0,0,0,0.05)] p-[12px] bg-gradient-to-b from-transparent via-transparent to-gray-200 shadow-md flex items-center justify-between mt-1"
@@ -29,7 +21,6 @@
               :style="{
                 background: 'radial-gradient(#fff, rgba(32,111,162,0.2))',
               }"
-              @click="openColumnConfig"
             >
               <img class="w-[11px]" src="@assets/icons/gear.png" alt="gear" />
             </li>
@@ -127,7 +118,7 @@
             :istherebody="isThereBody"
             open-url="prepareProductEntryType"
             :productions-action-buttons="true"
-            delete-row-url="batchProcess/prepareBatchProcessDelete"
+            delete-row-url="productEntry/prepareProductEntryTypesDelete"
             height="600"
             @pageEmitAction="getTableRequest"
           />
@@ -141,14 +132,12 @@
 import LoadingPage from '@components/Loading/LoadingPage.vue'
 import GenericButton from '@generics/GenericButton.vue'
 import GenericInput from '@generics/GenericInput.vue'
-import ColumnConfigPage from '@components/ColumnConfig/ColumnConfigPage.vue'
 import GenericTablePage from '@components/GenericTable/GenericTablePage.vue'
 export default {
   components: {
     LoadingPage,
     GenericButton,
     GenericInput,
-    ColumnConfigPage,
     GenericTablePage,
   },
 
@@ -161,18 +150,17 @@ export default {
       tableHead: {
         id: { name: 'Id', code: 'id' },
         name: {
-          name: 'Batch Process Name',
+          name: 'Product Entry Type Name',
           code: 'name',
         },
-        status: {
+        active: {
           name: 'Status',
-          code: 'status',
+          code: 'active',
         },
       },
       tableBody: [],
       tableHeadLength: null,
       isThereBody: false,
-      checkModal: false,
       isOpenTable: true,
       isCloseTable: true,
     }
@@ -187,17 +175,10 @@ export default {
 
   // Methods
   methods: {
-    handleValue(checkModal) {
-      this.checkModal = checkModal
-    },
-    openColumnConfig() {
-      this.checkModal = true
-    },
-
     getTableRequest() {
       this.isLoading = !this.isLoading
       this.$axios
-        .post(`/batchProcess/batchProcessAjaxLoad`, {
+        .post(`/productEntry/productEntryTypesAjaxLoad`, {
           searchForm: {
             keyword: this.keywordValue,
           },
@@ -208,9 +189,9 @@ export default {
             total: 328,
           },
         })
-        .then(({ data: { batchProcessList } }) => {
+        .then(({ data: { productEntryTypeList } }) => {
           this.isLoading = !this.isLoading
-          this.tableBody = batchProcessList
+          this.tableBody = productEntryTypeList
 
           this.tableBody.length
             ? (this.isThereBody = true)
@@ -238,16 +219,3 @@ export default {
   },
 }
 </script>
-
-<style>
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.5s;
-}
-
-.fade-enter,
-.fade-leave-to {
-  opacity: 0;
-  transform: translateY(-20px);
-}
-</style>

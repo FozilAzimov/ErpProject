@@ -11,21 +11,28 @@
     :loading="loading"
     loading-text="Loading..."
     no-data-text="No Data"
-    :filter-method="customFilterAction"
+    :filter-method="getRequestResponseAction"
     :style="{
       width: widthtype === '%' ? `${dwidth}%` : `${dwidth}px`,
       border: required ? 'none' : '1px solid red',
       borderRadius: '5px',
     }"
     @change="getChangeValueAction"
-    @focus="focusSelectAction"
+    @focus="getRequestResponseAction('')"
   >
     <el-option
       v-for="(item, index) in options"
       :key="index"
-      :label="item.name ? item.name : item.moduleName"
-      :text="item.name ? item.name : item.moduleName"
-      :value="item.id ? item.id : item.moduleId"
+      :label="
+        item?.name
+          ? item?.name
+          : item?.moduleName
+          ? item?.moduleName
+          : `${item?.fname} ${item?.lname} ${item?.employee_number}`
+      "
+      :value="
+        item?.id ? item?.id : item?.moduleId ? item?.moduleId : item?.code
+      "
     >
     </el-option>
   </el-select>
@@ -98,57 +105,28 @@ export default {
   data() {
     return {
       loading: false,
-      options: [],
+      options: this.optionsData,
       value: this.defvalue,
-      text: '',
     }
   },
 
   // WATCH
   watch: {
-    defvalue(newVal) {
-      this.value = newVal
-    },
-    optionsData: {
+    defvalue: {
       handler(newVal) {
-        this.options = newVal
+        this.value = newVal
       },
-      deep: true,
+      immediate: true,
     },
-  },
-
-  // MOUNTED
-  mounted() {
-    this.options = this.optionsData
   },
 
   // METHODS
   methods: {
-    // select'ga yozilganda ishaydi
-    customFilterAction(value) {
-      // function
-      this.getRequestResponseAction(value)
-    },
-
-    // select change bo'lganda ishlaydi
-    getChangeValueAction(value) {
-      // Emit action
-      this.$emit(
-        'customFunction',
-        this.name,
-        value,
-        this.order,
-        this.resultType
-      )
-    },
-
-    // select'ga focus qaratganda ishlaydi
-    focusSelectAction(event) {
-      // function
-      this.getRequestResponseAction('')
-    },
-
+    // Filtering And dUrl action
     getRequestResponseAction(searchKey) {
+      // filter searchKey'ni value'ga set qilish
+      this.value = searchKey
+      // filter searchKey'ni value'ga set qilish
       if (this.durl) {
         this.loading = true
         const body = { ...this.dparam, search_key: searchKey }
@@ -167,9 +145,25 @@ export default {
             this.options = res.data
           })
           .catch((res) => {
-            this.loading = true
+            this.loading = false
           })
+      } else {
+        this.options = this.optionsData.filter((obj) =>
+          obj?.name.includes(searchKey)
+        )
       }
+    },
+
+    // select change bo'lganda ishlaydi
+    getChangeValueAction(value) {
+      // Emit action
+      this.$emit(
+        'customFunction',
+        this.name,
+        value,
+        this.order,
+        this.resultType
+      )
     },
   },
 }

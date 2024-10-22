@@ -35,7 +35,7 @@
         <div class="flex items-center gap-[10px]">
           <img src="@assets/icons/user-black.png" alt="user" class="w-[14px]" />
           <h1 class="font-bold text-[rgb(49,126,172)] text-[14px] uppercase">
-            Company List
+            {{ GET_CORE_STRING?.['company.list'] || 'Company List' }}
           </h1>
         </div>
         <div>
@@ -92,7 +92,7 @@
         "
       >
         <GenericButton
-          name="Add New"
+          :name="GET_CORE_STRING?.allAddNew || 'Add New'"
           type="primary"
           :margin="true"
           icon-name-attribute="circle-plus-outline"
@@ -112,23 +112,23 @@
                 <option value="100">100</option>
                 <option value="500">500</option>
               </select>
-              Records
+              {{ GET_CORE_STRING?.records || 'Records' }}
             </div>
             <div class="flex items-center gap-2">
               <GenericInput
                 name="searchInput"
-                placeholder="Search..."
+                :placeholder="`${GET_CORE_STRING?.search}...`"
                 @enter="getTableRequest"
                 @customFunction="getInputAndLookUpValueAction"
               />
               <GenericButton
-                name="Search"
+                :name="GET_CORE_STRING?.search"
                 type="primary"
                 icon-name-attribute="search"
                 @click="getTableRequest"
               />
               <GenericButton
-                name="Print Preview"
+                :name="GET_CORE_STRING?.printPreview"
                 type="success"
                 icon-name-attribute="printer"
               />
@@ -141,7 +141,11 @@
             :istherebody="isThereBody"
             :productions-action-buttons="true"
             open-url="prepareCompany"
-            :custom-btn="{ name: 'Block', type: 'danger', clickType: 'block' }"
+            :custom-btn="{
+              name: 'Block',
+              type: 'danger',
+              clickType: 'block',
+            }"
             delete-row-url="batchProcess/prepareBatchProcessDelete"
             height="600"
             @pageEmitAction="getTableRequest"
@@ -153,6 +157,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import GenericButton from '@generics/GenericButton.vue'
 import LoadingPage from '@components/Loading/LoadingPage.vue'
 import GenericInput from '@generics/GenericInput.vue'
@@ -190,12 +195,30 @@ export default {
     }
   },
 
+  computed: {
+    // Store getters
+    ...mapGetters('translate', ['GET_CORE_STRING']),
+  },
+
+  // WATCH
+  watch: {
+    // start CoreString action
+    GET_CORE_STRING: {
+      handler(newVal) {
+        // function
+        this.createDataFiltering(newVal)
+      },
+      deep: true,
+    },
+    // end CoreString action
+  },
+
   // MOUNTED
   mounted() {
     // Table function
     this.getTableRequest()
     // function
-    this.createDataFiltering()
+    this.createDataFiltering(this.GET_CORE_STRING)
   },
 
   // Methods
@@ -260,10 +283,10 @@ export default {
     },
 
     // page yuqorisidagi filterlar uchun data yaratish
-    createDataFiltering() {
+    createDataFiltering(getText) {
       const createDate = [
         {
-          name: 'Company Category',
+          name: getText?.company_category || 'Company Category',
           subName: 'companies',
           type: 'select',
         },

@@ -160,13 +160,17 @@ export default {
       keywordValue: '',
       tableHead: {
         id: { name: 'Id', code: 'id' },
+        transferCodeTypeName: {
+          name: 'Transfer Code',
+          code: 'transferCodeTypeName',
+        },
         name: {
-          name: 'Batch Process Name',
+          name: 'Product Transfer Code',
           code: 'name',
         },
-        status: {
+        active: {
           name: 'Status',
-          code: 'status',
+          code: 'active',
         },
       },
       tableBody: [],
@@ -197,7 +201,7 @@ export default {
     getTableRequest() {
       this.isLoading = !this.isLoading
       this.$axios
-        .post(`/batchProcess/batchProcessAjaxLoad`, {
+        .post(`/productTransferCode/productTransferCodes`, {
           searchForm: {
             keyword: this.keywordValue,
           },
@@ -208,9 +212,9 @@ export default {
             total: 328,
           },
         })
-        .then(({ data: { batchProcessList } }) => {
+        .then(({ data: { productTransferCodes } }) => {
           this.isLoading = !this.isLoading
-          this.tableBody = batchProcessList
+          this.tableBody = productTransferCodes
 
           this.tableBody.length
             ? (this.isThereBody = true)

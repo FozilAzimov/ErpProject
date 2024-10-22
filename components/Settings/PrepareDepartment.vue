@@ -117,8 +117,8 @@
                 <generic-look-up
                   dwidth="300"
                   :name="element.subName"
-                  :defvalue="''"
-                  :options-data="currencyData"
+                  :defvalue="viewEditData?.[element?.subName]"
+                  :options-data="companyList"
                   :disabled="element.disabled"
                   @customFunction="getInputAndLookUpValueAction"
                 />
@@ -183,8 +183,8 @@ export default {
       elementData: [],
       viewEditData: {},
       allInputAndLookUpValue: {},
-      radio: null,
-      currencyData: [],
+      radio: 'Enabled',
+      companyList: [],
     }
   },
 
@@ -211,6 +211,7 @@ export default {
     this.dataCreatedAction()
     // Table function
     this.getTableRequest()
+    this.allInputAndLookUpValue.active = true
   },
 
   // Methods
@@ -239,9 +240,13 @@ export default {
             page_current: 1,
             page_size: 25,
           })
-          .then(({ data: { design } }) => {
+          .then(({ data: { department, companyList } }) => {
             this.isLoading = !this.isLoading
-            this.viewEditData = design
+            this.viewEditData = department
+            this.companyList = companyList
+            department.status
+              ? (this.radio = 'Enabled')
+              : (this.radio = 'Disabled')
           })
           .catch((error) => {
             this.isLoading = !this.isLoading
@@ -256,11 +261,11 @@ export default {
             page_current: 1,
             page_size: 25,
           })
-          .then(({ data: { batchProcess, currencyList } }) => {
+          .then(({ data: { department, companyList } }) => {
             this.isLoading = !this.isLoading
-            this.viewEditData = batchProcess
-            this.currencyData = currencyList
-            batchProcess.active
+            this.viewEditData = department
+            this.companyList = companyList
+            department.status
               ? (this.radio = 'Enabled')
               : (this.radio = 'Disabled')
           })
@@ -273,17 +278,12 @@ export default {
         this.isLoading = !this.isLoading
         this.$axios
           .post(`/department/prepareDepartment`, {
-            id: this.pageID,
             page_current: 1,
             page_size: 25,
           })
-          .then(({ data: { batchProcess, currencyList } }) => {
+          .then(({ data: { companyList } }) => {
             this.isLoading = !this.isLoading
-            this.viewEditData = batchProcess
-            this.currencyData = currencyList
-            batchProcess.active
-              ? (this.radio = 'Enabled')
-              : (this.radio = 'Disabled')
+            this.companyList = companyList
           })
           .catch((error) => {
             this.isLoading = !this.isLoading
@@ -301,40 +301,54 @@ export default {
     // Save Changes action
     saveAction() {
       let body = {}
-      let batchProcess = {}
+      let department = {}
       if (this.pageID && this.pageType === 'edit') {
-        batchProcess = {
+        department = {
           id: this.pageID,
-          name:
-            this.allInputAndLookUpValue?.name || this.viewEditData.name || '',
-          savename:
-            this.allInputAndLookUpValue?.savename ||
-            this.viewEditData.savename ||
-            '',
-          code:
-            this.allInputAndLookUpValue?.code || this.viewEditData.code || '',
-          active:
-            this.allInputAndLookUpValue?.active ||
-            this.viewEditData.active ||
-            '',
-          currency: {
-            id: this.allInputAndLookUpValue?.currency || '',
+          company: {
+            id:
+              this.allInputAndLookUpValue?.companyName ??
+              this.viewEditData?.companyId ??
+              '',
           },
-          price: this.allInputAndLookUpValue?.price || '',
+          name:
+            this.allInputAndLookUpValue?.name ?? this.viewEditData?.name ?? '',
+          telegramBotName:
+            this.allInputAndLookUpValue?.telegramName ??
+            this.viewEditData?.telegramBotName ??
+            '',
+          telegramBotChatId:
+            this.allInputAndLookUpValue?.telegramBotChatId ??
+            this.viewEditData?.telegramBotChatId ??
+            '',
+          telegramReportType:
+            this.allInputAndLookUpValue?.telegramReportType ??
+            this.viewEditData?.telegramReportType ??
+            '',
+          type:
+            this.allInputAndLookUpValue?.type ?? this.viewEditData?.type ?? '',
+          active:
+            this.allInputAndLookUpValue?.active ??
+            this.viewEditData?.status ??
+            false,
         }
       } else {
-        batchProcess = {
-          name: this.allInputAndLookUpValue?.name,
-          savename: this.allInputAndLookUpValue?.savename,
-          code: this.allInputAndLookUpValue?.code,
-          active: this.allInputAndLookUpValue?.active,
+        department = {
+          company: { id: this.allInputAndLookUpValue?.companyName ?? '' },
+          name: this.allInputAndLookUpValue?.name ?? '',
+          telegramBotName: this.allInputAndLookUpValue?.telegramName ?? '',
+          telegramBotChatId:
+            this.allInputAndLookUpValue?.telegramBotChatId ?? '',
+          telegramReportType:
+            this.allInputAndLookUpValue?.telegramReportType ?? '',
+          type: this.allInputAndLookUpValue?.type ?? '',
+          active: this.allInputAndLookUpValue?.active ?? false,
         }
       }
       body = {
         page_size: this.pageSize_value,
         page_current: 1,
-        rightData: '',
-        batchProcess,
+        department,
       }
 
       this.isLoading = !this.isLoading
@@ -366,7 +380,7 @@ export default {
         },
         {
           name: 'Department Name',
-          subName: 'departmentName',
+          subName: 'name',
           type: 'text',
           show: true,
           required: true,
@@ -374,7 +388,7 @@ export default {
         },
         {
           name: 'Department Telegram Name',
-          subName: 'department.telegramName',
+          subName: 'telegramName',
           type: 'text',
           required: true,
           show: this.pageType !== 'view',
@@ -382,7 +396,7 @@ export default {
         },
         {
           name: 'Department Telegram BotChatId',
-          subName: 'department.telegramBotChatId',
+          subName: 'telegramBotChatId',
           type: 'text',
           required: true,
           show: this.pageType !== 'view',
@@ -390,7 +404,7 @@ export default {
         },
         {
           name: 'Department Telegram ReportType',
-          subName: 'department.telegramReportType',
+          subName: 'telegramReportType',
           type: 'text',
           required: true,
           show: this.pageType !== 'view',
@@ -398,7 +412,7 @@ export default {
         },
         {
           name: 'Department type',
-          subName: 'department.type',
+          subName: 'type',
           type: 'text',
           show: this.pageType !== 'view',
           disabled: this.pageType === 'view',

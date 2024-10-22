@@ -255,6 +255,7 @@ const _67604b26 = () => interopDefault(import('..\\pages\\prepareDistrict.htm\\_
 const _109c7c4d = () => interopDefault(import('..\\pages\\prepareDoor.htm\\_id.vue' /* webpackChunkName: "pages/prepareDoor.htm/_id" */))
 const _6def37f5 = () => interopDefault(import('..\\pages\\prepareEquipment.htm\\_id.vue' /* webpackChunkName: "pages/prepareEquipment.htm/_id" */))
 const _3bf75acc = () => interopDefault(import('..\\pages\\prepareEquipmentExpenses.htm\\_id.vue' /* webpackChunkName: "pages/prepareEquipmentExpenses.htm/_id" */))
+const _5efdcfea = () => interopDefault(import('..\\pages\\prepareEquipmentExternal.htm\\_id.vue' /* webpackChunkName: "pages/prepareEquipmentExternal.htm/_id" */))
 const _7332d8a6 = () => interopDefault(import('..\\pages\\prepareExpenseInvoice.htm\\_id.vue' /* webpackChunkName: "pages/prepareExpenseInvoice.htm/_id" */))
 const _26af1dbc = () => interopDefault(import('..\\pages\\prepareExtraWork.htm\\_id.vue' /* webpackChunkName: "pages/prepareExtraWork.htm/_id" */))
 const _543a5e6b = () => interopDefault(import('..\\pages\\prepareHoliday.htm\\_id.vue' /* webpackChunkName: "pages/prepareHoliday.htm/_id" */))
@@ -1350,6 +1351,10 @@ export const routerOptions = {
     path: "/prepareEquipmentExpenses.htm/:id?",
     component: _3bf75acc,
     name: "prepareEquipmentExpenses.htm-id"
+  }, {
+    path: "/prepareEquipmentExternal.htm/:id?",
+    component: _5efdcfea,
+    name: "prepareEquipmentExternal.htm-id"
   }, {
     path: "/prepareExpenseInvoice.htm/:id?",
     component: _7332d8a6,

@@ -252,7 +252,6 @@ export default {
       logoutMessage: false,
       dropToggle: false,
       langToggle: false,
-      language: '',
       optionData: [
         { name: 'English', code: 'en' },
         { name: 'Russian', code: 'ru' },

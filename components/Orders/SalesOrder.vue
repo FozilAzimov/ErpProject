@@ -249,6 +249,8 @@ export default {
   mounted() {
     // function
     this.pageRequestAction()
+    // function
+    this.createDataFiltering(this.GET_CORE_STRING)
   },
 
   // METHODS

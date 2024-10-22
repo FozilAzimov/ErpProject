@@ -20,7 +20,7 @@
               v-if="showHideActionCol"
               class="w-[100px] text-[13px] font-semibold border-[1px] border-solid border-[rgba(119,136,153,0.2)] p-2 cursor-pointer"
             >
-              {{ GET_CORE_STRING?.['common.table.title.action'] }}
+              {{ GET_CORE_STRING?.['common.table.title.action'] || 'Action' }}
             </th>
           </tr>
         </thead>
@@ -92,7 +92,21 @@
                     (key?.code === 'checkPreviousStageEndStatus' &&
                       $route.path.includes('batchProcessStages.htm')) ||
                     (key?.code === 'status' &&
-                      $route.path.includes('departments.htm'))
+                      $route.path.includes('departments.htm')) ||
+                    (key?.code === 'active' &&
+                      ($route.path.includes('warehouses.htm') ||
+                        $route.path.includes('positions.htm') ||
+                        $route.path.includes('producttransfercodes.htm') ||
+                        $route.path.includes('characteristics.htm') ||
+                        $route.path.includes('characterDetails.htm') ||
+                        $route.path.includes('productEntryTypes.htm') ||
+                        $route.path.includes('manufacturers.htm') ||
+                        $route.path.includes('articles.htm') ||
+                        $route.path.includes('equipments.htm') ||
+                        $route.path.includes('productionArticles.htm') ||
+                        $route.path.includes('subDepartments.htm') ||
+                        $route.path.includes('phoneNumbers.htm') ||
+                        $route.path.includes('productcategories.htm')))
                   "
                   class="p-[2px_5px] italic text-white font-bold rounded-[5px]"
                 >
@@ -113,11 +127,13 @@
                 <!-- Start YES and NO -->
                 <span
                   v-else-if="
-                    (key?.code === 'system_company' ||
+                    ((key?.code === 'system_company' ||
                       key?.code === 'physical' ||
                       key?.code === 'companyBranch' ||
                       key?.code === 'active') &&
-                    $route.path.includes('companies.htm')
+                      $route.path.includes('companies.htm')) ||
+                    (key?.code === 'arrow' &&
+                      $route.path.includes('manufacturers.htm'))
                   "
                   class="p-[2px_5px] italic text-white font-bold rounded-[5px]"
                 >
@@ -147,6 +163,41 @@
                     value[key?.code]
                   }}</span>
                 </span>
+
+                <!-- teg filter -->
+                <span
+                  v-else-if="
+                    key?.code === 'type' && $route.path.includes('logs.htm')
+                  "
+                >
+                  <span
+                    v-if="value?.[key?.code] === 1"
+                    class="bg-[#43A1DA] text-[11px] italic p-[0px_5px] text-white rounded-sm"
+                    >Create</span
+                  >
+                  <span
+                    v-if="value?.[key?.code] === 2"
+                    class="bg-[#9E6AB8] text-[11px] italic p-[0px_5px] text-white rounded-sm"
+                    >Edit</span
+                  >
+                  <span
+                    v-if="value?.[key?.code] === 3"
+                    class="bg-[#D41E24] text-[11px] italic p-[0px_5px] text-white rounded-sm"
+                    >Delete</span
+                  >
+                  <span
+                    v-if="value?.[key?.code] === 4"
+                    class="bg-[#5B8793] text-[11px] italic p-[0px_5px] text-white rounded-sm"
+                    >Other</span
+                  >
+                  <span
+                    v-if="value?.[key?.code] === 5"
+                    class="bg-[#7BB33D] text-[11px] italic p-[0px_5px] text-white rounded-sm"
+                    >View</span
+                  >
+                </span>
+                <!-- teg filter -->
+
                 <span
                   v-else-if="
                     key?.code === 'status' ||
@@ -256,8 +307,10 @@
                 </span>
                 <div
                   v-else-if="
-                    $route.path.includes('designVariants.htm') &&
-                    key?.code === 'recipe'
+                    ($route.path.includes('designVariants.htm') &&
+                      key?.code === 'recipe') ||
+                    ($route.path.includes('equipments.htm') &&
+                      key?.code === 'calendar')
                   "
                   class="align-middle text-center"
                 >
@@ -269,6 +322,17 @@
                     @click="
                       $router.push(
                         `/prepareDesignColorVariant.htm/${value.colorVariantId}`
+                      )
+                    "
+                  />
+                  <generic-button
+                    v-else-if="value.id"
+                    name="Calendar"
+                    type="success"
+                    icon-name-attribute="zoom-in"
+                    @click="
+                      $router.push(
+                        `/prepareEquipmentServicesCalendar.htm/${value.id}`
                       )
                     "
                   />
@@ -339,7 +403,23 @@
                   v-html="value[key?.code]"
                 ></span>
                 <!-- All html elements -->
-
+                <span
+                  v-else-if="
+                    key?.code === 'person' &&
+                    $route.path.includes('tableRowAccessSysUser.htm')
+                  "
+                >
+                  {{ value?.[key?.code1] }}
+                  {{ value?.[key?.code2] }}
+                  {{ value?.[key?.code3] }}
+                  - Login: ({{ value?.[key?.code4] }})
+                </span>
+                <generic-check-box
+                  v-else-if="
+                    $route.path.includes('logs.htm') && key?.code === 'check'
+                  "
+                  :name="key?.code"
+                />
                 <span v-else>
                   {{ value?.[key?.code] }}
                 </span>
@@ -387,7 +467,14 @@
                 </span>
                 <span v-else class="flex items-center justify-center gap-2 p-2">
                   <GenericButton
-                    v-if="!$route.path.includes('products.htm')"
+                    v-if="
+                      !$route.path.includes('products.htm') &&
+                      !$route.path.includes('permissionGroups.htm') &&
+                      !$route.path.includes('capitals.htm') &&
+                      !$route.path.includes('obligations.htm') &&
+                      !$route.path.includes('profitsAndLosses.htm') &&
+                      !$route.path.includes('intangibleAssets.htm')
+                    "
                     name="View"
                     type="primary"
                     icon-name-attribute="zoom-in"
@@ -548,11 +635,13 @@ import { mapGetters } from 'vuex'
 import GenericButton from '@components/Generics/GenericButton.vue'
 import MessageBox from '@components/MessageBox.vue'
 import GenericPagination from '@components/Generics/GenericPagination.vue'
+import GenericCheckBox from '@generics/GenericCheckBox.vue'
 export default {
   components: {
     GenericButton,
     MessageBox,
     GenericPagination,
+    GenericCheckBox,
   },
 
   // PROPS
@@ -603,9 +692,22 @@ export default {
     },
   },
 
+  // DATA
+  data() {
+    return {
+      routerPath: null,
+    }
+  },
+
   // COMPUTED
   computed: {
     ...mapGetters('translate', ['GET_CORE_STRING']),
+  },
+
+  // CREATED
+  created() {
+    // page TYPE ni aniqlash
+    this.routerPath = this.$route?.name?.split('.')?.[0]
   },
 
   // METHODS
@@ -635,7 +737,17 @@ export default {
 
     // Message box EMIT action
     getEmitProp(propMessage, id) {
-      if (propMessage === 'confirm') {
+      if (
+        (this.routerPath === 'capitals' ||
+          this.routerPath === 'obligations' ||
+          this.routerPath === 'profitsAndLosses' ||
+          this.routerPath === 'intangibleAssets') &&
+        propMessage === 'confirm'
+      ) {
+        this.$axios.delete(`/${this.deleteRowUrl}/${id}`).then(({ status }) => {
+          if (status < 300) this.$emit('pageEmitAction', true)
+        })
+      } else if (propMessage === 'confirm') {
         this.$axios
           .delete(`/${this.deleteRowUrl}`, {
             data: {

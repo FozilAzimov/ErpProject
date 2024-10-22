@@ -224,16 +224,18 @@ export default {
     getTableRequest() {
       this.isLoading = !this.isLoading
       this.$axios
-        .post(`/batchProcess/batchProcessAjaxLoad`, {
+        .post(`/messages/inboxAjaxLoad`, {
           searchForm: {
             keyword: this.keywordValue,
           },
           pagingForm: {
             pageSize: this.pageSize_value,
             currentPage: 1,
-            pageCount: 14,
-            total: 328,
+            pageCount: 0,
+            btnPage: 0,
+            total: 0,
           },
+          statusId: null,
         })
         .then(({ data: { batchProcessList } }) => {
           this.isLoading = !this.isLoading

@@ -1,20 +1,12 @@
 <template>
-  <div class="w-full p-[0px_12px_0px_10px]">
+  <div class="w-full p-1">
     <LoadingPage
       v-if="isLoading"
       class="absolute left-[50%] top-[8px] translate-x-[-50%]"
     />
-    <transition name="fade">
-      <ColumnConfigPage
-        v-show="checkModal"
-        api="saveColumnConfig"
-        class="z-[10000]"
-        @checkModal="handleValue"
-      />
-    </transition>
     <template v-if="isCloseTable">
       <div
-        class="border-[1px] border-solid border-[rgba(0,0,0,0.05)] p-[12px] bg-gradient-to-b from-transparent via-transparent to-gray-200 shadow-md flex items-center justify-between mt-1"
+        class="border-[1px] border-solid border-[rgba(0,0,0,0.05)] p-[12px] bg-gradient-to-b from-transparent via-transparent to-gray-200 shadow-md flex items-center justify-between"
       >
         <div class="flex items-center gap-[10px]">
           <img src="@assets/icons/user-black.png" alt="user" class="w-[14px]" />
@@ -29,7 +21,6 @@
               :style="{
                 background: 'radial-gradient(#fff, rgba(32,111,162,0.2))',
               }"
-              @click="openColumnConfig"
             >
               <img class="w-[11px]" src="@assets/icons/gear.png" alt="gear" />
             </li>
@@ -77,7 +68,7 @@
       >
         <div class="flex items-center gap-2 m-2">
           <generic-button
-            name="Add New"
+            name="Add New Internal"
             type="primary"
             icon-name-attribute="circle-plus-outline"
             @click="
@@ -91,6 +82,12 @@
             name="Add New External"
             type="primary"
             icon-name-attribute="circle-plus-outline"
+            @click="
+              $router.push({
+                path: '/prepareEquipmentExternal.htm',
+                query: { page_type: 'create' },
+              })
+            "
           />
         </div>
         <div class="p-2">
@@ -112,8 +109,6 @@
             <div class="flex items-center gap-2">
               <GenericInput
                 v-model="keywordValue"
-                width="200"
-                type="text"
                 placeholder="Search..."
                 @enter="getTableRequest"
                 @input="getInputValue"
@@ -133,7 +128,7 @@
             :istherebody="isThereBody"
             open-url="prepareEquipment"
             :productions-action-buttons="true"
-            delete-row-url="batchProcess/prepareBatchProcessDelete"
+            delete-row-url="equipment/prepareEquipmentSevicesDelete"
             height="600"
             @pageEmitAction="getTableRequest"
           />
@@ -147,14 +142,12 @@
 import LoadingPage from '@components/Loading/LoadingPage.vue'
 import GenericButton from '@generics/GenericButton.vue'
 import GenericInput from '@generics/GenericInput.vue'
-import ColumnConfigPage from '@components/ColumnConfig/ColumnConfigPage.vue'
 import GenericTablePage from '@components/GenericTable/GenericTablePage.vue'
 export default {
   components: {
     LoadingPage,
     GenericButton,
     GenericInput,
-    ColumnConfigPage,
     GenericTablePage,
   },
 
@@ -167,18 +160,53 @@ export default {
       tableHead: {
         id: { name: 'Id', code: 'id' },
         name: {
-          name: 'Batch Process Name',
+          name: 'Equipment Name',
           code: 'name',
         },
-        status: {
+        code: {
+          name: 'Code Equipment',
+          code: 'code',
+        },
+        ecode: {
+          name: 'Equipment ecode',
+          code: 'ecode',
+        },
+        departmentName: {
+          name: 'Department',
+          code: 'departmentName',
+        },
+        equipmentIsInternalOrExternal: {
+          name: 'Equipment Is Internal Or External',
+          code: 'equipmentIsInternalOrExternal',
+        },
+        ipAddress: {
+          name: 'Ip Address',
+          code: 'ipAddress',
+        },
+        onlyOneStart: {
+          name: 'Only One Start',
+          code: 'onlyOneStart',
+        },
+        volume: {
+          name: 'Volume',
+          code: 'volume',
+        },
+        ratio: {
+          name: 'Ratio',
+          code: 'ratio',
+        },
+        active: {
           name: 'Status',
-          code: 'status',
+          code: 'active',
+        },
+        calendar: {
+          name: 'Calendar',
+          code: 'calendar',
         },
       },
       tableBody: [],
       tableHeadLength: null,
       isThereBody: false,
-      checkModal: false,
       isOpenTable: true,
       isCloseTable: true,
     }
@@ -193,17 +221,10 @@ export default {
 
   // Methods
   methods: {
-    handleValue(checkModal) {
-      this.checkModal = checkModal
-    },
-    openColumnConfig() {
-      this.checkModal = true
-    },
-
     getTableRequest() {
       this.isLoading = !this.isLoading
       this.$axios
-        .post(`/batchProcess/batchProcessAjaxLoad`, {
+        .post(`/equipment/equipmentServicesList`, {
           searchForm: {
             keyword: this.keywordValue,
           },
@@ -214,9 +235,9 @@ export default {
             total: 328,
           },
         })
-        .then(({ data: { batchProcessList } }) => {
+        .then(({ data: { equipmentList } }) => {
           this.isLoading = !this.isLoading
-          this.tableBody = batchProcessList
+          this.tableBody = equipmentList
 
           this.tableBody.length
             ? (this.isThereBody = true)
@@ -244,16 +265,3 @@ export default {
   },
 }
 </script>
-
-<style>
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.5s;
-}
-
-.fade-enter,
-.fade-leave-to {
-  opacity: 0;
-  transform: translateY(-20px);
-}
-</style>

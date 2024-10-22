@@ -22,13 +22,17 @@
     >
       <div class="flex items-center gap-[10px]">
         <generic-button
-          name="Go Back"
+          :name="GET_CORE_STRING?.allBack"
           type="primary"
           icon-name-attribute="arrow-left"
           @click="$router.push('/salesorder.htm')"
         />
         <h1 class="font-bold text-[rgb(49,126,172)] text-[14px] uppercase">
-          Sales order
+          {{
+            pageID
+              ? GET_CORE_STRING?.['salesOrder.edit']
+              : GET_CORE_STRING?.['salesOrder.add']
+          }}
         </h1>
       </div>
     </div>
@@ -161,7 +165,7 @@
           >
             <td colspan="6" class="border-[1px] border-solid border-[#778899]">
               <generic-button
-                name="Accept"
+                :name="GET_CORE_STRING?.accept || 'Accept'"
                 type="primary"
                 @click="acceptAction"
               />
@@ -393,6 +397,19 @@ export default {
     },
   },
 
+  // WATCH
+  watch: {
+    // start CoreString action
+    GET_CORE_STRING: {
+      handler(newVal) {
+        // function
+        this.dataCreatedAction(newVal)
+      },
+      deep: true,
+    },
+    // end CoreString action
+  },
+
   // CREATED
   created() {
     this.pageID = this.$route.params?.id
@@ -411,7 +428,7 @@ export default {
     // function
     this.getTableRequest(this.pageID)
     // function
-    this.dataCreatedAction()
+    this.dataCreatedAction(this.GET_CORE_STRING)
   },
 
   // METHODS
@@ -756,12 +773,12 @@ export default {
     },
 
     // Data created
-    dataCreatedAction() {
+    dataCreatedAction(getText) {
       const data = [
         [
           {
             width: '250',
-            name: 'Date',
+            name: getText?.date || 'date',
             type: 'text',
             required: true,
           },
@@ -773,7 +790,7 @@ export default {
           },
           {
             width: '250',
-            name: 'Address',
+            name: getText?.['company.address'] || 'company.address',
             type: 'text',
             required: false,
           },
@@ -785,7 +802,7 @@ export default {
           },
           {
             width: '250',
-            name: 'Order year',
+            name: getText?.['Order year'] || 'Order year',
             type: 'text',
             required: false,
           },
@@ -798,7 +815,7 @@ export default {
         [
           {
             width: '250',
-            name: 'Due Date',
+            name: getText?.dueDate || 'Due Date',
             type: 'text',
             required: true,
           },
@@ -822,7 +839,7 @@ export default {
           },
           {
             width: '250',
-            name: 'PAY Status',
+            name: getText?.['PAY Status'] || 'PAY Status',
             type: 'text',
             required: false,
           },
@@ -835,7 +852,7 @@ export default {
         [
           {
             width: '250',
-            name: 'Customer',
+            name: getText?.customer || 'Customer',
             type: 'text',
             required: false,
           },
@@ -861,7 +878,7 @@ export default {
           },
           {
             width: '250',
-            name: 'Order Status',
+            name: getText?.['Order Status'] || 'Order Status',
             type: 'text',
             required: false,
           },
@@ -874,7 +891,7 @@ export default {
         [
           {
             width: '250',
-            name: 'Branch',
+            name: getText?.branch || 'Branch',
             type: 'text',
             required: true,
           },
@@ -900,7 +917,7 @@ export default {
           },
           {
             width: '250',
-            name: 'Order',
+            name: getText?.order || 'Order',
             type: 'text',
             required: false,
           },
@@ -913,7 +930,7 @@ export default {
         [
           {
             width: '250',
-            name: 'Department',
+            name: getText?.department || 'Department',
             type: 'text',
             required: true,
           },
@@ -927,7 +944,7 @@ export default {
           },
           {
             width: '250',
-            name: 'Note',
+            name: getText?.note || 'Note',
             type: 'text',
             required: false,
           },
@@ -952,7 +969,7 @@ export default {
         [
           {
             width: '250',
-            name: 'Currency',
+            name: getText?.currency || 'Currency',
             type: 'text',
             required: true,
           },
