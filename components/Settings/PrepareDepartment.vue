@@ -119,6 +119,7 @@
                   :name="element.subName"
                   :defvalue="viewEditData?.[element?.subName]"
                   :options-data="companyList"
+                  :durl="element?.api"
                   :disabled="element.disabled"
                   @customFunction="getInputAndLookUpValueAction"
                 />
@@ -374,6 +375,7 @@ export default {
         {
           name: 'Company Name',
           subName: 'companyName',
+          api: 'findAllCompanyLogic',
           type: 'select',
           show: true,
           disabled: this.pageType === 'view',

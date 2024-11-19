@@ -1,11 +1,11 @@
 <template>
-  <input-from-production-company-page />
+  <input-from-production-company />
 </template>
 
 <script>
-import InputFromProductionCompanyPage from '@components/Invoices/InputFromProductionCompanyPage.vue'
+import InputFromProductionCompany from '@components/Invoices/InputFromProductionCompany.vue'
 
 export default {
-  components: { InputFromProductionCompanyPage },
+  components: { InputFromProductionCompany },
 }
 </script>

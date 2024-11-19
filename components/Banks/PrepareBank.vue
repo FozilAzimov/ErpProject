@@ -1,30 +1,22 @@
 <template>
-  <div class="w-full p-[0px_12px_0px_10px]">
+  <div class="w-full p-1">
     <LoadingPage
       v-if="isLoading"
       class="absolute left-[50%] top-[8px] translate-x-[-50%]"
     />
-    <transition name="fade">
-      <ColumnConfigPage
-        v-show="checkModal"
-        api="saveColumnConfig"
-        class="z-[10000]"
-        @checkModal="handleValue"
-      />
-    </transition>
     <template v-if="isCloseTable">
       <div
-        class="border-[1px] border-solid border-[rgba(0,0,0,0.05)] p-[12px] bg-gradient-to-b from-transparent via-transparent to-gray-200 shadow-md flex items-center justify-between mt-1"
+        class="border-[1px] border-solid border-[rgba(0,0,0,0.05)] p-[12px] bg-gradient-to-b from-transparent via-transparent to-gray-200 shadow-md flex items-center justify-between"
       >
         <div class="flex items-center gap-[10px]">
           <img src="@assets/icons/user-black.png" alt="user" class="w-[14px]" />
           <h1 class="font-bold text-[rgb(49,126,172)] text-[14px] uppercase">
             {{
-              btnType === 'view'
-                ? 'View bank'
-                : btnType === 'edit'
-                ? 'Edit bank'
-                : 'Add bank'
+              pageType === 'view'
+                ? 'View Bank'
+                : pageType === 'edit'
+                ? 'Edit Bank'
+                : 'Add Bank'
             }}
           </h1>
         </div>
@@ -35,7 +27,6 @@
               :style="{
                 background: 'radial-gradient(#fff, rgba(32,111,162,0.2))',
               }"
-              @click="openColumnConfig"
             >
               <img class="w-[11px]" src="@assets/icons/gear.png" alt="gear" />
             </li>
@@ -85,68 +76,27 @@
           <div v-for="(element, index) in elementData" :key="index">
             <template v-if="element.show">
               <span
-                v-if="element.type === 'text'"
+                v-if="element.type === 'text' || element?.type === 'number'"
                 class="flex flex-col items-start mb-1"
               >
-                <span class="text-[13px]">{{ element.name }}</span>
-                <generic-input
-                  :value="
-                    editData?.[element.subName]
-                      ? editData?.[element.subName]
-                      : ''
-                  "
-                  width="300"
-                  type="text"
-                  :name="element.subName"
-                  :disabled="element.disabled"
-                  @customFunction="getInputAndLookUpValueAction"
-                />
-              </span>
-              <span
-                v-else-if="element.type === 'number'"
-                class="flex flex-col items-start mb-1"
-              >
-                <span class="text-[13px]">{{ element.name }}</span>
+                <span class="text-[13px]"
+                  >{{ element.name }}
+                  <span
+                    v-if="element?.required"
+                    class="text-[18px] text-red-500"
+                    >*</span
+                  ></span
+                >
                 <generic-input
                   :value="`${
-                    editData?.[element.subName]
-                      ? editData?.[element.subName]
+                    viewEditData?.[element.subName]
+                      ? viewEditData?.[element.subName]
                       : ''
                   }`"
                   width="300"
-                  type="number"
+                  :type="element?.type"
                   :name="element.subName"
                   :disabled="element.disabled"
-                  @customFunction="getInputAndLookUpValueAction"
-                />
-              </span>
-              <span
-                v-else-if="element.type === 'select'"
-                class="flex flex-col items-start mb-1"
-              >
-                <span class="text-[13px]">{{ element.name }}</span>
-                <generic-look-up
-                  dwidth="300"
-                  :name="element.subName"
-                  defvalue="USA Dollor"
-                  :options-data="currencyData"
-                  :disabled="element.disabled"
-                  @customFunction="getInputAndLookUpValueAction"
-                />
-              </span>
-              <span
-                v-else-if="element.type === 'checkbox'"
-                class="flex flex-col items-start mb-1"
-              >
-                <generic-check-box
-                  :text="element?.name"
-                  :name="element?.subName"
-                  :disabled="element.disabled"
-                  :default-value="
-                    editData?.[element.subName]
-                      ? editData?.[element.subName]
-                      : false
-                  "
                   @customFunction="getInputAndLookUpValueAction"
                 />
               </span>
@@ -155,9 +105,11 @@
                 class="flex flex-col items-start mb-1"
               >
                 <el-radio
+                  v-for="(elem, inx) in element?.list"
+                  :key="inx"
                   v-model="radio"
                   :disabled="element.disabled"
-                  :label="element.subName"
+                  :label="elem.subName"
                 ></el-radio>
               </span>
             </template>
@@ -168,14 +120,14 @@
               name="Go Back"
               type="primary"
               icon-name-attribute="arrow-left"
-              @click="goBackAction"
+              @click="$router.push('/banks.htm')"
             />
             <generic-button
-              v-if="btnType !== 'view'"
-              :name="btnType === 'edit' ? 'Save changes' : 'Save'"
-              :type="btnType === 'edit' ? 'success' : 'primary'"
-              :icon-name-attribute="btnType && 'edit'"
-              @click="saveAction(btnType)"
+              v-if="pageType !== 'view'"
+              :name="pageType === 'edit' ? 'Save changes' : 'Save'"
+              :type="pageType === 'edit' ? 'success' : 'primary'"
+              :icon-name-attribute="pageType === 'edit' ? 'edit' : ''"
+              @click="saveAction"
             />
           </div>
         </div>
@@ -188,15 +140,11 @@
 import GenericButton from '@generics/GenericButton.vue'
 import GenericInput from '@generics/GenericInput.vue'
 import LoadingPage from '@components/Loading/LoadingPage.vue'
-import GenericLookUp from '@generics/GenericLookUp.vue'
-import GenericCheckBox from '@generics/GenericCheckBox.vue'
 export default {
   components: {
     LoadingPage,
     GenericButton,
     GenericInput,
-    GenericLookUp,
-    GenericCheckBox,
   },
 
   // DATA
@@ -204,55 +152,44 @@ export default {
     return {
       isLoading: false,
       pageSize_value: 25,
-      checkModal: false,
       isOpenTable: true,
       isCloseTable: true,
-      btnType: '',
+      pageType: null,
       pageID: null,
-      editData: {},
+      viewEditData: {},
       allInputAndLookUpValue: {},
       elementData: [],
-      radio: null,
-      currencyData: [],
+      radio: 'Enabled',
     }
   },
 
   // WATCH
   watch: {
-    pageID(newVal) {
-      this.btnTypeSpecifyingAction()
-    },
     radio(newVal) {
-      if (newVal === 'enabled') this.allInputAndLookUpValue.active = true
-      else if (newVal === 'disabled') this.allInputAndLookUpValue.active = false
+      if (newVal === 'Enabled') this.allInputAndLookUpValue.active = true
+      else if (newVal === 'Disabled') this.allInputAndLookUpValue.active = false
       else this.allInputAndLookUpValue.active = false
     },
   },
 
   // CREATED
   created() {
-    this.btnType = JSON.parse(localStorage.getItem('allTrueAndFalseData'))?.type
     // page ID sini olish
     this.pageID = this.$route.params?.id
+    // page Type
+    this.pageType = this.$route.query?.page_type
   },
 
   // MOUNTED
   mounted() {
     // function
     this.dataCreatedAction()
-
     // Table function
     this.getTableRequest()
   },
 
   // Methods
   methods: {
-    handleValue(checkModal) {
-      this.checkModal = checkModal
-    },
-    openColumnConfig() {
-      this.checkModal = true
-    },
     // Table page ni ochish va yopish uchun
     isOpen() {
       this.isOpenTable = !this.isOpenTable
@@ -261,109 +198,41 @@ export default {
       this.isCloseTable = !this.isCloseTable
     },
 
-    // go back action
-    goBackAction() {
-      localStorage.removeItem('allTrueAndFalseData')
-      this.$router.push('/banks.htm')
-    },
-
-    // Specifying the buttun type action
-    btnTypeSpecifyingAction() {
-      if (!this.pageID) {
-        localStorage.removeItem('allTrueAndFalseData')
-      }
-    },
-
-    // Data created
-    dataCreatedAction() {
-      const data = [
-        {
-          name: 'Batch Process Name',
-          subName: 'name',
-          type: 'text',
-          show: true,
-          disabled: this.btnType === 'view',
-        },
-        {
-          name: 'Code',
-          subName: 'code',
-          type: 'text',
-          show: true,
-          disabled: this.btnType === 'view',
-        },
-        {
-          name: 'Currency',
-          subName: 'currency',
-          type: 'select',
-          show: this.btnType === 'edit',
-          disabled: this.btnType === 'view',
-        },
-        {
-          name: 'Price',
-          subName: 'price',
-          type: 'number',
-          show: this.btnType === 'edit',
-          disabled: this.btnType === 'view',
-        },
-        {
-          name: 'Save name',
-          subName: 'savename',
-          type: 'checkbox',
-          show: true,
-          disabled: this.btnType === 'view',
-        },
-        {
-          name: 'Status',
-          subName: 'enabled',
-          type: 'radio',
-          show: true,
-          disabled: this.btnType === 'view',
-        },
-        {
-          name: 'Status',
-          subName: 'disabled',
-          type: 'radio',
-          show: true,
-          disabled: this.btnType === 'view',
-        },
-      ]
-      this.elementData = data
-    },
-
     // Page request
     getTableRequest() {
-      if (this.btnType === 'view') {
-        this.isLoading = !this.isLoading
+      this.isLoading = !this.isLoading
+      if (this.pageType === 'view') {
         this.$axios
-          .post(`/batchProcess/prepareBatchProcessViewAjaxLoad`, {
+          .post(`/bank/prepareBatchColorVariantWeight`, {
             id: this.pageID,
             page_current: 1,
             page_size: 25,
           })
-          .then(({ data: { design } }) => {
+          .then(({ data }) => {
+            this.viewEditData = data.bank
+            data.bank.active
+              ? (this.radio = 'Enabled')
+              : (this.radio = 'Disabled')
             this.isLoading = !this.isLoading
-            this.editData = design
           })
           .catch((error) => {
             this.isLoading = !this.isLoading
             // eslint-disable-next-line no-console
             console.log(error)
           })
-      } else if (this.btnType === 'edit') {
-        this.isLoading = !this.isLoading
+      } else if (this.pageType === 'edit') {
         this.$axios
-          .post(`/batchProcess/prepareBatchProcessAjaxLoad`, {
+          .post(`/bank/prepareBatchColorVariantWeight`, {
             id: this.pageID,
             page_current: 1,
             page_size: 25,
           })
-          .then(({ data: { batchProcess, currencyList } }) => {
+          .then(({ data }) => {
+            this.viewEditData = data.bank
+            data.bank.active
+              ? (this.radio = 'Enabled')
+              : (this.radio = 'Disabled')
             this.isLoading = !this.isLoading
-            this.editData = batchProcess
-            this.currencyData = currencyList
-            batchProcess.active
-              ? (this.radio = 'enabled')
-              : (this.radio = 'disabled')
           })
           .catch((error) => {
             this.isLoading = !this.isLoading
@@ -381,47 +250,35 @@ export default {
     // Save Changes action
     saveAction() {
       let body = {}
-      let batchProcess = {}
-      if (this.pageID && this.btnType === 'edit') {
-        batchProcess = {
+      let bank = {}
+      if (this.pageID && this.pageType === 'edit') {
+        bank = {
           id: this.pageID,
-          name: this.allInputAndLookUpValue?.name || this.editData.name || '',
-          savename:
-            this.allInputAndLookUpValue?.savename ||
-            this.editData.savename ||
-            '',
-          code: this.allInputAndLookUpValue?.code || this.editData.code || '',
+          name:
+            this.allInputAndLookUpValue?.name ?? this.viewEditData?.name ?? '',
           active:
-            this.allInputAndLookUpValue?.active || this.editData.active || '',
-          currency: {
-            id: this.allInputAndLookUpValue?.currency || '',
-          },
-          price: this.allInputAndLookUpValue?.price || '',
+            this.allInputAndLookUpValue?.active ??
+            this.viewEditData?.active ??
+            false,
         }
       } else {
-        batchProcess = {
-          name: this.allInputAndLookUpValue?.name,
-          savename: this.allInputAndLookUpValue?.savename,
-          code: this.allInputAndLookUpValue?.code,
-          active: this.allInputAndLookUpValue?.active,
+        bank = {
+          name: this.allInputAndLookUpValue?.name ?? '',
+          active: this.allInputAndLookUpValue?.active ?? false,
         }
       }
       body = {
         page_size: this.pageSize_value,
         page_current: 1,
-        rightData: '',
-        batchProcess,
+        bank,
       }
 
       this.isLoading = !this.isLoading
       const method = this.pageID ? 'put' : 'post'
-      this.$axios[method](
-        `/batchProcess/${this.pageID ? 'editBatchProcess' : 'addBatchProcess'}`,
-        body
-      )
+      this.$axios[method](`/bank/${this.pageID ? 'edit' : 'add'}`, body)
         .then(() => {
           this.isLoading = !this.isLoading
-          this.$router.push('/batchProcess.htm')
+          this.$router.push('/banks.htm')
         })
         .catch((error) => {
           this.isLoading = !this.isLoading
@@ -429,19 +286,28 @@ export default {
           console.log(error)
         })
     },
+
+    // Data created
+    dataCreatedAction() {
+      const data = [
+        {
+          name: 'Name',
+          subName: 'name',
+          type: 'text',
+          show: true,
+          required: true,
+          disabled: this.pageType === 'view',
+        },
+        {
+          name: 'Status',
+          type: 'radio',
+          show: true,
+          disabled: this.pageType === 'view',
+          list: [{ subName: 'Enabled' }, { subName: 'Disabled' }],
+        },
+      ]
+      this.elementData = data
+    },
   },
 }
 </script>
-
-<style>
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.5s;
-}
-
-.fade-enter,
-.fade-leave-to {
-  opacity: 0;
-  transform: translateY(-20px);
-}
-</style>

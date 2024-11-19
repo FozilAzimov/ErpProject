@@ -11,7 +11,7 @@
         :name="elem?.name"
         :type="elem?.type"
         :icon-name-attribute="elem?.iconNameAttribute"
-        @click="handleButtonClick(elem?.action)"
+        @click="customFunctionAction(elem?.action)"
       />
     </span>
 
@@ -22,9 +22,18 @@
             <th
               v-for="(headName, key) in data"
               :key="key"
-              class="text-[13px] font-semibold border-[1px] border-solid border-[rgba(119,136,153,0.3)] p-6 cursor-pointer whitespace-nowrap"
+              class="text-[13px] font-semibold border-[1px] border-solid border-[rgba(119,136,153,0.3)] p-6 cursor-pointer"
               :class="`w-[${headName?.width}px]`"
+              :style="{
+                whiteSpace:
+                  headName?.subName !== 'externalProductsAndServicesCode'
+                    ? 'nowrap'
+                    : '',
+              }"
             >
+              <template v-if="headName?.multiple"
+                >{{ headName?.topName }} |</template
+              >
               {{ headName?.name }}
               <span v-if="headName?.required" class="text-red-600 text-[16px]"
                 >*</span
@@ -50,36 +59,47 @@
                 <generic-input-date-page
                   type="datetime-local"
                   :name="element?.subName"
+                  :order="inx"
+                  :disabled="element?.disabled"
                   @customFunction="getSelectAndInputValueAction"
                 />
               </template>
               <template v-else-if="element?.type === 'select'">
                 <generic-look-up
                   :dwidth="element?.width"
+                  :durl="element?.api"
                   :name="element?.subName"
+                  :order="inx"
+                  :disabled="element?.disabled"
                   :options-data="allSelectData?.[element?.subName]"
                   @customFunction="getSelectAndInputValueAction"
+                  @emitLookUpData="getLookUpData"
                 />
               </template>
-              <template v-else-if="element?.type === 'text'">
+              <template
+                v-else-if="
+                  element?.type === 'text' ||
+                  element?.type === 'number' ||
+                  element?.type === 'textarea'
+                "
+              >
                 <generic-input
                   :width="element?.width"
                   :name="element?.subName"
-                  type="text"
-                  @customFunction="getSelectAndInputValueAction"
-                />
-              </template>
-              <template v-else-if="element?.type === 'textarea'">
-                <generic-input
-                  :width="element?.width"
-                  :name="element?.subName"
-                  type="textarea"
+                  :type="element?.type"
+                  :order="inx"
+                  :disabled="element?.disabled"
+                  :value="
+                    tableAllDataEmitArray?.[inx]?.[element?.subName] ?? ''
+                  "
                   @customFunction="getSelectAndInputValueAction"
                 />
               </template>
               <template v-else-if="element?.type === 'checkbox'">
                 <generic-check-box
                   :name="element?.subName"
+                  :order="inx"
+                  :disabled="element?.disabled"
                   @customFunction="getSelectAndInputValueAction"
                 />
               </template>
@@ -146,6 +166,9 @@ export default {
     return {
       tableData: [],
       allSelectAndInputValue: {},
+      tableAllDataEmitArray: [],
+      allSelectDataArr: [],
+      pageName: null,
     }
   },
 
@@ -159,16 +182,20 @@ export default {
     },
   },
 
+  // MOUNTED
+  mounted() {
+    this.pageName = this.$route?.name
+    this.tableData.push(this.data)
+  },
+
   // METHODS
   methods: {
     // Row Delete action
     deleteRowAction(index, rows) {
       rows.splice(index, 1)
+      this.tableAllDataEmitArray.splice(index, 1)
     },
 
-    handleButtonClick(action) {
-      this.customFunctionAction(action)
-    },
     customFunctionAction(name) {
       if (name === 'add') {
         this.tableData.push(this.data)
@@ -190,14 +217,76 @@ export default {
       }
     },
 
-    // Select and Input values set
-    getSelectAndInputValueAction(name, value) {
-      this.$set(this.allSelectAndInputValue, name, value)
-    },
-
     // Emit action
     additionTableValuesAction() {
       this.$emit('getTableValue', this.allSelectAndInputValue)
+    },
+
+    // Select and Input values set
+    getSelectAndInputValueAction(name, value, index) {
+      this.$set(this.allSelectAndInputValue, name, value)
+
+      // table valuelarini arrayga set qilish
+      if (!this.tableAllDataEmitArray[index])
+        this.$set(this.tableAllDataEmitArray, index, { prePayment: false })
+
+      if (name === 'externalProductsAndServicesCode' || name === 'item')
+        this.$set(this.tableAllDataEmitArray[index], name, { id: value })
+      else this.$set(this.tableAllDataEmitArray[index], name, value)
+      // table valuelarini arrayga set qilish
+
+      // function
+      this.pageName.includes('contractRegistration.htm') &&
+        this.selectAndInputAction(name, value, index)
+    },
+
+    // Input and Select actions
+    selectAndInputAction(name, value, index) {
+      if (name === 'item') {
+        const thisUM = this.allSelectDataArr.find(
+          (obj) => obj?.id === value
+        )?.um
+        this.$set(this.tableAllDataEmitArray[index], 'measurement', thisUM)
+      } else if (name === 'qty') {
+        const net =
+          parseFloat(value || 0) *
+          parseFloat(this.tableAllDataEmitArray?.[index]?.unitPrice || 0)
+        this.$set(this.tableAllDataEmitArray[index], 'net', net.toFixed(3))
+      } else if (name === 'unitPrice') {
+        const net =
+          parseFloat(value || 0) *
+          parseFloat(this.tableAllDataEmitArray?.[index]?.qty || 0)
+        this.$set(this.tableAllDataEmitArray[index], 'net', net.toFixed(3))
+      } else if (name === 'vat') {
+        const vatAmount =
+          (parseFloat(this.tableAllDataEmitArray?.[index]?.net || 0) / 100) *
+          parseFloat(value || 0)
+        this.$set(
+          this.tableAllDataEmitArray[index],
+          'vatAmount',
+          vatAmount.toFixed(3)
+        )
+      }
+
+      // Total Amount hisoblash uchun
+      if (name === 'qty' || name === 'unitPrice' || name === 'vat') {
+        const ammount =
+          parseFloat(this.tableAllDataEmitArray?.[index]?.net || 0) +
+          parseFloat(this.tableAllDataEmitArray?.[index]?.vatAmount || 0)
+        this.$set(
+          this.tableAllDataEmitArray[index],
+          'ammount',
+          ammount.toFixed(3)
+        )
+      }
+
+      // Emit set Table Data
+      this.$emit('emitTableData', this.tableAllDataEmitArray)
+    },
+
+    // get LookUp data
+    getLookUpData(data) {
+      this.allSelectDataArr = data
     },
   },
 }

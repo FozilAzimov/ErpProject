@@ -1,12 +1,12 @@
 <template>
-  <PrepareInputReturnNewPage />
+  <prepare-input-return-new />
 </template>
 
 <script>
-import PrepareInputReturnNewPage from '@components/Invoices/PrepareInputReturnNewPage.vue'
+import PrepareInputReturnNew from '@components/Invoices/PrepareInputReturnNew.vue'
 export default {
   components: {
-    PrepareInputReturnNewPage,
+    PrepareInputReturnNew,
   },
 }
 </script>

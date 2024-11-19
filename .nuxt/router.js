@@ -48,7 +48,6 @@ const _ca9d707a = () => interopDefault(import('..\\pages\\colorVariantRecipeStag
 const _3c2fc6b8 = () => interopDefault(import('..\\pages\\colorVariantRecipeStagePicture.htm\\index.vue' /* webpackChunkName: "pages/colorVariantRecipeStagePicture.htm/index" */))
 const _1a2eddfb = () => interopDefault(import('..\\pages\\columnSettings.htm\\index.vue' /* webpackChunkName: "pages/columnSettings.htm/index" */))
 const _72c8b7c2 = () => interopDefault(import('..\\pages\\companies.htm\\index.vue' /* webpackChunkName: "pages/companies.htm/index" */))
-const _617ae0a9 = () => interopDefault(import('..\\pages\\contractRegistration.htm\\index.vue' /* webpackChunkName: "pages/contractRegistration.htm/index" */))
 const _1468d5c4 = () => interopDefault(import('..\\pages\\country.htm\\index.vue' /* webpackChunkName: "pages/country.htm/index" */))
 const _5d8caa36 = () => interopDefault(import('..\\pages\\currencies.htm\\index.vue' /* webpackChunkName: "pages/currencies.htm/index" */))
 const _15c6dcbc = () => interopDefault(import('..\\pages\\currenRates.htm\\index.vue' /* webpackChunkName: "pages/currenRates.htm/index" */))
@@ -123,6 +122,7 @@ const _2250321a = () => interopDefault(import('..\\pages\\outputToPrOrderReturn.
 const _6f687400 = () => interopDefault(import('..\\pages\\outputToServiceInvoice.htm\\index.vue' /* webpackChunkName: "pages/outputToServiceInvoice.htm/index" */))
 const _79e7bfa1 = () => interopDefault(import('..\\pages\\packagetypes.htm\\index.vue' /* webpackChunkName: "pages/packagetypes.htm/index" */))
 const _b185ad12 = () => interopDefault(import('..\\pages\\packaging.htm\\index.vue' /* webpackChunkName: "pages/packaging.htm/index" */))
+const _4bbdc1c6 = () => interopDefault(import('..\\pages\\paymenttypegroups.htm\\index.vue' /* webpackChunkName: "pages/paymenttypegroups.htm/index" */))
 const _61765d61 = () => interopDefault(import('..\\pages\\paymenttypes.htm\\index.vue' /* webpackChunkName: "pages/paymenttypes.htm/index" */))
 const _191b8291 = () => interopDefault(import('..\\pages\\permissionGroups.htm\\index.vue' /* webpackChunkName: "pages/permissionGroups.htm/index" */))
 const _5e593833 = () => interopDefault(import('..\\pages\\personAndEquipments.htm\\index.vue' /* webpackChunkName: "pages/personAndEquipments.htm/index" */))
@@ -135,6 +135,8 @@ const _47e63abb = () => interopDefault(import('..\\pages\\plateNumber.htm\\index
 const _0092aca0 = () => interopDefault(import('..\\pages\\positions.htm\\index.vue' /* webpackChunkName: "pages/positions.htm/index" */))
 const _65b22454 = () => interopDefault(import('..\\pages\\post.htm\\index.vue' /* webpackChunkName: "pages/post.htm/index" */))
 const _7d4e3395 = () => interopDefault(import('..\\pages\\postStations.htm\\index.vue' /* webpackChunkName: "pages/postStations.htm/index" */))
+const _0743ce64 = () => interopDefault(import('..\\pages\\prepareCalculateProductionOrder.htm\\index.vue' /* webpackChunkName: "pages/prepareCalculateProductionOrder.htm/index" */))
+const _45d8bc50 = () => interopDefault(import('..\\pages\\prepareCurrenRate.htm\\index.vue' /* webpackChunkName: "pages/prepareCurrenRate.htm/index" */))
 const _1fe3130d = () => interopDefault(import('..\\pages\\prepareInternalInvoiceNewDevice.htm\\index.vue' /* webpackChunkName: "pages/prepareInternalInvoiceNewDevice.htm/index" */))
 const _2608b219 = () => interopDefault(import('..\\pages\\prepareOutputToPrOrderSimple.htm\\index.vue' /* webpackChunkName: "pages/prepareOutputToPrOrderSimple.htm/index" */))
 const _213e3aa5 = () => interopDefault(import('..\\pages\\prepareProductionOrderRecipeToChangeReserve.htm\\index.vue' /* webpackChunkName: "pages/prepareProductionOrderRecipeToChangeReserve.htm/index" */))
@@ -204,6 +206,7 @@ const _303fdf61 = () => interopDefault(import('..\\pages\\viabranchreceive.htm\\
 const _5d9f11b8 = () => interopDefault(import('..\\pages\\warehouses.htm\\index.vue' /* webpackChunkName: "pages/warehouses.htm/index" */))
 const _8295ec82 = () => interopDefault(import('..\\pages\\weights.htm\\index.vue' /* webpackChunkName: "pages/weights.htm/index" */))
 const _c36bdef2 = () => interopDefault(import('..\\pages\\index.vue' /* webpackChunkName: "pages/index" */))
+const _bf2a0d5e = () => interopDefault(import('..\\pages\\contractRegistration.htm\\_id.vue' /* webpackChunkName: "pages/contractRegistration.htm/_id" */))
 const _14b920fd = () => interopDefault(import('..\\pages\\decreePage.htm\\_id.vue' /* webpackChunkName: "pages/decreePage.htm/_id" */))
 const _1c90ac72 = () => interopDefault(import('..\\pages\\newPrepareSimpleProductionInvoice.htm\\_id.vue' /* webpackChunkName: "pages/newPrepareSimpleProductionInvoice.htm/_id" */))
 const _40c5aa18 = () => interopDefault(import('..\\pages\\planningsByProductionOrder.htm\\_id.vue' /* webpackChunkName: "pages/planningsByProductionOrder.htm/_id" */))
@@ -284,6 +287,7 @@ const _821edcf2 = () => interopDefault(import('..\\pages\\prepareOutputToService
 const _02b43523 = () => interopDefault(import('..\\pages\\preparePackageType.htm\\_id.vue' /* webpackChunkName: "pages/preparePackageType.htm/_id" */))
 const _638f5c20 = () => interopDefault(import('..\\pages\\preparePackaging.htm\\_id.vue' /* webpackChunkName: "pages/preparePackaging.htm/_id" */))
 const _6e206f63 = () => interopDefault(import('..\\pages\\preparePaymentType.htm\\_id.vue' /* webpackChunkName: "pages/preparePaymentType.htm/_id" */))
+const _47bfdcc8 = () => interopDefault(import('..\\pages\\preparePaymentTypeGroup.htm\\_id.vue' /* webpackChunkName: "pages/preparePaymentTypeGroup.htm/_id" */))
 const _4060e05a = () => interopDefault(import('..\\pages\\preparePermissionGroup.htm\\_id.vue' /* webpackChunkName: "pages/preparePermissionGroup.htm/_id" */))
 const _6a52764f = () => interopDefault(import('..\\pages\\preparePersonAndEquipment.htm\\_id.vue' /* webpackChunkName: "pages/preparePersonAndEquipment.htm/_id" */))
 const _1302e7cf = () => interopDefault(import('..\\pages\\preparePersonEquipmentSew.htm\\_id.vue' /* webpackChunkName: "pages/preparePersonEquipmentSew.htm/_id" */))
@@ -319,6 +323,7 @@ const _6699ba55 = () => interopDefault(import('..\\pages\\prepareSewModelOperati
 const _5d2a1af8 = () => interopDefault(import('..\\pages\\prepareSewModelPackingType.htm\\_id.vue' /* webpackChunkName: "pages/prepareSewModelPackingType.htm/_id" */))
 const _48571e59 = () => interopDefault(import('..\\pages\\prepareSewModelSizeColorBarcode.htm\\_id.vue' /* webpackChunkName: "pages/prepareSewModelSizeColorBarcode.htm/_id" */))
 const _04ca3288 = () => interopDefault(import('..\\pages\\prepareSewModelVariantsSize.htm\\_id.vue' /* webpackChunkName: "pages/prepareSewModelVariantsSize.htm/_id" */))
+const _4a79d0f8 = () => interopDefault(import('..\\pages\\prepareSewProductionOrderItem.htm\\_id.vue' /* webpackChunkName: "pages/prepareSewProductionOrderItem.htm/_id" */))
 const _3da7ff81 = () => interopDefault(import('..\\pages\\prepareShift.htm\\_id.vue' /* webpackChunkName: "pages/prepareShift.htm/_id" */))
 const _00888661 = () => interopDefault(import('..\\pages\\prepareSimpleProductionInvoice.htm\\_id.vue' /* webpackChunkName: "pages/prepareSimpleProductionInvoice.htm/_id" */))
 const _c5a5528a = () => interopDefault(import('..\\pages\\prepareSimpleProductionInvoiceManual.htm\\_id.vue' /* webpackChunkName: "pages/prepareSimpleProductionInvoiceManual.htm/_id" */))
@@ -523,10 +528,6 @@ export const routerOptions = {
     path: "/companies.htm",
     component: _72c8b7c2,
     name: "companies.htm"
-  }, {
-    path: "/contractRegistration.htm",
-    component: _617ae0a9,
-    name: "contractRegistration.htm"
   }, {
     path: "/country.htm",
     component: _1468d5c4,
@@ -824,6 +825,10 @@ export const routerOptions = {
     component: _b185ad12,
     name: "packaging.htm"
   }, {
+    path: "/paymenttypegroups.htm",
+    component: _4bbdc1c6,
+    name: "paymenttypegroups.htm"
+  }, {
     path: "/paymenttypes.htm",
     component: _61765d61,
     name: "paymenttypes.htm"
@@ -871,6 +876,14 @@ export const routerOptions = {
     path: "/postStations.htm",
     component: _7d4e3395,
     name: "postStations.htm"
+  }, {
+    path: "/prepareCalculateProductionOrder.htm",
+    component: _0743ce64,
+    name: "prepareCalculateProductionOrder.htm"
+  }, {
+    path: "/prepareCurrenRate.htm",
+    component: _45d8bc50,
+    name: "prepareCurrenRate.htm"
   }, {
     path: "/prepareInternalInvoiceNewDevice.htm",
     component: _1fe3130d,
@@ -1147,6 +1160,10 @@ export const routerOptions = {
     path: "/",
     component: _c36bdef2,
     name: "index"
+  }, {
+    path: "/contractRegistration.htm/:id?",
+    component: _bf2a0d5e,
+    name: "contractRegistration.htm-id"
   }, {
     path: "/decreePage.htm/:id?",
     component: _14b920fd,
@@ -1468,6 +1485,10 @@ export const routerOptions = {
     component: _6e206f63,
     name: "preparePaymentType.htm-id"
   }, {
+    path: "/preparePaymentTypeGroup.htm/:id?",
+    component: _47bfdcc8,
+    name: "preparePaymentTypeGroup.htm-id"
+  }, {
     path: "/preparePermissionGroup.htm/:id?",
     component: _4060e05a,
     name: "preparePermissionGroup.htm-id"
@@ -1607,6 +1628,10 @@ export const routerOptions = {
     path: "/prepareSewModelVariantsSize.htm/:id?",
     component: _04ca3288,
     name: "prepareSewModelVariantsSize.htm-id"
+  }, {
+    path: "/prepareSewProductionOrderItem.htm/:id?",
+    component: _4a79d0f8,
+    name: "prepareSewProductionOrderItem.htm-id"
   }, {
     path: "/prepareShift.htm/:id?",
     component: _3da7ff81,

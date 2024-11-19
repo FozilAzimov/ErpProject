@@ -80,10 +80,10 @@
                   >
                     <li
                       v-for="element in list"
-                      :key="element.order"
+                      :key="element?.order"
                       class="cursor-move bg-gradient-to-b from-[#fafafa] to-[#eee] hover:from-[#fff] hover:to-[#fff] border-[1px] border-solid border-[rgb(149,183,221)] my-[5px] p-[8px_10px] rounded-sm text-[14px] font-light hover:text-[#2e8de5]"
                     >
-                      {{ element.name }}
+                      {{ GET_CORE_STRING?.[element?.name] || element?.name }}
                     </li>
                   </transition-group>
                 </draggable>
@@ -98,6 +98,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import draggable from 'vuedraggable'
 import LoadingPage from '@components/Loading/LoadingPage.vue'
 import GenericButton from '@generics/GenericButton.vue'
@@ -135,13 +136,15 @@ export default {
         'Product Prices',
         'Product Packages',
       ],
-      list: [],
+      resData: [],
       drag: false,
     }
   },
 
   // COMPUTED
   computed: {
+    // Store getters
+    ...mapGetters('translate', ['GET_CORE_STRING']),
     dragOptions() {
       return {
         animation: 200,
@@ -149,9 +152,9 @@ export default {
         disabled: false,
       }
     },
-    orderedMessages() {
-      return this.message.map((name, index) => ({
-        name,
+    list() {
+      return this.resData.map((obj, index) => ({
+        name: obj?.name,
         order: index + 1,
       }))
     },
@@ -161,7 +164,6 @@ export default {
   created() {
     // Table function
     this.getTableRequest()
-    this.list = this.orderedMessages
   },
 
   // METHODS
@@ -182,7 +184,8 @@ export default {
       this.isLoading = !this.isLoading
       this.$axios
         .post(`/menuSetting/menuSettings`, body)
-        .then(({ data }) => {
+        .then(({ data: { list } }) => {
+          this.resData = list
           this.isLoading = !this.isLoading
         })
         .catch((error) => {

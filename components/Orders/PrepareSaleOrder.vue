@@ -190,7 +190,8 @@
             icon-name-attribute="setting"
             @click="openColumnConfig"
           />
-          <template v-if="!editData?.status && !isSubBodyDataLength">
+          <!-- create -->
+          <template v-if="!pageID && !isSubBodyDataLength">
             <span v-if="hideButton" class="flex gap-1 flex-wrap">
               <GenericButton
                 name="Save"
@@ -211,6 +212,32 @@
               @click="editSewModalOperationAction('topTable')"
             />
           </template>
+          <!-- create -->
+          <!-- edit -->
+          <template
+            v-else-if="pageID && !editData?.status && !isSubBodyDataLength"
+          >
+            <span v-if="hideButton" class="flex gap-1 flex-wrap">
+              <GenericButton
+                name="Save"
+                type="primary"
+                @click="saveAction('topTable')"
+              />
+              <GenericButton
+                v-if="pageID"
+                name="Discard"
+                @click="discardSewModalOperationAction('topTable')"
+              />
+            </span>
+            <GenericButton
+              v-else
+              name="Edit"
+              type="success"
+              icon-name-attribute="edit"
+              @click="editSewModalOperationAction('topTable')"
+            />
+          </template>
+          <!-- edit -->
           <GenericButton
             v-if="pageID && editData?.status !== 'CREDIT_CANCELLED'"
             name="makeCreditUndo"

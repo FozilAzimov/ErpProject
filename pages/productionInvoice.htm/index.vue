@@ -1,11 +1,10 @@
 <template>
-  <ProductionInvoicePage />
+  <production-invoice />
 </template>
 
 <script>
-import ProductionInvoicePage from '@components/Invoices/ProductionInvoicePage.vue'
-
+import ProductionInvoice from '@components/Invoices/ProductionInvoice.vue'
 export default {
-  components: { ProductionInvoicePage },
+  components: { ProductionInvoice },
 }
 </script>

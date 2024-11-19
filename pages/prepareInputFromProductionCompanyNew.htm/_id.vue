@@ -1,10 +1,10 @@
 <template>
-  <prepare-input-from-production-company-new-page />
+  <prepare-input-from-production-company-new />
 </template>
 
 <script>
-import PrepareInputFromProductionCompanyNewPage from '@components/Invoices/PrepareInputFromProductionCompanyNewPage.vue'
+import PrepareInputFromProductionCompanyNew from '@components/Invoices/PrepareInputFromProductionCompanyNew.vue'
 export default {
-  components: { PrepareInputFromProductionCompanyNewPage },
+  components: { PrepareInputFromProductionCompanyNew },
 }
 </script>

@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full p-[0px_12px_0px_10px]">
+  <div class="w-full px-1">
     <LoadingPage
       v-if="isLoading"
       class="absolute left-[50%] top-[8px] translate-x-[-50%]"
@@ -15,110 +15,51 @@
         @checkModal="handleValue"
       />
     </transition>
-    <form v-if="false" class="flex flex-wrap items-center gap-3 py-4">
-      <div>
-        <label for="from" class="text-[13px] cursor-pointer tracking-[1.1]"
-          >Date from</label
+    <form class="flex flex-wrap items-center gap-1 py-3">
+      <template v-for="(element, index) in topFilterData">
+        <span
+          v-if="element.type === 'date'"
+          :key="index"
+          class="flex flex-col items-start gap-1"
         >
-        <GenericInputDatePage
-          id="from"
-          v-model="formData.from"
-          width="165"
-          height="30"
-          pl="10"
-          pr="10"
-          pt="1"
-          pb="1"
-          textsize="13"
-          type="datetime-local"
-          valuecolor="rgba(0,0,0,0.7)"
-          @change="getInputDateValues"
-        />
-      </div>
-      <div>
-        <label for="to" class="text-[13px] cursor-pointer">Date to</label>
-        <GenericInputDatePage
-          id="to"
-          v-model="formData.to"
-          width="165"
-          height="30"
-          pl="10"
-          pr="10"
-          pt="2"
-          pb="2"
-          textsize="13"
-          type="datetime-local"
-          valuecolor="rgba(0,0,0,0.7)"
-          @change="getInputDateValues"
-        />
-      </div>
-      <div class="flex items-center gap-1">
-        <label for="bill" class="text-[13px] cursor-pointer"
-          >Status (Bill)</label
+          <span class="text-[12px] font-light">{{ element.name }}</span>
+          <generic-input-date-page
+            :value="allSelectAndInputValues?.[element?.subName]"
+            width="185"
+            pl="10"
+            pr="10"
+            pt="1"
+            pb="1"
+            textsize="13"
+            type="datetime-local"
+            valuecolor="rgba(0,0,0,0.7)"
+            :name="element?.subName"
+            @customFunction="getInputAndLookUpValueAction"
+          />
+        </span>
+        <span
+          v-else-if="element.type === 'select'"
+          :key="`unique-${index}`"
+          class="flex flex-col items-start gap-1"
         >
-        <GenericSelect
-          id="bill"
-          v-model="formData.from"
-          :data="selectData.billStatusList"
-          textsize="13"
-          @change="getSelectValue"
-        />
-      </div>
-      <div class="flex items-center gap-1">
-        <label for="pay" class="text-[13px] cursor-pointer">Status (Pay)</label>
-        <GenericSelect
-          id="pay"
-          v-model="formData.pay"
-          :data="selectData.payStatusList"
-          textsize="13"
-          @change="getSelectValue"
-        />
-      </div>
-      <div class="flex items-center gap-1">
-        <label for="invoice" class="text-[13px] cursor-pointer"
-          >Invoice (Status)</label
-        >
-        <GenericSelect
-          id="invoice"
-          v-model="formData.invoice"
-          :data="selectData.invoiceOnWayStatusList"
-          textsize="13"
-          @change="getSelectValue"
-        />
-      </div>
-      <div class="flex items-center gap-1">
-        <label for="departments" class="text-[13px] cursor-pointer"
-          >Departments</label
-        >
-        <GenericSelect
-          id="departments"
-          v-model="formData.departments"
-          :data="selectData.departmentDTOList"
-          textsize="13"
-          @change="getSelectValue"
-        />
-      </div>
-      <div class="flex items-center gap-1">
-        <label for="warehouse" class="text-[13px] cursor-pointer"
-          >Warehouse</label
-        >
-        <GenericSelect
-          id="warehouse"
-          v-model="formData.warehouse"
-          :data="selectData.warehouseList"
-          textsize="13"
-          @change="getSelectValue"
-        />
-      </div>
+          <span class="text-[12px] font-light">{{ element.name }}</span>
+          <generic-look-up
+            :dwidth="`${element?.width}`"
+            :name="element?.subName"
+            :options-data="selectData?.[element.selectName]"
+            @customFunction="getInputAndLookUpValueAction"
+          />
+        </span>
+      </template>
     </form>
     <template v-if="isCloseTable">
       <div
-        class="mt-1 border-[1px] border-solid border-[rgba(0,0,0,0.05)] p-[12px] bg-gradient-to-b from-transparent via-transparent to-gray-200 shadow-md flex items-center justify-between"
+        class="border-[1px] border-solid border-[rgba(0,0,0,0.05)] p-[12px] bg-gradient-to-b from-transparent via-transparent to-gray-200 shadow-md flex items-center justify-between"
       >
         <div class="flex items-center gap-[10px]">
           <img src="@assets/icons/user-black.png" alt="user" class="w-[14px]" />
           <h1 class="font-bold text-[rgb(49,126,172)] text-[14px] uppercase">
-            PURCHASE INVOICE LIST
+            Purchase Invoice List
           </h1>
         </div>
         <div>
@@ -174,106 +115,58 @@
             : 'duration-[1s] h-0 overflow-hidden'
         "
       >
-        <template v-if="false">
-          <generic-button
-            name="Add New"
-            type="primary"
-            :margin="true"
-            @click="$router.push('/preparePurchaseInvoiceNew.htm')"
-          />
-          <div class="p-2">
-            <div class="flex items-center justify-between mb-1">
-              <div class="text-[14px]">
-                <select
-                  v-model="pageSize_value"
-                  class="border-[1px] border-solid border-[rgba(171,177,187,0.7)] w-[60px] px-[5px] py-[3px] cursor-pointer rounded-[2px] text-[14px] outline-none"
-                  @change="getTableRequest()"
-                >
-                  <option value="10">10</option>
-                  <option value="25">25</option>
-                  <option value="50">50</option>
-                  <option value="100">100</option>
-                  <option value="500">500</option>
-                </select>
-                Records
-              </div>
-              <div class="flex items-center gap-2">
-                <GenericInput
-                  v-model="keywordValue"
-                  width="200"
-                  height="30"
-                  pl="10"
-                  pr="10"
-                  pt="2"
-                  pb="2"
-                  textsize="13"
-                  type="text"
-                  placeholder="Search..."
-                  @enter="getTableRequest"
-                  @input="getInputValue"
-                />
-                <GenericButton
-                  name="Search"
-                  type="primary"
-                  icon-name-attribute="search"
-                  @click="getTableRequest"
-                />
-                <GenericButton
-                  name="Print Preview"
-                  type="success"
-                  icon-name-attribute="printer"
-                />
-              </div>
+        <generic-button
+          name="Add New"
+          type="primary"
+          :margin="true"
+          icon-name-attribute="circle-plus-outline"
+          @click="$router.push('preparePurchaseInvoiceNew.htm')"
+        />
+        <div class="p-2">
+          <div class="flex items-center justify-between mb-1">
+            <div class="text-[14px]">
+              <select
+                v-model="pageSize_value"
+                class="border-[1px] border-solid border-[rgba(171,177,187,0.7)] w-[60px] px-[5px] py-[3px] cursor-pointer rounded-[2px] text-[14px] outline-none"
+                @change="getTableRequest"
+              >
+                <option value="10">10</option>
+                <option value="25">25</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+                <option value="500">500</option>
+              </select>
+              Records
             </div>
-            <GenericTablePage
-              :tablehead="tableHead"
-              :tablebody="tableBody"
-              :tableheadlength="tableHeadLength"
-              :istherebody="isThereBody"
-              open-url="preparePurchaseInvoiceNew"
-              height="600"
-            />
-          </div>
-        </template>
-        <template v-else>
-          <div class="flex items-end gap-4 m-2">
-            <span class="flex items-center gap-1">
-              <span class="text-[13px]">Date From:</span>
-              <GenericInputDatePage
-                width="200"
-                height="30"
-                pl="10"
-                pr="10"
-                pt="1"
-                pb="1"
-                textsize="13"
-                type="datetime-local"
-                valuecolor="rgba(0,0,0,0.7)"
+            <div class="flex items-center gap-2">
+              <GenericInput
+                name="searchInput"
+                placeholder="Search..."
+                @enter="getTableRequest"
+                @customFunction="getInputAndLookUpValueAction"
               />
-            </span>
-            <span class="flex items-center gap-1">
-              <span class="text-[13px]">Date To:</span>
-              <GenericInputDatePage
-                width="200"
-                height="30"
-                pl="10"
-                pr="10"
-                pt="1"
-                pb="1"
-                textsize="13"
-                type="datetime-local"
-                valuecolor="rgba(0,0,0,0.7)"
+              <GenericButton
+                name="Search"
+                type="primary"
+                icon-name-attribute="search"
+                @click="getTableRequest"
               />
-            </span>
-            <generic-button
-              name="Search"
-              type="primary"
-              icon-name-attribute="search"
-            />
+              <GenericButton
+                name="Print Preview"
+                type="success"
+                icon-name-attribute="printer"
+              />
+            </div>
           </div>
-
-          <purchase-invoice-scroll-table class="mt-10" />
-        </template>
+          <GenericTablePage
+            :tablehead="tableHead"
+            :tablebody="tableBody"
+            :tableheadlength="tableHeadLength"
+            :istherebody="isThereBody"
+            open-url="preparePurchaseInvoiceNew"
+            height="600"
+          />
+        </div>
       </div>
     </template>
   </div>
@@ -283,87 +176,121 @@
 import LoadingPage from '@components/Loading/LoadingPage.vue'
 import GenericButton from '@components/Generics/GenericButton.vue'
 import GenericInput from '@generics/GenericInput.vue'
-import GenericSelect from '@components/Select/GenericSelect.vue'
 import GenericInputDatePage from '@components/InputDate/GenericInputDatePage.vue'
 import ColumnConfigPage from '@components/ColumnConfig/ColumnConfigPage.vue'
 import GenericTablePage from '@components/GenericTable/GenericTablePage.vue'
-import PurchaseInvoiceScrollTable from '@components/Invoices/PurchaseInvoiceScrollTable.vue'
 export default {
+  // COMPONENTS
   components: {
     LoadingPage,
     GenericButton,
     GenericInput,
-    GenericSelect,
     GenericInputDatePage,
     ColumnConfigPage,
     GenericTablePage,
-    PurchaseInvoiceScrollTable,
   },
+
+  // DATA
   data() {
     return {
       isLoading: false,
-      pageSize_value: 10,
-      keywordValue: '',
-      users: [],
-      tableData: [],
+      pageSize_value: 25,
+      isOpenTable: true,
+      isCloseTable: true,
+      topFilterData: [],
       tableHead: {},
-      leftMap: {},
       tableBody: [],
       tableHeadLength: null,
       isThereBody: false,
-      selectData: {},
-      formData: new Map(),
+      allSelectAndInputValues: {},
       checkModal: false,
-      actionUrl: '',
-      isOpenTable: true,
-      isCloseTable: true,
+      actionUrl: null,
+      leftMap: {},
+      selectData: {},
+      productionOrderStatus: null,
     }
   },
+
+  // CREATED
+  created() {
+    this.allSelectAndInputValues.dateFrom = new Date(
+      new Date().setMonth(new Date().getMonth() - 1)
+    )
+      .toISOString()
+      .split('.')[0]
+    this.allSelectAndInputValues.dateTo = new Date().toISOString().split('.')[0]
+  },
+
+  // MOUNTED
   mounted() {
     // Table function
     this.getTableRequest()
+    // function
+    this.createDataFiltering()
   },
 
-  // Methods
+  // METHODS
   methods: {
+    // Column config uchun ishlaydi
     handleValue(checkModal) {
       this.checkModal = checkModal
     },
     openColumnConfig() {
       this.checkModal = true
     },
+    // Column config uchun ishlaydi
+    // Table page ni ochish va yopish uchun
+    isOpen() {
+      this.isOpenTable = !this.isOpenTable
+    },
+    isClose() {
+      this.isCloseTable = !this.isCloseTable
+    },
+    // Table page ni ochish va yopish uchun
+
+    // get Input, date, select datasini olish
+    getInputAndLookUpValueAction(name, value) {
+      this.$set(this.allSelectAndInputValues, name, value)
+    },
+    // get Input, date, select datasini olish
+
+    // page request action
     getTableRequest() {
+      // request body
+      const body = {
+        pagingForm: {
+          currentPage: 1,
+          pageSize: this.pageSize_value,
+        },
+        searchForm: {
+          keyword: this.allSelectAndInputValues?.searchInput ?? '',
+        },
+        dateFrom1: this.allSelectAndInputValues?.dateFrom
+          ? this.$formatDate(this.allSelectAndInputValues.dateFrom)
+          : '',
+        dateTo1: this.allSelectAndInputValues?.dateTo
+          ? this.$formatDate(this.allSelectAndInputValues.dateTo)
+          : '',
+        billStatus: this.allSelectAndInputValues?.billStatus ?? '',
+        payStatus: this.allSelectAndInputValues?.payStatus ?? '',
+        invoiceOnWayStatus:
+          this.allSelectAndInputValues?.invoiceOnWayStatus ?? '',
+        departmentId: this.allSelectAndInputValues?.departmentId ?? '',
+        warehouseId: this.allSelectAndInputValues?.warehouseId ?? '',
+        confirmStatus: this.allSelectAndInputValues?.confirmStatus ?? '',
+      }
+      // request body
       this.isLoading = !this.isLoading
       this.$axios
-        .post(`/invoice/purchaseInvoiceList`, {
-          current_page: 1,
-          page_size: this.pageSize_value,
-          searchForm: {
-            keyword: this.keywordValue,
-            from_date: new Date(Object.fromEntries(this.formData).from)
-              .toLocaleString('en-GB')
-              .split(',')
-              .join(''),
-            to_date: new Date(Object.fromEntries(this.formData).to)
-              .toLocaleString('en-GB')
-              .split(',')
-              .join(''),
-          },
-          billStatus: Object.fromEntries(this.formData).bill,
-          payStatus: Object.fromEntries(this.formData).pay,
-          invoiceOnWayStatus: Object.fromEntries(this.formData).invoice,
-          departmentId: Object.fromEntries(this.formData).departments,
-          warehouseId: Object.fromEntries(this.formData).warehouse,
-        })
+        .post(`/invoices/purchaseinvoice`, body)
         .then(({ data }) => {
-          this.tableBody = []
+          this.actionUrl = data?.actionUrl
+          this.tableHead = data?.rightMap
+          this.leftMap = data?.leftMap
+          this.selectData = data
+          // function
+          this.getTableBody(data?.invoiceList)
           this.isLoading = !this.isLoading
-          this.tableHead = data.rightMap
-          this.leftMap = data.leftMap
-          this.actionUrl = data.actionUrl
-          this.tableData = data.invoiceList
-          this.selectData = data.invoiceSearchDTO
-          this.getTableBody()
         })
         .catch((error) => {
           this.isLoading = !this.isLoading
@@ -373,51 +300,84 @@ export default {
     },
 
     // Generic Table action Start
-    getTableBody() {
-      const arr = new Set()
-      for (const obj of this.tableData) {
-        arr.add(obj.id)
-        const data = new Map()
+    getTableBody(bodyData) {
+      this.tableBody = []
+      for (const obj of bodyData) {
+        const newObj = {}
         for (const key in this.tableHead) {
-          const value = this.tableHead[key].code
-          if (this.tableHead[key].code in obj) {
-            if (obj[value]) {
-              if (typeof obj[value] === 'object')
-                data.set(value, obj[value].value)
-              else data.set(value, obj[value])
-            } else data.set(value, obj[value])
-          } else data.set(value, false)
+          const keyCode = this.tableHead[key]?.code
+          if (keyCode in obj) {
+            if (typeof obj[keyCode] === 'object')
+              newObj[keyCode] = obj[keyCode]?.value
+            else newObj[keyCode] = obj[keyCode]
+          }
         }
-        this.tableBody.push(Object.fromEntries(data))
+        this.tableBody.push(newObj)
       }
-      this.tableHeadLength = Object.entries(this.tableHead).length
+      this.tableHeadLength = Object.keys(this.tableHead).length
       this.tableBody.length > 0
         ? (this.isThereBody = true)
         : (this.isThereBody = false)
     },
     // Generic Table action End
 
-    // Generic_Date value
-    getInputDateValues(value, id) {
-      this.formData.set(id, value)
-    },
-
-    // Generic_Select value
-    getSelectValue(value, formDataId, isDefOptionTitle, index, id) {
-      this.formData.set(id, value)
-    },
-
-    // Generic_Input value
-    getInputValue(inputVal) {
-      this.keywordValue = inputVal
-    },
-
-    // Table page ni ochish va yopish uchun
-    isOpen() {
-      this.isOpenTable = !this.isOpenTable
-    },
-    isClose() {
-      this.isCloseTable = !this.isCloseTable
+    // page yuqorisidagi filterlar uchun data yaratish
+    createDataFiltering() {
+      const createDate = [
+        {
+          name: 'Date From',
+          subName: 'dateFrom',
+          type: 'date',
+        },
+        {
+          name: 'Date To',
+          subName: 'dateTo',
+          type: 'date',
+        },
+        {
+          width: 150,
+          name: 'Status Bill',
+          subName: 'billStatus',
+          selectName: 'billStatusList',
+          type: 'select',
+        },
+        {
+          width: 150,
+          name: 'Status Pay',
+          subName: 'payStatus',
+          selectName: 'payStatusList',
+          type: 'select',
+        },
+        {
+          width: 150,
+          name: 'Invoice (Status)',
+          subName: 'invoiceOnWayStatus',
+          selectName: 'invoiceOnWayStatusList',
+          type: 'select',
+        },
+        {
+          width: 200,
+          name: 'Departments',
+          subName: 'departmentId',
+          selectName: 'departmentList',
+          type: 'select',
+        },
+        {
+          width: 200,
+          name: 'Warehouse',
+          subName: 'warehouseId',
+          selectName: 'warehouseList',
+          type: 'select',
+        },
+        {
+          width: 200,
+          name: 'invoiceConfirmedStatus',
+          subName: 'confirmStatus',
+          selectName: 'confirmStatusList',
+          type: 'select',
+        },
+      ]
+      this.topFilterData = createDate
     },
   },
 }

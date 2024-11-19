@@ -158,7 +158,7 @@
                       <span class="text-[13px]">{{ element.name }}</span>
                       <generic-look-up
                         dwidth="300"
-                        :durl="element?.api ? element?.api : ''"
+                        :durl="element?.api"
                         :name="element.subName"
                         :defvalue="''"
                         :multiple="element?.multiple"
@@ -229,7 +229,6 @@
         </div>
       </div>
     </template>
-    <pre>{{ allInputAndLookUpValue }}</pre>
   </div>
 </template>
 
@@ -556,6 +555,7 @@ export default {
             name: getText?.companyGroup || 'Company Group',
             subName: 'companyGroupId',
             selectName: 'companyGroupList',
+            api: 'findAllCompanyGroups',
             type: 'select',
             show: true,
             disabled: this.pageType === 'view',
@@ -596,6 +596,7 @@ export default {
             name: getText?.companyCategory || 'companyCategory',
             subName: 'companyCategoryId',
             selectName: 'companyCategoryList',
+            api: 'findAllCompanyCategory',
             type: 'select',
             show: true,
             disabled: this.pageType === 'view',
@@ -604,6 +605,7 @@ export default {
             name: getText?.currency || 'Currency',
             subName: 'currencyId',
             selectName: 'currencyList',
+            api: 'findAllCurrency',
             type: 'select',
             show: true,
             disabled: this.pageType === 'view',
@@ -805,6 +807,7 @@ export default {
             name: getText?.district || 'District',
             subName: 'district',
             selectName: 'districtList',
+            api: 'findAllDistrict',
             type: 'select',
             show: true,
             disabled: this.pageType === 'view',
@@ -834,6 +837,7 @@ export default {
             name: getText?.['Post Types'] || 'Post Types',
             subName: 'postTypes',
             selectName: 'postTypes',
+            api: 'findAllPostType',
             type: 'select',
             show: true,
             disabled: this.pageType === 'view',
@@ -867,8 +871,8 @@ export default {
             name:
               getText?.['Post Type International'] || 'Post Type International',
             subName: 'postTypeInternational',
-            type: 'select',
             api: 'findAllPostType',
+            type: 'select',
             param: {
               postTypeId: this.allInputAndLookUpValue?.postTypeId ?? 3,
             },

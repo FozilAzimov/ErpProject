@@ -1,11 +1,11 @@
 <template>
-  <PreparePurchaseInvoiceNewPage />
+  <prepare-purchase-invoice-new />
 </template>
 
 <script>
-import PreparePurchaseInvoiceNewPage from '@components/Invoices/PreparePurchaseInvoiceNewPage.vue'
+import PreparePurchaseInvoiceNew from '@components/Invoices/PreparePurchaseInvoiceNew.vue'
 
 export default {
-  components: { PreparePurchaseInvoiceNewPage },
+  components: { PreparePurchaseInvoiceNew },
 }
 </script>

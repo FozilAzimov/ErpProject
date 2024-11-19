@@ -79,7 +79,7 @@
         </div>
       </div>
       <div
-        class="border-[1px] border-solid border-[rgba(0,0,0,0.1)]"
+        class="border-[1px] border-solid border-[rgba(0,0,0,0.1)] mb-10"
         :class="
           isOpenTable
             ? 'duration-[1s] h-fit overflow-hidden'
@@ -180,9 +180,7 @@
                   <span
                     v-else-if="element?.subName === 'openClose'"
                     class="text-green-600 font-semibold text-[14px]"
-                    >{{
-                      editData?.[element.subName] ? 'OPENED' : 'CLOSED'
-                    }}</span
+                    >{{ openClose ? 'OPENED' : 'CLOSED' }}</span
                   >
                   <span v-else>{{
                     editData?.[element?.subName]?.text ||
@@ -194,17 +192,14 @@
                   class="border-[1px] border-solid border-[#778899] px-1"
                 >
                   <template v-if="element.subName === 'date'">{{
-                    new Date(editData?.[element.subName])
-                      .toLocaleString('en-GB')
-                      .split(',')
-                      .join('')
+                    editData?.[element.subName]
+                      ? $formatDate(editData?.[element.subName])
+                      : ''
                   }}</template>
                   <span
                     v-else-if="element?.subName === 'openClose'"
                     class="text-green-600 font-semibold text-[14px]"
-                    >{{
-                      editData?.[element.subName] ? 'OPENED' : 'closed'
-                    }}</span
+                    >{{ openClose ? 'OPENED' : 'CLOSED' }}</span
                   >
                   <template v-else>{{
                     editData?.[element.subName]?.text ||
@@ -276,6 +271,7 @@
               <GenericButton
                 name="Save"
                 type="primary"
+                :disabled="planSaveBtnDisabled"
                 @click="planSaveAction"
               />
               <GenericButton name="Discard" @click="planDiscardAction" />
@@ -291,7 +287,6 @@
           <!-- TABLE -->
           <GenericPrepareTablePage
             ref="planRef"
-            department-name="production"
             tab-name="iplikLotStavkaPlanTable"
             filter-type="min"
             :addmodalorrow="true"
@@ -304,6 +299,7 @@
             delete-url-row="iplikLotStavka/prepareCreateEditIplikLotStavkaPlan"
             class="bg-[rgba(255,255,255,0.5)] mt-1"
             @rowValues="planGetRowElements"
+            @requiredAction="getDisabledValue"
           />
         </div>
         <!-- --END-- PLAN Table UI -->
@@ -327,6 +323,7 @@
               <GenericButton
                 name="Save"
                 type="primary"
+                :disabled="reserveSaveBtnDisabled"
                 @click="reserveSaveAction"
               />
               <GenericButton name="Discard" @click="reserveDiscardAction" />
@@ -342,9 +339,10 @@
           <!-- TABLE -->
           <GenericPrepareTablePage
             ref="reserveRef"
-            department-name="production"
+            action-url="iplikReserv"
             tab-name="iplikLotStavkaReserveTable"
             filter-type="max"
+            :top-static-table-data="allInputAndLookUpValue"
             :addmodalorrow="true"
             :tablehead="reserveHead"
             :tableheadlength="reserveHead?.length"
@@ -355,6 +353,7 @@
             delete-url-row="iplikLotStavka/prepareCreateEditIplikLotStavkaReserve"
             class="bg-[rgba(255,255,255,0.5)] mt-1"
             @rowValues="reserveGetRowElements"
+            @requiredAction="getDisabledValue"
           />
         </div>
         <!-- --END-- RESERVE Table UI -->
@@ -378,6 +377,7 @@
               <GenericButton
                 name="Save"
                 type="primary"
+                :disabled="stageSaveBtnDisabled"
                 @click="stageSaveAction"
               />
               <GenericButton name="Discard" @click="stageDiscardAction" />
@@ -394,6 +394,7 @@
           <GenericPrepareTablePage
             ref="stageRef"
             department-name="orders"
+            tab-name="iplikLotStavkaStageTable"
             :addmodalorrow="openPopUp"
             :tablehead="stageHead"
             :tableheadlength="stageHead?.length"
@@ -404,6 +405,7 @@
             delete-url-row="iplikLotStavka/prepareCreateEditIplikLotStavkaStage"
             class="bg-[rgba(255,255,255,0.5)] mt-1"
             @rowValues="stageGetRowElements"
+            @requiredAction="getDisabledValue"
           />
         </div>
         <!-- --END-- STAGE Table UI -->
@@ -446,6 +448,7 @@ export default {
       elementData: [],
       allBtnName: [],
       saveEditBtnType: false,
+      openClose: null,
       editData: {},
 
       // Column config
@@ -461,6 +464,7 @@ export default {
       planUiShowHide: null,
       isPlanEdit: null,
       planHideButton: null,
+      planSaveBtnDisabled: false,
       // Plan Table End
 
       // Reserve Table Start
@@ -469,6 +473,7 @@ export default {
       reserveUiShowHide: null,
       isReserveEdit: null,
       reserveHideButton: null,
+      reserveSaveBtnDisabled: false,
       // Reserve Table End
 
       // Stage Table Start
@@ -477,14 +482,21 @@ export default {
       stageUiShowHide: null,
       isStageEdit: null,
       stageHideButton: null,
+      stageSaveBtnDisabled: false,
       // Stage Table End
     }
   },
 
   // COMPUTED
   computed: {
-    headDataFiltered() {
+    planHeadDataFiltered() {
       return this.planHead.filter((headName) => headName?.showUI)
+    },
+    reserveHeadDataFiltered() {
+      return this.reserveHead.filter((headName) => headName?.showUI)
+    },
+    stageHeadDataFiltered() {
+      return this.stageHead.filter((headName) => headName?.showUI)
     },
   },
 
@@ -515,6 +527,13 @@ export default {
 
   // METHODS
   methods: {
+    // Table page ni ochish va yopish uchun
+    isOpen() {
+      this.isOpenTable = !this.isOpenTable
+    },
+    isClose() {
+      this.isCloseTable = !this.isCloseTable
+    },
     // Column Config function
     handleValue(checkModal) {
       // function
@@ -565,20 +584,12 @@ export default {
       this.rightData = rightMap
     },
 
-    // Table page ni ochish va yopish uchun
-    isOpen() {
-      this.isOpenTable = !this.isOpenTable
-    },
-    isClose() {
-      this.isCloseTable = !this.isCloseTable
-    },
-
     // Input value action
     getInputAndLookUpValueAction(name, value) {
       this.$set(this.allInputAndLookUpValue, name, value)
     },
 
-    // Page request
+    // PAGE request
     pageRequestAction(id) {
       this.isLoading = !this.isLoading
       this.$axios
@@ -589,6 +600,7 @@ export default {
         })
         .then(({ data: { iplikLotStavkaJson } }) => {
           this.editData = iplikLotStavkaJson
+          this.openClose = iplikLotStavkaJson?.openClose
           if (id) {
             // function's
             this.planAction(id)
@@ -716,7 +728,43 @@ export default {
             // eslint-disable-next-line no-console
             console.log(error)
           })
+      } else if (propMessage === 'confirm' && btnTypeProp === 'openOrClose') {
+        this.isLoading = !this.isLoading
+        this.$axios
+          .post(`/iplikLotStavka/changeIplikLotStavkaOpenStatus`, {
+            id,
+          })
+          .then(({ data }) => {
+            this.openClose = data?.id
+            this.isLoading = !this.isLoading
+          })
+          .catch((error) => {
+            this.isLoading = !this.isLoading
+            // eslint-disable-next-line no-console
+            console.log(error)
+          })
       }
+    },
+
+    // Response dan qaytgan data'ga static data set qilish
+    staticSetDataAction(resArray) {
+      return resArray.map((obj) => {
+        if (obj?.id) {
+          return { ...obj, iplikLotStavka: { id: this.pageID } }
+        }
+        return obj
+      })
+    },
+    // Response dan qaytgan data'ga static data set qilish
+
+    // Save button'ni disabled qilish
+    getDisabledValue(disabledVal, tabName) {
+      if (tabName === 'iplikLotStavkaPlanTable')
+        this.planSaveBtnDisabled = disabledVal
+      else if (tabName === 'iplikLotStavkaReserveTable')
+        this.reserveSaveBtnDisabled = disabledVal
+      else if (tabName === 'iplikLotStavkaStageTable')
+        this.stageSaveBtnDisabled = disabledVal
     },
 
     // PLAN TABLE ACTIONS start - =============================
@@ -727,16 +775,12 @@ export default {
         .post(`/iplikLotStavka/prepareCreateEditIplikLotStavkaPlan`, {
           id,
         })
-        .then(
-          ({
-            data: { iplikLotStavkaPlanColumns, iplikLotStavkaPlanListJson },
-          }) => {
-            this.planBody = iplikLotStavkaPlanListJson
-            this.planHead = iplikLotStavkaPlanColumns
-            this.planUiShowHide = true
-            this.isLoading = !this.isLoading
-          }
-        )
+        .then(({ data }) => {
+          this.planBody = data?.iplikLotStavkaPlanListJson
+          this.planHead = data?.iplikLotStavkaPlanColumns
+          this.planUiShowHide = true
+          this.isLoading = !this.isLoading
+        })
         .catch((error) => {
           this.isLoading = !this.isLoading
           // eslint-disable-next-line no-console
@@ -756,59 +800,35 @@ export default {
     planDiscardAction() {
       this.planHideButton = !this.planHideButton
       // GenericTablePage da ishlab beruvchi function
-      this.$refs.planRef.arrayFiltered()
+      this.$refs.planRef.discardArrayFiltered()
+      this.planBody = this.planBody.filter((obj) => obj?.id)
       this.planUiShowHide = true
     },
-
-    // Response dan qaytgan data ni filter qilish
-    responseArrayFilteredAction(resArray) {
-      // const newData = []
-      this.headDataFiltered.forEach(({ param, type, name }) => {
-        if (!param && type === 'list') {
-          resArray.forEach((obj, index) => {
-            for (const key in obj) {
-              if (
-                name in obj &&
-                obj?.[key] !== null &&
-                typeof obj?.[key] === 'object'
-              ) {
-                console.log(name, key, obj[key])
-              }
-            }
-          })
-        }
-      })
-      // console.log(resArray)
-    },
-    // Response dan qaytgan data ni filter qilish
 
     // Plan EMIT action
     planGetRowElements(arr, hideBtn) {
       this.planHideButton = !hideBtn
       // list set qilish
-      this.responseArrayFilteredAction(arr)
-      // this.planBody = arr
+      const iplikLotStavkaPlanList = this.staticSetDataAction(arr) // function
 
-      // console.log(this.planBody)
-
-      // this.isLoading = !this.isLoading
-      // this.$axios
-      //   .post(`/sewModel/prepareCreateEditSewModelSize`, {
-      //     id: this.pageID,
-      //     iplikLotStavkaPlanList: this.planBody,
-      //   })
-      //   .then(({ data }) => {
-      //     this.planBody = data?.sewModelSizeItem
-      //     this.planUiShowHide = true
-      //     this.isLoading = !this.isLoading
-      //     this.$notification(`Ma'lumot saqlandi!`, 'Success', 'success')
-      //   })
-      //   .catch((error) => {
-      //     this.isLoading = !this.isLoading
-      //     // eslint-disable-next-line no-console
-      //     console.log(error)
-      //     this.$notification(`Ma'lumot saqlanmadi!`, 'Error', 'error')
-      //   })
+      this.isLoading = !this.isLoading
+      this.$axios
+        .post(`/iplikLotStavka/prepareCreateEditIplikLotStavkaPlan`, {
+          id: this.pageID,
+          iplikLotStavkaPlanList,
+        })
+        .then(({ data }) => {
+          this.planBody = data?.iplikLotStavkaPlanListJson
+          this.planUiShowHide = true
+          this.isLoading = !this.isLoading
+          this.$notification(`Ma'lumot saqlandi!`, 'Success', 'success')
+        })
+        .catch((error) => {
+          this.isLoading = !this.isLoading
+          // eslint-disable-next-line no-console
+          console.log(error)
+          this.$notification(`Ma'lumot saqlanmadi!`, 'Error', 'error')
+        })
     },
 
     // Save Plan action
@@ -858,7 +878,8 @@ export default {
     reserveDiscardAction() {
       this.reserveHideButton = !this.reserveHideButton
       // GenericTablePage da ishlab beruvchi function
-      this.$refs.reserveRef.arrayFiltered()
+      this.$refs.reserveRef.discardArrayFiltered()
+      this.reserveBody = this.reserveBody.filter((obj) => obj?.id)
       this.reserveUiShowHide = true
     },
 
@@ -866,16 +887,16 @@ export default {
     reserveGetRowElements(arr, hideBtn) {
       this.reserveHideButton = !hideBtn
       // list set qilish
-      this.reserveBody = arr
+      this.reserveBody = this.staticSetDataAction(arr)
 
       this.isLoading = !this.isLoading
       this.$axios
-        .post(`/sewModel/prepareCreateEditSewModelSize`, {
+        .post(`/iplikLotStavka/prepareCreateEditIplikLotStavkaReserve`, {
           id: this.pageID,
           iplikLotStavkaReserveList: this.reserveBody,
         })
         .then(({ data }) => {
-          this.reserveBody = data?.sewModelSizeItem
+          this.reserveBody = data?.iplikLotStavkaReserveListJson
           this.reserveUiShowHide = true
           this.isLoading = !this.isLoading
           this.$notification(`Ma'lumot saqlandi!`, 'Success', 'success')
@@ -936,7 +957,8 @@ export default {
     stageDiscardAction() {
       this.stageHideButton = !this.stageHideButton
       // GenericTablePage da ishlab beruvchi function
-      this.$refs.stageRef.arrayFiltered()
+      this.$refs.stageRef.discardArrayFiltered()
+      this.stageBody = this.stageBody.filter((obj) => obj?.id)
       this.stageUiShowHide = true
     },
 
@@ -944,7 +966,7 @@ export default {
     stageGetRowElements(arr, hideBtn) {
       this.stageHideButton = !hideBtn
       // list set qilish
-      this.stageBody = arr
+      this.stageBody = this.staticSetDataAction(arr)
 
       this.isLoading = !this.isLoading
       this.$axios

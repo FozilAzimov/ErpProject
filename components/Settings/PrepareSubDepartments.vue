@@ -113,6 +113,7 @@
                       ? viewEditData?.[element.subName]
                       : ''
                   }`"
+                  :durl="element?.api"
                   :options-data="selectData?.[element?.selectName]"
                   :disabled="element.disabled"
                   @customFunction="getInputAndLookUpValueAction"
@@ -337,6 +338,7 @@ export default {
           name: 'Department Name',
           subName: 'departmentName',
           selectName: 'departmentList',
+          api: 'findAllSubDepartment',
           type: 'select',
           show: true,
           disabled: this.pageType === 'view',

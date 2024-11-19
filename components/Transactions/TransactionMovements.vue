@@ -178,7 +178,7 @@ export default {
 
       this.isLoading = !this.isLoading
       this.$axios
-        .post(`/invoices/expenseInvoice`, body)
+        .post(`/transactionMovements/transactionMovements`, body)
         .then(({ data: { build } }) => {
           this.isLoading = !this.isLoading
           this.tableHead = build?.rightMap

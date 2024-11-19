@@ -125,6 +125,7 @@
                       ? viewEditData?.[element.subName]
                       : ''
                   "
+                  :durl="element?.api"
                   :options-data="planteNumberList"
                   :disabled="element.disabled"
                   @customFunction="getInputAndLookUpValueAction"
@@ -333,6 +334,7 @@ export default {
         {
           name: 'Cars Name',
           subName: 'carName',
+          api: 'findAllCar',
           type: 'select',
           show: this.pageType !== 'view',
           required: true,

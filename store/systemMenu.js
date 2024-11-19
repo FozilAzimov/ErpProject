@@ -21,9 +21,9 @@ export const mutations = {
 
 // GETTERS
 export const getters = {
-  GET_LOADING: (state) => state.isLoading,
-  GET_SYSTEM_MENU_LIST: (state) =>
-    state.systemMenuList.filter((obj) => obj?.active && obj?.childList?.length),
+  GET_LOADING: ({ isLoading }) => isLoading,
+  GET_SYSTEM_MENU_LIST: ({ systemMenuList: list }) =>
+    list.filter(({ active, childList }) => active && childList?.length),
 }
 
 // ACTIONS

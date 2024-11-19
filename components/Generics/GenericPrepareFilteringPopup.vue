@@ -38,7 +38,6 @@
             <span class="text-[12px] font-light">{{ element?.name }}</span>
             <generic-input-date-page
               :width="element?.width"
-              height="28"
               pl="10"
               pr="10"
               pt="1"
@@ -134,6 +133,9 @@
                 :dwidth="element?.width"
                 :name="element?.subName"
                 :durl="element?.api"
+                :dparam="
+                  element?.subName === 'productQtyId' ? param : element?.param
+                "
                 :popper-append-to-body="false"
                 @customFunction="allSelectAndInputAction"
               />
@@ -172,6 +174,7 @@
       <!-- TABLE -->
       <generic-popup-prepare-table
         ref="popupTable"
+        :filter-type="filterType"
         :table-head-data="headData"
         :table-head-data-length="headData?.length"
         :table-body-data="tableData"
@@ -205,13 +208,21 @@ export default {
 
   // PROPS
   props: {
+    headData: {
+      type: Array,
+      default: () => [],
+    },
+    topStaticTableData: {
+      type: Object,
+      default: () => ({}),
+    },
     tabName: {
       type: String,
       default: '',
     },
-    headData: {
-      type: Array,
-      default: () => [],
+    actionUrl: {
+      type: String,
+      default: '',
     },
     filterType: {
       type: String,
@@ -231,20 +242,21 @@ export default {
 
       isLoading: false,
       pageID: null,
+      pageUrl: null,
+      isPage: null,
       filterElementMin: [],
       filterElementMax: [],
       allFilterElementValues: {},
       tableData: [],
       emitTableData: [],
+      param: {},
     }
   },
-
-  // WATCH
-  watch: {},
 
   // CREATED
   created() {
     this.pageID = this.$route.params?.id
+    this.pageUrl = this.$route?.name
     this.allFilterElementValues.startDate = new Date(
       new Date().setDate(new Date().getDate() - 7)
     )
@@ -296,7 +308,7 @@ export default {
 
     // Accept button action addition rows
     acceptAction() {
-      this.$emit('popupEmitAction', this.emitTableData, false)
+      this.$emit('filterPopupEmitAction', this.emitTableData, false)
     },
 
     // Emit action
@@ -307,60 +319,113 @@ export default {
     // set all select and input value
     allSelectAndInputAction(name, value) {
       this.$set(this.allFilterElementValues, name, value)
-    },
+      // start all params
 
-    allBtnAction(btnClickType) {
-      const body = {
-        internalStatus: this.allFilterElementValues?.internalStatus || true,
-        orderNumber: this.allFilterElementValues?.orderNumber ?? null,
-        clientOrder: this.allFilterElementValues?.clientOrder ?? null,
-        stillage: this.allFilterElementValues?.stillage ?? '',
-        planningTypeId: this.allFilterElementValues?.planningTypeId ?? null,
-        planningNumber: this.allFilterElementValues?.planningNumber ?? null,
-        packingNumbers: this.allFilterElementValues?.packingNumbers ?? null,
-        startDate: this.allFilterElementValues?.startDate ?? null,
-        endDate: this.allFilterElementValues?.endDate ?? null,
+      const params = {
+        allCompanies: this.allFilterElementValues?.allCompanies ?? false,
         clientCompanyId: this.allFilterElementValues?.clientCompanyId ?? null,
-        departmentId: this.allFilterElementValues?.departmentId ?? null,
-        sewModelSizeVariantId:
-          this.allFilterElementValues?.sewModelSizeVariantId ?? null,
-        planOpenOrCloseId:
-          this.allFilterElementValues?.planOpenOrCloseId ?? null,
-        prOrderId: this.allFilterElementValues?.prOrderId ?? null,
-        packingTypeId: this.allFilterElementValues?.packingTypeId ?? null,
+        clientOrder: this.allFilterElementValues?.clientOrder ?? null,
         colorId: this.allFilterElementValues?.colorId ?? null,
         colorVariantId: this.allFilterElementValues?.colorVariantId ?? null,
+        currencyId:
+          this.topStaticTableData?.currency?.id ??
+          this.topStaticTableData?.currency ??
+          null,
+        currencyRateVal:
+          this.topStaticTableData?.currencyRate?.text ??
+          this.topStaticTableData?.currencyRate ??
+          null,
+        dateFrom:
+          (isNaN(this.topStaticTableData?.date)
+            ? this.topStaticTableData?.date
+            : this.$formatDate(this.topStaticTableData?.date)) ?? null,
         designId: this.allFilterElementValues?.designId ?? null,
         designVariantId: this.allFilterElementValues?.designVariantId ?? null,
-        gradeId: this.allFilterElementValues?.gradeId ?? null,
-        fiberClassId: this.allFilterElementValues?.fiberClassId ?? null,
-        currencyId: this.allFilterElementValues?.currencyId ?? null,
-        currencyRateVal: this.allFilterElementValues?.currencyRateVal ?? null,
-        tabName: this.tabName ?? '',
-        warehouseId: this.allFilterElementValues?.warehouseId ?? null,
-        orderProductionTypeId:
-          this.allFilterElementValues?.orderProductionTypeId ?? null,
-        salesManagerId: this.allFilterElementValues?.salesManagerId ?? null,
-        equipmentId: this.allFilterElementValues?.equipmentId ?? null,
-        companyId: this.allFilterElementValues?.companyId ?? null,
-        id: this.pageID,
-        dateFrom: this.allFilterElementValues?.endDate ?? null,
-        allCompanies: this.allFilterElementValues?.allCompanies ?? false,
-        marriage: this.allFilterElementValues?.marriage ?? false,
         employeeId: this.allFilterElementValues?.employeeId ?? null,
+        equipmentId: this.allFilterElementValues?.equipmentId ?? null,
+        fiberClassId: this.allFilterElementValues?.fiberClassId ?? null,
+        gradeId: this.allFilterElementValues?.gradeId ?? null,
+        id: this.pageID,
+        internalStatus: this.allFilterElementValues?.internalStatus || null,
+        marriage: this.allFilterElementValues?.marriage ?? false,
+        orderNumber: this.allFilterElementValues?.orderNumber ?? null,
+        orderProductionTypeId:
+          this.topStaticTableData?.orderProductionType?.id ??
+          this.topStaticTableData?.orderProductionType ??
+          null,
+        packingNumbers: this.allFilterElementValues?.packingNumbers ?? null,
+        packingTypeId: this.allFilterElementValues?.packingTypeId ?? null,
+        planOpenOrCloseId:
+          this.allFilterElementValues?.planOpenOrCloseId ?? null,
+        planningNumber: this.allFilterElementValues?.planningNumber ?? null,
+        planningTypeId: this.allFilterElementValues?.planningTypeId ?? null,
+        prOrderId: this.allFilterElementValues?.prOrderId ?? null,
+        salesManagerId:
+          this.topStaticTableData?.salesManager?.id ??
+          this.topStaticTableData?.salesManager ??
+          null,
+        sewModelSizeVariantId:
+          this.allFilterElementValues?.sewModelSizeVariantId ?? null,
+        stillage: this.allFilterElementValues?.stillage ?? '',
+        tabName: this.tabName ?? '',
+        warehouseId:
+          (this.isPage
+            ? this.allFilterElementValues?.warehouseId
+            : this.topStaticTableData?.warehouse?.id) ?? null,
       }
+      if (this.tabName === 'outputToProductionCompanyItemTable') {
+        params.salesManagerId =
+          this.topStaticTableData?.company?.id ??
+          this.topStaticTableData?.company ??
+          null
+      } else if (this.tabName === 'productionInvoiceItemTable') {
+        params.companyId = null
+        params.currencyId = null
+      } else {
+        params.companyId =
+          this.topStaticTableData?.company?.id ??
+          this.topStaticTableData?.company ??
+          null
+      }
+      const minMaxParam =
+        this.filterType === 'max'
+          ? {
+              batchNumber: this.allFilterElementValues?.batchNumber ?? '',
+              lot: this.allFilterElementValues?.lot ?? '',
+              productId: this.allFilterElementValues?.productId ?? null,
+              departmentId:
+                this.topStaticTableData?.department?.id ??
+                this.topStaticTableData?.department ??
+                null,
+            }
+          : this.filterType === 'min'
+          ? {
+              endDate: this.allFilterElementValues?.endDate ?? '',
+              startDate: this.allFilterElementValues?.startDate ?? '',
+              departmentId: this.allFilterElementValues?.departmentId ?? null,
+            }
+          : {}
+      this.$set(this, 'param', { ...params, ...minMaxParam })
+      // end all params
 
+      // function
+      this.allBtnAction(name, value)
+    },
+
+    allBtnAction(btnClickType, selectAndInputValue) {
       if (
         btnClickType === 'get' ||
         this.allFilterElementValues?.planningNumber ||
         this.allFilterElementValues?.clientOrder ||
-        this.allFilterElementValues?.orderNumber
+        this.allFilterElementValues?.orderNumber ||
+        ((btnClickType === 'productQtyId' || btnClickType === 'productId') &&
+          selectAndInputValue)
       ) {
         this.isLoading = !this.isLoading
         this.$axios
-          .post(`/invoices/findInvoiceItemListUrl`, body)
+          .post(`/invoices/findInvoiceItemListUrl`, this.param)
           .then(({ data: { invoiceItemListJson } }) => {
-            this.tableData = invoiceItemListJson
+            this.tableData = JSON.parse(invoiceItemListJson)
             this.isLoading = !this.isLoading
           })
           .catch((error) => {
@@ -373,18 +438,19 @@ export default {
 
     // create data filter elements
     createFilterElementData() {
+      // MIN POPup uchun
       const dataMin = [
         {
           name: 'Date From',
           subName: 'startDate',
           type: 'date',
-          width: '165',
+          width: '185',
         },
         {
           name: 'Date To',
           subName: 'endDate',
           type: 'date',
-          width: '165',
+          width: '185',
         },
         {
           name: 'Planning No',
@@ -446,61 +512,85 @@ export default {
       ]
       this.filterElementMin = dataMin
 
+      // MAX POPup uchun
+      this.isPage = this.pageUrl?.includes('prepareIplikLotStavka')
+      const lookUpParam = {
+        allCompanies: this.allFilterElementValues?.allCompanies ?? false,
+        batchNumber: '-1',
+        clientCompanyId: this.allFilterElementValues?.clientCompanyId ?? null,
+        colorId: this.allFilterElementValues?.colorId ?? null,
+        colorVariantId: this.allFilterElementValues?.colorVariantId ?? null,
+        dateFrom:
+          (isNaN(this.topStaticTableData?.date)
+            ? this.topStaticTableData?.date
+            : this.$formatDate(this.topStaticTableData?.date)) ?? null,
+        designId: this.allFilterElementValues?.designId ?? null,
+        designVariantId: this.allFilterElementValues?.designVariantId ?? null,
+        employeeId: this.allFilterElementValues?.employeeId ?? null,
+        equipmentId: this.allFilterElementValues?.equipmentId ?? null,
+        fiberClassId: this.allFilterElementValues?.fiberClassId ?? null,
+        gradeId: this.allFilterElementValues?.gradeId ?? null,
+        id: this.pageID,
+        lot: this.allFilterElementValues?.lot ?? null,
+        marriage: this.allFilterElementValues?.marriage ?? false,
+        orderId: this.topStaticTableData?.order?.id ?? null,
+        orderNumber: this.allFilterElementValues?.orderNumber ?? null,
+        orderProductionTypeId:
+          this.topStaticTableData?.orderProductionType?.id ??
+          this.topStaticTableData?.orderProductionType ??
+          null,
+        packingNumbers: this.allFilterElementValues?.packingNumbers ?? null,
+        packingTypeId: this.allFilterElementValues?.packingTypeId ?? null,
+        planningNumber: this.allFilterElementValues?.planningNumber ?? null,
+        planningTypeId: this.allFilterElementValues?.planningTypeId ?? null,
+        prOrderId: this.allFilterElementValues?.prOrderId ?? null,
+        salesManagerId:
+          this.topStaticTableData?.salesManager?.id ??
+          this.topStaticTableData?.salesManager ??
+          null,
+        sewModelSizeVariantId:
+          this.allFilterElementValues?.sewModelSizeVariantId ?? null,
+        tabName: this.tabName ?? '',
+        warehouseId:
+          (this.isPage
+            ? this.allFilterElementValues?.warehouseId
+            : this.topStaticTableData?.warehouse?.id
+            ? this.topStaticTableData?.warehouse?.id
+            : this.topStaticTableData?.warehouse) ?? null,
+      }
+      if (this.tabName === 'outputToProductionCompanyItemTable') {
+        lookUpParam.salesManagerId =
+          this.topStaticTableData?.company?.id ??
+          this.topStaticTableData?.company ??
+          null
+      } else {
+        lookUpParam.companyId =
+          this.topStaticTableData?.company?.id ??
+          this.topStaticTableData?.company ??
+          null
+      }
       const dataMax = [
         [
           {
-            name: 'Warehouse',
-            subName: 'warehouseId',
+            name: this.isPage ? 'Warehouse' : 'Product',
+            subName: this.isPage ? 'warehouseId' : 'productId',
             type: 'select',
-            api: 'findAllWarehouseLogic',
+            api: this.isPage
+              ? 'findAllWarehouseLogic'
+              : 'findAllStockProductListUrl',
             width: '160',
-            param: {
-              actionUrl: 'iplikReserv',
-            },
+            param: this.isPage
+              ? {
+                  actionUrl: this.actionUrl,
+                }
+              : lookUpParam,
           },
           {
-            name: 'Product Qty',
-            subName: 'productQtyId',
-            type: 'select',
+            name: this.isPage ? 'Product Qty' : 'Qty',
+            subName: this.isPage ? 'productQtyId' : 'qty',
+            type: this.isPage ? 'select' : 'number',
             api: 'findAllStockProductListUrl',
             width: '160',
-            param: {
-              tabName: this.tabName,
-              warehouseId: this.allFilterElementValues?.warehouseId ?? null,
-              orderProductionTypeId:
-                this.allFilterElementValues?.orderProductionTypeId ?? null,
-              companyId: this.allFilterElementValues?.companyId ?? null,
-              employeeId: this.allFilterElementValues?.employeeId ?? null,
-              prOrderId: this.allFilterElementValues?.prOrderId ?? null,
-              equipment_id: null,
-              packingTypeId: this.allFilterElementValues?.packingTypeId ?? null,
-              colorId: this.allFilterElementValues?.colorId ?? null,
-              colorVariantId:
-                this.allFilterElementValues?.colorVariantId ?? null,
-              designId: this.allFilterElementValues?.designId ?? null,
-              designVariantId:
-                this.allFilterElementValues?.designVariantId ?? null,
-              salesManagerId:
-                this.allFilterElementValues?.salesManagerId ?? null,
-              dateFrom: this.allFilterElementValues?.endDate ?? null,
-              batchNumber: '-1',
-              gradeId: this.allFilterElementValues?.gradeId ?? null,
-              fiberClassId: this.allFilterElementValues?.fiberClassId ?? null,
-              id: this.pageID,
-              clientCompanyId:
-                this.allFilterElementValues?.clientCompanyId ?? null,
-              orderNumber: this.allFilterElementValues?.orderNumber ?? null,
-              lot: '',
-              packingNumbers: this.allFilterElementValues?.packingNumbers ?? '',
-              allCompanies: this.allFilterElementValues?.allCompanies ?? false,
-              marriage: this.allFilterElementValues?.marriage ?? false,
-              planningTypeId:
-                this.allFilterElementValues?.planningTypeId ?? null,
-              sewModelSizeVariantId:
-                this.allFilterElementValues?.sewModelSizeVariantId ?? null,
-              planningNumber:
-                this.allFilterElementValues?.planningNumber ?? null,
-            },
           },
           {
             name: 'packQty',
@@ -561,7 +651,7 @@ export default {
           },
           {
             name: 'Batch №',
-            subName: 'batch',
+            subName: 'batchNumber',
             type: 'text',
             width: '130',
           },

@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full p-[0px_12px_0px_10px]">
+  <div class="w-full p-1">
     <LoadingPage
       v-if="isLoading"
       class="absolute left-[50%] top-[8px] translate-x-[-50%]"
@@ -7,12 +7,15 @@
     <transition name="fade">
       <ColumnConfigPage
         v-show="checkModal"
+        :right="tableHead"
+        :left="leftMap"
+        :url="actionUrl"
         api="saveColumnConfig"
         class="z-[10000]"
         @checkModal="handleValue"
       />
     </transition>
-    <form class="flex flex-wrap items-center gap-3 py-4">
+    <form class="flex flex-wrap items-center gap-2">
       <span v-for="(element, index) in topFilterData" :key="index">
         <span
           v-if="element.type === 'select'"
@@ -20,10 +23,11 @@
         >
           <span class="text-[13px]">{{ element.name }}</span>
           <generic-look-up
-            dwidth="200"
-            :name="element.subName"
-            :defvalue="''"
-            :options-data="[]"
+            :dwidth="element?.width"
+            :name="element?.subName"
+            placeholder="Please Select"
+            :durl="element?.api"
+            :options-data="selectData?.[element?.selectName]"
             @customFunction="getInputAndLookUpValueAction"
           />
         </span>
@@ -32,14 +36,24 @@
           class="flex flex-col items-start"
         >
           <span class="text-[13px]">{{ element.name }}</span>
-          <generic-input type="number" width="80" />
+          <span class="flex items-center gap-1">
+            <generic-input
+              v-for="(elem, inx) in element?.list"
+              :key="inx"
+              :width="element?.width"
+              :name="elem?.subName"
+              type="number"
+              :clearable="false"
+              @customFunction="getInputAndLookUpValueAction"
+            />
+          </span>
         </span>
       </span>
     </form>
-    <generic-scales-box />
+    <generic-scales-box class="my-2" />
     <template v-if="isCloseTable">
       <div
-        class="border-[1px] border-solid border-[rgba(0,0,0,0.05)] p-[12px] bg-gradient-to-b from-transparent via-transparent to-gray-200 shadow-md flex items-center justify-between mt-1"
+        class="border-[1px] border-solid border-[rgba(0,0,0,0.05)] p-[12px] bg-gradient-to-b from-transparent via-transparent to-gray-200 shadow-md flex items-center justify-between"
       >
         <div class="flex items-center gap-[10px]">
           <img src="@assets/icons/user-black.png" alt="user" class="w-[14px]" />
@@ -136,7 +150,7 @@
               <select
                 v-model="pageSize_value"
                 class="border-[1px] border-solid border-[rgba(171,177,187,0.7)] w-[60px] px-[5px] py-[3px] cursor-pointer rounded-[2px] text-[14px] outline-none"
-                @change="getTableRequest()"
+                @change="getTableRequest"
               >
                 <option value="10">10</option>
                 <option value="25">25</option>
@@ -148,12 +162,10 @@
             </div>
             <div class="flex items-center gap-2">
               <GenericInput
-                v-model="keywordValue"
-                width="200"
-                type="text"
+                name="keyword"
                 placeholder="Search..."
                 @enter="getTableRequest"
-                @input="getInputValue"
+                @input="getInputAndLookUpValueAction"
               />
               <GenericButton
                 name="Search"
@@ -169,6 +181,12 @@
             :tableheadlength="tableHeadLength"
             :istherebody="isThereBody"
             open-url="prepareUserPersonal"
+            :custom-btn="{
+              name: 'Employment Contract',
+              type: 'success',
+              icon: 'check',
+              clickType: 'employmentContract',
+            }"
             :productions-action-buttons="true"
             delete-row-url="batchProcess/prepareBatchProcessDelete"
             height="600"
@@ -204,31 +222,25 @@ export default {
     return {
       isLoading: false,
       pageSize_value: 25,
-      topFilterData: [],
-      keywordValue: '',
-      tableHead: {
-        id: { name: 'Id', code: 'id' },
-        name: {
-          name: 'Batch Process Name',
-          code: 'name',
-        },
-        status: {
-          name: 'Status',
-          code: 'status',
-        },
-      },
-      tableBody: [],
-      tableHeadLength: null,
-      isThereBody: false,
       checkModal: false,
       isOpenTable: true,
       isCloseTable: true,
+      // ================
+      actionUrl: null,
+      topFilterData: [],
+      tableHead: {},
+      tableBody: [],
+      tableHeadLength: null,
+      isThereBody: false,
+      leftMap: {},
+      rightMap: {},
+      selectData: {},
+      allSelectAndInputValue: {},
     }
   },
 
   // MOUNTED
   mounted() {
-    this.tableHeadLength = Object.keys(this.tableHead).length + 1
     // Table function
     this.getTableRequest()
     // function
@@ -243,41 +255,6 @@ export default {
     openColumnConfig() {
       this.checkModal = true
     },
-
-    getTableRequest() {
-      this.isLoading = !this.isLoading
-      this.$axios
-        .post(`/user/usersAjaxLoad`, {
-          searchForm: {
-            keyword: this.keywordValue,
-          },
-          pagingForm: {
-            pageSize: this.pageSize_value,
-            currentPage: 1,
-            pageCount: 14,
-            total: 328,
-          },
-        })
-        .then(({ data: { batchProcessList } }) => {
-          this.isLoading = !this.isLoading
-          this.tableBody = batchProcessList
-
-          this.tableBody.length
-            ? (this.isThereBody = true)
-            : (this.isThereBody = false)
-        })
-        .catch((error) => {
-          this.isLoading = !this.isLoading
-          // eslint-disable-next-line no-console
-          console.log(error)
-        })
-    },
-
-    // Generic_Input value
-    getInputValue(inputVal) {
-      this.keywordValue = inputVal
-    },
-
     // Table page ni ochish va yopish uchun
     isOpen() {
       this.isOpenTable = !this.isOpenTable
@@ -286,61 +263,141 @@ export default {
       this.isCloseTable = !this.isCloseTable
     },
 
+    // get select and input value
+    getInputAndLookUpValueAction(name, value) {
+      this.$set(this.allSelectAndInputValue, name, value)
+    },
+
+    // Page Request
+    getTableRequest() {
+      this.isLoading = !this.isLoading
+      this.$axios
+        .post(`/user/usersAjaxLoad`, {
+          searchForm: {
+            keyword: this.allSelectAndInputValue?.keyword ?? '',
+          },
+          pagingForm: {
+            pageSize: this.pageSize_value,
+            currentPage: 1,
+            pageCount: 14,
+            total: 328,
+          },
+        })
+        .then(({ data }) => {
+          this.actionUrl = data?.actionUrl
+          this.leftMap = data?.leftMap
+          this.rightMap = data?.rightMap
+          this.tableHead = data?.rightMap
+          this.selectData = data
+          data?.resultPersonList?.length
+            ? (this.isThereBody = true)
+            : (this.isThereBody = false)
+          // function
+          this.getTableBody(data?.resultPersonList)
+          this.isLoading = !this.isLoading
+        })
+        .catch((error) => {
+          this.isLoading = !this.isLoading
+          // eslint-disable-next-line no-console
+          console.log(error)
+        })
+    },
+
+    // Generic Table action Start
+    getTableBody(bodyData) {
+      for (const obj of bodyData) {
+        const newObj = {}
+        for (const key in this.tableHead) {
+          const keyCode = this.tableHead[key]?.code
+          if (keyCode in obj) {
+            if (typeof obj[keyCode] === 'object')
+              newObj[keyCode] = obj[keyCode]?.value
+            else newObj[keyCode] = obj[keyCode]
+          }
+        }
+        this.tableBody.push(newObj)
+      }
+      this.tableHeadLength = Object.keys(this.tableHead).length + 1
+      this.tableBody.length > 0
+        ? (this.isThereBody = true)
+        : (this.isThereBody = false)
+    },
+    // Generic Table action End
+
     // page yuqorisidagi filterlar uchun data yaratish
     createDataFiltering() {
       const data = [
         {
+          width: '200',
           name: 'Company Branch',
           subName: 'companyBranchId',
+          selectName: 'companyList',
           type: 'select',
         },
         {
+          width: '200',
           name: 'Department Name',
           subName: 'DepartmentId',
+          selectName: 'departmentList',
           type: 'select',
         },
         {
+          width: '200',
           name: 'Sub Department Name',
           subName: 'subDepartmentName',
+          selectName: 'subDepartmentList',
           type: 'select',
         },
         {
+          width: '200',
           name: 'Position',
           subName: 'positionId',
+          selectName: 'positionList',
           type: 'select',
         },
         {
+          width: '200',
           name: 'Gender',
           subName: 'genderId',
+          selectName: 'genderList',
           type: 'select',
         },
         {
+          width: '100',
           name: 'Status',
           subName: 'statusId',
+          selectName: 'statusList',
           type: 'select',
         },
         {
+          width: '100',
           name: 'Type',
           subName: 'typeId',
+          selectName: 'userTypeList',
           type: 'select',
         },
         {
+          width: '100',
           name: 'Official',
           subName: 'officialId',
+          selectName: 'userOfficialTypeList',
           type: 'select',
         },
         {
+          width: '200',
           name: 'Country List',
           subName: 'countryListId',
+          selectName: 'countryList',
           type: 'select',
         },
         {
+          width: '100',
           name: 'Age',
-          subName: 'age',
           type: 'number',
+          multiply: true,
+          list: [{ subName: 'age1' }, { subName: 'age2' }],
         },
       ]
-
       this.topFilterData = data
     },
   },

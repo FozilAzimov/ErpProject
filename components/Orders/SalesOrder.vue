@@ -201,8 +201,9 @@ export default {
     return {
       isLoading: false,
       pageSize_value: 10,
+      isOpenTable: true,
+      isCloseTable: true,
       topFilterData: [],
-      tableData: [],
       tableHead: {},
       tableBody: [],
       tableHeadLength: null,
@@ -212,8 +213,6 @@ export default {
       actionUrl: null,
       leftMap: {},
       selectData: {},
-      isOpenTable: true,
-      isCloseTable: true,
     }
   },
 
@@ -321,11 +320,10 @@ export default {
             this.tableHead = rightMap
             this.leftMap = leftMap
             this.actionUrl = actionUrl
-            this.tableData = orderList
             this.selectData.branchCompanyId = companyList
             this.selectData.statusId = deliveryStatusList
             // function
-            this.getTableBody()
+            this.getTableBody(orderList)
             this.isLoading = !this.isLoading
           }
         )
@@ -337,8 +335,9 @@ export default {
     },
 
     // Generic Table action Start
-    getTableBody() {
-      for (const obj of this.tableData) {
+    getTableBody(bodyData) {
+      this.tableBody = []
+      for (const obj of bodyData) {
         const newObj = {}
         for (const key in this.tableHead) {
           const keyCode = this.tableHead[key]?.code

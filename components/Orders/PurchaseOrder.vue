@@ -168,7 +168,13 @@
             :tableheadlength="tableHeadLength"
             :istherebody="isThereBody"
             :productions-action-buttons="true"
-            open-url="preparePurchaseOrder"
+            open-url="contractRegistration"
+            :custom-btn="{
+              name: 'Print Preview',
+              type: 'primary',
+              icon: 'printer',
+              clickType: 'printer',
+            }"
             height="600"
           />
         </div>
@@ -219,7 +225,7 @@ export default {
   // CREATED
   created() {
     this.allSelectAndInputValues.dateFrom = new Date(
-      new Date().setMonth(new Date().getMonth() - 1)
+      new Date().setMonth(new Date().getMonth() - 5)
     )
       .toISOString()
       .split('.')[0]
@@ -264,24 +270,20 @@ export default {
       this.tableBody = []
       // request body
       const body = {
-        current_page: 1,
-        page_size: this.pageSize_value,
+        pagingForm: {
+          pageSize: this.pageSize_value,
+          currentPage: 1,
+        },
         searchForm: {
           keyword: this.allSelectAndInputValues?.searchInput || '',
         },
         dateFrom: this.allSelectAndInputValues?.dateFrom
-          ? new Date(this.allSelectAndInputValues?.dateFrom)
-              .toLocaleString('en-GB')
-              .split(',')
-              .join('')
+          ? this.$formatDate(this.allSelectAndInputValues?.dateFrom)
           : '',
         dateTo: this.allSelectAndInputValues?.dateTo
-          ? new Date(this.allSelectAndInputValues?.dateTo)
-              .toLocaleString('en-GB')
-              .split(',')
-              .join('')
+          ? this.$formatDate(this.allSelectAndInputValues?.dateTo)
           : '',
-        branchCompanyId: this.allSelectAndInputValues?.branchCompanyId ?? '',
+        companyId: this.allSelectAndInputValues?.companyId ?? '',
         departmentId: this.allSelectAndInputValues?.departmentId ?? '',
       }
       // request body
@@ -303,7 +305,7 @@ export default {
             this.leftMap = leftMap
             this.actionUrl = actionUrl
             this.tableData = orderList
-            this.selectData.branchCompanyId = companyList
+            this.selectData.companyId = companyList
             this.selectData.departmentId = departmentList
             // function
             this.getTableBody()
@@ -353,7 +355,7 @@ export default {
         },
         {
           name: 'Company Name',
-          subName: 'branchCompanyId',
+          subName: 'companyId',
           type: 'select',
         },
         {

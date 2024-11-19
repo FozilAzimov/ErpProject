@@ -33,6 +33,7 @@ export const actions = {
       ?.split(' ')
       .find((val) => val.includes('lang'))
       ?.split('=')[1]
+      ?.replace(';', '')
 
     if (lang) {
       language = lang

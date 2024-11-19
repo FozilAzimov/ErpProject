@@ -113,6 +113,7 @@
                       ? viewEditData?.[element.subName]
                       : ''
                   }`"
+                  :durl="element?.api"
                   :options-data="selectData?.[element?.selectName]"
                   :disabled="element.disabled"
                   @customFunction="getInputAndLookUpValueAction"
@@ -321,6 +322,7 @@ export default {
           name: 'City',
           subName: 'cityName',
           selectName: 'city',
+          api: 'findAllCity',
           type: 'select',
           show: true,
           disabled: this.pageType === 'view',

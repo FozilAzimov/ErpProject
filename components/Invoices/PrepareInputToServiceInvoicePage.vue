@@ -20,12 +20,6 @@
       />
     </transition>
     <div
-      v-if="showHideLogistic"
-      class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-[10000]"
-    >
-      <GenericLogisticsCalculationPage :table-data="logisticsCalcData" />
-    </div>
-    <div
       class="border-[1px] border-solid border-[rgba(0,0,0,0.05)] p-[12px] bg-gradient-to-b from-transparent via-transparent to-gray-200 shadow-md"
     >
       <div class="flex items-center gap-[10px]">
@@ -956,19 +950,6 @@
                 />
               </template>
             </div>
-            <GenericSubPrepareTablePage
-              ref="transactionColumnsRef"
-              :tablehead="transactionColumnsData"
-              :tableheadlength="transactionColumnsData.length"
-              :addmodalorrow="openPopup"
-              :sub-ui-show-hide="subUiShowHide"
-              :isedit="isEdit"
-              :height="350"
-              :default-values="transactionsList"
-              class="bg-[rgba(255,255,255,0.5)] mt-2"
-              @rowValues="getSubRowElements"
-              @requiredAction="getDisabledValue"
-            />
           </template>
           <template v-if="subTable || isEdit">
             <strong class="text-[15px]"
@@ -1006,19 +987,6 @@
                 />
               </template>
             </div>
-            <GenericSubPrepareTableTooPage
-              ref="transactionColumnsTooRef"
-              :tablehead="transactionColumnsData"
-              :tableheadlength="transactionColumnsData.length"
-              :addmodalorrow="openPopup"
-              :sub-ui-show-hide-two="subUiShowHideTwo"
-              :isedit="isEdit"
-              :height="290"
-              :default-values="transactionsExtraList"
-              class="bg-[rgba(255,255,255,0.5)] mt-2"
-              @rowValues="getSubRowElements"
-              @requiredAction="getDisabledValue"
-            />
           </template>
         </div>
       </div>
@@ -1033,9 +1001,6 @@ import GenericLookUp from '@generics/GenericLookUp.vue'
 import GenericInput from '@generics/GenericInput.vue'
 import GenericPrepareTablePage from '@components/GenericPrepareTable/GenericPrepareTablePage.vue'
 import ColumnConfigPage from '@components/ColumnConfig/ColumnConfigPage.vue'
-import GenericSubPrepareTablePage from '@generics/GenericSubPrepareTable/GenericSubPrepareTablePage.vue'
-import GenericSubPrepareTableTooPage from '@generics/GenericSubPrepareTableToo/GenericSubPrepareTableTooPage.vue'
-import GenericLogisticsCalculationPage from '@generics/GenericLogisticsCalculation/GenericLogisticsCalculationPage.vue'
 export default {
   // COMPONENTS
   components: {
@@ -1045,9 +1010,6 @@ export default {
     GenericInput,
     GenericPrepareTablePage,
     ColumnConfigPage,
-    GenericSubPrepareTablePage,
-    GenericSubPrepareTableTooPage,
-    GenericLogisticsCalculationPage,
   },
 
   // DATA

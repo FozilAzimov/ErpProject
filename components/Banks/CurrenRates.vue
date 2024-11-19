@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full p-[0px_12px_0px_10px]">
+  <div class="w-full p-1">
     <LoadingPage
       v-if="isLoading"
       class="absolute left-[50%] top-[8px] translate-x-[-50%]"
@@ -15,13 +15,13 @@
         @checkModal="handleValue"
       />
     </transition>
-    <form class="flex flex-wrap items-center gap-3 py-4">
+    <div class="flex flex-wrap items-center gap-3 py-2">
       <span v-for="(element, index) in topFilterData" :key="index">
         <span v-if="element.type === 'date'" class="flex items-center gap-1">
           <span class="text-[13px]">{{ element.name }}</span>
           <generic-input-date-page
-            :value="''"
-            width="165"
+            :value="new Date().toISOString()?.split('.')?.[0]"
+            width="185"
             pl="10"
             pr="10"
             pt="1"
@@ -33,21 +33,8 @@
             @customFunction="getInputAndLookUpValueAction"
           />
         </span>
-        <span
-          v-else-if="element.type === 'select'"
-          class="flex items-center gap-1"
-        >
-          <span class="text-[13px]">{{ element.name }}</span>
-          <generic-look-up
-            dwidth="200"
-            :name="element.subName"
-            :defvalue="''"
-            :options-data="[]"
-            @customFunction="getInputAndLookUpValueAction"
-          />
-        </span>
       </span>
-    </form>
+    </div>
     <template v-if="isCloseTable">
       <div
         class="border-[1px] border-solid border-[rgba(0,0,0,0.05)] p-[12px] bg-gradient-to-b from-transparent via-transparent to-gray-200 shadow-md flex items-center justify-between"
@@ -116,13 +103,22 @@
             name="Edit"
             type="primary"
             icon-name-attribute="edit"
-            @click="$router.push('/prepareSaleOrder.htm')"
+            @click="
+              $router.push({
+                path: `prepareCurrenRate.htm`,
+                query: {
+                  date_from: allSelectAndInputValues?.dateFrom
+                    ? $formatDate(allSelectAndInputValues?.dateFrom)
+                    : $formatDate(new Date()),
+                },
+              })
+            "
           />
           <generic-button
             name="Auto set currency rates"
             type="primary"
             icon-name-attribute="circle-plus-outline"
-            @click="$router.push('/prepareSaleOrder.htm')"
+            @click="autoSetCurrencyRateAction"
           />
         </div>
         <div class="p-2">
@@ -131,7 +127,7 @@
               <select
                 v-model="pageSize_value"
                 class="border-[1px] border-solid border-[rgba(171,177,187,0.7)] w-[60px] px-[5px] py-[3px] cursor-pointer rounded-[2px] text-[14px] outline-none"
-                @change="getTableRequest()"
+                @change="getTableRequest"
               >
                 <option value="10">10</option>
                 <option value="25">25</option>
@@ -143,9 +139,7 @@
             </div>
             <div class="flex items-center gap-2">
               <GenericInput
-                width="200"
-                type="text"
-                name="searchInput"
+                name="keyword"
                 placeholder="Search..."
                 @enter="getTableRequest"
                 @customFunction="getInputAndLookUpValueAction"
@@ -168,8 +162,7 @@
             :tablebody="tableBody"
             :tableheadlength="tableHeadLength"
             :istherebody="isThereBody"
-            :productions-action-buttons="true"
-            open-url="prepareSaleOrder"
+            :show-hide-action-col="false"
             height="600"
           />
         </div>
@@ -201,18 +194,17 @@ export default {
     return {
       isLoading: false,
       pageSize_value: 10,
+      isOpenTable: true,
+      isCloseTable: true,
+      checkModal: false,
+      isThereBody: false,
+      actionUrl: '',
       topFilterData: [],
-      tableData: [],
+      leftMap: {},
       tableHead: {},
       tableBody: [],
       tableHeadLength: null,
-      isThereBody: false,
       allSelectAndInputValues: {},
-      checkModal: false,
-      actionUrl: '',
-      leftMap: {},
-      isOpenTable: true,
-      isCloseTable: true,
     }
   },
 
@@ -249,42 +241,49 @@ export default {
     },
     // get Input, date, select datasini olish
 
-    // page request action
+    // PAGE request action
     getTableRequest() {
       const body = {
         current_page: 1,
         page_size: this.pageSize_value,
         searchForm: {
-          keyword: this.allSelectAndInputValues?.searchInput || '',
+          keyword: this.allSelectAndInputValues?.keyword ?? '',
         },
         dateFrom: this.allSelectAndInputValues?.dateFrom
-          ? new Date(this.allSelectAndInputValues?.dateFrom)
-              .toLocaleString('en-GB')
-              .split(',')
-              .join('')
-          : '',
-        dateTo: this.allSelectAndInputValues?.dateTo
-          ? new Date(this.allSelectAndInputValues?.dateTo)
-              .toLocaleString('en-GB')
-              .split(',')
-              .join('')
-          : '',
-        companyBranchId: this.allSelectAndInputValues?.companyBranchId || '',
-        statusId: this.allSelectAndInputValues?.statusId || '',
+          ? this.$formatDate(this.allSelectAndInputValues?.dateFrom)
+          : this.$formatDate(new Date()),
       }
 
       this.isLoading = !this.isLoading
       this.$axios
-        .post(`/invoices/expenseInvoice`, body)
-        .then(({ data: { build } }) => {
-          this.tableBody = []
+        .post(`/currencyRate/currenRatesAjaxLoad`, body)
+        .then(({ data }) => {
+          this.tableHead = data?.rightMap
+          this.leftMap = data?.leftMap
+          this.actionUrl = data?.actionUrl
+          this.getTableBody(data?.currencyRateList)
           this.isLoading = !this.isLoading
-          this.tableHead = build?.rightMap
-          this.leftMap = build?.leftMap
-          this.actionUrl = build?.actionUrl
-          this.tableData = build?.invoiceList
-          this.selectData = build?.invoiceSearchDTO
-          this.getTableBody()
+        })
+        .catch((error) => {
+          this.isLoading = !this.isLoading
+          // eslint-disable-next-line no-console
+          console.log(error)
+        })
+    },
+
+    autoSetCurrencyRateAction() {
+      const body = {
+        dateFrom: this.allSelectAndInputValues?.dateFrom
+          ? this.$formatDate(this.allSelectAndInputValues?.dateFrom)
+          : this.$formatDate(new Date()),
+      }
+      this.isLoading = !this.isLoading
+      this.$axios
+        .post(`/currencyRate/currenRatesAutoSet`, body)
+        .then(() => {
+          // function
+          this.getTableRequest()
+          this.isLoading = !this.isLoading
         })
         .catch((error) => {
           this.isLoading = !this.isLoading
@@ -294,24 +293,21 @@ export default {
     },
 
     // Generic Table action Start
-    getTableBody() {
-      const arr = new Set()
-      for (const obj of this.tableData) {
-        arr.add(obj.id)
-        const data = new Map()
+    getTableBody(data) {
+      this.tableBody = []
+      for (const obj of data) {
+        const newObj = {}
         for (const key in this.tableHead) {
-          const value = this.tableHead[key].code
-          if (this.tableHead[key].code in obj) {
-            if (obj[value]) {
-              if (typeof obj[value] === 'object')
-                data.set(value, obj[value].value)
-              else data.set(value, obj[value])
-            } else data.set(value, obj[value])
-          } else data.set(value, false)
+          const keyCode = this.tableHead[key]?.code
+          if (keyCode in obj) {
+            if (typeof obj[keyCode] === 'object')
+              newObj[keyCode] = obj[keyCode]?.value
+            else newObj[keyCode] = obj[keyCode]
+          }
         }
-        this.tableBody.push(Object.fromEntries(data))
+        this.tableBody.push(newObj)
       }
-      this.tableHeadLength = Object.entries(this.tableHead).length
+      this.tableHeadLength = Object.keys(this.tableHead).length
       this.tableBody.length > 0
         ? (this.isThereBody = true)
         : (this.isThereBody = false)

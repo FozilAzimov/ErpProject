@@ -1,11 +1,11 @@
 <template>
-  <SimpleProductionInvoicePage />
+  <simple-production-invoice />
 </template>
 
 <script>
-import SimpleProductionInvoicePage from '@components/Invoices/SimpleProductionInvoicePage.vue'
+import SimpleProductionInvoice from '@components/Invoices/SimpleProductionInvoice.vue'
 
 export default {
-  components: { SimpleProductionInvoicePage },
+  components: { SimpleProductionInvoice },
 }
 </script>

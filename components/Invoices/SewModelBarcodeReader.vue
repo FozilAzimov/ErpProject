@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full p-[0px_12px_0px_10px] mt-1">
+  <div class="w-full p-1">
     <LoadingPage
       v-if="isLoading"
       class="absolute left-[50%] top-[8px] translate-x-[-50%]"

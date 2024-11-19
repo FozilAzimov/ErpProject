@@ -108,7 +108,8 @@
                 <generic-look-up
                   dwidth="300"
                   :name="element.subName"
-                  :defvalue="`${viewEditData?.[element?.subName]}`"
+                  :defvalue="`${viewEditData?.[element?.subName] || ''}`"
+                  :durl="element?.api"
                   :options-data="selectData?.[element?.selectName]"
                   :disabled="element.disabled"
                   @customFunction="getInputAndLookUpValueAction"
@@ -326,7 +327,7 @@ export default {
         page_size: this.pageSize_value,
         page_current: 1,
         warehouseTypeId:
-          this.allInputAndLookUpValue?.warehouseTypeId ??
+          this.allInputAndLookUpValue?.warehouseTypeName ??
           this.viewEditData?.warehouseTypeId ??
           '',
         department_id:
@@ -358,8 +359,9 @@ export default {
       const data = [
         {
           name: 'Warehouses Type',
-          subName: 'warehouseTypeId',
+          subName: 'warehouseTypeName',
           selectName: 'warehouseTypeList',
+          api: 'findAllWarehouseType',
           type: 'select',
           show: this.pageType !== 'view',
           disabled: this.pageType === 'view',
@@ -368,6 +370,7 @@ export default {
           name: 'Department Name',
           subName: 'departmentName',
           selectName: 'departments',
+          api: 'findAllDepartmentByAbsoluteLogic',
           type: 'select',
           show: true,
           required: true,

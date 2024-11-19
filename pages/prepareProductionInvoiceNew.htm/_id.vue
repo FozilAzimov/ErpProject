@@ -1,10 +1,10 @@
 <template>
-  <prepare-production-invoice-new-page />
+  <prepare-production-invoice-new />
 </template>
 
 <script>
-import PrepareProductionInvoiceNewPage from '@components/Invoices/PrepareProductionInvoiceNewPage.vue'
+import PrepareProductionInvoiceNew from '@components/Invoices/PrepareProductionInvoiceNew.vue'
 export default {
-  components: { PrepareProductionInvoiceNewPage },
+  components: { PrepareProductionInvoiceNew },
 }
 </script>

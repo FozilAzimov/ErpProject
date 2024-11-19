@@ -15,6 +15,7 @@
               :class="`w-[${headName?.width}px]`"
             >
               {{ GET_CORE_STRING?.[headName.name] || headName.name }}
+              <!-- <pre>{{ headName }}</pre> -->
             </th>
             <th
               v-if="showHideActionCol"
@@ -35,6 +36,22 @@
                 v-for="(key, inx) in tablehead"
                 :key="inx"
                 class="border-[1px] text-[12px] p-2"
+                :style="{
+                  background:
+                    routerPath === 'productionorder' &&
+                    value?.status === 'CLOSED'
+                      ? 'green'
+                      : routerPath === 'productionorder' &&
+                        value?.status === 'SOLD'
+                      ? '#1baedf'
+                      : routerPath === 'productionorder' &&
+                        value?.status === 'PRODUCED'
+                      ? 'lightgreen'
+                      : routerPath === 'productionorder' &&
+                        value?.status === 'CUTTED'
+                      ? '#dfde0d'
+                      : 'linear-gradient(to bottom, transparent, transparent, #F4F4F4)',
+                }"
               >
                 <span
                   v-if="
@@ -106,6 +123,14 @@
                         $route.path.includes('productionArticles.htm') ||
                         $route.path.includes('subDepartments.htm') ||
                         $route.path.includes('phoneNumbers.htm') ||
+                        $route.path.includes('cashboxs.htm') ||
+                        $route.path.includes('transactionCharacters.htm') ||
+                        $route.path.includes('currencies.htm') ||
+                        $route.path.includes('banks.htm') ||
+                        $route.path.includes('branches.htm') ||
+                        $route.path.includes('accounts.htm') ||
+                        $route.path.includes('paymenttypes.htm') ||
+                        $route.path.includes('paymenttypegroups.htm') ||
                         $route.path.includes('productcategories.htm')))
                   "
                   class="p-[2px_5px] italic text-white font-bold rounded-[5px]"
@@ -200,48 +225,26 @@
 
                 <span
                   v-else-if="
-                    key?.code === 'status' ||
-                    key?.code === 'invoiceOnWayStatus' ||
-                    key?.code === 'type' ||
-                    key?.code === 'orderProductionType' ||
-                    key?.code === 'oder_payment_status'
+                    typeof value[key?.code] === 'boolean' &&
+                    (key?.code === 'status' ||
+                      key?.code === 'invoiceOnWayStatus' ||
+                      key?.code === 'type' ||
+                      key?.code === 'orderProductionType' ||
+                      key?.code === 'oder_payment_status')
                   "
                   class="p-[2px_5px] italic text-white font-bold rounded-[5px] bg-[rgb(102,149,51)]"
                   v-html="value[key?.code]"
                 >
                 </span>
-                <span
-                  v-else-if="key.code === 'invoiceConfirmedStatus'"
-                  class="p-[2px_5px] italic text-white font-bold rounded-[5px] bg-[rgb(221,86,0)]"
-                  v-html="value[key?.code]"
-                ></span>
 
                 <!-- Bill Status col -->
-                <span
-                  v-else-if="
-                    key.code === 'invoiceBillStatus' &&
-                    String(value[key?.code]).includes('Not')
-                  "
-                  class="p-[2px_5px] italic text-white font-bold rounded-[5px] bg-[rgb(221,86,0)]"
-                  v-html="value[key?.code]"
-                ></span>
-                <span
-                  v-else-if="
-                    key.code === 'invoiceBillStatus' &&
-                    !String(value[key?.code]).includes('Not')
-                  "
-                  class="p-[2px_5px] italic text-white font-bold rounded-[5px] bg-[rgb(102,149,51)]"
-                  v-html="value[key?.code]"
-                ></span>
                 <span
                   v-else-if="
                     (key.code === 'client' &&
                       $route.path.includes('batchDetailsList.htm')) ||
                     (key.code === 'unitprice' &&
                       $route.path.includes('products.htm')) ||
-                    ((key?.code === 'productimg' ||
-                      key?.code === 'sewmodelimg' ||
-                      key?.code === 'sew_barcode_created_qty' ||
+                    ((key?.code === 'sew_barcode_created_qty' ||
                       key?.code === 'sew_barcode_printed_qty' ||
                       key?.code === 'sew_barcode_read_qty' ||
                       key?.code.toLowerCase() === 'planningtypes' ||
@@ -276,20 +279,41 @@
                 ></span>
                 <!-- Bill Status col -->
 
-                <img
+                <!-- start IMAGE -->
+                <span
                   v-else-if="
                     key?.code === 'images' ||
                     key?.code === 'image' ||
-                    key?.code === 'mainImage'
+                    key?.code === 'mainImage' ||
+                    key?.code === 'face' ||
+                    key?.code === 'productimg' ||
+                    key?.code === 'sewmodelimg'
                   "
-                  :src="
-                    value?.[key?.code]
-                      ? `data:image/jpeg;base64,${value?.[key?.code]}`
-                      : require('@images/no-image.png')
-                  "
-                  :alt="value?.[key?.code]"
-                  class="w-[50px]"
-                />
+                >
+                  <img
+                    v-if="value?.[key?.code]?.includes('no_product')"
+                    :src="require('@images/no-image.png')"
+                    :alt="value?.[key?.code]"
+                    class="w-[50px]"
+                  />
+                  <img
+                    v-else-if="value?.[key?.code]?.includes('faceNo')"
+                    :src="require('@images/faceNo.png')"
+                    :alt="value?.[key?.code]"
+                    class="w-[50px]"
+                  />
+                  <img
+                    v-else
+                    :src="
+                      value?.[key?.code]
+                        ? `data:image/jpeg;base64,${value?.[key?.code]}`
+                        : require('@images/no-image.png')
+                    "
+                    :alt="value?.[key?.code]"
+                    class="w-[50px]"
+                  />
+                </span>
+                <!-- end IMAGE -->
                 <span
                   v-else-if="
                     $route.path.includes('colors.htm') &&
@@ -393,15 +417,40 @@
                   class="bg-[#BD4247] p-[2px_5px] italic text-white font-bold rounded-[5px]"
                   v-html="value?.[key?.code]"
                 ></span>
-                <span
+                <template
                   v-else-if="
                     typeof value?.[key?.code] === 'string' &&
                     value[key?.code]?.includes('<') &&
                     value[key?.code]?.includes('>')
                   "
-                  class="p-[2px_5px] italic text-white font-bold rounded-[5px]"
-                  v-html="value[key?.code]"
-                ></span>
+                >
+                  <span
+                    v-if="value[key?.code]?.includes('background')"
+                    class="p-[0px_5px] italic text-white font-bold rounded-[5px]"
+                    v-html="value[key?.code]"
+                  ></span>
+                  <span
+                    v-else-if="value[key?.code]?.includes('success')"
+                    class="p-[0px_5px] italic text-white font-bold rounded-[5px] bg-[rgb(102,149,51)]"
+                    v-html="value[key?.code]"
+                  ></span>
+                  <span
+                    v-else-if="value[key?.code]?.includes('important')"
+                    class="p-[0px_5px] italic text-white font-bold rounded-[5px] bg-[#BD4247]"
+                    v-html="value[key?.code]"
+                  ></span>
+                  <span
+                    v-else-if="value[key?.code]?.includes('label-warning')"
+                    class="p-[0px_5px] italic text-white font-bold rounded-[5px] bg-[#dd5600]"
+                    v-html="value[key?.code]"
+                  ></span>
+                  <span
+                    v-else-if="value[key?.code]?.includes('label-success')"
+                    class="p-[0px_5px] italic text-white font-bold rounded-[5px] bg-[rgb(102,149,51)]"
+                    v-html="value[key?.code]"
+                  ></span>
+                  <span v-else v-html="value[key?.code]"></span>
+                </template>
                 <!-- All html elements -->
                 <span
                   v-else-if="
@@ -416,12 +465,26 @@
                 </span>
                 <generic-check-box
                   v-else-if="
-                    $route.path.includes('logs.htm') && key?.code === 'check'
+                    $route.path?.includes('logs.htm') && key?.code === 'check'
                   "
                   :name="key?.code"
                 />
+                <!-- ProductionOrder page uchun -->
+                <span
+                  v-else-if="
+                    routerPath === 'productionorder' &&
+                    key?.code === 'status' &&
+                    value?.[key.code] === 'SAVE'
+                  "
+                >
+                  {{
+                    value?.order_prod_diff <= 0
+                      ? GET_CORE_STRING?.ready
+                      : GET_CORE_STRING?.action
+                  }}
+                </span>
                 <span v-else>
-                  {{ value?.[key?.code] }}
+                  {{ value?.[key?.code?.toLowerCase()] ?? value?.[key?.code] }}
                 </span>
               </td>
 
@@ -438,7 +501,6 @@
                     $route.path.includes('batches.htm') ||
                     $route.path.includes('colorVariant.htm') ||
                     $route.path.includes('salesorder.htm') ||
-                    $route.path.includes('purchaseorder.htm') ||
                     $route.path.includes('iplikLotStavka.htm') ||
                     $route.path.includes('tableRowAccessSysUser.htm') ||
                     $route.path.includes('languages.htm') ||
@@ -473,7 +535,8 @@
                       !$route.path.includes('capitals.htm') &&
                       !$route.path.includes('obligations.htm') &&
                       !$route.path.includes('profitsAndLosses.htm') &&
-                      !$route.path.includes('intangibleAssets.htm')
+                      !$route.path.includes('intangibleAssets.htm') &&
+                      !$route.path.includes('purchaseorder.htm')
                     "
                     name="View"
                     type="primary"
@@ -490,7 +553,9 @@
                     v-if="
                       $route.path.includes('departments.htm') ||
                       $route.path.includes('companies.htm') ||
-                      $route.path.includes('products.htm')
+                      $route.path.includes('products.htm') ||
+                      $route.path.includes('users.htm') ||
+                      $route.path.includes('purchaseorder.htm')
                     "
                     :name="customBtn?.name"
                     :type="
@@ -511,6 +576,7 @@
                   />
                   <!-- @click="$router.push(`${openUrlTwo}.htm/${value.id}`)" -->
                   <GenericButton
+                    v-if="!$route.path.includes('purchaseorder.htm')"
                     name="Delete"
                     type="danger"
                     icon-name-attribute="delete"
@@ -523,14 +589,43 @@
               <td v-else-if="showHideActionCol" class="border-[1px] p-2">
                 <span class="flex items-center justify-center gap-2">
                   <generic-button
-                    v-if="!$route.path.includes('simpleProductionInvoice.htm')"
-                    name="Open"
+                    v-if="!routerPath.includes('simpleProductionInvoice')"
+                    :name="`Open ${
+                      routerPath.includes('productioninvoice')
+                        ? value?.invoiceType
+                        : ''
+                    }`"
                     type="primary"
                     icon-name-attribute="edit"
-                    @click="$router.push(`${openUrl}.htm/${value.id}`)"
+                    @click="
+                      if (routerPath.includes('productioninvoice')) {
+                        if (value?.invoiceType === 'IPLIK') {
+                          $router.push({
+                            path: `${openUrl}.htm/${value.id}`,
+                            query: {
+                              productionInvoiceType: true,
+                            },
+                          })
+                        } else if (value?.invoiceType === 'WOVEN') {
+                          $router.push({
+                            path: `${openUrl}.htm/${value.id}`,
+                            query: {
+                              productionInvoiceTypeWoven: true,
+                            },
+                          })
+                        } else {
+                          $router.push({
+                            path: `${openUrl}.htm/${value.id}`,
+                            query: {
+                              internalStatus: true,
+                            },
+                          })
+                        }
+                      } else $router.push(`${openUrl}.htm/${value.id}`)
+                    "
                   />
                   <generic-button
-                    v-if="$route.path.includes('simpleProductionInvoice.htm')"
+                    v-if="routerPath?.includes('simpleProductionInvoice')"
                     name="Edit"
                     type="success"
                     icon-name-attribute="edit"
@@ -542,16 +637,19 @@
                       $route.path.includes('viabranchreceive.htm') ||
                       $route.path.includes('productionorder.htm')
                     "
-                    :name="btnName"
-                    type="primary"
-                    icon-name-attribute="edit"
-                    @click="$router.push(`${openUrlTwo}.htm/${value.id}`)"
+                    :name="customBtn?.name"
+                    :type="customBtn?.type ? customBtn?.type : 'primary'"
+                    :icon-name-attribute="customBtn?.icon"
+                    @click="$router.push(`${customBtn?.url}.htm/${value.id}`)"
                   />
                   <GenericButton
                     v-if="
                       !$route.path.includes('salesReturn.htm') &&
                       !$route.path.includes('inputReturn.htm') &&
+                      !$route.path.includes('expenseInvoice.htm') &&
+                      !$route.path.includes('inputFromProductionCompany.htm') &&
                       !$route.path.includes('simpleProductionInvoice.htm') &&
+                      !$route.path.includes('productioninvoice.htm') &&
                       !$route.path.includes('outputToPrOrder.htm') &&
                       !$route.path.includes('outputToServiceInvoice.htm') &&
                       !$route.path.includes('inputToServiceInvoice.htm') &&
@@ -574,7 +672,10 @@
                     v-if="
                       !$route.path.includes('salesReturn.htm') &&
                       !$route.path.includes('inputReturn.htm') &&
+                      !$route.path.includes('expenseInvoice.htm') &&
+                      !$route.path.includes('inputFromProductionCompany.htm') &&
                       !$route.path.includes('simpleProductionInvoice.htm') &&
+                      !$route.path.includes('productioninvoice.htm') &&
                       !$route.path.includes('outputToPrOrder.htm') &&
                       !$route.path.includes('outputToServiceInvoice.htm') &&
                       !$route.path.includes('inputToServiceInvoice.htm') &&
@@ -605,13 +706,21 @@
               >
                 <div class="flex justify-start">
                   <el-empty
-                    :image-size="60"
+                    :image-size="40"
                     description="No Data"
                     style="padding: 0"
                   >
                     <template #description>
-                      <p style="font-size: 13px; margin-top: -10px">
-                        {{ GET_CORE_STRING?.NoDataAvailableInTable }}
+                      <p
+                        style="
+                          font-size: 10px;
+                          margin-top: -17px;
+                          color: #cccdd0;
+                        "
+                      >
+                        {{
+                          GET_CORE_STRING?.NoDataAvailableInTable || 'No data'
+                        }}
                       </p>
                     </template>
                   </el-empty>
@@ -741,6 +850,7 @@ export default {
         (this.routerPath === 'capitals' ||
           this.routerPath === 'obligations' ||
           this.routerPath === 'profitsAndLosses' ||
+          this.routerPath === 'paymenttypegroups' ||
           this.routerPath === 'intangibleAssets') &&
         propMessage === 'confirm'
       ) {
@@ -782,6 +892,8 @@ export default {
             if (status < 300) this.$emit('pageEmitAction', true)
           })
       } else if (type === 'sticker') {
+        console.log(type)
+      } else if (type === 'printer') {
         console.log(type)
       }
     },

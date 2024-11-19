@@ -133,7 +133,7 @@
                     ? viewEditData?.[element.subName]
                     : ''
                 "
-                :options-data="selectData?.[element?.subName]"
+                :durl="element?.api"
                 @customFunction="getInputAndLookUpValueAction"
               />
             </div>
@@ -416,6 +416,7 @@ export default {
         {
           name: 'User Name',
           subName: 'userName',
+          api: 'findAllUsers1',
           type: 'select',
           show: this.pageType !== 'view',
           required: false,
@@ -424,6 +425,7 @@ export default {
         {
           name: 'Department Name',
           subName: 'departmentName',
+          api: 'findAllDepartmentByAbsoluteLogic',
           type: 'select',
           show: this.pageType !== 'view',
           required: false,
@@ -432,6 +434,7 @@ export default {
         {
           name: 'Plate Number',
           subName: 'plateNumberName',
+          api: 'findAllPlateNumberNative',
           type: 'select',
           show: this.pageType !== 'view',
           required: true,
@@ -448,6 +451,7 @@ export default {
         {
           name: 'carBody',
           subName: 'carBodyName',
+          api: 'findAllCarBady',
           type: 'select',
           show: this.pageType !== 'view',
           required: true,
@@ -472,6 +476,7 @@ export default {
         {
           name: 'Fuel Type',
           subName: 'fuelTypeName',
+          api: 'findAllFuelType',
           type: 'select',
           show: this.pageType !== 'view',
           required: true,

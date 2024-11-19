@@ -128,6 +128,7 @@
                   dwidth="300"
                   :name="element.subName"
                   :defvalue="editData?.[element?.subName]"
+                  :durl="element?.api"
                   :options-data="selectData?.[element?.selectName]"
                   :disabled="element.disabled"
                   @customFunction="getInputAndLookUpValueAction"
@@ -205,6 +206,7 @@
                   dwidth="300"
                   :name="element.subName"
                   :defvalue="editData?.[element?.subName]"
+                  :durl="element?.api"
                   :options-data="selectData?.[element?.selectName]"
                   :disabled="element.disabled"
                   @customFunction="getInputAndLookUpValueAction"
@@ -612,6 +614,7 @@ export default {
         {
           name: 'Article Name',
           subName: 'articleId',
+          api: 'findAllArticle',
           selectName: 'articleList',
           type: 'select',
           show: true,

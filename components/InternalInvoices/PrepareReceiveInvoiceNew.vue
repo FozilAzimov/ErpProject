@@ -745,19 +745,6 @@
                 />
               </template>
             </div>
-            <GenericSubPrepareTablePage
-              ref="transactionColumnsRef"
-              :tablehead="transactionColumnsData"
-              :tableheadlength="transactionColumnsData.length"
-              :addmodalorrow="openPopup"
-              :sub-ui-show-hide="subUiShowHide"
-              :isedit="isEdit"
-              :height="350"
-              :default-values="transactionsList"
-              class="bg-[rgba(255,255,255,0.5)] mt-2"
-              @rowValues="getSubRowElements"
-              @requiredAction="getDisabledValue"
-            />
           </template>
 
           <template v-if="false">
@@ -819,19 +806,6 @@
                 />
               </template>
             </div>
-            <GenericSubPrepareTableTooPage
-              ref="transactionColumnsTooRef"
-              :tablehead="transactionColumnsData"
-              :tableheadlength="transactionColumnsData.length"
-              :addmodalorrow="openPopup"
-              :sub-ui-show-hide-two="subUiShowHideTwo"
-              :isedit="isEdit"
-              :height="290"
-              :default-values="transactionsExtraList"
-              class="bg-[rgba(255,255,255,0.5)] mt-2"
-              @rowValues="getSubRowElements"
-              @requiredAction="getDisabledValue"
-            />
           </template>
         </div>
       </div>
@@ -846,8 +820,6 @@ import GenericLookUp from '@generics/GenericLookUp.vue'
 import GenericInput from '@generics/GenericInput.vue'
 import GenericPrepareTablePage from '@components/GenericPrepareTable/GenericPrepareTablePage.vue'
 import ColumnConfigPage from '@components/ColumnConfig/ColumnConfigPage.vue'
-import GenericSubPrepareTablePage from '@generics/GenericSubPrepareTable/GenericSubPrepareTablePage.vue'
-import GenericSubPrepareTableTooPage from '@generics/GenericSubPrepareTableToo/GenericSubPrepareTableTooPage.vue'
 import MessageBox from '@components/MessageBox.vue'
 export default {
   // COMPONENTS
@@ -858,8 +830,6 @@ export default {
     GenericInput,
     GenericPrepareTablePage,
     ColumnConfigPage,
-    GenericSubPrepareTablePage,
-    GenericSubPrepareTableTooPage,
     MessageBox,
   },
 

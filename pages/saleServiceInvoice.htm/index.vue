@@ -1,12 +1,12 @@
 <template>
-  <sale-service-invoice-page />
+  <sale-service-invoice />
 </template>
 
 <script>
-import SaleServiceInvoicePage from '@components/Invoices/SaleServiceInvoicePage.vue'
+import SaleServiceInvoice from '@components/Invoices/SaleServiceInvoice.vue'
 export default {
   components: {
-    SaleServiceInvoicePage,
+    SaleServiceInvoice,
   },
 }
 </script>

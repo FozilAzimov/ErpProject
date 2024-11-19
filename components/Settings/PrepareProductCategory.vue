@@ -82,7 +82,11 @@
                 >
                   <span class="text-[13px]">{{ element.name }}</span>
                   <generic-input
-                    value=""
+                    :value="`${
+                      viewEditData?.[element?.subName]
+                        ? viewEditData?.[element?.subName]
+                        : ''
+                    }`"
                     width="300"
                     :type="element.type"
                     :name="element.subName"
@@ -98,7 +102,11 @@
                   <generic-look-up
                     dwidth="300"
                     :name="element.subName"
-                    defvalue=""
+                    :defvalue="`${
+                      viewEditData?.[element?.subName]
+                        ? viewEditData?.[element?.subName]
+                        : ''
+                    }`"
                     :options-data="selectData?.[element?.selectName]"
                     :disabled="element.disabled"
                     @customFunction="getInputAndLookUpValueAction"
@@ -112,7 +120,11 @@
                     :text="element?.name"
                     :name="element?.subName"
                     :disabled="element.disabled"
-                    :default-value="false"
+                    :default-value="
+                      viewEditData?.[element?.subName]
+                        ? viewEditData?.[element?.subName]
+                        : false
+                    "
                     :border="true"
                     @customFunction="getInputAndLookUpValueAction"
                   />
@@ -161,13 +173,12 @@
               />
             </div>
           </div>
-          <div>
-            <generic-carry-draggable
-              v-if="characteristicNoSelect?.length"
-              :lyaut-one-data="characteristicNoSelect"
-              @customEmitFunction="lyautEmitAction"
-            />
-          </div>
+          <generic-carry-draggable
+            v-if="characteristicNoSelect?.length"
+            :lyaut-one-data="characteristicNoSelect"
+            :lyaut-two-data="characteristicSelect"
+            @customEmitFunction="lyautEmitAction"
+          />
         </div>
       </div>
     </template>
@@ -207,8 +218,10 @@ export default {
       radio: 'Enabled',
       radio2: 'Auto',
       selectData: {},
+      viewEditData: {},
       // carry Draggable
       characteristicNoSelect: [],
+      characteristicSelect: [],
       leftData: [],
       rightData: [],
       // carry Draggable
@@ -272,9 +285,37 @@ export default {
             page_current: 1,
             page_size: 25,
           })
-          .then(({ data: { design } }) => {
-            this.isLoading = !this.isLoading
-          })
+          .then(
+            ({
+              data: {
+                characteristicNoSelect,
+                characteristicSelect,
+                productCategory,
+              },
+            }) => {
+              this.viewEditData = productCategory
+              // carry data set
+              this.$set(this, 'characteristicNoSelect', [
+                ...this.characteristicNoSelect,
+                ...characteristicNoSelect,
+              ])
+              this.$set(this, 'characteristicSelect', [
+                ...this.characteristicSelect,
+                ...characteristicSelect,
+              ])
+              // carry data set
+              this.radio = productCategory.active ? 'Enabled' : 'Disabled'
+              this.radio2 =
+                productCategory.generatedValue === 1
+                  ? 'Auto'
+                  : productCategory.generatedValue === 2
+                  ? 'Manual'
+                  : productCategory.generatedValue === 3
+                  ? 'Group'
+                  : 'Auto'
+              this.isLoading = !this.isLoading
+            }
+          )
           .catch((error) => {
             this.isLoading = !this.isLoading
             // eslint-disable-next-line no-console
@@ -292,22 +333,36 @@ export default {
             ({
               data: {
                 characteristicNoSelect,
+                characteristicSelect,
                 dyingReciepeCalculationTypeModuleList,
                 productCategoryTypeModuleList,
+                productCategory,
               },
             }) => {
               this.selectData.dyingReciepeCalculationTypeModuleList =
                 dyingReciepeCalculationTypeModuleList
               this.selectData.productCategoryTypeModuleList =
                 productCategoryTypeModuleList
+              this.viewEditData = productCategory
               // carry data set
               this.$set(this, 'characteristicNoSelect', [
                 ...this.characteristicNoSelect,
                 ...characteristicNoSelect,
               ])
-              // batchProcess.active
-              //   ? (this.radio = 'enabled')
-              //   : (this.radio = 'disabled')
+              this.$set(this, 'characteristicSelect', [
+                ...this.characteristicSelect,
+                ...characteristicSelect,
+              ])
+              // carry data set
+              this.radio = productCategory.active ? 'Enabled' : 'Disabled'
+              this.radio2 =
+                productCategory.generatedValue === 1
+                  ? 'Auto'
+                  : productCategory.generatedValue === 2
+                  ? 'Manual'
+                  : productCategory.generatedValue === 3
+                  ? 'Group'
+                  : 'Auto'
               this.isLoading = !this.isLoading
             }
           )
@@ -363,6 +418,54 @@ export default {
       if (this.pageID && this.pageType === 'edit') {
         productCategory = {
           id: this.pageID,
+          name:
+            this.allInputAndLookUpValue?.name ?? this.viewEditData?.name ?? '',
+          kgQtyId:
+            this.allInputAndLookUpValue?.kgQtyId ??
+            this.viewEditData?.kgQtyId ??
+            '',
+          kgBrutQtyId:
+            this.allInputAndLookUpValue?.kgBrutQtyId ??
+            this.viewEditData?.kgBrutQtyId ??
+            '',
+          litresQtyId:
+            this.allInputAndLookUpValue?.litresQtyId ??
+            this.viewEditData?.litresQtyId ??
+            '',
+          meterQtyId:
+            this.allInputAndLookUpValue?.meterQtyId ??
+            this.viewEditData?.meterQtyId ??
+            '',
+          qtyQtyId:
+            this.allInputAndLookUpValue?.qtyQtyId ??
+            this.viewEditData?.qtyQtyId ??
+            '',
+          nameLan2:
+            this.allInputAndLookUpValue?.nameLan2 ??
+            this.viewEditData?.nameLan2 ??
+            '',
+          nameLan3:
+            this.allInputAndLookUpValue?.nameLan3 ??
+            this.viewEditData?.nameLan3 ??
+            '',
+          code:
+            this.allInputAndLookUpValue?.code ?? this.viewEditData?.code ?? '',
+          qtyLimit:
+            this.allInputAndLookUpValue?.qtyLimit ??
+            this.viewEditData?.qtyLimit ??
+            '',
+          active:
+            this.allInputAndLookUpValue?.active ??
+            this.viewEditData?.active ??
+            false,
+          generatedValue:
+            this.allInputAndLookUpValue?.generatedValue ??
+            this.viewEditData?.generatedValue ??
+            1,
+          articleManufacturerUnique:
+            this.allInputAndLookUpValue?.articleManufacturerUnique ??
+            this.viewEditData?.articleManufacturerUnique ??
+            false,
         }
       } else {
         productCategory = {
@@ -387,15 +490,16 @@ export default {
         page_current: 1,
         productCategoryTypeId:
           this.allInputAndLookUpValue?.productCategoryTypeName ??
-          this.viewEditData?.productCategoryTypeId ??
+          this.viewEditData?.type ??
           '',
         dyingReciepeCalculationTypeModuleId:
           this.allInputAndLookUpValue?.dyingReciepeCalculationTypeModuleName ??
-          this.viewEditData?.dyingReciepeCalculationTypeModuleId ??
+          this.viewEditData?.dyingReciepeCalculationType ??
           '',
         leftDiv: this.leftData,
         rightDiv: this.rightData,
         umAndPL: '',
+        ajoin: true,
         productCategory,
       }
 

@@ -1,20 +1,12 @@
 <template>
-  <div class="w-full p-[0px_12px_0px_10px]">
+  <div class="w-full p-1">
     <LoadingPage
       v-if="isLoading"
       class="absolute left-[50%] top-[8px] translate-x-[-50%]"
     />
-    <transition name="fade">
-      <ColumnConfigPage
-        v-show="checkModal"
-        api="saveColumnConfig"
-        class="z-[10000]"
-        @checkModal="handleValue"
-      />
-    </transition>
     <template v-if="isCloseTable">
       <div
-        class="border-[1px] border-solid border-[rgba(0,0,0,0.05)] p-[12px] bg-gradient-to-b from-transparent via-transparent to-gray-200 shadow-md flex items-center justify-between mt-1"
+        class="border-[1px] border-solid border-[rgba(0,0,0,0.05)] p-[12px] bg-gradient-to-b from-transparent via-transparent to-gray-200 shadow-md flex items-center justify-between"
       >
         <div class="flex items-center gap-[10px]">
           <img src="@assets/icons/user-black.png" alt="user" class="w-[14px]" />
@@ -29,7 +21,6 @@
               :style="{
                 background: 'radial-gradient(#fff, rgba(32,111,162,0.2))',
               }"
-              @click="openColumnConfig"
             >
               <img class="w-[11px]" src="@assets/icons/gear.png" alt="gear" />
             </li>
@@ -88,7 +79,7 @@
               <select
                 v-model="pageSize_value"
                 class="border-[1px] border-solid border-[rgba(171,177,187,0.7)] w-[60px] px-[5px] py-[3px] cursor-pointer rounded-[2px] text-[14px] outline-none"
-                @change="getTableRequest()"
+                @change="getTableRequest"
               >
                 <option value="10">10</option>
                 <option value="25">25</option>
@@ -101,8 +92,6 @@
             <div class="flex items-center gap-2">
               <GenericInput
                 v-model="keywordValue"
-                width="200"
-                type="text"
                 placeholder="Search..."
                 @enter="getTableRequest"
                 @input="getInputValue"
@@ -122,7 +111,7 @@
             :istherebody="isThereBody"
             open-url="prepareTransactionCharacter"
             :productions-action-buttons="true"
-            delete-row-url="batchProcess/prepareBatchProcessDelete"
+            delete-row-url="transactionCharacter/prepareTransactionCharacterDelete"
             height="600"
             @pageEmitAction="getTableRequest"
           />
@@ -136,14 +125,12 @@
 import LoadingPage from '@components/Loading/LoadingPage.vue'
 import GenericButton from '@generics/GenericButton.vue'
 import GenericInput from '@generics/GenericInput.vue'
-import ColumnConfigPage from '@components/ColumnConfig/ColumnConfigPage.vue'
 import GenericTablePage from '@components/GenericTable/GenericTablePage.vue'
 export default {
   components: {
     LoadingPage,
     GenericButton,
     GenericInput,
-    ColumnConfigPage,
     GenericTablePage,
   },
 
@@ -152,41 +139,24 @@ export default {
     return {
       isLoading: false,
       pageSize_value: 25,
-      btnType: '',
-      pageID: null,
       keywordValue: '',
       tableHead: {
         id: { name: 'Id', code: 'id' },
         name: {
-          name: 'Batch Process Name',
+          name: 'Cashbox Name',
           code: 'name',
         },
-        status: {
+        active: {
           name: 'Status',
-          code: 'status',
+          code: 'active',
         },
       },
       tableBody: [],
       tableHeadLength: null,
       isThereBody: false,
-      checkModal: false,
       isOpenTable: true,
       isCloseTable: true,
     }
-  },
-
-  // WATCH
-  watch: {
-    pageID(newVal) {
-      this.btnTypeSpecifyingAction()
-    },
-  },
-
-  // CREATED
-  created() {
-    this.btnType = JSON.parse(localStorage.getItem('allTrueAndFalseData'))?.type
-    // page ID sini olish
-    this.pageID = this.$route.params?.id
   },
 
   // MOUNTED
@@ -208,7 +178,7 @@ export default {
     getTableRequest() {
       this.isLoading = !this.isLoading
       this.$axios
-        .post(`/batchProcess/batchProcessAjaxLoad`, {
+        .post(`/transactionCharacter/transactionCharactersAjaxLoad`, {
           searchForm: {
             keyword: this.keywordValue,
           },
@@ -219,9 +189,9 @@ export default {
             total: 328,
           },
         })
-        .then(({ data: { batchProcessList } }) => {
+        .then(({ data: { transactionCharacters } }) => {
           this.isLoading = !this.isLoading
-          this.tableBody = batchProcessList
+          this.tableBody = transactionCharacters
 
           this.tableBody.length
             ? (this.isThereBody = true)
@@ -232,13 +202,6 @@ export default {
           // eslint-disable-next-line no-console
           console.log(error)
         })
-    },
-
-    // Specifying the buttun type action
-    btnTypeSpecifyingAction() {
-      if (!this.pageID) {
-        localStorage.removeItem('allTrueAndFalseData')
-      }
     },
 
     // Generic_Input value
@@ -256,16 +219,3 @@ export default {
   },
 }
 </script>
-
-<style>
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.5s;
-}
-
-.fade-enter,
-.fade-leave-to {
-  opacity: 0;
-  transform: translateY(-20px);
-}
-</style>

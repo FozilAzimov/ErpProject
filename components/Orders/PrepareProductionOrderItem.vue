@@ -84,13 +84,6 @@
                   "
                   width="100"
                   widthtype="%"
-                  pl="10"
-                  pr="10"
-                  pt="1"
-                  pb="1"
-                  textsize="13"
-                  type="datetime-local"
-                  valuecolor="rgba(0,0,0,0.7)"
                   :name="obj.subName"
                   :required="
                     !obj?.required ||
@@ -240,11 +233,11 @@
         <div class="flex gap-1 flex-wrap mt-1">
           <span v-for="(element, index) in allBtnData" :key="index">
             <template v-if="element?.type === 'number'">
-              <span class="text-[12px] font-light">{{ element?.name }}</span>
               <generic-input
                 type="number"
-                width="70"
+                width="120"
                 :name="element?.subName"
+                :placeholder="element?.name"
               />
             </template>
             <generic-button

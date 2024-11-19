@@ -16,19 +16,23 @@
           <th
             v-for="(headName, key) in filteredTableHead"
             :key="key"
-            class="text-[13px] font-semibold border-[1px] border-solid border-[rgba(119,136,153,0.3)] p-4 cursor-pointer whitespace-nowrap"
+            class="text-[13px] font-semibold border-[1px] border-solid border-[rgba(119,136,153,0.3)] px-4 py-1 cursor-pointer whitespace-nowrap"
             :class="headName.width ? `w-[${headName.width}px]` : ''"
           >
-            <div v-if="!('editableElement' in headName)">
-              <span>{{ headName?.headerText }}</span>
+            <div v-if="headName?.name === 'qty'">
+              <span>{{
+                GET_CORE_STRING?.[headName?.headerText] || headName?.headerText
+              }}</span>
               <div
-                class="w-full h-[20px] bg-[rgb(97,221,180)] mt-1 text-[12px] font-light"
+                class="w-full h-[20px] bg-[rgb(97,221,180)] mt-1 text-[12px] font-light rounded-sm"
               >
                 {{ totalQTY && totalQTY.toFixed(2) }}
               </div>
             </div>
             <template v-else>
-              {{ headName?.headerText }}
+              {{
+                GET_CORE_STRING?.[headName?.headerText] || headName?.headerText
+              }}
             </template>
           </th>
         </tr>
@@ -37,14 +41,23 @@
           <th
             class="border-[1px] text-[12px] p-[1px_3px] text-center font-normal"
           >
-            <GenericInput width="50" name="index" @customFunction="''" />
+            <generic-input
+              width="50"
+              name="index"
+              :clearable="false"
+              placeholder="filtering"
+            />
           </th>
           <th
             v-for="(key, inx) in filteredTableHead"
             :key="inx"
             class="border-[1px] text-[12px] p-[1px_3px] text-center font-normal"
           >
-            <GenericInput width="150" :name="key.name" @customFunction="''" />
+            <generic-input
+              width="150"
+              :name="key.name"
+              placeholder="filtering"
+            />
           </th>
         </tr>
         <!-- Filter input -->
@@ -68,12 +81,17 @@
               class="border-[1px] text-[12px] p-2"
             >
               <generic-input
-                v-if="!('editableElement' in obj)"
+                v-if="!('editableElement' in obj) || obj?.editableElement"
                 width="150"
+                :value="`${row?.[obj?.name] ?? ''}`"
                 :name="obj?.name"
                 type="number"
                 :order="index"
+                :is-it-limited-value="isItLimitedValue"
+                :limited-value="tableBodyData"
+                :regex="true"
                 @customFunctionRegEx="setInputValueAction"
+                @setMAXvalue="setMAXvalue"
               />
               <template v-else-if="typeof row?.[obj.name] === 'object'">{{
                 row?.[obj.name]?.text
@@ -99,17 +117,19 @@
           class="bg-gradient-to-b from-transparent via-transparent to-[#F4F4F4]"
         >
           <td
-            :colspan="tableHeadDataLength"
+            :colspan="tableHeadDataLength + 1"
             class="border-[1px] border-solid border-[#F0F0F0] text-[12px] p-3"
           >
             <div class="flex justify-start">
               <el-empty
-                :image-size="60"
+                :image-size="40"
                 description="No Data"
                 style="padding: 0"
               >
                 <template #description>
-                  <p style="font-size: 13px; margin-top: -10px">No Data</p>
+                  <p style="font-size: 10px; margin-top: -17px; color: #cccdd0">
+                    No Data
+                  </p>
                 </template>
               </el-empty>
             </div>
@@ -122,6 +142,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import GenericInput from '@generics/GenericInput.vue'
 
 export default {
@@ -148,29 +169,51 @@ export default {
       type: Number,
       default: 0,
     },
+    filterType: {
+      type: String,
+      default: '',
+    },
   },
 
   // DATA
   data() {
     return {
+      orginalArrayData: structuredClone(this.tableBodyData),
+      maxValueData: [],
       allSelectAndInputValue: {},
       totalQTY: null,
+      isItLimitedValue: false,
     }
   },
 
   // COMPUTED
   computed: {
+    // Store getters
+    ...mapGetters('translate', ['GET_CORE_STRING']),
     // table HEAD
     filteredTableHead() {
-      return this.tableHeadData.filter((headName) => headName.showUI)
+      return this.tableHeadData
     },
     // table BODY
     bodyData() {
-      return this.tableBodyData
+      return this.orginalArrayData
     },
     // QTY in newBodyData
     newBodyData() {
-      return this.bodyData.filter((obj) => parseFloat(obj?.qty))
+      return this.bodyData
+        .filter((obj) => parseFloat(obj?.qty)) // qty ni tekshirish va filtrlash
+        .map(({ id, ...rest }) => rest) // bu yerda "ID"ni ignore qilingan
+    },
+  },
+
+  // WATCH
+  watch: {
+    tableBodyData: {
+      handler(newVal) {
+        this.orginalArrayData = structuredClone(newVal)
+      },
+      deep: true,
+      immediate: true,
     },
   },
 
@@ -182,8 +225,11 @@ export default {
       this.$set(this.bodyData[rowIndex], name, value)
       // function
       this.totalQtyAction()
-      // Emit action
-      this.$emit('emitCustomFunc', this.newBodyData)
+      // popup type'ga qarab tekshirilgan
+      if (this.filterType === 'min')
+        this.$emit('emitCustomFunc', this.newBodyData)
+      else if (this.filterType === 'max')
+        this.tableDataProcessingAction(name, value, rowIndex)
     },
 
     // total qty
@@ -191,6 +237,46 @@ export default {
       this.totalQTY = this.newBodyData.reduce((summ, curr) => {
         return summ + (parseFloat(curr?.qty) || 0)
       }, 0)
+    },
+
+    // data Processing | bu faqat MAX popup'da ishlaydi.
+    tableDataProcessingAction(name, value, rowIndex) {
+      if (
+        name === 'qty' &&
+        value <= this.tableBodyData?.[rowIndex]?.realCount
+      ) {
+        this.$set(
+          this.bodyData[rowIndex],
+          'realCount',
+          this.tableBodyData?.[rowIndex]?.realCount
+        )
+        this.$set(
+          this.bodyData[rowIndex],
+          'realCount',
+          parseFloat(this.bodyData?.[rowIndex]?.realCount) -
+            (value ? parseFloat(value) : 0)
+        )
+        this.isItLimitedValue = false
+      } else if (
+        name === 'qty' &&
+        value > this.tableBodyData?.[rowIndex]?.realCount
+      ) {
+        this.$set(
+          this.bodyData[rowIndex],
+          name,
+          this.tableBodyData?.[rowIndex]?.realCount
+        )
+        this.$set(this.bodyData[rowIndex], 'realCount', 0)
+        this.isItLimitedValue = true
+      }
+      this.$emit('emitCustomFunc', this.newBodyData)
+    },
+
+    // qty uchun max value set qiladi
+    setMAXvalue(name, maxValue, index) {
+      this.$set(this.bodyData[index], name, maxValue)
+      // function
+      this.totalQtyAction()
     },
   },
 }

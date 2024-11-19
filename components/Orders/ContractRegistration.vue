@@ -1,16 +1,25 @@
 <template>
-  <div class="w-full p-[4px_12px_0px_10px]">
+  <div class="w-full p-1">
     <LoadingPage
       v-if="isLoading"
       class="absolute left-[50%] top-[8px] translate-x-[-50%]"
     />
+    <message-box ref="messageBoxRef" @emitProp="getEmitProp" />
     <template v-if="isCloseTable">
       <div
         class="border-[1px] border-solid border-[rgba(0,0,0,0.05)] p-[12px] bg-gradient-to-b from-transparent via-transparent to-gray-200 shadow-md flex items-center justify-between"
       >
-        <h1 class="font-bold text-[rgb(49,126,172)] text-[14px] uppercase">
-          Registration of Contracts
-        </h1>
+        <div class="flex items-center gap-1">
+          <generic-button
+            name="Go Back"
+            type="primary"
+            icon-name-attribute="arrow-left"
+            @click="$router.push('/purchaseorder.htm')"
+          />
+          <h1 class="font-bold text-[rgb(49,126,172)] text-[14px] uppercase">
+            Registration of Contracts
+          </h1>
+        </div>
         <div>
           <ul class="flex items-center gap-4">
             <li
@@ -48,16 +57,16 @@
         </div>
       </div>
       <div
-        class="border-[1px] border-solid border-[rgba(0,0,0,0.1)]"
+        class="border-[1px] border-solid border-[rgba(0,0,0,0.1)] p-2"
         :class="
           isOpenTable
-            ? 'duration-[1s] h-[755px] overflow-hidden'
+            ? 'duration-[1s] h-fit overflow-hidden'
             : 'duration-[1s] h-0 overflow-hidden'
         "
       >
-        <div class="flex justify-center">
+        <div class="flex justify-start">
           <div
-            class="w-[600px] rounded-md shadow-lg border-[1px] border-solid border-[#E5E5E5]"
+            class="w-[500px] rounded-md shadow-lg border-[1px] border-solid border-[#E5E5E5]"
           >
             <div
               v-for="(element, index) in topFilterData"
@@ -71,8 +80,11 @@
                 <span class="gradient-text">{{ element?.name }} :</span>
                 <generic-input-date-page
                   type="datetime-local"
+                  :name="element?.subName"
                   :width="element?.width"
+                  :value="allSelectAndInputValues?.[element?.subName]"
                   textsize="13"
+                  @customFunction="getInputAndLookUpValueAction"
                 />
               </div>
               <div
@@ -81,40 +93,46 @@
               >
                 <span class="gradient-text">{{ element?.name }} :</span>
                 <generic-look-up
-                  :dwidth="element?.width"
+                  :name="element?.subName"
                   :durl="element?.url"
+                  :dwidth="element?.width"
+                  @customFunction="getInputAndLookUpValueAction"
                 />
               </div>
               <div
-                v-else-if="element?.type === 'text'"
+                v-else-if="
+                  element?.type === 'text' || element?.type === 'textarea'
+                "
                 class="flex items-center justify-between gap-x-4"
               >
                 <span class="gradient-text">{{ element?.name }} :</span>
-                <generic-input :width="element?.width" type="text" />
-              </div>
-              <div
-                v-else-if="element?.type === 'textarea'"
-                class="flex items-center justify-between gap-x-4"
-              >
-                <span class="gradient-text">{{ element?.name }} :</span>
-                <generic-input :width="element?.width" type="textarea" />
+                <generic-input
+                  :width="element?.width"
+                  :type="element?.type"
+                  :name="element?.subName"
+                  @customFunction="getInputAndLookUpValueAction"
+                />
               </div>
             </div>
             <div class="flex items-center justify-evenly mb-3">
-              <generic-button name="Save" type="primary" />
+              <generic-button name="Save" type="primary" @click="saveAction" />
               <generic-button
                 name="Print"
                 type="success"
                 icon-name-attribute="printer"
               />
-              <generic-button name="Confirm" />
+              <generic-button
+                name="Confirm"
+                type="primary"
+                @click="confirmOrderAtion"
+              />
             </div>
           </div>
         </div>
 
         <div>
           <production-addition-table
-            class="mt-10 p-2"
+            class="mt-5"
             :data="rowData"
             :buttons="[
               {
@@ -124,6 +142,7 @@
                 action: 'add',
               },
             ]"
+            @emitTableData="getTableDataAction"
           />
         </div>
       </div>
@@ -157,99 +176,119 @@ export default {
       allSelectAndInputValues: {},
       isOpenTable: true,
       isCloseTable: true,
+      pageID: null,
+      pageType: null,
+      orderItems: [],
       rowData: [
         {
           name: '№',
           subName: 'id',
-          width: '120',
+          width: '100',
           type: 'label',
         },
         {
           name: 'Product name',
-          subName: 'productName',
-          width: '120',
+          subName: 'item',
+          width: '200',
           type: 'select',
+          api: 'searchProductList',
+        },
+        {
+          name: 'Identification number and name according to the unified electronic national catalog of the product',
+          subName: 'externalProductsAndServicesCode',
+          width: '200',
+          type: 'select',
+          api: 'findAllExternalProductsAndServicesCode',
+        },
+        {
+          name: 'Measurement',
+          subName: 'measurement',
+          width: '100',
+          type: 'text',
+          disabled: true,
         },
         {
           name: 'Qty',
           subName: 'qty',
           width: '120',
-          type: 'text',
+          type: 'number',
         },
         {
-          name: 'Unit Measurement Type1 Value',
-          subName: 'unitMeasurementType1Value',
+          name: 'Price',
+          subName: 'unitPrice',
           width: '120',
           type: 'text',
         },
         {
-          name: 'Unit Measurement Type1',
-          subName: 'unitMeasurementType1',
-          width: '120',
-          type: 'select',
+          name: 'Amount',
+          subName: 'net',
+          width: '150',
+          type: 'number',
+          disabled: true,
         },
         {
-          name: 'Unit Measurement Type2 Value',
-          subName: 'unitMeasurementType2Value',
-          width: '120',
-          type: 'text',
+          topName: 'Vat',
+          name: 'Percent',
+          subName: 'vat',
+          type: 'number',
+          width: '150',
+          multiple: true,
         },
         {
-          name: 'Unit Measurement Type2',
-          subName: 'unitMeasurementType2',
-          width: '120',
-          type: 'select',
+          topName: 'Vat',
+          name: 'vatAmount',
+          subName: 'vatAmount',
+          type: 'number',
+          width: '150',
+          disabled: true,
+          multiple: true,
         },
         {
-          name: 'Unit Measurement Type3 Value',
-          subName: 'unitMeasurementType3Value',
+          name: 'Total Amount',
+          subName: 'ammount',
           width: '120',
-          type: 'text',
+          type: 'number',
+          disabled: true,
         },
         {
-          name: 'Unit Measurement Type3',
-          subName: 'unitMeasurementType3',
-          width: '120',
-          type: 'select',
-        },
-        {
-          name: 'Unit Measurement Type4 Value',
-          subName: 'unitMeasurementType4Value',
-          width: '120',
-          type: 'text',
-        },
-        {
-          name: 'Unit Measurement Type4',
-          subName: 'unitMeasurementType4',
-          width: '120',
-          type: 'select',
-        },
-        {
-          name: 'Notes',
-          subName: 'notes',
+          name: 'Approximate day',
+          subName: 'approxDay',
           width: '120',
           type: 'text',
         },
         {
-          name: 'Expense',
-          subName: 'expense',
+          name: 'Prepayment',
+          subName: 'prePayment',
           width: '120',
           type: 'checkbox',
         },
         {
-          name: 'Action',
-          subName: 'delete',
-          width: '120',
+          width: '50',
           type: 'del',
         },
       ],
     }
   },
 
+  // CREATED
+  created() {
+    this.allSelectAndInputValues.dateFrom = new Date()
+      .toISOString()
+      .split('.')[0]
+    this.allSelectAndInputValues.contractDate = new Date()
+      .toISOString()
+      .split('.')[0]
+    this.allSelectAndInputValues.contractTimeDurationDate = new Date(
+      new Date().setMonth(new Date().getMonth() + 1)
+    )
+      .toISOString()
+      .split('.')[0]
+  },
+
   // MOUNTED
   mounted() {
-    // Table function
-    this.getTableRequest()
+    this.pageID = this.$route?.params?.id
+    this.pageType = this.$route?.query?.page_type
     // function
     this.createDataFiltering()
   },
@@ -272,31 +311,31 @@ export default {
           name: 'Kiritish chiqarish sanasi',
           subName: 'dateFrom',
           type: 'date',
-          width: '250',
+          width: '185',
         },
         {
           name: 'Shartnoma raqami',
           subName: 'contractNumber',
           type: 'text',
-          width: '250',
+          width: '185',
         },
         {
           name: 'Shartnoma sanasi',
           subName: 'contractDate',
           type: 'date',
-          width: '250',
+          width: '185',
         },
         {
           name: 'Amal qilish muddati',
-          subName: 'validityPeriod',
+          subName: 'contractTimeDurationDate',
           type: 'date',
-          width: '250',
+          width: '185',
         },
         {
           name: 'Yetkazib beruvchi nomi',
           subName: 'supplierName',
           type: 'select',
-          width: '250',
+          width: '200',
           url: 'findAllCompany',
           params: {
             branchcompany: false,
@@ -304,10 +343,17 @@ export default {
           },
         },
         {
+          name: 'Valyuta',
+          subName: 'currency',
+          type: 'select',
+          width: '200',
+          url: 'findAllCurrency',
+        },
+        {
           name: 'Izox',
           subName: 'description',
           type: 'textarea',
-          width: '250',
+          width: '200',
         },
       ]
       this.topFilterData = createDate
@@ -316,29 +362,78 @@ export default {
     // get Input, date, select datasini olish
     getInputAndLookUpValueAction(name, value) {
       this.$set(this.allSelectAndInputValues, name, value)
-      // function
-      this.getTableRequest()
-      if (name === 'autorefresh') {
-        // function
-        this.realTimeRequest(value)
-      }
     },
 
-    // page request action
-    getTableRequest() {
-      const body = {}
+    getTableDataAction(arr) {
+      this.orderItems = arr
+    },
 
+    // Save action
+    saveAction() {
+      const purchaseOrder = {
+        createDate: this.allSelectAndInputValues?.dateFrom
+          ? this.allSelectAndInputValues?.dateFrom
+          : '',
+        date: this.allSelectAndInputValues?.contractDate
+          ? this.allSelectAndInputValues?.contractDate
+          : '',
+        sellDate: this.allSelectAndInputValues?.contractTimeDurationDate
+          ? this.allSelectAndInputValues?.contractTimeDurationDate
+          : '',
+        company: {
+          id: this.allSelectAndInputValues?.supplierName ?? '',
+        },
+        currency: {
+          id: this.allSelectAndInputValues?.currency ?? '',
+        },
+        contractNumber: this.allSelectAndInputValues?.contractNumber ?? '',
+        orderItems: this.orderItems,
+      }
       this.isLoading = !this.isLoading
       this.$axios
-        .post(`/sew/contractRegistration`, body)
+        .post(`/order/createPurchaseOrder`, {
+          purchaseOrder,
+          note: this.allSelectAndInputValues?.description ?? '',
+        })
         .then(({ data }) => {
-          this.this.isLoading = !this.isLoading
+          this.isLoading = !this.isLoading
+          if (!this.pageID) {
+            this.$router.push({
+              path: `contractRegistration.htm/${data?.id}`,
+              query: { page_type: 'edit' },
+            })
+          }
         })
         .catch((error) => {
           this.isLoading = !this.isLoading
           // eslint-disable-next-line no-console
           console.log(error)
         })
+    },
+
+    // Confirm and Censel_Confirmation
+    confirmOrderAtion() {
+      this.$refs.messageBoxRef.open(this.pageID)
+    },
+
+    // Message Emit action
+    getEmitProp(propMessage, id) {
+      if (propMessage === 'confirm' && id) {
+        this.isLoading = !this.isLoading
+        this.$axios
+          .post(`/order/confirmOrder`, {
+            id,
+            status: true,
+          })
+          .then(() => {
+            this.isLoading = !this.isLoading
+          })
+          .catch((error) => {
+            this.isLoading = !this.isLoading
+            // eslint-disable-next-line no-console
+            console.log(error)
+          })
+      }
     },
   },
 }

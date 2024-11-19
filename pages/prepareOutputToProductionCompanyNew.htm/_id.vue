@@ -1,10 +1,10 @@
 <template>
-  <prepare-output-to-production-company-new-page />
+  <prepare-output-to-production-company-new />
 </template>
 
 <script>
-import prepareOutputToProductionCompanyNewPage from '@components/Invoices/prepareOutputToProductionCompanyNewPage.vue'
+import PrepareOutputToProductionCompanyNew from '@components/Invoices/prepareOutputToProductionCompanyNew.vue'
 export default {
-  components: { prepareOutputToProductionCompanyNewPage },
+  components: { PrepareOutputToProductionCompanyNew },
 }
 </script>

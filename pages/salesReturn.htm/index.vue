@@ -1,11 +1,11 @@
 <template>
-  <SalesReturnPage />
+  <sales-return />
 </template>
 
 <script>
-import SalesReturnPage from '@components/Invoices/SalesReturnPage.vue'
+import SalesReturn from '@components/Invoices/SalesReturn.vue'
 
 export default {
-  components: { SalesReturnPage },
+  components: { SalesReturn },
 }
 </script>

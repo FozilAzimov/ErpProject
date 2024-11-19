@@ -5,6 +5,7 @@
     :disabled="disabled"
     :placeholder="placeholder"
     :multiple="multiple"
+    :collapse-tags="collapseTags"
     :size="size"
     :clearable="true"
     :popper-append-to-body="popperAppendToBody"
@@ -28,10 +29,16 @@
           ? item?.name
           : item?.moduleName
           ? item?.moduleName
-          : `${item?.fname} ${item?.lname} ${item?.employee_number}`
+          : item?.fname || item?.lname || item?.employee_number
+          ? `${item?.fname} ${item?.lname} ${item?.employee_number}`
+          : ''
       "
       :value="
-        item?.id ? item?.id : item?.moduleId ? item?.moduleId : item?.code
+        item?.id || item?.id === 0
+          ? item?.id
+          : item?.moduleId || item?.moduleId === 0
+          ? item?.moduleId
+          : item?.code
       "
     >
     </el-option>
@@ -99,6 +106,14 @@ export default {
       type: Boolean,
       default: false,
     },
+    collapseTags: {
+      type: Boolean,
+      default: false,
+    },
+    isLookUpText: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   // DATA
@@ -118,6 +133,12 @@ export default {
       },
       immediate: true,
     },
+    optionsData: {
+      handler(newVal) {
+        this.options = newVal
+      },
+      deep: true,
+    },
   },
 
   // METHODS
@@ -125,7 +146,7 @@ export default {
     // Filtering And dUrl action
     getRequestResponseAction(searchKey) {
       // filter searchKey'ni value'ga set qilish
-      this.value = searchKey
+      !this.multiple && (this.value = searchKey)
       // filter searchKey'ni value'ga set qilish
       if (this.durl) {
         this.loading = true
@@ -136,6 +157,8 @@ export default {
               this.durl === 'findAllEquipments' ||
               this.durl === 'findAllDyeingEquipments'
                 ? 'productionReports'
+                : this.durl === 'findAllExternalProductsAndServicesCode'
+                ? 'externalProductsAndServices'
                 : 'invoiceBase'
             }/${this.durl}`,
             body
@@ -143,27 +166,42 @@ export default {
           .then((res) => {
             this.loading = false
             this.options = res.data
+            this.$emit('emitLookUpData', res?.data)
           })
-          .catch((res) => {
+          .catch(() => {
             this.loading = false
           })
       } else {
-        this.options = this.optionsData.filter((obj) =>
-          obj?.name.includes(searchKey)
+        this.options = this.optionsData?.filter(
+          ({ name, moduleName }) =>
+            (name || moduleName) && (name || moduleName)?.includes(searchKey)
         )
       }
     },
 
     // select change bo'lganda ishlaydi
     getChangeValueAction(value) {
-      // Emit action
-      this.$emit(
-        'customFunction',
-        this.name,
-        value,
-        this.order,
-        this.resultType
-      )
+      if (this.isLookUpText && this.options?.length) {
+        const { name } = this.options.find(({ id }) => value === id)
+        // Emit action
+        this.$emit(
+          'customFunction',
+          this.name,
+          value,
+          this.order,
+          this.resultType,
+          name
+        )
+      } else {
+        // Emit action
+        this.$emit(
+          'customFunction',
+          this.name,
+          value,
+          this.order,
+          this.resultType
+        )
+      }
     },
   },
 }

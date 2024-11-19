@@ -122,6 +122,7 @@
                       ? viewEditData?.[element.subName]
                       : ''
                   "
+                  :durl="element?.api"
                   :options-data="selectData?.[element?.selectName]"
                   :disabled="element.disabled"
                   @customFunction="getInputAndLookUpValueAction"
@@ -426,6 +427,7 @@ export default {
           name: 'Characteristic Name',
           subName: 'characteristicName',
           selectName: 'characteristics',
+          api: 'findAllCharacteristic',
           type: 'select',
           show: true,
           disabled: this.pageType === 'view',

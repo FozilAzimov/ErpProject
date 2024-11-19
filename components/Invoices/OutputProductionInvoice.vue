@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full p-[0px_12px_0px_10px]">
+  <div class="w-full px-1">
     <LoadingPage
       v-if="isLoading"
       class="absolute left-[50%] top-[8px] translate-x-[-50%]"
@@ -15,13 +15,17 @@
         @checkModal="handleValue"
       />
     </transition>
-    <form class="flex flex-wrap items-center gap-3 py-4">
-      <span v-for="(element, index) in topFilterData" :key="index">
-        <span v-if="element.type === 'date'" class="flex items-center gap-1">
-          <span class="text-[13px]">{{ element.name }}</span>
+    <form class="flex flex-wrap items-center gap-2 py-3">
+      <template v-for="(element, index) in topFilterData">
+        <span
+          v-if="element.type === 'date'"
+          :key="index"
+          class="flex items-center gap-1"
+        >
+          <span class="text-[12px] font-light">{{ element.name }}</span>
           <generic-input-date-page
-            :value="''"
-            width="165"
+            :value="allSelectAndInputValues?.[element?.subName]"
+            width="185"
             pl="10"
             pr="10"
             pt="1"
@@ -29,24 +33,11 @@
             textsize="13"
             type="datetime-local"
             valuecolor="rgba(0,0,0,0.7)"
-            :name="element.subName"
+            :name="element?.subName"
             @customFunction="getInputAndLookUpValueAction"
           />
         </span>
-        <span
-          v-else-if="element.type === 'select'"
-          class="flex items-center gap-1"
-        >
-          <span class="text-[13px]">{{ element.name }}</span>
-          <generic-look-up
-            dwidth="200"
-            :name="element.subName"
-            :defvalue="''"
-            :options-data="[]"
-            @customFunction="getInputAndLookUpValueAction"
-          />
-        </span>
-      </span>
+      </template>
     </form>
     <template v-if="isCloseTable">
       <div
@@ -55,7 +46,7 @@
         <div class="flex items-center gap-[10px]">
           <img src="@assets/icons/user-black.png" alt="user" class="w-[14px]" />
           <h1 class="font-bold text-[rgb(49,126,172)] text-[14px] uppercase">
-            EXPENSE INVOICE LIST
+            Output Production Invoice
           </h1>
         </div>
         <div>
@@ -111,19 +102,13 @@
             : 'duration-[1s] h-0 overflow-hidden'
         "
       >
-        <generic-button
-          name="Add New"
-          type="primary"
-          :margin="true"
-          icon-name-attribute="circle-plus-outline"
-        />
         <div class="p-2">
           <div class="flex items-center justify-between mb-1">
             <div class="text-[14px]">
               <select
                 v-model="pageSize_value"
                 class="border-[1px] border-solid border-[rgba(171,177,187,0.7)] w-[60px] px-[5px] py-[3px] cursor-pointer rounded-[2px] text-[14px] outline-none"
-                @change="getTableRequest()"
+                @change="getTableRequest"
               >
                 <option value="10">10</option>
                 <option value="25">25</option>
@@ -135,8 +120,6 @@
             </div>
             <div class="flex items-center gap-2">
               <GenericInput
-                width="200"
-                type="text"
                 name="searchInput"
                 placeholder="Search..."
                 @enter="getTableRequest"
@@ -160,8 +143,7 @@
             :tablebody="tableBody"
             :tableheadlength="tableHeadLength"
             :istherebody="isThereBody"
-            :productions-action-buttons="true"
-            open-url="prepareSaleOrder"
+            open-url=""
             height="600"
           />
         </div>
@@ -192,20 +174,33 @@ export default {
   data() {
     return {
       isLoading: false,
-      pageSize_value: 10,
+      pageSize_value: 25,
+      isOpenTable: true,
+      isCloseTable: true,
       topFilterData: [],
-      tableData: [],
       tableHead: {},
       tableBody: [],
       tableHeadLength: null,
       isThereBody: false,
       allSelectAndInputValues: {},
       checkModal: false,
-      actionUrl: '',
+      actionUrl: null,
       leftMap: {},
-      isOpenTable: true,
-      isCloseTable: true,
     }
+  },
+
+  // CREATED
+  created() {
+    this.allSelectAndInputValues.dateFrom = new Date(
+      new Date().setMonth(new Date().getMonth() - 1)
+    )
+      .toISOString()
+      .split('.')[0]
+    this.allSelectAndInputValues.dateTo = new Date(
+      new Date().setMonth(new Date().getMonth() + 1)
+    )
+      .toISOString()
+      .split('.')[0]
   },
 
   // MOUNTED
@@ -243,40 +238,33 @@ export default {
 
     // page request action
     getTableRequest() {
+      // request body
       const body = {
-        current_page: 1,
-        page_size: this.pageSize_value,
-        searchForm: {
-          keyword: this.allSelectAndInputValues?.searchInput || '',
+        pagingForm: {
+          currentPage: 1,
+          pageSize: this.pageSize_value,
         },
-        dateFrom: this.allSelectAndInputValues?.dateFrom
-          ? new Date(this.allSelectAndInputValues?.dateFrom)
-              .toLocaleString('en-GB')
-              .split(',')
-              .join('')
+        searchForm: {
+          keyword: this.allSelectAndInputValues?.searchInput ?? '',
+        },
+        dateFrom1: this.allSelectAndInputValues?.dateFrom
+          ? this.$formatDate(this.allSelectAndInputValues.dateFrom)
           : '',
-        dateTo: this.allSelectAndInputValues?.dateTo
-          ? new Date(this.allSelectAndInputValues?.dateTo)
-              .toLocaleString('en-GB')
-              .split(',')
-              .join('')
+        dateTo1: this.allSelectAndInputValues?.dateTo
+          ? this.$formatDate(this.allSelectAndInputValues.dateTo)
           : '',
-        companyBranchId: this.allSelectAndInputValues?.companyBranchId || '',
-        statusId: this.allSelectAndInputValues?.statusId || '',
       }
-
+      // request body
       this.isLoading = !this.isLoading
       this.$axios
-        .post(`/invoices/expenseInvoice`, body)
-        .then(({ data: { build } }) => {
-          this.tableBody = []
+        .post(`/invoices/outputproductioninvoice`, body)
+        .then(({ data }) => {
+          this.actionUrl = data?.actionUrl
+          this.tableHead = data?.rightMap
+          this.leftMap = data?.leftMap
+          // function
+          this.getTableBody(data?.invoiceList)
           this.isLoading = !this.isLoading
-          this.tableHead = build?.rightMap
-          this.leftMap = build?.leftMap
-          this.actionUrl = build?.actionUrl
-          this.tableData = build?.invoiceList
-          this.selectData = build?.invoiceSearchDTO
-          this.getTableBody()
         })
         .catch((error) => {
           this.isLoading = !this.isLoading
@@ -286,24 +274,21 @@ export default {
     },
 
     // Generic Table action Start
-    getTableBody() {
-      const arr = new Set()
-      for (const obj of this.tableData) {
-        arr.add(obj.id)
-        const data = new Map()
+    getTableBody(bodyData) {
+      this.tableBody = []
+      for (const obj of bodyData) {
+        const newObj = {}
         for (const key in this.tableHead) {
-          const value = this.tableHead[key].code
-          if (this.tableHead[key].code in obj) {
-            if (obj[value]) {
-              if (typeof obj[value] === 'object')
-                data.set(value, obj[value].value)
-              else data.set(value, obj[value])
-            } else data.set(value, obj[value])
-          } else data.set(value, false)
+          const keyCode = this.tableHead[key]?.code
+          if (keyCode in obj) {
+            if (typeof obj[keyCode] === 'object')
+              newObj[keyCode] = obj[keyCode]?.value
+            else newObj[keyCode] = obj[keyCode]
+          }
         }
-        this.tableBody.push(Object.fromEntries(data))
+        this.tableBody.push(newObj)
       }
-      this.tableHeadLength = Object.entries(this.tableHead).length
+      this.tableHeadLength = Object.keys(this.tableHead).length
       this.tableBody.length > 0
         ? (this.isThereBody = true)
         : (this.isThereBody = false)
@@ -324,7 +309,6 @@ export default {
           type: 'date',
         },
       ]
-
       this.topFilterData = createDate
     },
   },

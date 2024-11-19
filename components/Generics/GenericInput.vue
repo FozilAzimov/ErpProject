@@ -1,23 +1,25 @@
 <template>
-  <el-input
-    v-model="input"
-    :type="type"
-    :placeholder="placeholder"
-    :disabled="disabled"
-    :size="size"
-    :clearable="clearable"
-    :prefix-icon="prefixIcon && `el-icon-${prefixIcon}`"
-    :suffix-icon="suffixIcon && `el-icon-${suffixIcon}`"
-    :style="{
-      width: widthtype === '%' ? `${width}%` : `${width}px`,
-      border: required ? 'none' : '1px solid red',
-      borderRadius: '5px',
-      color: valuecolor,
-    }"
-    @input="getInputValue(name, input, order)"
-    @change="getTableRequest(name, input, order)"
-  >
-  </el-input>
+  <div>
+    <el-input
+      v-model="input"
+      :type="type"
+      :placeholder="placeholder"
+      :disabled="disabled"
+      :size="size"
+      :clearable="clearable"
+      :prefix-icon="prefixIcon && `el-icon-${prefixIcon}`"
+      :suffix-icon="suffixIcon && `el-icon-${suffixIcon}`"
+      :style="{
+        width: widthtype === '%' ? `${width}%` : `${width}px`,
+        border: required ? 'none' : '1px solid red',
+        borderRadius: '5px',
+        color: valuecolor,
+      }"
+      @input="getInputValue(name, input, order, feature)"
+      @change="getTableRequest(name, input, order, feature)"
+    >
+    </el-input>
+  </div>
 </template>
 
 <script>
@@ -30,6 +32,10 @@ export default {
     type: {
       type: String,
       default: 'text',
+    },
+    feature: {
+      type: String,
+      default: '',
     },
     width: {
       type: String,
@@ -76,6 +82,10 @@ export default {
       type: Boolean,
       default: true,
     },
+    regex: {
+      type: Boolean,
+      default: false,
+    },
     maxValue: {
       type: Number,
       default: 0,
@@ -90,16 +100,19 @@ export default {
     },
   },
 
+  // DATA
   data() {
     return {
       input: this.value,
-      clearableValue: this.clearable,
     }
   },
 
+  // WATCH
   watch: {
     value(newVal) {
       this.input = newVal
+    },
+    input() {
       this.name === 'qty' && this.setLimitedValueAction(this.name)
       if (this.name === 'top_qty' || this.name === 'packQty')
         this.setMaxValueAction(this.name)
@@ -107,17 +120,17 @@ export default {
   },
 
   methods: {
-    getTableRequest(name, value, index) {
+    getTableRequest(name, value, index, feature) {
       this.$emit('enter', value)
-      this.$emit('customFunction', name, value, index)
+      this.$emit('customFunction', name, value, index, feature)
     },
 
-    getInputValue(name, value, index) {
+    getInputValue(name, value, index, feature) {
       this.$emit('input', value)
-      this.$emit('customFunction', name, value, index)
+      this.$emit('customFunction', name, value, index, feature)
 
       // function
-      this.regexAction(name, value, index)
+      this.regex && this.regexAction(name, value, index, feature)
     },
 
     // RegeEx action

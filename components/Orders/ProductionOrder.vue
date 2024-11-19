@@ -46,6 +46,7 @@
             dwidth="200"
             :name="element?.subName"
             :defvalue="''"
+            :durl="element?.api"
             :options-data="selectData?.[element.subName]"
             :placeholder="element?.name"
             @customFunction="getInputAndLookUpValueAction"
@@ -128,7 +129,11 @@
             type="success"
             @click="$router.push('/prepareSewProductionOrderItem.htm')"
           />
-          <generic-button name="Calculation" type="primary" />
+          <generic-button
+            name="Calculation"
+            type="primary"
+            @click="$router.push('/prepareCalculateProductionOrder.htm')"
+          />
         </div>
         <div class="p-2">
           <div class="flex items-center justify-between mb-1">
@@ -148,8 +153,6 @@
             </div>
             <div class="flex items-center gap-2">
               <GenericInput
-                width="200"
-                type="text"
                 name="searchInput"
                 placeholder="Search..."
                 @enter="getTableRequest"
@@ -174,8 +177,12 @@
             :tableheadlength="tableHeadLength"
             :istherebody="isThereBody"
             open-url="prepareProductionOrderItem"
-            open-url-two="prepareSewProductionOrderItem"
-            btn-name="Open Sew"
+            :custom-btn="{
+              name: 'Open Sew',
+              type: 'success',
+              icon: 'edit',
+              url: 'prepareSewProductionOrderItem',
+            }"
             height="600"
           />
         </div>
@@ -210,7 +217,6 @@ export default {
       isOpenTable: true,
       isCloseTable: true,
       topFilterData: [],
-      tableData: [],
       tableHead: {},
       tableBody: [],
       tableHeadLength: null,
@@ -227,7 +233,7 @@ export default {
   // CREATED
   created() {
     this.allSelectAndInputValues.dateFrom = new Date(
-      new Date().setMonth(new Date().getMonth() - 1)
+      new Date().setMonth(new Date().getMonth() - 2)
     )
       .toISOString()
       .split('.')[0]
@@ -271,25 +277,26 @@ export default {
     getTableRequest() {
       // request body
       const body = {
-        current_page: 1,
-        page_size: this.pageSize_value,
+        pagingForm: {
+          pageSize: this.pageSize_value,
+          currentPage: 1,
+        },
         searchForm: {
           keyword: this.allSelectAndInputValues?.searchInput || '',
         },
         dateFrom: this.allSelectAndInputValues?.dateFrom
-          ? new Date(this.allSelectAndInputValues?.dateFrom)
-              .toLocaleString('en-GB')
-              .split(',')
-              .join('')
+          ? this.$formatDate(this.allSelectAndInputValues?.dateFrom)
           : '',
         dateTo: this.allSelectAndInputValues?.dateTo
-          ? new Date(this.allSelectAndInputValues?.dateTo)
-              .toLocaleString('en-GB')
-              .split(',')
-              .join('')
+          ? this.$formatDate(this.allSelectAndInputValues?.dateTo)
           : '',
-        branchCompanyId: this.allSelectAndInputValues?.branchCompanyId ?? '',
-        statusId: this.allSelectAndInputValues?.statusId ?? '',
+        confirm: this.allSelectAndInputValues?.confirm ?? '',
+        clientCompanyId: this.allSelectAndInputValues?.clientCompanyId ?? '',
+        colorVariantId: this.allSelectAndInputValues?.colorVariantId ?? '',
+        sysUserId: this.allSelectAndInputValues?.userId ?? '',
+        productionOrderLookupStatus:
+          this.allSelectAndInputValues?.reportId ?? '',
+        planningTypeId: this.allSelectAndInputValues?.planningTypeId ?? '',
       }
       // request body
       this.isLoading = !this.isLoading
@@ -310,11 +317,9 @@ export default {
               objectDataListType,
             },
           }) => {
-            this.tableBody = []
             this.tableHead = rightMap
             this.leftMap = leftMap
             this.actionUrl = actionUrl
-            this.tableData = productionListMap
             this.selectData.userId = userList
             this.selectData.reportId = reportItems
             this.selectData.confirmId = confirmItem
@@ -322,7 +327,7 @@ export default {
             this.selectData.clientId = clientList
             this.selectData.objectDataListTypeId = objectDataListType
             // function
-            this.getTableBody()
+            this.getTableBody(productionListMap)
             this.isLoading = !this.isLoading
           }
         )
@@ -334,11 +339,12 @@ export default {
     },
 
     // Generic Table action Start
-    getTableBody() {
-      for (const obj of this.tableData) {
+    getTableBody(bodyData) {
+      this.tableBody = []
+      for (const obj of bodyData) {
         const newObj = {}
         for (const key in this.tableHead) {
-          const keyCode = this.tableHead[key]?.code.toLowerCase()
+          const keyCode = this.tableHead[key]?.code?.toLowerCase()
           if (keyCode in obj) {
             if (typeof obj[keyCode] === 'object')
               newObj[keyCode] = obj[keyCode]?.value
@@ -369,17 +375,19 @@ export default {
         },
         {
           name: 'Order status confirmed',
-          subName: 'confirmId',
+          subName: 'confirm',
           type: 'select',
         },
         {
-          name: 'Select an Option',
-          subName: 'clientId',
+          name: 'Company',
+          subName: 'clientCompanyId',
+          api: 'findAllClientByProductionOrder',
           type: 'select',
         },
         {
           name: 'Color Variant',
           subName: 'colorVariantId',
+          api: 'findAllColorVariant',
           type: 'select',
         },
         {
@@ -394,7 +402,8 @@ export default {
         },
         {
           name: 'Type',
-          subName: 'objectDataListTypeId',
+          subName: 'planningTypeId',
+          api: 'findAllPlanningType',
           type: 'select',
         },
       ]

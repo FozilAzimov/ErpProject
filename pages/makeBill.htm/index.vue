@@ -1,12 +1,12 @@
 <template>
-  <make-bill-page />
+  <make-bill />
 </template>
 
 <script>
-import MakeBillPage from '@components/Invoices/MakeBillPage.vue'
+import MakeBill from '@components/Invoices/MakeBill.vue'
 export default {
   components: {
-    MakeBillPage,
+    MakeBill,
   },
 }
 </script>

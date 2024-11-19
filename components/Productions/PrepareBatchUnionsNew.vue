@@ -85,8 +85,6 @@
             pb="3"
             bggradient="linear-gradient(to right, rgba(70,94,140,0.8),rgb(34,39,76))"
             textsize="13"
-            :url="img.goBack"
-            :istherepicture="true"
             @click="goBackAction"
           />
           <table class="w-full text-[13px]">
