@@ -114,6 +114,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    isLookUpObj: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   // DATA
@@ -191,6 +195,19 @@ export default {
           this.order,
           this.resultType,
           name
+        )
+      } else if (this.isLookUpObj && this.options?.length) {
+        const resObj = this.options.find(({ id }) => value === id)
+        console.log(resObj, 'hayyyy')
+
+        // Emit action
+        this.$emit(
+          'customFunction',
+          this.name,
+          value,
+          this.order,
+          this.resultType,
+          resObj
         )
       } else {
         // Emit action

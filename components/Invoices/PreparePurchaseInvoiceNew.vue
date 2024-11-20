@@ -192,7 +192,7 @@
             <GenericButton
               v-if="pageID"
               name="Discard"
-              @click="discardSewModalOperationAction('top_table')"
+              @click="discardAction('top_table')"
             />
           </span>
           <GenericButton
@@ -200,7 +200,7 @@
             name="Edit"
             type="success"
             icon-name-attribute="edit"
-            @click="editSewModalOperationAction('top_table')"
+            @click="editAction('top_table')"
           />
           <GenericButton
             v-if="pageID"
@@ -260,7 +260,7 @@
             <GenericButton
               v-if="pageID"
               name="Discard"
-              @click="discardSewModalOperationAction('sub_table')"
+              @click="discardAction('sub_table')"
             />
           </span>
           <GenericButton
@@ -274,14 +274,15 @@
             name="Edit"
             type="success"
             icon-name-attribute="edit"
-            @click="editSewModalOperationAction('sub_table')"
+            @click="editAction('sub_table')"
           />
         </div>
         <GenericPrepareTablePage
           ref="subCustomTableRef"
-          :addmodalorrow="false"
-          :tablehead="getFilterSubTableHeadData"
-          :tableheadlength="getFilterSubTableHeadData?.length"
+          tab-name="sub_table"
+          :addmodalorrow="openPopup"
+          :tablehead="subAndSubExtraHeadData"
+          :tableheadlength="subAndSubExtraHeadData?.length"
           :response-data="subBodyData"
           :ui-show-hide="subUiShowHide"
           :is-edit="subIsEdit"
@@ -289,6 +290,56 @@
           delete-url-row=""
           class="bg-[rgba(255,255,255,0.5)] mt-1"
           @rowValues="getSubRowElements"
+          @requiredAction="getDisabledValue"
+        />
+      </div>
+      <!-- --END-- Sub Custom Table -->
+
+      <!-- ========================================================================================================== -->
+
+      <!-- --START-- Sub Custom Table -->
+      <div v-if="pageID" class="m-1">
+        <span class="text-[14px]"
+          >Extra Payment Details.
+          <strong v-if="pageID" class="text-[14px] text-[rgb(156,0,78)]"
+            >Parent ID = {{ pageID }}</strong
+          ></span
+        >
+        <div class="flex gap-1 flex-wrap">
+          <span v-if="subExtraHideButton" class="flex gap-1 flex-wrap">
+            <GenericButton
+              name="Pay"
+              type="primary"
+              :disabled="subExtraSaveBtnDisabled"
+              @click="saveAction('sub_extra_table')"
+            />
+            <GenericButton
+              v-if="pageID"
+              name="Discard"
+              @click="discardAction('sub_extra_table')"
+            />
+          </span>
+          <GenericButton
+            v-else
+            name="Edit"
+            type="success"
+            icon-name-attribute="edit"
+            @click="editAction('sub_extra_table')"
+          />
+        </div>
+        <GenericPrepareTablePage
+          ref="subExtraCustomTableRef"
+          tab-name="sub_extra_table"
+          :addmodalorrow="openPopup"
+          :tablehead="subAndSubExtraHeadData"
+          :tableheadlength="subAndSubExtraHeadData?.length"
+          :response-data="subExtraBodyData"
+          :ui-show-hide="subExtraUiShowHide"
+          :is-edit="subExtraIsEdit"
+          :height="450"
+          delete-url-row=""
+          class="bg-[rgba(255,255,255,0.5)] mt-1"
+          @rowValues="getSubExtraRowElements"
           @requiredAction="getDisabledValue"
         />
       </div>
@@ -343,7 +394,7 @@ export default {
       hideButton: null,
       saleToPerson: null,
       // sub Table uchun
-      subHeadData: [],
+      subAndSubExtraHeadData: [],
       subBodyData: [],
       subEditData: {},
       subIsEdit: null,
@@ -352,15 +403,16 @@ export default {
       subSaveBtnDisabled: false,
       isSubBodyDataLength: false,
       // sub Table uchun
+      // sub Table uchun
+      subExtraBodyData: [],
+      subExtraEditData: {},
+      subExtraIsEdit: null,
+      subExtraHideButton: null,
+      subExtraUiShowHide: false,
+      subExtraSaveBtnDisabled: false,
+      isSubExtraBodyDataLength: false,
+      // sub Table uchun
     }
-  },
-
-  // COMPUTED
-  computed: {
-    // sub table head data filtered
-    getFilterSubTableHeadData() {
-      return this.subHeadData?.filter((obj) => obj?.showUI && obj)
-    },
   },
 
   // CREATED
@@ -376,6 +428,11 @@ export default {
     this.subIsEdit = !!this.pageID
     this.subHideButton = !this.pageID
     this.subUiShowHide = !!this.pageID
+    // sub table uchun
+    // sub table uchun
+    this.subExtraIsEdit = !!this.pageID
+    this.subExtraHideButton = !this.pageID
+    this.subExtraUiShowHide = !!this.pageID
     // sub table uchun
   },
 
@@ -543,11 +600,15 @@ export default {
             this.bodyData = paramsObject?.invoiceItems
             this.editData = paramsObject
             this.allSelectAndInputValue = paramsObject
-            this.subHeadData = transactions
-            this.subBodyData = paramsObject?.transactions
-            paramsObject?.transactions?.length
+            this.subAndSubExtraHeadData = transactions
+            this.subBodyData = paramsObject?.transactionsList
+            paramsObject?.transactionsList?.length
               ? (this.isSubBodyDataLength = true)
               : (this.isSubBodyDataLength = false)
+            this.subExtraBodyData = paramsObject?.transactionsExtraList
+            paramsObject?.transactionsExtraList?.length
+              ? (this.isSubExtraBodyDataLength = true)
+              : (this.isSubExtraBodyDataLength = false)
             this.isLoading = !this.isLoading
           }
         )
@@ -559,7 +620,7 @@ export default {
     },
 
     // edit sewModelOperation
-    editSewModalOperationAction(propName) {
+    editAction(propName) {
       if (propName === 'top_table') {
         this.hideButton = !this.hideButton
         // GenericTablePage da ishlab beruvchi function
@@ -570,11 +631,16 @@ export default {
         // GenericTablePage da ishlab beruvchi function
         this.$refs.subCustomTableRef.getEditRowAction(this.pageID)
         this.subUiShowHide = false
+      } else if (propName === 'sub_extra_table') {
+        this.subExtraHideButton = !this.subExtraHideButton
+        // GenericTablePage da ishlab beruvchi function
+        this.$refs.subExtraCustomTableRef.getEditRowAction(this.pageID)
+        this.subExtraUiShowHide = false
       }
     },
 
     // discard sewModelOperation
-    discardSewModalOperationAction(propName) {
+    discardAction(propName) {
       if (propName === 'top_table') {
         // GenericTablePage da ishlab beruvchi function
         this.$refs.customTableRef.discardArrayFiltered()
@@ -587,6 +653,12 @@ export default {
         this.subBodyData = this.subBodyData.filter((obj) => obj?.id)
         this.subHideButton = !this.subHideButton
         this.subUiShowHide = true
+      } else if (propName === 'sub_extra_table') {
+        // GenericTablePage da ishlab beruvchi function
+        this.$refs.subExtraCustomTableRef.discardArrayFiltered()
+        this.subExtraBodyData = this.subExtraBodyData.filter((obj) => obj?.id)
+        this.subExtraHideButton = !this.subExtraHideButton
+        this.subExtraUiShowHide = true
       }
     },
 
@@ -599,7 +671,7 @@ export default {
         })
         .then(() => {
           // function
-          this.getTableRequest(this.pageID)
+          this.getTableRequest(this.pageID) // function
           this.isLoading = !this.isLoading
         })
         .catch((error) => {
@@ -616,6 +688,7 @@ export default {
         if (obj?.id) {
           obj = { ...obj, invoice: { id: this.pageID } }
         }
+
         // bu tekshiruv vaqtincha bo'lishi mumkin | tavsiya etilmaydi
         for (const key in obj) {
           if (typeof obj[key] === 'object' && !obj[key]?.id) {
@@ -631,7 +704,9 @@ export default {
     // Save button'ni disabled qilish
     getDisabledValue(disabledVal, tabName) {
       if (tabName === 'invoiceItemTable') this.saveBtnDisabled = disabledVal
-      else this.subSaveBtnDisabled = disabledVal
+      else if (tabName === 'sub_table') this.subSaveBtnDisabled = disabledVal
+      else if (tabName === 'sub_extra_table')
+        this.subExtraSaveBtnDisabled = disabledVal
     },
 
     // EMIT action
@@ -822,6 +897,38 @@ export default {
         })
     },
 
+    // EMIT action SUB_EXTRA_table
+    getSubExtraRowElements(arr, hideBtn) {
+      // function
+      this.subExtraBodyData = this.staticSetDataAction(arr)
+
+      // Start Request body
+      const body = {}
+      body.id = this.pageID
+      body.transactionsExtraList = this.subExtraBodyData
+      // End Request body
+
+      // this.isLoading = !this.isLoading
+      // this.$axios
+      //   .post(`/invoices/extraPayUnPay`, body)
+      //   .then(({ data }) => {
+      //     this.subExtraEditData = data
+      //     this.subExtraBodyData = data?.orderItems
+      //     this.subExtraUiShowHide = true
+      //     this.subExtraHideButton = !hideBtn
+      //     // function
+      //     this.getTableRequest(this.pageID)
+      //     this.isLoading = !this.isLoading
+      //     this.$notification(`Ma'lumot saqlandi!`, 'Success', 'success')
+      //   })
+      //   .catch((error) => {
+      //     this.isLoading = !this.isLoading
+      //     // eslint-disable-next-line no-console
+      //     console.log(error)
+      //     this.$notification(`Ma'lumot saqlanmadi!`, 'Error', 'error')
+      //   })
+    },
+
     // Save btn action
     saveAction(propName) {
       // GenericTablePage da ishlab beruvchi function
@@ -829,6 +936,8 @@ export default {
         this.$refs.customTableRef.getSaveRowAction()
       } else if (propName === 'sub_table') {
         this.$refs.subCustomTableRef.getSaveRowAction()
+      } else if (propName === 'sub_extra_table') {
+        this.$refs.subExtraCustomTableRef.getSaveRowAction()
       }
     },
 

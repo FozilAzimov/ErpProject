@@ -65,13 +65,13 @@
               №
             </th>
             <th
-              v-for="(headName, key) in filteredTableHeadData"
+              v-for="(obj, key) in filteredTableHeadData"
               :key="key"
               class="text-[13px] font-semibold border-[1px] border-solid border-[rgba(119,136,153,0.3)] p-4 cursor-pointer whitespace-nowrap"
-              :class="headName.width ? `w-[${headName.width}px]` : ''"
+              :class="obj.width ? `w-[${obj.width}px]` : ''"
             >
-              {{ headName.headerText }}
-              <!-- <pre>{{ headName }}</pre> -->
+              {{ obj.headerText }}
+              <!-- <pre>{{ obj }}</pre> -->
             </th>
             <th
               v-if="!showHideRow && !isCanAdd"
@@ -474,7 +474,7 @@ export default {
     ...mapGetters('translate', ['GET_CORE_STRING']),
     // Filter Head data
     filteredTableHeadData() {
-      return this.tablehead.filter((headName) => headName.showUI)
+      return this.tablehead.filter((obj) => obj?.showUI)
     },
     // Required Array
     requiredArr() {
@@ -815,10 +815,11 @@ export default {
             obj?.entryRef &&
             obj?.planningProduct?.id &&
             obj?.warehouse
-          )
+          ) {
             newObj.entryRef = { id: obj?.entryRef } // entryRef'ni static set qilindi
-          newObj.planningProduct = obj.planningProduct // planningProduct'ni static set qilindi
-          newObj.warehouse = { id: obj?.warehouse } // warehouse'ni static set qilindi
+            newObj.planningProduct = obj.planningProduct // planningProduct'ni static set qilindi
+            newObj.warehouse = { id: obj?.warehouse } // warehouse'ni static set qilindi
+          }
         })
         return newObj
       })
@@ -835,7 +836,6 @@ export default {
         this.filteredTableHeadData,
         this.tabName
       ) // function
-      // Total row ko'rinishini xal qiladi
     },
 
     // Edit button click qilganda ishlaydi
@@ -854,8 +854,8 @@ export default {
     totalAction() {
       let total = 0
       const sumColumnArr = []
-      this.filteredTableHeadData.forEach((headName) => {
-        headName.sumColumn && sumColumnArr.push(headName.name)
+      this.filteredTableHeadData.forEach((obj) => {
+        obj.sumColumn && sumColumnArr.push(obj.name)
       })
       sumColumnArr.forEach((name) => {
         this.sortedTableList.forEach((obj) => {

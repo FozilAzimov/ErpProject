@@ -44,6 +44,8 @@
       <sew-created-table-body-edit
         v-else
         :order-list="tableSewCreated?.orderList"
+        :kroy-list="tableSewCreated?.kroyList"
+        @emitAction="editTableEmitAction"
       />
     </div>
   </div>
@@ -145,28 +147,28 @@ export default {
       this.sewCreatedTaleBodyShowAndHide = showAndHide
     },
 
+    // Edit Table Emit Action
+    editTableEmitAction(prop) {
+      prop && this.pageID && this.findNewUISewingOrderAction(this.pageID) // function
+    },
+
     // Message box action
-    getEmitProp(propMessage, id) {
+    getEmitProp(propMessage, id, index, type) {
       this.isLoading = !this.isLoading
-      if (propMessage === 'confirm') {
+      if (propMessage === 'confirm' && type === 'changePrice') {
         this.$axios
-          .delete(`/invoices/prepareDeleteInvoiceUrl`, {
-            data: {
-              id,
-            },
-          })
+          .put(`/sewModel/changePriceInModelUrl`, { id })
           .then(() => {
-            this.$notification('Successfully Deleted', 'Deleted', 'success')
-            this.$router.push('/inputReturn.htm')
+            this.getTableRequest(this.pageID) // function
+            this.findNewUISewingOrderAction(this.pageID) // function
             this.isLoading = !this.isLoading
           })
           .catch((error) => {
-            this.$notification('Error Deleted', 'Not Deleted', 'error')
             this.isLoading = !this.isLoading
             // eslint-disable-next-line no-console
             console.log(error)
           })
-      } else this.isLoading = !this.isLoading
+      }
     },
 
     topAllBtnAction(type) {
@@ -179,6 +181,9 @@ export default {
       // else if (type === 'sewBarcode') console.log(type)
       // else if (type === 'kroy') console.log(type)
       // else if (type === 'openKnitting') console.log(type)
+      else if (type === 'changePrice') {
+        this.$refs.messageBoxRef.open(this.pageID, '', type)
+      }
     },
 
     // Save Action
@@ -384,6 +389,12 @@ export default {
           name: 'Open Knitting',
           type: 'primary',
           clickType: 'openKnitting',
+          showAndHide: !!this.pageID,
+        },
+        {
+          name: 'Change Price',
+          type: 'danger',
+          clickType: 'changePrice',
           showAndHide: !!this.pageID,
         },
       ]

@@ -15,7 +15,7 @@
               :class="`w-[${headName?.width}px]`"
             >
               {{ GET_CORE_STRING?.[headName.name] || headName.name }}
-              <!-- <pre>{{ headName }}</pre> -->
+              <pre>{{ headName }}</pre>
             </th>
             <th
               v-if="showHideActionCol"
