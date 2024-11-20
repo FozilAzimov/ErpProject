@@ -38,14 +38,7 @@
             <span class="text-[12px] font-light">{{ element?.name }}</span>
             <generic-input-date-page
               :width="element?.width"
-              pl="10"
-              pr="10"
-              pt="1"
-              pb="1"
-              textsize="13"
-              type="datetime-local"
               :value="`${allFilterElementValues?.[element?.subName]}`"
-              valuecolor="rgba(0,0,0,0.7)"
               :name="element.subName"
               @customFunction="allSelectAndInputAction"
             />
@@ -111,15 +104,7 @@
               <span class="text-[12px] font-light">{{ element?.name }}</span>
               <generic-input-date-page
                 :width="element?.width"
-                height="28"
-                pl="10"
-                pr="10"
-                pt="1"
-                pb="1"
-                textsize="13"
-                type="datetime-local"
                 :value="`${allFilterElementValues?.[element?.subName]}`"
-                valuecolor="rgba(0,0,0,0.7)"
                 :name="element.subName"
                 @customFunction="allSelectAndInputAction"
               />

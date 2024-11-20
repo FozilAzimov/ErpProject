@@ -474,7 +474,13 @@ export default {
     ...mapGetters('translate', ['GET_CORE_STRING']),
     // Filter Head data
     filteredTableHeadData() {
-      return this.tablehead.filter((obj) => obj?.showUI)
+      return this.tablehead.filter(
+        (obj) =>
+          obj?.showUI ||
+          ((this.tabName === 'sub_table' ||
+            this.tabName === 'sub_extra_table') &&
+            obj?.name === 'id')
+      )
     },
     // Required Array
     requiredArr() {
@@ -797,15 +803,22 @@ export default {
                 ? obj.invoiceDate
                 : this.$formatDate(obj?.invoiceDate, 'yyyy-mm-dd hh:mm:ss')
           }
-          // Invoice Date formatted
+          // Update Date formatted
           if (obj?.updatedDate) {
             newObj.updatedDate =
               isNaN(obj.updatedDate) && obj.updatedDate?.includes('-')
                 ? obj.updatedDate
                 : this.$formatDate(obj?.updatedDate, 'yyyy-mm-dd hh:mm:ss')
           }
-          // Invoice Date formatted
+          // Date formatted
+          if (obj?.date) {
+            newObj.date =
+              isNaN(obj.date) && obj.date?.includes('-')
+                ? obj.date
+                : this.$formatDate(obj?.date, 'yyyy-mm-dd hh:mm:ss')
+          }
 
+          // static set values --------------------------
           if (tabName === 'iplikLotStavkaReserveTable' && obj?.entryRef)
             newObj.entryRef = { id: obj?.entryRef } // entryRef'ni static set qilindi
           if (tabName === 'salesReturnItemTable' && obj?.returnRef)
@@ -820,6 +833,12 @@ export default {
             newObj.planningProduct = obj.planningProduct // planningProduct'ni static set qilindi
             newObj.warehouse = { id: obj?.warehouse } // warehouse'ni static set qilindi
           }
+          if (
+            (tabName === 'sub_table' || tabName === 'sub_extra_table') &&
+            obj?.companyRefId
+          )
+            newObj.companyRefId = obj?.companyRefId // companyRefId'ni static set qilindi
+          // static set values --------------------------
         })
         return newObj
       })

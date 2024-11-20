@@ -24,14 +24,6 @@
           id="from"
           v-model="formData.from"
           width="165"
-          height="30"
-          pl="10"
-          pr="10"
-          pt="1"
-          pb="1"
-          textsize="13"
-          type="datetime-local"
-          valuecolor="rgba(0,0,0,0.7)"
           @change="getInputDateValues"
         />
       </div>
@@ -41,14 +33,6 @@
           id="to"
           v-model="formData.to"
           width="165"
-          height="30"
-          pl="10"
-          pr="10"
-          pt="2"
-          pb="2"
-          textsize="13"
-          type="datetime-local"
-          valuecolor="rgba(0,0,0,0.7)"
           @change="getInputDateValues"
         />
       </div>

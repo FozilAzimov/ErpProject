@@ -76,13 +76,6 @@
                       : ''
                   "
                   :width="obj?.width"
-                  pl="10"
-                  pr="10"
-                  pt="1"
-                  pb="1"
-                  textsize="13"
-                  type="datetime-local"
-                  valuecolor="rgba(0,0,0,0.7)"
                   :name="obj.subName"
                   :required="
                     !obj?.required ||
@@ -908,25 +901,25 @@ export default {
       body.transactionsExtraList = this.subExtraBodyData
       // End Request body
 
-      // this.isLoading = !this.isLoading
-      // this.$axios
-      //   .post(`/invoices/extraPayUnPay`, body)
-      //   .then(({ data }) => {
-      //     this.subExtraEditData = data
-      //     this.subExtraBodyData = data?.orderItems
-      //     this.subExtraUiShowHide = true
-      //     this.subExtraHideButton = !hideBtn
-      //     // function
-      //     this.getTableRequest(this.pageID)
-      //     this.isLoading = !this.isLoading
-      //     this.$notification(`Ma'lumot saqlandi!`, 'Success', 'success')
-      //   })
-      //   .catch((error) => {
-      //     this.isLoading = !this.isLoading
-      //     // eslint-disable-next-line no-console
-      //     console.log(error)
-      //     this.$notification(`Ma'lumot saqlanmadi!`, 'Error', 'error')
-      //   })
+      this.isLoading = !this.isLoading
+      this.$axios
+        .post(`/invoices/extraPayUnPay`, body)
+        .then(({ data }) => {
+          this.subExtraEditData = data
+          this.subExtraBodyData = data?.orderItems
+          this.subExtraUiShowHide = true
+          this.subExtraHideButton = !hideBtn
+          // function
+          this.getTableRequest(this.pageID)
+          this.isLoading = !this.isLoading
+          this.$notification(`Ma'lumot saqlandi!`, 'Success', 'success')
+        })
+        .catch((error) => {
+          this.isLoading = !this.isLoading
+          // eslint-disable-next-line no-console
+          console.log(error)
+          this.$notification(`Ma'lumot saqlanmadi!`, 'Error', 'error')
+        })
     },
 
     // Save btn action

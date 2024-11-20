@@ -84,15 +84,8 @@
               <generic-input-date-page
                 v-if="element.type === 'date'"
                 :width="element.width"
-                height="23"
-                pl="8"
-                pr="8"
-                pt="1"
-                pb="1"
-                textsize="13"
                 type="datetime-local"
                 :value="new Date().toISOString().split('.')[0]"
-                valuecolor="rgba(0,0,0,0.7)"
                 :name="element.subName"
                 @customFunction="getInputDateValueAction"
               />

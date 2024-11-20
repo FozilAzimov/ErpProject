@@ -23,15 +23,6 @@
                 <GenericInputDatePage
                   id="from"
                   :value="itemSearchList[item?.name]"
-                  width="165"
-                  height="30"
-                  pl="10"
-                  pr="10"
-                  pt="1"
-                  pb="1"
-                  textsize="13"
-                  type="datetime-local"
-                  valuecolor="rgba(0,0,0,0.7)"
                   @change="getSelectValue"
                 />
               </template>

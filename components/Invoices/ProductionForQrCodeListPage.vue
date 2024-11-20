@@ -186,14 +186,6 @@
             </span>
             <generic-input-date-page
               width="200"
-              height="28"
-              pl="10"
-              pr="10"
-              pt="1"
-              pb="1"
-              textsize="13"
-              type="datetime-local"
-              valuecolor="rgba(0,0,0,0.7)"
               :name="element.payloadName"
               :value="new Date().toISOString().split('.')[0]"
               @customFunction="getDateValue"

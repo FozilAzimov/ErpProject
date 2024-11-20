@@ -22,13 +22,6 @@
           <generic-input-date-page
             :value="new Date().toISOString()?.split('.')?.[0]"
             width="185"
-            pl="10"
-            pr="10"
-            pt="1"
-            pb="1"
-            textsize="13"
-            type="datetime-local"
-            valuecolor="rgba(0,0,0,0.7)"
             :name="element.subName"
             @customFunction="getInputAndLookUpValueAction"
           />

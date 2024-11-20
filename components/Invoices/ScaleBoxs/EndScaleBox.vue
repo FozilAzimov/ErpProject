@@ -34,13 +34,6 @@
           v-else-if="element.type === 'date'"
           :value="new Date().toISOString().split('.')[0]"
           width="210"
-          pl="8"
-          pr="8"
-          pt="2"
-          pb="2"
-          textsize="13"
-          type="datetime-local"
-          valuecolor="rgba(0,0,0,0.7)"
           :name="element.payloadName"
           @customFunction="getDateValue"
         />

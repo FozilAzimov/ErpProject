@@ -106,13 +106,6 @@
               <generic-input-date-page
                 v-else-if="element.type === 'date'"
                 width="300"
-                height="28"
-                pl="10"
-                pr="10"
-                pt="1"
-                pb="1"
-                textsize="13"
-                type="datetime-local"
                 :value="
                   viewEditData?.[element.subName]
                     ? new Date(viewEditData?.[element.subName])
@@ -120,7 +113,6 @@
                         .split('.')[0]
                     : ''
                 "
-                valuecolor="rgba(0,0,0,0.7)"
                 :name="element.name"
                 @customFunction="getInputAndLookUpValueAction"
               />

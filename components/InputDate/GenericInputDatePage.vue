@@ -30,10 +30,6 @@ export default {
       type: String,
       default: '',
     },
-    height: {
-      type: String,
-      default: '',
-    },
     name: {
       type: String,
       default: '',

@@ -44,13 +44,7 @@
               <generic-input-date-page
                 :width="element?.width"
                 :widthtype="element?.widthtype"
-                height="28"
-                pl="10"
-                pr="10"
-                textsize="12"
                 :name="element?.subName"
-                type="datetime-local"
-                valuecolor="rgba(0,0,0,0.7)"
               />
             </template>
             <template v-else-if="element?.type === 'select'">
@@ -107,13 +101,7 @@
             <template v-if="element?.type === 'date'">
               <generic-input-date-page
                 :width="element?.width"
-                height="28"
-                pl="10"
-                pr="10"
-                textsize="12"
                 :name="element?.subName"
-                type="datetime-local"
-                valuecolor="rgba(0,0,0,0.7)"
               />
             </template>
             <template v-else-if="element?.type === 'select'">
