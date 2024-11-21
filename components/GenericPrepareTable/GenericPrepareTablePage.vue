@@ -81,7 +81,7 @@
             </th>
           </tr>
           <!-- Filter -->
-          <tr class="bg-[#fff]">
+          <tr v-if="showHideRow || isCanAdd" class="bg-[#fff]">
             <th
               class="border-[1px] text-[12px] p-[1px_3px] text-center font-normal"
             >
@@ -681,7 +681,7 @@ export default {
     // Row delete Request
     requestAction(id, index) {
       this.$axios
-        .delete(`/${this.deleteUrlRow}`, { data: { deleteItemId: id } })
+        .post(`/${this.deleteUrlRow}`, { deleteItemId: id })
         .then((res) => {
           this.$notification('Successfully Deleted', 'Deleted', 'success')
           this.tableBody = this.tableBody.filter((row, inx) => inx !== index)
@@ -767,6 +767,7 @@ export default {
             (!param ||
               param === 'noFormat' ||
               param === 'objectId' ||
+              param === 'float' ||
               param === 'date') &&
             obj?.[name] !== '' &&
             obj?.[name] !== ' '
@@ -820,10 +821,16 @@ export default {
 
           // static set values --------------------------
           if (tabName === 'iplikLotStavkaReserveTable' && obj?.entryRef)
-            newObj.entryRef = { id: obj?.entryRef } // entryRef'ni static set qilindi
-          if (tabName === 'salesReturnItemTable' && obj?.returnRef)
-            newObj.returnRef = { id: obj?.returnRef } // returnRef'ni static set qilindi
-          if (
+            newObj.entryRef = {
+              id: obj?.entryRef,
+            }
+          // entryRef'ni static set qilindi
+          else if (tabName === 'salesReturnItemTable' && obj?.returnRef)
+            newObj.returnRef = {
+              id: obj?.returnRef,
+            }
+          // returnRef'ni static set qilindi
+          else if (
             tabName === 'expenseInvoiceItemTable' &&
             obj?.entryRef &&
             obj?.planningProduct?.id &&
@@ -832,12 +839,17 @@ export default {
             newObj.entryRef = { id: obj?.entryRef } // entryRef'ni static set qilindi
             newObj.planningProduct = obj.planningProduct // planningProduct'ni static set qilindi
             newObj.warehouse = { id: obj?.warehouse } // warehouse'ni static set qilindi
-          }
-          if (
+          } else if (
             (tabName === 'sub_table' || tabName === 'sub_extra_table') &&
             obj?.companyRefId
           )
-            newObj.companyRefId = obj?.companyRefId // companyRefId'ni static set qilindi
+            // companyRefId'ni static set qilindi
+            newObj.companyRefId = obj?.companyRefId
+          else if (tabName === 'productionOrderItemTable' && obj?.planning) {
+            // planning va active'ni static set qilindi
+            newObj.planning = { id: obj.planning }
+            newObj.active = obj?.active ?? false
+          }
           // static set values --------------------------
         })
         return newObj
