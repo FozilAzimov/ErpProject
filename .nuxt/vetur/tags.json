@@ -8,6 +8,30 @@
   "BranchesPage": {
     "description": "Auto imported from components/Branches/BranchesPage.vue"
   },
+  "CashboxsList": {
+    "description": "Auto imported from components/Cashboxs/CashboxsList.vue"
+  },
+  "CurrenciesList": {
+    "description": "Auto imported from components/Cashboxs/CurrenciesList.vue"
+  },
+  "PrepareCashbox": {
+    "description": "Auto imported from components/Cashboxs/PrepareCashbox.vue"
+  },
+  "PrepareCurrency": {
+    "description": "Auto imported from components/Cashboxs/PrepareCurrency.vue"
+  },
+  "PrepareTransactionCharacter": {
+    "description": "Auto imported from components/Cashboxs/PrepareTransactionCharacter.vue"
+  },
+  "TransactionCharacters": {
+    "description": "Auto imported from components/Cashboxs/TransactionCharacters.vue"
+  },
+  "BtnGen": {
+    "description": "Auto imported from components/Button/BtnGen.vue"
+  },
+  "GenericButton": {
+    "description": "Auto imported from components/Button/GenericButton.vue"
+  },
   "AccountsList": {
     "description": "Auto imported from components/Banks/AccountsList.vue"
   },
@@ -31,36 +55,6 @@
   },
   "PrepareCurrenRate": {
     "description": "Auto imported from components/Banks/PrepareCurrenRate.vue"
-  },
-  "CashboxsList": {
-    "description": "Auto imported from components/Cashboxs/CashboxsList.vue"
-  },
-  "CurrenciesList": {
-    "description": "Auto imported from components/Cashboxs/CurrenciesList.vue"
-  },
-  "PrepareCashbox": {
-    "description": "Auto imported from components/Cashboxs/PrepareCashbox.vue"
-  },
-  "PrepareCurrency": {
-    "description": "Auto imported from components/Cashboxs/PrepareCurrency.vue"
-  },
-  "PrepareTransactionCharacter": {
-    "description": "Auto imported from components/Cashboxs/PrepareTransactionCharacter.vue"
-  },
-  "TransactionCharacters": {
-    "description": "Auto imported from components/Cashboxs/TransactionCharacters.vue"
-  },
-  "ColumnConfigPage": {
-    "description": "Auto imported from components/ColumnConfig/ColumnConfigPage.vue"
-  },
-  "BtnGen": {
-    "description": "Auto imported from components/Button/BtnGen.vue"
-  },
-  "GenericButton": {
-    "description": "Auto imported from components/Button/GenericButton.vue"
-  },
-  "DashboardPage": {
-    "description": "Auto imported from components/Dashboard/DashboardPage.vue"
   },
   "ClusterCamera": {
     "description": "Auto imported from components/Cluster/ClusterCamera.vue"
@@ -92,6 +86,12 @@
   "PrepareDistanceToTerminal": {
     "description": "Auto imported from components/Cluster/PrepareDistanceToTerminal.vue"
   },
+  "ColumnConfigPage": {
+    "description": "Auto imported from components/ColumnConfig/ColumnConfigPage.vue"
+  },
+  "DashboardPage": {
+    "description": "Auto imported from components/Dashboard/DashboardPage.vue"
+  },
   "EquipmentExpenses": {
     "description": "Auto imported from components/EquipmentReports/EquipmentExpenses.vue"
   },
@@ -113,11 +113,11 @@
   "PrepareEquipmentExpenses": {
     "description": "Auto imported from components/EquipmentReports/PrepareEquipmentExpenses.vue"
   },
-  "GenericInvoiceItemModalPage": {
-    "description": "Auto imported from components/GenericInvoiceItemModal/GenericInvoiceItemModalPage.vue"
-  },
   "GenericInvoiceFilteringModalPage": {
     "description": "Auto imported from components/GenericInvoiceFilteringModal/GenericInvoiceFilteringModalPage.vue"
+  },
+  "GenericInvoiceItemModalPage": {
+    "description": "Auto imported from components/GenericInvoiceItemModal/GenericInvoiceItemModalPage.vue"
   },
   "GenericPrepareTablePage": {
     "description": "Auto imported from components/GenericPrepareTable/GenericPrepareTablePage.vue"
@@ -166,9 +166,6 @@
   },
   "GenericTranslatePage": {
     "description": "Auto imported from components/GenericTranslate/GenericTranslatePage.vue"
-  },
-  "GenericInputDatePage": {
-    "description": "Auto imported from components/InputDate/GenericInputDatePage.vue"
   },
   "AttendanceSchedule": {
     "description": "Auto imported from components/HRMS/AttendanceSchedule.vue"
@@ -247,6 +244,9 @@
   },
   "TimeZones": {
     "description": "Auto imported from components/HRMS/TimeZones.vue"
+  },
+  "GenericInputDatePage": {
+    "description": "Auto imported from components/InputDate/GenericInputDatePage.vue"
   },
   "InternalInvoice": {
     "description": "Auto imported from components/InternalInvoices/InternalInvoice.vue"
@@ -1049,6 +1049,12 @@
   "WeightsList": {
     "description": "Auto imported from components/Weights/WeightsList.vue"
   },
+  "InternalCustomTable": {
+    "description": "Auto imported from components/Invoices/PurchaseAndTransferInvoicesFolder/InternalCustomTable.vue"
+  },
+  "PurchaseAndTransferInvoices": {
+    "description": "Auto imported from components/Invoices/PurchaseAndTransferInvoicesFolder/PurchaseAndTransferInvoices.vue"
+  },
   "EndScaleBox": {
     "description": "Auto imported from components/Invoices/ScaleBoxs/EndScaleBox.vue"
   },
@@ -1057,12 +1063,6 @@
   },
   "ScaleBoxGenericTable": {
     "description": "Auto imported from components/Invoices/ScaleBoxs/ScaleBoxGenericTable.vue"
-  },
-  "InternalCustomTable": {
-    "description": "Auto imported from components/Invoices/PurchaseAndTransferInvoicesFolder/InternalCustomTable.vue"
-  },
-  "PurchaseAndTransferInvoices": {
-    "description": "Auto imported from components/Invoices/PurchaseAndTransferInvoicesFolder/PurchaseAndTransferInvoices.vue"
   },
   "PrepareSewProductionOrderItemList": {
     "description": "Auto imported from components/Orders/PrepareSewProductionOrderItem/PrepareSewProductionOrderItemList.vue"
