@@ -53,7 +53,7 @@
                   :key="i"
                   :name="elem.name"
                   :type="elem.type"
-                  @click="allBtnClickAction(elem?.clickType, index)"
+                  @click="allBtnClickAction(elem?.clickType, index, row)"
                 />
               </div>
 
@@ -152,6 +152,37 @@
                 </div>
                 <!-- end Edit & Save & Cansel actions -->
               </div>
+
+              <!-- Type -->
+              <template v-else-if="subName === 'sewModel'">
+                {{ row[subName] }}
+                <div class="flex flex-col items-center gap-1 mt-2">
+                  <generic-button
+                    name="Open top cutted"
+                    type="success"
+                    @click="
+                      sizeItemSaveOrEditOrCanselOrPlanReqQtyBtnsAction(
+                        'topCutted',
+                        row[subName],
+                        subName,
+                        index
+                      )
+                    "
+                  />
+                  <generic-button
+                    name="Open bottom cutted"
+                    type="primary"
+                    @click="
+                      sizeItemSaveOrEditOrCanselOrPlanReqQtyBtnsAction(
+                        'bottomCutted',
+                        row[subName],
+                        subName,
+                        index
+                      )
+                    "
+                  />
+                </div>
+              </template>
 
               <!-- Color Variant LookUp -->
               <template v-else-if="subName === 'colorVariant'">
@@ -327,7 +358,7 @@
                 class="flex items-center gap-1 text-[13px]"
               >
                 <span class="text-red-500">{{ subName }}:</span>
-                {{ row[subName] }}
+                {{ row[subName] ?? 0 }}
               </div>
 
               <!-- All Element -->
@@ -363,7 +394,24 @@
       </table>
     </div>
     <!-- ======================================================================= -->
-    <sub-kroy-table v-if="kroyHeadData?.length" :head-data="kroyHeadData" />
+    <sub-kroy-table
+      v-if="kroyTopHeadData?.length"
+      :head-data="kroyTopHeadData"
+      table-type="kroyTop"
+      @emitAction="$emit('emitAction', true, true)"
+    />
+    <sub-kroy-table
+      v-if="kroyBottomHeadData?.length"
+      :head-data="kroyBottomHeadData"
+      table-type="kroyBottom"
+      @emitAction="$emit('emitAction', true, true)"
+    />
+    <sub-kroy-table
+      v-if="productionInvoiceHeadData?.length"
+      :head-data="productionInvoiceHeadData"
+      table-type="productionInvoice"
+      @emitAction="$emit('emitAction', true, true)"
+    />
 
     <!-- --START-- Custom Table -->
     <div v-if="isShowHide && pageID" class="m-1">
@@ -484,8 +532,11 @@ export default {
       totalRowDataObj: {},
       isTotal: false,
       // Kroy Top uchun
-      kroyHeadData: [],
-      // Kroy Top uchun
+      kroyTopHeadData: [],
+      // Kroy Bottom uchun
+      kroyBottomHeadData: [],
+      // Production Invoice uchun
+      productionInvoiceHeadData: [],
       // CutomTable uchun
       planningModelOperationColumns: [],
       planningModelOperationListJson: [],
@@ -929,68 +980,177 @@ export default {
     },
 
     // Static data set action
-    staticSetKroyDataAction(headData) {
+    staticSetKroyDataAction(type, rowObj) {
       // Set Size Item
-      headData.forEach((obj) => {
-        const newObj = { ...obj }
-        newObj.name = obj.size
-        newObj.subName = obj.size
-        newObj.type = 'number'
-        newObj.required = true
-        this.kroyHeadData.push(newObj)
-      })
+      let count = 5
+      for (const key in rowObj) {
+        const newObj = {}
+        if (key?.includes('size')) {
+          newObj.name = rowObj[key]?.productionOrderSizeName
+          newObj.subName =
+            type === 'addProductionInvoice'
+              ? `${rowObj[key]?.planId}planid${rowObj[key]?.planId}item${count}`
+              : `${rowObj[key]?.planId}item${count}`
+          newObj.type = 'number'
+          newObj.item = true
+          type === 'addKroyTop'
+            ? this.kroyTopHeadData.push(newObj)
+            : type === 'addKroyBottom'
+            ? this.kroyBottomHeadData.push(newObj)
+            : type === 'addProductionInvoice'
+            ? this.productionInvoiceHeadData.push(newObj)
+            : console.log(type)
+          count++
+        }
+      }
       // Set Size Item
 
       // Set Action Column
       const action = {
         name: 'Action',
-        subName: 'action',
-        type: 'btn',
+        type: 'btns',
+        list: [
+          {
+            subName: 'all',
+            type: 'checkbox',
+          },
+          {
+            subName: 'action',
+            type: 'btn',
+            btnType: 'danger',
+            icon: 'delete',
+            circle: true,
+          },
+        ],
       }
-      this.kroyHeadData.push(action)
+      type === 'addKroyTop'
+        ? this.kroyTopHeadData.push(action)
+        : type === 'addKroyBottom'
+        ? this.kroyBottomHeadData.push(action)
+        : type === 'addProductionInvoice'
+        ? this.productionInvoiceHeadData.push(action)
+        : console.log(type)
       // Set Action Column
     },
 
     // All Button Click Action
-    allBtnClickAction(type, index) {
-      const headData = this.kroyList?.[0]?.sizeList
+    allBtnClickAction(type, index, rowObj) {
+      console.log(rowObj)
+
       if (type === 'addKroyTop') {
         const headKroy = [
           {
             name: 'Id',
             subName: 'id',
             type: 'text',
+            id: rowObj?.number,
           },
           {
             name: '№',
-            subName: 'number',
+            subName: `${rowObj?.orderItemId}number1`,
             type: 'number',
-            required: true,
           },
           {
             name: 'Color',
-            subName: 'color',
+            subName: 'item2',
             type: 'text',
+            item2: rowObj?.color,
+            itemId2: rowObj?.colorId,
           },
           {
             name: 'Color Variant',
-            subName: 'colorVariant',
+            subName: 'item3',
             type: 'text',
+            item3: rowObj?.colorVariant,
+            itemId3: rowObj?.colorVariantId,
           },
           {
             name: 'Size',
-            subName: 'size',
+            subName: 'item4',
             type: 'text',
+            item4: 'Qty',
           },
         ]
-        this.kroyHeadData = headKroy
-        this.staticSetKroyDataAction(headData) // function
+        this.kroyTopHeadData = headKroy
+        this.staticSetKroyDataAction(type, rowObj) // function
       } else if (type === 'addKroyBottom') {
-        console.log(type, '|', index)
+        const headKroy = [
+          {
+            name: 'Id',
+            subName: 'id',
+            type: 'text',
+            id: rowObj?.number,
+          },
+          {
+            name: '№',
+            subName: `0_${rowObj?.orderItemId}item1`,
+            type: 'number',
+          },
+          {
+            name: 'Color',
+            subName: 'item2',
+            type: 'select',
+            api: 'findAllColor',
+            item2: rowObj?.color,
+            itemId2: rowObj?.colorId,
+          },
+          {
+            name: 'Color Variant',
+            subName: 'item3',
+            type: 'text',
+            item3: rowObj?.colorVariant,
+            itemId3: rowObj?.colorVariantId,
+          },
+          {
+            name: 'Size',
+            subName: 'item4',
+            type: 'text',
+            item4: 'Qty',
+          },
+        ]
+        this.kroyBottomHeadData = headKroy
+        this.staticSetKroyDataAction(type, rowObj) // function
       } else if (type === 'add') {
         console.log(type, '|', index)
       } else if (type === 'addProductionInvoice') {
-        console.log(type, '|', index)
+        const headProductionInvoice = [
+          {
+            name: 'Id',
+            subName: 'id',
+            type: 'text',
+            id: rowObj?.number,
+          },
+          {
+            name: 'Color',
+            subName: 'item1',
+            type: 'text',
+            item1: rowObj?.color,
+            itemId1: rowObj?.colorId,
+          },
+          {
+            name: 'Grade',
+            subName: 'item2',
+            type: 'select',
+            api: 'findAllGrade',
+            item2: rowObj?.grade,
+            itemId2: rowObj?.gradeId,
+          },
+          {
+            name: 'Department',
+            subName: 'item3',
+            type: 'text',
+            item3: rowObj?.department,
+            itemId3: rowObj?.departmentId,
+          },
+          {
+            name: 'Size',
+            subName: 'item4',
+            type: 'text',
+            item4: 'Qty',
+          },
+        ]
+        this.productionInvoiceHeadData = headProductionInvoice
+        this.staticSetKroyDataAction(type, rowObj) // function
       }
     },
   },

@@ -5,33 +5,6 @@
   "ActualitySystem": {
     "description": "Auto imported from components/ActualitySystemPage/ActualitySystem.vue"
   },
-  "BranchesPage": {
-    "description": "Auto imported from components/Branches/BranchesPage.vue"
-  },
-  "CashboxsList": {
-    "description": "Auto imported from components/Cashboxs/CashboxsList.vue"
-  },
-  "CurrenciesList": {
-    "description": "Auto imported from components/Cashboxs/CurrenciesList.vue"
-  },
-  "PrepareCashbox": {
-    "description": "Auto imported from components/Cashboxs/PrepareCashbox.vue"
-  },
-  "PrepareCurrency": {
-    "description": "Auto imported from components/Cashboxs/PrepareCurrency.vue"
-  },
-  "PrepareTransactionCharacter": {
-    "description": "Auto imported from components/Cashboxs/PrepareTransactionCharacter.vue"
-  },
-  "TransactionCharacters": {
-    "description": "Auto imported from components/Cashboxs/TransactionCharacters.vue"
-  },
-  "BtnGen": {
-    "description": "Auto imported from components/Button/BtnGen.vue"
-  },
-  "GenericButton": {
-    "description": "Auto imported from components/Button/GenericButton.vue"
-  },
   "AccountsList": {
     "description": "Auto imported from components/Banks/AccountsList.vue"
   },
@@ -55,6 +28,30 @@
   },
   "PrepareCurrenRate": {
     "description": "Auto imported from components/Banks/PrepareCurrenRate.vue"
+  },
+  "BtnGen": {
+    "description": "Auto imported from components/Button/BtnGen.vue"
+  },
+  "GenericButton": {
+    "description": "Auto imported from components/Button/GenericButton.vue"
+  },
+  "CashboxsList": {
+    "description": "Auto imported from components/Cashboxs/CashboxsList.vue"
+  },
+  "CurrenciesList": {
+    "description": "Auto imported from components/Cashboxs/CurrenciesList.vue"
+  },
+  "PrepareCashbox": {
+    "description": "Auto imported from components/Cashboxs/PrepareCashbox.vue"
+  },
+  "PrepareCurrency": {
+    "description": "Auto imported from components/Cashboxs/PrepareCurrency.vue"
+  },
+  "PrepareTransactionCharacter": {
+    "description": "Auto imported from components/Cashboxs/PrepareTransactionCharacter.vue"
+  },
+  "TransactionCharacters": {
+    "description": "Auto imported from components/Cashboxs/TransactionCharacters.vue"
   },
   "ClusterCamera": {
     "description": "Auto imported from components/Cluster/ClusterCamera.vue"
@@ -89,6 +86,9 @@
   "ColumnConfigPage": {
     "description": "Auto imported from components/ColumnConfig/ColumnConfigPage.vue"
   },
+  "BranchesPage": {
+    "description": "Auto imported from components/Branches/BranchesPage.vue"
+  },
   "DashboardPage": {
     "description": "Auto imported from components/Dashboard/DashboardPage.vue"
   },
@@ -113,11 +113,11 @@
   "PrepareEquipmentExpenses": {
     "description": "Auto imported from components/EquipmentReports/PrepareEquipmentExpenses.vue"
   },
-  "GenericInvoiceFilteringModalPage": {
-    "description": "Auto imported from components/GenericInvoiceFilteringModal/GenericInvoiceFilteringModalPage.vue"
-  },
   "GenericInvoiceItemModalPage": {
     "description": "Auto imported from components/GenericInvoiceItemModal/GenericInvoiceItemModalPage.vue"
+  },
+  "GenericInvoiceFilteringModalPage": {
+    "description": "Auto imported from components/GenericInvoiceFilteringModal/GenericInvoiceFilteringModalPage.vue"
   },
   "GenericPrepareTablePage": {
     "description": "Auto imported from components/GenericPrepareTable/GenericPrepareTablePage.vue"
@@ -262,6 +262,9 @@
   },
   "PrepareReceiveInvoiceNew": {
     "description": "Auto imported from components/InternalInvoices/PrepareReceiveInvoiceNew.vue"
+  },
+  "LoadingPage": {
+    "description": "Auto imported from components/Loading/LoadingPage.vue"
   },
   "BatchProductionInvoiceUi": {
     "description": "Auto imported from components/Invoices/BatchProductionInvoiceUi.vue"
@@ -433,9 +436,6 @@
   },
   "SimpleProductionInvoice": {
     "description": "Auto imported from components/Invoices/SimpleProductionInvoice.vue"
-  },
-  "LoadingPage": {
-    "description": "Auto imported from components/Loading/LoadingPage.vue"
   },
   "LoginPage": {
     "description": "Auto imported from components/Login/LoginPage.vue"

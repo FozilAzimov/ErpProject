@@ -1,25 +1,23 @@
 <template>
-  <div>
-    <el-input
-      v-model="input"
-      :type="type"
-      :placeholder="placeholder"
-      :disabled="disabled"
-      :size="size"
-      :clearable="clearable"
-      :prefix-icon="prefixIcon && `el-icon-${prefixIcon}`"
-      :suffix-icon="suffixIcon && `el-icon-${suffixIcon}`"
-      :style="{
-        width: widthtype === '%' ? `${width}%` : `${width}px`,
-        border: required ? 'none' : '1px solid red',
-        borderRadius: '5px',
-        color: valuecolor,
-      }"
-      @input="getInputValue(name, input, order, feature)"
-      @change="getTableRequest(name, input, order, feature)"
-    >
-    </el-input>
-  </div>
+  <el-input
+    v-model="input"
+    :type="type"
+    :placeholder="placeholder"
+    :disabled="disabled"
+    :size="size"
+    :clearable="clearable"
+    :prefix-icon="prefixIcon && `el-icon-${prefixIcon}`"
+    :suffix-icon="suffixIcon && `el-icon-${suffixIcon}`"
+    :style="{
+      width: widthtype === '%' ? `${width}%` : `${width}px`,
+      border: required ? 'none' : '1px solid red',
+      borderRadius: '5px',
+      color: valuecolor,
+    }"
+    @input="getInputValue(name, input, order, feature)"
+    @keyup.native.enter="onEnterPress(name, input, order, feature)"
+  >
+  </el-input>
 </template>
 
 <script>
@@ -120,7 +118,7 @@ export default {
   },
 
   methods: {
-    getTableRequest(name, value, index, feature) {
+    onEnterPress(name, value, index, feature) {
       this.$emit('enter', value)
       this.$emit('customFunction', name, value, index, feature)
     },

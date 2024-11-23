@@ -663,6 +663,7 @@
                       !$route.path.includes('internalInvoice.htm') &&
                       !$route.path.includes('viabranchreceive.htm') &&
                       !$route.path.includes('productionorder.htm') &&
+                      !$route.path.includes('personSalaries.htm') &&
                       !$route.path.includes('colorVariant.htm')
                     "
                     name="qrCode"
@@ -689,6 +690,7 @@
                       !$route.path.includes('internalInvoice.htm') &&
                       !$route.path.includes('viabranchreceive.htm') &&
                       !$route.path.includes('productionorder.htm') &&
+                      !$route.path.includes('personSalaries.htm') &&
                       !$route.path.includes('colorVariant.htm')
                     "
                     name="forDevice"

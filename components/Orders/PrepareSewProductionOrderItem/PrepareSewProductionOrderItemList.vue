@@ -148,7 +148,8 @@ export default {
     },
 
     // Edit Table Emit Action
-    editTableEmitAction(prop) {
+    editTableEmitAction(prop, prop2) {
+      prop2 && this.pageID && this.getTableRequest(this.pageID) // function
       prop && this.pageID && this.findNewUISewingOrderAction(this.pageID) // function
     },
 
@@ -346,7 +347,7 @@ export default {
           name: 'Save',
           type: 'primary',
           clickType: 'save',
-          showAndHide: true,
+          showAndHide: !this.pageID,
         },
         {
           name: 'Add New',
@@ -358,13 +359,13 @@ export default {
           name: 'Save kroy',
           type: 'primary',
           clickType: 'saveKroy',
-          showAndHide: !!this.pageID,
+          showAndHide: false,
         },
         {
           name: 'Create',
           type: 'primary',
           clickType: 'create',
-          showAndHide: !!this.pageID,
+          showAndHide: false,
         },
         {
           name: 'Print Preview',
