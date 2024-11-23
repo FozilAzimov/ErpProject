@@ -40,8 +40,6 @@ export default {
     '@middleware': '@/middleware',
   },
 
-  ssr: false,
-
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
     '@/plugins/vee-validate.js',
@@ -54,7 +52,11 @@ export default {
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: [
-    { path: '~/components', pathPrefix: false, extensions: ['vue'] },
+    {
+      path: '~/components',
+      pathPrefix: false,
+      extensions: ['vue'],
+    },
   ],
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
@@ -62,6 +64,8 @@ export default {
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: ['@nuxtjs/axios', '@nuxtjs/pwa', '@nuxtjs/eslint-module'],
+
+  ssr: false,
 
   generate: {
     fallback: true,

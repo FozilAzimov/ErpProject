@@ -744,7 +744,9 @@ export default {
           paymentType:
             (this.allSelectAndInputValue?.paymentType?.id
               ? this.allSelectAndInputValue?.paymentType
-              : this.allSelectAndInputValue?.paymentType) ?? null,
+              : this.allSelectAndInputValue?.paymentType
+              ? { id: this.allSelectAndInputValue?.paymentType }
+              : null) ?? null,
           reseller:
             (this.allSelectAndInputValue?.reseller?.id
               ? this.allSelectAndInputValue?.reseller
@@ -829,6 +831,12 @@ export default {
               this.allSelectAndInputValue?.warehouse ??
               '',
           },
+          paymentType:
+            (this.allSelectAndInputValue?.paymentType?.id
+              ? this.allSelectAndInputValue?.paymentType
+              : this.allSelectAndInputValue?.paymentType
+              ? { id: this.allSelectAndInputValue?.paymentType }
+              : null) ?? null,
         }
         body.invoice = invoice
       }
@@ -982,7 +990,7 @@ export default {
           },
           {
             width: '250',
-            subName: 'paymentTypeName',
+            subName: 'paymentType',
             url: 'findAllPaymentType',
             type: 'select',
             required: false,
