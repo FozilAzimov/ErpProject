@@ -1,10 +1,12 @@
 <template>
-  <prepare-output-to-equipment-page />
+  <prepare-output-to-equipment />
 </template>
 
 <script>
-import PrepareOutputToEquipmentPage from '@components/Invoices/PrepareOutputToEquipmentPage.vue'
+import PrepareOutputToEquipment from '@components/Invoices/PrepareOutputToEquipment.vue'
 export default {
-  components: { PrepareOutputToEquipmentPage },
+  components: {
+    PrepareOutputToEquipment,
+  },
 }
 </script>

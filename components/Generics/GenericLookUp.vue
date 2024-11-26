@@ -198,8 +198,6 @@ export default {
         )
       } else if (this.isLookUpObj && this.options?.length) {
         const resObj = this.options.find(({ id }) => value === id)
-        console.log(resObj, 'hayyyy')
-
         // Emit action
         this.$emit(
           'customFunction',

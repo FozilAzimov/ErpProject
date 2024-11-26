@@ -258,16 +258,10 @@ export default {
           keyword: this.allSelectAndInputValues?.searchInput || '',
         },
         dateFrom: this.allSelectAndInputValues?.dateFrom
-          ? new Date(this.allSelectAndInputValues?.dateFrom)
-              .toLocaleString('en-GB')
-              .split(',')
-              .join('')
+          ? this.$formatDate(this.allSelectAndInputValues?.dateFrom)
           : '',
         dateTo: this.allSelectAndInputValues?.dateTo
-          ? new Date(this.allSelectAndInputValues?.dateTo)
-              .toLocaleString('en-GB')
-              .split(',')
-              .join('')
+          ? this.$formatDate(this.allSelectAndInputValues?.dateTo)
           : '',
         branchCompanyId: this.allSelectAndInputValues?.branchCompanyId ?? '',
         statusId: this.allSelectAndInputValues?.statusId ?? '',

@@ -52,7 +52,10 @@
         <div class="flex items-center gap-[10px]">
           <img src="@assets/icons/user-black.png" alt="user" class="w-[14px]" />
           <h1 class="font-bold text-[rgb(49,126,172)] text-[14px] uppercase">
-            Purchase Invoice List
+            {{
+              GET_CORE_STRING?.['purchaseinvoice.list'] ||
+              'Purchase Invoice List'
+            }}
           </h1>
         </div>
         <div>
@@ -109,7 +112,7 @@
         "
       >
         <generic-button
-          name="Add New"
+          :name="GET_CORE_STRING?.allAddNew"
           type="primary"
           :margin="true"
           icon-name-attribute="circle-plus-outline"
@@ -129,23 +132,23 @@
                 <option value="100">100</option>
                 <option value="500">500</option>
               </select>
-              Records
+              {{ GET_CORE_STRING?.records || 'Records' }}
             </div>
             <div class="flex items-center gap-2">
               <GenericInput
                 name="searchInput"
-                placeholder="Search..."
+                :placeholder="`${GET_CORE_STRING?.search}...`"
                 @enter="getTableRequest"
                 @customFunction="getInputAndLookUpValueAction"
               />
               <GenericButton
-                name="Search"
+                :name="GET_CORE_STRING?.search"
                 type="primary"
                 icon-name-attribute="search"
                 @click="getTableRequest"
               />
               <GenericButton
-                name="Print Preview"
+                :name="GET_CORE_STRING?.printPreview"
                 type="success"
                 icon-name-attribute="printer"
               />
@@ -166,6 +169,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import LoadingPage from '@components/Loading/LoadingPage.vue'
 import GenericButton from '@components/Generics/GenericButton.vue'
 import GenericInput from '@generics/GenericInput.vue'
@@ -204,6 +208,24 @@ export default {
     }
   },
 
+  computed: {
+    // Store getters
+    ...mapGetters('translate', ['GET_CORE_STRING']),
+  },
+
+  // WATCH
+  watch: {
+    // start CoreString action
+    GET_CORE_STRING: {
+      handler(newVal) {
+        // function
+        this.createDataFiltering(newVal)
+      },
+      deep: true,
+    },
+    // end CoreString action
+  },
+
   // CREATED
   created() {
     this.allSelectAndInputValues.dateFrom = new Date(
@@ -219,7 +241,7 @@ export default {
     // Table function
     this.getTableRequest()
     // function
-    this.createDataFiltering()
+    this.createDataFiltering(this.GET_CORE_STRING)
   },
 
   // METHODS
@@ -227,6 +249,7 @@ export default {
     // Column config uchun ishlaydi
     handleValue(checkModal) {
       this.checkModal = checkModal
+      this.getTableRequest() // Table function
     },
     openColumnConfig() {
       this.checkModal = true
@@ -315,56 +338,57 @@ export default {
     // Generic Table action End
 
     // page yuqorisidagi filterlar uchun data yaratish
-    createDataFiltering() {
+    createDataFiltering(getText) {
       const createDate = [
         {
-          name: 'Date From',
+          name: getText?.['common.search.dateFrom'] || 'Date From',
           subName: 'dateFrom',
           type: 'date',
         },
         {
-          name: 'Date To',
+          name: getText?.['common.search.dateTo'] || 'Date To',
           subName: 'dateTo',
           type: 'date',
         },
         {
           width: 150,
-          name: 'Status Bill',
+          name: `${getText?.status} ${getText?.BILL}` || 'Status Bill',
           subName: 'billStatus',
           selectName: 'billStatusList',
           type: 'select',
         },
         {
           width: 150,
-          name: 'Status Pay',
+          name: `${getText?.status} ${getText?.PAY}` || 'Status Pay',
           subName: 'payStatus',
           selectName: 'payStatusList',
           type: 'select',
         },
         {
           width: 150,
-          name: 'Invoice (Status)',
+          name:
+            `${getText?.invoice} (${getText?.status})` || 'Invoice (Status)',
           subName: 'invoiceOnWayStatus',
           selectName: 'invoiceOnWayStatusList',
           type: 'select',
         },
         {
           width: 200,
-          name: 'Departments',
+          name: getText?.departments || 'Departments',
           subName: 'departmentId',
           selectName: 'departmentList',
           type: 'select',
         },
         {
           width: 200,
-          name: 'Warehouse',
+          name: getText?.warehouse || 'Warehouse',
           subName: 'warehouseId',
           selectName: 'warehouseList',
           type: 'select',
         },
         {
           width: 200,
-          name: 'invoiceConfirmedStatus',
+          name: getText?.invoiceConfirmedStatus || 'invoiceConfirmedStatus',
           subName: 'confirmStatus',
           selectName: 'confirmStatusList',
           type: 'select',

@@ -12,7 +12,7 @@
           name="Go Back"
           type="primary"
           icon-name-attribute="arrow-left"
-          @click="$router.push('')"
+          @click="$router.push('/outputToPrOrder.htm')"
         />
         <h1 class="font-bold text-[rgb(49,126,172)] text-[14px] uppercase">
           Output To Production Order Simple

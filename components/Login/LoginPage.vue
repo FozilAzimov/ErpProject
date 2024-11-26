@@ -92,7 +92,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import LoadingPage from '@components/Loading/LoadingPage.vue'
 import LanguageList from '@generics/LanguageList.vue'
 export default {
@@ -127,6 +127,9 @@ export default {
 
   // METHODS
   methods: {
+    // Store getters
+    ...mapActions('translate', ['FETCH_TRANSLATE']),
+
     getTypePassword() {
       this.typeIcon ? (this.typeIcon = false) : (this.typeIcon = true)
     },
@@ -145,19 +148,20 @@ export default {
             .then((res) => {
               localStorage.setItem('token', res.data.token)
               this.isLoading = !this.isLoading
+              this.FETCH_TRANSLATE() // store translare function
+              this.$router.push('/branchess.htm')
               this.$notification(
                 `Muvaffaqqiyatli o'tdingiz!`,
                 'Success',
                 'success',
                 5
               )
-              this.$router.push('/branchess.htm')
             })
             .catch((error) => {
               this.isLoading = !this.isLoading
               // eslint-disable-next-line no-console
               console.error('Login request failed', error)
-              this.$notification(`LogIn'dan o'ta olmadingiz`)
+              this.$notification(`LogIn'dan o'ta olmadingiz`, 'Error', 'error')
             })
         }
       })

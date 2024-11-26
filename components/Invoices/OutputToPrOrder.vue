@@ -109,6 +109,26 @@
             : 'duration-[1s] h-0 overflow-hidden'
         "
       >
+        <div class="flex items-center gap-1 m-2">
+          <generic-button
+            name="Add New"
+            type="primary"
+            icon-name-attribute="circle-plus-outline"
+            @click="$router.push('/prepareOutputToPrOrder.htm')"
+          />
+          <generic-button
+            name="Add New simplified"
+            type="primary"
+            icon-name-attribute="circle-plus-outline"
+            @click="$router.push('/prepareOutputToPrOrderSimple.htm')"
+          />
+          <generic-button
+            name="Experience on Equipments"
+            type="primary"
+            icon-name-attribute="circle-plus-outline"
+            @click="$router.push('/prepareOutputToEquipment.htm')"
+          />
+        </div>
         <div class="p-2">
           <div class="flex items-center justify-between mb-1">
             <div class="text-[14px]">
@@ -150,7 +170,7 @@
             :tablebody="tableBody"
             :tableheadlength="tableHeadLength"
             :istherebody="isThereBody"
-            open-url=""
+            open-url="prepareOutputToPrOrder"
             height="600"
           />
         </div>

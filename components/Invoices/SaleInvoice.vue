@@ -268,22 +268,18 @@ export default {
     getTableRequest() {
       // request body
       const body = {
-        current_page: 1,
-        page_size: this.pageSize_value,
+        pagingForm: {
+          currentPage: 1,
+          pageSize: this.pageSize_value,
+        },
         searchForm: {
           keyword: this.allSelectAndInputValues?.searchInput ?? '',
         },
-        dateFrom: this.allSelectAndInputValues?.dateFrom
-          ? new Date(this.allSelectAndInputValues?.dateFrom)
-              .toLocaleString('en-GB')
-              .split(',')
-              .join('')
+        dateFrom1: this.allSelectAndInputValues?.dateFrom
+          ? this.$formatDate(this.allSelectAndInputValues.dateFrom)
           : '',
-        dateTo: this.allSelectAndInputValues?.dateTo
-          ? new Date(this.allSelectAndInputValues?.dateTo)
-              .toLocaleString('en-GB')
-              .split(',')
-              .join('')
+        dateTo1: this.allSelectAndInputValues?.dateTo
+          ? this.$formatDate(this.allSelectAndInputValues.dateTo)
           : '',
         branchCompanyId: this.allSelectAndInputValues?.branchCompanyId ?? '',
         statusId: this.allSelectAndInputValues?.statusId ?? '',

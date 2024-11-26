@@ -70,14 +70,14 @@
               class="text-[13px] font-semibold border-[1px] border-solid border-[rgba(119,136,153,0.3)] p-4 cursor-pointer whitespace-nowrap"
               :class="obj.width ? `w-[${obj.width}px]` : ''"
             >
-              {{ obj.headerText }}
+              {{ GET_CORE_STRING?.[obj.name] || obj.headerText }}
               <!-- <pre>{{ obj }}</pre> -->
             </th>
             <th
               v-if="!showHideRow && !isCanAdd"
               class="text-[13px] font-semibold border-[1px] border-solid border-[rgba(119,136,153,0.3)] p-4 cursor-pointer whitespace-nowrap"
             >
-              Delete
+              {{ GET_CORE_STRING?.delete || 'Delete' }}
             </th>
           </tr>
           <!-- Filter -->
@@ -89,7 +89,7 @@
                 width="50"
                 name="index"
                 :clearable="false"
-                placeholder="filtering"
+                :placeholder="GET_CORE_STRING?.filter || 'filtering'"
                 @customFunction="filterAction"
               />
             </th>
@@ -101,7 +101,7 @@
               <GenericInput
                 width="150"
                 :name="key?.name"
-                placeholder="filtering"
+                :placeholder="GET_CORE_STRING?.filter || 'filtering'"
                 @customFunction="filterAction"
               />
             </th>
@@ -233,6 +233,7 @@
                   :order="index"
                   :name="obj.name"
                   :result-type="obj.resultType"
+                  :is-look-up-obj="obj.name === 'item'"
                   :required="
                     !!(
                       !obj?.required ||
@@ -260,7 +261,13 @@
                   }`"
                   width="150"
                   :order="index"
-                  :type="obj?.type === 'hidden' ? 'number' : obj?.type"
+                  :type="
+                    obj?.type === 'hidden' ||
+                    obj.type === 'float' ||
+                    obj.type === 'integer'
+                      ? 'number'
+                      : obj?.type
+                  "
                   :required="
                     !!(
                       !obj?.required ||
@@ -620,7 +627,7 @@ export default {
       })
     },
 
-    // default set values
+    // default set values | function chaqirilgan joyni o'zgartirish kk.
     setDefaultValues(order) {
       if (this.departmentName === 'invoice') {
         const defValue = {
@@ -642,8 +649,13 @@ export default {
     },
     // default set values
 
+    // change action
+    onChangeSelectedLookUp(name, value, order, resultType, resObj) {
+      this.$set(this.tableList[order], 'unitMeasurement', { text: resObj?.um })
+    },
+
     // set all LookUp and Input Value action
-    setLookUpAndInputValue(name, value, order, resultType) {
+    setLookUpAndInputValue(name, value, order, resultType, resObj) {
       if (!this.tableList[order]) this.$set(this.tableList, order, {})
       this.$set(
         this.tableList[order],
@@ -658,6 +670,8 @@ export default {
         name === 'vat'
       )
         this.conbinationsAction(order) // function
+      if (name === 'item')
+        this.onChangeSelectedLookUp(name, value, order, resultType, resObj) // function
       this.requiredLookUpAndInputCheckerAction(this.tableList) // function
     },
 
@@ -820,7 +834,11 @@ export default {
           }
 
           // static set values --------------------------
-          if (tabName === 'iplikLotStavkaReserveTable' && obj?.entryRef)
+          if (
+            (tabName === 'iplikLotStavkaReserveTable' ||
+              tabName === 'saleInvoiceItemTable') &&
+            obj?.entryRef
+          )
             newObj.entryRef = {
               id: obj?.entryRef,
             }

@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full p-[0px_10px_0px_4px]">
+  <div class="w-full px-1">
     <LoadingPage
       v-if="isLoading"
       class="absolute left-[50%] top-[8px] translate-x-[-50%]"
@@ -10,7 +10,6 @@
         :right="rightData"
         :left="leftData"
         :url="actionUrl"
-        :openpopup="openPopup"
         :create-edit="true"
         api="saveColumnConfig"
         class="z-[10000]"
@@ -26,14 +25,18 @@
           name="Back"
           type="primary"
           icon-name-attribute="arrow-left"
-          @click="$router.push('/productioninvoice.htm')"
+          @click="$router.push('/outputToPrOrder.htm')"
         />
         <h1 class="font-bold text-[rgb(49,126,172)] text-[14px] uppercase">
-          {{ pageID ? 'Edit Production Invoice' : 'Add Production Invoice' }}
+          {{
+            pageID
+              ? 'Edit Output To Production Order'
+              : 'Add Output To Production Order'
+          }}
         </h1>
       </div>
     </div>
-    <div class="border-[1px] border-solid border-[rgba(0,0,0,0.1)] mb-10">
+    <div class="border-[1px] border-solid border-[rgba(0,0,0,0.1)]">
       <!-- Top static table -->
       <table class="w-full text-[13px] mt-1">
         <tbody>
@@ -115,19 +118,6 @@
                     : allSelectAndInputValue?.[obj?.subName]) ??
                   ''
                 }}</template>
-                <template
-                  v-else-if="
-                    (internalStatus || internalStatus === null) &&
-                    (obj.subName === 'branch' || obj.subName === 'company')
-                  "
-                  >{{
-                    allSelectAndInputValue?.[obj?.subName]?.text ??
-                    (typeof allSelectAndInputValue?.[obj?.subName] === 'object'
-                      ? ''
-                      : allSelectAndInputValue?.[obj?.subName]) ??
-                    ''
-                  }}</template
-                >
                 <generic-look-up
                   v-else
                   :defvalue="
@@ -198,7 +188,7 @@
             <GenericButton
               v-if="pageID"
               name="Discard"
-              @click="discardAction"
+              @click="discardSewModalOperationAction"
             />
           </span>
           <GenericButton
@@ -206,7 +196,7 @@
             name="Edit"
             type="success"
             icon-name-attribute="edit"
-            @click="editAction"
+            @click="editSewModalOperationAction"
           />
           <GenericButton
             v-if="pageID"
@@ -225,13 +215,11 @@
         </div>
         <GenericPrepareTablePage
           ref="customTableRef"
-          :filter-type="internalStatus || internalStatus === false ? 'min' : ''"
           :action-url="actionUrl"
-          tab-name="productionInvoiceItemTable"
+          tab-name="outpuToPrOrderItemTable"
+          filter-type="max"
           :top-static-table-data="allSelectAndInputValue"
-          :addmodalorrow="
-            internalStatus || internalStatus === false ? true : false
-          "
+          :addmodalorrow="true"
           :tablehead="headData"
           :tableheadlength="headData?.length"
           :response-data="bodyData"
@@ -274,45 +262,32 @@ export default {
   data() {
     return {
       // column config uchun
+      checkModal: false,
+      actionUrl: null,
       rightMap: {},
       leftMap: {},
       rightData: {},
       leftData: {},
-      checkModal: false,
-      actionUrl: null,
-      openPopup: false,
       // column config uchun
+      isLoading: false,
       pageSize_value: 25,
-      allSelectAndInputValue: {},
-      allSelectAndInputPropsObj: {},
+      pageID: null,
+      elementData: [],
       headData: [],
       bodyData: [],
-      elementData: [],
-      isLoading: false,
-      isAccept: false,
       uiShowHide: false,
-      saveBtnDisabled: false,
-      pageID: null,
       isEdit: null,
       hideButton: null,
-      internalStatus: null,
-      productionInvoiceType: null,
-      productionInvoiceTypeWoven: null,
+      allSelectAndInputValue: {},
+      allSelectAndInputPropsObj: {},
+      isAccept: false,
+      saveBtnDisabled: false,
     }
   },
 
   // CREATED
   created() {
     this.pageID = this.$route.params?.id
-    const query = this.$route.query
-    if (query?.internalStatus)
-      this.internalStatus = JSON.parse(query?.internalStatus)
-    else if (query?.productionInvoiceType)
-      this.productionInvoiceType = JSON.parse(query?.productionInvoiceType)
-    else if (query?.productionInvoiceTypeWoven)
-      this.productionInvoiceTypeWoven = JSON.parse(
-        query?.productionInvoiceTypeWoven
-      )
     this.isEdit = !!this.pageID
     this.hideButton = !this.pageID
     this.uiShowHide = !!this.pageID
@@ -358,9 +333,9 @@ export default {
         this.allSelectAndInputValue,
         `${
           propName === 'company'
-            ? 'supplierRefCurSymbol'
-            : propName === 'branch'
             ? 'supplierCurSymbol'
+            : propName === 'branch'
+            ? 'supplierRefCurSymbol'
             : 'currencySymbol'
         }`,
         value ? name : ''
@@ -369,9 +344,9 @@ export default {
         this.allSelectAndInputValue,
         `${
           propName === 'company'
-            ? 'companyRefCurrencyRate'
-            : propName === 'branch'
             ? 'companyCurrencyRate'
+            : propName === 'branch'
+            ? 'companyRefCurrencyRate'
             : 'currencyRate'
         }`,
         value ?? ''
@@ -379,11 +354,23 @@ export default {
     },
 
     // Look Up selected qilganda ishliydi
-    getCurrentCurrencyRate(propName, propValue) {
-      const body = {}
-      body[`${propName === 'currency' ? 'currencyId' : 'branchCompanyId'}`] =
-        propValue
-      body.settingsRateType = 'SALE'
+    getCurrentCurrencyRate(propName) {
+      this.dataCreatedAction() // function
+      const body = {
+        branchCompanyId:
+          this.allSelectAndInputValue?.branch?.id ??
+          this.allSelectAndInputValue?.branch ??
+          null,
+        currencyId:
+          this.allSelectAndInputValue?.currency?.id ??
+          this.allSelectAndInputValue?.currency ??
+          null,
+        dateFrom: isNaN(this.allSelectAndInputValue?.date)
+          ? this.allSelectAndInputValue?.date
+          : this.$formatDate(this.allSelectAndInputValue?.date),
+        employeeId: null,
+        settingsRateType: 'SALE',
+      }
 
       this.isLoading = !this.isLoading
       this.$axios
@@ -441,16 +428,15 @@ export default {
     acceptAction() {
       if (
         this.allSelectAndInputValue.date &&
-        this.allSelectAndInputValue.company &&
         this.allSelectAndInputValue.sellDate &&
         this.allSelectAndInputValue.branch &&
         this.allSelectAndInputValue.department &&
+        this.allSelectAndInputValue.warehouse &&
         this.allSelectAndInputValue.currency &&
         this.allSelectAndInputValue.orderProductionType &&
         this.allSelectAndInputValue.calc_type &&
         this.allSelectAndInputValue.companyCurrencyRate &&
-        this.allSelectAndInputValue.currencyRate &&
-        this.allSelectAndInputValue.invoiceNominal
+        this.allSelectAndInputValue.currencyRate
       )
         this.isAccept = true
       else {
@@ -464,27 +450,18 @@ export default {
       const body = {}
       body.page_current = 1
       body.page_size = this.pageSize_value
-      if (this.productionInvoiceType)
-        body.productionInvoiceType = this.productionInvoiceType
-      else if (this.productionInvoiceTypeWoven)
-        body.productionInvoiceTypeWoven = this.productionInvoiceTypeWoven
-      else if (this.internalStatus) body.internalStatus = this.internalStatus
-      else body.internalStatus = false
       if (pageID) body.id = pageID
 
       this.isLoading = !this.isLoading
       this.$axios
-        .post(`/invoices/prepareProductionInvoiceNew`, body)
-        .then(
-          ({ data: { actionUrl, openPopup, rightColumns, invoiceJson } }) => {
-            this.actionUrl = actionUrl
-            this.openPopup = openPopup
-            this.headData = rightColumns
-            this.bodyData = invoiceJson?.invoiceItems
-            this.allSelectAndInputValue = invoiceJson
-            this.isLoading = !this.isLoading
-          }
-        )
+        .post(`/invoices/prepareOutputToEquipment`, body)
+        .then(({ data: { actionUrl, rightColumns, invoiceJson } }) => {
+          this.actionUrl = actionUrl
+          this.headData = rightColumns
+          this.bodyData = invoiceJson?.invoiceItems
+          this.allSelectAndInputValue = invoiceJson
+          this.isLoading = !this.isLoading
+        })
         .catch((error) => {
           this.isLoading = !this.isLoading
           // eslint-disable-next-line no-console
@@ -493,7 +470,7 @@ export default {
     },
 
     // edit sewModelOperation
-    editAction() {
+    editSewModalOperationAction() {
       this.hideButton = !this.hideButton
       // GenericTablePage da ishlab beruvchi function
       this.$refs.customTableRef.getEditRowAction(this.pageID)
@@ -501,12 +478,32 @@ export default {
     },
 
     // discard sewModelOperation
-    discardAction() {
+    discardSewModalOperationAction() {
       // GenericTablePage da ishlab beruvchi function
       this.$refs.customTableRef.discardArrayFiltered()
       this.bodyData = this.bodyData.filter((obj) => obj?.id)
       this.hideButton = !this.hideButton
       this.uiShowHide = true
+    },
+
+    // Undo Payment Action
+    undoPaymentAction() {
+      this.isLoading = !this.isLoading
+      this.$axios
+        .post(`/invoices/payUnPayUrl`, {
+          id: this.pageID,
+        })
+        .then(() => {
+          // function
+          this.getTableRequest(this.pageID)
+          this.isLoading = !this.isLoading
+        })
+        .catch((error) => {
+          this.isLoading = !this.isLoading
+          // eslint-disable-next-line no-console
+          console.log(error)
+          this.$notification(`Ma'lumot saqlanmadi!`, 'Error', 'error')
+        })
     },
 
     // Response dan qaytgan data'ga static data set qilish
@@ -515,9 +512,6 @@ export default {
         if (obj?.id) {
           obj = { ...obj, invoice: { id: this.pageID } }
         }
-        // planningProduct set object type
-        typeof obj?.planningProduct !== 'object' &&
-          (obj.planningProduct = { id: obj?.planningProduct })
         // bu tekshiruv vaqtincha bo'lishi mumkin | tavsiya etilmaydi
         for (const key in obj) {
           if (typeof obj[key] === 'object' && !obj[key]?.id) {
@@ -531,8 +525,8 @@ export default {
     // Response dan qaytgan data'ga static data set qilish
 
     // Save button'ni disabled qilish
-    getDisabledValue(disabledVal, tabName) {
-      if (tabName === 'invoiceItemTable') this.saveBtnDisabled = disabledVal
+    getDisabledValue(disabledVal) {
+      this.saveBtnDisabled = disabledVal
     },
 
     // EMIT action
@@ -541,72 +535,9 @@ export default {
       this.bodyData = this.staticSetDataAction(arr)
 
       // Start Request body
-      const body = {}
-      if (this.pageID) {
+      const body = { invoice: {} }
+      if (!this.pageID) {
         const invoice = {
-          id: this.pageID,
-          calc_type:
-            this.allSelectAndInputValue?.calc_type?.id ??
-            this.allSelectAndInputValue?.calc_type ??
-            '',
-          companyCurrencyRate:
-            this.allSelectAndInputValue?.companyCurrencyRate?.text ??
-            this.allSelectAndInputValue?.companyCurrencyRate ??
-            '',
-          companyRefCurrencyRate:
-            this.allSelectAndInputValue?.companyRefCurrencyRate?.text ??
-            this.allSelectAndInputValue?.companyRefCurrencyRate ??
-            '',
-          currency: {
-            id:
-              this.allSelectAndInputValue?.currency?.id ??
-              this.allSelectAndInputValue?.currency ??
-              '',
-          },
-          currencyRate:
-            this.allSelectAndInputValue?.currencyRate?.text ??
-            this.allSelectAndInputValue?.currencyRate ??
-            '',
-          driverName: '',
-          invoiceNominal: 1,
-        }
-        body.invoice = invoice
-      } else {
-        const invoice = {
-          branch: {
-            id:
-              this.allSelectAndInputValue?.branch?.id ??
-              this.allSelectAndInputValue?.branch ??
-              '',
-          },
-          calc_type:
-            this.allSelectAndInputValue?.calc_type?.id ??
-            this.allSelectAndInputValue?.calc_type ??
-            '',
-          company: {
-            id:
-              this.allSelectAndInputValue?.company?.id ??
-              this.allSelectAndInputValue?.company ??
-              '',
-          },
-          companyCurrencyRate:
-            this.allSelectAndInputValue?.companyCurrencyRate?.text ??
-            this.allSelectAndInputValue?.companyCurrencyRate ??
-            '',
-          companyRefCurrencyRate:
-            this.allSelectAndInputValue?.companyRefCurrencyRate?.text ??
-            this.allSelectAndInputValue?.companyRefCurrencyRate ??
-            '',
-          currency: {
-            id:
-              this.allSelectAndInputValue?.currency?.id ??
-              this.allSelectAndInputValue?.currency ??
-              '',
-          },
-          currencyRate:
-            this.allSelectAndInputValue?.currencyRate?.text ??
-            this.allSelectAndInputValue?.currencyRate ??
-            '',
           date: this.allSelectAndInputValue?.date
             ? this.$formatDate(
                 this.allSelectAndInputValue?.date,
@@ -619,76 +550,98 @@ export default {
                 'yyyy-mm-dd hh:mm:ss'
               )
             : '',
-          department: {
-            id:
-              this.allSelectAndInputValue?.department?.id ??
-              this.allSelectAndInputValue?.department ??
-              '',
-          },
-          driverName: '',
-          invoiceBillStatus: '',
-          invoiceNo: '',
-          invoiceNominal: 1,
-          invoiceStatus: '',
-          notes: this.allSelectAndInputValue?.note ?? '',
-          orderProductionType: {
-            id:
-              this.allSelectAndInputValue?.orderProductionType?.id ??
-              this.allSelectAndInputValue?.orderProductionType ??
-              '',
-          },
-          systemNumber: '',
-          shiftDayInterval: this.allSelectAndInputValue?.shiftDayInterval ?? '',
-          warehouse: {
-            id:
-              this.allSelectAndInputValue?.warehouse?.id ??
-              this.allSelectAndInputValue?.warehouse ??
-              '',
-          },
+          branch: this.allSelectAndInputValue?.branch?.id
+            ? this.allSelectAndInputValue?.branch
+            : this.allSelectAndInputValue?.branch
+            ? { id: this.allSelectAndInputValue?.branch }
+            : null,
+          department: this.allSelectAndInputValue?.department?.id
+            ? this.allSelectAndInputValue?.department
+            : this.allSelectAndInputValue?.department
+            ? { id: this.allSelectAndInputValue?.department }
+            : null,
+          orderProductionType: this.allSelectAndInputValue?.orderProductionType
+            ?.id
+            ? this.allSelectAndInputValue?.orderProductionType
+            : this.allSelectAndInputValue?.orderProductionType
+            ? { id: this.allSelectAndInputValue?.orderProductionType }
+            : null,
+          warehouse: this.allSelectAndInputValue?.warehouse?.id
+            ? this.allSelectAndInputValue?.warehouse
+            : this.allSelectAndInputValue?.warehouse
+            ? { id: this.allSelectAndInputValue?.warehouse }
+            : null,
+          currency: this.allSelectAndInputValue?.currency?.id
+            ? this.allSelectAndInputValue?.currency
+            : this.allSelectAndInputValue?.currency
+            ? { id: this.allSelectAndInputValue?.currency }
+            : null,
+          calc_type:
+            this.allSelectAndInputValue?.calc_type?.id ??
+            this.allSelectAndInputValue?.calc_type ??
+            null,
+          companyCurrencyRate:
+            this.allSelectAndInputValue?.companyCurrencyRate?.text ??
+            this.allSelectAndInputValue?.companyCurrencyRate ??
+            '',
+          companyRefCurrencyRate:
+            this.allSelectAndInputValue?.companyRefCurrencyRate?.text ??
+            this.allSelectAndInputValue?.companyRefCurrencyRate ??
+            '',
+          currencyRate:
+            this.allSelectAndInputValue?.currencyRate?.text ??
+            this.allSelectAndInputValue?.currencyRate ??
+            '',
+          invoiceBillStatus:
+            this.allSelectAndInputValue?.invoiceBillStatus?.text ??
+            this.allSelectAndInputValue?.invoiceBillStatus ??
+            '',
+          invoiceNo:
+            this.allSelectAndInputValue?.invoiceNo?.text ??
+            this.allSelectAndInputValue?.invoiceNo ??
+            '',
+          invoiceStatus:
+            this.allSelectAndInputValue?.invoiceStatus?.text ??
+            this.allSelectAndInputValue?.invoiceStatus ??
+            '',
+          systemNumber:
+            this.allSelectAndInputValue?.systemNumber?.text ??
+            this.allSelectAndInputValue?.systemNumber ??
+            '',
+          notes: this.allSelectAndInputValue?.notes ?? '',
         }
         body.invoice = invoice
-        if (this.productionInvoiceType) {
-          body.invoice.invoiceType = 'IPLIK'
-          body.productionInvoiceType = this.productionInvoiceType
-        } else if (this.productionInvoiceTypeWoven) {
-          body.invoice.invoiceType = 'WOVEN'
-          body.productionInvoiceTypeWoven = this.productionInvoiceTypeWoven
-        } else if (this.internalStatus)
-          body.internalStatus = this.internalStatus
-        else body.internalStatus = false
       }
+      body.invoice.id = this.pageID ?? null
+      body.invoice.companyRefCurrencyRate =
+        this.allSelectAndInputValue?.companyRefCurrencyRate?.text ??
+        this.allSelectAndInputValue?.companyRefCurrencyRate ??
+        ''
+      body.invoice.companyCurrencyRate =
+        this.allSelectAndInputValue?.companyCurrencyRate?.text ??
+        this.allSelectAndInputValue?.companyCurrencyRate ??
+        ''
+      body.invoice.currencyRate =
+        this.allSelectAndInputValue?.currencyRate?.text ??
+        this.allSelectAndInputValue?.currencyRate ??
+        ''
+      body.invoice.driverName = ''
+      body.invoice.invoiceNominal =
+        this.allSelectAndInputValue?.invoiceNominal?.text ??
+        this.allSelectAndInputValue?.invoiceNominal ??
+        ''
       // List set qilish
       body.invoice.invoiceItems = this.bodyData
       // End Request body
 
       this.isLoading = !this.isLoading
       this.$axios
-        .post(`/invoices/prepareCreateEditProductionInvoice`, body)
+        .post(`/invoices/prepareCreateEditOutputToEquipment`, body)
         .then(({ data: { invoiceJson } }) => {
-          const res = JSON.parse(invoiceJson)
-          this.allSelectAndInputValue = res
-          this.bodyData = res?.invoiceItems
-          if (!this.pageID && res?.id) {
-            if (this.productionInvoiceType)
-              this.$router.push({
-                path: `prepareProductionInvoiceNew.htm/${res?.id}`,
-                query: { productionInvoiceType: true },
-              })
-            else if (this.productionInvoiceTypeWoven)
-              this.$router.push({
-                path: `prepareProductionInvoiceNew.htm/${res?.id}`,
-                query: { productionInvoiceTypeWoven: true },
-              })
-            else if (this.internalStatus)
-              this.$router.push({
-                path: `prepareProductionInvoiceNew.htm/${res?.id}`,
-                query: { internalStatus: true },
-              })
-            else
-              this.$router.push({
-                path: `prepareProductionInvoiceNew.htm/${res?.id}`,
-                query: { internalStatus: false },
-              })
+          this.allSelectAndInputValue = invoiceJson
+          this.bodyData = invoiceJson?.invoiceItems
+          if (!this.pageID) {
+            this.$router.push(`prepareOutputToEquipment.htm/${invoiceJson?.id}`)
           }
           this.hideButton = !hideBtn
           this.uiShowHide = true
@@ -717,7 +670,6 @@ export default {
       leftColumns.forEach((obj) => {
         this.leftMap[obj.name] = obj
       })
-
       this.rightData = this.rightMap
       this.leftData = this.leftMap
     },
@@ -734,7 +686,7 @@ export default {
           })
           .then(() => {
             this.$notification('Successfully Deleted', 'Deleted', 'success')
-            this.$router.push('/productioninvoice.htm')
+            this.$router.push('/outputToPrOrder.htm')
             this.isLoading = !this.isLoading
           })
           .catch((error) => {
@@ -764,16 +716,12 @@ export default {
           },
           {
             width: '250',
-            name: 'Payment Type',
+            name: '',
             type: 'text',
-            required: false,
           },
           {
             width: '250',
-            subName: 'paymentTypeName',
-            url: 'findAllPaymentType',
-            type: 'select',
-            required: false,
+            type: 'text',
           },
           {
             width: '250',
@@ -810,12 +758,12 @@ export default {
           },
           {
             width: '250',
-            name: 'InvoiceStatus',
+            name: 'InvoiceBillStatus',
             type: 'text',
             required: false,
           },
           {
-            subName: 'invoiceStatus',
+            subName: 'invoiceBillStatus',
             type: 'number',
             required: false,
           },
@@ -831,9 +779,7 @@ export default {
             width: '300',
             subName: 'branch',
             url: 'findAllCompanyLogic',
-            param: {
-              branchcompany: true,
-            },
+            param: { branchcompany: true },
             type: 'select',
             required: true,
           },
@@ -851,12 +797,12 @@ export default {
           },
           {
             width: '250',
-            name: 'Invoice №',
+            name: 'InvoiceStatus',
             type: 'text',
             required: false,
           },
           {
-            subName: 'invoiceNo',
+            subName: 'invoiceStatus',
             type: 'number',
             required: false,
           },
@@ -885,12 +831,12 @@ export default {
           },
           {
             width: '250',
-            name: 'Shift',
+            name: 'Invoice №',
             type: 'text',
             required: false,
           },
           {
-            subName: 'shiftDayInterval',
+            subName: 'invoiceNo',
             type: 'number',
             required: false,
           },
@@ -900,7 +846,7 @@ export default {
             width: '250',
             name: 'Warehouse',
             type: 'text',
-            required: true,
+            required: false,
           },
           {
             width: '300',
@@ -921,47 +867,12 @@ export default {
             width: '250',
             name: 'Note',
             type: 'text',
+            required: false,
           },
           {
             subName: 'note',
             type: 'inputText',
-          },
-        ],
-        [
-          {
-            width: '250',
-            name: 'CompanyRefProduction',
-            type: 'text',
-            required: true,
-          },
-          {
-            width: '300',
-            subName: 'company',
-            url: 'findAllCompanyForInvoice',
-            param: {
-              branchcompany: false,
-            },
-            type: 'select',
-            required: true,
-          },
-          {
-            width: '250',
-            subName: 'supplierRefCurSymbol',
-            type: 'text',
             required: false,
-          },
-          {
-            width: '250',
-            subName: 'companyRefCurrencyRate',
-            type: 'number',
-            required: true,
-          },
-          {
-            width: '250',
-            type: 'text',
-          },
-          {
-            type: 'text',
           },
         ],
         [
@@ -992,10 +903,14 @@ export default {
           },
           {
             width: '250',
+            name: '',
             type: 'text',
+            required: false,
           },
           {
+            subName: '',
             type: 'text',
+            required: false,
           },
         ],
         [
@@ -1009,9 +924,6 @@ export default {
             width: '300',
             subName: 'orderProductionType',
             url: 'findAllOrderProductionType',
-            param: {
-              tabName: 'purchaseInvoice',
-            },
             type: 'select',
             required: true,
           },

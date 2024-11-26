@@ -98,6 +98,15 @@ export default {
     manifest: {
       lang: 'en',
     },
+
+    workbox: {
+      runtimeCaching: [
+        {
+          urlPattern: '.*',
+          handler: 'NetworkFirst',
+        },
+      ],
+    },
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build

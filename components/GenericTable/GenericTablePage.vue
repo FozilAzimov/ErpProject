@@ -574,7 +574,6 @@
                       )
                     "
                   />
-                  <!-- @click="$router.push(`${openUrlTwo}.htm/${value.id}`)" -->
                   <GenericButton
                     v-if="!$route.path.includes('purchaseorder.htm')"
                     name="Delete"
@@ -591,8 +590,12 @@
                   <generic-button
                     v-if="!routerPath.includes('simpleProductionInvoice')"
                     :name="`Open ${
-                      routerPath.includes('productioninvoice')
+                      routerPath?.includes('productioninvoice') &&
+                      value?.invoiceType
                         ? value?.invoiceType
+                        : routerPath?.includes('outputToPrOrder') &&
+                          value?.statusType
+                        ? value?.statusType
                         : ''
                     }`"
                     type="primary"
@@ -778,10 +781,6 @@ export default {
       default: '',
     },
     openUrl: {
-      type: String,
-      default: '',
-    },
-    openUrlTwo: {
       type: String,
       default: '',
     },

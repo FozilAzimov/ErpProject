@@ -52,9 +52,7 @@
                   obj?.name
                 }}</span>
                 <span v-else-if="obj?.subName" class="whitespace-nowrap">{{
-                  allSelectAndInputValue?.[obj?.subName] ??
-                  editData?.[obj?.subName] ??
-                  ''
+                  allSelectAndInputValue?.[obj?.subName] ?? ''
                 }}</span>
                 <span v-if="obj?.required" class="text-red-600 text-[16px]"
                   >*</span
@@ -62,14 +60,14 @@
               </template>
               <template v-else-if="obj?.type === 'date'">
                 <template v-if="pageID">{{
-                  editData?.[obj?.subName] ? editData[obj.subName] : ''
+                  allSelectAndInputValue?.[obj?.subName] ?? ''
                 }}</template>
                 <generic-input-date-page
                   v-else
                   :value="
-                    editData?.[obj?.subName]
+                    allSelectAndInputValue?.[obj?.subName]
                       ? $formatDate(
-                          editData?.[obj?.subName],
+                          allSelectAndInputValue?.[obj?.subName],
                           'yyyy-mm-dd hh:mm:ss'
                         )
                       : ''
@@ -77,9 +75,7 @@
                   :width="obj?.width"
                   :name="obj.subName"
                   :required="
-                    !obj?.required ||
-                    allSelectAndInputValue?.[obj?.subName] ||
-                    editData?.[obj?.subName]
+                    !obj?.required || allSelectAndInputValue?.[obj?.subName]
                       ? true
                       : false
                   "
@@ -90,22 +86,20 @@
                 v-else-if="obj?.type === 'number' || obj?.type === 'inputText'"
               >
                 <template v-if="pageID">{{
-                  editData?.[obj?.subName]
+                  allSelectAndInputValue?.[obj?.subName]
                 }}</template>
                 <generic-input
                   v-else
                   :value="`${
-                    (typeof editData?.[obj?.subName] === 'object'
-                      ? editData?.[obj?.subName]?.text
-                      : editData?.[obj?.subName]) ?? ''
+                    allSelectAndInputValue?.[obj?.subName]?.text ??
+                    allSelectAndInputValue?.[obj?.subName] ??
+                    ''
                   }`"
                   :name="obj?.subName"
                   :type="obj?.type"
                   :width="obj?.width"
                   :required="
-                    !obj?.required ||
-                    allSelectAndInputValue?.[obj?.subName] ||
-                    editData?.[obj?.subName]
+                    !obj?.required || allSelectAndInputValue?.[obj?.subName]
                       ? true
                       : false
                   "
@@ -114,27 +108,33 @@
               </template>
               <template v-else-if="obj?.type === 'select'">
                 <template v-if="pageID">{{
-                  typeof editData?.[obj?.subName] === 'object'
-                    ? editData?.[obj?.subName]?.text
-                    : editData?.[obj?.subName]
+                  allSelectAndInputValue?.[obj?.subName]?.text ??
+                  (typeof allSelectAndInputValue?.[obj?.subName] === 'object'
+                    ? ''
+                    : allSelectAndInputValue?.[obj?.subName]) ??
+                  ''
                 }}</template>
                 <generic-look-up
                   v-else
                   :defvalue="
-                    typeof editData?.[obj?.subName] === 'object'
-                      ? editData?.[obj?.subName]?.text
-                      : editData?.[obj?.subName]
+                    allSelectAndInputValue?.[obj?.subName]?.text ??
+                    (typeof allSelectAndInputValue?.[obj?.subName] === 'object'
+                      ? ''
+                      : allSelectAndInputValue?.[obj?.subName]) ??
+                    ''
                   "
                   :name="obj?.subName"
                   :dwidth="obj?.width"
                   :durl="obj?.url"
-                  :dparam="obj?.param"
+                  :dparam="{
+                    ...obj?.param,
+                    ...allSelectAndInputPropsObj?.[obj.subName],
+                  }"
                   :disabled="obj?.disabled"
                   :required="
                     !obj?.required ||
                     allSelectAndInputValue?.[obj?.subName] ||
-                    editData?.[obj?.subName]?.text ||
-                    editData?.[obj?.subName]
+                    allSelectAndInputValue?.[obj?.subName]
                       ? true
                       : false
                   "
@@ -324,13 +324,13 @@ export default {
       pageSize_value: 25,
       pageID: null,
       elementData: [],
-      editData: {},
       headData: [],
       bodyData: [],
       uiShowHide: false,
       isEdit: null,
       hideButton: null,
       allSelectAndInputValue: {},
+      allSelectAndInputPropsObj: {},
       isAccept: false,
       saveBtnDisabled: false,
       // sub Table uchun
@@ -465,6 +465,25 @@ export default {
         })
     },
 
+    // set prop action
+    setPropsAction(name, value) {
+      if (name === 'branch') {
+        this.$set(this, 'allSelectAndInputValue', {
+          ...this.allSelectAndInputValue,
+          department: '',
+          warehouse: '',
+        })
+        this.$set(this.allSelectAndInputPropsObj, 'department', {
+          branchCompanyId: value,
+        }) // branch qiymati department'ga prop qilib berildi.
+      } else if (name === 'department') {
+        this.$set(this.allSelectAndInputValue, 'warehouse', '')
+        this.$set(this.allSelectAndInputPropsObj, 'warehouse', {
+          departmentId: value,
+        }) // branch qiymati department'ga prop qilib berildi.
+      }
+    },
+
     // get LookUps and Inputs value
     getSelectAndInputsValueAction(name, value) {
       if (name === 'company' || name === 'branch' || name === 'currency') {
@@ -473,6 +492,9 @@ export default {
       }
       // all select and input values
       this.$set(this.allSelectAndInputValue, name, value)
+      // set prop action
+      if (name === 'branch' || name === 'department')
+        this.setPropsAction(name, value)
     },
 
     // Accept action
@@ -514,7 +536,6 @@ export default {
             this.actionUrl = actionUrl
             this.headData = rightColumns
             this.bodyData = invoiceJson?.invoiceItems
-            this.editData = invoiceJson
             this.allSelectAndInputValue = invoiceJson
             this.subHeadData = transactionsColumns
             this.subBodyData = invoiceJson?.transactionsList
@@ -625,38 +646,40 @@ export default {
             this.allSelectAndInputValue?.companyRefCurrencyRate?.text ??
             this.allSelectAndInputValue?.companyRefCurrencyRate ??
             '',
-          currency: {
-            id:
-              this.allSelectAndInputValue?.currency?.id ??
-              this.allSelectAndInputValue?.currency ??
-              '',
-          },
+          currency: this.allSelectAndInputValue?.currency?.id
+            ? this.allSelectAndInputValue?.currency
+            : this.allSelectAndInputValue?.currency
+            ? { id: this.allSelectAndInputValue?.currency }
+            : null,
           currencyRate:
             this.allSelectAndInputValue?.currencyRate?.text ??
             this.allSelectAndInputValue?.currencyRate ??
             '',
           driverName: '',
           invoiceNominal: 1,
+          paymentType: this.allSelectAndInputValue?.paymentType?.id
+            ? this.allSelectAndInputValue?.paymentType
+            : this.allSelectAndInputValue?.paymentType
+            ? { id: this.allSelectAndInputValue?.paymentType }
+            : null,
         }
         body.invoice = invoice
       } else {
         const invoice = {
-          branch: {
-            id:
-              this.allSelectAndInputValue?.branch?.id ??
-              this.allSelectAndInputValue?.branch ??
-              '',
-          },
+          branch: this.allSelectAndInputValue?.branch?.id
+            ? this.allSelectAndInputValue?.branch
+            : this.allSelectAndInputValue?.branch
+            ? { id: this.allSelectAndInputValue?.branch }
+            : null,
           calc_type:
             this.allSelectAndInputValue?.calc_type?.id ??
             this.allSelectAndInputValue?.calc_type ??
             '',
-          company: {
-            id:
-              this.allSelectAndInputValue?.company?.id ??
-              this.allSelectAndInputValue?.company ??
-              '',
-          },
+          company: this.allSelectAndInputValue?.company?.id
+            ? this.allSelectAndInputValue?.company
+            : this.allSelectAndInputValue?.company
+            ? { id: this.allSelectAndInputValue?.company }
+            : null,
           companyCurrencyRate:
             this.allSelectAndInputValue?.companyCurrencyRate?.text ??
             this.allSelectAndInputValue?.companyCurrencyRate ??
@@ -665,12 +688,11 @@ export default {
             this.allSelectAndInputValue?.companyRefCurrencyRate?.text ??
             this.allSelectAndInputValue?.companyRefCurrencyRate ??
             '',
-          currency: {
-            id:
-              this.allSelectAndInputValue?.currency?.id ??
-              this.allSelectAndInputValue?.currency ??
-              '',
-          },
+          currency: this.allSelectAndInputValue?.currency?.id
+            ? this.allSelectAndInputValue?.currency
+            : this.allSelectAndInputValue?.currency
+            ? { id: this.allSelectAndInputValue?.currency }
+            : null,
           currencyRate:
             this.allSelectAndInputValue?.currencyRate?.text ??
             this.allSelectAndInputValue?.currencyRate ??
@@ -687,31 +709,34 @@ export default {
                 'yyyy-mm-dd hh:mm:ss'
               )
             : '',
-          department: {
-            id:
-              this.allSelectAndInputValue?.department?.id ??
-              this.allSelectAndInputValue?.department ??
-              '',
-          },
+          department: this.allSelectAndInputValue?.department?.id
+            ? this.allSelectAndInputValue?.department
+            : this.allSelectAndInputValue?.department
+            ? { id: this.allSelectAndInputValue?.department }
+            : null,
           driverName: '',
           invoiceBillStatus: '',
           invoiceNo: '',
           invoiceNominal: 1,
           invoiceStatus: '',
           notes: this.allSelectAndInputValue?.note ?? '',
-          orderProductionType: {
-            id:
-              this.allSelectAndInputValue?.orderProductionType?.id ??
-              this.allSelectAndInputValue?.orderProductionType ??
-              '',
-          },
+          orderProductionType: this.allSelectAndInputValue?.orderProductionType
+            ?.id
+            ? this.allSelectAndInputValue?.orderProductionType
+            : this.allSelectAndInputValue?.orderProductionType
+            ? { id: this.allSelectAndInputValue?.orderProductionType }
+            : null,
           systemNumber: '',
-          warehouse: {
-            id:
-              this.allSelectAndInputValue?.warehouse?.id ??
-              this.allSelectAndInputValue?.warehouse ??
-              '',
-          },
+          warehouse: this.allSelectAndInputValue?.warehouse?.id
+            ? this.allSelectAndInputValue?.warehouse
+            : this.allSelectAndInputValue?.warehouse
+            ? { id: this.allSelectAndInputValue?.warehouse }
+            : null,
+          paymentType: this.allSelectAndInputValue?.paymentType?.id
+            ? this.allSelectAndInputValue?.paymentType
+            : this.allSelectAndInputValue?.paymentType
+            ? { id: this.allSelectAndInputValue?.paymentType }
+            : null,
         }
         body.invoice = invoice
       }
@@ -723,7 +748,7 @@ export default {
       this.$axios
         .post(`/invoices/prepareCreateEditInputReturn`, body)
         .then(({ data: { invoiceJson } }) => {
-          this.editData = invoiceJson
+          this.allSelectAndInputValue = invoiceJson
           this.bodyData = invoiceJson?.invoiceItems
           if (!this.pageID) {
             this.$router.push(`prepareInputReturnNew.htm/${invoiceJson?.id}`)
@@ -894,7 +919,7 @@ export default {
             required: false,
           },
           {
-            subName: 'paymentTypeName',
+            subName: 'paymentType',
             url: 'findAllPaymentType',
             type: 'select',
             required: false,
@@ -983,7 +1008,6 @@ export default {
             width: '300',
             subName: 'department',
             url: 'findAllDepartmentLogic',
-            param: { branchcompany: 1 },
             type: 'select',
             required: true,
           },
@@ -1018,9 +1042,6 @@ export default {
             width: '300',
             subName: 'warehouse',
             url: 'findAllWarehouseLogic',
-            param: {
-              departmentId: this.allSelectAndInputValue?.department ?? null,
-            },
             type: 'select',
             required: true,
           },

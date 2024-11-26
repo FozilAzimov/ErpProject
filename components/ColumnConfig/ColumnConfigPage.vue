@@ -91,8 +91,8 @@
       </div>
     </div>
     <div class="buttons">
-      <el-button type="success" @click="postColumns">Save</el-button>
-      <el-button type="danger" @click="closePopup">Close</el-button>
+      <el-button type="success" @click="saveAction">Save</el-button>
+      <el-button type="danger" @click="closeAction">Close</el-button>
     </div>
   </div>
 </template>
@@ -236,7 +236,9 @@ export default {
       })
       this.rightItems = []
     },
-    postColumns() {
+
+    // coluumn Save action
+    saveAction() {
       let rightItemsName = ''
       // eslint-disable-next-line array-callback-return
       this.rightItems.map((item, index) => {
@@ -267,16 +269,14 @@ export default {
         .post(`/base/${this.api}`, data)
         .then(() => {
           this.checkModal = false
-          this.$emit('checkModal', this.checkModal)
-          location.reload()
+          this.$emit('checkModal', this.checkModal, true)
+          // location.reload()
         })
         .catch((error) => {
           alert(error)
         })
     },
-    closePopup() {
-      this.rightItems = []
-      this.leftItems = []
+    closeAction() {
       this.checkModal = false
       this.$emit('checkModal', this.checkModal)
     },
