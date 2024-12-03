@@ -22,11 +22,7 @@ export default {
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
-  css: ['@assets/scss/main.scss', '@assets/css/main.css'],
-
-  styleResources: {
-    scss: ['assets/scss/_variables.scss'],
-  },
+  css: ['@assets/css/main.css'],
 
   alias: {
     '@images': '@/static/images',
@@ -48,6 +44,7 @@ export default {
     '@/plugins/axios.js',
     '@/plugins/notification.js',
     '@/plugins/format-date.js',
+    '@/plugins/chart.js',
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -63,7 +60,12 @@ export default {
   buildModules: ['@nuxtjs/eslint-module'],
 
   // Modules: https://go.nuxtjs.dev/config-modules
-  modules: ['@nuxtjs/axios', '@nuxtjs/pwa', '@nuxtjs/eslint-module'],
+  modules: [
+    '@nuxtjs/axios',
+    '@nuxtjs/pwa',
+    '@nuxtjs/eslint-module',
+    '@nuxtjs/proxy',
+  ],
 
   ssr: false,
 
@@ -82,15 +84,18 @@ export default {
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
-    // baseURL: 'https://localhost:8443/api',
-    // baseURL: 'https://localhost:443/api',
-    // baseURL: 'https://localhost:8008/api',
-    // baseURL: 'https://192.168.1.159:8443/api',
-    // baseURL: 'https://192.168.1.64:8443/api',
-    // baseURL: 'https://192.168.1.170:443/api',
-    // baseURL: 'https://192.168.1.150:8443/api',
-    // baseURL: 'https://192.168.1.150:443/api',
-    baseURL: 'https://192.168.1.150:443/api',
+    proxy: true,
+    prefix: '/api',
+    withCredentials: true,
+  },
+
+  proxy: {
+    '/api': {
+      target: 'https://192.168.1.150:443',
+      changeOrigin: true, // Origin o'zgartirish
+      secure: false, // SSL sertifikatni tekshirmaslik, ishonchsiz sertifikat uchun.
+      debug: true, // So'rovlarni kuzatish
+    },
   },
 
   // PWA module configuration: https://go.nuxtjs.dev/pwa
@@ -98,7 +103,6 @@ export default {
     manifest: {
       lang: 'en',
     },
-
     workbox: {
       runtimeCaching: [
         {

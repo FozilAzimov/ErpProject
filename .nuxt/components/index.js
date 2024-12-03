@@ -1,385 +1,368 @@
-export { default as MessageBox } from '../..\\components\\MessageBox.vue'
-export { default as ActualitySystem } from '../..\\components\\ActualitySystemPage\\ActualitySystem.vue'
-export { default as BranchesPage } from '../..\\components\\Branches\\BranchesPage.vue'
-export { default as AccountsList } from '../..\\components\\Banks\\AccountsList.vue'
-export { default as BanksList } from '../..\\components\\Banks\\BanksList.vue'
-export { default as BranchesList } from '../..\\components\\Banks\\BranchesList.vue'
-export { default as CurrenRates } from '../..\\components\\Banks\\CurrenRates.vue'
-export { default as PrepareAccount } from '../..\\components\\Banks\\PrepareAccount.vue'
-export { default as PrepareBank } from '../..\\components\\Banks\\PrepareBank.vue'
-export { default as PrepareBranche } from '../..\\components\\Banks\\PrepareBranche.vue'
-export { default as PrepareCurrenRate } from '../..\\components\\Banks\\PrepareCurrenRate.vue'
-export { default as CashboxsList } from '../..\\components\\Cashboxs\\CashboxsList.vue'
-export { default as CurrenciesList } from '../..\\components\\Cashboxs\\CurrenciesList.vue'
-export { default as PrepareCashbox } from '../..\\components\\Cashboxs\\PrepareCashbox.vue'
-export { default as PrepareCurrency } from '../..\\components\\Cashboxs\\PrepareCurrency.vue'
-export { default as PrepareTransactionCharacter } from '../..\\components\\Cashboxs\\PrepareTransactionCharacter.vue'
-export { default as TransactionCharacters } from '../..\\components\\Cashboxs\\TransactionCharacters.vue'
-export { default as ClusterCamera } from '../..\\components\\Cluster\\ClusterCamera.vue'
-export { default as ClusterSeason } from '../..\\components\\Cluster\\ClusterSeason.vue'
-export { default as ClusterSeasonPriceList } from '../..\\components\\Cluster\\ClusterSeasonPriceList.vue'
-export { default as ClusterSeasonReport } from '../..\\components\\Cluster\\ClusterSeasonReport.vue'
-export { default as ClusterYear } from '../..\\components\\Cluster\\ClusterYear.vue'
-export { default as DistanceToTerminalList } from '../..\\components\\Cluster\\DistanceToTerminalList.vue'
-export { default as PrepareClusterSeason } from '../..\\components\\Cluster\\PrepareClusterSeason.vue'
-export { default as PrepareClusterSeasonPriceList } from '../..\\components\\Cluster\\PrepareClusterSeasonPriceList.vue'
-export { default as PrepareClusterYear } from '../..\\components\\Cluster\\PrepareClusterYear.vue'
-export { default as PrepareDistanceToTerminal } from '../..\\components\\Cluster\\PrepareDistanceToTerminal.vue'
-export { default as ColumnConfigPage } from '../..\\components\\ColumnConfig\\ColumnConfigPage.vue'
-export { default as DashboardPage } from '../..\\components\\Dashboard\\DashboardPage.vue'
-export { default as BtnGen } from '../..\\components\\Button\\BtnGen.vue'
-export { default as GenericButton } from '../..\\components\\Button\\GenericButton.vue'
-export { default as EquipmentExpenses } from '../..\\components\\EquipmentReports\\EquipmentExpenses.vue'
-export { default as EquipmentReports } from '../..\\components\\EquipmentReports\\EquipmentReports.vue'
-export { default as EquipmentsOnlineStatus } from '../..\\components\\EquipmentReports\\EquipmentsOnlineStatus.vue'
-export { default as EquipmentsOrderReports } from '../..\\components\\EquipmentReports\\EquipmentsOrderReports.vue'
-export { default as EquipmentsPersonOnlineStatus } from '../..\\components\\EquipmentReports\\EquipmentsPersonOnlineStatus.vue'
-export { default as EquipmentsPersonReports } from '../..\\components\\EquipmentReports\\EquipmentsPersonReports.vue'
-export { default as PrepareEquipmentExpenses } from '../..\\components\\EquipmentReports\\PrepareEquipmentExpenses.vue'
-export { default as GenericInvoiceItemModalPage } from '../..\\components\\GenericInvoiceItemModal\\GenericInvoiceItemModalPage.vue'
-export { default as GenericInvoiceFilteringModalPage } from '../..\\components\\GenericInvoiceFilteringModal\\GenericInvoiceFilteringModalPage.vue'
-export { default as GenericPrepareTablePage } from '../..\\components\\GenericPrepareTable\\GenericPrepareTablePage.vue'
-export { default as GenericCarryDraggable } from '../..\\components\\Generics\\GenericCarryDraggable.vue'
-export { default as GenericCheckBox } from '../..\\components\\Generics\\GenericCheckBox.vue'
-export { default as GenericFileUpload } from '../..\\components\\Generics\\GenericFileUpload.vue'
-export { default as GenericImageUpload } from '../..\\components\\Generics\\GenericImageUpload.vue'
-export { default as GenericInput } from '../..\\components\\Generics\\GenericInput.vue'
-export { default as GenericLookUp } from '../..\\components\\Generics\\GenericLookUp.vue'
-export { default as GenericPagination } from '../..\\components\\Generics\\GenericPagination.vue'
-export { default as GenericPopupPrepareTable } from '../..\\components\\Generics\\GenericPopupPrepareTable.vue'
-export { default as GenericPrepareFilteringPopup } from '../..\\components\\Generics\\GenericPrepareFilteringPopup.vue'
-export { default as GenericPreparePopup } from '../..\\components\\Generics\\GenericPreparePopup.vue'
-export { default as GenericScalesBox } from '../..\\components\\Generics\\GenericScalesBox.vue'
-export { default as GenericTransfer } from '../..\\components\\Generics\\GenericTransfer.vue'
-export { default as LanguageList } from '../..\\components\\Generics\\LanguageList.vue'
-export { default as GenericTablePage } from '../..\\components\\GenericTable\\GenericTablePage.vue'
-export { default as GenericTranslatePage } from '../..\\components\\GenericTranslate\\GenericTranslatePage.vue'
-export { default as AttendanceSchedule } from '../..\\components\\HRMS\\AttendanceSchedule.vue'
-export { default as CheckPoints } from '../..\\components\\HRMS\\CheckPoints.vue'
-export { default as DischargeList } from '../..\\components\\HRMS\\DischargeList.vue'
-export { default as DoorsList } from '../..\\components\\HRMS\\DoorsList.vue'
-export { default as EntryExitByDoors } from '../..\\components\\HRMS\\EntryExitByDoors.vue'
-export { default as HolidaysList } from '../..\\components\\HRMS\\HolidaysList.vue'
-export { default as HrDevices } from '../..\\components\\HRMS\\HrDevices.vue'
-export { default as HrEvents } from '../..\\components\\HRMS\\HrEvents.vue'
-export { default as HronlinesList } from '../..\\components\\HRMS\\HronlinesList.vue'
-export { default as LeavesList } from '../..\\components\\HRMS\\LeavesList.vue'
-export { default as LeaveType } from '../..\\components\\HRMS\\LeaveType.vue'
-export { default as PersonListReport } from '../..\\components\\HRMS\\PersonListReport.vue'
-export { default as PersonSalaries } from '../..\\components\\HRMS\\PersonSalaries.vue'
-export { default as PrepareCheckPoint } from '../..\\components\\HRMS\\PrepareCheckPoint.vue'
-export { default as PrepareDischarge } from '../..\\components\\HRMS\\PrepareDischarge.vue'
-export { default as PrepareDoor } from '../..\\components\\HRMS\\PrepareDoor.vue'
-export { default as PrepareHoliday } from '../..\\components\\HRMS\\PrepareHoliday.vue'
-export { default as PrepareHrDevice } from '../..\\components\\HRMS\\PrepareHrDevice.vue'
-export { default as PrepareLeaves } from '../..\\components\\HRMS\\PrepareLeaves.vue'
-export { default as PrepareLeaveType } from '../..\\components\\HRMS\\PrepareLeaveType.vue'
-export { default as PreparePersonSalary } from '../..\\components\\HRMS\\PreparePersonSalary.vue'
-export { default as PrepareRetentionType } from '../..\\components\\HRMS\\PrepareRetentionType.vue'
-export { default as PrepareTimeZone } from '../..\\components\\HRMS\\PrepareTimeZone.vue'
-export { default as RetentionType } from '../..\\components\\HRMS\\RetentionType.vue'
-export { default as SalariesList } from '../..\\components\\HRMS\\SalariesList.vue'
-export { default as TimeZones } from '../..\\components\\HRMS\\TimeZones.vue'
-export { default as GenericInputDatePage } from '../..\\components\\InputDate\\GenericInputDatePage.vue'
-export { default as InternalInvoice } from '../..\\components\\InternalInvoices\\InternalInvoice.vue'
-export { default as InternalViabranchreceive } from '../..\\components\\InternalInvoices\\InternalViabranchreceive.vue'
-export { default as PrepareInternalInvoiceNew } from '../..\\components\\InternalInvoices\\PrepareInternalInvoiceNew.vue'
-export { default as PrepareInternalInvoiceNewDevice } from '../..\\components\\InternalInvoices\\PrepareInternalInvoiceNewDevice.vue'
-export { default as PrepareReceiveInvoiceNew } from '../..\\components\\InternalInvoices\\PrepareReceiveInvoiceNew.vue'
-export { default as BatchProductionInvoiceUi } from '../..\\components\\Invoices\\BatchProductionInvoiceUi.vue'
-export { default as EntryLaboratory } from '../..\\components\\Invoices\\EntryLaboratory.vue'
-export { default as ExpenseInvoice } from '../..\\components\\Invoices\\ExpenseInvoice.vue'
-export { default as ExternalInvoice } from '../..\\components\\Invoices\\ExternalInvoice.vue'
-export { default as InputFromProductionCompany } from '../..\\components\\Invoices\\InputFromProductionCompany.vue'
-export { default as InputReturn } from '../..\\components\\Invoices\\InputReturn.vue'
-export { default as InputToServiceInvoicePage } from '../..\\components\\Invoices\\InputToServiceInvoicePage.vue'
-export { default as KnittingSewModelBarcodeReader } from '../..\\components\\Invoices\\KnittingSewModelBarcodeReader.vue'
-export { default as MakeBill } from '../..\\components\\Invoices\\MakeBill.vue'
-export { default as MarketSalesInvoice } from '../..\\components\\Invoices\\MarketSalesInvoice.vue'
-export { default as NewPrepareSimpleProductionInvoice } from '../..\\components\\Invoices\\NewPrepareSimpleProductionInvoice.vue'
-export { default as NewSimpleProductionInvoice } from '../..\\components\\Invoices\\NewSimpleProductionInvoice.vue'
-export { default as OpenControlPageNewPage } from '../..\\components\\Invoices\\OpenControlPageNewPage.vue'
-export { default as OutputProductionInvoice } from '../..\\components\\Invoices\\OutputProductionInvoice.vue'
-export { default as OutputProductionReturn } from '../..\\components\\Invoices\\OutputProductionReturn.vue'
-export { default as OutputToProductionCompany } from '../..\\components\\Invoices\\OutputToProductionCompany.vue'
-export { default as OutputToProductionCompanyReturn } from '../..\\components\\Invoices\\OutputToProductionCompanyReturn.vue'
-export { default as OutputToPrOrder } from '../..\\components\\Invoices\\OutputToPrOrder.vue'
-export { default as OutputToPrOrderReturn } from '../..\\components\\Invoices\\OutputToPrOrderReturn.vue'
-export { default as OutputToServiceInvoicePage } from '../..\\components\\Invoices\\OutputToServiceInvoicePage.vue'
-export { default as PrepareExpenseInvoice } from '../..\\components\\Invoices\\prepareExpenseInvoice.vue'
-export { default as PrepareInputFromProductionCompanyNew } from '../..\\components\\Invoices\\PrepareInputFromProductionCompanyNew.vue'
-export { default as PrepareInputReturnNew } from '../..\\components\\Invoices\\PrepareInputReturnNew.vue'
-export { default as PrepareInputToServiceInvoicePage } from '../..\\components\\Invoices\\PrepareInputToServiceInvoicePage.vue'
-export { default as PrepareOutputToEquipment } from '../..\\components\\Invoices\\PrepareOutputToEquipment.vue'
-export { default as PrepareOutputToEquipmentReturnPage } from '../..\\components\\Invoices\\PrepareOutputToEquipmentReturnPage.vue'
-export { default as PrepareOutputToProductionCompanyNew } from '../..\\components\\Invoices\\prepareOutputToProductionCompanyNew.vue'
-export { default as PrepareOutputToProductionCompanyReturnNewPage } from '../..\\components\\Invoices\\PrepareOutputToProductionCompanyReturnNewPage.vue'
-export { default as PrepareOutputToPrOrderPage } from '../..\\components\\Invoices\\PrepareOutputToPrOrderPage.vue'
-export { default as PrepareOutputToPrOrderReturnPage } from '../..\\components\\Invoices\\PrepareOutputToPrOrderReturnPage.vue'
-export { default as PrepareOutputToPrOrderSimple } from '../..\\components\\Invoices\\PrepareOutputToPrOrderSimple.vue'
-export { default as PrepareOutputToServiceInvoicePage } from '../..\\components\\Invoices\\PrepareOutputToServiceInvoicePage.vue'
-export { default as PrepareProductionInvoiceNew } from '../..\\components\\Invoices\\PrepareProductionInvoiceNew.vue'
-export { default as PreparePurchaseInvoiceNew } from '../..\\components\\Invoices\\PreparePurchaseInvoiceNew.vue'
-export { default as PreparePurchaseServiceInvoiceNew } from '../..\\components\\Invoices\\PreparePurchaseServiceInvoiceNew.vue'
-export { default as PrepareSaleInvoiceNew } from '../..\\components\\Invoices\\PrepareSaleInvoiceNew.vue'
-export { default as PrepareSaleServiceInvoiceNewPage } from '../..\\components\\Invoices\\PrepareSaleServiceInvoiceNewPage.vue'
-export { default as PrepareSalesReturnNew } from '../..\\components\\Invoices\\PrepareSalesReturnNew.vue'
-export { default as PrepareSimpleProductionInvoiceManualPage } from '../..\\components\\Invoices\\PrepareSimpleProductionInvoiceManualPage.vue'
-export { default as PrepareSimpleProductionInvoicePage } from '../..\\components\\Invoices\\PrepareSimpleProductionInvoicePage.vue'
-export { default as ProductionByEquipment } from '../..\\components\\Invoices\\ProductionByEquipment.vue'
-export { default as ProductionByPackagePage } from '../..\\components\\Invoices\\ProductionByPackagePage.vue'
-export { default as ProductionForQrCodeListPage } from '../..\\components\\Invoices\\ProductionForQrCodeListPage.vue'
-export { default as ProductionInvoice } from '../..\\components\\Invoices\\ProductionInvoice.vue'
-export { default as ProductionOrderMovement } from '../..\\components\\Invoices\\ProductionOrderMovement.vue'
-export { default as ProductLoading } from '../..\\components\\Invoices\\ProductLoading.vue'
-export { default as ProductLoadingList } from '../..\\components\\Invoices\\ProductLoadingList.vue'
-export { default as PurchaseInvoice } from '../..\\components\\Invoices\\PurchaseInvoice.vue'
-export { default as PurchaseInvoiceScrollTable } from '../..\\components\\Invoices\\PurchaseInvoiceScrollTable.vue'
-export { default as PurchaseServiceInvoice } from '../..\\components\\Invoices\\PurchaseServiceInvoice.vue'
-export { default as SaleInvoice } from '../..\\components\\Invoices\\SaleInvoice.vue'
-export { default as SaleServiceInvoice } from '../..\\components\\Invoices\\SaleServiceInvoice.vue'
-export { default as SalesReturn } from '../..\\components\\Invoices\\SalesReturn.vue'
-export { default as SewModelBarcodeReader } from '../..\\components\\Invoices\\SewModelBarcodeReader.vue'
-export { default as SewModelBarcodeReaderSticker } from '../..\\components\\Invoices\\SewModelBarcodeReaderSticker.vue'
-export { default as SewModelManualBarcodeReader } from '../..\\components\\Invoices\\SewModelManualBarcodeReader.vue'
-export { default as SimpleProductionInvoice } from '../..\\components\\Invoices\\SimpleProductionInvoice.vue'
-export { default as LoadingPage } from '../..\\components\\Loading\\LoadingPage.vue'
-export { default as LoginPage } from '../..\\components\\Login\\LoginPage.vue'
-export { default as ItemSearchList } from '../..\\components\\main\\ItemSearchList.vue'
-export { default as MainHeader } from '../..\\components\\main\\MainHeader.vue'
-export { default as SearchBar } from '../..\\components\\main\\SearchBar.vue'
-export { default as CalculationByColorVariantRecipe } from '../..\\components\\Orders\\CalculationByColorVariantRecipe.vue'
-export { default as ContractRegistration } from '../..\\components\\Orders\\ContractRegistration.vue'
-export { default as DyeingsList } from '../..\\components\\Orders\\DyeingsList.vue'
-export { default as IplikLotStavka } from '../..\\components\\Orders\\IplikLotStavka.vue'
-export { default as IplikStages } from '../..\\components\\Orders\\IplikStages.vue'
-export { default as OrderSalePlannerCalendar } from '../..\\components\\Orders\\OrderSalePlannerCalendar.vue'
-export { default as PlanningsByProductionOrder } from '../..\\components\\Orders\\PlanningsByProductionOrder.vue'
-export { default as PrepareCalculateProductionOrder } from '../..\\components\\Orders\\PrepareCalculateProductionOrder.vue'
-export { default as PrepareIplikLotStavka } from '../..\\components\\Orders\\PrepareIplikLotStavka.vue'
-export { default as PrepareIplikStage } from '../..\\components\\Orders\\PrepareIplikStage.vue'
-export { default as PrepareProductionOrderItem } from '../..\\components\\Orders\\PrepareProductionOrderItem.vue'
-export { default as PrepareSaleOrder } from '../..\\components\\Orders\\PrepareSaleOrder.vue'
-export { default as ProductionOrder } from '../..\\components\\Orders\\ProductionOrder.vue'
-export { default as ProductionOrderPlannings } from '../..\\components\\Orders\\ProductionOrderPlannings.vue'
-export { default as PurchaseOrder } from '../..\\components\\Orders\\PurchaseOrder.vue'
-export { default as SalesOrder } from '../..\\components\\Orders\\SalesOrder.vue'
-export { default as BatchColorDepthTariffs } from '../..\\components\\Productions\\BatchColorDepthTariffs.vue'
-export { default as BatchColorMethodTariffs } from '../..\\components\\Productions\\BatchColorMethodTariffs.vue'
-export { default as BatchDetailsList } from '../..\\components\\Productions\\BatchDetailsList.vue'
-export { default as BatchesList } from '../..\\components\\Productions\\BatchesList.vue'
-export { default as BatchProccesStageTariffs } from '../..\\components\\Productions\\BatchProccesStageTariffs.vue'
-export { default as BatchProcess } from '../..\\components\\Productions\\BatchProcess.vue'
-export { default as BatchProcessStages } from '../..\\components\\Productions\\BatchProcessStages.vue'
-export { default as BatchRepair } from '../..\\components\\Productions\\BatchRepair.vue'
-export { default as BatchUnions } from '../..\\components\\Productions\\BatchUnions.vue'
-export { default as ChangeProductColorVariant } from '../..\\components\\Productions\\ChangeProductColorVariant.vue'
-export { default as ColorDepth } from '../..\\components\\Productions\\ColorDepth.vue'
-export { default as ColorsList } from '../..\\components\\Productions\\ColorsList.vue'
-export { default as ColorVariant } from '../..\\components\\Productions\\ColorVariant.vue'
-export { default as ColorVariantRecipeStage } from '../..\\components\\Productions\\ColorVariantRecipeStage.vue'
-export { default as ColorVariantRecipeStageChild } from '../..\\components\\Productions\\ColorVariantRecipeStageChild.vue'
-export { default as ColorVariantRecipeStageGroup } from '../..\\components\\Productions\\ColorVariantRecipeStageGroup.vue'
-export { default as ColorVariantRecipeStagePicture } from '../..\\components\\Productions\\ColorVariantRecipeStagePicture.vue'
-export { default as DefectTypes } from '../..\\components\\Productions\\DefectTypes.vue'
-export { default as DesignsList } from '../..\\components\\Productions\\DesignsList.vue'
-export { default as DesignTypes } from '../..\\components\\Productions\\DesignTypes.vue'
-export { default as DesignVariants } from '../..\\components\\Productions\\DesignVariants.vue'
-export { default as EquipmentsRealTimeStatus } from '../..\\components\\Productions\\EquipmentsRealTimeStatus.vue'
-export { default as EquipmentsRealTimeStatus2 } from '../..\\components\\Productions\\EquipmentsRealTimeStatus2.vue'
-export { default as ExtraWorks } from '../..\\components\\Productions\\ExtraWorks.vue'
-export { default as OpenControl } from '../..\\components\\Productions\\OpenControl.vue'
-export { default as OrderProductionTypes } from '../..\\components\\Productions\\OrderProductionTypes.vue'
-export { default as PackagingList } from '../..\\components\\Productions\\PackagingList.vue'
-export { default as PersonAndEquipments } from '../..\\components\\Productions\\PersonAndEquipments.vue'
-export { default as PlanningTypes } from '../..\\components\\Productions\\PlanningTypes.vue'
-export { default as PrepareBand } from '../..\\components\\Productions\\PrepareBand.vue'
-export { default as PrepareBatchColorDepthTariffs } from '../..\\components\\Productions\\PrepareBatchColorDepthTariffs.vue'
-export { default as PrepareBatchColorMethodTariffs } from '../..\\components\\Productions\\PrepareBatchColorMethodTariffs.vue'
-export { default as PrepareBatchNew } from '../..\\components\\Productions\\PrepareBatchNew.vue'
-export { default as PrepareBatchProccesStageTariffs } from '../..\\components\\Productions\\PrepareBatchProccesStageTariffs.vue'
-export { default as PrepareBatchProcess } from '../..\\components\\Productions\\PrepareBatchProcess.vue'
-export { default as PrepareBatchProcessStage } from '../..\\components\\Productions\\PrepareBatchProcessStage.vue'
-export { default as PrepareBatchUnionsNew } from '../..\\components\\Productions\\PrepareBatchUnionsNew.vue'
-export { default as PrepareColor } from '../..\\components\\Productions\\PrepareColor.vue'
-export { default as PrepareColorDepth } from '../..\\components\\Productions\\PrepareColorDepth.vue'
-export { default as PrepareColorVariant } from '../..\\components\\Productions\\PrepareColorVariant.vue'
-export { default as PrepareColorVariantRecipeStage } from '../..\\components\\Productions\\PrepareColorVariantRecipeStage.vue'
-export { default as PrepareColorVariantRecipeStageChild } from '../..\\components\\Productions\\PrepareColorVariantRecipeStageChild.vue'
-export { default as PrepareColorVariantRecipeStageGroup } from '../..\\components\\Productions\\PrepareColorVariantRecipeStageGroup.vue'
-export { default as PrepareColorVariantRecipeStagePicture } from '../..\\components\\Productions\\PrepareColorVariantRecipeStagePicture.vue'
-export { default as PrepareDefectType } from '../..\\components\\Productions\\PrepareDefectType.vue'
-export { default as PrepareDesign } from '../..\\components\\Productions\\PrepareDesign.vue'
-export { default as PrepareDesignColorVariant } from '../..\\components\\Productions\\PrepareDesignColorVariant.vue'
-export { default as PrepareDesignType } from '../..\\components\\Productions\\PrepareDesignType.vue'
-export { default as PrepareDesignVariant } from '../..\\components\\Productions\\PrepareDesignVariant.vue'
-export { default as PrepareExtraWork } from '../..\\components\\Productions\\PrepareExtraWork.vue'
-export { default as PrepareOrderProductionType } from '../..\\components\\Productions\\PrepareOrderProductionType.vue'
-export { default as PreparePackaging } from '../..\\components\\Productions\\PreparePackaging.vue'
-export { default as PreparePersonAndEquipment } from '../..\\components\\Productions\\PreparePersonAndEquipment.vue'
-export { default as PreparePersonEquipmentSew } from '../..\\components\\Productions\\PreparePersonEquipmentSew.vue'
-export { default as PreparePlanningType } from '../..\\components\\Productions\\PreparePlanningType.vue'
-export { default as PrepareProductAnalogs } from '../..\\components\\Productions\\PrepareProductAnalogs.vue'
-export { default as PrepareProductProductionType } from '../..\\components\\Productions\\PrepareProductProductionType.vue'
-export { default as PrepareSewBandEquipment } from '../..\\components\\Productions\\PrepareSewBandEquipment.vue'
-export { default as PrepareSewModel } from '../..\\components\\Productions\\PrepareSewModel.vue'
-export { default as PrepareSewModelOperationName } from '../..\\components\\Productions\\PrepareSewModelOperationName.vue'
-export { default as PrepareSewModelPackingType } from '../..\\components\\Productions\\PrepareSewModelPackingType.vue'
-export { default as PrepareSewModelSizeColorBarcode } from '../..\\components\\Productions\\PrepareSewModelSizeColorBarcode.vue'
-export { default as PrepareSewModelVariantsSize } from '../..\\components\\Productions\\PrepareSewModelVariantsSize.vue'
-export { default as PrepareSewOperatorsKpi } from '../..\\components\\Productions\\PrepareSewOperatorsKpi.vue'
-export { default as PrepareStage } from '../..\\components\\Productions\\PrepareStage.vue'
-export { default as PrepareTariffs } from '../..\\components\\Productions\\PrepareTariffs.vue'
-export { default as ProductAnalogs } from '../..\\components\\Productions\\ProductAnalogs.vue'
-export { default as ProductionAdditionTable } from '../..\\components\\Productions\\ProductionAdditionTable.vue'
-export { default as ProductProductionTypes } from '../..\\components\\Productions\\ProductProductionTypes.vue'
-export { default as ProductsAndAutomaticSystemsCreateEdit } from '../..\\components\\Productions\\ProductsAndAutomaticSystemsCreateEdit.vue'
-export { default as SewModel } from '../..\\components\\Productions\\SewModel.vue'
-export { default as SewModelBarcodeReaderQualityControl } from '../..\\components\\Productions\\SewModelBarcodeReaderQualityControl.vue'
-export { default as SewModelOperationName } from '../..\\components\\Productions\\SewModelOperationName.vue'
-export { default as SewModelPackingType } from '../..\\components\\Productions\\SewModelPackingType.vue'
-export { default as SewModelSizeColorBarcode } from '../..\\components\\Productions\\SewModelSizeColorBarcode.vue'
-export { default as SewModelVariantsSize } from '../..\\components\\Productions\\SewModelVariantsSize.vue'
-export { default as SewOperatorsKpi } from '../..\\components\\Productions\\SewOperatorsKpi.vue'
-export { default as SewOrderOnlineStatus } from '../..\\components\\Productions\\SewOrderOnlineStatus.vue'
-export { default as ShippingTransportDislocationParent } from '../..\\components\\Productions\\ShippingTransportDislocationParent.vue'
-export { default as StagesList } from '../..\\components\\Productions\\StagesList.vue'
-export { default as TariffsList } from '../..\\components\\Productions\\TariffsList.vue'
-export { default as QuickMenuSettingsList } from '../..\\components\\QuickMenuSettings\\QuickMenuSettingsList.vue'
-export { default as GenericSelect } from '../..\\components\\Select\\GenericSelect.vue'
-export { default as SessionsPage } from '../..\\components\\Sessions\\SessionsPage.vue'
-export { default as ArticlesList } from '../..\\components\\Settings\\ArticlesList.vue'
-export { default as BasicTools } from '../..\\components\\Settings\\BasicTools.vue'
-export { default as CapitalsList } from '../..\\components\\Settings\\CapitalsList.vue'
-export { default as CarList } from '../..\\components\\Settings\\CarList.vue'
-export { default as CharacterDetails } from '../..\\components\\Settings\\CharacterDetails.vue'
-export { default as CharacteristicsList } from '../..\\components\\Settings\\CharacteristicsList.vue'
-export { default as CityList } from '../..\\components\\Settings\\CityList.vue'
-export { default as ColumnSettings } from '../..\\components\\Settings\\ColumnSettings.vue'
-export { default as CompaniesList } from '../..\\components\\Settings\\CompaniesList.vue'
-export { default as CountryList } from '../..\\components\\Settings\\CountryList.vue'
-export { default as DecreesList } from '../..\\components\\Settings\\DecreesList.vue'
-export { default as DepartmentsList } from '../..\\components\\Settings\\DepartmentsList.vue'
-export { default as DiscountCards } from '../..\\components\\Settings\\DiscountCards.vue'
-export { default as DiscountsList } from '../..\\components\\Settings\\DiscountsList.vue'
-export { default as DistrictList } from '../..\\components\\Settings\\DistrictList.vue'
-export { default as EquipmentsList } from '../..\\components\\Settings\\EquipmentsList.vue'
-export { default as FilesList } from '../..\\components\\Settings\\FilesList.vue'
-export { default as InboxList } from '../..\\components\\Settings\\InboxList.vue'
-export { default as IntangibleAssets } from '../..\\components\\Settings\\IntangibleAssets.vue'
-export { default as KroyList } from '../..\\components\\Settings\\KroyList.vue'
-export { default as LanguagesList } from '../..\\components\\Settings\\LanguagesList.vue'
-export { default as LogsList } from '../..\\components\\Settings\\LogsList.vue'
-export { default as ManufacturersList } from '../..\\components\\Settings\\ManufacturersList.vue'
-export { default as MenuSettings } from '../..\\components\\Settings\\MenuSettings.vue'
-export { default as ObligationsList } from '../..\\components\\Settings\\ObligationsList.vue'
-export { default as PackageTypes } from '../..\\components\\Settings\\PackageTypes.vue'
-export { default as PermissionGroups } from '../..\\components\\Settings\\PermissionGroups.vue'
-export { default as PhoneNumbers } from '../..\\components\\Settings\\PhoneNumbers.vue'
-export { default as PlateNumber } from '../..\\components\\Settings\\PlateNumber.vue'
-export { default as PositionsList } from '../..\\components\\Settings\\PositionsList.vue'
-export { default as PostList } from '../..\\components\\Settings\\PostList.vue'
-export { default as PostStations } from '../..\\components\\Settings\\PostStations.vue'
-export { default as PrepareArticle } from '../..\\components\\Settings\\PrepareArticle.vue'
-export { default as PrepareBasicTools } from '../..\\components\\Settings\\PrepareBasicTools.vue'
-export { default as PrepareCapitals } from '../..\\components\\Settings\\PrepareCapitals.vue'
-export { default as PrepareCar } from '../..\\components\\Settings\\PrepareCar.vue'
-export { default as PrepareCharacterDetail } from '../..\\components\\Settings\\PrepareCharacterDetail.vue'
-export { default as PrepareCharacteristic } from '../..\\components\\Settings\\PrepareCharacteristic.vue'
-export { default as PrepareCity } from '../..\\components\\Settings\\PrepareCity.vue'
-export { default as PrepareColumnSettings } from '../..\\components\\Settings\\PrepareColumnSettings.vue'
-export { default as PrepareCompany } from '../..\\components\\Settings\\PrepareCompany.vue'
-export { default as PrepareCountry } from '../..\\components\\Settings\\PrepareCountry.vue'
-export { default as PrepareDecreeList } from '../..\\components\\Settings\\PrepareDecreeList.vue'
-export { default as PrepareDepartment } from '../..\\components\\Settings\\PrepareDepartment.vue'
-export { default as PrepareDiscount } from '../..\\components\\Settings\\PrepareDiscount.vue'
-export { default as PrepareDiscountCard } from '../..\\components\\Settings\\PrepareDiscountCard.vue'
-export { default as PrepareDistrict } from '../..\\components\\Settings\\PrepareDistrict.vue'
-export { default as PrepareEquipment } from '../..\\components\\Settings\\PrepareEquipment.vue'
-export { default as PrepareEquipmentExternal } from '../..\\components\\Settings\\PrepareEquipmentExternal.vue'
-export { default as PrepareIntangibleAssets } from '../..\\components\\Settings\\PrepareIntangibleAssets.vue'
-export { default as PrepareKroy } from '../..\\components\\Settings\\PrepareKroy.vue'
-export { default as PrepareLanguage } from '../..\\components\\Settings\\PrepareLanguage.vue'
-export { default as PrepareManufacturer } from '../..\\components\\Settings\\PrepareManufacturer.vue'
-export { default as PrepareObligations } from '../..\\components\\Settings\\PrepareObligations.vue'
-export { default as PreparePackageType } from '../..\\components\\Settings\\PreparePackageType.vue'
-export { default as PreparePermissionGroup } from '../..\\components\\Settings\\PreparePermissionGroup.vue'
-export { default as PreparePhoneNumber } from '../..\\components\\Settings\\PreparePhoneNumber.vue'
-export { default as PreparePlateNumber } from '../..\\components\\Settings\\PreparePlateNumber.vue'
-export { default as PreparePosition } from '../..\\components\\Settings\\PreparePosition.vue'
-export { default as PreparePost } from '../..\\components\\Settings\\PreparePost.vue'
-export { default as PreparePostStation } from '../..\\components\\Settings\\PreparePostStation.vue'
-export { default as PrepareProductCategory } from '../..\\components\\Settings\\PrepareProductCategory.vue'
-export { default as PrepareProductCompanyPriceList } from '../..\\components\\Settings\\PrepareProductCompanyPriceList.vue'
-export { default as PrepareProductEntryType } from '../..\\components\\Settings\\PrepareProductEntryType.vue'
-export { default as PrepareProductionArticle } from '../..\\components\\Settings\\PrepareProductionArticle.vue'
-export { default as PrepareProductionOrderRecipeToChangeReserve } from '../..\\components\\Settings\\PrepareProductionOrderRecipeToChangeReserve.vue'
-export { default as PrepareProducts } from '../..\\components\\Settings\\PrepareProducts.vue'
-export { default as PrepareProductTransferCode } from '../..\\components\\Settings\\PrepareProductTransferCode.vue'
-export { default as PrepareProfitsAndLosses } from '../..\\components\\Settings\\prepareProfitsAndLosses.vue'
-export { default as PrepareShift } from '../..\\components\\Settings\\PrepareShift.vue'
-export { default as PrepareStreet } from '../..\\components\\Settings\\PrepareStreet.vue'
-export { default as PrepareSubDepartments } from '../..\\components\\Settings\\PrepareSubDepartments.vue'
-export { default as PrepareTableRowAccessSysUser } from '../..\\components\\Settings\\PrepareTableRowAccessSysUser.vue'
-export { default as PrepareTara } from '../..\\components\\Settings\\PrepareTara.vue'
-export { default as PrepareUnitMeasurement } from '../..\\components\\Settings\\PrepareUnitMeasurement.vue'
-export { default as PrepareUser } from '../..\\components\\Settings\\PrepareUser.vue'
-export { default as PrepareUserPersonal } from '../..\\components\\Settings\\PrepareUserPersonal.vue'
-export { default as PrepareWarehouse } from '../..\\components\\Settings\\PrepareWarehouse.vue'
-export { default as ProductCategories } from '../..\\components\\Settings\\ProductCategories.vue'
-export { default as ProductCompanyPriceList } from '../..\\components\\Settings\\ProductCompanyPriceList.vue'
-export { default as ProductEntryTypes } from '../..\\components\\Settings\\ProductEntryTypes.vue'
-export { default as ProductionArticles } from '../..\\components\\Settings\\ProductionArticles.vue'
-export { default as ProductsList } from '../..\\components\\Settings\\ProductsList.vue'
-export { default as ProductTransferCodes } from '../..\\components\\Settings\\ProductTransferCodes.vue'
-export { default as ProfitsAndLosses } from '../..\\components\\Settings\\ProfitsAndLosses.vue'
-export { default as ShiftList } from '../..\\components\\Settings\\ShiftList.vue'
-export { default as StreetList } from '../..\\components\\Settings\\StreetList.vue'
-export { default as SubDepartments } from '../..\\components\\Settings\\SubDepartments.vue'
-export { default as TableRowAccessSysUser } from '../..\\components\\Settings\\TableRowAccessSysUser.vue'
-export { default as TarasList } from '../..\\components\\Settings\\TarasList.vue'
-export { default as UnitMeasurement } from '../..\\components\\Settings\\UnitMeasurement.vue'
-export { default as UsersList } from '../..\\components\\Settings\\UsersList.vue'
-export { default as WarehousesList } from '../..\\components\\Settings\\WarehousesList.vue'
-export { default as PaymentTypeGroups } from '../..\\components\\Transactions\\PaymentTypeGroups.vue'
-export { default as PaymentTypes } from '../..\\components\\Transactions\\PaymentTypes.vue'
-export { default as PreparePaymentType } from '../..\\components\\Transactions\\PreparePaymentType.vue'
-export { default as PreparePaymentTypeGroup } from '../..\\components\\Transactions\\PreparePaymentTypeGroup.vue'
-export { default as TransactionMovements } from '../..\\components\\Transactions\\TransactionMovements.vue'
-export { default as PrepareWeight } from '../..\\components\\Weights\\PrepareWeight.vue'
-export { default as WeightsList } from '../..\\components\\Weights\\WeightsList.vue'
-export { default as InternalCustomTable } from '../..\\components\\Invoices\\PurchaseAndTransferInvoicesFolder\\InternalCustomTable.vue'
-export { default as PurchaseAndTransferInvoices } from '../..\\components\\Invoices\\PurchaseAndTransferInvoicesFolder\\PurchaseAndTransferInvoices.vue'
-export { default as EndScaleBox } from '../..\\components\\Invoices\\ScaleBoxs\\EndScaleBox.vue'
-export { default as ScaleBox } from '../..\\components\\Invoices\\ScaleBoxs\\ScaleBox.vue'
-export { default as ScaleBoxGenericTable } from '../..\\components\\Invoices\\ScaleBoxs\\ScaleBoxGenericTable.vue'
-export { default as PrepareSewProductionOrderItemList } from '../..\\components\\Orders\\PrepareSewProductionOrderItem\\PrepareSewProductionOrderItemList.vue'
-export { default as SewCreatedTableBody } from '../..\\components\\Orders\\PrepareSewProductionOrderItem\\SewCreatedTableBody.vue'
-export { default as SewCreatedTableBodyEdit } from '../..\\components\\Orders\\PrepareSewProductionOrderItem\\SewCreatedTableBodyEdit.vue'
-export { default as StaticTopTableList } from '../..\\components\\Orders\\PrepareSewProductionOrderItem\\StaticTopTableList.vue'
-export { default as SubKroyTable } from '../..\\components\\Orders\\PrepareSewProductionOrderItem\\SubKroyTable.vue'
-export { default as TableSewCreated } from '../..\\components\\Orders\\PrepareSewProductionOrderItem\\TableSewCreated.vue'
-export { default as BandsPage } from '../..\\components\\Reports\\BandsPage\\BandsPage.vue'
-export { default as BatchReportsPage } from '../..\\components\\Reports\\BatchReportsPage\\BatchReportsPage.vue'
-export { default as BatchStagesReport } from '../..\\components\\Reports\\BatchStagesReport\\BatchStagesReport.vue'
-export { default as BranchProductsStockReportByLogic } from '../..\\components\\Reports\\BranchProductsStockReportByLogic\\BranchProductsStockReportByLogic.vue'
-export { default as GradePage } from '../..\\components\\Reports\\GradePage\\GradePage.vue'
-export { default as InputStockDetailReport } from '../..\\components\\Reports\\InputStockDetailReport\\InputStockDetailReport.vue'
-export { default as InvoiceReportsPage } from '../..\\components\\Reports\\InvoiceReportsPage\\InvoiceReportsPage.vue'
-export { default as PersonEquipmentsPage } from '../..\\components\\Reports\\PersonEquipmentsPage\\PersonEquipmentsPage.vue'
-export { default as SewBandEquipments } from '../..\\components\\Reports\\SewBandsEquipments\\SewBandEquipments.vue'
-export { default as SewModelReport } from '../..\\components\\Reports\\SewModelReport\\SewModelReport.vue'
-export { default as TransactionDetailReportPage } from '../..\\components\\Reports\\TransactionDetailReportPage\\TransactionDetailReportPage.vue'
-export { default as PageTable } from '../..\\components\\Reports\\TransactionReports\\PageTable.vue'
-export { default as SummaryReportPage1 } from '../..\\components\\Reports\\TransactionReports\\SummaryReportPage1.vue'
-export { default as SummaryReportPage2 } from '../..\\components\\Reports\\TransactionReports\\SummaryReportPage2.vue'
-export { default as SummaryReportPage3 } from '../..\\components\\Reports\\TransactionReports\\SummaryReportPage3.vue'
-export { default as SummaryReportPage4 } from '../..\\components\\Reports\\TransactionReports\\SummaryReportPage4.vue'
-export { default as SummaryReportPage5 } from '../..\\components\\Reports\\TransactionReports\\SummaryReportPage5.vue'
-export { default as SummaryReportPage6 } from '../..\\components\\Reports\\TransactionReports\\SummaryReportPage6.vue'
-export { default as SummaryReportPage7 } from '../..\\components\\Reports\\TransactionReports\\SummaryReportPage7.vue'
-export { default as TransactionReportsPage } from '../..\\components\\Reports\\TransactionReports\\TransactionReportsPage.vue'
-export { default as TransactionSaldoReport } from '../..\\components\\Reports\\TransactionSaldoReport\\TransactionSaldoReport.vue'
+export const MessageBox = () => import('../..\\components\\MessageBox.vue' /* webpackChunkName: "components/message-box" */).then(c => wrapFunctional(c.default || c))
+export const ActualitySystem = () => import('../..\\components\\ActualitySystemPage\\ActualitySystem.vue' /* webpackChunkName: "components/actuality-system" */).then(c => wrapFunctional(c.default || c))
+export const BtnGen = () => import('../..\\components\\Button\\BtnGen.vue' /* webpackChunkName: "components/btn-gen" */).then(c => wrapFunctional(c.default || c))
+export const GenericButton = () => import('../..\\components\\Button\\GenericButton.vue' /* webpackChunkName: "components/generic-button" */).then(c => wrapFunctional(c.default || c))
+export const BranchesPage = () => import('../..\\components\\Branches\\BranchesPage.vue' /* webpackChunkName: "components/branches-page" */).then(c => wrapFunctional(c.default || c))
+export const CashboxsList = () => import('../..\\components\\Cashboxs\\CashboxsList.vue' /* webpackChunkName: "components/cashboxs-list" */).then(c => wrapFunctional(c.default || c))
+export const CurrenciesList = () => import('../..\\components\\Cashboxs\\CurrenciesList.vue' /* webpackChunkName: "components/currencies-list" */).then(c => wrapFunctional(c.default || c))
+export const PrepareCashbox = () => import('../..\\components\\Cashboxs\\PrepareCashbox.vue' /* webpackChunkName: "components/prepare-cashbox" */).then(c => wrapFunctional(c.default || c))
+export const PrepareCurrency = () => import('../..\\components\\Cashboxs\\PrepareCurrency.vue' /* webpackChunkName: "components/prepare-currency" */).then(c => wrapFunctional(c.default || c))
+export const PrepareTransactionCharacter = () => import('../..\\components\\Cashboxs\\PrepareTransactionCharacter.vue' /* webpackChunkName: "components/prepare-transaction-character" */).then(c => wrapFunctional(c.default || c))
+export const TransactionCharacters = () => import('../..\\components\\Cashboxs\\TransactionCharacters.vue' /* webpackChunkName: "components/transaction-characters" */).then(c => wrapFunctional(c.default || c))
+export const AccountsList = () => import('../..\\components\\Banks\\AccountsList.vue' /* webpackChunkName: "components/accounts-list" */).then(c => wrapFunctional(c.default || c))
+export const BanksList = () => import('../..\\components\\Banks\\BanksList.vue' /* webpackChunkName: "components/banks-list" */).then(c => wrapFunctional(c.default || c))
+export const BranchesList = () => import('../..\\components\\Banks\\BranchesList.vue' /* webpackChunkName: "components/branches-list" */).then(c => wrapFunctional(c.default || c))
+export const CurrenRates = () => import('../..\\components\\Banks\\CurrenRates.vue' /* webpackChunkName: "components/curren-rates" */).then(c => wrapFunctional(c.default || c))
+export const PrepareAccount = () => import('../..\\components\\Banks\\PrepareAccount.vue' /* webpackChunkName: "components/prepare-account" */).then(c => wrapFunctional(c.default || c))
+export const PrepareBank = () => import('../..\\components\\Banks\\PrepareBank.vue' /* webpackChunkName: "components/prepare-bank" */).then(c => wrapFunctional(c.default || c))
+export const PrepareBranche = () => import('../..\\components\\Banks\\PrepareBranche.vue' /* webpackChunkName: "components/prepare-branche" */).then(c => wrapFunctional(c.default || c))
+export const PrepareCurrenRate = () => import('../..\\components\\Banks\\PrepareCurrenRate.vue' /* webpackChunkName: "components/prepare-curren-rate" */).then(c => wrapFunctional(c.default || c))
+export const ColumnConfigPage = () => import('../..\\components\\ColumnConfig\\ColumnConfigPage.vue' /* webpackChunkName: "components/column-config-page" */).then(c => wrapFunctional(c.default || c))
+export const DashboardPage = () => import('../..\\components\\Dashboard\\DashboardPage.vue' /* webpackChunkName: "components/dashboard-page" */).then(c => wrapFunctional(c.default || c))
+export const ClusterCamera = () => import('../..\\components\\Cluster\\ClusterCamera.vue' /* webpackChunkName: "components/cluster-camera" */).then(c => wrapFunctional(c.default || c))
+export const ClusterSeason = () => import('../..\\components\\Cluster\\ClusterSeason.vue' /* webpackChunkName: "components/cluster-season" */).then(c => wrapFunctional(c.default || c))
+export const ClusterSeasonPriceList = () => import('../..\\components\\Cluster\\ClusterSeasonPriceList.vue' /* webpackChunkName: "components/cluster-season-price-list" */).then(c => wrapFunctional(c.default || c))
+export const ClusterSeasonReport = () => import('../..\\components\\Cluster\\ClusterSeasonReport.vue' /* webpackChunkName: "components/cluster-season-report" */).then(c => wrapFunctional(c.default || c))
+export const ClusterYear = () => import('../..\\components\\Cluster\\ClusterYear.vue' /* webpackChunkName: "components/cluster-year" */).then(c => wrapFunctional(c.default || c))
+export const DistanceToTerminalList = () => import('../..\\components\\Cluster\\DistanceToTerminalList.vue' /* webpackChunkName: "components/distance-to-terminal-list" */).then(c => wrapFunctional(c.default || c))
+export const PrepareClusterSeason = () => import('../..\\components\\Cluster\\PrepareClusterSeason.vue' /* webpackChunkName: "components/prepare-cluster-season" */).then(c => wrapFunctional(c.default || c))
+export const PrepareClusterSeasonPriceList = () => import('../..\\components\\Cluster\\PrepareClusterSeasonPriceList.vue' /* webpackChunkName: "components/prepare-cluster-season-price-list" */).then(c => wrapFunctional(c.default || c))
+export const PrepareClusterYear = () => import('../..\\components\\Cluster\\PrepareClusterYear.vue' /* webpackChunkName: "components/prepare-cluster-year" */).then(c => wrapFunctional(c.default || c))
+export const PrepareDistanceToTerminal = () => import('../..\\components\\Cluster\\PrepareDistanceToTerminal.vue' /* webpackChunkName: "components/prepare-distance-to-terminal" */).then(c => wrapFunctional(c.default || c))
+export const GenericInvoiceItemModalPage = () => import('../..\\components\\GenericInvoiceItemModal\\GenericInvoiceItemModalPage.vue' /* webpackChunkName: "components/generic-invoice-item-modal-page" */).then(c => wrapFunctional(c.default || c))
+export const EquipmentExpenses = () => import('../..\\components\\EquipmentReports\\EquipmentExpenses.vue' /* webpackChunkName: "components/equipment-expenses" */).then(c => wrapFunctional(c.default || c))
+export const EquipmentReports = () => import('../..\\components\\EquipmentReports\\EquipmentReports.vue' /* webpackChunkName: "components/equipment-reports" */).then(c => wrapFunctional(c.default || c))
+export const EquipmentsOnlineStatus = () => import('../..\\components\\EquipmentReports\\EquipmentsOnlineStatus.vue' /* webpackChunkName: "components/equipments-online-status" */).then(c => wrapFunctional(c.default || c))
+export const EquipmentsOrderReports = () => import('../..\\components\\EquipmentReports\\EquipmentsOrderReports.vue' /* webpackChunkName: "components/equipments-order-reports" */).then(c => wrapFunctional(c.default || c))
+export const EquipmentsPersonOnlineStatus = () => import('../..\\components\\EquipmentReports\\EquipmentsPersonOnlineStatus.vue' /* webpackChunkName: "components/equipments-person-online-status" */).then(c => wrapFunctional(c.default || c))
+export const EquipmentsPersonReports = () => import('../..\\components\\EquipmentReports\\EquipmentsPersonReports.vue' /* webpackChunkName: "components/equipments-person-reports" */).then(c => wrapFunctional(c.default || c))
+export const PrepareEquipmentExpenses = () => import('../..\\components\\EquipmentReports\\PrepareEquipmentExpenses.vue' /* webpackChunkName: "components/prepare-equipment-expenses" */).then(c => wrapFunctional(c.default || c))
+export const GenericInvoiceFilteringModalPage = () => import('../..\\components\\GenericInvoiceFilteringModal\\GenericInvoiceFilteringModalPage.vue' /* webpackChunkName: "components/generic-invoice-filtering-modal-page" */).then(c => wrapFunctional(c.default || c))
+export const GenericPrepareTablePage = () => import('../..\\components\\GenericPrepareTable\\GenericPrepareTablePage.vue' /* webpackChunkName: "components/generic-prepare-table-page" */).then(c => wrapFunctional(c.default || c))
+export const GenericCarryDraggable = () => import('../..\\components\\Generics\\GenericCarryDraggable.vue' /* webpackChunkName: "components/generic-carry-draggable" */).then(c => wrapFunctional(c.default || c))
+export const GenericCheckBox = () => import('../..\\components\\Generics\\GenericCheckBox.vue' /* webpackChunkName: "components/generic-check-box" */).then(c => wrapFunctional(c.default || c))
+export const GenericFileUpload = () => import('../..\\components\\Generics\\GenericFileUpload.vue' /* webpackChunkName: "components/generic-file-upload" */).then(c => wrapFunctional(c.default || c))
+export const GenericImageUpload = () => import('../..\\components\\Generics\\GenericImageUpload.vue' /* webpackChunkName: "components/generic-image-upload" */).then(c => wrapFunctional(c.default || c))
+export const GenericInput = () => import('../..\\components\\Generics\\GenericInput.vue' /* webpackChunkName: "components/generic-input" */).then(c => wrapFunctional(c.default || c))
+export const GenericLookUp = () => import('../..\\components\\Generics\\GenericLookUp.vue' /* webpackChunkName: "components/generic-look-up" */).then(c => wrapFunctional(c.default || c))
+export const GenericPagination = () => import('../..\\components\\Generics\\GenericPagination.vue' /* webpackChunkName: "components/generic-pagination" */).then(c => wrapFunctional(c.default || c))
+export const GenericPopupPrepareTable = () => import('../..\\components\\Generics\\GenericPopupPrepareTable.vue' /* webpackChunkName: "components/generic-popup-prepare-table" */).then(c => wrapFunctional(c.default || c))
+export const GenericPrepareFilteringPopup = () => import('../..\\components\\Generics\\GenericPrepareFilteringPopup.vue' /* webpackChunkName: "components/generic-prepare-filtering-popup" */).then(c => wrapFunctional(c.default || c))
+export const GenericPreparePopup = () => import('../..\\components\\Generics\\GenericPreparePopup.vue' /* webpackChunkName: "components/generic-prepare-popup" */).then(c => wrapFunctional(c.default || c))
+export const GenericScalesBox = () => import('../..\\components\\Generics\\GenericScalesBox.vue' /* webpackChunkName: "components/generic-scales-box" */).then(c => wrapFunctional(c.default || c))
+export const GenericTransfer = () => import('../..\\components\\Generics\\GenericTransfer.vue' /* webpackChunkName: "components/generic-transfer" */).then(c => wrapFunctional(c.default || c))
+export const LanguageList = () => import('../..\\components\\Generics\\LanguageList.vue' /* webpackChunkName: "components/language-list" */).then(c => wrapFunctional(c.default || c))
+export const GenericTablePage = () => import('../..\\components\\GenericTable\\GenericTablePage.vue' /* webpackChunkName: "components/generic-table-page" */).then(c => wrapFunctional(c.default || c))
+export const AttendanceSchedule = () => import('../..\\components\\HRMS\\AttendanceSchedule.vue' /* webpackChunkName: "components/attendance-schedule" */).then(c => wrapFunctional(c.default || c))
+export const CheckPoints = () => import('../..\\components\\HRMS\\CheckPoints.vue' /* webpackChunkName: "components/check-points" */).then(c => wrapFunctional(c.default || c))
+export const DischargeList = () => import('../..\\components\\HRMS\\DischargeList.vue' /* webpackChunkName: "components/discharge-list" */).then(c => wrapFunctional(c.default || c))
+export const DoorsList = () => import('../..\\components\\HRMS\\DoorsList.vue' /* webpackChunkName: "components/doors-list" */).then(c => wrapFunctional(c.default || c))
+export const EntryExitByDoors = () => import('../..\\components\\HRMS\\EntryExitByDoors.vue' /* webpackChunkName: "components/entry-exit-by-doors" */).then(c => wrapFunctional(c.default || c))
+export const HolidaysList = () => import('../..\\components\\HRMS\\HolidaysList.vue' /* webpackChunkName: "components/holidays-list" */).then(c => wrapFunctional(c.default || c))
+export const HrDevices = () => import('../..\\components\\HRMS\\HrDevices.vue' /* webpackChunkName: "components/hr-devices" */).then(c => wrapFunctional(c.default || c))
+export const HrEvents = () => import('../..\\components\\HRMS\\HrEvents.vue' /* webpackChunkName: "components/hr-events" */).then(c => wrapFunctional(c.default || c))
+export const HronlinesList = () => import('../..\\components\\HRMS\\HronlinesList.vue' /* webpackChunkName: "components/hronlines-list" */).then(c => wrapFunctional(c.default || c))
+export const LeavesList = () => import('../..\\components\\HRMS\\LeavesList.vue' /* webpackChunkName: "components/leaves-list" */).then(c => wrapFunctional(c.default || c))
+export const LeaveType = () => import('../..\\components\\HRMS\\LeaveType.vue' /* webpackChunkName: "components/leave-type" */).then(c => wrapFunctional(c.default || c))
+export const PersonListReport = () => import('../..\\components\\HRMS\\PersonListReport.vue' /* webpackChunkName: "components/person-list-report" */).then(c => wrapFunctional(c.default || c))
+export const PersonSalaries = () => import('../..\\components\\HRMS\\PersonSalaries.vue' /* webpackChunkName: "components/person-salaries" */).then(c => wrapFunctional(c.default || c))
+export const PrepareCheckPoint = () => import('../..\\components\\HRMS\\PrepareCheckPoint.vue' /* webpackChunkName: "components/prepare-check-point" */).then(c => wrapFunctional(c.default || c))
+export const PrepareDischarge = () => import('../..\\components\\HRMS\\PrepareDischarge.vue' /* webpackChunkName: "components/prepare-discharge" */).then(c => wrapFunctional(c.default || c))
+export const PrepareDoor = () => import('../..\\components\\HRMS\\PrepareDoor.vue' /* webpackChunkName: "components/prepare-door" */).then(c => wrapFunctional(c.default || c))
+export const PrepareHoliday = () => import('../..\\components\\HRMS\\PrepareHoliday.vue' /* webpackChunkName: "components/prepare-holiday" */).then(c => wrapFunctional(c.default || c))
+export const PrepareHrDevice = () => import('../..\\components\\HRMS\\PrepareHrDevice.vue' /* webpackChunkName: "components/prepare-hr-device" */).then(c => wrapFunctional(c.default || c))
+export const PrepareLeaves = () => import('../..\\components\\HRMS\\PrepareLeaves.vue' /* webpackChunkName: "components/prepare-leaves" */).then(c => wrapFunctional(c.default || c))
+export const PrepareLeaveType = () => import('../..\\components\\HRMS\\PrepareLeaveType.vue' /* webpackChunkName: "components/prepare-leave-type" */).then(c => wrapFunctional(c.default || c))
+export const PreparePersonSalary = () => import('../..\\components\\HRMS\\PreparePersonSalary.vue' /* webpackChunkName: "components/prepare-person-salary" */).then(c => wrapFunctional(c.default || c))
+export const PrepareRetentionType = () => import('../..\\components\\HRMS\\PrepareRetentionType.vue' /* webpackChunkName: "components/prepare-retention-type" */).then(c => wrapFunctional(c.default || c))
+export const PrepareTimeZone = () => import('../..\\components\\HRMS\\PrepareTimeZone.vue' /* webpackChunkName: "components/prepare-time-zone" */).then(c => wrapFunctional(c.default || c))
+export const RetentionType = () => import('../..\\components\\HRMS\\RetentionType.vue' /* webpackChunkName: "components/retention-type" */).then(c => wrapFunctional(c.default || c))
+export const SalariesList = () => import('../..\\components\\HRMS\\SalariesList.vue' /* webpackChunkName: "components/salaries-list" */).then(c => wrapFunctional(c.default || c))
+export const TimeZones = () => import('../..\\components\\HRMS\\TimeZones.vue' /* webpackChunkName: "components/time-zones" */).then(c => wrapFunctional(c.default || c))
+export const GenericTranslatePage = () => import('../..\\components\\GenericTranslate\\GenericTranslatePage.vue' /* webpackChunkName: "components/generic-translate-page" */).then(c => wrapFunctional(c.default || c))
+export const GenericInputDatePage = () => import('../..\\components\\InputDate\\GenericInputDatePage.vue' /* webpackChunkName: "components/generic-input-date-page" */).then(c => wrapFunctional(c.default || c))
+export const InternalInvoice = () => import('../..\\components\\InternalInvoices\\InternalInvoice.vue' /* webpackChunkName: "components/internal-invoice" */).then(c => wrapFunctional(c.default || c))
+export const InternalViabranchreceive = () => import('../..\\components\\InternalInvoices\\InternalViabranchreceive.vue' /* webpackChunkName: "components/internal-viabranchreceive" */).then(c => wrapFunctional(c.default || c))
+export const PrepareInternalInvoiceNew = () => import('../..\\components\\InternalInvoices\\PrepareInternalInvoiceNew.vue' /* webpackChunkName: "components/prepare-internal-invoice-new" */).then(c => wrapFunctional(c.default || c))
+export const PrepareInternalInvoiceNewDevice = () => import('../..\\components\\InternalInvoices\\PrepareInternalInvoiceNewDevice.vue' /* webpackChunkName: "components/prepare-internal-invoice-new-device" */).then(c => wrapFunctional(c.default || c))
+export const PrepareReceiveInvoiceNew = () => import('../..\\components\\InternalInvoices\\PrepareReceiveInvoiceNew.vue' /* webpackChunkName: "components/prepare-receive-invoice-new" */).then(c => wrapFunctional(c.default || c))
+export const BatchProductionInvoiceUi = () => import('../..\\components\\Invoices\\BatchProductionInvoiceUi.vue' /* webpackChunkName: "components/batch-production-invoice-ui" */).then(c => wrapFunctional(c.default || c))
+export const EntryLaboratory = () => import('../..\\components\\Invoices\\EntryLaboratory.vue' /* webpackChunkName: "components/entry-laboratory" */).then(c => wrapFunctional(c.default || c))
+export const ExpenseInvoice = () => import('../..\\components\\Invoices\\ExpenseInvoice.vue' /* webpackChunkName: "components/expense-invoice" */).then(c => wrapFunctional(c.default || c))
+export const ExternalInvoice = () => import('../..\\components\\Invoices\\ExternalInvoice.vue' /* webpackChunkName: "components/external-invoice" */).then(c => wrapFunctional(c.default || c))
+export const InputFromProductionCompany = () => import('../..\\components\\Invoices\\InputFromProductionCompany.vue' /* webpackChunkName: "components/input-from-production-company" */).then(c => wrapFunctional(c.default || c))
+export const InputReturn = () => import('../..\\components\\Invoices\\InputReturn.vue' /* webpackChunkName: "components/input-return" */).then(c => wrapFunctional(c.default || c))
+export const InputToServiceInvoicePage = () => import('../..\\components\\Invoices\\InputToServiceInvoicePage.vue' /* webpackChunkName: "components/input-to-service-invoice-page" */).then(c => wrapFunctional(c.default || c))
+export const KnittingSewModelBarcodeReader = () => import('../..\\components\\Invoices\\KnittingSewModelBarcodeReader.vue' /* webpackChunkName: "components/knitting-sew-model-barcode-reader" */).then(c => wrapFunctional(c.default || c))
+export const MakeBill = () => import('../..\\components\\Invoices\\MakeBill.vue' /* webpackChunkName: "components/make-bill" */).then(c => wrapFunctional(c.default || c))
+export const MarketSalesInvoice = () => import('../..\\components\\Invoices\\MarketSalesInvoice.vue' /* webpackChunkName: "components/market-sales-invoice" */).then(c => wrapFunctional(c.default || c))
+export const NewPrepareSimpleProductionInvoice = () => import('../..\\components\\Invoices\\NewPrepareSimpleProductionInvoice.vue' /* webpackChunkName: "components/new-prepare-simple-production-invoice" */).then(c => wrapFunctional(c.default || c))
+export const NewSimpleProductionInvoice = () => import('../..\\components\\Invoices\\NewSimpleProductionInvoice.vue' /* webpackChunkName: "components/new-simple-production-invoice" */).then(c => wrapFunctional(c.default || c))
+export const OpenControlPageNewPage = () => import('../..\\components\\Invoices\\OpenControlPageNewPage.vue' /* webpackChunkName: "components/open-control-page-new-page" */).then(c => wrapFunctional(c.default || c))
+export const OutputProductionInvoice = () => import('../..\\components\\Invoices\\OutputProductionInvoice.vue' /* webpackChunkName: "components/output-production-invoice" */).then(c => wrapFunctional(c.default || c))
+export const OutputProductionReturn = () => import('../..\\components\\Invoices\\OutputProductionReturn.vue' /* webpackChunkName: "components/output-production-return" */).then(c => wrapFunctional(c.default || c))
+export const OutputToProductionCompany = () => import('../..\\components\\Invoices\\OutputToProductionCompany.vue' /* webpackChunkName: "components/output-to-production-company" */).then(c => wrapFunctional(c.default || c))
+export const OutputToProductionCompanyReturn = () => import('../..\\components\\Invoices\\OutputToProductionCompanyReturn.vue' /* webpackChunkName: "components/output-to-production-company-return" */).then(c => wrapFunctional(c.default || c))
+export const OutputToPrOrder = () => import('../..\\components\\Invoices\\OutputToPrOrder.vue' /* webpackChunkName: "components/output-to-pr-order" */).then(c => wrapFunctional(c.default || c))
+export const OutputToPrOrderReturn = () => import('../..\\components\\Invoices\\OutputToPrOrderReturn.vue' /* webpackChunkName: "components/output-to-pr-order-return" */).then(c => wrapFunctional(c.default || c))
+export const OutputToServiceInvoicePage = () => import('../..\\components\\Invoices\\OutputToServiceInvoicePage.vue' /* webpackChunkName: "components/output-to-service-invoice-page" */).then(c => wrapFunctional(c.default || c))
+export const PrepareExpenseInvoice = () => import('../..\\components\\Invoices\\prepareExpenseInvoice.vue' /* webpackChunkName: "components/prepare-expense-invoice" */).then(c => wrapFunctional(c.default || c))
+export const PrepareInputFromProductionCompanyNew = () => import('../..\\components\\Invoices\\PrepareInputFromProductionCompanyNew.vue' /* webpackChunkName: "components/prepare-input-from-production-company-new" */).then(c => wrapFunctional(c.default || c))
+export const PrepareInputReturnNew = () => import('../..\\components\\Invoices\\PrepareInputReturnNew.vue' /* webpackChunkName: "components/prepare-input-return-new" */).then(c => wrapFunctional(c.default || c))
+export const PrepareInputToServiceInvoicePage = () => import('../..\\components\\Invoices\\PrepareInputToServiceInvoicePage.vue' /* webpackChunkName: "components/prepare-input-to-service-invoice-page" */).then(c => wrapFunctional(c.default || c))
+export const PrepareOutputToEquipment = () => import('../..\\components\\Invoices\\PrepareOutputToEquipment.vue' /* webpackChunkName: "components/prepare-output-to-equipment" */).then(c => wrapFunctional(c.default || c))
+export const PrepareOutputToEquipmentReturnPage = () => import('../..\\components\\Invoices\\PrepareOutputToEquipmentReturnPage.vue' /* webpackChunkName: "components/prepare-output-to-equipment-return-page" */).then(c => wrapFunctional(c.default || c))
+export const PrepareOutputToProductionCompanyNew = () => import('../..\\components\\Invoices\\prepareOutputToProductionCompanyNew.vue' /* webpackChunkName: "components/prepare-output-to-production-company-new" */).then(c => wrapFunctional(c.default || c))
+export const PrepareOutputToProductionCompanyReturnNewPage = () => import('../..\\components\\Invoices\\PrepareOutputToProductionCompanyReturnNewPage.vue' /* webpackChunkName: "components/prepare-output-to-production-company-return-new-page" */).then(c => wrapFunctional(c.default || c))
+export const PrepareOutputToPrOrderPage = () => import('../..\\components\\Invoices\\PrepareOutputToPrOrderPage.vue' /* webpackChunkName: "components/prepare-output-to-pr-order-page" */).then(c => wrapFunctional(c.default || c))
+export const PrepareOutputToPrOrderReturnPage = () => import('../..\\components\\Invoices\\PrepareOutputToPrOrderReturnPage.vue' /* webpackChunkName: "components/prepare-output-to-pr-order-return-page" */).then(c => wrapFunctional(c.default || c))
+export const PrepareOutputToPrOrderSimple = () => import('../..\\components\\Invoices\\PrepareOutputToPrOrderSimple.vue' /* webpackChunkName: "components/prepare-output-to-pr-order-simple" */).then(c => wrapFunctional(c.default || c))
+export const PrepareOutputToServiceInvoicePage = () => import('../..\\components\\Invoices\\PrepareOutputToServiceInvoicePage.vue' /* webpackChunkName: "components/prepare-output-to-service-invoice-page" */).then(c => wrapFunctional(c.default || c))
+export const PrepareProductionInvoiceNew = () => import('../..\\components\\Invoices\\PrepareProductionInvoiceNew.vue' /* webpackChunkName: "components/prepare-production-invoice-new" */).then(c => wrapFunctional(c.default || c))
+export const PreparePurchaseInvoiceNew = () => import('../..\\components\\Invoices\\PreparePurchaseInvoiceNew.vue' /* webpackChunkName: "components/prepare-purchase-invoice-new" */).then(c => wrapFunctional(c.default || c))
+export const PreparePurchaseServiceInvoiceNew = () => import('../..\\components\\Invoices\\PreparePurchaseServiceInvoiceNew.vue' /* webpackChunkName: "components/prepare-purchase-service-invoice-new" */).then(c => wrapFunctional(c.default || c))
+export const PrepareSaleInvoiceNew = () => import('../..\\components\\Invoices\\PrepareSaleInvoiceNew.vue' /* webpackChunkName: "components/prepare-sale-invoice-new" */).then(c => wrapFunctional(c.default || c))
+export const PrepareSaleServiceInvoiceNewPage = () => import('../..\\components\\Invoices\\PrepareSaleServiceInvoiceNewPage.vue' /* webpackChunkName: "components/prepare-sale-service-invoice-new-page" */).then(c => wrapFunctional(c.default || c))
+export const PrepareSalesReturnNew = () => import('../..\\components\\Invoices\\PrepareSalesReturnNew.vue' /* webpackChunkName: "components/prepare-sales-return-new" */).then(c => wrapFunctional(c.default || c))
+export const PrepareSimpleProductionInvoiceManualPage = () => import('../..\\components\\Invoices\\PrepareSimpleProductionInvoiceManualPage.vue' /* webpackChunkName: "components/prepare-simple-production-invoice-manual-page" */).then(c => wrapFunctional(c.default || c))
+export const PrepareSimpleProductionInvoicePage = () => import('../..\\components\\Invoices\\PrepareSimpleProductionInvoicePage.vue' /* webpackChunkName: "components/prepare-simple-production-invoice-page" */).then(c => wrapFunctional(c.default || c))
+export const ProductionByEquipment = () => import('../..\\components\\Invoices\\ProductionByEquipment.vue' /* webpackChunkName: "components/production-by-equipment" */).then(c => wrapFunctional(c.default || c))
+export const ProductionByPackagePage = () => import('../..\\components\\Invoices\\ProductionByPackagePage.vue' /* webpackChunkName: "components/production-by-package-page" */).then(c => wrapFunctional(c.default || c))
+export const ProductionForQrCodeListPage = () => import('../..\\components\\Invoices\\ProductionForQrCodeListPage.vue' /* webpackChunkName: "components/production-for-qr-code-list-page" */).then(c => wrapFunctional(c.default || c))
+export const ProductionInvoice = () => import('../..\\components\\Invoices\\ProductionInvoice.vue' /* webpackChunkName: "components/production-invoice" */).then(c => wrapFunctional(c.default || c))
+export const ProductionOrderMovement = () => import('../..\\components\\Invoices\\ProductionOrderMovement.vue' /* webpackChunkName: "components/production-order-movement" */).then(c => wrapFunctional(c.default || c))
+export const ProductLoading = () => import('../..\\components\\Invoices\\ProductLoading.vue' /* webpackChunkName: "components/product-loading" */).then(c => wrapFunctional(c.default || c))
+export const ProductLoadingList = () => import('../..\\components\\Invoices\\ProductLoadingList.vue' /* webpackChunkName: "components/product-loading-list" */).then(c => wrapFunctional(c.default || c))
+export const PurchaseInvoice = () => import('../..\\components\\Invoices\\PurchaseInvoice.vue' /* webpackChunkName: "components/purchase-invoice" */).then(c => wrapFunctional(c.default || c))
+export const PurchaseInvoiceScrollTable = () => import('../..\\components\\Invoices\\PurchaseInvoiceScrollTable.vue' /* webpackChunkName: "components/purchase-invoice-scroll-table" */).then(c => wrapFunctional(c.default || c))
+export const PurchaseServiceInvoice = () => import('../..\\components\\Invoices\\PurchaseServiceInvoice.vue' /* webpackChunkName: "components/purchase-service-invoice" */).then(c => wrapFunctional(c.default || c))
+export const SaleInvoice = () => import('../..\\components\\Invoices\\SaleInvoice.vue' /* webpackChunkName: "components/sale-invoice" */).then(c => wrapFunctional(c.default || c))
+export const SaleServiceInvoice = () => import('../..\\components\\Invoices\\SaleServiceInvoice.vue' /* webpackChunkName: "components/sale-service-invoice" */).then(c => wrapFunctional(c.default || c))
+export const SalesReturn = () => import('../..\\components\\Invoices\\SalesReturn.vue' /* webpackChunkName: "components/sales-return" */).then(c => wrapFunctional(c.default || c))
+export const SewModelBarcodeReader = () => import('../..\\components\\Invoices\\SewModelBarcodeReader.vue' /* webpackChunkName: "components/sew-model-barcode-reader" */).then(c => wrapFunctional(c.default || c))
+export const SewModelBarcodeReaderSticker = () => import('../..\\components\\Invoices\\SewModelBarcodeReaderSticker.vue' /* webpackChunkName: "components/sew-model-barcode-reader-sticker" */).then(c => wrapFunctional(c.default || c))
+export const SewModelManualBarcodeReader = () => import('../..\\components\\Invoices\\SewModelManualBarcodeReader.vue' /* webpackChunkName: "components/sew-model-manual-barcode-reader" */).then(c => wrapFunctional(c.default || c))
+export const SimpleProductionInvoice = () => import('../..\\components\\Invoices\\SimpleProductionInvoice.vue' /* webpackChunkName: "components/simple-production-invoice" */).then(c => wrapFunctional(c.default || c))
+export const LoadingPage = () => import('../..\\components\\Loading\\LoadingPage.vue' /* webpackChunkName: "components/loading-page" */).then(c => wrapFunctional(c.default || c))
+export const LoginPage = () => import('../..\\components\\Login\\LoginPage.vue' /* webpackChunkName: "components/login-page" */).then(c => wrapFunctional(c.default || c))
+export const ItemSearchList = () => import('../..\\components\\main\\ItemSearchList.vue' /* webpackChunkName: "components/item-search-list" */).then(c => wrapFunctional(c.default || c))
+export const MainHeader = () => import('../..\\components\\main\\MainHeader.vue' /* webpackChunkName: "components/main-header" */).then(c => wrapFunctional(c.default || c))
+export const SearchBar = () => import('../..\\components\\main\\SearchBar.vue' /* webpackChunkName: "components/search-bar" */).then(c => wrapFunctional(c.default || c))
+export const CalculationByColorVariantRecipe = () => import('../..\\components\\Orders\\CalculationByColorVariantRecipe.vue' /* webpackChunkName: "components/calculation-by-color-variant-recipe" */).then(c => wrapFunctional(c.default || c))
+export const ContractRegistration = () => import('../..\\components\\Orders\\ContractRegistration.vue' /* webpackChunkName: "components/contract-registration" */).then(c => wrapFunctional(c.default || c))
+export const DyeingsList = () => import('../..\\components\\Orders\\DyeingsList.vue' /* webpackChunkName: "components/dyeings-list" */).then(c => wrapFunctional(c.default || c))
+export const IplikLotStavka = () => import('../..\\components\\Orders\\IplikLotStavka.vue' /* webpackChunkName: "components/iplik-lot-stavka" */).then(c => wrapFunctional(c.default || c))
+export const IplikStages = () => import('../..\\components\\Orders\\IplikStages.vue' /* webpackChunkName: "components/iplik-stages" */).then(c => wrapFunctional(c.default || c))
+export const OrderSalePlannerCalendar = () => import('../..\\components\\Orders\\OrderSalePlannerCalendar.vue' /* webpackChunkName: "components/order-sale-planner-calendar" */).then(c => wrapFunctional(c.default || c))
+export const PlanningsByProductionOrder = () => import('../..\\components\\Orders\\PlanningsByProductionOrder.vue' /* webpackChunkName: "components/plannings-by-production-order" */).then(c => wrapFunctional(c.default || c))
+export const PrepareCalculateProductionOrder = () => import('../..\\components\\Orders\\PrepareCalculateProductionOrder.vue' /* webpackChunkName: "components/prepare-calculate-production-order" */).then(c => wrapFunctional(c.default || c))
+export const PrepareIplikLotStavka = () => import('../..\\components\\Orders\\PrepareIplikLotStavka.vue' /* webpackChunkName: "components/prepare-iplik-lot-stavka" */).then(c => wrapFunctional(c.default || c))
+export const PrepareIplikStage = () => import('../..\\components\\Orders\\PrepareIplikStage.vue' /* webpackChunkName: "components/prepare-iplik-stage" */).then(c => wrapFunctional(c.default || c))
+export const PrepareProductionOrderItem = () => import('../..\\components\\Orders\\PrepareProductionOrderItem.vue' /* webpackChunkName: "components/prepare-production-order-item" */).then(c => wrapFunctional(c.default || c))
+export const PrepareSaleOrder = () => import('../..\\components\\Orders\\PrepareSaleOrder.vue' /* webpackChunkName: "components/prepare-sale-order" */).then(c => wrapFunctional(c.default || c))
+export const ProductionOrder = () => import('../..\\components\\Orders\\ProductionOrder.vue' /* webpackChunkName: "components/production-order" */).then(c => wrapFunctional(c.default || c))
+export const ProductionOrderPlannings = () => import('../..\\components\\Orders\\ProductionOrderPlannings.vue' /* webpackChunkName: "components/production-order-plannings" */).then(c => wrapFunctional(c.default || c))
+export const PurchaseOrder = () => import('../..\\components\\Orders\\PurchaseOrder.vue' /* webpackChunkName: "components/purchase-order" */).then(c => wrapFunctional(c.default || c))
+export const SalesOrder = () => import('../..\\components\\Orders\\SalesOrder.vue' /* webpackChunkName: "components/sales-order" */).then(c => wrapFunctional(c.default || c))
+export const BatchColorDepthTariffs = () => import('../..\\components\\Productions\\BatchColorDepthTariffs.vue' /* webpackChunkName: "components/batch-color-depth-tariffs" */).then(c => wrapFunctional(c.default || c))
+export const BatchColorMethodTariffs = () => import('../..\\components\\Productions\\BatchColorMethodTariffs.vue' /* webpackChunkName: "components/batch-color-method-tariffs" */).then(c => wrapFunctional(c.default || c))
+export const BatchDetailsList = () => import('../..\\components\\Productions\\BatchDetailsList.vue' /* webpackChunkName: "components/batch-details-list" */).then(c => wrapFunctional(c.default || c))
+export const BatchesList = () => import('../..\\components\\Productions\\BatchesList.vue' /* webpackChunkName: "components/batches-list" */).then(c => wrapFunctional(c.default || c))
+export const BatchProccesStageTariffs = () => import('../..\\components\\Productions\\BatchProccesStageTariffs.vue' /* webpackChunkName: "components/batch-procces-stage-tariffs" */).then(c => wrapFunctional(c.default || c))
+export const BatchProcess = () => import('../..\\components\\Productions\\BatchProcess.vue' /* webpackChunkName: "components/batch-process" */).then(c => wrapFunctional(c.default || c))
+export const BatchProcessStages = () => import('../..\\components\\Productions\\BatchProcessStages.vue' /* webpackChunkName: "components/batch-process-stages" */).then(c => wrapFunctional(c.default || c))
+export const BatchRepair = () => import('../..\\components\\Productions\\BatchRepair.vue' /* webpackChunkName: "components/batch-repair" */).then(c => wrapFunctional(c.default || c))
+export const BatchUnions = () => import('../..\\components\\Productions\\BatchUnions.vue' /* webpackChunkName: "components/batch-unions" */).then(c => wrapFunctional(c.default || c))
+export const ChangeProductColorVariant = () => import('../..\\components\\Productions\\ChangeProductColorVariant.vue' /* webpackChunkName: "components/change-product-color-variant" */).then(c => wrapFunctional(c.default || c))
+export const ColorDepth = () => import('../..\\components\\Productions\\ColorDepth.vue' /* webpackChunkName: "components/color-depth" */).then(c => wrapFunctional(c.default || c))
+export const ColorsList = () => import('../..\\components\\Productions\\ColorsList.vue' /* webpackChunkName: "components/colors-list" */).then(c => wrapFunctional(c.default || c))
+export const ColorVariant = () => import('../..\\components\\Productions\\ColorVariant.vue' /* webpackChunkName: "components/color-variant" */).then(c => wrapFunctional(c.default || c))
+export const ColorVariantRecipeStage = () => import('../..\\components\\Productions\\ColorVariantRecipeStage.vue' /* webpackChunkName: "components/color-variant-recipe-stage" */).then(c => wrapFunctional(c.default || c))
+export const ColorVariantRecipeStageChild = () => import('../..\\components\\Productions\\ColorVariantRecipeStageChild.vue' /* webpackChunkName: "components/color-variant-recipe-stage-child" */).then(c => wrapFunctional(c.default || c))
+export const ColorVariantRecipeStageGroup = () => import('../..\\components\\Productions\\ColorVariantRecipeStageGroup.vue' /* webpackChunkName: "components/color-variant-recipe-stage-group" */).then(c => wrapFunctional(c.default || c))
+export const ColorVariantRecipeStagePicture = () => import('../..\\components\\Productions\\ColorVariantRecipeStagePicture.vue' /* webpackChunkName: "components/color-variant-recipe-stage-picture" */).then(c => wrapFunctional(c.default || c))
+export const DefectTypes = () => import('../..\\components\\Productions\\DefectTypes.vue' /* webpackChunkName: "components/defect-types" */).then(c => wrapFunctional(c.default || c))
+export const DesignsList = () => import('../..\\components\\Productions\\DesignsList.vue' /* webpackChunkName: "components/designs-list" */).then(c => wrapFunctional(c.default || c))
+export const DesignTypes = () => import('../..\\components\\Productions\\DesignTypes.vue' /* webpackChunkName: "components/design-types" */).then(c => wrapFunctional(c.default || c))
+export const DesignVariants = () => import('../..\\components\\Productions\\DesignVariants.vue' /* webpackChunkName: "components/design-variants" */).then(c => wrapFunctional(c.default || c))
+export const EquipmentsRealTimeStatus = () => import('../..\\components\\Productions\\EquipmentsRealTimeStatus.vue' /* webpackChunkName: "components/equipments-real-time-status" */).then(c => wrapFunctional(c.default || c))
+export const EquipmentsRealTimeStatus2 = () => import('../..\\components\\Productions\\EquipmentsRealTimeStatus2.vue' /* webpackChunkName: "components/equipments-real-time-status2" */).then(c => wrapFunctional(c.default || c))
+export const ExtraWorks = () => import('../..\\components\\Productions\\ExtraWorks.vue' /* webpackChunkName: "components/extra-works" */).then(c => wrapFunctional(c.default || c))
+export const OpenControl = () => import('../..\\components\\Productions\\OpenControl.vue' /* webpackChunkName: "components/open-control" */).then(c => wrapFunctional(c.default || c))
+export const OrderProductionTypes = () => import('../..\\components\\Productions\\OrderProductionTypes.vue' /* webpackChunkName: "components/order-production-types" */).then(c => wrapFunctional(c.default || c))
+export const PackagingList = () => import('../..\\components\\Productions\\PackagingList.vue' /* webpackChunkName: "components/packaging-list" */).then(c => wrapFunctional(c.default || c))
+export const PersonAndEquipments = () => import('../..\\components\\Productions\\PersonAndEquipments.vue' /* webpackChunkName: "components/person-and-equipments" */).then(c => wrapFunctional(c.default || c))
+export const PlanningTypes = () => import('../..\\components\\Productions\\PlanningTypes.vue' /* webpackChunkName: "components/planning-types" */).then(c => wrapFunctional(c.default || c))
+export const PrepareBand = () => import('../..\\components\\Productions\\PrepareBand.vue' /* webpackChunkName: "components/prepare-band" */).then(c => wrapFunctional(c.default || c))
+export const PrepareBatchColorDepthTariffs = () => import('../..\\components\\Productions\\PrepareBatchColorDepthTariffs.vue' /* webpackChunkName: "components/prepare-batch-color-depth-tariffs" */).then(c => wrapFunctional(c.default || c))
+export const PrepareBatchColorMethodTariffs = () => import('../..\\components\\Productions\\PrepareBatchColorMethodTariffs.vue' /* webpackChunkName: "components/prepare-batch-color-method-tariffs" */).then(c => wrapFunctional(c.default || c))
+export const PrepareBatchNew = () => import('../..\\components\\Productions\\PrepareBatchNew.vue' /* webpackChunkName: "components/prepare-batch-new" */).then(c => wrapFunctional(c.default || c))
+export const PrepareBatchProccesStageTariffs = () => import('../..\\components\\Productions\\PrepareBatchProccesStageTariffs.vue' /* webpackChunkName: "components/prepare-batch-procces-stage-tariffs" */).then(c => wrapFunctional(c.default || c))
+export const PrepareBatchProcess = () => import('../..\\components\\Productions\\PrepareBatchProcess.vue' /* webpackChunkName: "components/prepare-batch-process" */).then(c => wrapFunctional(c.default || c))
+export const PrepareBatchProcessStage = () => import('../..\\components\\Productions\\PrepareBatchProcessStage.vue' /* webpackChunkName: "components/prepare-batch-process-stage" */).then(c => wrapFunctional(c.default || c))
+export const PrepareBatchUnionsNew = () => import('../..\\components\\Productions\\PrepareBatchUnionsNew.vue' /* webpackChunkName: "components/prepare-batch-unions-new" */).then(c => wrapFunctional(c.default || c))
+export const PrepareColor = () => import('../..\\components\\Productions\\PrepareColor.vue' /* webpackChunkName: "components/prepare-color" */).then(c => wrapFunctional(c.default || c))
+export const PrepareColorDepth = () => import('../..\\components\\Productions\\PrepareColorDepth.vue' /* webpackChunkName: "components/prepare-color-depth" */).then(c => wrapFunctional(c.default || c))
+export const PrepareColorVariant = () => import('../..\\components\\Productions\\PrepareColorVariant.vue' /* webpackChunkName: "components/prepare-color-variant" */).then(c => wrapFunctional(c.default || c))
+export const PrepareColorVariantRecipeStage = () => import('../..\\components\\Productions\\PrepareColorVariantRecipeStage.vue' /* webpackChunkName: "components/prepare-color-variant-recipe-stage" */).then(c => wrapFunctional(c.default || c))
+export const PrepareColorVariantRecipeStageChild = () => import('../..\\components\\Productions\\PrepareColorVariantRecipeStageChild.vue' /* webpackChunkName: "components/prepare-color-variant-recipe-stage-child" */).then(c => wrapFunctional(c.default || c))
+export const PrepareColorVariantRecipeStageGroup = () => import('../..\\components\\Productions\\PrepareColorVariantRecipeStageGroup.vue' /* webpackChunkName: "components/prepare-color-variant-recipe-stage-group" */).then(c => wrapFunctional(c.default || c))
+export const PrepareColorVariantRecipeStagePicture = () => import('../..\\components\\Productions\\PrepareColorVariantRecipeStagePicture.vue' /* webpackChunkName: "components/prepare-color-variant-recipe-stage-picture" */).then(c => wrapFunctional(c.default || c))
+export const PrepareDefectType = () => import('../..\\components\\Productions\\PrepareDefectType.vue' /* webpackChunkName: "components/prepare-defect-type" */).then(c => wrapFunctional(c.default || c))
+export const PrepareDesign = () => import('../..\\components\\Productions\\PrepareDesign.vue' /* webpackChunkName: "components/prepare-design" */).then(c => wrapFunctional(c.default || c))
+export const PrepareDesignColorVariant = () => import('../..\\components\\Productions\\PrepareDesignColorVariant.vue' /* webpackChunkName: "components/prepare-design-color-variant" */).then(c => wrapFunctional(c.default || c))
+export const PrepareDesignType = () => import('../..\\components\\Productions\\PrepareDesignType.vue' /* webpackChunkName: "components/prepare-design-type" */).then(c => wrapFunctional(c.default || c))
+export const PrepareDesignVariant = () => import('../..\\components\\Productions\\PrepareDesignVariant.vue' /* webpackChunkName: "components/prepare-design-variant" */).then(c => wrapFunctional(c.default || c))
+export const PrepareExtraWork = () => import('../..\\components\\Productions\\PrepareExtraWork.vue' /* webpackChunkName: "components/prepare-extra-work" */).then(c => wrapFunctional(c.default || c))
+export const PrepareOrderProductionType = () => import('../..\\components\\Productions\\PrepareOrderProductionType.vue' /* webpackChunkName: "components/prepare-order-production-type" */).then(c => wrapFunctional(c.default || c))
+export const PreparePackaging = () => import('../..\\components\\Productions\\PreparePackaging.vue' /* webpackChunkName: "components/prepare-packaging" */).then(c => wrapFunctional(c.default || c))
+export const PreparePersonAndEquipment = () => import('../..\\components\\Productions\\PreparePersonAndEquipment.vue' /* webpackChunkName: "components/prepare-person-and-equipment" */).then(c => wrapFunctional(c.default || c))
+export const PreparePersonEquipmentSew = () => import('../..\\components\\Productions\\PreparePersonEquipmentSew.vue' /* webpackChunkName: "components/prepare-person-equipment-sew" */).then(c => wrapFunctional(c.default || c))
+export const PreparePlanningType = () => import('../..\\components\\Productions\\PreparePlanningType.vue' /* webpackChunkName: "components/prepare-planning-type" */).then(c => wrapFunctional(c.default || c))
+export const PrepareProductAnalogs = () => import('../..\\components\\Productions\\PrepareProductAnalogs.vue' /* webpackChunkName: "components/prepare-product-analogs" */).then(c => wrapFunctional(c.default || c))
+export const PrepareProductProductionType = () => import('../..\\components\\Productions\\PrepareProductProductionType.vue' /* webpackChunkName: "components/prepare-product-production-type" */).then(c => wrapFunctional(c.default || c))
+export const PrepareSewBandEquipment = () => import('../..\\components\\Productions\\PrepareSewBandEquipment.vue' /* webpackChunkName: "components/prepare-sew-band-equipment" */).then(c => wrapFunctional(c.default || c))
+export const PrepareSewModel = () => import('../..\\components\\Productions\\PrepareSewModel.vue' /* webpackChunkName: "components/prepare-sew-model" */).then(c => wrapFunctional(c.default || c))
+export const PrepareSewModelOperationName = () => import('../..\\components\\Productions\\PrepareSewModelOperationName.vue' /* webpackChunkName: "components/prepare-sew-model-operation-name" */).then(c => wrapFunctional(c.default || c))
+export const PrepareSewModelPackingType = () => import('../..\\components\\Productions\\PrepareSewModelPackingType.vue' /* webpackChunkName: "components/prepare-sew-model-packing-type" */).then(c => wrapFunctional(c.default || c))
+export const PrepareSewModelSizeColorBarcode = () => import('../..\\components\\Productions\\PrepareSewModelSizeColorBarcode.vue' /* webpackChunkName: "components/prepare-sew-model-size-color-barcode" */).then(c => wrapFunctional(c.default || c))
+export const PrepareSewModelVariantsSize = () => import('../..\\components\\Productions\\PrepareSewModelVariantsSize.vue' /* webpackChunkName: "components/prepare-sew-model-variants-size" */).then(c => wrapFunctional(c.default || c))
+export const PrepareSewOperatorsKpi = () => import('../..\\components\\Productions\\PrepareSewOperatorsKpi.vue' /* webpackChunkName: "components/prepare-sew-operators-kpi" */).then(c => wrapFunctional(c.default || c))
+export const PrepareStage = () => import('../..\\components\\Productions\\PrepareStage.vue' /* webpackChunkName: "components/prepare-stage" */).then(c => wrapFunctional(c.default || c))
+export const PrepareTariffs = () => import('../..\\components\\Productions\\PrepareTariffs.vue' /* webpackChunkName: "components/prepare-tariffs" */).then(c => wrapFunctional(c.default || c))
+export const ProductAnalogs = () => import('../..\\components\\Productions\\ProductAnalogs.vue' /* webpackChunkName: "components/product-analogs" */).then(c => wrapFunctional(c.default || c))
+export const ProductionAdditionTable = () => import('../..\\components\\Productions\\ProductionAdditionTable.vue' /* webpackChunkName: "components/production-addition-table" */).then(c => wrapFunctional(c.default || c))
+export const ProductProductionTypes = () => import('../..\\components\\Productions\\ProductProductionTypes.vue' /* webpackChunkName: "components/product-production-types" */).then(c => wrapFunctional(c.default || c))
+export const ProductsAndAutomaticSystemsCreateEdit = () => import('../..\\components\\Productions\\ProductsAndAutomaticSystemsCreateEdit.vue' /* webpackChunkName: "components/products-and-automatic-systems-create-edit" */).then(c => wrapFunctional(c.default || c))
+export const SewModel = () => import('../..\\components\\Productions\\SewModel.vue' /* webpackChunkName: "components/sew-model" */).then(c => wrapFunctional(c.default || c))
+export const SewModelBarcodeReaderQualityControl = () => import('../..\\components\\Productions\\SewModelBarcodeReaderQualityControl.vue' /* webpackChunkName: "components/sew-model-barcode-reader-quality-control" */).then(c => wrapFunctional(c.default || c))
+export const SewModelOperationName = () => import('../..\\components\\Productions\\SewModelOperationName.vue' /* webpackChunkName: "components/sew-model-operation-name" */).then(c => wrapFunctional(c.default || c))
+export const SewModelPackingType = () => import('../..\\components\\Productions\\SewModelPackingType.vue' /* webpackChunkName: "components/sew-model-packing-type" */).then(c => wrapFunctional(c.default || c))
+export const SewModelSizeColorBarcode = () => import('../..\\components\\Productions\\SewModelSizeColorBarcode.vue' /* webpackChunkName: "components/sew-model-size-color-barcode" */).then(c => wrapFunctional(c.default || c))
+export const SewModelVariantsSize = () => import('../..\\components\\Productions\\SewModelVariantsSize.vue' /* webpackChunkName: "components/sew-model-variants-size" */).then(c => wrapFunctional(c.default || c))
+export const SewOperatorsKpi = () => import('../..\\components\\Productions\\SewOperatorsKpi.vue' /* webpackChunkName: "components/sew-operators-kpi" */).then(c => wrapFunctional(c.default || c))
+export const SewOrderOnlineStatus = () => import('../..\\components\\Productions\\SewOrderOnlineStatus.vue' /* webpackChunkName: "components/sew-order-online-status" */).then(c => wrapFunctional(c.default || c))
+export const ShippingTransportDislocationParent = () => import('../..\\components\\Productions\\ShippingTransportDislocationParent.vue' /* webpackChunkName: "components/shipping-transport-dislocation-parent" */).then(c => wrapFunctional(c.default || c))
+export const StagesList = () => import('../..\\components\\Productions\\StagesList.vue' /* webpackChunkName: "components/stages-list" */).then(c => wrapFunctional(c.default || c))
+export const TariffsList = () => import('../..\\components\\Productions\\TariffsList.vue' /* webpackChunkName: "components/tariffs-list" */).then(c => wrapFunctional(c.default || c))
+export const QuickMenuSettingsList = () => import('../..\\components\\QuickMenuSettings\\QuickMenuSettingsList.vue' /* webpackChunkName: "components/quick-menu-settings-list" */).then(c => wrapFunctional(c.default || c))
+export const BalanceReports = () => import('../..\\components\\Reports\\BalanceReports.vue' /* webpackChunkName: "components/balance-reports" */).then(c => wrapFunctional(c.default || c))
+export const BalanceReportsGraphic = () => import('../..\\components\\Reports\\BalanceReportsGraphic.vue' /* webpackChunkName: "components/balance-reports-graphic" */).then(c => wrapFunctional(c.default || c))
+export const CashFlow = () => import('../..\\components\\Reports\\CashFlow.vue' /* webpackChunkName: "components/cash-flow" */).then(c => wrapFunctional(c.default || c))
+export const PnlReports = () => import('../..\\components\\Reports\\PnlReports.vue' /* webpackChunkName: "components/pnl-reports" */).then(c => wrapFunctional(c.default || c))
+export const GenericSelect = () => import('../..\\components\\Select\\GenericSelect.vue' /* webpackChunkName: "components/generic-select" */).then(c => wrapFunctional(c.default || c))
+export const SessionsPage = () => import('../..\\components\\Sessions\\SessionsPage.vue' /* webpackChunkName: "components/sessions-page" */).then(c => wrapFunctional(c.default || c))
+export const ArticlesList = () => import('../..\\components\\Settings\\ArticlesList.vue' /* webpackChunkName: "components/articles-list" */).then(c => wrapFunctional(c.default || c))
+export const BasicTools = () => import('../..\\components\\Settings\\BasicTools.vue' /* webpackChunkName: "components/basic-tools" */).then(c => wrapFunctional(c.default || c))
+export const CapitalsList = () => import('../..\\components\\Settings\\CapitalsList.vue' /* webpackChunkName: "components/capitals-list" */).then(c => wrapFunctional(c.default || c))
+export const CarList = () => import('../..\\components\\Settings\\CarList.vue' /* webpackChunkName: "components/car-list" */).then(c => wrapFunctional(c.default || c))
+export const CharacterDetails = () => import('../..\\components\\Settings\\CharacterDetails.vue' /* webpackChunkName: "components/character-details" */).then(c => wrapFunctional(c.default || c))
+export const CharacteristicsList = () => import('../..\\components\\Settings\\CharacteristicsList.vue' /* webpackChunkName: "components/characteristics-list" */).then(c => wrapFunctional(c.default || c))
+export const CityList = () => import('../..\\components\\Settings\\CityList.vue' /* webpackChunkName: "components/city-list" */).then(c => wrapFunctional(c.default || c))
+export const ColumnSettings = () => import('../..\\components\\Settings\\ColumnSettings.vue' /* webpackChunkName: "components/column-settings" */).then(c => wrapFunctional(c.default || c))
+export const CompaniesList = () => import('../..\\components\\Settings\\CompaniesList.vue' /* webpackChunkName: "components/companies-list" */).then(c => wrapFunctional(c.default || c))
+export const CountryList = () => import('../..\\components\\Settings\\CountryList.vue' /* webpackChunkName: "components/country-list" */).then(c => wrapFunctional(c.default || c))
+export const DecreesList = () => import('../..\\components\\Settings\\DecreesList.vue' /* webpackChunkName: "components/decrees-list" */).then(c => wrapFunctional(c.default || c))
+export const DepartmentsList = () => import('../..\\components\\Settings\\DepartmentsList.vue' /* webpackChunkName: "components/departments-list" */).then(c => wrapFunctional(c.default || c))
+export const DiscountCards = () => import('../..\\components\\Settings\\DiscountCards.vue' /* webpackChunkName: "components/discount-cards" */).then(c => wrapFunctional(c.default || c))
+export const DiscountsList = () => import('../..\\components\\Settings\\DiscountsList.vue' /* webpackChunkName: "components/discounts-list" */).then(c => wrapFunctional(c.default || c))
+export const DistrictList = () => import('../..\\components\\Settings\\DistrictList.vue' /* webpackChunkName: "components/district-list" */).then(c => wrapFunctional(c.default || c))
+export const EquipmentsList = () => import('../..\\components\\Settings\\EquipmentsList.vue' /* webpackChunkName: "components/equipments-list" */).then(c => wrapFunctional(c.default || c))
+export const FilesList = () => import('../..\\components\\Settings\\FilesList.vue' /* webpackChunkName: "components/files-list" */).then(c => wrapFunctional(c.default || c))
+export const InboxList = () => import('../..\\components\\Settings\\InboxList.vue' /* webpackChunkName: "components/inbox-list" */).then(c => wrapFunctional(c.default || c))
+export const IntangibleAssets = () => import('../..\\components\\Settings\\IntangibleAssets.vue' /* webpackChunkName: "components/intangible-assets" */).then(c => wrapFunctional(c.default || c))
+export const KroyList = () => import('../..\\components\\Settings\\KroyList.vue' /* webpackChunkName: "components/kroy-list" */).then(c => wrapFunctional(c.default || c))
+export const LanguagesList = () => import('../..\\components\\Settings\\LanguagesList.vue' /* webpackChunkName: "components/languages-list" */).then(c => wrapFunctional(c.default || c))
+export const LogsList = () => import('../..\\components\\Settings\\LogsList.vue' /* webpackChunkName: "components/logs-list" */).then(c => wrapFunctional(c.default || c))
+export const ManufacturersList = () => import('../..\\components\\Settings\\ManufacturersList.vue' /* webpackChunkName: "components/manufacturers-list" */).then(c => wrapFunctional(c.default || c))
+export const MenuSettings = () => import('../..\\components\\Settings\\MenuSettings.vue' /* webpackChunkName: "components/menu-settings" */).then(c => wrapFunctional(c.default || c))
+export const ObligationsList = () => import('../..\\components\\Settings\\ObligationsList.vue' /* webpackChunkName: "components/obligations-list" */).then(c => wrapFunctional(c.default || c))
+export const PackageTypes = () => import('../..\\components\\Settings\\PackageTypes.vue' /* webpackChunkName: "components/package-types" */).then(c => wrapFunctional(c.default || c))
+export const PermissionGroups = () => import('../..\\components\\Settings\\PermissionGroups.vue' /* webpackChunkName: "components/permission-groups" */).then(c => wrapFunctional(c.default || c))
+export const PhoneNumbers = () => import('../..\\components\\Settings\\PhoneNumbers.vue' /* webpackChunkName: "components/phone-numbers" */).then(c => wrapFunctional(c.default || c))
+export const PlateNumber = () => import('../..\\components\\Settings\\PlateNumber.vue' /* webpackChunkName: "components/plate-number" */).then(c => wrapFunctional(c.default || c))
+export const PositionsList = () => import('../..\\components\\Settings\\PositionsList.vue' /* webpackChunkName: "components/positions-list" */).then(c => wrapFunctional(c.default || c))
+export const PostList = () => import('../..\\components\\Settings\\PostList.vue' /* webpackChunkName: "components/post-list" */).then(c => wrapFunctional(c.default || c))
+export const PostStations = () => import('../..\\components\\Settings\\PostStations.vue' /* webpackChunkName: "components/post-stations" */).then(c => wrapFunctional(c.default || c))
+export const PrepareArticle = () => import('../..\\components\\Settings\\PrepareArticle.vue' /* webpackChunkName: "components/prepare-article" */).then(c => wrapFunctional(c.default || c))
+export const PrepareBasicTools = () => import('../..\\components\\Settings\\PrepareBasicTools.vue' /* webpackChunkName: "components/prepare-basic-tools" */).then(c => wrapFunctional(c.default || c))
+export const PrepareCapitals = () => import('../..\\components\\Settings\\PrepareCapitals.vue' /* webpackChunkName: "components/prepare-capitals" */).then(c => wrapFunctional(c.default || c))
+export const PrepareCar = () => import('../..\\components\\Settings\\PrepareCar.vue' /* webpackChunkName: "components/prepare-car" */).then(c => wrapFunctional(c.default || c))
+export const PrepareCharacterDetail = () => import('../..\\components\\Settings\\PrepareCharacterDetail.vue' /* webpackChunkName: "components/prepare-character-detail" */).then(c => wrapFunctional(c.default || c))
+export const PrepareCharacteristic = () => import('../..\\components\\Settings\\PrepareCharacteristic.vue' /* webpackChunkName: "components/prepare-characteristic" */).then(c => wrapFunctional(c.default || c))
+export const PrepareCity = () => import('../..\\components\\Settings\\PrepareCity.vue' /* webpackChunkName: "components/prepare-city" */).then(c => wrapFunctional(c.default || c))
+export const PrepareColumnSettings = () => import('../..\\components\\Settings\\PrepareColumnSettings.vue' /* webpackChunkName: "components/prepare-column-settings" */).then(c => wrapFunctional(c.default || c))
+export const PrepareCompany = () => import('../..\\components\\Settings\\PrepareCompany.vue' /* webpackChunkName: "components/prepare-company" */).then(c => wrapFunctional(c.default || c))
+export const PrepareCountry = () => import('../..\\components\\Settings\\PrepareCountry.vue' /* webpackChunkName: "components/prepare-country" */).then(c => wrapFunctional(c.default || c))
+export const PrepareDecreeList = () => import('../..\\components\\Settings\\PrepareDecreeList.vue' /* webpackChunkName: "components/prepare-decree-list" */).then(c => wrapFunctional(c.default || c))
+export const PrepareDepartment = () => import('../..\\components\\Settings\\PrepareDepartment.vue' /* webpackChunkName: "components/prepare-department" */).then(c => wrapFunctional(c.default || c))
+export const PrepareDiscount = () => import('../..\\components\\Settings\\PrepareDiscount.vue' /* webpackChunkName: "components/prepare-discount" */).then(c => wrapFunctional(c.default || c))
+export const PrepareDiscountCard = () => import('../..\\components\\Settings\\PrepareDiscountCard.vue' /* webpackChunkName: "components/prepare-discount-card" */).then(c => wrapFunctional(c.default || c))
+export const PrepareDistrict = () => import('../..\\components\\Settings\\PrepareDistrict.vue' /* webpackChunkName: "components/prepare-district" */).then(c => wrapFunctional(c.default || c))
+export const PrepareEquipment = () => import('../..\\components\\Settings\\PrepareEquipment.vue' /* webpackChunkName: "components/prepare-equipment" */).then(c => wrapFunctional(c.default || c))
+export const PrepareEquipmentExternal = () => import('../..\\components\\Settings\\PrepareEquipmentExternal.vue' /* webpackChunkName: "components/prepare-equipment-external" */).then(c => wrapFunctional(c.default || c))
+export const PrepareIntangibleAssets = () => import('../..\\components\\Settings\\PrepareIntangibleAssets.vue' /* webpackChunkName: "components/prepare-intangible-assets" */).then(c => wrapFunctional(c.default || c))
+export const PrepareKroy = () => import('../..\\components\\Settings\\PrepareKroy.vue' /* webpackChunkName: "components/prepare-kroy" */).then(c => wrapFunctional(c.default || c))
+export const PrepareLanguage = () => import('../..\\components\\Settings\\PrepareLanguage.vue' /* webpackChunkName: "components/prepare-language" */).then(c => wrapFunctional(c.default || c))
+export const PrepareManufacturer = () => import('../..\\components\\Settings\\PrepareManufacturer.vue' /* webpackChunkName: "components/prepare-manufacturer" */).then(c => wrapFunctional(c.default || c))
+export const PrepareObligations = () => import('../..\\components\\Settings\\PrepareObligations.vue' /* webpackChunkName: "components/prepare-obligations" */).then(c => wrapFunctional(c.default || c))
+export const PreparePackageType = () => import('../..\\components\\Settings\\PreparePackageType.vue' /* webpackChunkName: "components/prepare-package-type" */).then(c => wrapFunctional(c.default || c))
+export const PreparePermissionGroup = () => import('../..\\components\\Settings\\PreparePermissionGroup.vue' /* webpackChunkName: "components/prepare-permission-group" */).then(c => wrapFunctional(c.default || c))
+export const PreparePhoneNumber = () => import('../..\\components\\Settings\\PreparePhoneNumber.vue' /* webpackChunkName: "components/prepare-phone-number" */).then(c => wrapFunctional(c.default || c))
+export const PreparePlateNumber = () => import('../..\\components\\Settings\\PreparePlateNumber.vue' /* webpackChunkName: "components/prepare-plate-number" */).then(c => wrapFunctional(c.default || c))
+export const PreparePosition = () => import('../..\\components\\Settings\\PreparePosition.vue' /* webpackChunkName: "components/prepare-position" */).then(c => wrapFunctional(c.default || c))
+export const PreparePost = () => import('../..\\components\\Settings\\PreparePost.vue' /* webpackChunkName: "components/prepare-post" */).then(c => wrapFunctional(c.default || c))
+export const PreparePostStation = () => import('../..\\components\\Settings\\PreparePostStation.vue' /* webpackChunkName: "components/prepare-post-station" */).then(c => wrapFunctional(c.default || c))
+export const PrepareProductCategory = () => import('../..\\components\\Settings\\PrepareProductCategory.vue' /* webpackChunkName: "components/prepare-product-category" */).then(c => wrapFunctional(c.default || c))
+export const PrepareProductCompanyPriceList = () => import('../..\\components\\Settings\\PrepareProductCompanyPriceList.vue' /* webpackChunkName: "components/prepare-product-company-price-list" */).then(c => wrapFunctional(c.default || c))
+export const PrepareProductEntryType = () => import('../..\\components\\Settings\\PrepareProductEntryType.vue' /* webpackChunkName: "components/prepare-product-entry-type" */).then(c => wrapFunctional(c.default || c))
+export const PrepareProductionArticle = () => import('../..\\components\\Settings\\PrepareProductionArticle.vue' /* webpackChunkName: "components/prepare-production-article" */).then(c => wrapFunctional(c.default || c))
+export const PrepareProductionOrderRecipeToChangeReserve = () => import('../..\\components\\Settings\\PrepareProductionOrderRecipeToChangeReserve.vue' /* webpackChunkName: "components/prepare-production-order-recipe-to-change-reserve" */).then(c => wrapFunctional(c.default || c))
+export const PrepareProducts = () => import('../..\\components\\Settings\\PrepareProducts.vue' /* webpackChunkName: "components/prepare-products" */).then(c => wrapFunctional(c.default || c))
+export const PrepareProductTransferCode = () => import('../..\\components\\Settings\\PrepareProductTransferCode.vue' /* webpackChunkName: "components/prepare-product-transfer-code" */).then(c => wrapFunctional(c.default || c))
+export const PrepareProfitsAndLosses = () => import('../..\\components\\Settings\\prepareProfitsAndLosses.vue' /* webpackChunkName: "components/prepare-profits-and-losses" */).then(c => wrapFunctional(c.default || c))
+export const PrepareShift = () => import('../..\\components\\Settings\\PrepareShift.vue' /* webpackChunkName: "components/prepare-shift" */).then(c => wrapFunctional(c.default || c))
+export const PrepareStreet = () => import('../..\\components\\Settings\\PrepareStreet.vue' /* webpackChunkName: "components/prepare-street" */).then(c => wrapFunctional(c.default || c))
+export const PrepareSubDepartments = () => import('../..\\components\\Settings\\PrepareSubDepartments.vue' /* webpackChunkName: "components/prepare-sub-departments" */).then(c => wrapFunctional(c.default || c))
+export const PrepareTableRowAccessSysUser = () => import('../..\\components\\Settings\\PrepareTableRowAccessSysUser.vue' /* webpackChunkName: "components/prepare-table-row-access-sys-user" */).then(c => wrapFunctional(c.default || c))
+export const PrepareTara = () => import('../..\\components\\Settings\\PrepareTara.vue' /* webpackChunkName: "components/prepare-tara" */).then(c => wrapFunctional(c.default || c))
+export const PrepareUnitMeasurement = () => import('../..\\components\\Settings\\PrepareUnitMeasurement.vue' /* webpackChunkName: "components/prepare-unit-measurement" */).then(c => wrapFunctional(c.default || c))
+export const PrepareUser = () => import('../..\\components\\Settings\\PrepareUser.vue' /* webpackChunkName: "components/prepare-user" */).then(c => wrapFunctional(c.default || c))
+export const PrepareUserPersonal = () => import('../..\\components\\Settings\\PrepareUserPersonal.vue' /* webpackChunkName: "components/prepare-user-personal" */).then(c => wrapFunctional(c.default || c))
+export const PrepareWarehouse = () => import('../..\\components\\Settings\\PrepareWarehouse.vue' /* webpackChunkName: "components/prepare-warehouse" */).then(c => wrapFunctional(c.default || c))
+export const ProductCategories = () => import('../..\\components\\Settings\\ProductCategories.vue' /* webpackChunkName: "components/product-categories" */).then(c => wrapFunctional(c.default || c))
+export const ProductCompanyPriceList = () => import('../..\\components\\Settings\\ProductCompanyPriceList.vue' /* webpackChunkName: "components/product-company-price-list" */).then(c => wrapFunctional(c.default || c))
+export const ProductEntryTypes = () => import('../..\\components\\Settings\\ProductEntryTypes.vue' /* webpackChunkName: "components/product-entry-types" */).then(c => wrapFunctional(c.default || c))
+export const ProductionArticles = () => import('../..\\components\\Settings\\ProductionArticles.vue' /* webpackChunkName: "components/production-articles" */).then(c => wrapFunctional(c.default || c))
+export const ProductsList = () => import('../..\\components\\Settings\\ProductsList.vue' /* webpackChunkName: "components/products-list" */).then(c => wrapFunctional(c.default || c))
+export const ProductTransferCodes = () => import('../..\\components\\Settings\\ProductTransferCodes.vue' /* webpackChunkName: "components/product-transfer-codes" */).then(c => wrapFunctional(c.default || c))
+export const ProfitsAndLosses = () => import('../..\\components\\Settings\\ProfitsAndLosses.vue' /* webpackChunkName: "components/profits-and-losses" */).then(c => wrapFunctional(c.default || c))
+export const ShiftList = () => import('../..\\components\\Settings\\ShiftList.vue' /* webpackChunkName: "components/shift-list" */).then(c => wrapFunctional(c.default || c))
+export const StreetList = () => import('../..\\components\\Settings\\StreetList.vue' /* webpackChunkName: "components/street-list" */).then(c => wrapFunctional(c.default || c))
+export const SubDepartments = () => import('../..\\components\\Settings\\SubDepartments.vue' /* webpackChunkName: "components/sub-departments" */).then(c => wrapFunctional(c.default || c))
+export const TableRowAccessSysUser = () => import('../..\\components\\Settings\\TableRowAccessSysUser.vue' /* webpackChunkName: "components/table-row-access-sys-user" */).then(c => wrapFunctional(c.default || c))
+export const TarasList = () => import('../..\\components\\Settings\\TarasList.vue' /* webpackChunkName: "components/taras-list" */).then(c => wrapFunctional(c.default || c))
+export const UnitMeasurement = () => import('../..\\components\\Settings\\UnitMeasurement.vue' /* webpackChunkName: "components/unit-measurement" */).then(c => wrapFunctional(c.default || c))
+export const UsersList = () => import('../..\\components\\Settings\\UsersList.vue' /* webpackChunkName: "components/users-list" */).then(c => wrapFunctional(c.default || c))
+export const WarehousesList = () => import('../..\\components\\Settings\\WarehousesList.vue' /* webpackChunkName: "components/warehouses-list" */).then(c => wrapFunctional(c.default || c))
+export const PaymentTypeGroups = () => import('../..\\components\\Transactions\\PaymentTypeGroups.vue' /* webpackChunkName: "components/payment-type-groups" */).then(c => wrapFunctional(c.default || c))
+export const PaymentTypes = () => import('../..\\components\\Transactions\\PaymentTypes.vue' /* webpackChunkName: "components/payment-types" */).then(c => wrapFunctional(c.default || c))
+export const PreparePaymentType = () => import('../..\\components\\Transactions\\PreparePaymentType.vue' /* webpackChunkName: "components/prepare-payment-type" */).then(c => wrapFunctional(c.default || c))
+export const PreparePaymentTypeGroup = () => import('../..\\components\\Transactions\\PreparePaymentTypeGroup.vue' /* webpackChunkName: "components/prepare-payment-type-group" */).then(c => wrapFunctional(c.default || c))
+export const TransactionMovements = () => import('../..\\components\\Transactions\\TransactionMovements.vue' /* webpackChunkName: "components/transaction-movements" */).then(c => wrapFunctional(c.default || c))
+export const PrepareWeight = () => import('../..\\components\\Weights\\PrepareWeight.vue' /* webpackChunkName: "components/prepare-weight" */).then(c => wrapFunctional(c.default || c))
+export const WeightsList = () => import('../..\\components\\Weights\\WeightsList.vue' /* webpackChunkName: "components/weights-list" */).then(c => wrapFunctional(c.default || c))
+export const InternalCustomTable = () => import('../..\\components\\Invoices\\PurchaseAndTransferInvoicesFolder\\InternalCustomTable.vue' /* webpackChunkName: "components/internal-custom-table" */).then(c => wrapFunctional(c.default || c))
+export const PurchaseAndTransferInvoices = () => import('../..\\components\\Invoices\\PurchaseAndTransferInvoicesFolder\\PurchaseAndTransferInvoices.vue' /* webpackChunkName: "components/purchase-and-transfer-invoices" */).then(c => wrapFunctional(c.default || c))
+export const EndScaleBox = () => import('../..\\components\\Invoices\\ScaleBoxs\\EndScaleBox.vue' /* webpackChunkName: "components/end-scale-box" */).then(c => wrapFunctional(c.default || c))
+export const ScaleBox = () => import('../..\\components\\Invoices\\ScaleBoxs\\ScaleBox.vue' /* webpackChunkName: "components/scale-box" */).then(c => wrapFunctional(c.default || c))
+export const ScaleBoxGenericTable = () => import('../..\\components\\Invoices\\ScaleBoxs\\ScaleBoxGenericTable.vue' /* webpackChunkName: "components/scale-box-generic-table" */).then(c => wrapFunctional(c.default || c))
+export const PrepareSewProductionOrderItemList = () => import('../..\\components\\Orders\\PrepareSewProductionOrderItem\\PrepareSewProductionOrderItemList.vue' /* webpackChunkName: "components/prepare-sew-production-order-item-list" */).then(c => wrapFunctional(c.default || c))
+export const SewCreatedTableBody = () => import('../..\\components\\Orders\\PrepareSewProductionOrderItem\\SewCreatedTableBody.vue' /* webpackChunkName: "components/sew-created-table-body" */).then(c => wrapFunctional(c.default || c))
+export const SewCreatedTableBodyEdit = () => import('../..\\components\\Orders\\PrepareSewProductionOrderItem\\SewCreatedTableBodyEdit.vue' /* webpackChunkName: "components/sew-created-table-body-edit" */).then(c => wrapFunctional(c.default || c))
+export const StaticTopTableList = () => import('../..\\components\\Orders\\PrepareSewProductionOrderItem\\StaticTopTableList.vue' /* webpackChunkName: "components/static-top-table-list" */).then(c => wrapFunctional(c.default || c))
+export const SubKroyTable = () => import('../..\\components\\Orders\\PrepareSewProductionOrderItem\\SubKroyTable.vue' /* webpackChunkName: "components/sub-kroy-table" */).then(c => wrapFunctional(c.default || c))
+export const TableSewCreated = () => import('../..\\components\\Orders\\PrepareSewProductionOrderItem\\TableSewCreated.vue' /* webpackChunkName: "components/table-sew-created" */).then(c => wrapFunctional(c.default || c))
 
 // nuxt/nuxt.js#8607
 function wrapFunctional(options) {

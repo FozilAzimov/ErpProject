@@ -20,6 +20,7 @@
     "@nuxtjs/proxy": "^2.1.0",
     "@nuxtjs/pwa": "^3.3.5",
     "axios": "^1.6.2",
+    "chart.js": "^3.0.0",
     "core-js": "^3.25.3",
     "cors": "^2.8.5",
     "element-ui": "^2.15.14",

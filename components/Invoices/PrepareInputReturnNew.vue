@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full p-[0px_10px_0px_4px]">
+  <div class="w-full px-1">
     <LoadingPage
       v-if="isLoading"
       class="absolute left-[50%] top-[8px] translate-x-[-50%]"
@@ -634,37 +634,8 @@ export default {
       this.bodyData = this.staticSetDataAction(arr)
 
       // Start Request body
-      const body = {}
-      if (this.pageID) {
-        const invoice = {
-          id: this.pageID,
-          companyCurrencyRate:
-            this.allSelectAndInputValue?.companyCurrencyRate?.text ??
-            this.allSelectAndInputValue?.companyCurrencyRate ??
-            '',
-          companyRefCurrencyRate:
-            this.allSelectAndInputValue?.companyRefCurrencyRate?.text ??
-            this.allSelectAndInputValue?.companyRefCurrencyRate ??
-            '',
-          currency: this.allSelectAndInputValue?.currency?.id
-            ? this.allSelectAndInputValue?.currency
-            : this.allSelectAndInputValue?.currency
-            ? { id: this.allSelectAndInputValue?.currency }
-            : null,
-          currencyRate:
-            this.allSelectAndInputValue?.currencyRate?.text ??
-            this.allSelectAndInputValue?.currencyRate ??
-            '',
-          driverName: '',
-          invoiceNominal: 1,
-          paymentType: this.allSelectAndInputValue?.paymentType?.id
-            ? this.allSelectAndInputValue?.paymentType
-            : this.allSelectAndInputValue?.paymentType
-            ? { id: this.allSelectAndInputValue?.paymentType }
-            : null,
-        }
-        body.invoice = invoice
-      } else {
+      const body = { invoice: {} }
+      if (!this.pageID) {
         const invoice = {
           branch: this.allSelectAndInputValue?.branch?.id
             ? this.allSelectAndInputValue?.branch
@@ -680,22 +651,9 @@ export default {
             : this.allSelectAndInputValue?.company
             ? { id: this.allSelectAndInputValue?.company }
             : null,
-          companyCurrencyRate:
-            this.allSelectAndInputValue?.companyCurrencyRate?.text ??
-            this.allSelectAndInputValue?.companyCurrencyRate ??
-            '',
           companyRefCurrencyRate:
             this.allSelectAndInputValue?.companyRefCurrencyRate?.text ??
             this.allSelectAndInputValue?.companyRefCurrencyRate ??
-            '',
-          currency: this.allSelectAndInputValue?.currency?.id
-            ? this.allSelectAndInputValue?.currency
-            : this.allSelectAndInputValue?.currency
-            ? { id: this.allSelectAndInputValue?.currency }
-            : null,
-          currencyRate:
-            this.allSelectAndInputValue?.currencyRate?.text ??
-            this.allSelectAndInputValue?.currencyRate ??
             '',
           date: this.allSelectAndInputValue?.date
             ? this.$formatDate(
@@ -714,10 +672,8 @@ export default {
             : this.allSelectAndInputValue?.department
             ? { id: this.allSelectAndInputValue?.department }
             : null,
-          driverName: '',
           invoiceBillStatus: '',
           invoiceNo: '',
-          invoiceNominal: 1,
           invoiceStatus: '',
           notes: this.allSelectAndInputValue?.note ?? '',
           orderProductionType: this.allSelectAndInputValue?.orderProductionType
@@ -732,14 +688,35 @@ export default {
             : this.allSelectAndInputValue?.warehouse
             ? { id: this.allSelectAndInputValue?.warehouse }
             : null,
-          paymentType: this.allSelectAndInputValue?.paymentType?.id
-            ? this.allSelectAndInputValue?.paymentType
-            : this.allSelectAndInputValue?.paymentType
-            ? { id: this.allSelectAndInputValue?.paymentType }
-            : null,
         }
         body.invoice = invoice
       }
+      body.invoice.id = this.pageID
+      body.invoice.companyCurrencyRate =
+        this.allSelectAndInputValue?.companyCurrencyRate?.text ??
+        this.allSelectAndInputValue?.companyCurrencyRate ??
+        ''
+      body.invoice.companyRefCurrencyRate =
+        this.allSelectAndInputValue?.companyRefCurrencyRate?.text ??
+        this.allSelectAndInputValue?.companyRefCurrencyRate ??
+        ''
+      body.invoice.currency = this.allSelectAndInputValue?.currency?.id
+        ? this.allSelectAndInputValue?.currency
+        : this.allSelectAndInputValue?.currency
+        ? { id: this.allSelectAndInputValue?.currency }
+        : null
+      body.invoice.currencyRate =
+        this.allSelectAndInputValue?.currencyRate?.text ??
+        this.allSelectAndInputValue?.currencyRate ??
+        ''
+      body.invoice.paymentType = this.allSelectAndInputValue?.paymentType?.id
+        ? this.allSelectAndInputValue?.paymentType
+        : this.allSelectAndInputValue?.paymentType
+        ? { id: this.allSelectAndInputValue?.paymentType }
+        : null
+      body.invoice.driverName = ''
+      body.invoice.invoiceNominal =
+        this.allSelectAndInputValue?.invoiceNominal ?? ''
       // List set qilish
       body.invoice.invoiceItems = this.bodyData
       // End Request body

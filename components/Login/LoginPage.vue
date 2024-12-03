@@ -30,7 +30,7 @@
                 ref="usernameInput"
                 v-model="form.username"
                 :class="{
-                  'border-red-200 shadow-[0_0_4px_#ef4444]': errors[0],
+                  'border-red-500': errors[0],
                 }"
                 type="text"
                 :placeholder="GET_CORE_STRING?.['login.login']"
@@ -54,7 +54,7 @@
                 id="password"
                 v-model="form.password"
                 :class="{
-                  'border-red-200 shadow-[0_0_4px_#ef4444]': errors[0],
+                  'border-red-500': errors[0],
                 }"
                 :type="typeIcon ? 'text' : 'password'"
                 :placeholder="GET_CORE_STRING?.['login.password']"
@@ -145,11 +145,11 @@ export default {
                 password: this.form.password,
               },
             })
-            .then((res) => {
-              localStorage.setItem('token', res.data.token)
+            .then(({ data: { token } }) => {
+              localStorage.setItem('token', token)
               this.isLoading = !this.isLoading
               this.FETCH_TRANSLATE() // store translare function
-              this.$router.push('/branchess.htm')
+              this.$router.push('/dashboard.htm')
               this.$notification(
                 `Muvaffaqqiyatli o'tdingiz!`,
                 'Success',

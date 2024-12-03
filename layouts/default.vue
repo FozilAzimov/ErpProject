@@ -49,7 +49,7 @@
             />
           </button>
           <ul
-            class="w-[203px] bg-[#fff] absolute top-[44px] z-[1000] text-[13px] overflow-hidden duration-[0.5s]"
+            class="w-[203px] bg-[#fff] absolute top-[40px] z-[1000] text-[13px] overflow-hidden duration-[0.5s]"
             :style="{
               height: dropToggle ? '229px' : '0px',
               border: dropToggle ? '1px solid #ddd' : '1px solid #206fa2b3',
@@ -124,7 +124,7 @@
             />
           </button>
           <ul
-            class="w-[130px] bg-[#fff] absolute top-[44px] text-[13px] overflow-hidden duration-[0.4s] z-[100]"
+            class="w-[130px] bg-[#fff] absolute top-[40px] text-[13px] overflow-hidden duration-[0.4s] z-[100]"
             :style="{
               height: langToggle ? '135px' : '0px',
               border: langToggle ? '1px solid #ddd' : '1px solid #206fa2b3',
@@ -331,11 +331,14 @@ export default {
         .delete(`/security/logout`)
         .then((res) => {
           if (res.status < 300) {
+            // remove
+            document.cookie = 'JSESSIONID='
             localStorage.removeItem('token')
+            document.cookie = 'lang='
+            // remove
             this.logoutMessage = false
             this.$router.push('/login.htm')
             this.$notification(`Proyekt'dan chiqdingiz.`, 'Success', 'success')
-            document.cookie = 'lang='
             this.isLoading = !this.isLoading
           }
         })

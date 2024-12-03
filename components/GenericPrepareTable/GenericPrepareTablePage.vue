@@ -233,7 +233,11 @@
                   :order="index"
                   :name="obj.name"
                   :result-type="obj.resultType"
-                  :is-look-up-obj="obj.name === 'item'"
+                  :is-look-up-obj="
+                    obj.name === 'item' ||
+                    obj.name === 'cashbox' ||
+                    obj.name === 'bankBranchAccount'
+                  "
                   :required="
                     !!(
                       !obj?.required ||
@@ -651,7 +655,23 @@ export default {
 
     // change action
     onChangeSelectedLookUp(name, value, order, resultType, resObj) {
-      this.$set(this.tableList[order], 'unitMeasurement', { text: resObj?.um })
+      if (name === 'item')
+        this.$set(this.tableList[order], 'unitMeasurement', {
+          text: resObj?.um,
+        })
+      else if (name === 'cashbox') {
+        this.$set(this.tableList[order], 'bankBranchAccount', '')
+        this.$set(this.tableList[order], name, {
+          id: value,
+          text: resObj?.name,
+        })
+      } else if (name === 'bankBranchAccount') {
+        this.$set(this.tableList[order], 'cashbox', '')
+        this.$set(this.tableList[order], name, {
+          id: value,
+          text: resObj?.name,
+        })
+      }
     },
 
     // set all LookUp and Input Value action
@@ -670,7 +690,7 @@ export default {
         name === 'vat'
       )
         this.conbinationsAction(order) // function
-      if (name === 'item')
+      if (name === 'item' || name === 'cashbox' || name === 'bankBranchAccount')
         this.onChangeSelectedLookUp(name, value, order, resultType, resObj) // function
       this.requiredLookUpAndInputCheckerAction(this.tableList) // function
     },

@@ -7,7 +7,7 @@ import scrollBehavior from './router.scrollBehavior.js'
 const _15ed15ce = () => interopDefault(import('..\\pages\\accounts.htm\\index.vue' /* webpackChunkName: "pages/accounts.htm/index" */))
 const _b1e4b2d2 = () => interopDefault(import('..\\pages\\articles.htm\\index.vue' /* webpackChunkName: "pages/articles.htm/index" */))
 const _6a78fdb4 = () => interopDefault(import('..\\pages\\attendanceschedule.htm\\index.vue' /* webpackChunkName: "pages/attendanceschedule.htm/index" */))
-const _503dcf88 = () => interopDefault(import('..\\pages\\bands.htm\\index.vue' /* webpackChunkName: "pages/bands.htm/index" */))
+const _2d8d8711 = () => interopDefault(import('..\\pages\\balanceReports.htm\\index.vue' /* webpackChunkName: "pages/balanceReports.htm/index" */))
 const _0c862a43 = () => interopDefault(import('..\\pages\\banks.htm\\index.vue' /* webpackChunkName: "pages/banks.htm/index" */))
 const _00d38147 = () => interopDefault(import('..\\pages\\basicTools.htm\\index.vue' /* webpackChunkName: "pages/basicTools.htm/index" */))
 const _36bee89f = () => interopDefault(import('..\\pages\\batchColorDepthTariffs.htm\\index.vue' /* webpackChunkName: "pages/batchColorDepthTariffs.htm/index" */))
@@ -19,16 +19,14 @@ const _d0159502 = () => interopDefault(import('..\\pages\\batchProcess.htm\\inde
 const _83de6cec = () => interopDefault(import('..\\pages\\batchProcessStages.htm\\index.vue' /* webpackChunkName: "pages/batchProcessStages.htm/index" */))
 const _658cd266 = () => interopDefault(import('..\\pages\\batchProductionInvoiceUi.htm\\index.vue' /* webpackChunkName: "pages/batchProductionInvoiceUi.htm/index" */))
 const _79af2853 = () => interopDefault(import('..\\pages\\batchRepair.htm\\index.vue' /* webpackChunkName: "pages/batchRepair.htm/index" */))
-const _4e260fa2 = () => interopDefault(import('..\\pages\\batchReports.htm\\index.vue' /* webpackChunkName: "pages/batchReports.htm/index" */))
-const _e7405a52 = () => interopDefault(import('..\\pages\\batchStagesReport.htm\\index.vue' /* webpackChunkName: "pages/batchStagesReport.htm/index" */))
 const _2703b0c8 = () => interopDefault(import('..\\pages\\batchunions.htm\\index.vue' /* webpackChunkName: "pages/batchunions.htm/index" */))
 const _75c6aea4 = () => interopDefault(import('..\\pages\\branches.htm\\index.vue' /* webpackChunkName: "pages/branches.htm/index" */))
 const _d3ff9752 = () => interopDefault(import('..\\pages\\branchess.htm\\index.vue' /* webpackChunkName: "pages/branchess.htm/index" */))
-const _6283df51 = () => interopDefault(import('..\\pages\\branchProductsStockReportByLogic.htm\\index.vue' /* webpackChunkName: "pages/branchProductsStockReportByLogic.htm/index" */))
 const _23e6ac2a = () => interopDefault(import('..\\pages\\calculationByColorVariantRecipe.htm\\index.vue' /* webpackChunkName: "pages/calculationByColorVariantRecipe.htm/index" */))
 const _f64711ee = () => interopDefault(import('..\\pages\\capitals.htm\\index.vue' /* webpackChunkName: "pages/capitals.htm/index" */))
 const _16286346 = () => interopDefault(import('..\\pages\\car.htm\\index.vue' /* webpackChunkName: "pages/car.htm/index" */))
 const _5609314e = () => interopDefault(import('..\\pages\\cashboxs.htm\\index.vue' /* webpackChunkName: "pages/cashboxs.htm/index" */))
+const _5db0887f = () => interopDefault(import('..\\pages\\cashFlowReport.htm\\index.vue' /* webpackChunkName: "pages/cashFlowReport.htm/index" */))
 const _f973b24e = () => interopDefault(import('..\\pages\\changeProductColorVariant.htm\\index.vue' /* webpackChunkName: "pages/changeProductColorVariant.htm/index" */))
 const _0a27e17b = () => interopDefault(import('..\\pages\\characterDetails.htm\\index.vue' /* webpackChunkName: "pages/characterDetails.htm/index" */))
 const _54ae203c = () => interopDefault(import('..\\pages\\characteristics.htm\\index.vue' /* webpackChunkName: "pages/characteristics.htm/index" */))
@@ -80,7 +78,6 @@ const _f9c6bf42 = () => interopDefault(import('..\\pages\\expenseInvoice.htm\\in
 const _d961e810 = () => interopDefault(import('..\\pages\\externalInvoice.htm\\index.vue' /* webpackChunkName: "pages/externalInvoice.htm/index" */))
 const _5da670bc = () => interopDefault(import('..\\pages\\extraWorks.htm\\index.vue' /* webpackChunkName: "pages/extraWorks.htm/index" */))
 const _a97cccfa = () => interopDefault(import('..\\pages\\files.htm\\index.vue' /* webpackChunkName: "pages/files.htm/index" */))
-const _3cfdeab8 = () => interopDefault(import('..\\pages\\grades.htm\\index.vue' /* webpackChunkName: "pages/grades.htm/index" */))
 const _5ebafdf9 = () => interopDefault(import('..\\pages\\holidays.htm\\index.vue' /* webpackChunkName: "pages/holidays.htm/index" */))
 const _a70d0332 = () => interopDefault(import('..\\pages\\hrdevices.htm\\index.vue' /* webpackChunkName: "pages/hrdevices.htm/index" */))
 const _000f9d5e = () => interopDefault(import('..\\pages\\hrEvents.htm\\index.vue' /* webpackChunkName: "pages/hrEvents.htm/index" */))
@@ -88,11 +85,9 @@ const _4b8b7c64 = () => interopDefault(import('..\\pages\\hronlines.htm\\index.v
 const _47443194 = () => interopDefault(import('..\\pages\\inbox.htm\\index.vue' /* webpackChunkName: "pages/inbox.htm/index" */))
 const _26659438 = () => interopDefault(import('..\\pages\\inputFromProductionCompany.htm\\index.vue' /* webpackChunkName: "pages/inputFromProductionCompany.htm/index" */))
 const _96dfac80 = () => interopDefault(import('..\\pages\\inputReturn.htm\\index.vue' /* webpackChunkName: "pages/inputReturn.htm/index" */))
-const _c7b909ba = () => interopDefault(import('..\\pages\\inputStockDetailReport.htm\\index.vue' /* webpackChunkName: "pages/inputStockDetailReport.htm/index" */))
 const _3d2bf33d = () => interopDefault(import('..\\pages\\inputToServiceInvoice.htm\\index.vue' /* webpackChunkName: "pages/inputToServiceInvoice.htm/index" */))
 const _79dcc598 = () => interopDefault(import('..\\pages\\intangibleAssets.htm\\index.vue' /* webpackChunkName: "pages/intangibleAssets.htm/index" */))
 const _0e3a652c = () => interopDefault(import('..\\pages\\internalInvoice.htm\\index.vue' /* webpackChunkName: "pages/internalInvoice.htm/index" */))
-const _4b75d8a2 = () => interopDefault(import('..\\pages\\invoiceReports.htm\\index.vue' /* webpackChunkName: "pages/invoiceReports.htm/index" */))
 const _2d729544 = () => interopDefault(import('..\\pages\\iplikLotStavka.htm\\index.vue' /* webpackChunkName: "pages/iplikLotStavka.htm/index" */))
 const _fadc8204 = () => interopDefault(import('..\\pages\\iplikStages.htm\\index.vue' /* webpackChunkName: "pages/iplikStages.htm/index" */))
 const _5c1613d7 = () => interopDefault(import('..\\pages\\knittingSewModelBarcodeReader.htm\\index.vue' /* webpackChunkName: "pages/knittingSewModelBarcodeReader.htm/index" */))
@@ -126,12 +121,12 @@ const _4bbdc1c6 = () => interopDefault(import('..\\pages\\paymenttypegroups.htm\
 const _61765d61 = () => interopDefault(import('..\\pages\\paymenttypes.htm\\index.vue' /* webpackChunkName: "pages/paymenttypes.htm/index" */))
 const _191b8291 = () => interopDefault(import('..\\pages\\permissionGroups.htm\\index.vue' /* webpackChunkName: "pages/permissionGroups.htm/index" */))
 const _5e593833 = () => interopDefault(import('..\\pages\\personAndEquipments.htm\\index.vue' /* webpackChunkName: "pages/personAndEquipments.htm/index" */))
-const _297d529a = () => interopDefault(import('..\\pages\\personEquipmentSews.htm\\index.vue' /* webpackChunkName: "pages/personEquipmentSews.htm/index" */))
 const _94945426 = () => interopDefault(import('..\\pages\\personListReport.htm\\index.vue' /* webpackChunkName: "pages/personListReport.htm/index" */))
 const _3a9650b7 = () => interopDefault(import('..\\pages\\personSalaries.htm\\index.vue' /* webpackChunkName: "pages/personSalaries.htm/index" */))
 const _5307bb78 = () => interopDefault(import('..\\pages\\phoneNumbers.htm\\index.vue' /* webpackChunkName: "pages/phoneNumbers.htm/index" */))
 const _5655cf3e = () => interopDefault(import('..\\pages\\planningTypes.htm\\index.vue' /* webpackChunkName: "pages/planningTypes.htm/index" */))
 const _47e63abb = () => interopDefault(import('..\\pages\\plateNumber.htm\\index.vue' /* webpackChunkName: "pages/plateNumber.htm/index" */))
+const _17855a18 = () => interopDefault(import('..\\pages\\pnlReport.htm\\index.vue' /* webpackChunkName: "pages/pnlReport.htm/index" */))
 const _0092aca0 = () => interopDefault(import('..\\pages\\positions.htm\\index.vue' /* webpackChunkName: "pages/positions.htm/index" */))
 const _65b22454 = () => interopDefault(import('..\\pages\\post.htm\\index.vue' /* webpackChunkName: "pages/post.htm/index" */))
 const _7d4e3395 = () => interopDefault(import('..\\pages\\postStations.htm\\index.vue' /* webpackChunkName: "pages/postStations.htm/index" */))
@@ -172,7 +167,6 @@ const _59f60516 = () => interopDefault(import('..\\pages\\saleServiceInvoice.htm
 const _828a159c = () => interopDefault(import('..\\pages\\salesorder.htm\\index.vue' /* webpackChunkName: "pages/salesorder.htm/index" */))
 const _12181484 = () => interopDefault(import('..\\pages\\salesReturn.htm\\index.vue' /* webpackChunkName: "pages/salesReturn.htm/index" */))
 const _01b3c792 = () => interopDefault(import('..\\pages\\sessions.htm\\index.vue' /* webpackChunkName: "pages/sessions.htm/index" */))
-const _da9c5c0a = () => interopDefault(import('..\\pages\\sewBandEquipments.htm\\index.vue' /* webpackChunkName: "pages/sewBandEquipments.htm/index" */))
 const _2282a010 = () => interopDefault(import('..\\pages\\sewmodel.htm\\index.vue' /* webpackChunkName: "pages/sewmodel.htm/index" */))
 const _71f3b6fb = () => interopDefault(import('..\\pages\\sewModelBarcodeReader.htm\\index.vue' /* webpackChunkName: "pages/sewModelBarcodeReader.htm/index" */))
 const _1a3530bd = () => interopDefault(import('..\\pages\\sewModelBarcodeReaderQualityControl.htm\\index.vue' /* webpackChunkName: "pages/sewModelBarcodeReaderQualityControl.htm/index" */))
@@ -180,7 +174,6 @@ const _02de07f6 = () => interopDefault(import('..\\pages\\sewModelBarcodeReaderS
 const _177356be = () => interopDefault(import('..\\pages\\sewModelManualBarcodeReader.htm\\index.vue' /* webpackChunkName: "pages/sewModelManualBarcodeReader.htm/index" */))
 const _9471b028 = () => interopDefault(import('..\\pages\\sewModelOperationName.htm\\index.vue' /* webpackChunkName: "pages/sewModelOperationName.htm/index" */))
 const _834457ca = () => interopDefault(import('..\\pages\\sewModelPackingType.htm\\index.vue' /* webpackChunkName: "pages/sewModelPackingType.htm/index" */))
-const _074c499c = () => interopDefault(import('..\\pages\\sewModelReport.htm\\index.vue' /* webpackChunkName: "pages/sewModelReport.htm/index" */))
 const _52d57012 = () => interopDefault(import('..\\pages\\sewModelSizeColorBarcode.htm\\index.vue' /* webpackChunkName: "pages/sewModelSizeColorBarcode.htm/index" */))
 const _3e838d01 = () => interopDefault(import('..\\pages\\sewModelVariantsSize.htm\\index.vue' /* webpackChunkName: "pages/sewModelVariantsSize.htm/index" */))
 const _412a3000 = () => interopDefault(import('..\\pages\\sewOperatorsKPI.htm\\index.vue' /* webpackChunkName: "pages/sewOperatorsKPI.htm/index" */))
@@ -196,10 +189,7 @@ const _418c1963 = () => interopDefault(import('..\\pages\\taras.htm\\index.vue' 
 const _73512f2a = () => interopDefault(import('..\\pages\\tariffs.htm\\index.vue' /* webpackChunkName: "pages/tariffs.htm/index" */))
 const _ebde26c0 = () => interopDefault(import('..\\pages\\timeZones.htm\\index.vue' /* webpackChunkName: "pages/timeZones.htm/index" */))
 const _ecd73c1c = () => interopDefault(import('..\\pages\\transactionCharacters.htm\\index.vue' /* webpackChunkName: "pages/transactionCharacters.htm/index" */))
-const _5ea140d7 = () => interopDefault(import('..\\pages\\transactionDetailReport.htm\\index.vue' /* webpackChunkName: "pages/transactionDetailReport.htm/index" */))
 const _d7c63c64 = () => interopDefault(import('..\\pages\\transactionMovements.htm\\index.vue' /* webpackChunkName: "pages/transactionMovements.htm/index" */))
-const _65240713 = () => interopDefault(import('..\\pages\\transactionReports.htm\\index.vue' /* webpackChunkName: "pages/transactionReports.htm/index" */))
-const _4db7a815 = () => interopDefault(import('..\\pages\\transactionSaldoReport.htm\\index.vue' /* webpackChunkName: "pages/transactionSaldoReport.htm/index" */))
 const _4d064a62 = () => interopDefault(import('..\\pages\\unitmeasurement.htm\\index.vue' /* webpackChunkName: "pages/unitmeasurement.htm/index" */))
 const _01efdc5c = () => interopDefault(import('..\\pages\\users.htm\\index.vue' /* webpackChunkName: "pages/users.htm/index" */))
 const _303fdf61 = () => interopDefault(import('..\\pages\\viabranchreceive.htm\\index.vue' /* webpackChunkName: "pages/viabranchreceive.htm/index" */))
@@ -365,9 +355,9 @@ export const routerOptions = {
     component: _6a78fdb4,
     name: "attendanceschedule.htm"
   }, {
-    path: "/bands.htm",
-    component: _503dcf88,
-    name: "bands.htm"
+    path: "/balanceReports.htm",
+    component: _2d8d8711,
+    name: "balanceReports.htm"
   }, {
     path: "/banks.htm",
     component: _0c862a43,
@@ -413,14 +403,6 @@ export const routerOptions = {
     component: _79af2853,
     name: "batchRepair.htm"
   }, {
-    path: "/batchReports.htm",
-    component: _4e260fa2,
-    name: "batchReports.htm"
-  }, {
-    path: "/batchStagesReport.htm",
-    component: _e7405a52,
-    name: "batchStagesReport.htm"
-  }, {
     path: "/batchunions.htm",
     component: _2703b0c8,
     name: "batchunions.htm"
@@ -432,10 +414,6 @@ export const routerOptions = {
     path: "/branchess.htm",
     component: _d3ff9752,
     name: "branchess.htm"
-  }, {
-    path: "/branchProductsStockReportByLogic.htm",
-    component: _6283df51,
-    name: "branchProductsStockReportByLogic.htm"
   }, {
     path: "/calculationByColorVariantRecipe.htm",
     component: _23e6ac2a,
@@ -452,6 +430,10 @@ export const routerOptions = {
     path: "/cashboxs.htm",
     component: _5609314e,
     name: "cashboxs.htm"
+  }, {
+    path: "/cashFlowReport.htm",
+    component: _5db0887f,
+    name: "cashFlowReport.htm"
   }, {
     path: "/changeProductColorVariant.htm",
     component: _f973b24e,
@@ -657,10 +639,6 @@ export const routerOptions = {
     component: _a97cccfa,
     name: "files.htm"
   }, {
-    path: "/grades.htm",
-    component: _3cfdeab8,
-    name: "grades.htm"
-  }, {
     path: "/holidays.htm",
     component: _5ebafdf9,
     name: "holidays.htm"
@@ -689,10 +667,6 @@ export const routerOptions = {
     component: _96dfac80,
     name: "inputReturn.htm"
   }, {
-    path: "/inputStockDetailReport.htm",
-    component: _c7b909ba,
-    name: "inputStockDetailReport.htm"
-  }, {
     path: "/inputToServiceInvoice.htm",
     component: _3d2bf33d,
     name: "inputToServiceInvoice.htm"
@@ -704,10 +678,6 @@ export const routerOptions = {
     path: "/internalInvoice.htm",
     component: _0e3a652c,
     name: "internalInvoice.htm"
-  }, {
-    path: "/invoiceReports.htm",
-    component: _4b75d8a2,
-    name: "invoiceReports.htm"
   }, {
     path: "/iplikLotStavka.htm",
     component: _2d729544,
@@ -841,10 +811,6 @@ export const routerOptions = {
     component: _5e593833,
     name: "personAndEquipments.htm"
   }, {
-    path: "/personEquipmentSews.htm",
-    component: _297d529a,
-    name: "personEquipmentSews.htm"
-  }, {
     path: "/personListReport.htm",
     component: _94945426,
     name: "personListReport.htm"
@@ -864,6 +830,10 @@ export const routerOptions = {
     path: "/plateNumber.htm",
     component: _47e63abb,
     name: "plateNumber.htm"
+  }, {
+    path: "/pnlReport.htm",
+    component: _17855a18,
+    name: "pnlReport.htm"
   }, {
     path: "/positions.htm",
     component: _0092aca0,
@@ -1025,10 +995,6 @@ export const routerOptions = {
     component: _01b3c792,
     name: "sessions.htm"
   }, {
-    path: "/sewBandEquipments.htm",
-    component: _da9c5c0a,
-    name: "sewBandEquipments.htm"
-  }, {
     path: "/sewmodel.htm",
     component: _2282a010,
     name: "sewmodel.htm"
@@ -1056,10 +1022,6 @@ export const routerOptions = {
     path: "/sewModelPackingType.htm",
     component: _834457ca,
     name: "sewModelPackingType.htm"
-  }, {
-    path: "/sewModelReport.htm",
-    component: _074c499c,
-    name: "sewModelReport.htm"
   }, {
     path: "/sewModelSizeColorBarcode.htm",
     component: _52d57012,
@@ -1121,21 +1083,9 @@ export const routerOptions = {
     component: _ecd73c1c,
     name: "transactionCharacters.htm"
   }, {
-    path: "/transactionDetailReport.htm",
-    component: _5ea140d7,
-    name: "transactionDetailReport.htm"
-  }, {
     path: "/transactionMovements.htm",
     component: _d7c63c64,
     name: "transactionMovements.htm"
-  }, {
-    path: "/transactionReports.htm",
-    component: _65240713,
-    name: "transactionReports.htm"
-  }, {
-    path: "/transactionSaldoReport.htm",
-    component: _4db7a815,
-    name: "transactionSaldoReport.htm"
   }, {
     path: "/unitmeasurement.htm",
     component: _4d064a62,

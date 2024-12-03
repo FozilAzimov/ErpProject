@@ -511,7 +511,8 @@ export default {
     acceptAction() {
       if (
         this.allSelectAndInputValue.date &&
-        this.allSelectAndInputValue.company &&
+        (this.allSelectAndInputValue.company ||
+          this.allSelectAndInputValue.person) &&
         this.allSelectAndInputValue.sellDate &&
         this.allSelectAndInputValue.branch &&
         this.allSelectAndInputValue.department &&
@@ -544,9 +545,16 @@ export default {
         .post(`/invoices/prepareSaleInvoiceNew`, body)
         .then(
           ({
-            data: { actionUrl, rightColumns, invoiceJson, transactionsColumns },
+            data: {
+              actionUrl,
+              saleToPerson,
+              rightColumns,
+              invoiceJson,
+              transactionsColumns,
+            },
           }) => {
             this.actionUrl = actionUrl
+            this.saleToPerson = saleToPerson
             this.headData = rightColumns
             this.bodyData = invoiceJson?.invoiceItems
             this.allSelectAndInputValue = invoiceJson
@@ -555,6 +563,7 @@ export default {
             invoiceJson?.transactionsList.length
               ? (this.isSubBodyDataLength = true)
               : (this.isSubBodyDataLength = false)
+            this.dataCreatedAction() // function
             this.isLoading = !this.isLoading
           }
         )
@@ -647,7 +656,7 @@ export default {
       this.bodyData = this.staticSetDataAction(arr)
 
       // Start Request body
-      const body = {}
+      const body = { invoice: {} }
       if (this.pageID) {
         body.invoice = {
           id: this.pageID,
@@ -667,11 +676,6 @@ export default {
             ? this.allSelectAndInputValue?.branch
             : this.allSelectAndInputValue?.branch
             ? { id: this.allSelectAndInputValue?.branch }
-            : null,
-          company: this.allSelectAndInputValue?.company?.id
-            ? this.allSelectAndInputValue?.company
-            : this.allSelectAndInputValue?.company
-            ? { id: this.allSelectAndInputValue?.company }
             : null,
           date: this.allSelectAndInputValue?.date
             ? this.$formatDate(
@@ -716,6 +720,19 @@ export default {
           invoiceStatus: '',
           systemNumber: '',
         }
+      }
+      if (this.saleToPerson) {
+        body.invoice.person = this.allSelectAndInputValue?.person?.id
+          ? this.allSelectAndInputValue?.person
+          : this.allSelectAndInputValue?.person
+          ? { id: this.allSelectAndInputValue?.person }
+          : null
+      } else {
+        body.invoice.company = this.allSelectAndInputValue?.company?.id
+          ? this.allSelectAndInputValue?.company
+          : this.allSelectAndInputValue?.company
+          ? { id: this.allSelectAndInputValue?.company }
+          : null
       }
       body.invoice.companyRefCurrencyRate =
         this.allSelectAndInputValue?.companyRefCurrencyRate?.text ??
@@ -896,7 +913,7 @@ export default {
           },
           {
             width: '300',
-            subName: 'company',
+            subName: this.saleToPerson ? 'person' : 'company',
             url: this.saleToPerson
               ? 'findAllEmployeeLookUp'
               : 'findAllCompanyForInvoice',

@@ -21,11 +21,11 @@
     "_name": "_6a78fdb4"
   },
   {
-    "name": "bands.htm",
-    "path": "/bands.htm",
-    "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\bands.htm\\\\index.vue",
-    "chunkName": "pages/bands.htm/index",
-    "_name": "_503dcf88"
+    "name": "balanceReports.htm",
+    "path": "/balanceReports.htm",
+    "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\balanceReports.htm\\\\index.vue",
+    "chunkName": "pages/balanceReports.htm/index",
+    "_name": "_2d8d8711"
   },
   {
     "name": "banks.htm",
@@ -105,20 +105,6 @@
     "_name": "_79af2853"
   },
   {
-    "name": "batchReports.htm",
-    "path": "/batchReports.htm",
-    "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\batchReports.htm\\\\index.vue",
-    "chunkName": "pages/batchReports.htm/index",
-    "_name": "_4e260fa2"
-  },
-  {
-    "name": "batchStagesReport.htm",
-    "path": "/batchStagesReport.htm",
-    "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\batchStagesReport.htm\\\\index.vue",
-    "chunkName": "pages/batchStagesReport.htm/index",
-    "_name": "_e7405a52"
-  },
-  {
     "name": "batchunions.htm",
     "path": "/batchunions.htm",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\batchunions.htm\\\\index.vue",
@@ -138,13 +124,6 @@
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\branchess.htm\\\\index.vue",
     "chunkName": "pages/branchess.htm/index",
     "_name": "_d3ff9752"
-  },
-  {
-    "name": "branchProductsStockReportByLogic.htm",
-    "path": "/branchProductsStockReportByLogic.htm",
-    "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\branchProductsStockReportByLogic.htm\\\\index.vue",
-    "chunkName": "pages/branchProductsStockReportByLogic.htm/index",
-    "_name": "_6283df51"
   },
   {
     "name": "calculationByColorVariantRecipe.htm",
@@ -173,6 +152,13 @@
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\cashboxs.htm\\\\index.vue",
     "chunkName": "pages/cashboxs.htm/index",
     "_name": "_5609314e"
+  },
+  {
+    "name": "cashFlowReport.htm",
+    "path": "/cashFlowReport.htm",
+    "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\cashFlowReport.htm\\\\index.vue",
+    "chunkName": "pages/cashFlowReport.htm/index",
+    "_name": "_5db0887f"
   },
   {
     "name": "changeProductColorVariant.htm",
@@ -532,13 +518,6 @@
     "_name": "_a97cccfa"
   },
   {
-    "name": "grades.htm",
-    "path": "/grades.htm",
-    "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\grades.htm\\\\index.vue",
-    "chunkName": "pages/grades.htm/index",
-    "_name": "_3cfdeab8"
-  },
-  {
     "name": "holidays.htm",
     "path": "/holidays.htm",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\holidays.htm\\\\index.vue",
@@ -588,13 +567,6 @@
     "_name": "_96dfac80"
   },
   {
-    "name": "inputStockDetailReport.htm",
-    "path": "/inputStockDetailReport.htm",
-    "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\inputStockDetailReport.htm\\\\index.vue",
-    "chunkName": "pages/inputStockDetailReport.htm/index",
-    "_name": "_c7b909ba"
-  },
-  {
     "name": "inputToServiceInvoice.htm",
     "path": "/inputToServiceInvoice.htm",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\inputToServiceInvoice.htm\\\\index.vue",
@@ -614,13 +586,6 @@
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\internalInvoice.htm\\\\index.vue",
     "chunkName": "pages/internalInvoice.htm/index",
     "_name": "_0e3a652c"
-  },
-  {
-    "name": "invoiceReports.htm",
-    "path": "/invoiceReports.htm",
-    "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\invoiceReports.htm\\\\index.vue",
-    "chunkName": "pages/invoiceReports.htm/index",
-    "_name": "_4b75d8a2"
   },
   {
     "name": "iplikLotStavka.htm",
@@ -854,13 +819,6 @@
     "_name": "_5e593833"
   },
   {
-    "name": "personEquipmentSews.htm",
-    "path": "/personEquipmentSews.htm",
-    "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\personEquipmentSews.htm\\\\index.vue",
-    "chunkName": "pages/personEquipmentSews.htm/index",
-    "_name": "_297d529a"
-  },
-  {
     "name": "personListReport.htm",
     "path": "/personListReport.htm",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\personListReport.htm\\\\index.vue",
@@ -894,6 +852,13 @@
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\plateNumber.htm\\\\index.vue",
     "chunkName": "pages/plateNumber.htm/index",
     "_name": "_47e63abb"
+  },
+  {
+    "name": "pnlReport.htm",
+    "path": "/pnlReport.htm",
+    "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\pnlReport.htm\\\\index.vue",
+    "chunkName": "pages/pnlReport.htm/index",
+    "_name": "_17855a18"
   },
   {
     "name": "positions.htm",
@@ -1176,13 +1141,6 @@
     "_name": "_01b3c792"
   },
   {
-    "name": "sewBandEquipments.htm",
-    "path": "/sewBandEquipments.htm",
-    "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\sewBandEquipments.htm\\\\index.vue",
-    "chunkName": "pages/sewBandEquipments.htm/index",
-    "_name": "_da9c5c0a"
-  },
-  {
     "name": "sewmodel.htm",
     "path": "/sewmodel.htm",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\sewmodel.htm\\\\index.vue",
@@ -1230,13 +1188,6 @@
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\sewModelPackingType.htm\\\\index.vue",
     "chunkName": "pages/sewModelPackingType.htm/index",
     "_name": "_834457ca"
-  },
-  {
-    "name": "sewModelReport.htm",
-    "path": "/sewModelReport.htm",
-    "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\sewModelReport.htm\\\\index.vue",
-    "chunkName": "pages/sewModelReport.htm/index",
-    "_name": "_074c499c"
   },
   {
     "name": "sewModelSizeColorBarcode.htm",
@@ -1344,32 +1295,11 @@
     "_name": "_ecd73c1c"
   },
   {
-    "name": "transactionDetailReport.htm",
-    "path": "/transactionDetailReport.htm",
-    "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\transactionDetailReport.htm\\\\index.vue",
-    "chunkName": "pages/transactionDetailReport.htm/index",
-    "_name": "_5ea140d7"
-  },
-  {
     "name": "transactionMovements.htm",
     "path": "/transactionMovements.htm",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\transactionMovements.htm\\\\index.vue",
     "chunkName": "pages/transactionMovements.htm/index",
     "_name": "_d7c63c64"
-  },
-  {
-    "name": "transactionReports.htm",
-    "path": "/transactionReports.htm",
-    "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\transactionReports.htm\\\\index.vue",
-    "chunkName": "pages/transactionReports.htm/index",
-    "_name": "_65240713"
-  },
-  {
-    "name": "transactionSaldoReport.htm",
-    "path": "/transactionSaldoReport.htm",
-    "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\transactionSaldoReport.htm\\\\index.vue",
-    "chunkName": "pages/transactionSaldoReport.htm/index",
-    "_name": "_4db7a815"
   },
   {
     "name": "unitmeasurement.htm",
