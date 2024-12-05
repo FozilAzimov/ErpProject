@@ -10,10 +10,10 @@
     >
       <nuxt-link
         to="/dashboard.htm"
-        class="flex items-center gap-2 text-[17px] text-[rgba(255,255,255,0.8)] hover:text-[rgb(255,255,255)] duration-[0.2s] font-medium"
+        class="flex items-center gap-1 text-[17px] text-[rgba(255,255,255,0.8)] hover:text-[rgb(255,255,255)] duration-[0.2s] font-medium"
       >
         <img class="w-[30px] ml-1" src="@icons/logo.png" alt="logo" />
-        <h1>ERP</h1>
+        <h1 class="text-[#004A8F]">UZ-ERP</h1>
       </nuxt-link>
       <div class="flex items-center gap-[5px]">
         <div>

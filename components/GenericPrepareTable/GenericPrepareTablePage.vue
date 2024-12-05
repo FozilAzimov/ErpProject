@@ -67,15 +67,32 @@
             <th
               v-for="(obj, key) in filteredTableHeadData"
               :key="key"
-              class="text-[13px] font-semibold border-[1px] border-solid border-[rgba(119,136,153,0.3)] p-4 whitespace-nowrap"
+              class="text-[13px] font-semibold border-[1px] border-solid border-[rgba(119,136,153,0.3)] py-4 px-2 whitespace-nowrap"
               :style="{
                 width: obj.dwidth ? `${obj.dwidth}px` : '100px',
                 cursor: showHideRow || isCanAdd ? 'pointer' : 'text',
               }"
               @click="sortedRowAction(obj.name)"
             >
-              {{ GET_CORE_STRING?.[obj.name] || obj.headerText }}
-              <!-- <pre>{{ obj }}</pre> -->
+              <div class="flex items-center justify-between">
+                <template v-if="showHideRow || isCanAdd">
+                  <span></span>
+                  {{ GET_CORE_STRING[obj.name] || obj.headerText }}
+
+                  <i
+                    v-if="allSortOrderObj?.[obj.name] === 1"
+                    class="el-icon-caret-top"
+                  ></i>
+                  <i
+                    v-else-if="allSortOrderObj?.[obj.name] === -1"
+                    class="el-icon-caret-bottom"
+                  ></i>
+                  <i v-else class="el-icon-d-caret"></i>
+                </template>
+                <div v-else class="w-full text-center">
+                  {{ GET_CORE_STRING[obj.name] || obj.headerText }}
+                </div>
+              </div>
             </th>
             <th
               v-if="!showHideRow && !isCanAdd"
@@ -120,7 +137,7 @@
               <tr
                 v-for="(row, index) in sortedData"
                 :key="index"
-                class="bg-gradient-to-b from-transparent via-transparent to-[#F4F4F4] hover:bg-[#eef3fa] hover:bg-gradient-to-b hover:from-transparent hover:via-transparent hover:to-transparent transition-all duration-300 ease-in-out"
+                class="bg-gradient-to-b from-transparent via-transparent to-[#F4F4F4] hover:bg-[rgb(239,243,247)] hover:bg-gradient-to-b hover:from-transparent hover:via-transparent hover:to-transparent transition-all duration-300 ease-in-out"
               >
                 <td class="border-[1px] text-[12px] p-2 text-center">
                   {{ index + 1 }}
@@ -214,7 +231,7 @@
             <tr
               v-for="(innerArr, index) in tableBody"
               :key="index"
-              class="bg-gradient-to-b from-transparent via-transparent to-[#F4F4F4] hover:bg-[#eef3fa] hover:bg-gradient-to-b hover:from-transparent hover:via-transparent hover:to-transparent transition-all duration-300 ease-in-out"
+              class="bg-gradient-to-b from-transparent via-transparent to-[#F4F4F4] hover:bg-[rgb(239,243,247)] hover:bg-gradient-to-b hover:from-transparent hover:via-transparent hover:to-transparent transition-all duration-300 ease-in-out"
             >
               <td class="border-[1px] text-[12px] p-2 text-center">
                 {{ index + 1 }}
@@ -476,8 +493,11 @@ export default {
       isCanAdd: this.isEdit,
       tableShowHide: false,
       disabledButton: false,
+      // table head col click sorted row elements
       sortKey: '',
-      sortOrder: 1,
+      sortOrder: null,
+      allSortOrderObj: {},
+      // table head col click sorted row elements
     }
   },
 
@@ -504,6 +524,7 @@ export default {
           (obj.type === 'list' || obj.type === 'float' || obj.type === 'date')
       )
     },
+
     // Sorted row
     sortedData() {
       return this.sortedTableList.slice().sort((a, b) => {
@@ -511,15 +532,25 @@ export default {
           const valueA = this.getNestedValue(a, this.sortKey)
           const valueB = this.getNestedValue(b, this.sortKey)
 
-          if (typeof valueA === 'string' && typeof valueB === 'string') {
+          if (
+            typeof valueA === 'string' &&
+            typeof valueB === 'string' &&
+            valueA &&
+            valueB
+          ) {
             return this.sortOrder * valueA.localeCompare(valueB) // Sorting strings alphabetically
-          } else if (typeof valueA === 'object' && typeof valueB === 'object') {
+          } else if (
+            typeof valueA === 'object' &&
+            typeof valueB === 'object' &&
+            valueA?.text &&
+            valueB?.text
+          ) {
             return this.sortOrder * valueA.text.localeCompare(valueB.text) // Sorting Object alphabetically
           } else if (typeof valueA === 'number' && typeof valueB === 'number') {
             return this.sortOrder * (valueA - valueB) // Sorting numbers
           }
         }
-        return 0
+        return ''
       })
     },
   },
@@ -659,6 +690,8 @@ export default {
         this.sortKey = column
         this.sortOrder = 1
       }
+      this.allSortOrderObj = {}
+      this.$set(this.allSortOrderObj, column, this.sortOrder)
     },
     getNestedValue(object, keyPath) {
       return keyPath.split('.').reduce((acc, key) => acc && acc[key], object)
