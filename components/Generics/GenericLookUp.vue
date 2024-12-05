@@ -2,12 +2,13 @@
   <el-select
     v-model="value"
     filterable
+    clearable
     :disabled="disabled"
+    :class="{ 'border-red': true }"
     :placeholder="placeholder"
     :multiple="multiple"
     :collapse-tags="collapseTags"
     :size="size"
-    :clearable="true"
     :popper-append-to-body="popperAppendToBody"
     :loading="loading"
     loading-text="Loading..."

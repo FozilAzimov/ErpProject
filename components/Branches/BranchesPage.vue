@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <div class="w-full h-screen">
     <div
       class="w-full h-[80vh] bg-[url('@/assets/images/fon.png')] bg-no-repeat bg-cover"
@@ -118,4 +118,4 @@ export default {
     },
   },
 }
-</script>
+</script> -->

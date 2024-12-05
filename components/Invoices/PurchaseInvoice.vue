@@ -23,9 +23,9 @@
           class="flex flex-col items-start gap-1"
         >
           <span class="text-[12px] font-light">{{ element.name }}</span>
-          <generic-input-date-page
+          <generic-date-time-picker
+            width="175"
             :value="allSelectAndInputValues?.[element?.subName]"
-            width="185"
             :name="element?.subName"
             @customFunction="getInputAndLookUpValueAction"
           />
@@ -173,18 +173,18 @@ import { mapGetters } from 'vuex'
 import LoadingPage from '@components/Loading/LoadingPage.vue'
 import GenericButton from '@components/Generics/GenericButton.vue'
 import GenericInput from '@generics/GenericInput.vue'
-import GenericInputDatePage from '@components/InputDate/GenericInputDatePage.vue'
 import ColumnConfigPage from '@components/ColumnConfig/ColumnConfigPage.vue'
 import GenericTablePage from '@components/GenericTable/GenericTablePage.vue'
+import GenericDateTimePicker from '@generics/GenericDateTimePicker.vue'
 export default {
   // COMPONENTS
   components: {
     LoadingPage,
     GenericButton,
     GenericInput,
-    GenericInputDatePage,
     ColumnConfigPage,
     GenericTablePage,
+    GenericDateTimePicker,
   },
 
   // DATA
@@ -228,12 +228,10 @@ export default {
 
   // CREATED
   created() {
-    this.allSelectAndInputValues.dateFrom = new Date(
-      new Date().setMonth(new Date().getMonth() - 1)
+    this.allSelectAndInputValues.dateFrom = this.$formatDate(
+      new Date(new Date().setMonth(new Date().getMonth() - 1))
     )
-      .toISOString()
-      .split('.')[0]
-    this.allSelectAndInputValues.dateTo = new Date().toISOString().split('.')[0]
+    this.allSelectAndInputValues.dateTo = this.$formatDate(new Date())
   },
 
   // MOUNTED
@@ -281,12 +279,8 @@ export default {
         searchForm: {
           keyword: this.allSelectAndInputValues?.searchInput ?? '',
         },
-        dateFrom1: this.allSelectAndInputValues?.dateFrom
-          ? this.$formatDate(this.allSelectAndInputValues.dateFrom)
-          : '',
-        dateTo1: this.allSelectAndInputValues?.dateTo
-          ? this.$formatDate(this.allSelectAndInputValues.dateTo)
-          : '',
+        dateFrom1: this.allSelectAndInputValues?.dateFrom ?? '',
+        dateTo1: this.allSelectAndInputValues?.dateTo ?? '',
         billStatus: this.allSelectAndInputValues?.billStatus ?? '',
         payStatus: this.allSelectAndInputValues?.payStatus ?? '',
         invoiceOnWayStatus:

@@ -67,8 +67,12 @@
             <th
               v-for="(obj, key) in filteredTableHeadData"
               :key="key"
-              class="text-[13px] font-semibold border-[1px] border-solid border-[rgba(119,136,153,0.3)] p-4 cursor-pointer whitespace-nowrap"
-              :class="obj.width ? `w-[${obj.width}px]` : ''"
+              class="text-[13px] font-semibold border-[1px] border-solid border-[rgba(119,136,153,0.3)] p-4 whitespace-nowrap"
+              :style="{
+                width: obj.dwidth ? `${obj.dwidth}px` : '100px',
+                cursor: showHideRow || isCanAdd ? 'pointer' : 'text',
+              }"
+              @click="sortedRowAction(obj.name)"
             >
               {{ GET_CORE_STRING?.[obj.name] || obj.headerText }}
               <!-- <pre>{{ obj }}</pre> -->
@@ -114,9 +118,9 @@
           <template v-if="showHideRow || isCanAdd">
             <template v-if="rowDataShowHide">
               <tr
-                v-for="(row, index) in sortedTableList"
+                v-for="(row, index) in sortedData"
                 :key="index"
-                class="bg-gradient-to-b from-transparent via-transparent to-[#F4F4F4]"
+                class="bg-gradient-to-b from-transparent via-transparent to-[#F4F4F4] hover:bg-[#eef3fa] hover:bg-gradient-to-b hover:from-transparent hover:via-transparent hover:to-transparent transition-all duration-300 ease-in-out"
               >
                 <td class="border-[1px] text-[12px] p-2 text-center">
                   {{ index + 1 }}
@@ -172,7 +176,7 @@
                 :key="innerIndex"
                 class="border-1px text-[12px] p-2 text-[rgb(29,119,255)] border-[1px] border-solid border-[rgba(119,136,153,0.2)]"
               >
-                {{ obj.sumColumn && totalObj?.[obj.name]?.toFixed(4) }}
+                {{ obj.sumColumn && $formatNumber(totalObj?.[obj.name], 3) }}
               </td>
             </tr>
             <tr v-else>
@@ -210,7 +214,7 @@
             <tr
               v-for="(innerArr, index) in tableBody"
               :key="index"
-              class="bg-gradient-to-b from-transparent via-transparent to-[#F3F3F3]"
+              class="bg-gradient-to-b from-transparent via-transparent to-[#F4F4F4] hover:bg-[#eef3fa] hover:bg-gradient-to-b hover:from-transparent hover:via-transparent hover:to-transparent transition-all duration-300 ease-in-out"
             >
               <td class="border-[1px] text-[12px] p-2 text-center">
                 {{ index + 1 }}
@@ -285,19 +289,15 @@
                   :name="obj?.name"
                   @customFunction="setLookUpAndInputValue"
                 />
-                <GenericInputDatePage
+                <generic-date-time-picker
                   v-else-if="obj.type === 'date'"
-                  width="200"
                   :order="index"
+                  :name="obj.name"
                   :value="
                     tableList?.[index] && tableList[index]?.[obj?.name]
-                      ? $formatDate(
-                          tableList[index][obj.name],
-                          'yyyy-mm-dd hh:mm:ss'
-                        )
+                      ? $formatDate(tableList[index][obj.name])
                       : ''
                   "
-                  :name="obj.name"
                   :required="
                     !!(!obj?.required || tableList[index]?.[obj?.name])
                   "
@@ -364,7 +364,7 @@
                 class="flex flex-col justify-center items-start text-[rgba(0,0,0,0.5)]"
               >
                 <GenericButton
-                  name="Add an Item"
+                  :name="GET_CORE_STRING?.addAnItem || 'Add an Item'"
                   type="success"
                   icon-name-attribute="circle-plus-outline"
                   @click="addAnItemAction"
@@ -383,12 +383,12 @@ import { mapGetters } from 'vuex'
 import GenericButton from '@generics/GenericButton.vue'
 import GenericInput from '@generics/GenericInput.vue'
 import GenericLookUp from '@generics/GenericLookUp.vue'
-import GenericInputDatePage from '@components/InputDate/GenericInputDatePage.vue'
 import LoadingPage from '@components/Loading/LoadingPage.vue'
 import MessageBox from '@components/MessageBox.vue'
 import GenericCheckBox from '@generics/GenericCheckBox.vue'
 import GenericPreparePopup from '@generics/GenericPreparePopup.vue'
 import GenericPrepareFilteringPopup from '@generics/GenericPrepareFilteringPopup.vue'
+import GenericDateTimePicker from '@generics/GenericDateTimePicker.vue'
 
 export default {
   // COMPONENTS
@@ -396,7 +396,7 @@ export default {
     GenericButton,
     GenericInput,
     GenericLookUp,
-    GenericInputDatePage,
+    GenericDateTimePicker,
     LoadingPage,
     MessageBox,
     GenericCheckBox,
@@ -476,6 +476,8 @@ export default {
       isCanAdd: this.isEdit,
       tableShowHide: false,
       disabledButton: false,
+      sortKey: '',
+      sortOrder: 1,
     }
   },
 
@@ -501,6 +503,24 @@ export default {
           (obj.type !== 'label' || obj.type !== 'hidden') &&
           (obj.type === 'list' || obj.type === 'float' || obj.type === 'date')
       )
+    },
+    // Sorted row
+    sortedData() {
+      return this.sortedTableList.slice().sort((a, b) => {
+        if (this.sortKey) {
+          const valueA = this.getNestedValue(a, this.sortKey)
+          const valueB = this.getNestedValue(b, this.sortKey)
+
+          if (typeof valueA === 'string' && typeof valueB === 'string') {
+            return this.sortOrder * valueA.localeCompare(valueB) // Sorting strings alphabetically
+          } else if (typeof valueA === 'object' && typeof valueB === 'object') {
+            return this.sortOrder * valueA.text.localeCompare(valueB.text) // Sorting Object alphabetically
+          } else if (typeof valueA === 'number' && typeof valueB === 'number') {
+            return this.sortOrder * (valueA - valueB) // Sorting numbers
+          }
+        }
+        return 0
+      })
     },
   },
 
@@ -630,6 +650,20 @@ export default {
         } else return obj
       })
     },
+
+    // Row sorted
+    sortedRowAction(column) {
+      if (this.sortKey === column) {
+        this.sortOrder = -this.sortOrder
+      } else {
+        this.sortKey = column
+        this.sortOrder = 1
+      }
+    },
+    getNestedValue(object, keyPath) {
+      return keyPath.split('.').reduce((acc, key) => acc && acc[key], object)
+    },
+    // Row sorted
 
     // default set values | function chaqirilgan joyni o'zgartirish kk.
     setDefaultValues(order) {

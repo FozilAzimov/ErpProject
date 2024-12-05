@@ -21,7 +21,6 @@ const _658cd266 = () => interopDefault(import('..\\pages\\batchProductionInvoice
 const _79af2853 = () => interopDefault(import('..\\pages\\batchRepair.htm\\index.vue' /* webpackChunkName: "pages/batchRepair.htm/index" */))
 const _2703b0c8 = () => interopDefault(import('..\\pages\\batchunions.htm\\index.vue' /* webpackChunkName: "pages/batchunions.htm/index" */))
 const _75c6aea4 = () => interopDefault(import('..\\pages\\branches.htm\\index.vue' /* webpackChunkName: "pages/branches.htm/index" */))
-const _d3ff9752 = () => interopDefault(import('..\\pages\\branchess.htm\\index.vue' /* webpackChunkName: "pages/branchess.htm/index" */))
 const _23e6ac2a = () => interopDefault(import('..\\pages\\calculationByColorVariantRecipe.htm\\index.vue' /* webpackChunkName: "pages/calculationByColorVariantRecipe.htm/index" */))
 const _f64711ee = () => interopDefault(import('..\\pages\\capitals.htm\\index.vue' /* webpackChunkName: "pages/capitals.htm/index" */))
 const _16286346 = () => interopDefault(import('..\\pages\\car.htm\\index.vue' /* webpackChunkName: "pages/car.htm/index" */))
@@ -410,10 +409,6 @@ export const routerOptions = {
     path: "/branches.htm",
     component: _75c6aea4,
     name: "branches.htm"
-  }, {
-    path: "/branchess.htm",
-    component: _d3ff9752,
-    name: "branchess.htm"
   }, {
     path: "/calculationByColorVariantRecipe.htm",
     component: _23e6ac2a,

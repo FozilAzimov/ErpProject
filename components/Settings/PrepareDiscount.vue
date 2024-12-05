@@ -165,7 +165,7 @@
         <div class="flex gap-1 flex-wrap">
           <GenericButton
             name="Column Setting"
-            type="warning"
+            type="info"
             icon-name-attribute="setting"
             @click="openColumnConfig"
           />

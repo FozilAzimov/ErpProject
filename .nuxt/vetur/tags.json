@@ -5,32 +5,8 @@
   "ActualitySystem": {
     "description": "Auto imported from components/ActualitySystemPage/ActualitySystem.vue"
   },
-  "BtnGen": {
-    "description": "Auto imported from components/Button/BtnGen.vue"
-  },
-  "GenericButton": {
-    "description": "Auto imported from components/Button/GenericButton.vue"
-  },
   "BranchesPage": {
     "description": "Auto imported from components/Branches/BranchesPage.vue"
-  },
-  "CashboxsList": {
-    "description": "Auto imported from components/Cashboxs/CashboxsList.vue"
-  },
-  "CurrenciesList": {
-    "description": "Auto imported from components/Cashboxs/CurrenciesList.vue"
-  },
-  "PrepareCashbox": {
-    "description": "Auto imported from components/Cashboxs/PrepareCashbox.vue"
-  },
-  "PrepareCurrency": {
-    "description": "Auto imported from components/Cashboxs/PrepareCurrency.vue"
-  },
-  "PrepareTransactionCharacter": {
-    "description": "Auto imported from components/Cashboxs/PrepareTransactionCharacter.vue"
-  },
-  "TransactionCharacters": {
-    "description": "Auto imported from components/Cashboxs/TransactionCharacters.vue"
   },
   "AccountsList": {
     "description": "Auto imported from components/Banks/AccountsList.vue"
@@ -56,11 +32,29 @@
   "PrepareCurrenRate": {
     "description": "Auto imported from components/Banks/PrepareCurrenRate.vue"
   },
-  "ColumnConfigPage": {
-    "description": "Auto imported from components/ColumnConfig/ColumnConfigPage.vue"
+  "CashboxsList": {
+    "description": "Auto imported from components/Cashboxs/CashboxsList.vue"
   },
-  "DashboardPage": {
-    "description": "Auto imported from components/Dashboard/DashboardPage.vue"
+  "CurrenciesList": {
+    "description": "Auto imported from components/Cashboxs/CurrenciesList.vue"
+  },
+  "PrepareCashbox": {
+    "description": "Auto imported from components/Cashboxs/PrepareCashbox.vue"
+  },
+  "PrepareCurrency": {
+    "description": "Auto imported from components/Cashboxs/PrepareCurrency.vue"
+  },
+  "PrepareTransactionCharacter": {
+    "description": "Auto imported from components/Cashboxs/PrepareTransactionCharacter.vue"
+  },
+  "TransactionCharacters": {
+    "description": "Auto imported from components/Cashboxs/TransactionCharacters.vue"
+  },
+  "BtnGen": {
+    "description": "Auto imported from components/Button/BtnGen.vue"
+  },
+  "GenericButton": {
+    "description": "Auto imported from components/Button/GenericButton.vue"
   },
   "ClusterCamera": {
     "description": "Auto imported from components/Cluster/ClusterCamera.vue"
@@ -92,8 +86,11 @@
   "PrepareDistanceToTerminal": {
     "description": "Auto imported from components/Cluster/PrepareDistanceToTerminal.vue"
   },
-  "GenericInvoiceItemModalPage": {
-    "description": "Auto imported from components/GenericInvoiceItemModal/GenericInvoiceItemModalPage.vue"
+  "DashboardPage": {
+    "description": "Auto imported from components/Dashboard/DashboardPage.vue"
+  },
+  "ColumnConfigPage": {
+    "description": "Auto imported from components/ColumnConfig/ColumnConfigPage.vue"
   },
   "EquipmentExpenses": {
     "description": "Auto imported from components/EquipmentReports/EquipmentExpenses.vue"
@@ -119,6 +116,9 @@
   "GenericInvoiceFilteringModalPage": {
     "description": "Auto imported from components/GenericInvoiceFilteringModal/GenericInvoiceFilteringModalPage.vue"
   },
+  "GenericInvoiceItemModalPage": {
+    "description": "Auto imported from components/GenericInvoiceItemModal/GenericInvoiceItemModalPage.vue"
+  },
   "GenericPrepareTablePage": {
     "description": "Auto imported from components/GenericPrepareTable/GenericPrepareTablePage.vue"
   },
@@ -127,6 +127,9 @@
   },
   "GenericCheckBox": {
     "description": "Auto imported from components/Generics/GenericCheckBox.vue"
+  },
+  "GenericDateTimePicker": {
+    "description": "Auto imported from components/Generics/GenericDateTimePicker.vue"
   },
   "GenericFileUpload": {
     "description": "Auto imported from components/Generics/GenericFileUpload.vue"
@@ -163,6 +166,9 @@
   },
   "GenericTablePage": {
     "description": "Auto imported from components/GenericTable/GenericTablePage.vue"
+  },
+  "GenericTranslatePage": {
+    "description": "Auto imported from components/GenericTranslate/GenericTranslatePage.vue"
   },
   "AttendanceSchedule": {
     "description": "Auto imported from components/HRMS/AttendanceSchedule.vue"
@@ -242,9 +248,6 @@
   "TimeZones": {
     "description": "Auto imported from components/HRMS/TimeZones.vue"
   },
-  "GenericTranslatePage": {
-    "description": "Auto imported from components/GenericTranslate/GenericTranslatePage.vue"
-  },
   "GenericInputDatePage": {
     "description": "Auto imported from components/InputDate/GenericInputDatePage.vue"
   },
@@ -262,6 +265,9 @@
   },
   "PrepareReceiveInvoiceNew": {
     "description": "Auto imported from components/InternalInvoices/PrepareReceiveInvoiceNew.vue"
+  },
+  "LoadingPage": {
+    "description": "Auto imported from components/Loading/LoadingPage.vue"
   },
   "BatchProductionInvoiceUi": {
     "description": "Auto imported from components/Invoices/BatchProductionInvoiceUi.vue"
@@ -433,9 +439,6 @@
   },
   "SimpleProductionInvoice": {
     "description": "Auto imported from components/Invoices/SimpleProductionInvoice.vue"
-  },
-  "LoadingPage": {
-    "description": "Auto imported from components/Loading/LoadingPage.vue"
   },
   "LoginPage": {
     "description": "Auto imported from components/Login/LoginPage.vue"

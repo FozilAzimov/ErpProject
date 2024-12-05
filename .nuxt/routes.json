@@ -119,13 +119,6 @@
     "_name": "_75c6aea4"
   },
   {
-    "name": "branchess.htm",
-    "path": "/branchess.htm",
-    "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\branchess.htm\\\\index.vue",
-    "chunkName": "pages/branchess.htm/index",
-    "_name": "_d3ff9752"
-  },
-  {
     "name": "calculationByColorVariantRecipe.htm",
     "path": "/calculationByColorVariantRecipe.htm",
     "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\calculationByColorVariantRecipe.htm\\\\index.vue",

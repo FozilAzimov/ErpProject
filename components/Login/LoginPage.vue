@@ -117,6 +117,7 @@ export default {
   // COMPUTED
   computed: {
     ...mapGetters('translate', ['GET_CORE_STRING']),
+    ...mapGetters('activeLanguage', ['GET_ACTIVE_LANG']),
   },
 
   // MOUNTED
@@ -129,6 +130,7 @@ export default {
   methods: {
     // Store getters
     ...mapActions('translate', ['FETCH_TRANSLATE']),
+    ...mapActions('systemMenu', ['FETCH_SYSTEM_MENU']),
 
     getTypePassword() {
       this.typeIcon ? (this.typeIcon = false) : (this.typeIcon = true)
@@ -149,6 +151,7 @@ export default {
               localStorage.setItem('token', token)
               this.isLoading = !this.isLoading
               this.FETCH_TRANSLATE() // store translare function
+              this.FETCH_SYSTEM_MENU() // store systemMenu function
               this.$router.push('/dashboard.htm')
               this.$notification(
                 `Muvaffaqqiyatli o'tdingiz!`,

@@ -27,7 +27,7 @@ export const getters = {
 
 // ACTIONS
 export const actions = {
-  async FETCH_TRANSLATE({ commit }, lang) {
+  async FETCH_TRANSLATE({ commit }, { lang, api } = {}) {
     let language = null
     const cookieLang = document.cookie
       ?.split(' ')
@@ -43,15 +43,16 @@ export const actions = {
     }
     commit('SET_LOADING', true)
     try {
-      const { data } = await this.$axios.post(
-        `/base/getLanguage?language=${language || 'en'}`
+      const method = api ? 'get' : 'post'
+      const { data } = await this.$axios[method](
+        `/language/${api || 'getLanguageAndSave'}?language=${language || 'en'}`
       )
       commit('SET_CORE_STRING_OBJECT', data)
       commit('SET_LOADING', false)
     } catch (error) {
       commit('SET_LOADING', false)
       // eslint-disable-next-line no-console
-      console.error('Failed to axios systemMenu:', error)
+      console.error('Failed to axios translate:', error)
     }
   },
 }

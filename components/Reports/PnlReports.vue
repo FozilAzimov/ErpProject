@@ -12,9 +12,9 @@
           class="flex items-center gap-1"
         >
           <span class="text-[12px] font-light">{{ element.name }}</span>
-          <generic-input-date-page
+          <generic-date-time-picker
             :value="allSelectAndInputValues?.[element.subName]"
-            width="117"
+            width="175"
             :name="element.subName"
             @customFunction="getInputAndLookUpValueAction"
           />
@@ -162,11 +162,11 @@
                       <template v-if="key === 'sum_amount'">
                         {{
                           obj?.entry_exit_all_none === '1'
-                            ? parseFloat(obj?.sum_credit).toFixed(2)
+                            ? $formatNumber(obj?.sum_credit, 2)
                             : obj?.entry_exit_all_none === '2'
-                            ? parseFloat(obj?.sum_debit).toFixed(2)
+                            ? $formatNumber(obj?.sum_debit, 2)
                             : !obj?.entry_exit_all_none
-                            ? parseFloat(obj?.sum_amount).toFixed(2)
+                            ? $formatNumber(obj?.sum_amount, 2)
                             : ''
                         }}
                       </template>
@@ -188,15 +188,11 @@
 <script>
 import { mapGetters } from 'vuex'
 import LoadingPage from '@components/Loading/LoadingPage.vue'
-import GenericInputDatePage from '@components/InputDate/GenericInputDatePage.vue'
-import GenericInput from '@generics/GenericInput.vue'
 import GenericButton from '@generics/GenericButton.vue'
 export default {
   // COMPONENTS
   components: {
     LoadingPage,
-    GenericInputDatePage,
-    GenericInput,
     GenericButton,
   },
 
@@ -235,12 +231,10 @@ export default {
 
   // CREATED
   created() {
-    this.allSelectAndInputValues.dateFrom = new Date(
-      new Date().setMonth(new Date().getMonth() - 1)
+    this.allSelectAndInputValues.dateFrom = this.$formatDate(
+      new Date(new Date().setMonth(new Date().getMonth() - 1))
     )
-      .toISOString()
-      .split('.')[0]
-    this.allSelectAndInputValues.dateTo = new Date().toISOString().split('.')[0]
+    this.allSelectAndInputValues.dateTo = this.$formatDate(new Date())
   },
 
   // MOUNTED
@@ -298,15 +292,12 @@ export default {
         const body = {
           currencyRate: this.allSelectAndInputValues?.currencyRate,
           branchId: this.allSelectAndInputValues?.branch,
-          dateFrom: this.allSelectAndInputValues?.dateFrom
-            ? this.$formatDate(this.allSelectAndInputValues.dateFrom)
-            : '',
-          dateTo: this.allSelectAndInputValues?.dateTo
-            ? this.$formatDate(this.allSelectAndInputValues.dateTo)
-            : '',
+          dateFrom: this.allSelectAndInputValues?.dateFrom ?? '',
+          dateTo: this.allSelectAndInputValues?.dateTo ?? '',
         }
         // request body
         this.isLoading = !this.isLoading
+        this.fullscreenLoading = true
         this.$axios
           .post(`/balance/getPnlReportList`, body)
           .then(({ data: { allTransactionInfoByType } }) => {

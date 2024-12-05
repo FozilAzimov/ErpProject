@@ -1,11 +1,11 @@
 <template>
   <div>
     <LoadingPage
-      v-if="isLoading && !isLoginPage && !isBranchessPage"
+      v-if="isLoading && !isLoginPage"
       class="absolute left-[50%] top-[8px] translate-x-[-50%]"
     />
     <div
-      v-if="!isLoginPage && !isBranchessPage"
+      v-if="!isLoginPage"
       class="w-full h-[50px] bg-[rgba(32,111,162,0.7)] flex justify-between items-center px-1"
     >
       <nuxt-link
@@ -18,132 +18,146 @@
       <div class="flex items-center gap-[5px]">
         <div>
           <button
-            class="toggle-button p-[5px_10px] text-[13px] uppercase flex items-center justify-center gap-4 bg-[#fff] rounded-[3px] relative z-[1] hover:bg-gradient-to-b hover:from-transparent hover:via-transparent hover:to-gray-200"
+            class="toggle-button p-[5px_8px] text-[13px] uppercase flex items-center justify-center gap-4 bg-[#fff] rounded-[3px] relative z-[1] hover:bg-gradient-to-b hover:from-transparent hover:via-transparent hover:to-gray-200"
             @click="goToMenuSetting"
           >
             <img
               src="@assets/icons/menuSetting.png"
               alt="menu-setting"
-              class="w-[18px]"
+              class="w-[16px]"
             />
           </button>
         </div>
         <div>
           <button
-            class="toggle-button p-[4px_10px] text-[13px] uppercase flex items-center justify-center gap-4 bg-[#fff] rounded-[3px] relative z-[1] hover:bg-gradient-to-b hover:from-transparent hover:via-transparent hover:to-gray-200"
+            class="toggle-button w-[190px] whitespace-nowrap p-[3px_8px] text-[13px] uppercase flex items-center justify-between gap-1 bg-[#fff] rounded-[3px] relative z-[1] hover:bg-gradient-to-b hover:from-transparent hover:via-transparent hover:to-gray-200"
             @click="dropdownToggle"
           >
             <img
               src="@assets/icons/user-black.png"
               alt="user"
-              class="w-[14px]"
+              class="w-[12px]"
             />
-            Actuality System
+            {{ GET_CORE_STRING.actualSystem || 'Actuality System' }}
             <img
               src="@assets/icons/arrow-bottom.png"
               alt="user"
-              class="w-[8px]"
+              class="w-[7px]"
               :style="{
                 transform: dropToggle ? 'rotate(180deg)' : 'rotate(0deg)',
               }"
             />
           </button>
           <ul
-            class="w-[203px] bg-[#fff] absolute top-[40px] z-[1000] text-[13px] overflow-hidden duration-[0.5s]"
+            class="w-[190px] bg-[#fff] absolute top-[40px] z-[1000] text-[12px] overflow-hidden duration-[0.5s]"
             :style="{
-              height: dropToggle ? '229px' : '0px',
+              height: dropToggle ? '220px' : '0px',
               border: dropToggle ? '1px solid #ddd' : '1px solid #206fa2b3',
             }"
           >
             <li>
               <nuxt-link
                 to="#"
-                class="block p-[7px_15px] hover:bg-[rgba(54,155,215,0.3)] duration-[0.2s]"
-                >Change Password</nuxt-link
+                class="block whitespace-nowrap p-[7px_10px] hover:bg-[rgba(54,155,215,0.3)] duration-[0.2s]"
+                >{{
+                  GET_CORE_STRING?.['menu.settings.password'] ||
+                  'Change Password'
+                }}</nuxt-link
               >
             </li>
             <li>
               <nuxt-link
                 to="#"
-                class="block p-[7px_15px] bg-[lightgreen] hover:bg-[rgba(54,155,215,0.3)] duration-[0.2s]"
-                >setAutoLoginPage</nuxt-link
+                class="block whitespace-nowrap p-[7px_10px] bg-[lightgreen] hover:bg-[rgba(54,155,215,0.3)] duration-[0.2s]"
+                >{{
+                  GET_CORE_STRING?.setAutoLoginPage || 'setAutoLoginPage'
+                }}</nuxt-link
               >
             </li>
             <div class="w-fll h-[1px] bg-[#ddd] mt-3"></div>
             <li>
               <nuxt-link
                 to="/sessions.htm"
-                class="block p-[7px_15px] hover:bg-[rgba(54,155,215,0.3)] duration-[0.2s]"
-                >Sessions</nuxt-link
+                class="block whitespace-nowrap p-[7px_10px] hover:bg-[rgba(54,155,215,0.3)] duration-[0.2s]"
+                >{{ GET_CORE_STRING?.sessions || 'Sessions' }}</nuxt-link
               >
             </li>
             <li>
               <nuxt-link
                 to="#"
-                class="block p-[7px_15px] hover:bg-[rgba(54,155,215,0.3)] duration-[0.2s]"
-                >Sessions</nuxt-link
+                class="block whitespace-nowrap p-[7px_10px] hover:bg-[rgba(54,155,215,0.3)] duration-[0.2s]"
+                >{{ GET_CORE_STRING?.sessions || 'Sessions' }}</nuxt-link
               >
             </li>
             <li>
               <nuxt-link
                 to="#"
-                class="block p-[7px_15px] hover:bg-[rgba(54,155,215,0.3)] duration-[0.2s]"
-                >Settings</nuxt-link
+                class="block whitespace-nowrap p-[7px_10px] hover:bg-[rgba(54,155,215,0.3)] duration-[0.2s]"
+                >{{
+                  GET_CORE_STRING?.['title.settings.sub'] || 'Settings'
+                }}</nuxt-link
               >
             </li>
             <div class="w-fll h-[1px] bg-[#ddd] mb-3"></div>
             <li>
               <p
-                class="flex items-center gap-3 p-[7px_15px] bg-[rgba(255,0,0,0.5)] hover:bg-[rgba(54,155,215,0.3)] duration-[0.2s] cursor-pointer"
+                class="flex items-center gap-3 p-[7px_10px] bg-[rgba(255,0,0,0.5)] hover:bg-[rgba(54,155,215,0.3)] duration-[0.2s] cursor-pointer"
                 @click="logoutMessage = true"
               >
                 <img src="@assets/icons/logout.png" alt="logout" />
-                Logout
+                {{ GET_CORE_STRING?.['menu.logout'] || 'Log out' }}
               </p>
             </li>
           </ul>
         </div>
         <div>
           <button
-            class="translate-button w-[130px] p-[4px_15px] text-[13px] uppercase flex items-center justify-between bg-[#fff] rounded-[3px] relative z-[1] hover:bg-gradient-to-b hover:from-transparent hover:via-transparent hover:to-gray-200"
+            class="translate-button w-[110px] p-[3px_8px] text-[13px] flex items-center justify-between bg-[#fff] rounded-[3px] relative z-[1] hover:bg-gradient-to-b hover:from-transparent hover:via-transparent hover:to-gray-200"
             @click="translateToggle"
           >
             <img
               src="@assets/icons/translate.png"
               alt="user"
-              class="w-[14px]"
+              class="w-[13px]"
             />
-            {{ 'English' }}
+            {{ GET_CORE_STRING[GET_ACTIVE_LANG] }}
             <img
               src="@assets/icons/arrow-bottom.png"
               alt="user"
-              class="w-[8px]"
+              class="w-[7px]"
               :style="{
                 transform: langToggle ? 'rotate(180deg)' : 'rotate(0deg)',
               }"
             />
           </button>
           <ul
-            class="w-[130px] bg-[#fff] absolute top-[40px] text-[13px] overflow-hidden duration-[0.4s] z-[100]"
+            class="w-[110px] bg-[#fff] absolute top-[40px] text-[12px] overflow-hidden duration-[0.4s] z-[100]"
             :style="{
-              height: langToggle ? '135px' : '0px',
+              height: langToggle ? `${parseFloat(optionLength) * 34}px` : '0px',
               border: langToggle ? '1px solid #ddd' : '1px solid #206fa2b3',
             }"
           >
             <li
-              v-for="locale in optionData"
-              :key="locale.code"
-              @click="getLanguage(locale.code)"
+              v-for="obj in optionData"
+              :key="obj.code"
+              @click="getLanguage(obj.code)"
             >
               <span
-                class="p-[7px_15px] hover:bg-[rgba(54,155,215,0.3)] duration-[0.2s] flex items-center gap-2 cursor-pointer"
+                class="p-[7px_10px] hover:bg-[rgba(54,155,215,0.3)] duration-[0.2s] flex items-center gap-2 cursor-pointer"
               >
                 <img
                   class="w-[11px]"
-                  :src="require(`@icons/${locale.code}.png`)"
-                  :alt="locale.code"
+                  :src="
+                    obj.code === 'en' ||
+                    obj.code === 'ru' ||
+                    obj.code === 'tr' ||
+                    obj.code === 'uz'
+                      ? require(`@icons/${obj.code}.png`)
+                      : ''
+                  "
+                  :alt="obj.code"
                 />
-                {{ locale.name }}
+                {{ GET_CORE_STRING[obj.name] }}
               </span>
             </li>
           </ul>
@@ -153,7 +167,7 @@
     <div class="w-full flex items-start gap-[5px]">
       <el-container>
         <el-aside
-          v-if="!isLoginPage && !isBranchessPage"
+          v-if="!isLoginPage"
           :width="collapseMune ? '64px' : '300px'"
           class="mt-1 border-t-[1px] border-t-solid border-t-[rgba(0,0,0,0.15)]"
         >
@@ -223,7 +237,7 @@
     </div>
     <div
       v-show="logoutMessage"
-      v-if="!isLoginPage && !isBranchessPage"
+      v-if="!isLoginPage"
       class="absolute left-0 top-0 right-0 bottom-0 bg-[rgba(0,0,0,0.3)]"
     ></div>
     <div
@@ -240,24 +254,20 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions, mapGetters, mapMutations } from 'vuex'
+
 export default {
   // DATA
   data() {
     return {
       isLoading: false,
       isLoginPage: false,
-      isBranchessPage: false,
       collapseMune: true,
       logoutMessage: false,
       dropToggle: false,
       langToggle: false,
-      optionData: [
-        { name: 'English', code: 'en' },
-        { name: 'Russian', code: 'ru' },
-        { name: 'O`zbekistan', code: 'uz' },
-        { name: 'Turkiya', code: 'tr' },
-      ],
+      optionData: [],
+      optionLength: null,
     }
   },
 
@@ -266,13 +276,13 @@ export default {
     // Store getters
     ...mapGetters('systemMenu', ['GET_LOADING', 'GET_SYSTEM_MENU_LIST']),
     ...mapGetters('translate', ['GET_CORE_STRING']),
+    ...mapGetters('activeLanguage', ['GET_ACTIVE_LANG', 'GET_ACTIVE_DATA']),
   },
 
   // WATCH
   watch: {
     $route(to, from) {
       this.isLoginPage = to.path === '/login.htm'
-      this.isBranchessPage = to.path === '/branchess.htm'
       const token = localStorage.getItem('token')
       if (!token && to.path !== '/login.htm') {
         this.$router.push('/login.htm')
@@ -287,7 +297,6 @@ export default {
   // CREATED
   created() {
     this.isLoginPage = this.$route.path === '/login.htm'
-    this.isBranchessPage = this.$route.path === '/branchess.htm'
     const token = localStorage.getItem('token')
     if (token === 'undefined' || token === '') {
       localStorage.removeItem('token')
@@ -299,10 +308,22 @@ export default {
 
   // MOUNTED
   mounted() {
-    // Translate
-    this.FETCH_TRANSLATE()
-    // System Menu
-    !this.isLoginPage && this.FETCH_SYSTEM_MENU()
+    const cookieLang = document.cookie
+      ?.split(' ')
+      .find((val) => val.includes('lang'))
+      ?.split('=')[1]
+      ?.replace(';', '')
+    const lang = cookieLang || 'en'
+    const api = 'getLanguage'
+
+    if (this.isLoginPage) {
+      this.FETCH_TRANSLATE({ lang, api }) // Translate all page
+    } else {
+      this.FETCH_TRANSLATE() // Translate login.htm
+      this.FETCH_SYSTEM_MENU() // System Menu
+      this.setAndGetActiveLang() // function
+    }
+
     // Drop Toggle
     window.addEventListener('click', this.handleWindowClick)
     window.addEventListener('click', this.handleWindowClickTranslate)
@@ -319,6 +340,15 @@ export default {
     // Store actions
     ...mapActions('translate', ['FETCH_TRANSLATE']),
     ...mapActions('systemMenu', ['FETCH_SYSTEM_MENU']),
+    ...mapActions('activeLanguage', ['FETCH_ACTIVE_LANG']),
+    ...mapMutations('activeLanguage', ['SET_ACTIVE_LANG']),
+
+    // Active LANG get and set action
+    async setAndGetActiveLang() {
+      await this.FETCH_ACTIVE_LANG()
+      this.optionData = this.GET_ACTIVE_DATA
+      this.optionLength = this.GET_ACTIVE_DATA?.length || 4
+    },
 
     isCollapse() {
       this.collapseMune = !this.collapseMune
@@ -334,7 +364,6 @@ export default {
             // remove
             document.cookie = 'JSESSIONID='
             localStorage.removeItem('token')
-            document.cookie = 'lang='
             // remove
             this.logoutMessage = false
             this.$router.push('/login.htm')
@@ -370,6 +399,7 @@ export default {
 
     // Translate toggle
     translateToggle() {
+      this.setAndGetActiveLang() // function
       this.langToggle = !this.langToggle
     },
     handleWindowClickTranslate(event) {
@@ -383,10 +413,10 @@ export default {
 
     // Language Request
     getLanguage(lang) {
-      // Translate
-      this.FETCH_TRANSLATE(lang)
-      // System Menu
-      !this.isLoginPage && this.FETCH_SYSTEM_MENU()
+      this.FETCH_TRANSLATE({ lang }) // Translate
+      this.FETCH_SYSTEM_MENU() // System Menu
+      const obj = this.optionData.find((obj) => obj?.code === lang)
+      this.SET_ACTIVE_LANG(obj?.name)
     },
 
     // go to Menu Setting

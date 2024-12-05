@@ -44,6 +44,7 @@ export default {
     '@/plugins/axios.js',
     '@/plugins/notification.js',
     '@/plugins/format-date.js',
+    '@/plugins/format-number.js',
     '@/plugins/chart.js',
   ],
 
@@ -78,7 +79,7 @@ export default {
       key: fs.readFileSync(path.resolve(__dirname, './keys/private.key')),
       cert: fs.readFileSync(path.resolve(__dirname, './keys/certificate.crt')),
     },
-    port: 3000,
+    port: 3001,
     host: '0.0.0.0',
   },
 

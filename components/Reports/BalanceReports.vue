@@ -12,9 +12,9 @@
           class="flex items-center gap-1"
         >
           <span class="text-[12px] font-light">{{ element.name }}</span>
-          <generic-input-date-page
+          <generic-date-time-picker
             :value="allSelectAndInputValues?.[element.subName]"
-            width="117"
+            width="175"
             :name="element.subName"
             @customFunction="getInputAndLookUpValueAction"
           />
@@ -159,7 +159,7 @@
                           subKey === 'real_count_sum' ||
                           subKey === 'amount') &&
                         parseFloat(value)
-                          ? value.toFixed(2)
+                          ? $formatNumber(value, 2)
                           : subKey === 'startDate' || subKey === 'endDate'
                           ? $formatDate(value)
                           : value
@@ -179,18 +179,18 @@
 <script>
 import { mapGetters } from 'vuex'
 import LoadingPage from '@components/Loading/LoadingPage.vue'
-import GenericInputDatePage from '@components/InputDate/GenericInputDatePage.vue'
 import GenericInput from '@generics/GenericInput.vue'
 import GenericButton from '@generics/GenericButton.vue'
 import BalanceReportsGraphic from '@components/Reports/BalanceReportsGraphic.vue'
+import GenericDateTimePicker from '@generics/GenericDateTimePicker.vue'
 export default {
   // COMPONENTS
   components: {
     LoadingPage,
-    GenericInputDatePage,
     GenericInput,
     GenericButton,
     BalanceReportsGraphic,
+    GenericDateTimePicker,
   },
 
   // DATA
@@ -239,12 +239,10 @@ export default {
 
   // CREATED
   created() {
-    this.allSelectAndInputValues.dateFrom = new Date(
-      new Date().setMonth(new Date().getMonth() - 1)
+    this.allSelectAndInputValues.dateFrom = this.$formatDate(
+      new Date(new Date().setMonth(new Date().getMonth() - 1))
     )
-      .toISOString()
-      .split('.')[0]
-    this.allSelectAndInputValues.dateTo = new Date().toISOString().split('.')[0]
+    this.allSelectAndInputValues.dateTo = this.$formatDate(new Date())
   },
 
   // MOUNTED
@@ -302,12 +300,8 @@ export default {
         const body = {
           currencyRate: this.allSelectAndInputValues?.currencyRate,
           branchId: this.allSelectAndInputValues?.branch,
-          dateFrom: this.allSelectAndInputValues?.dateFrom
-            ? this.$formatDate(this.allSelectAndInputValues.dateFrom)
-            : '',
-          dateTo: this.allSelectAndInputValues?.dateTo
-            ? this.$formatDate(this.allSelectAndInputValues.dateTo)
-            : '',
+          dateFrom: this.allSelectAndInputValues?.dateFrom ?? '',
+          dateTo: this.allSelectAndInputValues?.dateTo ?? '',
         }
         // request body
         this.isLoading = !this.isLoading

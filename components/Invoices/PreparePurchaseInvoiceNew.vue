@@ -165,48 +165,48 @@
       <!-- --START-- Custom Table -->
       <div v-if="isAccept || pageID" class="m-1">
         <span class="text-[14px]"
-          >Invoice Item.
+          >{{ GET_CORE_STRING?.invoiceItem || 'Invoice Item' }}.
           <strong v-if="pageID" class="text-[14px] text-[rgb(156,0,78)]"
             >Parent ID = {{ pageID }}</strong
           ></span
         >
         <div class="flex gap-1 flex-wrap">
           <GenericButton
-            name="Column Setting"
-            type="warning"
+            :name="GET_CORE_STRING?.columnSettings || 'Column Setting'"
+            type="info"
             icon-name-attribute="setting"
             @click="openColumnConfig"
           />
           <span v-if="hideButton" class="flex gap-1 flex-wrap">
             <GenericButton
-              name="Save"
+              :name="GET_CORE_STRING?.save || 'Save'"
               type="primary"
               :disabled="saveBtnDisabled"
               @click="saveAction('top_table')"
             />
             <GenericButton
               v-if="pageID"
-              name="Discard"
+              :name="GET_CORE_STRING?.discard || 'Discard'"
               @click="discardAction('top_table')"
             />
           </span>
           <GenericButton
             v-else-if="!hideButton && !isSubBodyDataLength"
-            name="Edit"
+            :name="GET_CORE_STRING?.edit || 'Edit'"
             type="success"
             icon-name-attribute="edit"
             @click="editAction('top_table')"
           />
           <GenericButton
             v-if="pageID"
-            name="Print Preview"
+            :name="GET_CORE_STRING?.printPreview || 'Print Preview'"
             type="success"
             icon-name-attribute="printer"
             @click="''"
           />
           <GenericButton
             v-if="pageID && !isSubBodyDataLength"
-            name="Delete"
+            :name="GET_CORE_STRING?.delete || 'Delete'"
             type="danger"
             icon-name-attribute="delete"
             @click="$refs.messageBoxRef.open(pageID)"
@@ -239,7 +239,7 @@
       <!-- --START-- Sub Custom Table -->
       <div v-if="pageID" class="m-1">
         <span class="text-[14px]"
-          >Payment Details.
+          >{{ GET_CORE_STRING?.paymentDetails || 'Payment Dateils' }}.
           <strong v-if="pageID" class="text-[14px] text-[rgb(156,0,78)]"
             >Parent ID = {{ pageID }}</strong
           ></span
@@ -247,26 +247,26 @@
         <div class="flex gap-1 flex-wrap">
           <span v-if="subHideButton" class="flex gap-1 flex-wrap">
             <GenericButton
-              name="Pay"
+              :name="GET_CORE_STRING?.payment || 'Pay'"
               type="primary"
               :disabled="subSaveBtnDisabled"
               @click="saveAction('sub_table')"
             />
             <GenericButton
               v-if="pageID"
-              name="Discard"
+              :name="GET_CORE_STRING?.discard || 'Discard'"
               @click="discardAction('sub_table')"
             />
           </span>
           <GenericButton
             v-else-if="!subHideButton && isSubBodyDataLength"
             type="info"
-            name="Undo Payment"
+            :name="GET_CORE_STRING?.undoPayment || 'Undo Payment'"
             @click="undoPaymentAction"
           />
           <GenericButton
             v-else
-            name="Edit"
+            :name="GET_CORE_STRING?.edit || 'Edit'"
             type="success"
             icon-name-attribute="edit"
             @click="editAction('sub_table')"
@@ -295,7 +295,9 @@
       <!-- --START-- Sub Custom Table -->
       <div v-if="pageID" class="m-1">
         <span class="text-[14px]"
-          >Extra Payment Details.
+          >{{
+            GET_CORE_STRING?.extraPaymentDetails || 'Extra Payment Details'
+          }}.
           <strong v-if="pageID" class="text-[14px] text-[rgb(156,0,78)]"
             >Parent ID = {{ pageID }}</strong
           ></span
@@ -303,20 +305,20 @@
         <div class="flex gap-1 flex-wrap">
           <span v-if="subExtraHideButton" class="flex gap-1 flex-wrap">
             <GenericButton
-              name="Pay"
+              :name="GET_CORE_STRING?.payment || 'Pay'"
               type="primary"
               :disabled="subExtraSaveBtnDisabled"
               @click="saveAction('sub_extra_table')"
             />
             <GenericButton
               v-if="pageID"
-              name="Discard"
+              :name="GET_CORE_STRING?.discard || 'Discard'"
               @click="discardAction('sub_extra_table')"
             />
           </span>
           <GenericButton
             v-else
-            name="Edit"
+            :name="GET_CORE_STRING?.edit || 'Edit'"
             type="success"
             icon-name-attribute="edit"
             @click="editAction('sub_extra_table')"
