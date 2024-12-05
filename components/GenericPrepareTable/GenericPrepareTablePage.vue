@@ -78,7 +78,6 @@
                 <template v-if="showHideRow || isCanAdd">
                   <span></span>
                   {{ GET_CORE_STRING[obj.name] || obj.headerText }}
-
                   <i
                     v-if="allSortOrderObj?.[obj.name] === 1"
                     class="el-icon-caret-top"

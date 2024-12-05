@@ -11,11 +11,23 @@
             <th
               v-for="(headName, key) in tablehead"
               :key="key"
-              class="text-[13px] font-semibold border-[1px] border-solid border-[rgba(119,136,153,0.3)] p-4 cursor-pointer whitespace-nowrap"
-              :class="`w-[${headName?.width}px]`"
+              class="text-[13px] font-semibold border-[1px] border-solid border-[rgba(119,136,153,0.3)] py-4 px-2 cursor-pointer whitespace-nowrap"
+              :class="`w-[${headName?.dwidth}px]`"
+              @click="sortedRowAction(headName.code)"
             >
-              {{ GET_CORE_STRING?.[headName.name] || headName.name }}
-              <!-- <pre>{{ headName }}</pre> -->
+              <div class="flex items-center justify-between">
+                <span></span>
+                {{ GET_CORE_STRING?.[headName.name] || headName.name }}
+                <i
+                  v-if="allSortOrderObj?.[headName.code] === 1"
+                  class="el-icon-caret-top ml-2"
+                ></i>
+                <i
+                  v-else-if="allSortOrderObj?.[headName.code] === -1"
+                  class="el-icon-caret-bottom ml-2"
+                ></i>
+                <i v-else class="el-icon-d-caret ml-2"></i>
+              </div>
             </th>
             <th
               v-if="showHideActionCol"
@@ -28,7 +40,7 @@
         <tbody>
           <template v-if="istherebody">
             <tr
-              v-for="(value, index) in tablebody"
+              v-for="(value, index) in sortedData"
               :key="index"
               class="bg-gradient-to-b from-transparent via-transparent to-[#F4F4F4]"
             >
@@ -805,6 +817,11 @@ export default {
   // DATA
   data() {
     return {
+      // table head col click sorted row elements
+      sortKey: '',
+      sortOrder: null,
+      allSortOrderObj: {},
+      // table head col click sorted row elements
       routerPath: null,
     }
   },
@@ -812,6 +829,37 @@ export default {
   // COMPUTED
   computed: {
     ...mapGetters('translate', ['GET_CORE_STRING']),
+
+    // Sorted row
+    sortedData() {
+      return this.tablebody.slice().sort((a, b) => {
+        if (this.sortKey) {
+          const valueA = this.getNestedValue(a, this.sortKey)
+          const valueB = this.getNestedValue(b, this.sortKey)
+
+          console.log(valueA, '|', valueB)
+
+          if (
+            typeof valueA === 'string' &&
+            typeof valueB === 'string' &&
+            valueA &&
+            valueB
+          ) {
+            return this.sortOrder * valueA.localeCompare(valueB) // Sorting strings alphabetically
+          } else if (
+            typeof valueA === 'object' &&
+            typeof valueB === 'object' &&
+            valueA?.text &&
+            valueB?.text
+          ) {
+            return this.sortOrder * valueA.text.localeCompare(valueB.text) // Sorting Object alphabetically
+          } else if (typeof valueA === 'number' && typeof valueB === 'number') {
+            return this.sortOrder * (valueA - valueB) // Sorting numbers
+          }
+        }
+        return ''
+      })
+    },
   },
 
   // CREATED
@@ -840,11 +888,26 @@ export default {
       )
     },
 
+    // Row sorted
+    sortedRowAction(column) {
+      if (this.sortKey === column) {
+        this.sortOrder = -this.sortOrder
+      } else {
+        this.sortKey = column
+        this.sortOrder = 1
+      }
+      this.allSortOrderObj = {}
+      this.$set(this.allSortOrderObj, column, this.sortOrder)
+    },
+    getNestedValue(object, keyPath) {
+      return keyPath.split('.').reduce((acc, key) => acc && acc[key], object)
+    },
+    // Row sorted
+
     // row delete action
     rowDelAction(id) {
       this.$refs.messageBoxRef.open(id)
     },
-
     // Message box EMIT action
     getEmitProp(propMessage, id) {
       if (
