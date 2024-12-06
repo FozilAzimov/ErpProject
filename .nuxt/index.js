@@ -26,6 +26,7 @@ import nuxt_plugin_notification_1685ae90 from 'nuxt_plugin_notification_1685ae90
 import nuxt_plugin_formatdate_00a9b2a7 from 'nuxt_plugin_formatdate_00a9b2a7' // Source: ..\\plugins\\format-date.js (mode: 'all')
 import nuxt_plugin_formatnumber_1e29e4a8 from 'nuxt_plugin_formatnumber_1e29e4a8' // Source: ..\\plugins\\format-number.js (mode: 'all')
 import nuxt_plugin_chart_a53e2166 from 'nuxt_plugin_chart_a53e2166' // Source: ..\\plugins\\chart.js (mode: 'all')
+import nuxt_plugin_valueutils_5d114914 from 'nuxt_plugin_valueutils_5d114914' // Source: ..\\plugins\\value-utils.js (mode: 'all')
 
 // Component: <ClientOnly>
 Vue.component(ClientOnly.name, ClientOnly)
@@ -270,6 +271,10 @@ async function createApp(ssrContext, config = {}) {
 
   if (typeof nuxt_plugin_chart_a53e2166 === 'function') {
     await nuxt_plugin_chart_a53e2166(app.context, inject)
+  }
+
+  if (typeof nuxt_plugin_valueutils_5d114914 === 'function') {
+    await nuxt_plugin_valueutils_5d114914(app.context, inject)
   }
 
   // Lock enablePreview in context

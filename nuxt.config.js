@@ -46,6 +46,7 @@ export default {
     '@/plugins/format-date.js',
     '@/plugins/format-number.js',
     '@/plugins/chart.js',
+    '@/plugins/value-utils.js',
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -79,7 +80,7 @@ export default {
       key: fs.readFileSync(path.resolve(__dirname, './keys/private.key')),
       cert: fs.readFileSync(path.resolve(__dirname, './keys/certificate.crt')),
     },
-    port: 3001,
+    port: 3000,
     host: '0.0.0.0',
   },
 

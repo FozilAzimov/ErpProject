@@ -188,6 +188,7 @@ const _418c1963 = () => interopDefault(import('..\\pages\\taras.htm\\index.vue' 
 const _73512f2a = () => interopDefault(import('..\\pages\\tariffs.htm\\index.vue' /* webpackChunkName: "pages/tariffs.htm/index" */))
 const _ebde26c0 = () => interopDefault(import('..\\pages\\timeZones.htm\\index.vue' /* webpackChunkName: "pages/timeZones.htm/index" */))
 const _ecd73c1c = () => interopDefault(import('..\\pages\\transactionCharacters.htm\\index.vue' /* webpackChunkName: "pages/transactionCharacters.htm/index" */))
+const _5ea140d7 = () => interopDefault(import('..\\pages\\transactionDetailReport.htm\\index.vue' /* webpackChunkName: "pages/transactionDetailReport.htm/index" */))
 const _d7c63c64 = () => interopDefault(import('..\\pages\\transactionMovements.htm\\index.vue' /* webpackChunkName: "pages/transactionMovements.htm/index" */))
 const _4d064a62 = () => interopDefault(import('..\\pages\\unitmeasurement.htm\\index.vue' /* webpackChunkName: "pages/unitmeasurement.htm/index" */))
 const _01efdc5c = () => interopDefault(import('..\\pages\\users.htm\\index.vue' /* webpackChunkName: "pages/users.htm/index" */))
@@ -1077,6 +1078,10 @@ export const routerOptions = {
     path: "/transactionCharacters.htm",
     component: _ecd73c1c,
     name: "transactionCharacters.htm"
+  }, {
+    path: "/transactionDetailReport.htm",
+    component: _5ea140d7,
+    name: "transactionDetailReport.htm"
   }, {
     path: "/transactionMovements.htm",
     component: _d7c63c64,

@@ -5,8 +5,8 @@
   "ActualitySystem": {
     "description": "Auto imported from components/ActualitySystemPage/ActualitySystem.vue"
   },
-  "BranchesPage": {
-    "description": "Auto imported from components/Branches/BranchesPage.vue"
+  "GenericButton": {
+    "description": "Auto imported from components/Button/GenericButton.vue"
   },
   "AccountsList": {
     "description": "Auto imported from components/Banks/AccountsList.vue"
@@ -32,6 +32,9 @@
   "PrepareCurrenRate": {
     "description": "Auto imported from components/Banks/PrepareCurrenRate.vue"
   },
+  "ColumnConfigPage": {
+    "description": "Auto imported from components/ColumnConfig/ColumnConfigPage.vue"
+  },
   "CashboxsList": {
     "description": "Auto imported from components/Cashboxs/CashboxsList.vue"
   },
@@ -49,12 +52,6 @@
   },
   "TransactionCharacters": {
     "description": "Auto imported from components/Cashboxs/TransactionCharacters.vue"
-  },
-  "BtnGen": {
-    "description": "Auto imported from components/Button/BtnGen.vue"
-  },
-  "GenericButton": {
-    "description": "Auto imported from components/Button/GenericButton.vue"
   },
   "ClusterCamera": {
     "description": "Auto imported from components/Cluster/ClusterCamera.vue"
@@ -89,9 +86,6 @@
   "DashboardPage": {
     "description": "Auto imported from components/Dashboard/DashboardPage.vue"
   },
-  "ColumnConfigPage": {
-    "description": "Auto imported from components/ColumnConfig/ColumnConfigPage.vue"
-  },
   "EquipmentExpenses": {
     "description": "Auto imported from components/EquipmentReports/EquipmentExpenses.vue"
   },
@@ -112,12 +106,6 @@
   },
   "PrepareEquipmentExpenses": {
     "description": "Auto imported from components/EquipmentReports/PrepareEquipmentExpenses.vue"
-  },
-  "GenericInvoiceFilteringModalPage": {
-    "description": "Auto imported from components/GenericInvoiceFilteringModal/GenericInvoiceFilteringModalPage.vue"
-  },
-  "GenericInvoiceItemModalPage": {
-    "description": "Auto imported from components/GenericInvoiceItemModal/GenericInvoiceItemModalPage.vue"
   },
   "GenericPrepareTablePage": {
     "description": "Auto imported from components/GenericPrepareTable/GenericPrepareTablePage.vue"
@@ -166,9 +154,6 @@
   },
   "GenericTablePage": {
     "description": "Auto imported from components/GenericTable/GenericTablePage.vue"
-  },
-  "GenericTranslatePage": {
-    "description": "Auto imported from components/GenericTranslate/GenericTranslatePage.vue"
   },
   "AttendanceSchedule": {
     "description": "Auto imported from components/HRMS/AttendanceSchedule.vue"
@@ -442,15 +427,6 @@
   },
   "LoginPage": {
     "description": "Auto imported from components/Login/LoginPage.vue"
-  },
-  "ItemSearchList": {
-    "description": "Auto imported from components/main/ItemSearchList.vue"
-  },
-  "MainHeader": {
-    "description": "Auto imported from components/main/MainHeader.vue"
-  },
-  "SearchBar": {
-    "description": "Auto imported from components/main/SearchBar.vue"
   },
   "CalculationByColorVariantRecipe": {
     "description": "Auto imported from components/Orders/CalculationByColorVariantRecipe.vue"
@@ -758,6 +734,9 @@
   "PnlReports": {
     "description": "Auto imported from components/Reports/PnlReports.vue"
   },
+  "TransactionDetailReport": {
+    "description": "Auto imported from components/Reports/TransactionDetailReport.vue"
+  },
   "GenericSelect": {
     "description": "Auto imported from components/Select/GenericSelect.vue"
   },
@@ -1057,6 +1036,39 @@
   },
   "TransactionMovements": {
     "description": "Auto imported from components/Transactions/TransactionMovements.vue"
+  },
+  "UniqueCheckbox": {
+    "description": "Auto imported from components/UniqueComponents/UniqueCheckbox.vue"
+  },
+  "UniqueColumnConfig": {
+    "description": "Auto imported from components/UniqueComponents/UniqueColumnConfig.vue"
+  },
+  "UniqueConfirmDialog": {
+    "description": "Auto imported from components/UniqueComponents/UniqueConfirmDialog.vue"
+  },
+  "UniqueCurrencyCounter": {
+    "description": "Auto imported from components/UniqueComponents/UniqueCurrencyCounter.vue"
+  },
+  "UniqueCustomTable": {
+    "description": "Auto imported from components/UniqueComponents/UniqueCustomTable.vue"
+  },
+  "UniqueDatePicker": {
+    "description": "Auto imported from components/UniqueComponents/UniqueDatePicker.vue"
+  },
+  "UniqueFilterMultiSelect": {
+    "description": "Auto imported from components/UniqueComponents/UniqueFilterMultiSelect.vue"
+  },
+  "UniqueInput": {
+    "description": "Auto imported from components/UniqueComponents/UniqueInput.vue"
+  },
+  "UniqueListTable": {
+    "description": "Auto imported from components/UniqueComponents/UniqueListTable.vue"
+  },
+  "UniqueLookUp": {
+    "description": "Auto imported from components/UniqueComponents/UniqueLookUp.vue"
+  },
+  "UniqueMultiSelect": {
+    "description": "Auto imported from components/UniqueComponents/UniqueMultiSelect.vue"
   },
   "PrepareWeight": {
     "description": "Auto imported from components/Weights/PrepareWeight.vue"
