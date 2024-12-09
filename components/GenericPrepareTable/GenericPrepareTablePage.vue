@@ -185,7 +185,7 @@
               <td
                 class="border-1px text-[13px] p-3 text-[rgba(0,0,0,0.7)] border-[1px] border-solid border-[rgba(119,136,153,0.2)]"
               >
-                Total
+                {{ GET_CORE_STRING?.total || 'Total' }}
               </td>
               <td
                 v-for="(obj, innerIndex) in filteredTableHeadData"

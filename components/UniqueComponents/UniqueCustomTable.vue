@@ -373,7 +373,7 @@
                       'label-success':
                         object[item.uniqueId].includes('btn-success'),
                     }"
-                    v-html="object[item.uniqueId]"
+                    v-html="object[item.uniqueId].replace('?id=', '/')"
                   ></div>
                 </template>
 

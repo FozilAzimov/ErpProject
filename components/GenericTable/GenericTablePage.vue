@@ -42,7 +42,7 @@
             <tr
               v-for="(value, index) in sortedData"
               :key="index"
-              class="bg-gradient-to-b from-transparent via-transparent to-[#F4F4F4]"
+              class="bg-gradient-to-b from-transparent via-transparent to-[#F4F4F4] hover:bg-[rgb(239,243,247)] hover:bg-gradient-to-b hover:from-transparent hover:via-transparent hover:to-transparent transition-all duration-300 ease-in-out"
             >
               <td
                 v-for="(key, inx) in tablehead"

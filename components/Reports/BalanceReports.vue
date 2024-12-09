@@ -296,6 +296,12 @@ export default {
     // page request action
     acceptAction() {
       if (this.allSelectAndInputValues?.currency) {
+        const loading = this.$loading({
+          lock: true,
+          text: this.GET_CORE_STRING?.loading || 'Loading',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.7)',
+        })
         // request body
         const body = {
           currencyRate: this.allSelectAndInputValues?.currencyRate,
@@ -311,9 +317,11 @@ export default {
             this.resultDataObj = data
             this.createGraphDataAction(data)
             this.showHideTable = true
+            loading.close()
             this.isLoading = !this.isLoading
           })
           .catch((error) => {
+            loading.close()
             this.isLoading = !this.isLoading
             // eslint-disable-next-line no-console
             console.log(error)
