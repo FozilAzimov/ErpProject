@@ -1,30 +1,22 @@
 <template>
-  <div class="w-full p-[0px_12px_0px_10px]">
+  <div class="w-full p-1">
     <LoadingPage
       v-if="isLoading"
       class="absolute left-[50%] top-[8px] translate-x-[-50%]"
     />
-    <transition name="fade">
-      <ColumnConfigPage
-        v-show="checkModal"
-        api="saveColumnConfig"
-        class="z-[10000]"
-        @checkModal="handleValue"
-      />
-    </transition>
     <template v-if="isCloseTable">
       <div
-        class="border-[1px] border-solid border-[rgba(0,0,0,0.05)] p-[12px] bg-gradient-to-b from-transparent via-transparent to-gray-200 shadow-md flex items-center justify-between mt-1"
+        class="border-[1px] border-solid border-[rgba(0,0,0,0.05)] p-[12px] bg-gradient-to-b from-transparent via-transparent to-gray-200 shadow-md flex items-center justify-between"
       >
         <div class="flex items-center gap-[10px]">
           <img src="@assets/icons/user-black.png" alt="user" class="w-[14px]" />
           <h1 class="font-bold text-[rgb(49,126,172)] text-[14px] uppercase">
             {{
-              btnType === 'view'
-                ? 'View DOOR/Turnstile'
-                : btnType === 'edit'
-                ? 'Edit DOOR/Turnstile'
-                : 'Add DOOR/Turnstile'
+              pageType === 'view'
+                ? 'View Doors'
+                : pageType === 'edit'
+                ? 'Edit Doors'
+                : 'Add Doors'
             }}
           </h1>
         </div>
@@ -35,7 +27,6 @@
               :style="{
                 background: 'radial-gradient(#fff, rgba(32,111,162,0.2))',
               }"
-              @click="openColumnConfig"
             >
               <img class="w-[11px]" src="@assets/icons/gear.png" alt="gear" />
             </li>
@@ -81,40 +72,29 @@
             : 'duration-[1s] h-0 overflow-hidden'
         "
       >
-        <div class="w-fit flex flex-col items-start m-2 gap-1">
+        <div class="flex flex-col items-start m-2 gap-1">
           <div v-for="(element, index) in elementData" :key="index">
             <template v-if="element.show">
               <span
                 v-if="element.type === 'text'"
                 class="flex flex-col items-start mb-1"
               >
-                <span class="text-[13px]">{{ element.name }}</span>
-                <generic-input
-                  :value="
-                    editData?.[element.subName]
-                      ? editData?.[element.subName]
-                      : ''
-                  "
-                  width="300"
-                  type="text"
-                  :name="element.subName"
-                  :disabled="element.disabled"
-                  @customFunction="getInputAndLookUpValueAction"
-                />
-              </span>
-              <span
-                v-else-if="element.type === 'number'"
-                class="flex flex-col items-start mb-1"
-              >
-                <span class="text-[13px]">{{ element.name }}</span>
+                <span class="text-[13px]"
+                  >{{ element.name }}
+                  <span
+                    v-if="element?.required"
+                    class="text-red-500 text-[16px]"
+                    >*</span
+                  >
+                </span>
                 <generic-input
                   :value="`${
-                    editData?.[element.subName]
-                      ? editData?.[element.subName]
+                    viewEditData?.[element.subName]
+                      ? viewEditData[element.subName]
                       : ''
                   }`"
                   width="300"
-                  type="number"
+                  type="text"
                   :name="element.subName"
                   :disabled="element.disabled"
                   @customFunction="getInputAndLookUpValueAction"
@@ -128,25 +108,11 @@
                 <generic-look-up
                   dwidth="300"
                   :name="element.subName"
-                  defvalue="USA Dollor"
-                  :options-data="currencyData"
+                  :defvalue="''"
+                  :durl="element?.api"
+                  :options-data="selectData?.[element?.selectName]"
                   :disabled="element.disabled"
-                  @customFunction="getInputAndLookUpValueAction"
-                />
-              </span>
-              <span
-                v-else-if="element.type === 'checkbox'"
-                class="flex flex-col items-start mb-1"
-              >
-                <generic-check-box
-                  :text="element?.name"
-                  :name="element?.subName"
-                  :disabled="element.disabled"
-                  :default-value="
-                    editData?.[element.subName]
-                      ? editData?.[element.subName]
-                      : false
-                  "
+                  :multiple="element?.multiple"
                   @customFunction="getInputAndLookUpValueAction"
                 />
               </span>
@@ -163,19 +129,60 @@
             </template>
           </div>
 
+          <div v-if="pageType === 'edit'" class="w-full">
+            <transition name="fade">
+              <div
+                v-show="showHideFaceID && isAccept"
+                class="w-fit p-2 mb-5 flex flex-col items-start gap-2 border-[1px] border-solid border-[rgba(0,0,0,0.1)] rounded-sm"
+              >
+                <span
+                  v-for="(obj, i) in cameraIdsArr"
+                  :key="i"
+                  class="flex items-center gap-2 text-[13px] justify-between p-2 rounded-sm w-fit"
+                  :style="
+                    setCameraIds?.[i]
+                      ? { background: '#b5e5b5' }
+                      : { background: 'none' }
+                  "
+                >
+                  <div class="font-semibold">{{ obj?.label }}:</div>
+                  <div>{{ obj?.id }}</div>
+                  <generic-button
+                    v-show="!setCameraIds?.[i]"
+                    name="Add"
+                    type="primary"
+                    @click="setDeviceIdAction(i, obj?.id)"
+                  />
+                </span>
+                <generic-button
+                  v-if="setCameraIds[0] && setCameraIds[1]"
+                  name="Accept"
+                  type="success"
+                  @click="setAcceptAction(setCameraIds)"
+                />
+              </div>
+            </transition>
+            <generic-button
+              v-if="isAccept"
+              name="Change FaceId Camera Ids"
+              type="primary"
+              @click="showFaceIdsAction"
+            />
+          </div>
+
           <div class="flex items-center gap-3 mt-3">
             <generic-button
               name="Go Back"
               type="primary"
               icon-name-attribute="arrow-left"
-              @click="goBackAction"
+              @click="$router.push('/doors.htm')"
             />
             <generic-button
-              v-if="btnType !== 'view'"
-              :name="btnType === 'edit' ? 'Save changes' : 'Save'"
-              :type="btnType === 'edit' ? 'success' : 'primary'"
-              :icon-name-attribute="btnType && 'edit'"
-              @click="saveAction(btnType)"
+              v-if="pageType !== 'view'"
+              :name="pageType === 'edit' ? 'Save changes' : 'Save'"
+              type="success"
+              :icon-name-attribute="pageType && 'edit'"
+              @click="saveAction"
             />
           </div>
         </div>
@@ -189,70 +196,54 @@ import GenericButton from '@generics/GenericButton.vue'
 import GenericInput from '@generics/GenericInput.vue'
 import LoadingPage from '@components/Loading/LoadingPage.vue'
 import GenericLookUp from '@generics/GenericLookUp.vue'
-import GenericCheckBox from '@generics/GenericCheckBox.vue'
 export default {
   components: {
     LoadingPage,
     GenericButton,
     GenericInput,
     GenericLookUp,
-    GenericCheckBox,
   },
 
   // DATA
   data() {
     return {
       isLoading: false,
+      showHideFaceID: false,
       pageSize_value: 25,
-      checkModal: false,
       isOpenTable: true,
       isCloseTable: true,
-      btnType: '',
+      pageType: null,
       pageID: null,
-      editData: {},
-      allInputAndLookUpValue: {},
       elementData: [],
-      radio: null,
-      currencyData: [],
+      viewEditData: {},
+      allInputAndLookUpValue: {},
+      selectData: {},
+      cameraIdsArr: [],
+      setCameraIds: [],
+      isAccept: true,
+      faceIdCameraIds: '',
     }
-  },
-
-  // WATCH
-  watch: {
-    pageID(newVal) {
-      this.btnTypeSpecifyingAction()
-    },
-    radio(newVal) {
-      if (newVal === 'enabled') this.allInputAndLookUpValue.active = true
-      else if (newVal === 'disabled') this.allInputAndLookUpValue.active = false
-      else this.allInputAndLookUpValue.active = false
-    },
   },
 
   // CREATED
   created() {
-    this.btnType = JSON.parse(localStorage.getItem('allTrueAndFalseData'))?.type
     // page ID sini olish
     this.pageID = this.$route.params?.id
+    // page TYPE ni aniqlash
+    this.pageType = this.$route?.query?.page_type
   },
 
   // MOUNTED
   mounted() {
     // function
     this.dataCreatedAction()
-
     // Table function
     this.getTableRequest()
+    this.allInputAndLookUpValue.active = true
   },
 
   // Methods
   methods: {
-    handleValue(checkModal) {
-      this.checkModal = checkModal
-    },
-    openColumnConfig() {
-      this.checkModal = true
-    },
     // Table page ni ochish va yopish uchun
     isOpen() {
       this.isOpenTable = !this.isOpenTable
@@ -261,109 +252,55 @@ export default {
       this.isCloseTable = !this.isCloseTable
     },
 
-    // go back action
-    goBackAction() {
-      localStorage.removeItem('allTrueAndFalseData')
-      this.$router.push('/doors.htm')
-    },
-
-    // Specifying the buttun type action
-    btnTypeSpecifyingAction() {
-      if (!this.pageID) {
-        localStorage.removeItem('allTrueAndFalseData')
-      }
-    },
-
-    // Data created
-    dataCreatedAction() {
-      const data = [
-        {
-          name: 'Batch Process Name',
-          subName: 'name',
-          type: 'text',
-          show: true,
-          disabled: this.btnType === 'view',
-        },
-        {
-          name: 'Code',
-          subName: 'code',
-          type: 'text',
-          show: true,
-          disabled: this.btnType === 'view',
-        },
-        {
-          name: 'Currency',
-          subName: 'currency',
-          type: 'select',
-          show: this.btnType === 'edit',
-          disabled: this.btnType === 'view',
-        },
-        {
-          name: 'Price',
-          subName: 'price',
-          type: 'number',
-          show: this.btnType === 'edit',
-          disabled: this.btnType === 'view',
-        },
-        {
-          name: 'Save name',
-          subName: 'savename',
-          type: 'checkbox',
-          show: true,
-          disabled: this.btnType === 'view',
-        },
-        {
-          name: 'Status',
-          subName: 'enabled',
-          type: 'radio',
-          show: true,
-          disabled: this.btnType === 'view',
-        },
-        {
-          name: 'Status',
-          subName: 'disabled',
-          type: 'radio',
-          show: true,
-          disabled: this.btnType === 'view',
-        },
-      ]
-      this.elementData = data
-    },
-
     // Page request
     getTableRequest() {
-      if (this.btnType === 'view') {
-        this.isLoading = !this.isLoading
+      this.isLoading = !this.isLoading
+      if (this.pageType === 'view') {
         this.$axios
-          .post(`/batchProcess/prepareBatchProcessViewAjaxLoad`, {
+          .post(`/door/prepareDoorView`, {
             id: this.pageID,
             page_current: 1,
             page_size: 25,
           })
-          .then(({ data: { design } }) => {
+          .then(({ data: { door, hrDeviceList, hrDeviceList2 } }) => {
+            this.viewEditData = door
+            this.selectData.hrDeviceList2 = hrDeviceList2
+            this.selectData.hrDeviceList = hrDeviceList
             this.isLoading = !this.isLoading
-            this.editData = design
           })
           .catch((error) => {
             this.isLoading = !this.isLoading
             // eslint-disable-next-line no-console
             console.log(error)
           })
-      } else if (this.btnType === 'edit') {
-        this.isLoading = !this.isLoading
+      } else if (this.pageType === 'edit') {
         this.$axios
-          .post(`/batchProcess/prepareBatchProcessAjaxLoad`, {
+          .post(`/door/prepareDoor`, {
             id: this.pageID,
             page_current: 1,
             page_size: 25,
           })
-          .then(({ data: { batchProcess, currencyList } }) => {
+          .then(({ data: { door, hrDeviceList, hrDeviceList2 } }) => {
+            this.viewEditData = door
+            this.selectData.hrDeviceList2 = hrDeviceList2
+            this.selectData.hrDeviceList = hrDeviceList
             this.isLoading = !this.isLoading
-            this.editData = batchProcess
-            this.currencyData = currencyList
-            batchProcess.active
-              ? (this.radio = 'enabled')
-              : (this.radio = 'disabled')
+          })
+          .catch((error) => {
+            this.isLoading = !this.isLoading
+            // eslint-disable-next-line no-console
+            console.log(error)
+          })
+      } else {
+        this.$axios
+          .post(`/door/prepareDoor`, {
+            page_current: 1,
+            page_size: 25,
+          })
+          .then(({ data: { warehouseTypeList, departments } }) => {
+            this.selectData.departments = departments
+            this.selectData.warehouseTypeList = warehouseTypeList
+            this.isLoading = !this.isLoading
           })
           .catch((error) => {
             this.isLoading = !this.isLoading
@@ -378,56 +315,159 @@ export default {
       this.$set(this.allInputAndLookUpValue, name, value)
     },
 
+    // FACE id set action
+    async showFaceIdsAction() {
+      try {
+        const devices = await navigator.mediaDevices.enumerateDevices()
+        if (devices?.length) {
+          devices.forEach((device) => {
+            if (
+              device.kind === 'videoinput' &&
+              (device.label.includes('ForwardRGB') ||
+                device.label.includes('USB ColorCamera') ||
+                device.label.includes('USB RGB Camera') ||
+                device.label.includes('RGB Camera') ||
+                device.label.includes('ForwardIR') ||
+                device.label.includes('CameraWN.AHD') ||
+                device.label.includes('USB IRCamera') ||
+                device.label.includes('USB IR Camera') ||
+                device.label.includes('NIR Camera'))
+            ) {
+              const newObj = {
+                label: device.label,
+                id: device.deviceId,
+              }
+              this.cameraIdsArr.push(newObj)
+            }
+          })
+        }
+        this.showHideFaceID = true
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error('Kamerani ishga tushirishda xatolik:', error)
+        this.$notification(
+          'Kamerani ishga tushirishda xatolik',
+          'Error',
+          'error'
+        )
+      }
+    },
+
+    setDeviceIdAction(index, id) {
+      this.$set(this.setCameraIds, index, id)
+    },
+
+    setAcceptAction(arr) {
+      let strID = ''
+      arr.forEach((val) => {
+        strID += val + ','
+      })
+      // Oxirgi vergulni olib tashlash
+      this.faceIdCameraIds = strID.slice(0, -1)
+      this.isAccept = false
+      this.$notification('Success', 'Success', 'success')
+    },
+
     // Save Changes action
     saveAction() {
-      let body = {}
-      let batchProcess = {}
-      if (this.pageID && this.btnType === 'edit') {
-        batchProcess = {
-          id: this.pageID,
-          name: this.allInputAndLookUpValue?.name || this.editData.name || '',
-          savename:
-            this.allInputAndLookUpValue?.savename ||
-            this.editData.savename ||
-            '',
-          code: this.allInputAndLookUpValue?.code || this.editData.code || '',
-          active:
-            this.allInputAndLookUpValue?.active || this.editData.active || '',
-          currency: {
-            id: this.allInputAndLookUpValue?.currency || '',
-          },
-          price: this.allInputAndLookUpValue?.price || '',
+      if (this.allInputAndLookUpValue?.name || this.viewEditData?.name) {
+        let body = {}
+        let door = {}
+        if (this.pageID && this.pageType === 'edit') {
+          door = {
+            id: this.pageID,
+            name:
+              this.allInputAndLookUpValue?.name ??
+              this.viewEditData?.name ??
+              '',
+            number:
+              this.allInputAndLookUpValue?.number ??
+              this.viewEditData?.number ??
+              null,
+            faceIdCameraRotate: 0,
+            faceIdCameraIds: this.faceIdCameraIds ?? '',
+          }
+        } else {
+          door = {
+            name: this.allInputAndLookUpValue?.name ?? '',
+            number: this.allInputAndLookUpValue?.number ?? null,
+            number2: this.allInputAndLookUpValue?.number2 ?? null,
+            hrDeviceIds: this.allInputAndLookUpValue?.hrDeviceIds ?? null,
+            hr_deviceId: this.allInputAndLookUpValue?.hr_deviceId ?? null,
+          }
         }
-      } else {
-        batchProcess = {
-          name: this.allInputAndLookUpValue?.name,
-          savename: this.allInputAndLookUpValue?.savename,
-          code: this.allInputAndLookUpValue?.code,
-          active: this.allInputAndLookUpValue?.active,
+        body = {
+          page_size: this.pageSize_value,
+          page_current: 1,
+          door,
         }
-      }
-      body = {
-        page_size: this.pageSize_value,
-        page_current: 1,
-        rightData: '',
-        batchProcess,
-      }
 
-      this.isLoading = !this.isLoading
-      const method = this.pageID ? 'put' : 'post'
-      this.$axios[method](
-        `/batchProcess/${this.pageID ? 'editBatchProcess' : 'addBatchProcess'}`,
-        body
-      )
-        .then(() => {
-          this.isLoading = !this.isLoading
-          this.$router.push('/batchProcess.htm')
-        })
-        .catch((error) => {
-          this.isLoading = !this.isLoading
-          // eslint-disable-next-line no-console
-          console.log(error)
-        })
+        this.isLoading = !this.isLoading
+        this.$axios
+          .post(`/door/${this.pageID ? 'editDoor' : 'addDoor'}`, body)
+          .then(() => {
+            this.isLoading = !this.isLoading
+            this.$router.push('/doors.htm')
+          })
+          .catch((error) => {
+            this.isLoading = !this.isLoading
+            // eslint-disable-next-line no-console
+            console.log(error)
+          })
+      } else this.$notification(`'name' not entered!`)
+    },
+
+    // Data created
+    dataCreatedAction() {
+      const data = [
+        {
+          name: 'Door/Turnstile Name',
+          subName: 'name',
+          type: 'text',
+          show: true,
+          disabled: this.pageType === 'view',
+        },
+        {
+          name: 'Door/Turnstile Number',
+          subName: 'number',
+          type: 'text',
+          show: true,
+          disabled: this.pageType === 'view',
+        },
+        {
+          name: 'Hr Device',
+          subName: 'hrDeviceList',
+          selectName: 'hrDeviceList',
+          type: 'select',
+          show: true,
+          multiple: true,
+          disabled: this.pageType === 'view',
+        },
+        {
+          name: 'Door/Turnstile Number№2',
+          subName: 'number2',
+          type: 'text',
+          show: this.pageType !== 'view',
+          disabled: this.pageType === 'view',
+        },
+        {
+          name: 'Hr Device For INBIO',
+          subName: 'hrDeviceList2',
+          selectName: 'hrDeviceList2',
+          type: 'select',
+          show: this.pageType !== 'view',
+          disabled: this.pageType === 'view',
+        },
+        {
+          name: 'Camera rotation',
+          subName: 'cameraRotation',
+          selectName: 'list',
+          type: 'select',
+          show: this.pageType === 'edit',
+          disabled: this.pageType === 'view',
+        },
+      ]
+      this.elementData = data
     },
   },
 }
@@ -436,12 +476,10 @@ export default {
 <style>
 .fade-enter-active,
 .fade-leave-active {
-  transition: opacity 0.5s;
+  transition: opacity 2s ease;
 }
-
 .fade-enter,
 .fade-leave-to {
   opacity: 0;
-  transform: translateY(-20px);
 }
 </style>

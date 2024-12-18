@@ -18,6 +18,7 @@ let store = {};
   store.modules = store.modules || {}
 
   resolveStoreModules(require('..\\store\\activeLanguage.js'), 'activeLanguage.js')
+  resolveStoreModules(require('..\\store\\session.js'), 'session.js')
   resolveStoreModules(require('..\\store\\systemMenu.js'), 'systemMenu.js')
   resolveStoreModules(require('..\\store\\translate.js'), 'translate.js')
 
@@ -27,6 +28,7 @@ let store = {};
     // Whenever any Vuex module is updated...
     module.hot.accept([
       '..\\store\\activeLanguage.js',
+      '..\\store\\session.js',
       '..\\store\\systemMenu.js',
       '..\\store\\translate.js',
     ], () => {

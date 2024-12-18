@@ -16,7 +16,10 @@
               @click="sortedRowAction(headName.code)"
             >
               <div class="flex items-center justify-between">
-                <span></span>
+                <span>
+                  <!-- style uchun ishlatilgan -->
+                  <!-- <pre>{{ headName }}</pre> -->
+                </span>
                 {{ GET_CORE_STRING?.[headName.name] || headName.name }}
                 <i
                   v-if="allSortOrderObj?.[headName.code] === 1"
@@ -143,6 +146,7 @@
                         $route.path.includes('accounts.htm') ||
                         $route.path.includes('paymenttypes.htm') ||
                         $route.path.includes('paymenttypegroups.htm') ||
+                        $route.path.includes('doors.htm') ||
                         $route.path.includes('productcategories.htm')))
                   "
                   class="p-[2px_5px] italic text-white font-bold rounded-[5px]"
@@ -299,7 +303,8 @@
                     key?.code === 'mainImage' ||
                     key?.code === 'face' ||
                     key?.code === 'productimg' ||
-                    key?.code === 'sewmodelimg'
+                    key?.code === 'sewmodelimg' ||
+                    key?.code === 'faceIdImg'
                   "
                 >
                   <img
@@ -318,7 +323,7 @@
                     v-else
                     :src="
                       value?.[key?.code]
-                        ? `data:image/jpeg;base64,${value?.[key?.code]}`
+                        ? value?.[key?.code]
                         : require('@images/no-image.png')
                     "
                     :alt="value?.[key?.code]"
@@ -718,7 +723,7 @@
           <template v-else>
             <tr>
               <td
-                :colspan="tableheadlength"
+                :colspan="Object.keys(tablehead)?.length"
                 class="border-[1px] border-solid border-[#F0F0F0] text-[12px] p-3"
               >
                 <div class="flex justify-start">
@@ -780,10 +785,6 @@ export default {
       type: Array,
       default: () => [],
     },
-    tableheadlength: {
-      type: Number,
-      default: 0,
-    },
     istherebody: {
       type: Boolean,
       default: false,
@@ -836,9 +837,6 @@ export default {
         if (this.sortKey) {
           const valueA = this.getNestedValue(a, this.sortKey)
           const valueB = this.getNestedValue(b, this.sortKey)
-
-          console.log(valueA, '|', valueB)
-
           if (
             typeof valueA === 'string' &&
             typeof valueB === 'string' &&
@@ -956,8 +954,10 @@ export default {
             if (status < 300) this.$emit('pageEmitAction', true)
           })
       } else if (type === 'sticker') {
+        // eslint-disable-next-line no-console
         console.log(type)
       } else if (type === 'printer') {
+        // eslint-disable-next-line no-console
         console.log(type)
       }
     },

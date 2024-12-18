@@ -1,5 +1,6 @@
 <template>
   <div>
+    <message-box ref="messageBoxRef" @emitProp="getEmitProp" />
     <LoadingPage
       v-if="isLoading && !isLoginPage"
       class="absolute left-[50%] top-[8px] translate-x-[-50%]"
@@ -16,10 +17,10 @@
         <h1 class="text-[#004A8F]">UZ-ERP</h1>
       </nuxt-link>
       <div class="flex items-center gap-[5px]">
-        <div>
+        <div v-if="GET_SESSION?.sessionUser?.accessPermission">
           <button
             class="toggle-button p-[5px_8px] text-[13px] uppercase flex items-center justify-center gap-4 bg-[#fff] rounded-[3px] relative z-[1] hover:bg-gradient-to-b hover:from-transparent hover:via-transparent hover:to-gray-200"
-            @click="goToMenuSetting"
+            @click="$router.push('/quickMenuSettings.htm')"
           >
             <img
               src="@assets/icons/menuSetting.png"
@@ -28,17 +29,21 @@
             />
           </button>
         </div>
-        <div>
+        <div class="relative w-fit">
           <button
-            class="toggle-button w-[190px] whitespace-nowrap p-[3px_8px] text-[13px] uppercase flex items-center justify-between gap-1 bg-[#fff] rounded-[3px] relative z-[1] hover:bg-gradient-to-b hover:from-transparent hover:via-transparent hover:to-gray-200"
-            @click="dropdownToggle"
+            class="toggle-button w-fit whitespace-nowrap p-[3px_8px] text-[13px] flex items-center justify-between gap-1 bg-[#fff] rounded-[3px] relative z-[1] hover:bg-gradient-to-b hover:from-transparent hover:via-transparent hover:to-gray-200"
+            @click="dropToggle = !dropToggle"
           >
             <img
               src="@assets/icons/user-black.png"
               alt="user"
               class="w-[12px]"
             />
-            {{ GET_CORE_STRING.actualSystem || 'Actuality System' }}
+            {{
+              `${GET_SESSION?.sessionUser?.person?.fname ?? ''} ${
+                GET_SESSION?.sessionUser?.person?.lname ?? ''
+              }`
+            }}
             <img
               src="@assets/icons/arrow-bottom.png"
               alt="user"
@@ -49,7 +54,7 @@
             />
           </button>
           <ul
-            class="w-[190px] bg-[#fff] absolute top-[40px] z-[1000] text-[12px] overflow-hidden duration-[0.5s]"
+            class="w-[190px] bg-[#fff] absolute top-[28px] right-0 z-[1000] text-[12px] overflow-hidden duration-[0.5s]"
             :style="{
               height: dropToggle ? '220px' : '0px',
               border: dropToggle ? '1px solid #ddd' : '1px solid #206fa2b3',
@@ -102,7 +107,7 @@
             <li>
               <p
                 class="flex items-center gap-3 p-[7px_10px] bg-[rgba(255,0,0,0.5)] hover:bg-[rgba(54,155,215,0.3)] duration-[0.2s] cursor-pointer"
-                @click="logoutMessage = true"
+                @click="$refs.messageBoxRef.open('', '', 'delete', 'Log out')"
               >
                 <img src="@assets/icons/logout.png" alt="logout" />
                 {{ GET_CORE_STRING?.['menu.logout'] || 'Log out' }}
@@ -167,7 +172,7 @@
     <div class="w-full flex items-start gap-[5px]">
       <el-container>
         <el-aside
-          v-if="!isLoginPage"
+          v-if="!isLoginPage && !GET_SESSION?.sessionCompany"
           :width="collapseMune ? '64px' : '300px'"
           class="mt-1 border-t-[1px] border-t-solid border-t-[rgba(0,0,0,0.15)]"
         >
@@ -235,35 +240,21 @@
         </el-container>
       </el-container>
     </div>
-    <div
-      v-show="logoutMessage"
-      v-if="!isLoginPage"
-      class="absolute left-0 top-0 right-0 bottom-0 bg-[rgba(0,0,0,0.3)]"
-    ></div>
-    <div
-      v-show="logoutMessage"
-      class="w-[300px] h-[100px] bg-[#fff] absolute top-[15%] left-[50%] translate-x-[-50%] rounded-[5px] flex flex-col justify-center items-center gap-4"
-    >
-      <h3 class="font-semibold">Do you want log out?</h3>
-      <div class="flex justify-between items-center">
-        <el-button size="small" @click="getLogoutCansel">Cansel</el-button>
-        <el-button size="small" type="danger" @click="getLogout">Yes</el-button>
-      </div>
-    </div>
   </div>
 </template>
 
 <script>
 import { mapActions, mapGetters, mapMutations } from 'vuex'
+import MessageBox from '@components/MessageBox.vue'
 
 export default {
+  components: { MessageBox },
   // DATA
   data() {
     return {
       isLoading: false,
       isLoginPage: false,
       collapseMune: true,
-      logoutMessage: false,
       dropToggle: false,
       langToggle: false,
       optionData: [],
@@ -277,6 +268,7 @@ export default {
     ...mapGetters('systemMenu', ['GET_LOADING', 'GET_SYSTEM_MENU_LIST']),
     ...mapGetters('translate', ['GET_CORE_STRING']),
     ...mapGetters('activeLanguage', ['GET_ACTIVE_LANG', 'GET_ACTIVE_DATA']),
+    ...mapGetters('session', ['GET_SESSION']),
   },
 
   // WATCH
@@ -307,7 +299,7 @@ export default {
   },
 
   // MOUNTED
-  mounted() {
+  async mounted() {
     const cookieLang = document.cookie
       ?.split(' ')
       .find((val) => val.includes('lang'))
@@ -316,12 +308,25 @@ export default {
     const lang = cookieLang || 'en'
     const api = 'getLanguage'
 
-    if (this.isLoginPage) {
-      this.FETCH_TRANSLATE({ lang, api }) // Translate all page
-    } else {
-      this.FETCH_TRANSLATE() // Translate login.htm
-      this.FETCH_SYSTEM_MENU() // System Menu
-      this.setAndGetActiveLang() // function
+    try {
+      if (this.isLoginPage) {
+        // Translate all page
+        await this.FETCH_TRANSLATE({ lang, api })
+      } else {
+        // Store session function
+        await this.FETCH_SESSION()
+        // Translate login.htm
+        await this.FETCH_TRANSLATE()
+        // System Menu if session data exists
+        if (!this.GET_SESSION?.sessionCompany) {
+          await this.FETCH_SYSTEM_MENU()
+        }
+        // Function for setting and getting active language
+        await this.setAndGetActiveLang()
+      }
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error('Error in mounted:', error)
     }
 
     // Drop Toggle
@@ -342,6 +347,7 @@ export default {
     ...mapActions('systemMenu', ['FETCH_SYSTEM_MENU']),
     ...mapActions('activeLanguage', ['FETCH_ACTIVE_LANG']),
     ...mapMutations('activeLanguage', ['SET_ACTIVE_LANG']),
+    ...mapActions('session', ['FETCH_SESSION']),
 
     // Active LANG get and set action
     async setAndGetActiveLang() {
@@ -352,6 +358,13 @@ export default {
 
     isCollapse() {
       this.collapseMune = !this.collapseMune
+    },
+
+    // Message box action
+    getEmitProp(propMessage, id, index, actionName) {
+      if (propMessage === 'confirm' && actionName === 'delete') {
+        this.getLogout() // function
+      }
     },
 
     // Log Out
@@ -365,7 +378,6 @@ export default {
             document.cookie = 'JSESSIONID='
             localStorage.removeItem('token')
             // remove
-            this.logoutMessage = false
             this.$router.push('/login.htm')
             this.$notification(`Proyekt'dan chiqdingiz.`, 'Success', 'success')
             this.isLoading = !this.isLoading
@@ -376,25 +388,13 @@ export default {
           // eslint-disable-next-line no-console
           console.error('Login request failed', error)
           this.$notification(`Error`, 'Error', 'error')
-          this.logoutMessage = false
         })
     },
 
-    getLogoutCansel() {
-      this.logoutMessage = false
-    },
-
-    // Dropdown toggle
-    dropdownToggle() {
-      this.dropToggle = !this.dropToggle
-    },
     handleWindowClick(event) {
       if (!event.target.closest('.toggle-button')) {
-        this.toggleFunction()
+        this.dropToggle = false
       }
-    },
-    toggleFunction() {
-      this.dropToggle = false
     },
 
     // Translate toggle
@@ -404,24 +404,16 @@ export default {
     },
     handleWindowClickTranslate(event) {
       if (!event.target.closest('.translate-button')) {
-        this.toggleFunctionTranslate()
+        this.langToggle = false
       }
-    },
-    toggleFunctionTranslate() {
-      this.langToggle = false
     },
 
     // Language Request
     getLanguage(lang) {
       this.FETCH_TRANSLATE({ lang }) // Translate
-      this.FETCH_SYSTEM_MENU() // System Menu
+      !this.GET_SESSION?.sessionCompany && this.FETCH_SYSTEM_MENU() // System Menu
       const obj = this.optionData.find((obj) => obj?.code === lang)
       this.SET_ACTIVE_LANG(obj?.name)
-    },
-
-    // go to Menu Setting
-    goToMenuSetting() {
-      this.$router.push('quickMenuSettings.htm')
     },
   },
 }

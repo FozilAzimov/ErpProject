@@ -12,7 +12,7 @@
       </h1>
     </div>
     <div
-      class="flex flex-wrap items-start justify-start gap-7 p-5 mt-2 border-[1px] border-solid border-[#D9D9D9] shadow-md rounded-sm"
+      class="flex flex-wrap items-start justify-start gap-7 p-5 mt-1 border-[1px] border-solid border-[#D9D9D9] shadow-md rounded-sm"
     >
       <nuxt-link
         v-for="(item, index) of items"

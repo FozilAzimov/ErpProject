@@ -10,7 +10,7 @@ export default function ({ $axios, redirect }) {
   // })
   // test end
   $axios.onError((error) => {
-    if (error?.response?.status === 401) {
+    if (error?.response?.status === 401 || error?.response?.status === 504) {
       localStorage.removeItem('token')
       redirect('/login.htm')
     }

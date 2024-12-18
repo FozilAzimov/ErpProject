@@ -22,7 +22,7 @@ export default {
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
-  css: ['@assets/css/main.css'],
+  css: ['@assets/css/main.css', 'element-ui/lib/theme-chalk/index.css'],
 
   alias: {
     '@images': '@/static/images',
@@ -86,19 +86,20 @@ export default {
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
-    proxy: true,
-    prefix: '/api',
-    withCredentials: true,
+    baseURL: 'https://192.168.1.150:443/api',
+    // proxy: true,
+    // prefix: '/api',
+    // withCredentials: true,
   },
 
-  proxy: {
-    '/api': {
-      target: 'https://192.168.1.150:443',
-      changeOrigin: true, // Origin o'zgartirish
-      secure: false, // SSL sertifikatni tekshirmaslik, ishonchsiz sertifikat uchun.
-      debug: true, // So'rovlarni kuzatish
-    },
-  },
+  // proxy: {
+  //   '/api': {
+  //     target: 'https://192.168.1.150:443',
+  //     changeOrigin: true, // Origin o'zgartirish
+  //     secure: false, // SSL sertifikatni tekshirmaslik, ishonchsiz sertifikat uchun.
+  //     debug: true, // So'rovlarni kuzatish
+  //   },
+  // },
 
   // PWA module configuration: https://go.nuxtjs.dev/pwa
   pwa: {

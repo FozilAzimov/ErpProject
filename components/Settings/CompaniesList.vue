@@ -146,7 +146,7 @@
               type: 'danger',
               clickType: 'block',
             }"
-            delete-row-url="batchProcess/prepareBatchProcessDelete"
+            delete-row-url="company/prepareCompanyDelete"
             height="600"
             @pageEmitAction="getTableRequest"
           />
@@ -258,7 +258,7 @@ export default {
 
       this.isLoading = !this.isLoading
       this.$axios
-        .post(`/company/companiesAjaxLoad`, body)
+        .post(`/company/companies`, body)
         .then(
           ({
             data: { actionUrl, companies, leftMap, rightMap, companyCategory },

@@ -240,6 +240,7 @@
                 }"
               >
                 <p class="flex items-center justify-center w-[90%]">
+                  <!-- {{ GET_CORE_STRING?.[item.uniqueId] }} -->
                   {{ item.headerText ? item.headerText : item.name }}
                 </p>
                 <el-button
@@ -582,6 +583,7 @@
   </div>
 </template>
 <script>
+import { mapGetters } from 'vuex'
 // icons
 import goBack from '@assets/icons/go-back.png'
 import copy from '@assets/icons/copy.png'
@@ -598,6 +600,7 @@ import UniqueInput from '@components/UniqueComponents/UniqueInput.vue'
 import UniqueCheckbox from '@components/UniqueComponents/UniqueCheckbox.vue'
 import UniqueColumnConfig from '@components/UniqueComponents/UniqueColumnConfig.vue'
 export default {
+  // COMPONENTS
   components: {
     GenericInput,
     GenericButton,
@@ -607,6 +610,8 @@ export default {
     UniqueCheckbox,
     UniqueColumnConfig,
   },
+
+  // PROPS
   props: {
     actionUrl: {
       type: String,
@@ -634,6 +639,8 @@ export default {
       default: 350,
     },
   },
+
+  // DATA
   data() {
     return {
       showTable: true,
@@ -669,6 +676,14 @@ export default {
       totalValuesObj: {},
     }
   },
+
+  // COMPUTED
+  computed: {
+    // Store getters
+    ...mapGetters('translate', ['GET_CORE_STRING']),
+  },
+
+  // WATCH
   watch: {
     tableHeader: {
       handler(newValue) {
@@ -716,6 +731,8 @@ export default {
       immediate: true,
     },
   },
+
+  // METHODS
   methods: {
     toggleModal() {
       this.showModal = !this.showModal
@@ -806,6 +823,7 @@ export default {
   },
 }
 </script>
+
 <style scoped>
 .label {
   padding: 2px 4px;

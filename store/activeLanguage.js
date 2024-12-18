@@ -33,10 +33,11 @@ export const actions = {
       commit('SET_ACTIVE_DATA', data)
       const cookieLang = document.cookie
         ?.split(' ')
-        .find((val) => val.includes('lang'))
+        ?.find((val) => val.includes('lang'))
         ?.split('=')[1]
         ?.replace(';', '')
-      const obj = data?.find((obj) => obj?.code === cookieLang)
+      const obj =
+        Array.isArray(data) && data?.find((obj) => obj?.code === cookieLang)
       commit('SET_ACTIVE_LANG', obj.name)
     } catch (error) {
       // eslint-disable-next-line no-console

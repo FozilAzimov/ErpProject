@@ -29,7 +29,10 @@
         <div class="flex items-center gap-[10px]">
           <img src="@assets/icons/user-black.png" alt="user" class="w-[14px]" />
           <h1 class="font-bold text-[rgb(49,126,172)] text-[14px] uppercase">
-            Transaction Detail Report
+            {{
+              GET_CORE_STRING?.['title.transactionDetailReport.sub'] ||
+              'Transaction Detail Report'
+            }}
           </h1>
         </div>
         <div>
@@ -88,7 +91,7 @@
             <!-- content filter section -->
             <div class="p-[15px] border-box">
               <div class="flex justify-between w-[400px] mb-[5px]">
-                <label>Start date</label>
+                <label> {{ GET_CORE_STRING?.startDate || 'Start date' }}</label>
                 <UniqueDatePicker
                   :date-start="true"
                   @newValue="
@@ -99,7 +102,7 @@
                 />
               </div>
               <div class="flex justify-between w-[400px] mb-[5px]">
-                <label>End date</label>
+                <label>{{ GET_CORE_STRING?.endDate || 'End date' }}</label>
                 <UniqueDatePicker
                   :date-end="true"
                   @newValue="
@@ -113,7 +116,9 @@
                 v-if="transactionValue && transactionValue !== 'COMPANY'"
                 class="flex justify-between w-[400px] mb-[5px]"
               >
-                <label>Company Group</label>
+                <label>{{
+                  GET_CORE_STRING?.companyGroup || 'Company Group'
+                }}</label>
                 <UniqueLookUp
                   style="width: 150px"
                   :def-value="valueObject.companyGroupId"
@@ -137,7 +142,9 @@
                 "
                 class="flex justify-between w-[400px] mb-[5px]"
               >
-                <label>Company Branch</label>
+                <label>
+                  {{ GET_CORE_STRING?.companyBranch || 'Company Branch' }}
+                </label>
                 <UniqueLookUp
                   style="width: 150px"
                   :def-value="valueObject.branchCompanyId"
@@ -161,7 +168,9 @@
                 />
               </div>
               <div class="flex justify-between w-[400px] mb-[5px]">
-                <label>Transactions</label>
+                <label>
+                  {{ GET_CORE_STRING?.transactions || 'Transactions' }}
+                </label>
                 <el-select
                   v-model="transactionValue"
                   clearable
@@ -189,7 +198,7 @@
                 "
                 class="flex justify-between w-[400px] mb-[5px]"
               >
-                <label>Branch</label>
+                <label>{{ GET_CORE_STRING?.branch || 'Branch' }}</label>
                 <UniqueLookUp
                   style="width: 150px"
                   :def-value="valueObject.companyBranchId"
@@ -208,7 +217,12 @@
                 v-if="transactionValue && transactionValue !== 'PERSON'"
                 class="flex justify-between w-[400px] mb-[5px]"
               >
-                <label>Cluster Season For Payment Type</label>
+                <label>
+                  {{
+                    GET_CORE_STRING?.clusterSeasonForPaymentType ||
+                    'Cluster Season For Payment Type'
+                  }}</label
+                >
                 <UniqueLookUp
                   style="width: 150px"
                   :def-value="valueObject.clusterSeasonId"
@@ -225,7 +239,9 @@
                 v-if="transactionValue && transactionValue !== 'PERSON'"
                 class="flex justify-between w-[400px] mb-[5px]"
               >
-                <label>Payment Type</label>
+                <label>
+                  {{ GET_CORE_STRING?.payment_type || 'Payment Type' }}</label
+                >
                 <UniqueLookUp
                   style="width: 150px"
                   :def-value="valueObject.paymentTypeId"
@@ -248,7 +264,13 @@
                 v-if="transactionValue && transactionValue !== 'PERSON'"
                 class="flex justify-between w-[400px] mb-[5px]"
               >
-                <label>Currency Filter</label>
+                <label>
+                  {{
+                    `${GET_CORE_STRING?.currency || 'Currency'} ${
+                      GET_CORE_STRING?.filter || 'Filter'
+                    }`
+                  }}</label
+                >
                 <UniqueLookUp
                   style="width: 150px"
                   :def-value="valueObject.currencyFilterId"
@@ -264,11 +286,17 @@
                 v-if="transactionValue && transactionValue !== 'PERSON'"
                 class="flex justify-between w-[400px] mb-[5px]"
               >
-                <label>Company</label>
+                <label> {{ GET_CORE_STRING?.company || 'Company' }}</label>
                 <el-radio-group v-model="companyRadioValue">
-                  <el-radio label="1">All</el-radio>
-                  <el-radio label="2">Active</el-radio>
-                  <el-radio label="3">Inactive</el-radio>
+                  <el-radio label="1">
+                    {{ GET_CORE_STRING?.all || 'All' }}</el-radio
+                  >
+                  <el-radio label="2">{{
+                    GET_CORE_STRING?.active || 'Active'
+                  }}</el-radio>
+                  <el-radio label="3">{{
+                    GET_CORE_STRING?.inactive || 'Inactive'
+                  }}</el-radio>
                 </el-radio-group>
               </div>
               <div
@@ -280,7 +308,7 @@
                 "
                 class="flex justify-between w-[400px] mb-[5px]"
               >
-                <label>Companies</label>
+                <label>{{ GET_CORE_STRING?.companies || 'Companies' }}</label>
                 <UniqueLookUp
                   style="width: 150px"
                   :def-value="valueObject.companyId"
@@ -313,7 +341,7 @@
                 "
                 class="flex justify-between w-[400px] mb-[5px]"
               >
-                <label>Cashbox</label>
+                <label>{{ GET_CORE_STRING?.cashbox || 'Cashbox' }}</label>
                 <UniqueLookUp
                   style="width: 150px"
                   :def-value="valueObject.cashboxId"
@@ -352,7 +380,7 @@
                 "
                 class="flex justify-between w-[400px] mb-[5px]"
               >
-                <label>Banks</label>
+                <label>{{ GET_CORE_STRING?.banks || 'Banks' }}</label>
                 <UniqueLookUp
                   style="width: 150px"
                   :def-value="valueObject.branchAccountId"
@@ -391,7 +419,7 @@
                 "
                 class="flex justify-between w-[400px] mb-[5px]"
               >
-                <label>Employee</label>
+                <label>{{ GET_CORE_STRING?.employee || 'Employee' }}</label>
                 <UniqueLookUp
                   style="width: 150px"
                   :def-value="valueObject.employeeId"
@@ -424,7 +452,11 @@
                 v-if="transactionValue && transactionValue !== 'PERSON'"
                 class="flex justify-between w-[400px] mb-[5px]"
               >
-                <label>Company Type</label>
+                <label>{{
+                  `${GET_CORE_STRING?.company || 'Company'} ${
+                    GET_CORE_STRING?.type || 'Type'
+                  }`
+                }}</label>
                 <UniqueLookUp
                   style="width: 150px"
                   :def-value="valueObject.companyTypeId"
@@ -437,15 +469,17 @@
                 />
               </div>
               <div class="flex justify-between w-[400px] mb-[5px]">
-                <label>Currency</label>
+                <label>{{ GET_CORE_STRING?.currency || 'Currency' }}</label>
                 {{ currencySymbol }}
               </div>
               <div class="flex justify-between w-[400px] mb-[5px]">
-                <label>Currency System</label>
+                <label>{{
+                  GET_CORE_STRING?.['currency.system'] || 'Currency System'
+                }}</label>
                 {{ currencySymbolSystem }}
               </div>
               <div class="flex justify-between w-[400px] mb-[5px]">
-                <label>Detail</label>
+                <label>{{ GET_CORE_STRING?.details || 'Detail' }}</label>
                 <UniqueCheckbox
                   @newValue="
                     (value) => {
@@ -455,7 +489,10 @@
                 />
               </div>
               <div class="flex justify-between w-[400px] mb-[5px]">
-                <label>Transaction Ref Saldo View</label>
+                <label>{{
+                  GET_CORE_STRING?.transactionRefSaldoView ||
+                  'Transaction Ref Saldo View'
+                }}</label>
                 <UniqueCheckbox
                   @newValue="
                     (value) => {
@@ -693,14 +730,14 @@
               size="small"
               @click="acceptValues"
             >
-              Accept
+              {{ GET_CORE_STRING?.accept || 'Accept' }}
             </el-button>
           </div>
 
           <div v-if="customTableData" class="mt-4">
             <el-card class="box-card">
               <div class="flex">
-                <p>Records:</p>
+                <p>{{ GET_CORE_STRING?.records || 'Records' }}:</p>
                 <UniqueInput
                   class="w-[70px] mx-[5px]"
                   :def-value="maxPageSize"
@@ -708,7 +745,7 @@
                   :disabled-status="true"
                 />
 
-                <p>Limit:</p>
+                <p>{{ GET_CORE_STRING?.limit || 'Limit' }}:</p>
                 <UniqueInput
                   class="w-[60px]"
                   :def-value="pageLimit"
@@ -747,7 +784,10 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
+  // DATA
   data() {
     return {
       valueObject: {
@@ -785,12 +825,17 @@ export default {
       pageLimit: 150,
       maxPageSize: 0,
       customTableData: '',
-      customTableHead: [],
+      customTableHead: {},
       customTableBody: [],
       fullscreenLoading: false,
     }
   },
+
+  // COMPUTED
   computed: {
+    // Store getters
+    ...mapGetters('translate', ['GET_CORE_STRING']),
+
     selectClass() {
       return {
         'border-red': !this.transactionType && this.acceptStatus,
@@ -1184,6 +1229,8 @@ export default {
       return dataArr
     },
   },
+
+  // WATCH
   watch: {
     'valueObject.date.formattedDateTimeEnd': function (newDate) {
       this.currencyCounterPropObj.dateFrom = newDate || ''
@@ -1206,27 +1253,19 @@ export default {
       this.companyRadioValue = '1'
     },
   },
+
+  // MOUNTED
   mounted() {
     this.getTransactionInitialData()
   },
+
+  // METHODS
   methods: {
     isOpen() {
       this.isOpenTable = !this.isOpenTable
     },
     isClose() {
       this.isCloseTable = !this.isCloseTable
-    },
-    // new methods
-    setNewValue(value, objKey) {
-      // this.$set(this.valueObject, objKey, value);
-      this.$handleNewValue(this.valueObject, objKey, value)
-      if (objKey === 'companyId') {
-        if (value && value.id) {
-          this.openCompActionUrl = `preparePlanningPrice.htm?id=${value.id}`
-        } else {
-          this.openCompActionUrl = '#'
-        }
-      }
     },
     getCurrentDate() {
       const currentDate = new Date()
@@ -1444,6 +1483,18 @@ export default {
     },
     setNewColumnHeaders(value, status) {
       this.acceptValues()
+    },
+
+    // new methods
+    setNewValue(value, objKey) {
+      this.$handleNewValue(this.valueObject, objKey, value)
+      if (objKey === 'companyId') {
+        if (value && value.id) {
+          this.openCompActionUrl = `preparePlanningPrice.htm?/${value.id}`
+        } else {
+          this.openCompActionUrl = '#'
+        }
+      }
     },
   },
 }

@@ -1084,7 +1084,7 @@ export default {
           this.isLoading = !this.isLoading
           // eslint-disable-next-line no-console
           console.log(error)
-          this.$notification(`Error!`, 'Error', 'error')
+          this.$notification(`Error`, 'Error', 'error')
         })
     },
 

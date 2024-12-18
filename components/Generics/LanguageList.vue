@@ -34,7 +34,14 @@
         >
           <img
             class="w-[11px]"
-            :src="require(`@icons/${obj.code}.png`)"
+            :src="
+              obj?.code === 'uz' ||
+              obj?.code === 'en' ||
+              obj?.code === 'ru' ||
+              obj?.code === 'tr'
+                ? require(`@icons/${obj.code}.png`)
+                : ''
+            "
             :alt="obj.code"
           />
           {{ GET_CORE_STRING?.[obj.name] }}

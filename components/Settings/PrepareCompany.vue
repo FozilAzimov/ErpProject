@@ -27,6 +27,21 @@
                 : 'Add Company'
             }}
           </h1>
+          <div class="flex items-center gap-2">
+            <generic-button
+              name="Go Back"
+              type="primary"
+              icon-name-attribute="arrow-left"
+              @click="$router.push('/companies.htm')"
+            />
+            <generic-button
+              v-if="pageType !== 'view'"
+              :name="pageType === 'edit' ? 'Save changes' : 'Save'"
+              :type="pageType === 'edit' ? 'success' : 'primary'"
+              :icon-name-attribute="pageType && 'edit'"
+              @click="saveAction"
+            />
+          </div>
         </div>
         <div>
           <ul class="flex items-center gap-4">
@@ -77,23 +92,11 @@
         class="border-[1px] border-solid border-[rgba(0,0,0,0.1)]"
         :class="
           isOpenTable
-            ? 'duration-[1s] h-[755px] overflow-hidden'
+            ? 'duration-[1s] h-fit overflow-hidden'
             : 'duration-[1s] h-0 overflow-hidden'
         "
       >
         <div class="w-fit flex flex-col items-start m-2 gap-1">
-          <div class="flex items-center gap-1">
-            <generic-button
-              v-for="(obj, index) in allBtnElements"
-              v-show="obj?.showHide"
-              :key="index"
-              :name="obj?.name"
-              :icon-name-attribute="obj?.icon"
-              type="primary"
-              @click="allBtnAction(obj?.clickType)"
-            />
-          </div>
-
           <div v-for="(parentRow, inx) in commonData" :key="inx">
             <div
               v-for="(row, index) in parentRow"
@@ -148,6 +151,13 @@
                         :type="element.type"
                         :name="element.subName"
                         :disabled="element.disabled"
+                        :required="
+                          !element?.required ||
+                          allInputAndLookUpValue?.[element.subName] ||
+                          viewEditData?.[element.subName]
+                            ? true
+                            : false
+                        "
                         @customFunction="getInputAndLookUpValueAction"
                       />
                     </span>
@@ -160,10 +170,17 @@
                         dwidth="300"
                         :durl="element?.api"
                         :name="element.subName"
-                        :defvalue="''"
+                        :defvalue="viewEditData?.[element.subName]"
                         :multiple="element?.multiple"
                         :options-data="allSelectData?.[element?.selectName]"
                         :disabled="element.disabled"
+                        :required="
+                          !element?.required ||
+                          allInputAndLookUpValue?.[element.subName] ||
+                          viewEditData?.[element.subName]
+                            ? true
+                            : false
+                        "
                         @customFunction="getInputAndLookUpValueAction"
                       />
                     </span>
@@ -210,21 +227,29 @@
               </span>
             </div>
           </div>
-
-          <div class="flex items-center gap-3 mt-3">
-            <generic-button
-              name="Go Back"
-              type="primary"
-              icon-name-attribute="arrow-left"
-              @click="$router.push('/companies.htm')"
-            />
-            <generic-button
-              v-if="pageType !== 'view'"
-              :name="pageType === 'edit' ? 'Save changes' : 'Save'"
-              :type="pageType === 'edit' ? 'success' : 'primary'"
-              :icon-name-attribute="pageType && 'edit'"
-              @click="saveAction"
-            />
+        </div>
+        <hr />
+        <div
+          v-if="pageType === 'edit'"
+          class="w-full flex justify-center items-center py-5"
+        >
+          <div class="flex items-center gap-5">
+            <div class="relative">
+              <video
+                id="video"
+                muted
+                autoplay
+                playsinline
+                class="w-[400px] h-[300px] rounded-md"
+              ></video>
+              <generic-button
+                name="Take Photo"
+                type="primary"
+                class="absolute bottom-0 right-1/2 translate-x-1/2"
+                @click="captureImage"
+              />
+            </div>
+            <canvas id="canvas" class="w-[400px] h-[300px] rounded-md"></canvas>
           </div>
         </div>
       </div>
@@ -257,21 +282,17 @@ export default {
       isCloseTable: true,
       pageType: null,
       pageID: null,
-      allBtnElements: [],
       viewEditData: {},
       allInputAndLookUpValue: {},
       radio: null,
       radio2: null,
-      allSelectData: [],
-      // element data
+      allSelectData: {},
+      checkDoorIds: [],
       commonData: [],
-      defaultElementData: [],
-      additionElementData: [],
-      specialElementData: [],
-      // element data
     }
   },
 
+  // COMPUTED
   computed: {
     // Store getters
     ...mapGetters('translate', ['GET_CORE_STRING']),
@@ -315,6 +336,8 @@ export default {
     this.dataCreatedAction(this.GET_CORE_STRING)
     // Table function
     this.getTableRequest()
+    // function
+    this.pageType === 'edit' && this.checkDoorsFrDb() // function
   },
 
   // Methods
@@ -331,6 +354,11 @@ export default {
     },
     isClose() {
       this.isCloseTable = !this.isCloseTable
+    },
+
+    // Input value action
+    getInputAndLookUpValueAction(name, value) {
+      this.$set(this.allInputAndLookUpValue, name, value)
     },
 
     // Page request
@@ -359,13 +387,18 @@ export default {
             page_current: 1,
             page_size: 25,
           })
-          .then(({ data: { batchProcess, currencyList } }) => {
+          .then(({ data: { company, currencyList, language } }) => {
             this.isLoading = !this.isLoading
-            this.viewEditData = batchProcess
+            this.viewEditData = company
             this.currencyData = currencyList
-            batchProcess.active
+            company?.active
               ? (this.radio = 'enabled')
               : (this.radio = 'disabled')
+            const arr = []
+            for (const key in language) {
+              arr.push({ id: key, name: language[key] })
+            }
+            this.allSelectData.activeLanguages = arr
           })
           .catch((error) => {
             this.isLoading = !this.isLoading
@@ -380,11 +413,12 @@ export default {
           })
           .then(({ data }) => {
             this.isLoading = !this.isLoading
-            // this.viewEditData = batchProcess
             this.allSelectData = data
-            // batchProcess.active
-            //   ? (this.radio = 'enabled')
-            //   : (this.radio = 'disabled')
+            const arr = []
+            for (const key in data.activeLanguages) {
+              arr.push({ id: key, name: data.activeLanguages[key] })
+            }
+            this.allSelectData.activeLanguages = arr
           })
           .catch((error) => {
             this.isLoading = !this.isLoading
@@ -394,25 +428,108 @@ export default {
       }
     },
 
-    // Input value action
-    getInputAndLookUpValueAction(name, value) {
-      this.$set(this.allInputAndLookUpValue, name, value)
+    checkDoorsFrDb() {
+      this.$axios
+        .post(`/door/faceIdDoors`, {})
+        .then(({ data: { doorList } }) => {
+          for (let i = 0; i < doorList?.length; i++) {
+            const arr = doorList[i].faceIdCameraIds.split(',')
+            for (let j = 0; j < arr.length; j++) {
+              const keys = ['ID', 'KEY', 'ROTATE']
+              const obj = {}
+              obj[keys[0]] = j
+              obj[keys[1]] = arr[j]
+              obj[keys[2]] = doorList[i].faceIdCameraRotate
+              this.checkDoorIds.push(obj)
+            }
+            // function
+            this.startCamera()
+          }
+        })
+        .catch((error) => {
+          // eslint-disable-next-line no-console
+          console.error('Login request failed', error)
+        })
     },
 
-    allBtnAction(btnType) {
-      if (btnType === 'main') {
-        this.commonData[0]?.length
-          ? this.$set(this.commonData, 0, [])
-          : this.$set(this.commonData, 0, this.defaultElementData)
-      } else if (btnType === 'addition') {
-        this.commonData[1]?.length
-          ? this.$set(this.commonData, 1, [])
-          : this.$set(this.commonData, 1, this.additionElementData)
-      } else if (btnType === 'spacial') {
-        this.commonData[2]?.length
-          ? this.$set(this.commonData, 2, [])
-          : this.$set(this.commonData, 2, this.specialElementData)
+    // Start set image
+    async startCamera() {
+      try {
+        const video = document.getElementById('video')
+        const devices = await navigator.mediaDevices.enumerateDevices()
+        if (devices?.length) {
+          for (const obj of devices) {
+            if (obj?.kind === 'videoinput') {
+              this.isEqual = false // Default qiymat
+              for (const subObj of this.checkDoorIds || []) {
+                if (subObj.KEY === obj.deviceId) {
+                  this.isEqual = true
+                  if (obj.label.includes('PC Camera')) {
+                    await this.setupCamera(video, obj.deviceId)
+                  } else if (!obj.label.includes('IR')) {
+                    await this.setupCamera(video, obj.deviceId)
+                  }
+                }
+              }
+              if (!this.isEqual) {
+                this.$notification('Camera ID si topilmadi!')
+              }
+            }
+          }
+        }
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error('Kamerani ishga tushirishda xatolik:', error)
+        this.$notification('Error', 'Error', 'error')
       }
+    },
+
+    // Colback function
+    async setupCamera(videoElement, deviceId) {
+      try {
+        const constraints = {
+          video: { deviceId: { exact: deviceId } },
+          audio: false,
+        }
+        const videoStream = await navigator.mediaDevices.getUserMedia(
+          constraints
+        )
+        videoElement.srcObject = videoStream
+        videoElement.onloadedmetadata = () => videoElement.play()
+      } catch (err) {
+        // eslint-disable-next-line no-console
+        console.error('An error occurred:', err)
+        this.$notification('Error', 'Error', 'error')
+      }
+    },
+
+    // Click Image capture
+    captureImage() {
+      const video = document.getElementById('video')
+      const canvasElement = document.getElementById('canvas')
+      const context = canvasElement.getContext('2d')
+      // Canvas o'lchamini video o'lchamiga moslashtirish
+      canvasElement.width = video.videoWidth
+      canvasElement.height = video.videoHeight
+      // Video tasvirini canvasga chizish
+      context.drawImage(video, 0, 0, canvasElement.width, canvasElement.height)
+      // Request action ====================================
+      this.loadingAction() // loading
+      const imageURL = canvasElement.toDataURL('image/jpeg', 0.8)
+      this.$axios
+        .post(`/company/saveCompanyFaceTemplate`, {
+          companyId: this.pageID,
+          imgFaceBase64: imageURL,
+        })
+        .then(({ data }) => {
+          this.loadingAction().close() // loading
+        })
+        .catch((error) => {
+          // eslint-disable-next-line no-console
+          console.error('Login request failed', error)
+          this.loadingAction().close() // loading
+        })
+      // Request action ====================================
     },
 
     // Save Changes action
@@ -421,619 +538,699 @@ export default {
       const company = {}
       if (this.pageID && this.pageType === 'edit') {
         company.id = this.pageID ?? ''
-        company.code = this.allInputAndLookUpValue?.code ?? ''
-      } else {
-        company.code = this.allInputAndLookUpValue?.code ?? ''
-        company.companyGroup = {
-          id: this.allInputAndLookUpValue?.companyGroup ?? '',
-        }
-        company.active = this.allInputAndLookUpValue?.active ?? false
+        company.code = this.allInputAndLookUpValue?.code ?? null
+        company.companyGroup = this.allInputAndLookUpValue?.companyGroup
+          ? {
+              id: this.allInputAndLookUpValue?.companyGroup,
+            }
+          : this.viewEditData?.companyGroupId
+          ? {
+              id: this.viewEditData?.companyGroupId,
+            }
+          : null
         company.name = this.allInputAndLookUpValue?.name ?? ''
-        company.companyCategory = {
-          id: this.allInputAndLookUpValue?.companyCategory ?? '',
-        }
-        company.currency = {
-          id: this.allInputAndLookUpValue?.currency ?? '',
-        }
+        company.currency = this.allInputAndLookUpValue?.currency
+          ? {
+              id: this.allInputAndLookUpValue?.currency,
+            }
+          : null
         company.physical = this.allInputAndLookUpValue?.physical ?? false
         company.reportCompany =
-          this.allInputAndLookUpValue?.reportCompany ?? false
+          this.allInputAndLookUpValue?.reportCompany ?? true
         company.systemCompany =
-          this.allInputAndLookUpValue?.systemCompany ?? false
+          this.allInputAndLookUpValue?.systemCompany ?? true
         company.name2 = this.allInputAndLookUpValue?.name2 ?? ''
         company.assignedBranchId =
-          this.allInputAndLookUpValue?.assignedBranchId ?? ''
-        company.chief = this.allInputAndLookUpValue?.chief ?? ''
-        company.address = this.allInputAndLookUpValue?.address ?? ''
-        company.web_address = this.allInputAndLookUpValue?.web_address ?? ''
-        company.mfo = this.allInputAndLookUpValue?.mfo ?? ''
-        company.town = this.allInputAndLookUpValue?.town ?? ''
-        company.phone_number = this.allInputAndLookUpValue?.phone_number ?? ''
+          this.allInputAndLookUpValue?.assignedBranchId ?? null
+        company.chief = this.allInputAndLookUpValue?.chief ?? null
+        company.address = this.allInputAndLookUpValue?.address ?? null
+        company.web_address = this.allInputAndLookUpValue?.web_address ?? null
+        company.mfo = this.allInputAndLookUpValue?.mfo ?? null
+        company.town = this.allInputAndLookUpValue?.town ?? null
+        company.phone_number = this.allInputAndLookUpValue?.phone_number ?? null
         company.tax_organization_name =
-          this.allInputAndLookUpValue?.tax_organization_name ?? ''
-        company.notes = this.allInputAndLookUpValue?.notes ?? ''
-        company.country = this.allInputAndLookUpValue?.country ?? ''
-        company.mobile_phone = this.allInputAndLookUpValue?.mobile_phone ?? ''
-        company.bank = {
-          id: this.allInputAndLookUpValue?.bank ?? '',
-        }
-        company.city = this.allInputAndLookUpValue?.city ?? ''
-        company.email = this.allInputAndLookUpValue?.email ?? ''
-        company.accountNumber = this.allInputAndLookUpValue?.accountNumber ?? ''
-        company.fax_number = this.allInputAndLookUpValue?.fax_number ?? ''
-        company.tax_number = this.allInputAndLookUpValue?.tax_number ?? ''
+          this.allInputAndLookUpValue?.tax_organization_name ?? null
+        company.notes = this.allInputAndLookUpValue?.notes ?? null
+        company.country = this.allInputAndLookUpValue?.country ?? null
+        company.mobile_phone = this.allInputAndLookUpValue?.mobile_phone ?? null
+        company.bank = this.allInputAndLookUpValue?.bank
+          ? {
+              id: this.allInputAndLookUpValue?.bank,
+            }
+          : null
+        company.city = this.allInputAndLookUpValue?.city ?? null
+        company.email = this.allInputAndLookUpValue?.email ?? null
+        company.accountNumber =
+          this.allInputAndLookUpValue?.accountNumber ?? null
+        company.fax_number = this.allInputAndLookUpValue?.fax_number ?? null
+        company.tax_number = this.allInputAndLookUpValue?.tax_number ?? null
+        company.active = this.allInputAndLookUpValue?.active ?? false
+        company.companyCategory = this.allInputAndLookUpValue?.companyCategory
+          ? {
+              id: this.allInputAndLookUpValue?.companyCategory,
+            }
+          : null
         company.reportOrderSequence =
-          this.allInputAndLookUpValue?.reportOrderSequence ?? ''
+          this.allInputAndLookUpValue?.reportOrderSequence ?? null
         company.ecPasswordHashNew =
-          this.allInputAndLookUpValue?.ecPasswordHashNew ?? ''
-        company.special_day = this.allInputAndLookUpValue?.special_day ?? ''
+          this.allInputAndLookUpValue?.ecPasswordHashNew ?? null
+        company.special_day = this.allInputAndLookUpValue?.special_day ?? null
         company.postTypeInternational =
-          this.allInputAndLookUpValue?.postTypeInternational ?? ''
-        company.discount_rate = this.allInputAndLookUpValue?.discount_rate ?? ''
+          this.allInputAndLookUpValue?.postTypeInternational ?? null
+        company.discount_rate =
+          this.allInputAndLookUpValue?.discount_rate ?? null
         company.webAccess = this.allInputAndLookUpValue?.webAccess ?? false
         company.monday = this.allInputAndLookUpValue?.monday ?? false
-        company.tuesday = this.allInputAndLookUpValue?.tuesday ?? false
-        company.wednesday = this.allInputAndLookUpValue?.wednesday ?? false
-        company.thursday = this.allInputAndLookUpValue?.thursday ?? false
-        company.friday = this.allInputAndLookUpValue?.friday ?? false
-        company.saturday = this.allInputAndLookUpValue?.saturday ?? false
-        company.vatAmount = this.allInputAndLookUpValue?.vatAmount ?? ''
+        company.tuesday = this.allInputAndLookUpValue?.tuesday
+        company.wednesday = this.allInputAndLookUpValue?.wednesday
+        company.thursday = this.allInputAndLookUpValue?.thursday
+        company.friday = this.allInputAndLookUpValue?.friday
+        company.saturday = this.allInputAndLookUpValue?.saturday
+        company.vatAmount = this.allInputAndLookUpValue?.vatAmount ?? 0
         company.vatIncludedExcluded =
           this.allInputAndLookUpValue?.vatIncludedExcluded ?? false
-        company.week1 = this.allInputAndLookUpValue?.week1 ?? false
-        company.week2 = this.allInputAndLookUpValue?.week2 ?? false
-        company.week3 = this.allInputAndLookUpValue?.week3 ?? false
-        company.week4 = this.allInputAndLookUpValue?.week4 ?? false
-        company.locale = this.allInputAndLookUpValue?.locale ?? ''
+        company.week1 = this.allInputAndLookUpValue?.week1
+        company.week2 = this.allInputAndLookUpValue?.week2
+        company.week3 = this.allInputAndLookUpValue?.week3
+        company.week4 = this.allInputAndLookUpValue?.week4
+        company.locale = this.allInputAndLookUpValue?.locale ?? null
+        company.creditMarketSaleAutoExtraDebit =
+          this.allInputAndLookUpValue?.creditMarketSaleAutoExtraDebit ?? false
+      } else {
+        company.code = this.allInputAndLookUpValue?.code ?? null
+        company.companyGroup = this.allInputAndLookUpValue?.companyGroup
+          ? {
+              id: this.allInputAndLookUpValue?.companyGroup,
+            }
+          : null
+        company.name = this.allInputAndLookUpValue?.name ?? ''
+        company.currency = this.allInputAndLookUpValue?.currency
+          ? {
+              id: this.allInputAndLookUpValue?.currency,
+            }
+          : null
+        company.physical = this.allInputAndLookUpValue?.physical ?? false
+        company.reportCompany =
+          this.allInputAndLookUpValue?.reportCompany ?? true
+        company.systemCompany =
+          this.allInputAndLookUpValue?.systemCompany ?? true
+        company.name2 = this.allInputAndLookUpValue?.name2 ?? ''
+        company.assignedBranchId =
+          this.allInputAndLookUpValue?.assignedBranchId ?? null
+        company.chief = this.allInputAndLookUpValue?.chief ?? null
+        company.address = this.allInputAndLookUpValue?.address ?? null
+        company.web_address = this.allInputAndLookUpValue?.web_address ?? null
+        company.mfo = this.allInputAndLookUpValue?.mfo ?? null
+        company.town = this.allInputAndLookUpValue?.town ?? null
+        company.phone_number = this.allInputAndLookUpValue?.phone_number ?? null
+        company.tax_organization_name =
+          this.allInputAndLookUpValue?.tax_organization_name ?? null
+        company.notes = this.allInputAndLookUpValue?.notes ?? null
+        company.country = this.allInputAndLookUpValue?.country ?? null
+        company.mobile_phone = this.allInputAndLookUpValue?.mobile_phone ?? null
+        company.bank = this.allInputAndLookUpValue?.bank
+          ? {
+              id: this.allInputAndLookUpValue?.bank,
+            }
+          : null
+        company.city = this.allInputAndLookUpValue?.city ?? null
+        company.email = this.allInputAndLookUpValue?.email ?? null
+        company.accountNumber =
+          this.allInputAndLookUpValue?.accountNumber ?? null
+        company.fax_number = this.allInputAndLookUpValue?.fax_number ?? null
+        company.tax_number = this.allInputAndLookUpValue?.tax_number ?? null
+        company.active = this.allInputAndLookUpValue?.active ?? false
+        company.companyCategory = this.allInputAndLookUpValue?.companyCategory
+          ? {
+              id: this.allInputAndLookUpValue?.companyCategory,
+            }
+          : null
+        company.reportOrderSequence =
+          this.allInputAndLookUpValue?.reportOrderSequence ?? null
+        company.ecPasswordHashNew =
+          this.allInputAndLookUpValue?.ecPasswordHashNew ?? null
+        company.special_day = this.allInputAndLookUpValue?.special_day ?? null
+        company.postTypeInternational =
+          this.allInputAndLookUpValue?.postTypeInternational ?? null
+        company.discount_rate =
+          this.allInputAndLookUpValue?.discount_rate ?? null
+        company.webAccess = this.allInputAndLookUpValue?.webAccess ?? false
+        company.monday = this.allInputAndLookUpValue?.monday ?? false
+        company.tuesday = this.allInputAndLookUpValue?.tuesday
+        company.wednesday = this.allInputAndLookUpValue?.wednesday
+        company.thursday = this.allInputAndLookUpValue?.thursday
+        company.friday = this.allInputAndLookUpValue?.friday
+        company.saturday = this.allInputAndLookUpValue?.saturday
+        company.vatAmount = this.allInputAndLookUpValue?.vatAmount ?? 0
+        company.vatIncludedExcluded =
+          this.allInputAndLookUpValue?.vatIncludedExcluded ?? false
+        company.week1 = this.allInputAndLookUpValue?.week1
+        company.week2 = this.allInputAndLookUpValue?.week2
+        company.week3 = this.allInputAndLookUpValue?.week3
+        company.week4 = this.allInputAndLookUpValue?.week4
+        company.locale = this.allInputAndLookUpValue?.locale ?? null
         company.creditMarketSaleAutoExtraDebit =
           this.allInputAndLookUpValue?.creditMarketSaleAutoExtraDebit ?? false
       }
       body = {
+        id: this.pageID,
+        page_size: this.page_size,
+        page_current: 1,
         companyTypesIds: this.allInputAndLookUpValue?.typeId ?? [],
-        districtId: this.allInputAndLookUpValue?.districtId ?? '',
+        districtId: this.allInputAndLookUpValue?.districtId ?? null,
         company,
       }
 
-      this.isLoading = !this.isLoading
-      const method = this.pageID ? 'put' : 'post'
-      this.$axios[method](
-        `/companies/${this.pageID ? 'editCompany' : 'addCompany'}`,
-        body
-      )
-        .then(() => {
-          this.isLoading = !this.isLoading
-          this.$router.push('/batchProcess.htm')
-        })
-        .catch((error) => {
-          this.isLoading = !this.isLoading
-          // eslint-disable-next-line no-console
-          console.log(error)
-        })
+      console.log(body)
+      // this.isLoading = !this.isLoading
+      // const method = this.pageID ? 'put' : 'post'
+      // this.$axios[method](
+      //   `/company/${this.pageID ? 'editCompany' : 'addCompany'}`,
+      //   body
+      // )
+      //   .then(() => {
+      //     this.isLoading = !this.isLoading
+      //     this.$router.push('companies.htm')
+      //   })
+      //   .catch((error) => {
+      //     this.isLoading = !this.isLoading
+      //     // eslint-disable-next-line no-console
+      //     console.log(error)
+      //   })
+    },
+
+    // Loading action
+    loadingAction() {
+      const loading = this.$loading({
+        lock: true,
+        text: 'Loading...',
+        spinner: 'el-icon-loading',
+        background: 'rgba(0, 0, 0, 0.8)',
+      })
+      return loading
     },
 
     // Data created
     dataCreatedAction(getText) {
-      // ALL BTN DATA
-      const btnData = [
-        {
-          name: getText?.mainInfo || 'Main information',
-          showHide: true,
-          clickType: 'main',
-        },
-        {
-          name: getText?.additionInfo || 'Addition information',
-          showHide: true,
-          clickType: 'addition',
-        },
-        {
-          name: getText?.specialInfo || 'Spacial information',
-          showHide: true,
-          clickType: 'spacial',
-        },
-        {
-          name:
-            `${getText?.upload} ${getText?.['title.files.sub']}` ||
-            'Upload Files',
-          showHide: this.pageType === 'edit',
-          clickType: 'uploadFile',
-          icon: 'upload2',
-        },
-      ]
-      this.allBtnElements = btnData
-
       // DEFAULT DATA
       const data = [
         [
-          {
-            name: getText?.code || 'Code',
-            subName: 'code',
-            type: 'text',
-            show: true,
-            disabled: this.pageType === 'view',
-          },
-          {
-            name: getText?.companyGroup || 'Company Group',
-            subName: 'companyGroupId',
-            selectName: 'companyGroupList',
-            api: 'findAllCompanyGroups',
-            type: 'select',
-            show: true,
-            disabled: this.pageType === 'view',
-          },
-          {
-            name: getText?.['common.types'] || 'Type',
-            subName: 'typeId',
-            selectName: 'companyTypeList',
-            type: 'select',
-            show: true,
-            multiple: true,
-            disabled: this.pageType === 'view',
-          },
-          {
-            name: getText?.status || 'Status',
-            subName: 'enabled',
-            selectName: 'companyCategoryList',
-            type: 'radio',
-            show: true,
-            disabled: this.pageType === 'view',
-          },
-          {
-            subName: 'disabled',
-            type: 'radio',
-            show: true,
-            disabled: this.pageType === 'view',
-          },
-        ],
-        [
-          {
-            name: getText?.['company.name'] || 'Name',
-            subName: 'name',
-            type: 'text',
-            show: true,
-            disabled: this.pageType === 'view',
-          },
-          {
-            name: getText?.companyCategory || 'companyCategory',
-            subName: 'companyCategoryId',
-            selectName: 'companyCategoryList',
-            api: 'findAllCompanyCategory',
-            type: 'select',
-            show: true,
-            disabled: this.pageType === 'view',
-          },
-          {
-            name: getText?.currency || 'Currency',
-            subName: 'currencyId',
-            selectName: 'currencyList',
-            api: 'findAllCurrency',
-            type: 'select',
-            show: true,
-            disabled: this.pageType === 'view',
-          },
-          {
-            subName: 'physical',
-            type: 'radio2',
-            show: true,
-            disabled: this.pageType === 'view',
-          },
-          {
-            subName: 'notPhysical',
-            type: 'radio2',
-            show: true,
-            disabled: this.pageType === 'view',
-          },
-        ],
-        [
-          {
-            name: getText?.['company.name2'] || 'Name 2',
-            subName: 'name2',
-            type: 'text',
-            show: true,
-            disabled: this.pageType === 'view',
-          },
-          {
-            name: getText?.['assigned company'] || 'Assigned company',
-            subName: 'assignedCompanyId',
-            selectName: 'branchCompanyList',
-            type: 'select',
-            show: true,
-            disabled: this.pageType === 'view',
-          },
-          {
-            name: getText?.reportCompany || 'Report Company',
-            subName: 'reportCompany',
-            type: 'checkbox',
-            show: true,
-            disabled: this.pageType === 'view',
-          },
-          {
-            name: getText?.systemCompany || 'System Company',
-            subName: 'systemCompany',
-            type: 'checkbox',
-            show: true,
-            disabled: this.pageType === 'view',
-          },
-          {
-            name:
-              getText?.creditMarketSaleAutoExtraDebit ||
-              'Credit Market Sale Auto Extra Debit',
-            subName: 'creditMarketSaleAutoExtraDebit',
-            type: 'checkbox',
-            show: this.pageType === 'edit',
-          },
-        ],
-        [
-          {
-            name: getText?.['Company Access'] || 'Company Access',
-            subName: 'companyAccess',
-            selectName: 'personList',
-            type: 'select',
-            multiple: true,
-            show: this.pageType === 'edit',
-          },
-          {
-            name: getText?.['To Company Access'] || 'To Company Access',
-            subName: 'toCompanyAccess',
-            selectName: 'personList',
-            type: 'select',
-            multiple: true,
-            show: this.pageType === 'edit',
-          },
-        ],
-      ]
-      this.defaultElementData = data
-      this.commonData[0] = this.defaultElementData
-
-      // DEFAULT DATA
-      const data2 = [
-        [
-          {
-            name: getText?.['company.chief'] || 'company.chief',
-            subName: 'company.chief',
-            type: 'text',
-            show: true,
-            disabled: this.pageType === 'view',
-          },
-          {
-            name: getText?.['company.address'] || 'Address',
-            subName: 'address',
-            type: 'text',
-            show: true,
-            disabled: this.pageType === 'view',
-          },
-          {
-            name: getText?.['common.webaddress'] || 'Web Address',
-            subName: 'webAddress',
-            type: 'text',
-            show: !this.pageID,
-            disabled: this.pageType === 'view',
-          },
-          {
-            name: getText?.['company.fax_number'] || 'Fax number',
-            subName: 'webAddress',
-            type: 'text',
-            show: this.pageType === 'edit',
-            disabled: this.pageType === 'view',
-          },
-          {
-            name: getText?.['company.mfo'] || 'MFO',
-            subName: 'mfo',
-            type: 'text',
-            show: true,
-            disabled: this.pageType === 'view',
-          },
-        ],
-        [
-          {
-            name: getText?.['common.town'] || 'Town',
-            subName: 'town',
-            type: 'text',
-            show: true,
-            disabled: this.pageType === 'view',
-          },
-          {
-            name: getText?.['company.phone_number'] || 'Company phone number',
-            subName: 'companyPhoneNumber',
-            type: 'text',
-            show: true,
-            disabled: this.pageType === 'view',
-          },
-          {
-            name:
-              getText?.['company.tax_organization_name'] ||
-              'Tax Organization Name',
-            subName: 'taxOrganizationName',
-            type: 'text',
-            show: true,
-            disabled: this.pageType === 'view',
-          },
-          {
-            name: getText?.['company.notes'] || 'company.notes',
-            subName: 'company.notes',
-            type: 'text',
-            show: true,
-            disabled: this.pageType === 'view',
-          },
-        ],
-        [
-          {
-            name: getText?.['common.country'] || 'Country',
-            subName: 'country',
-            type: 'text',
-            show: true,
-            disabled: this.pageType === 'view',
-          },
-          {
-            name: getText?.['company.mobile_phone'] || 'Phone',
-            subName: 'phone',
-            type: 'text',
-            show: true,
-            disabled: this.pageType === 'view',
-          },
-          {
-            name: getText?.banks || 'Banks',
-            subName: 'banks',
-            selectName: 'bankList',
-            type: 'select',
-            show: true,
-            disabled: this.pageType === 'view',
-          },
-        ],
-        [
-          {
-            name: getText?.['common.city'] || 'City',
-            subName: 'city',
-            type: 'text',
-            show: true,
-            disabled: this.pageType === 'view',
-          },
-          {
-            name: getText?.['common.email'] || 'Email',
-            subName: 'email',
-            type: 'text',
-            show: true,
-            disabled: this.pageType === 'view',
-          },
-          {
-            name: getText?.['common.accountnumber'] || 'Account number',
-            subName: 'accountNumber',
-            type: 'text',
-            show: true,
-            disabled: this.pageType === 'view',
-          },
-        ],
-        [
-          {
-            name: getText?.district || 'District',
-            subName: 'district',
-            selectName: 'districtList',
-            api: 'findAllDistrict',
-            type: 'select',
-            show: true,
-            disabled: this.pageType === 'view',
-          },
-          {
-            name: getText?.['company.fax_number'] || 'Fax number',
-            subName: 'faxNumber',
-            type: 'text',
-            show: true,
-            disabled: this.pageType === 'view',
-          },
-          {
-            name: getText?.['company.tax_number'] || 'Tax number',
-            subName: 'taxNumber',
-            type: 'text',
-            show: true,
-            disabled: this.pageType === 'view',
-          },
-        ],
-      ]
-      this.additionElementData = data2
-
-      // DEFAULT DATA
-      const data3 = [
-        [
-          {
-            name: getText?.['Post Types'] || 'Post Types',
-            subName: 'postTypes',
-            selectName: 'postTypes',
-            api: 'findAllPostType',
-            type: 'select',
-            show: true,
-            disabled: this.pageType === 'view',
-          },
-          {
-            name:
-              getText?.['company.report_order_sequence'] ||
-              'Company report order sequence',
-            subName: 'companyReportOrderSequence',
-            type: 'text',
-            show: true,
-            disabled: this.pageType === 'view',
-          },
-          {
-            name: getText?.['login.password'] || 'Password',
-            subName: 'password',
-            type: 'password',
-            show: true,
-            disabled: this.pageType === 'view',
-          },
-          {
-            name: getText?.['company.special_day'] || 'Special Day',
-            subName: 'specialDay',
-            type: 'text',
-            show: true,
-            disabled: this.pageType === 'view',
-          },
-        ],
-        [
-          {
-            name:
-              getText?.['Post Type International'] || 'Post Type International',
-            subName: 'postTypeInternational',
-            api: 'findAllPostType',
-            type: 'select',
-            param: {
-              postTypeId: this.allInputAndLookUpValue?.postTypeId ?? 3,
-            },
-            show: true,
-            disabled: this.pageType === 'view',
-          },
-          {
-            name: getText?.['company.discount_rate'] || 'Discount Rate',
-            subName: 'discountRate',
-            type: 'text',
-            show: true,
-            disabled: this.pageType === 'view',
-          },
-          {
-            name: getText?.webAccess || 'Access for web',
-            subName: 'accessForWeb',
-            type: 'checkbox',
-            show: true,
-            disabled: this.pageType === 'view',
-          },
           [
             {
-              name: getText?.['company.monday'] || 'Monday',
-              subName: 'monday',
+              name: getText?.code || 'Code',
+              subName: 'code',
+              type: 'text',
+              show: true,
+              disabled: this.pageType === 'view',
+            },
+            {
+              name: getText?.companyGroup || 'Company Group',
+              subName: 'companyGroup',
+              selectName: 'companyGroupList',
+              api: 'findAllCompanyGroups',
+              type: 'select',
+              show: true,
+              required: true,
+              disabled: this.pageType === 'view',
+            },
+            {
+              name: getText?.['common.types'] || 'Type',
+              subName: 'typeId',
+              selectName: 'companyTypeList',
+              type: 'select',
+              show: true,
+              multiple: true,
+              required: true,
+              disabled: this.pageType === 'view',
+            },
+            {
+              name: getText?.status || 'Status',
+              subName: 'enabled',
+              selectName: 'companyCategoryList',
+              type: 'radio',
+              show: true,
+              disabled: this.pageType === 'view',
+            },
+            {
+              subName: 'disabled',
+              type: 'radio',
+              show: true,
+              disabled: this.pageType === 'view',
+            },
+          ],
+          [
+            {
+              name: getText?.['company.name'] || 'Name',
+              subName: 'name',
+              type: 'text',
+              show: true,
+              required: true,
+              disabled: this.pageType === 'view',
+            },
+            {
+              name: getText?.companyCategory || 'companyCategory',
+              subName: 'companyCategoryId',
+              selectName: 'companyCategoryList',
+              api: 'findAllCompanyCategory',
+              type: 'select',
+              show: true,
+              disabled: this.pageType === 'view',
+            },
+            {
+              name: getText?.currency || 'Currency',
+              subName: 'currencyId',
+              selectName: 'currencyList',
+              api: 'findAllCurrency',
+              type: 'select',
+              show: true,
+              required: true,
+              disabled: this.pageType === 'view',
+            },
+            {
+              subName: 'physical',
+              type: 'radio2',
+              show: true,
+              disabled: this.pageType === 'view',
+            },
+            {
+              subName: 'notPhysical',
+              type: 'radio2',
+              show: true,
+              disabled: this.pageType === 'view',
+            },
+          ],
+          [
+            {
+              name: getText?.['company.name2'] || 'Name 2',
+              subName: 'name2',
+              type: 'text',
+              show: true,
+              disabled: this.pageType === 'view',
+            },
+            {
+              name: getText?.['assigned company'] || 'Assigned company',
+              subName: 'assignedCompanyId',
+              selectName: 'branchCompanyList',
+              type: 'select',
+              show: true,
+              disabled: this.pageType === 'view',
+            },
+            {
+              name: getText?.reportCompany || 'Report Company',
+              subName: 'reportCompany',
               type: 'checkbox',
               show: true,
               disabled: this.pageType === 'view',
             },
             {
-              name: getText?.['company.tuesday'] || 'Tuesday',
-              subName: 'tuesday',
+              name: getText?.systemCompany || 'System Company',
+              subName: 'systemCompany',
               type: 'checkbox',
               show: true,
               disabled: this.pageType === 'view',
             },
             {
-              name: getText?.['company.wednesday'] || 'Wednesday',
-              subName: 'wednesday',
+              name:
+                getText?.creditMarketSaleAutoExtraDebit ||
+                'Credit Market Sale Auto Extra Debit',
+              subName: 'creditMarketSaleAutoExtraDebit',
+              type: 'checkbox',
+              show: this.pageType === 'edit',
+            },
+          ],
+        ],
+
+        [
+          [
+            {
+              name: getText?.['Company Access'] || 'Company Access',
+              subName: 'companyAccess',
+              selectName: 'personList',
+              type: 'select',
+              multiple: true,
+              show: this.pageType === 'edit',
+            },
+            {
+              name: getText?.['To Company Access'] || 'To Company Access',
+              subName: 'toCompanyAccess',
+              selectName: 'personList',
+              type: 'select',
+              multiple: true,
+              show: this.pageType === 'edit',
+            },
+          ],
+          [
+            {
+              name: getText?.['company.chief'] || 'company.chief',
+              subName: 'company.chief',
+              type: 'text',
+              show: true,
+              disabled: this.pageType === 'view',
+            },
+            {
+              name: getText?.['company.address'] || 'Address',
+              subName: 'address',
+              type: 'text',
+              show: true,
+              disabled: this.pageType === 'view',
+            },
+            {
+              name: getText?.['common.webaddress'] || 'Web Address',
+              subName: 'webAddress',
+              type: 'text',
+              show: !this.pageID,
+              disabled: this.pageType === 'view',
+            },
+            {
+              name: getText?.['company.fax_number'] || 'Fax number',
+              subName: 'webAddress',
+              type: 'text',
+              show: this.pageType === 'edit',
+              disabled: this.pageType === 'view',
+            },
+            {
+              name: getText?.['company.mfo'] || 'MFO',
+              subName: 'mfo',
+              type: 'text',
+              show: true,
+              disabled: this.pageType === 'view',
+            },
+          ],
+          [
+            {
+              name: getText?.['common.town'] || 'Town',
+              subName: 'town',
+              type: 'text',
+              show: true,
+              disabled: this.pageType === 'view',
+            },
+            {
+              name: getText?.['company.phone_number'] || 'Company phone number',
+              subName: 'companyPhoneNumber',
+              type: 'text',
+              show: true,
+              disabled: this.pageType === 'view',
+            },
+            {
+              name:
+                getText?.['company.tax_organization_name'] ||
+                'Tax Organization Name',
+              subName: 'taxOrganizationName',
+              type: 'text',
+              show: true,
+              disabled: this.pageType === 'view',
+            },
+            {
+              name: getText?.['company.notes'] || 'company.notes',
+              subName: 'company.notes',
+              type: 'text',
+              show: true,
+              disabled: this.pageType === 'view',
+            },
+          ],
+          [
+            {
+              name: getText?.['common.country'] || 'Country',
+              subName: 'country',
+              type: 'text',
+              show: true,
+              disabled: this.pageType === 'view',
+            },
+            {
+              name: getText?.['company.mobile_phone'] || 'Phone',
+              subName: 'phone',
+              type: 'text',
+              show: true,
+              disabled: this.pageType === 'view',
+            },
+            {
+              name: getText?.banks || 'Banks',
+              subName: 'banks',
+              selectName: 'bankList',
+              type: 'select',
+              show: true,
+              required: true,
+              disabled: this.pageType === 'view',
+            },
+          ],
+          [
+            {
+              name: getText?.['common.city'] || 'City',
+              subName: 'city',
+              type: 'text',
+              show: true,
+              disabled: this.pageType === 'view',
+            },
+            {
+              name: getText?.['common.email'] || 'Email',
+              subName: 'email',
+              type: 'text',
+              show: true,
+              disabled: this.pageType === 'view',
+            },
+            {
+              name: getText?.['common.accountnumber'] || 'Account number',
+              subName: 'accountNumber',
+              type: 'text',
+              show: true,
+              disabled: this.pageType === 'view',
+            },
+          ],
+        ],
+
+        [
+          [
+            {
+              name: getText?.district || 'District',
+              subName: 'district',
+              selectName: 'districtList',
+              api: 'findAllDistrict',
+              type: 'select',
+              show: true,
+              disabled: this.pageType === 'view',
+            },
+            {
+              name: getText?.['company.fax_number'] || 'Fax number',
+              subName: 'faxNumber',
+              type: 'text',
+              show: true,
+              disabled: this.pageType === 'view',
+            },
+            {
+              name: getText?.['company.tax_number'] || 'Tax number',
+              subName: 'taxNumber',
+              type: 'text',
+              show: true,
+              disabled: this.pageType === 'view',
+            },
+          ],
+          [
+            {
+              name: getText?.['Post Types'] || 'Post Types',
+              subName: 'postTypes',
+              selectName: 'postTypes',
+              api: 'findAllPostType',
+              type: 'select',
+              show: true,
+              disabled: this.pageType === 'view',
+            },
+            {
+              name:
+                getText?.['company.report_order_sequence'] ||
+                'Company report order sequence',
+              subName: 'companyReportOrderSequence',
+              type: 'text',
+              show: true,
+              disabled: this.pageType === 'view',
+            },
+            {
+              name: getText?.['login.password'] || 'Password',
+              subName: 'password',
+              type: 'password',
+              show: true,
+              disabled: this.pageType === 'view',
+            },
+            {
+              name: getText?.['company.special_day'] || 'Special Day',
+              subName: 'specialDay',
+              type: 'text',
+              show: true,
+              disabled: this.pageType === 'view',
+            },
+          ],
+          [
+            {
+              name:
+                getText?.['Post Type International'] ||
+                'Post Type International',
+              subName: 'postTypeInternational',
+              api: 'findAllPostType',
+              type: 'select',
+              param: {
+                postTypeId: this.allInputAndLookUpValue?.postTypeId ?? 3,
+              },
+              show: true,
+              disabled: this.pageType === 'view',
+            },
+            {
+              name: getText?.['company.discount_rate'] || 'Discount Rate',
+              subName: 'discountRate',
+              type: 'text',
+              show: true,
+              disabled: this.pageType === 'view',
+            },
+            {
+              name: getText?.webAccess || 'Access for web',
+              subName: 'accessForWeb',
+              type: 'checkbox',
+              show: true,
+              disabled: this.pageType === 'view',
+            },
+            [
+              {
+                name: getText?.['company.monday'] || 'Monday',
+                subName: 'monday',
+                type: 'checkbox',
+                show: true,
+                disabled: this.pageType === 'view',
+              },
+              {
+                name: getText?.['company.tuesday'] || 'Tuesday',
+                subName: 'tuesday',
+                type: 'checkbox',
+                show: true,
+                disabled: this.pageType === 'view',
+              },
+              {
+                name: getText?.['company.wednesday'] || 'Wednesday',
+                subName: 'wednesday',
+                type: 'checkbox',
+                show: true,
+                disabled: this.pageType === 'view',
+              },
+              {
+                name: getText?.['company.thursday'] || 'Thursday',
+                subName: 'thursday',
+                type: 'checkbox',
+                show: true,
+                disabled: this.pageType === 'view',
+              },
+              {
+                name: getText?.['company.friday'] || 'Friday',
+                subName: 'friday',
+                type: 'checkbox',
+                show: true,
+                disabled: this.pageType === 'view',
+              },
+              {
+                name: getText?.['company.saturday'] || 'Saturday',
+                subName: 'saturday',
+                type: 'checkbox',
+                show: true,
+                disabled: this.pageType === 'view',
+              },
+            ],
+          ],
+          [
+            {
+              name: getText?.PostTypeRegion || 'Post Type Region',
+              subName: 'postTypeRegion',
+              type: 'select',
+              api: 'findAllPostType',
+              param: {
+                postTypeId: this.allInputAndLookUpValue?.postTypeId ?? 1,
+              },
+              show: true,
+              disabled: this.pageType === 'view',
+            },
+            {
+              name: getText?.vat_amount || 'Vat amount',
+              subName: 'vatAmount',
+              type: 'number',
+              show: true,
+              disabled: this.pageType === 'view',
+            },
+            {
+              name: getText?.webAccess || 'Access for web',
+              subName: 'webAccess',
               type: 'checkbox',
               show: true,
               disabled: this.pageType === 'view',
             },
             {
-              name: getText?.['company.thursday'] || 'Thursday',
-              subName: 'thursday',
+              name: getText?.vatIncludedExcluded || 'vatIncludedExcluded',
+              subName: 'vatIncludedExcluded',
               type: 'checkbox',
               show: true,
               disabled: this.pageType === 'view',
             },
+            [
+              {
+                name: getText?.['company.week1'] || 'Week',
+                subName: 'week',
+                type: 'checkbox',
+                show: true,
+                disabled: this.pageType === 'view',
+              },
+              {
+                name: getText?.['company.week2'] || 'Week 2',
+                subName: 'week2',
+                type: 'checkbox',
+                show: true,
+                disabled: this.pageType === 'view',
+              },
+              {
+                name: getText?.['company.week3'] || 'Week 3',
+                subName: 'week3',
+                type: 'checkbox',
+                show: true,
+                disabled: this.pageType === 'view',
+              },
+              {
+                name: getText?.['company.week4'] || 'Week 4',
+                subName: 'week4',
+                type: 'checkbox',
+                show: true,
+                disabled: this.pageType === 'view',
+              },
+            ],
+          ],
+          [
             {
-              name: getText?.['company.friday'] || 'Friday',
-              subName: 'friday',
-              type: 'checkbox',
+              name: getText?.PostTypeCity || 'Post Type City',
+              subName: 'postTypeCity',
+              type: 'select',
+              api: 'findAllPostType',
+              param: {
+                postTypeId: this.allInputAndLookUpValue?.postTypeId ?? 2,
+              },
               show: true,
               disabled: this.pageType === 'view',
             },
             {
-              name: getText?.['company.saturday'] || 'Saturday',
-              subName: 'saturday',
+              name:
+                getText?.['menu.settings.default_language'] ||
+                'Default Language',
+              subName: 'locale',
+              selectName: 'activeLanguages',
+              type: 'select',
+              show: true,
+              required: true,
+              disabled: this.pageType === 'view',
+            },
+            {
+              name:
+                getText?.creditMarketSaleAutoExtraDebit ||
+                'creditMarketSaleAutoExtraDebit',
+              subName: 'creditMarketSaleAutoExtraDebit',
               type: 'checkbox',
               show: true,
               disabled: this.pageType === 'view',
             },
           ],
         ],
-        [
-          {
-            name: getText?.PostTypeRegion || 'Post Type Region',
-            subName: 'postTypeRegion',
-            type: 'select',
-            api: 'findAllPostType',
-            param: {
-              postTypeId: this.allInputAndLookUpValue?.postTypeId ?? 1,
-            },
-            show: true,
-            disabled: this.pageType === 'view',
-          },
-          {
-            name: getText?.vat_amount || 'Vat amount',
-            subName: 'vatAmount',
-            type: 'number',
-            show: true,
-            disabled: this.pageType === 'view',
-          },
-          {
-            name: getText?.webAccess || 'Access for web',
-            subName: 'webAccess',
-            type: 'checkbox',
-            show: true,
-            disabled: this.pageType === 'view',
-          },
-          {
-            name: getText?.vatIncludedExcluded || 'vatIncludedExcluded',
-            subName: 'vatIncludedExcluded',
-            type: 'checkbox',
-            show: true,
-            disabled: this.pageType === 'view',
-          },
-          [
-            {
-              name: getText?.['company.week1'] || 'Week',
-              subName: 'week',
-              type: 'checkbox',
-              show: true,
-              disabled: this.pageType === 'view',
-            },
-            {
-              name: getText?.['company.week2'] || 'Week 2',
-              subName: 'week2',
-              type: 'checkbox',
-              show: true,
-              disabled: this.pageType === 'view',
-            },
-            {
-              name: getText?.['company.week3'] || 'Week 3',
-              subName: 'week3',
-              type: 'checkbox',
-              show: true,
-              disabled: this.pageType === 'view',
-            },
-            {
-              name: getText?.['company.week4'] || 'Week 4',
-              subName: 'week4',
-              type: 'checkbox',
-              show: true,
-              disabled: this.pageType === 'view',
-            },
-          ],
-        ],
-        [
-          {
-            name: getText?.PostTypeCity || 'Post Type City',
-            subName: 'postTypeCity',
-            type: 'select',
-            api: 'findAllPostType',
-            param: {
-              postTypeId: this.allInputAndLookUpValue?.postTypeId ?? 2,
-            },
-            show: true,
-            disabled: this.pageType === 'view',
-          },
-          {
-            name:
-              getText?.['menu.settings.default_language'] || 'Default Language',
-            subName: 'defaultLanguage',
-            type: 'select',
-            show: true,
-            disabled: this.pageType === 'view',
-          },
-          {
-            name:
-              getText?.creditMarketSaleAutoExtraDebit ||
-              'creditMarketSaleAutoExtraDebit',
-            subName: 'creditMarketSaleAutoExtraDebit',
-            type: 'checkbox',
-            show: true,
-            disabled: this.pageType === 'view',
-          },
-        ],
       ]
-      this.specialElementData = data3
+      this.commonData = data
     },
   },
 }

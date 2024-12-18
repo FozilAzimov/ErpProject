@@ -9,8 +9,8 @@ export default (context, inject) => {
       message,
       title = 'Warning',
       type = 'warning',
-      duration = 8,
-      position = 'bottom-right'
+      duration = 2,
+      position = 'top-right'
     ) => {
       if (type === 'warning' || type === 'success') {
         Notification({

@@ -5,9 +5,10 @@
       class="w-full h-[80vh] bg-[url('@/assets/images/fon.png')] bg-no-repeat bg-cover flex flex-col items-center justify-center"
     >
       <LoadingPage v-if="isLoading" class="absolute top-[30px]" />
+      <face-door-list :loading="loading" @getDoorIdsEmitAction="getDoorIds" />
       <img class="w-[200px]" src="@/assets/icons/logo.png" />
       <h1 class="text-[24px] text-[#317eac] leading-[36px] font-bold py-[30px]">
-        {{ GET_CORE_STRING?.['welcomeErp'] }}
+        {{ GET_CORE_STRING?.welcomeErp || 'Welcome to Uz-Erp' }}
       </h1>
       <ValidationObserver ref="formValidation">
         <form
@@ -95,22 +96,25 @@
 import { mapGetters, mapActions } from 'vuex'
 import LoadingPage from '@components/Loading/LoadingPage.vue'
 import LanguageList from '@generics/LanguageList.vue'
+import FaceDoorList from '@components/Login/FaceDoorList.vue'
 export default {
   // COMPONENTS
   components: {
     LoadingPage,
     LanguageList,
+    FaceDoorList,
   },
 
   // DATA
   data() {
     return {
+      isLoading: false,
+      loading: false,
       typeIcon: false,
       form: {
         username: null,
         password: null,
       },
-      isLoading: false,
     }
   },
 
@@ -131,9 +135,37 @@ export default {
     // Store getters
     ...mapActions('translate', ['FETCH_TRANSLATE']),
     ...mapActions('systemMenu', ['FETCH_SYSTEM_MENU']),
+    ...mapActions('session', ['FETCH_SESSION']),
 
     getTypePassword() {
       this.typeIcon ? (this.typeIcon = false) : (this.typeIcon = true)
+    },
+
+    getDoorIds(isActive, body) {
+      if (isActive && body) {
+        this.$set(this, 'loading', true)
+        this.$axios
+          .post(`/security/logIn`, body)
+          .then(({ data: { token } }) => {
+            localStorage.setItem('token', token)
+            this.FETCH_TRANSLATE() // store translate function
+            // this.FETCH_SYSTEM_MENU() // store systemMenu function
+            this.FETCH_SESSION() // store session function
+            this.$router.push('/dashboard.htm')
+            this.$set(this, 'loading', false)
+            this.$notification(
+              `Muvaffaqqiyatli o'tdingiz!`,
+              'Success',
+              'success'
+            )
+          })
+          .catch((error) => {
+            // eslint-disable-next-line no-console
+            console.error('Login request failed', error)
+            this.$notification(`LogIn'dan o'ta olmadingiz`, 'Error', 'error')
+            this.$set(this, 'loading', false)
+          })
+      }
     },
 
     getResponse() {
@@ -152,12 +184,12 @@ export default {
               this.isLoading = !this.isLoading
               this.FETCH_TRANSLATE() // store translare function
               this.FETCH_SYSTEM_MENU() // store systemMenu function
+              this.FETCH_SESSION() // store activeUser function
               this.$router.push('/dashboard.htm')
               this.$notification(
                 `Muvaffaqqiyatli o'tdingiz!`,
                 'Success',
-                'success',
-                5
+                'success'
               )
             })
             .catch((error) => {

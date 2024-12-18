@@ -5,6 +5,9 @@
   "ActualitySystem": {
     "description": "Auto imported from components/ActualitySystemPage/ActualitySystem.vue"
   },
+  "GenericButton": {
+    "description": "Auto imported from components/Button/GenericButton.vue"
+  },
   "AccountsList": {
     "description": "Auto imported from components/Banks/AccountsList.vue"
   },
@@ -29,8 +32,29 @@
   "PrepareCurrenRate": {
     "description": "Auto imported from components/Banks/PrepareCurrenRate.vue"
   },
-  "GenericButton": {
-    "description": "Auto imported from components/Button/GenericButton.vue"
+  "CashboxsList": {
+    "description": "Auto imported from components/Cashboxs/CashboxsList.vue"
+  },
+  "CurrenciesList": {
+    "description": "Auto imported from components/Cashboxs/CurrenciesList.vue"
+  },
+  "PrepareCashbox": {
+    "description": "Auto imported from components/Cashboxs/PrepareCashbox.vue"
+  },
+  "PrepareCurrency": {
+    "description": "Auto imported from components/Cashboxs/PrepareCurrency.vue"
+  },
+  "PrepareTransactionCharacter": {
+    "description": "Auto imported from components/Cashboxs/PrepareTransactionCharacter.vue"
+  },
+  "TransactionCharacters": {
+    "description": "Auto imported from components/Cashboxs/TransactionCharacters.vue"
+  },
+  "ColumnConfigPage": {
+    "description": "Auto imported from components/ColumnConfig/ColumnConfigPage.vue"
+  },
+  "DashboardPage": {
+    "description": "Auto imported from components/Dashboard/DashboardPage.vue"
   },
   "ClusterCamera": {
     "description": "Auto imported from components/Cluster/ClusterCamera.vue"
@@ -62,30 +86,6 @@
   "PrepareDistanceToTerminal": {
     "description": "Auto imported from components/Cluster/PrepareDistanceToTerminal.vue"
   },
-  "CashboxsList": {
-    "description": "Auto imported from components/Cashboxs/CashboxsList.vue"
-  },
-  "CurrenciesList": {
-    "description": "Auto imported from components/Cashboxs/CurrenciesList.vue"
-  },
-  "PrepareCashbox": {
-    "description": "Auto imported from components/Cashboxs/PrepareCashbox.vue"
-  },
-  "PrepareCurrency": {
-    "description": "Auto imported from components/Cashboxs/PrepareCurrency.vue"
-  },
-  "PrepareTransactionCharacter": {
-    "description": "Auto imported from components/Cashboxs/PrepareTransactionCharacter.vue"
-  },
-  "TransactionCharacters": {
-    "description": "Auto imported from components/Cashboxs/TransactionCharacters.vue"
-  },
-  "ColumnConfigPage": {
-    "description": "Auto imported from components/ColumnConfig/ColumnConfigPage.vue"
-  },
-  "DashboardPage": {
-    "description": "Auto imported from components/Dashboard/DashboardPage.vue"
-  },
   "EquipmentExpenses": {
     "description": "Auto imported from components/EquipmentReports/EquipmentExpenses.vue"
   },
@@ -109,9 +109,6 @@
   },
   "GenericPrepareTablePage": {
     "description": "Auto imported from components/GenericPrepareTable/GenericPrepareTablePage.vue"
-  },
-  "GenericTablePage": {
-    "description": "Auto imported from components/GenericTable/GenericTablePage.vue"
   },
   "GenericCarryDraggable": {
     "description": "Auto imported from components/Generics/GenericCarryDraggable.vue"
@@ -154,6 +151,9 @@
   },
   "LanguageList": {
     "description": "Auto imported from components/Generics/LanguageList.vue"
+  },
+  "GenericTablePage": {
+    "description": "Auto imported from components/GenericTable/GenericTablePage.vue"
   },
   "AttendanceSchedule": {
     "description": "Auto imported from components/HRMS/AttendanceSchedule.vue"
@@ -424,6 +424,9 @@
   },
   "LoadingPage": {
     "description": "Auto imported from components/Loading/LoadingPage.vue"
+  },
+  "FaceDoorList": {
+    "description": "Auto imported from components/Login/FaceDoorList.vue"
   },
   "LoginPage": {
     "description": "Auto imported from components/Login/LoginPage.vue"
@@ -1075,6 +1078,12 @@
   },
   "WeightsList": {
     "description": "Auto imported from components/Weights/WeightsList.vue"
+  },
+  "CampMarketSaleInvoice": {
+    "description": "Auto imported from components/Invoices/CampMarket/CampMarketSaleInvoice.vue"
+  },
+  "CardList": {
+    "description": "Auto imported from components/Invoices/CampMarket/CardList.vue"
   },
   "InternalCustomTable": {
     "description": "Auto imported from components/Invoices/PurchaseAndTransferInvoicesFolder/InternalCustomTable.vue"

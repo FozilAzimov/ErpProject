@@ -17,6 +17,7 @@
       :disabled="disabled"
       :round="rounded"
       :plain="plain"
+      :loading="loading"
       :icon="`el-icon-${iconNameAttribute}`"
       @click="clickAction"
       >{{ name }}
@@ -29,6 +30,7 @@
       :disabled="disabled"
       :round="rounded"
       :plain="plain"
+      :loading="loading"
       @click="clickAction"
       >{{ name }}
       <i v-if="isIcon" :class="`el-icon-${iconNameClass} el-icon-right`"></i
@@ -42,7 +44,7 @@ export default {
   props: {
     name: {
       type: String,
-      default: 'Default',
+      default: '',
     },
     type: {
       type: String,
@@ -87,6 +89,10 @@ export default {
     slotName: {
       type: String,
       default: '',
+    },
+    loading: {
+      type: Boolean,
+      default: false,
     },
   },
 
