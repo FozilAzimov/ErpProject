@@ -2,11 +2,11 @@
   <div class="w-full h-screen">
     <LanguageList class="absolute right-[10px] top-[7px]" />
     <div
-      class="w-full h-[80vh] bg-[url('@/assets/images/fon.png')] bg-no-repeat bg-cover flex flex-col items-center justify-center"
+      class="w-full h-[80vh] bg-[url('@/assets/images/fon.png')] bg-no-repeat bg-cover flex flex-col items-center justify-start"
     >
       <LoadingPage v-if="isLoading" class="absolute top-[30px]" />
       <face-door-list :loading="loading" @getDoorIdsEmitAction="getDoorIds" />
-      <img class="w-[200px]" src="@/assets/icons/logo.png" />
+      <img class="w-[200px] mt-16" src="@/assets/icons/logo.png" />
       <h1 class="text-[24px] text-[#317eac] leading-[36px] font-bold py-[30px]">
         {{ GET_CORE_STRING?.welcomeErp || 'Welcome to Uz-Erp' }}
       </h1>

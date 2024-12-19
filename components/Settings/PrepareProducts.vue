@@ -30,7 +30,7 @@
               v-if="pageType === 'create'"
               name="More Info"
               type="success"
-              @click="isMoreInfoAction"
+              @click="isMoreInfo = !isMoreInfo"
             />
             <generic-button
               v-if="pageType !== 'view'"
@@ -165,7 +165,7 @@
         </div>
 
         <div
-          v-if="!isMoreInfo"
+          v-if="isMoreInfo || pageType === 'edit'"
           class="w-fit flex flex-col items-start m-2 gap-1"
         >
           <div v-for="(element, index) in elementData2" :key="index">
@@ -278,14 +278,33 @@
             />
           </template>
         </div>
-        <generic-transfer
-          v-show="allInputAndLookUpValue?.productProductionType || pageID"
-          ref="transferRef"
-          class="mt-5"
-          :left-data="transferLeft"
-          :right-data="transferRight"
-          @customFunction="getTransferLeftRightData"
-        />
+        <div>
+          <generic-transfer
+            v-show="allInputAndLookUpValue?.productProductionType || pageID"
+            ref="transferRef"
+            class="mt-5"
+            :left-data="transferLeft"
+            :right-data="transferRight"
+            @customFunction="getTransferLeftRightData"
+          />
+          <div
+            class="w-fit mt-5 bg-[rgba(0,0,0,0.01)] p-3 border-[1px] border-solid border-[rgba(0,0,0,0.1)] rounded-sm"
+          >
+            <span class="text-[16px] font-normal">Upload & Save</span>
+            <form
+              class="flex items-center gap-2"
+              @submit.prevent="handleSubmit"
+            >
+              <input ref="fileInput" type="file" class="cursor-pointer" />
+              <button
+                type="submit"
+                class="bg-blue-400 text-white text-[13px] px-2 py-1 rounded-sm"
+              >
+                Upload
+              </button>
+            </form>
+          </div>
+        </div>
       </div>
     </template>
   </div>
@@ -389,6 +408,30 @@ export default {
     },
     isClose() {
       this.isCloseTable = !this.isCloseTable
+    },
+
+    async handleSubmit() {
+      const formData = new FormData()
+      const fileInput = this.$refs.fileInput
+
+      // Agar fayl tanlangan bo'lsa
+      if (fileInput.files.length > 0) {
+        formData.append('userImage', fileInput.files[0])
+
+        try {
+          // Axios orqali faylni yuborish
+          const response = await this.$axios.post('/userImage1', formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          })
+          console.log('Fayl muvaffaqiyatli yuklandi:', response.data)
+        } catch (error) {
+          console.error('Xatolik:', error)
+        }
+      } else {
+        console.log('Fayl tanlanmagan.')
+      }
     },
 
     // Page request
@@ -520,11 +563,6 @@ export default {
             console.log(error)
           })
       }
-    },
-
-    // More Info action
-    isMoreInfoAction() {
-      this.isMoreInfo = !this.isMoreInfo
     },
 
     // Save Changes action

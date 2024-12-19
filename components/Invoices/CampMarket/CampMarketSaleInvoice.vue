@@ -1,21 +1,36 @@
 <template>
-  <div class="w-full max-w-[1440px] px-[50px] mx-auto my-5">
+  <div class="w-full max-w-[1440px] px-[50px] mx-auto mb-5">
     <message-box ref="messageBoxRef" @emitProp="getEmitProp" />
     <div class="bg-[rgba(0,0,0,0.03)] p-2">
       <div class="flex flex-col items-center">
         <table class="mb-4 w-fit">
           <thead>
             <tr>
-              <th class="py-2 px-4 bg-[#dbdbdb]">yourCurrentBalance</th>
-              <th class="py-2 px-4 bg-[#dbdbdb]">maxSaleLimit</th>
-              <th class="py-2 px-4 bg-[#dbdbdb]">totalOrder</th>
+              <th class="py-2 px-4 bg-[#dbdbdb]">
+                {{
+                  GET_CORE_STRING?.yourCurrentBalance || 'Your current balance'
+                }}
+              </th>
+              <th class="py-2 px-4 bg-[#dbdbdb]">
+                {{ GET_CORE_STRING?.maxSaleLimit || 'Max sale limit' }}
+              </th>
+              <th class="py-2 px-4 bg-[#dbdbdb]">
+                {{ GET_CORE_STRING?.totalOrder || 'Total order' }}
+              </th>
               <th>
                 <generic-button
                   btn-size="medium"
-                  name="Log out"
+                  :name="GET_CORE_STRING?.['menu.logout'] || 'Log out'"
                   class="ml-3"
                   type="danger"
-                  @click="$refs.messageBoxRef.open('', '', 'delete', 'Log out')"
+                  @click="
+                    $refs.messageBoxRef.open(
+                      '',
+                      '',
+                      'delete',
+                      GET_CORE_STRING?.['menu.logout'] || 'Log out'
+                    )
+                  "
                 />
               </th>
             </tr>
@@ -34,7 +49,7 @@
               <td>
                 <generic-button
                   btn-size="medium"
-                  name="To do order"
+                  :name="GET_CORE_STRING?.toDoOrder || 'To do order'"
                   class="ml-3"
                   type="success"
                   @click="purchaseAction"
@@ -119,6 +134,7 @@
 </template>
 
 <script>
+import QRCode from 'qrcode'
 import { mapGetters } from 'vuex'
 import CardList from '@components/Invoices/CampMarket/CardList.vue'
 import GenericInput from '@generics/GenericInput.vue'
@@ -165,11 +181,32 @@ export default {
   watch: {
     productCategories: {
       handler(newVal) {
-        this.categoriesData = [{ name: 'All', type: 'all' }, ...newVal]
+        this.categoriesData = [
+          {
+            name: this.GET_CORE_STRING?.allProduct || 'All products',
+            type: 'all',
+          },
+          ...newVal,
+        ]
       },
       deep: true,
       immediate: true,
     },
+    // start CoreString action
+    GET_CORE_STRING: {
+      handler(newVal) {
+        this.categoriesData = [
+          {
+            name: newVal?.allProduct || 'All products',
+            type: 'all',
+          },
+          ...this.productCategories,
+        ]
+      },
+      deep: true,
+      immediate: true,
+    },
+    // end CoreString action
   },
 
   // MOUNTED
@@ -290,29 +327,170 @@ export default {
       }
     },
 
+    // GET check
+    getAccountSheetAction(response) {
+      const myWindow = window.open(
+        '',
+        'myPaymentCheckDiv',
+        'height=530,width=510'
+      )
+      myWindow.document.write(
+        '<p style="font-family:\'Monotype Corsiva\';font-weight: 900;font-size: 30px; margin-bottom: 0px;">' +
+          response?.saleDate +
+          '</p>'
+      )
+      myWindow.document.write(
+        '<p style="font-family:\'Monotype Corsiva\';font-weight: 900;font-size: 30px; margin-bottom: 0px;">' +
+          '&nbsp;&nbsp;&nbsp;' +
+          `${
+            this.GET_CORE_STRING?.['title.purchaseorder.sub'] ||
+            'Purchase Order'
+          } - ` +
+          response?.order_id +
+          '</p>'
+      )
+      myWindow.document.write(
+        '<p style="font-family:\'Monotype Corsiva\';font-weight: 900;font-size: 30px; margin-bottom: 0px;">' +
+          response?.client +
+          response?.notes +
+          '</p>'
+      )
+
+      let totalVal = 0.0
+      let count = 0
+      this.mapArrayList.forEach((arrayItem) => {
+        totalVal = totalVal + arrayItem.product_price * arrayItem.qty
+
+        const bodyVl =
+          '<p style="font-family:\'Arial Black\';font-weight: 100;font-size: 14px; margin-bottom: 0px;">' +
+          ++count +
+          arrayItem.product_name +
+          '</p>'
+        const bodyVl1 =
+          '<p style="font-family:\'Arial \';font-weight: 100;font-size: 14px; margin-bottom: 0px;">' +
+          '</p>'
+        const bodyVl2 =
+          '<p style="font-family:\'Arial\';font-weight: 100;font-size: 14px; margin-bottom: 0px;">' +
+          `${this.GET_CORE_STRING?.qty || 'Qty'}` +
+          '  : ' +
+          arrayItem.qty +
+          ' * ' +
+          arrayItem.product_price +
+          '</p>'
+        const bodyVl3 =
+          '<p style="font-family:\'Arial\';font-weight: 100;font-size: 13px; margin-bottom: 0px;">' +
+          `${this.GET_CORE_STRING?.totalAmount || 'Total Amount'}` +
+          '  : ' +
+          parseFloat(arrayItem.product_price * arrayItem.qty).toLocaleString(
+            undefined,
+            { minimumFractionDigits: 2, maximumFractionDigits: 2 }
+          ) +
+          '</p>'
+        const bodyVl4 =
+          '<p style="font-family:\'Arial Black\';font-weight: 100;font-size: 12px; margin-bottom: 0px;">' +
+          '</p>'
+
+        myWindow.document.write(bodyVl + bodyVl1 + bodyVl2 + bodyVl3 + bodyVl4)
+        myWindow.document.write(
+          '<p style="font-family:\'Arial Black\';font-weight: 100;font-size: 8px; margin-bottom: 0px;">' +
+            '&nbsp;' +
+            '-----' +
+            '</p>'
+        )
+      })
+
+      myWindow.document.write(
+        '<p style="font-family:\'Arial Black\';font-weight: 100;font-size: 18px; margin-bottom: 0px;">' +
+          `${this.GET_CORE_STRING?.total || 'Total'}` +
+          '  : ' +
+          parseFloat(totalVal).toLocaleString(undefined, {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          }) +
+          '</p>'
+      )
+      myWindow.document.write(
+        '<p style="font-family:\'Arial Black\';font-weight: 100;font-size: 16px; margin-bottom: 0px;">' +
+          `${
+            this.GET_CORE_STRING?.yourCurrentBalance || 'Your Current Balance'
+          }` +
+          '  : ' +
+          parseFloat(response.balance).toLocaleString(undefined, {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          }) +
+          '</p>'
+      )
+      myWindow.document.write(
+        '<p style="font-family:\'Arial Black\';font-weight: 100;font-size: 18px; margin-bottom: 0px;">' +
+          `${
+            this.GET_CORE_STRING?.orderConfirmedSuccess ||
+            'Order Confirmed Success'
+          }` +
+          '</p>'
+      )
+
+      // QR code created
+      const canvas = document.createElement('canvas')
+      QRCode.toCanvas(
+        canvas,
+        `${response?.order_id}`,
+        {
+          width: 100,
+          height: 100,
+          color: {
+            dark: '#000000',
+            light: '#ffffff',
+          },
+        },
+        (error) => {
+          if (error) {
+            // eslint-disable-next-line no-console
+            console.log(error)
+          } else {
+            myWindow.document.body.appendChild(canvas)
+            myWindow.document.close()
+            myWindow.focus()
+            myWindow.print()
+            myWindow.close()
+          }
+        }
+      )
+    },
+
     // Message box action
-    getEmitProp(propMessage, id, index, actionName) {
+    async getEmitProp(propMessage, id, index, actionName) {
       if (propMessage === 'confirm' && actionName === 'delete') {
         this.logOutAction() // function
       } else if (propMessage === 'confirm' && actionName === 'purchase') {
-        this.loadingAction() // function
         // created body
         const body = {
           client_id: this.clientId,
           order_notes: this.inputValue,
           mapArrayList: this.mapArrayList,
         }
-        this.$axios
-          .post('/compMarketApi/campMarketSaleInvoiceSale', body)
-          .then(({ data }) => {
-            this.logOutAction() // function
-            this.loadingAction().close() // loading function
-          })
-          .catch((error) => {
-            this.loadingAction().close() // loading function
-            // eslint-disable-next-line no-console
-            console.log(error)
-          })
+        try {
+          this.loadingAction() // function
+          // Post so'rovi
+          const {
+            status,
+            data: { resultJsonObject },
+          } = await this.$axios.post(
+            '/compMarketApi/campMarketSaleInvoiceSale',
+            body
+          )
+          if (status < 300) {
+            await this.getAccountSheetAction(resultJsonObject) // function
+            await this.logOutAction() // function
+            this.loadingAction().close() // Loading
+          }
+        } catch (error) {
+          // Loading funksiyasini yopish
+          this.loadingAction().close()
+          this.$notification(`Error`, 'Error', 'error')
+          // eslint-disable-next-line no-console
+          console.error(error)
+        }
       }
     },
 
@@ -323,7 +501,7 @@ export default {
       document.cookie = 'JSESSIONID='
       localStorage.removeItem('token')
       // remove
-      this.$notification(`Proyekt'dan chiqdingiz.`, 'Success', 'success')
+      this.$notification(`Success`, 'Success', 'success')
     },
 
     // purchase Action

@@ -2,21 +2,21 @@
   <div>
     <button
       v-if="!isVideo || !isEqual"
-      class="py-5 px-10 bg-green-500 rounded-md mb-10"
+      class="text-[42px] text-white bg-[#04AA6D] h-[176px] py-1 px-2 rounded-lg"
       @click="authorizationClickAction"
     >
       {{ GET_CORE_STRING?.enableCameraFaceId || 'Authorization by Face' }}
     </button>
     <!-- Start Video -->
     <div
+      v-show="isVideo"
       class="absolute z-10 cursor-grab rounded-lg overflow-hidden"
       :style="{ top: yPos + 'px', left: xPos + 'px' }"
       @mousedown="startDrag"
     >
       <video
-        v-show="isVideo"
         id="video"
-        style="transform: scale(2)"
+        style="transform: scale(1.5)"
         muted
         autoplay
         playsinline
@@ -37,10 +37,17 @@
         btn-size="medium"
         @click="captureImage"
       />
+      <generic-button
+        v-show="isVideo && isEqual"
+        class="absolute top-0 right-0"
+        type="info"
+        icon-name-attribute="close"
+        @click="captureImageCloseAction"
+      />
     </div>
     <!-- End Video -->
 
-    <!-- hidden -->
+    <!-- hidden element -->
     <video
       v-show="false"
       id="video2"
@@ -51,7 +58,7 @@
     ></video>
     <canvas v-show="false" id="canvas"></canvas>
     <canvas v-show="false" id="canvas2"></canvas>
-    <!-- hidden -->
+    <!-- hidden element -->
   </div>
 </template>
 
@@ -165,6 +172,13 @@ export default {
       }
     },
 
+    // Close camera
+    captureImageCloseAction() {
+      this.isVideo = false
+      this.isEqual = false
+      clearInterval(this.intervalId)
+    },
+
     // Start set image
     async startCamera() {
       try {
@@ -234,6 +248,7 @@ export default {
         // eslint-disable-next-line no-console
         console.error('Kamerani ishga tushirishda xatolik:', error)
         this.$notification('Error', 'Error', 'error')
+        clearInterval(this.intervalId)
       }
     },
 
@@ -253,6 +268,7 @@ export default {
         // eslint-disable-next-line no-console
         console.error('An error occurred:', err)
         this.$notification('Error', 'Error', 'error')
+        clearInterval(this.intervalId)
       }
     },
 

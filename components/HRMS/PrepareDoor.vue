@@ -320,6 +320,7 @@ export default {
       try {
         const devices = await navigator.mediaDevices.enumerateDevices()
         if (devices?.length) {
+          this.cameraIdsArr = []
           devices.forEach((device) => {
             if (
               device.kind === 'videoinput' &&
@@ -345,11 +346,7 @@ export default {
       } catch (error) {
         // eslint-disable-next-line no-console
         console.error('Kamerani ishga tushirishda xatolik:', error)
-        this.$notification(
-          'Kamerani ishga tushirishda xatolik',
-          'Error',
-          'error'
-        )
+        this.$notification('Error', 'Error', 'error')
       }
     },
 

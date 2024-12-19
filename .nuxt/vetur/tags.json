@@ -56,6 +56,30 @@
   "DashboardPage": {
     "description": "Auto imported from components/Dashboard/DashboardPage.vue"
   },
+  "EquipmentExpenses": {
+    "description": "Auto imported from components/EquipmentReports/EquipmentExpenses.vue"
+  },
+  "EquipmentReports": {
+    "description": "Auto imported from components/EquipmentReports/EquipmentReports.vue"
+  },
+  "EquipmentsOnlineStatus": {
+    "description": "Auto imported from components/EquipmentReports/EquipmentsOnlineStatus.vue"
+  },
+  "EquipmentsOrderReports": {
+    "description": "Auto imported from components/EquipmentReports/EquipmentsOrderReports.vue"
+  },
+  "EquipmentsPersonOnlineStatus": {
+    "description": "Auto imported from components/EquipmentReports/EquipmentsPersonOnlineStatus.vue"
+  },
+  "EquipmentsPersonReports": {
+    "description": "Auto imported from components/EquipmentReports/EquipmentsPersonReports.vue"
+  },
+  "PrepareEquipmentExpenses": {
+    "description": "Auto imported from components/EquipmentReports/PrepareEquipmentExpenses.vue"
+  },
+  "GenericPrepareTablePage": {
+    "description": "Auto imported from components/GenericPrepareTable/GenericPrepareTablePage.vue"
+  },
   "ClusterCamera": {
     "description": "Auto imported from components/Cluster/ClusterCamera.vue"
   },
@@ -85,30 +109,6 @@
   },
   "PrepareDistanceToTerminal": {
     "description": "Auto imported from components/Cluster/PrepareDistanceToTerminal.vue"
-  },
-  "EquipmentExpenses": {
-    "description": "Auto imported from components/EquipmentReports/EquipmentExpenses.vue"
-  },
-  "EquipmentReports": {
-    "description": "Auto imported from components/EquipmentReports/EquipmentReports.vue"
-  },
-  "EquipmentsOnlineStatus": {
-    "description": "Auto imported from components/EquipmentReports/EquipmentsOnlineStatus.vue"
-  },
-  "EquipmentsOrderReports": {
-    "description": "Auto imported from components/EquipmentReports/EquipmentsOrderReports.vue"
-  },
-  "EquipmentsPersonOnlineStatus": {
-    "description": "Auto imported from components/EquipmentReports/EquipmentsPersonOnlineStatus.vue"
-  },
-  "EquipmentsPersonReports": {
-    "description": "Auto imported from components/EquipmentReports/EquipmentsPersonReports.vue"
-  },
-  "PrepareEquipmentExpenses": {
-    "description": "Auto imported from components/EquipmentReports/PrepareEquipmentExpenses.vue"
-  },
-  "GenericPrepareTablePage": {
-    "description": "Auto imported from components/GenericPrepareTable/GenericPrepareTablePage.vue"
   },
   "GenericCarryDraggable": {
     "description": "Auto imported from components/Generics/GenericCarryDraggable.vue"
@@ -479,6 +479,9 @@
   "SalesOrder": {
     "description": "Auto imported from components/Orders/SalesOrder.vue"
   },
+  "QuickMenuSettingsList": {
+    "description": "Auto imported from components/QuickMenuSettings/QuickMenuSettingsList.vue"
+  },
   "BatchColorDepthTariffs": {
     "description": "Auto imported from components/Productions/BatchColorDepthTariffs.vue"
   },
@@ -721,9 +724,6 @@
   },
   "TariffsList": {
     "description": "Auto imported from components/Productions/TariffsList.vue"
-  },
-  "QuickMenuSettingsList": {
-    "description": "Auto imported from components/QuickMenuSettings/QuickMenuSettingsList.vue"
   },
   "BalanceReports": {
     "description": "Auto imported from components/Reports/BalanceReports.vue"
@@ -1015,6 +1015,9 @@
   },
   "TarasList": {
     "description": "Auto imported from components/Settings/TarasList.vue"
+  },
+  "TestQRcode": {
+    "description": "Auto imported from components/Settings/TestQRcode.vue"
   },
   "UnitMeasurement": {
     "description": "Auto imported from components/Settings/UnitMeasurement.vue"

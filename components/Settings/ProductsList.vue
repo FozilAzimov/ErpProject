@@ -174,7 +174,7 @@
         <!-- Start GRID template -->
         <div v-else class="overflow-y-auto w-full h-screen">
           <div
-            class="p-4 w-full h-fit mt-4 grid grid-flow-row grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-5"
+            class="p-4 w-full h-fit grid grid-flow-row grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-5"
             :style="{
               gridTemplateColumns: `repeat(auto-fit, minmax(250px, 1fr))`,
             }"
@@ -188,23 +188,21 @@
               }"
               @click="
                 $router.push({
-                  path: '/prepareProducts.htm',
-                  query: { page_type: 'create' },
+                  path: `/prepareProducts.htm/${box?.id}`,
+                  query: { page_type: 'edit' },
                 })
               "
             >
               <span class="flex flex-col items-center gap-2">
                 <img
                   :src="
-                    box?.[image]
-                      ? box?.[image]
-                      : require('@images/no-image.png')
+                    box?.image ? box?.image : require('@images/no-image.png')
                   "
                   width="80"
-                  :alt="box?.[image]"
+                  alt="image"
                 />
               </span>
-              <p class="text-[14px] p-2 font-medium whitespace-normal">
+              <p class="text-[12px] p-2 font-medium whitespace-normal">
                 {{ box?.name }}
               </p>
             </div>
