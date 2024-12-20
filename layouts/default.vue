@@ -172,7 +172,10 @@
     <div class="w-full flex items-start gap-[5px]">
       <el-container>
         <el-aside
-          v-if="!isLoginPage && !GET_SESSION?.sessionCompany"
+          v-if="
+            !isLoginPage &&
+            (!GET_SESSION?.sessionCompany || !GET_SESSION?.menu?.length)
+          "
           :width="collapseMune ? '64px' : '300px'"
           class="mt-1 border-t-[1px] border-t-solid border-t-[rgba(0,0,0,0.15)]"
         >
@@ -265,10 +268,10 @@ export default {
   // COMPUTED
   computed: {
     // Store getters
+    ...mapGetters('session', ['GET_SESSION']),
     ...mapGetters('systemMenu', ['GET_LOADING', 'GET_SYSTEM_MENU_LIST']),
     ...mapGetters('translate', ['GET_CORE_STRING']),
     ...mapGetters('activeLanguage', ['GET_ACTIVE_LANG', 'GET_ACTIVE_DATA']),
-    ...mapGetters('session', ['GET_SESSION']),
   },
 
   // WATCH
@@ -318,7 +321,10 @@ export default {
         // Translate login.htm
         await this.FETCH_TRANSLATE()
         // System Menu if session data exists
-        if (!this.GET_SESSION?.sessionCompany) {
+        if (
+          !this.GET_SESSION?.sessionCompany ||
+          !this.GET_SESSION?.menu?.length
+        ) {
           await this.FETCH_SYSTEM_MENU()
         }
         // Function for setting and getting active language
@@ -410,8 +416,10 @@ export default {
 
     // Language Request
     getLanguage(lang) {
-      this.FETCH_TRANSLATE({ lang }) // Translate
-      !this.GET_SESSION?.sessionCompany && this.FETCH_SYSTEM_MENU() // System Menu
+      this.FETCH_TRANSLATE({ lang })(
+        // Translate
+        !this.GET_SESSION?.sessionCompany || !this.GET_SESSION?.menu?.length
+      ) && this.FETCH_SYSTEM_MENU() // System Menu
       const obj = this.optionData.find((obj) => obj?.code === lang)
       this.SET_ACTIVE_LANG(obj?.name)
     },

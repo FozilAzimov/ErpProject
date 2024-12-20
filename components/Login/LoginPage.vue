@@ -122,6 +122,7 @@ export default {
   computed: {
     ...mapGetters('translate', ['GET_CORE_STRING']),
     ...mapGetters('activeLanguage', ['GET_ACTIVE_LANG']),
+    ...mapGetters('session', ['GET_SESSION']),
   },
 
   // MOUNTED
@@ -133,73 +134,67 @@ export default {
   // METHODS
   methods: {
     // Store getters
+    ...mapActions('session', ['FETCH_SESSION']),
     ...mapActions('translate', ['FETCH_TRANSLATE']),
     ...mapActions('systemMenu', ['FETCH_SYSTEM_MENU']),
-    ...mapActions('session', ['FETCH_SESSION']),
 
     getTypePassword() {
       this.typeIcon ? (this.typeIcon = false) : (this.typeIcon = true)
     },
 
-    getDoorIds(isActive, body) {
-      if (isActive && body) {
-        this.$set(this, 'loading', true)
-        this.$axios
-          .post(`/security/logIn`, body)
-          .then(({ data: { token } }) => {
-            localStorage.setItem('token', token)
-            this.FETCH_TRANSLATE() // store translate function
-            // this.FETCH_SYSTEM_MENU() // store systemMenu function
-            this.FETCH_SESSION() // store session function
-            this.$router.push('/dashboard.htm')
-            this.$set(this, 'loading', false)
-            this.$notification(
-              `Muvaffaqqiyatli o'tdingiz!`,
-              'Success',
-              'success'
-            )
-          })
-          .catch((error) => {
-            // eslint-disable-next-line no-console
-            console.error('Login request failed', error)
-            this.$notification(`LogIn'dan o'ta olmadingiz`, 'Error', 'error')
-            this.$set(this, 'loading', false)
-          })
+    // Face uchun
+    async getDoorIds(isActive, body) {
+      try {
+        if (isActive && body) {
+          this.$set(this, 'loading', true)
+          const {
+            data: { token },
+          } = await this.$axios.post('/security/logIn', body)
+          localStorage.setItem('token', token)
+          await this.FETCH_SESSION() // Store session function
+          await this.FETCH_TRANSLATE() // Store translate function
+          await this.$router.push(`/campMarketSaleInvoice.htm`)
+          await this.$notification('Success', 'Success', 'success')
+        }
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error('Login request failed', error)
+        this.$notification(`Error`, 'Error', 'error')
+      } finally {
+        // Loading holatini tugatish
+        this.$set(this, 'loading', false)
       }
     },
 
-    getResponse() {
-      this.$refs.formValidation.validate().then((success) => {
+    async getResponse() {
+      try {
+        const success = await this.$refs.formValidation.validate()
         if (success) {
-          this.isLoading = !this.isLoading
-          this.$axios
-            .post(`/security/logIn`, {
-              user: {
-                username: this.form.username,
-                password: this.form.password,
-              },
-            })
-            .then(({ data: { token } }) => {
-              localStorage.setItem('token', token)
-              this.isLoading = !this.isLoading
-              this.FETCH_TRANSLATE() // store translare function
-              this.FETCH_SYSTEM_MENU() // store systemMenu function
-              this.FETCH_SESSION() // store activeUser function
-              this.$router.push('/dashboard.htm')
-              this.$notification(
-                `Muvaffaqqiyatli o'tdingiz!`,
-                'Success',
-                'success'
-              )
-            })
-            .catch((error) => {
-              this.isLoading = !this.isLoading
-              // eslint-disable-next-line no-console
-              console.error('Login request failed', error)
-              this.$notification(`LogIn'dan o'ta olmadingiz`, 'Error', 'error')
-            })
+          this.$set(this, 'isLoading', true)
+          const {
+            data: { token },
+          } = await this.$axios.post('/security/logIn', {
+            user: {
+              username: this.form.username,
+              password: this.form.password,
+            },
+          })
+          localStorage.setItem('token', token)
+          await this.FETCH_SESSION() // Store session function
+          await this.FETCH_TRANSLATE() // Store translate function
+          await this.FETCH_SYSTEM_MENU() // Store systemMenu function
+          await this.$router.push(
+            `/${this.GET_SESSION?.sessionUser?.autoLoginPage}.htm`
+          )
+          await this.$notification('Success', 'Success', 'success')
         }
-      })
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error(error)
+        this.$notification('Error', 'Error', 'error')
+      } finally {
+        this.$set(this, 'isLoading', false)
+      }
     },
   },
 }

@@ -50,36 +50,6 @@
   "TransactionCharacters": {
     "description": "Auto imported from components/Cashboxs/TransactionCharacters.vue"
   },
-  "ColumnConfigPage": {
-    "description": "Auto imported from components/ColumnConfig/ColumnConfigPage.vue"
-  },
-  "DashboardPage": {
-    "description": "Auto imported from components/Dashboard/DashboardPage.vue"
-  },
-  "EquipmentExpenses": {
-    "description": "Auto imported from components/EquipmentReports/EquipmentExpenses.vue"
-  },
-  "EquipmentReports": {
-    "description": "Auto imported from components/EquipmentReports/EquipmentReports.vue"
-  },
-  "EquipmentsOnlineStatus": {
-    "description": "Auto imported from components/EquipmentReports/EquipmentsOnlineStatus.vue"
-  },
-  "EquipmentsOrderReports": {
-    "description": "Auto imported from components/EquipmentReports/EquipmentsOrderReports.vue"
-  },
-  "EquipmentsPersonOnlineStatus": {
-    "description": "Auto imported from components/EquipmentReports/EquipmentsPersonOnlineStatus.vue"
-  },
-  "EquipmentsPersonReports": {
-    "description": "Auto imported from components/EquipmentReports/EquipmentsPersonReports.vue"
-  },
-  "PrepareEquipmentExpenses": {
-    "description": "Auto imported from components/EquipmentReports/PrepareEquipmentExpenses.vue"
-  },
-  "GenericPrepareTablePage": {
-    "description": "Auto imported from components/GenericPrepareTable/GenericPrepareTablePage.vue"
-  },
   "ClusterCamera": {
     "description": "Auto imported from components/Cluster/ClusterCamera.vue"
   },
@@ -109,6 +79,39 @@
   },
   "PrepareDistanceToTerminal": {
     "description": "Auto imported from components/Cluster/PrepareDistanceToTerminal.vue"
+  },
+  "ColumnConfigPage": {
+    "description": "Auto imported from components/ColumnConfig/ColumnConfigPage.vue"
+  },
+  "DashboardPage": {
+    "description": "Auto imported from components/Dashboard/DashboardPage.vue"
+  },
+  "GenericPrepareTablePage": {
+    "description": "Auto imported from components/GenericPrepareTable/GenericPrepareTablePage.vue"
+  },
+  "GenericTablePage": {
+    "description": "Auto imported from components/GenericTable/GenericTablePage.vue"
+  },
+  "EquipmentExpenses": {
+    "description": "Auto imported from components/EquipmentReports/EquipmentExpenses.vue"
+  },
+  "EquipmentReports": {
+    "description": "Auto imported from components/EquipmentReports/EquipmentReports.vue"
+  },
+  "EquipmentsOnlineStatus": {
+    "description": "Auto imported from components/EquipmentReports/EquipmentsOnlineStatus.vue"
+  },
+  "EquipmentsOrderReports": {
+    "description": "Auto imported from components/EquipmentReports/EquipmentsOrderReports.vue"
+  },
+  "EquipmentsPersonOnlineStatus": {
+    "description": "Auto imported from components/EquipmentReports/EquipmentsPersonOnlineStatus.vue"
+  },
+  "EquipmentsPersonReports": {
+    "description": "Auto imported from components/EquipmentReports/EquipmentsPersonReports.vue"
+  },
+  "PrepareEquipmentExpenses": {
+    "description": "Auto imported from components/EquipmentReports/PrepareEquipmentExpenses.vue"
   },
   "GenericCarryDraggable": {
     "description": "Auto imported from components/Generics/GenericCarryDraggable.vue"
@@ -151,9 +154,6 @@
   },
   "LanguageList": {
     "description": "Auto imported from components/Generics/LanguageList.vue"
-  },
-  "GenericTablePage": {
-    "description": "Auto imported from components/GenericTable/GenericTablePage.vue"
   },
   "AttendanceSchedule": {
     "description": "Auto imported from components/HRMS/AttendanceSchedule.vue"
@@ -250,6 +250,9 @@
   },
   "PrepareReceiveInvoiceNew": {
     "description": "Auto imported from components/InternalInvoices/PrepareReceiveInvoiceNew.vue"
+  },
+  "LoadingPage": {
+    "description": "Auto imported from components/Loading/LoadingPage.vue"
   },
   "BatchProductionInvoiceUi": {
     "description": "Auto imported from components/Invoices/BatchProductionInvoiceUi.vue"
@@ -421,9 +424,6 @@
   },
   "SimpleProductionInvoice": {
     "description": "Auto imported from components/Invoices/SimpleProductionInvoice.vue"
-  },
-  "LoadingPage": {
-    "description": "Auto imported from components/Loading/LoadingPage.vue"
   },
   "FaceDoorList": {
     "description": "Auto imported from components/Login/FaceDoorList.vue"

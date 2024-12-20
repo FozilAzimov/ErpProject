@@ -129,4 +129,12 @@ export default {
   router: {
     middleware: 'auth',
   },
+
+  // get image from external folder
+  serverMiddleware: [
+    {
+      path: '/external-images',
+      handler: '~/serverMiddleware/external-images.js',
+    },
+  ],
 }

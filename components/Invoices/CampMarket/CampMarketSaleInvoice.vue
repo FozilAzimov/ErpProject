@@ -62,6 +62,7 @@
           <generic-input
             :value="inputValue"
             size="medium"
+            :required="!!inputValue"
             @customFunction="inputValueAction"
           />
           <div v-for="num in calcArr" :key="num">
@@ -98,8 +99,8 @@
           </div>
           <div v-else class="flex flex-col items-center justify-start gap-2">
             <img
-              v-if="obj?.base64"
-              :src="obj?.base64"
+              v-if="obj?.path"
+              :src="`/external-images/${obj.path}`"
               alt="img"
               class="w-[80px] h-[70px] rounded-md"
             />
@@ -506,7 +507,7 @@ export default {
 
     // purchase Action
     purchaseAction() {
-      if (this.allTotalValue) {
+      if (this.allTotalValue && this.inputValue) {
         this.mapArrayList = []
         this.allCardData.forEach((obj) => {
           // mapArrayList
@@ -521,7 +522,14 @@ export default {
           }
         })
         this.$refs.messageBoxRef.open('', '', 'purchase', 'Purchase')
-      } else this.$notification('pleaseAddProductsToCart')
+      } else if (!this.allTotalValue && this.inputValue)
+        this.$notification('Please Add Products To Cart!')
+      else if (this.allTotalValue && !this.inputValue)
+        this.$notification('Please enter the Room number!')
+      else
+        this.$notification(
+          'Please add products to cart and select room number!'
+        )
     },
 
     // Loading action

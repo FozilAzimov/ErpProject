@@ -6,8 +6,8 @@
     :style="allCardData?.[rowIndex]?.count ? { background: '#deffde' } : 'none'"
   >
     <img
-      v-if="cardData?.base64"
-      :src="cardData.base64"
+      v-if="cardData?.path"
+      :src="`/external-images/${cardData?.path}`"
       alt="product_img"
       class="w-full h-[350px]"
       :style="{ borderRadius: '0.125rem 0.125rem 0 0' }"
@@ -26,7 +26,9 @@
       <div
         class="w-full flex items-center justify-between bg-[#a1e3a6] rounded-sm px-2 py-1"
       >
-        <span class="w-1/3 text-[15px] font-semibold">Price</span>
+        <span class="w-1/3 text-[15px] font-semibold">{{
+          GET_CORE_STRING?.price || 'Price'
+        }}</span>
         <span class="w-2/3 text-end">{{
           $formatNumber(cardData?.price ?? 0, 2) ?? 0
         }}</span>
@@ -34,7 +36,9 @@
       <div
         class="w-full flex items-center justify-between bg-[rgb(131,207,223)] rounded-sm px-2 py-1"
       >
-        <span class="w-1/3 text-[15px] font-semibold">Total</span>
+        <span class="w-1/3 text-[15px] font-semibold">{{
+          GET_CORE_STRING?.total || 'Total'
+        }}</span>
         <span class="w-2/3 text-end">{{
           $formatNumber(allCardData?.[rowIndex]?.total ?? 0, 2) ?? 0
         }}</span>
@@ -42,7 +46,9 @@
       <div
         class="w-full flex items-center justify-between bg-[#a8bfeb] rounded-sm px-2 py-1"
       >
-        <span class="text-[15px] font-semibold">Qty</span>
+        <span class="text-[15px] font-semibold">{{
+          GET_CORE_STRING?.qty || 'Qty'
+        }}</span>
         <div
           class="flex items-center justify-between gap-3 bg-[rgb(255,252,252)] px-2 py-1 rounded-sm"
         >
@@ -82,7 +88,9 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import GenericButton from '@generics/GenericButton.vue'
+
 export default {
   // COMPONENTS
   components: { GenericButton },
@@ -109,6 +117,10 @@ export default {
       type: Number,
       default: 0,
     },
+  },
+
+  computed: {
+    ...mapGetters('translate', ['GET_CORE_STRING']),
   },
 
   // METHODS

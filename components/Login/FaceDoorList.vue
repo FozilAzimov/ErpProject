@@ -2,7 +2,7 @@
   <div>
     <button
       v-if="!isVideo || !isEqual"
-      class="text-[42px] text-white bg-[#04AA6D] h-[176px] py-1 px-2 rounded-lg"
+      class="text-[42px] mt-3 text-white bg-[#04AA6D] h-[176px] py-1 px-2 rounded-lg hover:bg-[#3e8e41] active:scale-110 transition-all duration-400 ease-in-out"
       @click="authorizationClickAction"
     >
       {{ GET_CORE_STRING?.enableCameraFaceId || 'Authorization by Face' }}
@@ -232,11 +232,11 @@ export default {
                   }
                 }
               }
-
-              if (!this.isEqual) {
-                this.$notification('Camera ID si topilmadi!')
-              }
             }
+          }
+          if (!this.isEqual) {
+            this.$notification('Camera ID si topilmadi!')
+            this.captureImageCloseAction()
           }
 
           this.doorIds = arr
