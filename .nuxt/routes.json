@@ -987,11 +987,11 @@
     "_name": "_b820f084"
   },
   {
-    "name": "productioninvoice.htm",
-    "path": "/productioninvoice.htm",
-    "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\productioninvoice.htm\\\\index.vue",
-    "chunkName": "pages/productioninvoice.htm/index",
-    "_name": "_1c0ff186"
+    "name": "productionInvoice.htm",
+    "path": "/productionInvoice.htm",
+    "component": "C:\\\\ERP_PROJECT_FRONTEND\\\\pages\\\\productionInvoice.htm\\\\index.vue",
+    "chunkName": "pages/productionInvoice.htm/index",
+    "_name": "_4b589da6"
   },
   {
     "name": "productionorder.htm",

@@ -145,7 +145,7 @@ const _69480544 = () => interopDefault(import('..\\pages\\productionArticles.htm
 const _e97bcac8 = () => interopDefault(import('..\\pages\\productionByEquipment.htm\\index.vue' /* webpackChunkName: "pages/productionByEquipment.htm/index" */))
 const _ae0dc4b8 = () => interopDefault(import('..\\pages\\productionByPackage.htm\\index.vue' /* webpackChunkName: "pages/productionByPackage.htm/index" */))
 const _b820f084 = () => interopDefault(import('..\\pages\\productionForQrCodeList.htm\\index.vue' /* webpackChunkName: "pages/productionForQrCodeList.htm/index" */))
-const _1c0ff186 = () => interopDefault(import('..\\pages\\productioninvoice.htm\\index.vue' /* webpackChunkName: "pages/productioninvoice.htm/index" */))
+const _4b589da6 = () => interopDefault(import('..\\pages\\productionInvoice.htm\\index.vue' /* webpackChunkName: "pages/productionInvoice.htm/index" */))
 const _2cc4e645 = () => interopDefault(import('..\\pages\\productionorder.htm\\index.vue' /* webpackChunkName: "pages/productionorder.htm/index" */))
 const _b1a32094 = () => interopDefault(import('..\\pages\\productionOrderMovement.htm\\index.vue' /* webpackChunkName: "pages/productionOrderMovement.htm/index" */))
 const _817b679a = () => interopDefault(import('..\\pages\\productionorderplannings.htm\\index.vue' /* webpackChunkName: "pages/productionorderplannings.htm/index" */))
@@ -908,9 +908,9 @@ export const routerOptions = {
     component: _b820f084,
     name: "productionForQrCodeList.htm"
   }, {
-    path: "/productioninvoice.htm",
-    component: _1c0ff186,
-    name: "productioninvoice.htm"
+    path: "/productionInvoice.htm",
+    component: _4b589da6,
+    name: "productionInvoice.htm"
   }, {
     path: "/productionorder.htm",
     component: _2cc4e645,

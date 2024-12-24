@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full max-w-[1440px] px-[50px] mx-auto mb-5">
+  <div class="w-full max-w-[1440px] mx-auto mb-5">
     <message-box ref="messageBoxRef" @emitProp="getEmitProp" />
     <div class="bg-[rgba(0,0,0,0.03)] p-2">
       <div class="flex flex-col items-center">
@@ -102,7 +102,7 @@
               v-if="obj?.path"
               :src="`/external-images/${obj.path}`"
               alt="img"
-              class="w-[80px] h-[70px] rounded-md"
+              class="w-fit h-[70px] rounded-md"
             />
             <img
               v-else
@@ -115,7 +115,7 @@
         </div>
       </div>
     </div>
-    <div class="h-[700px] overflow-y-auto p-2">
+    <div class="h-screen overflow-y-auto p-2">
       <div
         class="grid auto-rows-auto grid-cols-[repeat(auto-fit,minmax(400px,1fr))] gap-6 max-w-[1440px] w-full mx-auto place-items-center"
       >
