@@ -94,7 +94,7 @@ export default {
 
   proxy: {
     '/api': {
-      target: 'https://192.168.1.150:443',
+      target: 'https://192.168.1.101:443',
       changeOrigin: true, // Origin o'zgartirish
       secure: false, // SSL sertifikatni tekshirmaslik, ishonchsiz sertifikat uchun.
       debug: true, // So'rovlarni kuzatish
