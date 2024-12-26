@@ -2,9 +2,6 @@
   "MessageBox": {
     "description": "Auto imported from components/MessageBox.vue"
   },
-  "ActualitySystem": {
-    "description": "Auto imported from components/ActualitySystemPage/ActualitySystem.vue"
-  },
   "AccountsList": {
     "description": "Auto imported from components/Banks/AccountsList.vue"
   },
@@ -29,6 +26,9 @@
   "PrepareCurrenRate": {
     "description": "Auto imported from components/Banks/PrepareCurrenRate.vue"
   },
+  "ActualitySystem": {
+    "description": "Auto imported from components/ActualitySystemPage/ActualitySystem.vue"
+  },
   "GenericButton": {
     "description": "Auto imported from components/Button/GenericButton.vue"
   },
@@ -52,9 +52,6 @@
   },
   "ColumnConfigPage": {
     "description": "Auto imported from components/ColumnConfig/ColumnConfigPage.vue"
-  },
-  "DashboardPage": {
-    "description": "Auto imported from components/Dashboard/DashboardPage.vue"
   },
   "ClusterCamera": {
     "description": "Auto imported from components/Cluster/ClusterCamera.vue"
@@ -106,6 +103,9 @@
   },
   "PrepareEquipmentExpenses": {
     "description": "Auto imported from components/EquipmentReports/PrepareEquipmentExpenses.vue"
+  },
+  "DashboardPage": {
+    "description": "Auto imported from components/Dashboard/DashboardPage.vue"
   },
   "GenericPrepareTablePage": {
     "description": "Auto imported from components/GenericPrepareTable/GenericPrepareTablePage.vue"
@@ -479,6 +479,9 @@
   "SalesOrder": {
     "description": "Auto imported from components/Orders/SalesOrder.vue"
   },
+  "QuickMenuSettingsList": {
+    "description": "Auto imported from components/QuickMenuSettings/QuickMenuSettingsList.vue"
+  },
   "BatchColorDepthTariffs": {
     "description": "Auto imported from components/Productions/BatchColorDepthTariffs.vue"
   },
@@ -721,9 +724,6 @@
   },
   "TariffsList": {
     "description": "Auto imported from components/Productions/TariffsList.vue"
-  },
-  "QuickMenuSettingsList": {
-    "description": "Auto imported from components/QuickMenuSettings/QuickMenuSettingsList.vue"
   },
   "BalanceReports": {
     "description": "Auto imported from components/Reports/BalanceReports.vue"
