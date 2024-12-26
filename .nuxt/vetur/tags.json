@@ -2,6 +2,9 @@
   "MessageBox": {
     "description": "Auto imported from components/MessageBox.vue"
   },
+  "ActualitySystem": {
+    "description": "Auto imported from components/ActualitySystemPage/ActualitySystem.vue"
+  },
   "AccountsList": {
     "description": "Auto imported from components/Banks/AccountsList.vue"
   },
@@ -26,9 +29,6 @@
   "PrepareCurrenRate": {
     "description": "Auto imported from components/Banks/PrepareCurrenRate.vue"
   },
-  "ActualitySystem": {
-    "description": "Auto imported from components/ActualitySystemPage/ActualitySystem.vue"
-  },
   "GenericButton": {
     "description": "Auto imported from components/Button/GenericButton.vue"
   },
@@ -49,9 +49,6 @@
   },
   "TransactionCharacters": {
     "description": "Auto imported from components/Cashboxs/TransactionCharacters.vue"
-  },
-  "ColumnConfigPage": {
-    "description": "Auto imported from components/ColumnConfig/ColumnConfigPage.vue"
   },
   "ClusterCamera": {
     "description": "Auto imported from components/Cluster/ClusterCamera.vue"
@@ -83,6 +80,9 @@
   "PrepareDistanceToTerminal": {
     "description": "Auto imported from components/Cluster/PrepareDistanceToTerminal.vue"
   },
+  "ColumnConfigPage": {
+    "description": "Auto imported from components/ColumnConfig/ColumnConfigPage.vue"
+  },
   "EquipmentExpenses": {
     "description": "Auto imported from components/EquipmentReports/EquipmentExpenses.vue"
   },
@@ -109,6 +109,9 @@
   },
   "GenericPrepareTablePage": {
     "description": "Auto imported from components/GenericPrepareTable/GenericPrepareTablePage.vue"
+  },
+  "GenericTablePage": {
+    "description": "Auto imported from components/GenericTable/GenericTablePage.vue"
   },
   "GenericCarryDraggable": {
     "description": "Auto imported from components/Generics/GenericCarryDraggable.vue"
@@ -151,9 +154,6 @@
   },
   "LanguageList": {
     "description": "Auto imported from components/Generics/LanguageList.vue"
-  },
-  "GenericTablePage": {
-    "description": "Auto imported from components/GenericTable/GenericTablePage.vue"
   },
   "AttendanceSchedule": {
     "description": "Auto imported from components/HRMS/AttendanceSchedule.vue"
@@ -479,9 +479,6 @@
   "SalesOrder": {
     "description": "Auto imported from components/Orders/SalesOrder.vue"
   },
-  "QuickMenuSettingsList": {
-    "description": "Auto imported from components/QuickMenuSettings/QuickMenuSettingsList.vue"
-  },
   "BatchColorDepthTariffs": {
     "description": "Auto imported from components/Productions/BatchColorDepthTariffs.vue"
   },
@@ -724,6 +721,9 @@
   },
   "TariffsList": {
     "description": "Auto imported from components/Productions/TariffsList.vue"
+  },
+  "QuickMenuSettingsList": {
+    "description": "Auto imported from components/QuickMenuSettings/QuickMenuSettingsList.vue"
   },
   "BalanceReports": {
     "description": "Auto imported from components/Reports/BalanceReports.vue"
