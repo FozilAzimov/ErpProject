@@ -5,11 +5,56 @@
   "ActualitySystem": {
     "description": "Auto imported from components/ActualitySystemPage/ActualitySystem.vue"
   },
+  "AccountsList": {
+    "description": "Auto imported from components/Banks/AccountsList.vue"
+  },
+  "BanksList": {
+    "description": "Auto imported from components/Banks/BanksList.vue"
+  },
+  "BranchesList": {
+    "description": "Auto imported from components/Banks/BranchesList.vue"
+  },
+  "CurrenRates": {
+    "description": "Auto imported from components/Banks/CurrenRates.vue"
+  },
+  "PrepareAccount": {
+    "description": "Auto imported from components/Banks/PrepareAccount.vue"
+  },
+  "PrepareBank": {
+    "description": "Auto imported from components/Banks/PrepareBank.vue"
+  },
+  "PrepareBranche": {
+    "description": "Auto imported from components/Banks/PrepareBranche.vue"
+  },
+  "PrepareCurrenRate": {
+    "description": "Auto imported from components/Banks/PrepareCurrenRate.vue"
+  },
   "GenericButton": {
     "description": "Auto imported from components/Button/GenericButton.vue"
   },
+  "CashboxsList": {
+    "description": "Auto imported from components/Cashboxs/CashboxsList.vue"
+  },
+  "CurrenciesList": {
+    "description": "Auto imported from components/Cashboxs/CurrenciesList.vue"
+  },
+  "PrepareCashbox": {
+    "description": "Auto imported from components/Cashboxs/PrepareCashbox.vue"
+  },
+  "PrepareCurrency": {
+    "description": "Auto imported from components/Cashboxs/PrepareCurrency.vue"
+  },
+  "PrepareTransactionCharacter": {
+    "description": "Auto imported from components/Cashboxs/PrepareTransactionCharacter.vue"
+  },
+  "TransactionCharacters": {
+    "description": "Auto imported from components/Cashboxs/TransactionCharacters.vue"
+  },
   "ColumnConfigPage": {
     "description": "Auto imported from components/ColumnConfig/ColumnConfigPage.vue"
+  },
+  "DashboardPage": {
+    "description": "Auto imported from components/Dashboard/DashboardPage.vue"
   },
   "ClusterCamera": {
     "description": "Auto imported from components/Cluster/ClusterCamera.vue"
@@ -41,50 +86,26 @@
   "PrepareDistanceToTerminal": {
     "description": "Auto imported from components/Cluster/PrepareDistanceToTerminal.vue"
   },
-  "DashboardPage": {
-    "description": "Auto imported from components/Dashboard/DashboardPage.vue"
+  "EquipmentExpenses": {
+    "description": "Auto imported from components/EquipmentReports/EquipmentExpenses.vue"
   },
-  "AccountsList": {
-    "description": "Auto imported from components/Banks/AccountsList.vue"
+  "EquipmentReports": {
+    "description": "Auto imported from components/EquipmentReports/EquipmentReports.vue"
   },
-  "BanksList": {
-    "description": "Auto imported from components/Banks/BanksList.vue"
+  "EquipmentsOnlineStatus": {
+    "description": "Auto imported from components/EquipmentReports/EquipmentsOnlineStatus.vue"
   },
-  "BranchesList": {
-    "description": "Auto imported from components/Banks/BranchesList.vue"
+  "EquipmentsOrderReports": {
+    "description": "Auto imported from components/EquipmentReports/EquipmentsOrderReports.vue"
   },
-  "CurrenRates": {
-    "description": "Auto imported from components/Banks/CurrenRates.vue"
+  "EquipmentsPersonOnlineStatus": {
+    "description": "Auto imported from components/EquipmentReports/EquipmentsPersonOnlineStatus.vue"
   },
-  "PrepareAccount": {
-    "description": "Auto imported from components/Banks/PrepareAccount.vue"
+  "EquipmentsPersonReports": {
+    "description": "Auto imported from components/EquipmentReports/EquipmentsPersonReports.vue"
   },
-  "PrepareBank": {
-    "description": "Auto imported from components/Banks/PrepareBank.vue"
-  },
-  "PrepareBranche": {
-    "description": "Auto imported from components/Banks/PrepareBranche.vue"
-  },
-  "PrepareCurrenRate": {
-    "description": "Auto imported from components/Banks/PrepareCurrenRate.vue"
-  },
-  "CashboxsList": {
-    "description": "Auto imported from components/Cashboxs/CashboxsList.vue"
-  },
-  "CurrenciesList": {
-    "description": "Auto imported from components/Cashboxs/CurrenciesList.vue"
-  },
-  "PrepareCashbox": {
-    "description": "Auto imported from components/Cashboxs/PrepareCashbox.vue"
-  },
-  "PrepareCurrency": {
-    "description": "Auto imported from components/Cashboxs/PrepareCurrency.vue"
-  },
-  "PrepareTransactionCharacter": {
-    "description": "Auto imported from components/Cashboxs/PrepareTransactionCharacter.vue"
-  },
-  "TransactionCharacters": {
-    "description": "Auto imported from components/Cashboxs/TransactionCharacters.vue"
+  "PrepareEquipmentExpenses": {
+    "description": "Auto imported from components/EquipmentReports/PrepareEquipmentExpenses.vue"
   },
   "GenericPrepareTablePage": {
     "description": "Auto imported from components/GenericPrepareTable/GenericPrepareTablePage.vue"
@@ -133,27 +154,6 @@
   },
   "GenericTablePage": {
     "description": "Auto imported from components/GenericTable/GenericTablePage.vue"
-  },
-  "EquipmentExpenses": {
-    "description": "Auto imported from components/EquipmentReports/EquipmentExpenses.vue"
-  },
-  "EquipmentReports": {
-    "description": "Auto imported from components/EquipmentReports/EquipmentReports.vue"
-  },
-  "EquipmentsOnlineStatus": {
-    "description": "Auto imported from components/EquipmentReports/EquipmentsOnlineStatus.vue"
-  },
-  "EquipmentsOrderReports": {
-    "description": "Auto imported from components/EquipmentReports/EquipmentsOrderReports.vue"
-  },
-  "EquipmentsPersonOnlineStatus": {
-    "description": "Auto imported from components/EquipmentReports/EquipmentsPersonOnlineStatus.vue"
-  },
-  "EquipmentsPersonReports": {
-    "description": "Auto imported from components/EquipmentReports/EquipmentsPersonReports.vue"
-  },
-  "PrepareEquipmentExpenses": {
-    "description": "Auto imported from components/EquipmentReports/PrepareEquipmentExpenses.vue"
   },
   "AttendanceSchedule": {
     "description": "Auto imported from components/HRMS/AttendanceSchedule.vue"
@@ -479,9 +479,6 @@
   "SalesOrder": {
     "description": "Auto imported from components/Orders/SalesOrder.vue"
   },
-  "QuickMenuSettingsList": {
-    "description": "Auto imported from components/QuickMenuSettings/QuickMenuSettingsList.vue"
-  },
   "BatchColorDepthTariffs": {
     "description": "Auto imported from components/Productions/BatchColorDepthTariffs.vue"
   },
@@ -724,6 +721,9 @@
   },
   "TariffsList": {
     "description": "Auto imported from components/Productions/TariffsList.vue"
+  },
+  "QuickMenuSettingsList": {
+    "description": "Auto imported from components/QuickMenuSettings/QuickMenuSettingsList.vue"
   },
   "BalanceReports": {
     "description": "Auto imported from components/Reports/BalanceReports.vue"

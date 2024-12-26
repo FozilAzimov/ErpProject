@@ -20,7 +20,13 @@
         :to="item.url"
         class="flex flex-col items-center hover:shadow-lg duration-[0.2s] w-full max-w-[150px] bg-white border border-gray-200 rounded-lg shadow"
       >
-        <img class="w-[80px]" src="@images/desktop.png" alt="image" />
+        <img
+          v-if="item?.value"
+          class="w-[80px] h-[80px] p-1"
+          :src="item?.value"
+          alt="image"
+        />
+        <img v-else class="w-[80px]" src="@images/desktop.png" alt="image" />
         <div class="text-center mb-2 w-full px-2 whitespace-normal">
           <p class="font-medium text-[13px] text-[#317EAC] line-clamp-1">
             {{ item.name }}

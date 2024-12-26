@@ -56,7 +56,7 @@
           <ul
             class="w-[190px] bg-[#fff] absolute top-[28px] right-0 z-[1000] text-[12px] overflow-hidden duration-[0.5s]"
             :style="{
-              height: dropToggle ? '220px' : '0px',
+              height: dropToggle ? 'auto' : '0px',
               border: dropToggle ? '1px solid #ddd' : '1px solid #206fa2b3',
             }"
           >
@@ -80,29 +80,38 @@
               >
             </li>
             <div class="w-fll h-[1px] bg-[#ddd] mt-3"></div>
-            <li>
-              <nuxt-link
-                to="/sessions.htm"
-                class="block whitespace-nowrap p-[7px_10px] hover:bg-[rgba(54,155,215,0.3)] duration-[0.2s]"
-                >{{ GET_CORE_STRING?.sessions || 'Sessions' }}</nuxt-link
+            <template v-if="!GET_SESSION?.sessionCompany">
+              <template
+                v-if="
+                  GET_SESSION?.sessionUser?.checkSession ||
+                  GET_SESSION?.sessionUser?.login === 'root'
+                "
               >
-            </li>
-            <li>
-              <nuxt-link
-                to="#"
-                class="block whitespace-nowrap p-[7px_10px] hover:bg-[rgba(54,155,215,0.3)] duration-[0.2s]"
-                >{{ GET_CORE_STRING?.sessions || 'Sessions' }}</nuxt-link
-              >
-            </li>
-            <li>
-              <nuxt-link
-                to="#"
-                class="block whitespace-nowrap p-[7px_10px] hover:bg-[rgba(54,155,215,0.3)] duration-[0.2s]"
-                >{{
-                  GET_CORE_STRING?.['title.settings.sub'] || 'Settings'
-                }}</nuxt-link
-              >
-            </li>
+                <li>
+                  <nuxt-link
+                    to="/sessions.htm"
+                    class="block whitespace-nowrap p-[7px_10px] hover:bg-[rgba(54,155,215,0.3)] duration-[0.2s]"
+                    >{{ GET_CORE_STRING?.sessions || 'Sessions' }}</nuxt-link
+                  >
+                </li>
+                <li>
+                  <nuxt-link
+                    to="#"
+                    class="block whitespace-nowrap p-[7px_10px] hover:bg-[rgba(54,155,215,0.3)] duration-[0.2s]"
+                    >{{ GET_CORE_STRING?.sessions || 'Sessions' }}</nuxt-link
+                  >
+                </li>
+              </template>
+              <li>
+                <nuxt-link
+                  to="#"
+                  class="block whitespace-nowrap p-[7px_10px] hover:bg-[rgba(54,155,215,0.3)] duration-[0.2s]"
+                  >{{
+                    GET_CORE_STRING?.['title.settings.sub'] || 'Settings'
+                  }}</nuxt-link
+                >
+              </li>
+            </template>
             <div class="w-fll h-[1px] bg-[#ddd] mb-3"></div>
             <li>
               <p
@@ -349,11 +358,11 @@ export default {
   // METHODS
   methods: {
     // Store actions
+    ...mapActions('session', ['FETCH_SESSION']),
     ...mapActions('translate', ['FETCH_TRANSLATE']),
     ...mapActions('systemMenu', ['FETCH_SYSTEM_MENU']),
     ...mapActions('activeLanguage', ['FETCH_ACTIVE_LANG']),
     ...mapMutations('activeLanguage', ['SET_ACTIVE_LANG']),
-    ...mapActions('session', ['FETCH_SESSION']),
 
     // Active LANG get and set action
     async setAndGetActiveLang() {
@@ -375,26 +384,13 @@ export default {
 
     // Log Out
     getLogout() {
+      // remove
+      document.cookie = 'JSESSIONID='
+      localStorage.removeItem('token')
+      // remove
+      this.$router.push('/login.htm')
+      this.$notification(`Proyekt'dan chiqdingiz.`, 'Success', 'success')
       this.isLoading = !this.isLoading
-      this.$axios
-        .delete(`/security/logout`)
-        .then((res) => {
-          if (res.status < 300) {
-            // remove
-            document.cookie = 'JSESSIONID='
-            localStorage.removeItem('token')
-            // remove
-            this.$router.push('/login.htm')
-            this.$notification(`Proyekt'dan chiqdingiz.`, 'Success', 'success')
-            this.isLoading = !this.isLoading
-          }
-        })
-        .catch((error) => {
-          this.isLoading = !this.isLoading
-          // eslint-disable-next-line no-console
-          console.error('Login request failed', error)
-          this.$notification(`Error`, 'Error', 'error')
-        })
     },
 
     handleWindowClick(event) {

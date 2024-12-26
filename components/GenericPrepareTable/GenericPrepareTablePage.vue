@@ -57,7 +57,7 @@
       style="min-height: 165px"
     >
       <table class="w-full border-[1px] border-solid border-[#F0F0F0]">
-        <thead class="sticky top-[-1px] z-[1000]">
+        <thead class="bg-[rgb(229,235,245)] sticky top-[-1px] z-[1000]">
           <tr class="bg-[rgb(229,235,245)]">
             <th
               class="text-[13px] font-semibold border-[1px] border-solid border-[rgba(119,136,153,0.3)] p-4 cursor-pointer whitespace-nowrap"

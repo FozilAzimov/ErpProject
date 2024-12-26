@@ -6,7 +6,7 @@
     >
       <message-box ref="messageBoxRef" @emitProp="getEmitProp" />
       <table class="w-full border-[1px] border-solid border-[#F0F0F0]">
-        <thead class="bg-[rgb(229,235,245)] sticky top-[-1px]">
+        <thead class="bg-[rgb(229,235,245)] sticky top-[-1px] z-[1000]">
           <tr>
             <th
               v-for="(headName, key) in tablehead"
@@ -40,6 +40,7 @@
             </th>
           </tr>
         </thead>
+
         <tbody>
           <template v-if="istherebody">
             <tr
