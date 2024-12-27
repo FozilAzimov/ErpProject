@@ -50,9 +50,16 @@ export const actions = {
       commit('SET_CORE_STRING_OBJECT', data)
       commit('SET_LOADING', false)
     } catch (error) {
+      try {
+        const { data } = await this.$axios.get(
+          `/language/getLanguage?language=${language || 'en'}`
+        )
+        commit('SET_CORE_STRING_OBJECT', data)
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error('Failed to axios translate:', error)
+      }
       commit('SET_LOADING', false)
-      // eslint-disable-next-line no-console
-      console.error('Failed to axios translate:', error)
     }
   },
 }

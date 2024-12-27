@@ -29,7 +29,7 @@
         <img v-else class="w-[80px]" src="@images/desktop.png" alt="image" />
         <div class="text-center mb-2 w-full px-2 whitespace-normal">
           <p class="font-medium text-[13px] text-[#317EAC] line-clamp-1">
-            {{ item.name }}
+            {{ GET_CORE_STRING?.[item.name] || item.name }}
           </p>
         </div>
       </nuxt-link>
