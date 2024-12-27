@@ -124,6 +124,11 @@ export default {
         autoprefixer: {},
       },
     },
+    // helps reduce file size
+    analyze: false,
+    extractCSS: true,
+    optimizeCSS: true,
+    // helps reduce file size
   },
 
   router: {
